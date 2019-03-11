@@ -32,4 +32,5 @@
     <string name="format_version_name">版本号：%1$d</string>
     <string name="text_newest_version">最新版本</string>
     <string name="format_goods_info">%1$d件|%2$dkg|%3$fm³</string>
+    <string name="format_goods_inport">%1$s件|%2$skg</string>
 </resources>

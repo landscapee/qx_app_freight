@@ -64,6 +64,8 @@ public class TransportListBean implements Serializable {
      * aircraftType : null
      * associateAirport : null
      * etd : null
+     * outboundNumber  0  已出库单数
+     * waybillCount  3 总运单数
      */
     private String stepOwner;
     private String taskId;
@@ -113,12 +115,15 @@ public class TransportListBean implements Serializable {
     private String flightId;
     private DeclareWaybillAdditionBean declareWaybillAddition;
     private String flightNo;
+    private String outboundNumber;
+    private String waybillCount;
     private Object aircraftType;
     private Object associateAirport;
     private long etd;
     private List<DeclareItemBean> declareItem;
     private boolean isExpand = false;
 
+    private String serialNumber;  //流水号
     @Data
     public static class DeclareWaybillAdditionBean implements Serializable{
         /**

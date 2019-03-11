@@ -150,6 +150,9 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InstallEquipFragment());
                 list_Title.add("装卸机");
+            } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                fragmentList.add(new InPortDeliveryFragment());
+                list_Title.add("进港提货");
             }
 
         }

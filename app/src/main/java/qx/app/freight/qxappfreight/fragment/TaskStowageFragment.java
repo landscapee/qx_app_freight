@@ -116,7 +116,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
 
     @Override
     public void onLoadMore() {
-
+        pageCurrent++;
         getData();
     }
 
@@ -128,9 +128,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
                 list.clear();
                 mMfrvData.finishRefresh();
             }
-            else
-            {
-                pageCurrent++;
+            else {
                 mMfrvData.finishLoadMore();
             }
 

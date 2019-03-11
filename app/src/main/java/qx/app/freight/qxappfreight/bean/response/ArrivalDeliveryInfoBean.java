@@ -147,8 +147,8 @@ public class ArrivalDeliveryInfoBean {
             private int flightId;
             private String mailType;
             private int documentDelivery;
-            private int totalNumberPackages;
-            private double totalWeight;
+            private String totalNumberPackages;
+            private String totalWeight;
             private String specialCargoCode;
             private String commodityName;
             private String consignee;
@@ -172,10 +172,10 @@ public class ArrivalDeliveryInfoBean {
             private Object warehouseLocation;
             private Object putStorageTime;
             private Object putStorageUser;
-            private Object outStorageTime;
-            private Object outStorageUser;
-            private Object tallyingTotal;
-            private Object tallyingWeight;
+            private long outStorageTime;
+            private String outStorageUser;
+            private String tallyingTotal;
+            private String tallyingWeight;
             private int waybillStatus;
             private String waybillCodeScanUrl;
             private String commodityScanUrl;

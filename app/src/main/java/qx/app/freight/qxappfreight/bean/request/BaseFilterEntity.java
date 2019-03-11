@@ -26,8 +26,6 @@ public class BaseFilterEntity<T> {
     private String counterbillId;
     private String taskId;
     private String completeUser;
-
-
     //复重
     private String scooterCode;
 }

@@ -101,6 +101,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     @Override
     public void onLoadMore() {
+        pageCurrent++;
         loadData();
     }
 
@@ -123,7 +124,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 mMfrvData.finishRefresh();
             }
             else{
-                pageCurrent++;
+
                 mMfrvData.finishLoadMore();
             }
             list.addAll(transportListBeans);

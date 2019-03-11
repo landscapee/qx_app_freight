@@ -242,6 +242,26 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+    /**
+     * 时间戳转换成6位数时间
+     *
+     * @param second 时分秒间不带冒号
+     * @return
+     */
+    public static String date2Tasktime6(long second) {
+        if (second <= 0) {
+            return "0";
+        }
+        String seconds = (second / 1000) + "";
+        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+            return "";
+        }
+        String format = "yyyy-MM-dd HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
+        return re;
+    }
 
     /**
      * 时间戳转换成4位数时间

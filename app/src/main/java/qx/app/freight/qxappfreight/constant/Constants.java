@@ -63,6 +63,11 @@ public class Constants {
      */
     public static String STOWAGE = "stowage";
 
+    /**
+     * 配载
+     */
+    public static String INPORTDELIVERY = "delivery_in";
+
 
     //收验type值
     public static final int TYPE_MAIN_LIST_CHECK = 1;

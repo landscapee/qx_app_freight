@@ -99,6 +99,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
     @Override
     public void onLoadMore() {
+        pageCurrent++;
         getData();
     }
 
@@ -112,7 +113,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
                 mMfrvData.finishRefresh();
             }
             else{
-                pageCurrent++;
+
                 mMfrvData.finishLoadMore();
             }
             transportListList.addAll(transportListBeans);
