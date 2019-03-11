@@ -1,0 +1,39 @@
+package qx.app.freight.qxappfreight.bean.request;
+
+import lombok.Data;
+
+/**
+ * TODO : xxx
+ * Created by pr
+ */
+@Data
+public class StorageCommitEntity {
+    /****
+     *
+     * {
+     *   "waybillId" : "运单id",
+     *   "insFile":"报检员资质路径"，
+     *   "insCheck" : "报检是否合格1合格 0不合格",
+     *   "fileCheck" : "资质是否合格1合格 0不合格",
+     *   "packaging" : "是否已包装1勾选 0不勾选",
+     *   "require" : "是否满足航空公司要求1勾选 0不勾选",
+     *   "spotResult" : "抽检结果1合格 0不合格",
+     *   "unspotReson" : "未通过原因",
+     *   "type" : "0暂存 1提交",
+     *   "taskId" : "当前任务id",
+     *   "userId" : "当前提交人id"
+     * }
+     */
+    private String waybillId;
+    private String insFile;
+    private int insCheck;
+    private int fileCheck;
+    private int packaging;
+    private int require;
+    private int spotResult;
+    private String unspotReson;
+    private int insStatus;
+    private int type;
+    private String taskId;
+    private String userId;
+}

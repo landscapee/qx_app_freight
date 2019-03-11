@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/zx_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:qrcv_animTime="300"
+        app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
+        app:qrcv_barcodeRectHeight="40dp"
+        app:qrcv_borderColor="#66666666"
+        app:qrcv_borderSize="0.1dp"
+        app:qrcv_cornerColor="#123456"
+        app:qrcv_cornerLength="20dp"
+        app:qrcv_cornerSize="3dp"
+        app:qrcv_isBarcode="false"
+        app:qrcv_isCenterVertical="false"
+        app:qrcv_isOnlyDecodeScanBoxArea="true"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_isShowDefaultGridScanLineDrawable="false"
+        app:qrcv_isShowDefaultScanLineDrawable="true"
+        app:qrcv_isShowTipBackground="false"
+        app:qrcv_isShowTipTextAsSingleLine="false"
+        app:qrcv_isTipTextBelowRect="true"
+        app:qrcv_maskColor="#de000000"
+        app:qrcv_qrCodeTipText="对准二维码开始扫描"
+        app:qrcv_rectWidth="240dp"
+        app:qrcv_scanLineColor="#654321"
+        app:qrcv_scanLineMargin="0dp"
+        app:qrcv_scanLineSize="0.5dp"
+        app:qrcv_tipTextColor="#80ffffff"
+        app:qrcv_tipTextSize="14sp"
+        app:qrcv_toolbarHeight="40dp"
+        app:qrcv_topOffset="80dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_open_flash_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue_press"
+                android:text="打开闪光灯"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_toRightOf="@+id/btn_open_flash_light"
+                android:background="@drawable/btn_blue_press"
+                android:text="再次识别"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </cn.bingoogolapple.qrcode.zxing.ZXingView>
+
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f4ebdc"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect_blue"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_3"
+                android:text="舱单"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_ship_bill_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:text="@string/format_tally_info" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_10">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect_yellow"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_3"
+                android:text="理货"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_tally_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:text="@string/format_tally_info" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+        android:id="@+id/mfrv_in_port_tally"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_1593c6"
+        android:text="确定"
+        android:textColor="@color/white" />
+</LinearLayout>

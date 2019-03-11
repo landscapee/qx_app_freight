@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">智慧货运</string>
+    <string name="explain_left_icon">左边的图标</string>
+    <string name="explain_right_text">右边的图标</string>
+    <string name="format_certificate_date">%1$s至%2$s</string>
+    <string name="format_main_list_way">%1$s | %2$s(%3$s)</string>
+    <string name="format_store_goods_info">%1$s | %2$s |%3$s</string>
+    <string name="format_number_info">%1$d件|%2$fm³|%3$dkg</string>
+    <string name="format_store_info">%1$s |%2$d℃ %3$s</string>
+    <string name="format_arrive_info">%1$s(%2$s)</string>
+    <string name="format_company_info">%1$s | %2$s</string>
+    <string name="format_company_info1">%1$s | %2$s | %3$s | %4$s</string>
+    <string name="format_cargo_cabin"> 约%1$sm³ | %2$sKG | %3$s </string>
+    <string name="format_allocate_info">%1$s件/%2$skg/%3$sm³</string>
+    <string name="format_allocate_ddress_info">%1$s     %2$s</string>
+    <string name="format_return_good_info">%1$s | %2$s件 |%3$sKG| %4$sm³</string>
+    <string name="format_receive_uld">ULD:%1$s/%2$skg</string>
+    <string name="goods_name">品名</string>
+    <string name="goods_number">件数</string>
+    <string name="goods_weight">重量</string>
+    <string name="goods_volume">体积</string>
+    <string name="goods_package_type">包装类型</string>
+    <string name="arrive_plan_time">预</string>
+    <string name="please_choose">请选择</string>
+    <string name="unqualified">不合格</string>
+    <string name="qualified">合格</string>
+    <string name="no_data">暂无数据</string>
+    <string name="load_error">加载失败</string>
+    <string name="loading">正在加载...</string>
+    <string name="format_store_number_goods_info">%1$d件/%2$dKG/%3$fm³</string>
+    <string name="format_tally_info">总件数：56 总重量：666KG</string>
+    <string name="format_version_name">版本号：%1$d</string>
+    <string name="text_newest_version">最新版本</string>
+    <string name="format_goods_info">%1$d件|%2$dkg|%3$fm³</string>
+</resources>

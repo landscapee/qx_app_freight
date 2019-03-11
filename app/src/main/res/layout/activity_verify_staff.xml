@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="报检员"
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_16" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginStart="@dimen/dp_50"
+                        android:layout_marginEnd="@dimen/dp_50"
+                        android:layout_weight="3"
+                        android:visibility="gone">
+
+                        <Spinner
+                            android:id="@+id/sp_select_staff"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/shape_rectangle_menu_gray"
+                            android:gravity="center_vertical"
+                            android:spinnerMode="dropdown" />
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_15"
+                            android:layout_height="@dimen/dp_15"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@mipmap/icon_down_black" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="报检证有效期"
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_16" />
+
+                    <TextView
+                        android:id="@+id/tv_certificate_in_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="@string/format_certificate_date"
+                        android:textColor="@color/main_tv_normal"
+                        android:textSize="@dimen/sp_16" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dp_15">
+
+                    <ImageView
+                        android:id="@+id/iv_staff_photo_old"
+                        android:layout_width="@dimen/dp_200"
+                        android:layout_height="@dimen/dp_250"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_launcher"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_staff_photo_now"
+                        android:layout_width="@dimen/dp_200"
+                        android:layout_height="@dimen/dp_250"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:background="@drawable/shape_rect_gray"
+                        android:scaleType="fitXY" />
+
+                    <ImageButton
+                        android:id="@+id/btn_take_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:src="@drawable/btn_shoot_press"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:background="@color/white"
+                        />
+                    <TextView
+                        android:id="@+id/btn_take_photo_re"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#999999"
+                        android:text="重新拍照"
+                        android:drawableStart="@mipmap/retrial"
+                        android:drawablePadding="3dp"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:background="@drawable/background_press"
+                        android:padding="5dp"
+                        android:clickable="true"
+                        />
+                </LinearLayout>
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/bg_gray"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="@dimen/dp_8">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="货代公司托运资质"-->
+                        <!--android:textColor="@color/black_3"-->
+                        <!--android:textSize="@dimen/sp_16" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_aptitude"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="@dimen/dp_5"-->
+                        <!--android:text="可以托运危险品;\n可以托运贵重物品;"-->
+                        <!--android:textColor="@color/gray" />-->
+                <!--</LinearLayout>-->
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <View style="@style/line_horizontal" />
+
+            <include
+                android:id="@+id/ll_bottom"
+                layout="@layout/layout_agree_refuse_bottom" />
+        </LinearLayout>
+</LinearLayout>

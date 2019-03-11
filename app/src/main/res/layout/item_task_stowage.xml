@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="7dp"
+    android:paddingRight="7dp"
+    >
+
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:background="@drawable/shape_rect_gray"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_flight_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rect_blue_cce4"
+            android:drawableLeft="@mipmap/flight"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="3U12523"
+            android:textColor="@color/blue_093"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_arrive_time"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="18dp"
+            android:drawableLeft="@mipmap/yu"
+            android:gravity="center_vertical"
+            android:text="@string/format_arrive_info" />
+
+        <TextView
+            android:id="@+id/tv_waybill_count"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="运单件数：33" />
+    </LinearLayout>
+</LinearLayout>

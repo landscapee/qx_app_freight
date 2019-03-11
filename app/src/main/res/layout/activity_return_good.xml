@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:src="@mipmap/point1" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_marginLeft="50dp"
+            android:paddingTop="5dp"
+            android:text="待退货出库" />
+
+        <View
+            android:id="@+id/line_normal"
+            android:layout_width="100dp"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image"
+            android:background="#A6A6A6" />
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/line_normal"
+            android:src="@mipmap/point1" />
+
+        <TextView
+            android:id="@+id/tv_info1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image1"
+            android:layout_marginLeft="50dp"
+            android:layout_toRightOf="@+id/tv_info"
+            android:paddingTop="5dp"
+            android:text="已退货出库" />
+
+        <View
+            android:id="@+id/line_normal1"
+            android:layout_width="100dp"
+            android:layout_height="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image1"
+            android:background="#A6A6A6" />
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/line_normal1"
+            android:src="@mipmap/point1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image2"
+            android:layout_marginLeft="50dp"
+            android:layout_toRightOf="@+id/tv_info1"
+            android:paddingTop="5dp"
+            android:text="货代以确定" />
+
+    </RelativeLayout>
+
+
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+        android:id="@+id/mfrv_returngood_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>

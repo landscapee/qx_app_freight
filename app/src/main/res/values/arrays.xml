@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="recevinggood">
+        <item>通过</item>
+        <item>不通过</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+            <ImageView
+                android:scaleType="fitXY"
+                android:src="@mipmap/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="22dp"
+                android:layout_width="wrap_content"
+                android:layout_height="17dp"
+                android:text=" @成都双流国际机场版权所有（v1.0.0）"
+                android:textColor="#ff909699"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginBottom="@dimen/dp_30"
+                android:src="@mipmap/logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="欢迎使用智慧货运系统"
+                android:textColor="#ff2e81fd"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_50"
+                android:paddingRight="@dimen/dp_50">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:src="@mipmap/user_name" />
+
+                    <EditText
+                        android:id="@+id/et_username"
+                        android:textSize="@dimen/sp_16"
+                        android:hint="请输入用户名"
+                        android:singleLine="true"
+                        android:maxLength="20"
+                        android:background="@null"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:background="#979797"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_50"
+                android:paddingRight="@dimen/dp_50">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:src="@mipmap/passwoed" />
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:textSize="@dimen/sp_16"
+                        android:hint="请输入密码"
+                        android:singleLine="true"
+                        android:imeOptions="actionDone"
+                        android:maxLength="20"
+                        android:background="@null"
+                        android:layout_marginStart="13dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:background="#979797"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:layout_marginRight="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_40"
+                android:background="@drawable/selector_blue_20"
+                android:text="登录"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+
+            <View
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

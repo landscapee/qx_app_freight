@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView
+        android:id="@+id/slide_left"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="4dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="1px"
+        android:text="左滑领受"
+        android:textColor="@color/white"
+        app:lock_drawable="@mipmap/slide_do"
+        />
+
+</LinearLayout>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_eff"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/gray"
+        android:orientation="vertical"
+        android:showDividers="middle|end"
+        android:layout_weight="1"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/white"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="运单号" />
+
+            <TextView
+                android:id="@+id/tv_waybill_number"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:visibility="gone"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="航班号" />
+
+            <TextView
+                android:id="@+id/tv_flight_number"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:visibility="gone"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="航线" />
+
+            <TextView
+                android:id="@+id/tv_flight_route"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:visibility="gone"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="预计起飞时间" />
+
+            <TextView
+                android:id="@+id/tv_etd"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginTop="10dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="可分装重量" />
+
+            <TextView
+                android:id="@+id/tv_subpackage_weight_total"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="可分装件数" />
+
+            <TextView
+                android:id="@+id/tv_subpackage_count_total"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="可分装体积" />
+
+            <TextView
+                android:id="@+id/tv_subpackage_volume_total"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="分装重量" />
+
+            <EditText
+                android:id="@+id/et_subpackage_weight"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/transparent"
+                android:inputType="numberDecimal"
+                android:hint="请填写分装重量"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="分装件数" />
+
+            <EditText
+                android:id="@+id/et_subpackage_count"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/transparent"
+                android:inputType="number"
+                android:hint="请填写分装件数"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white"
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                style="@style/describe_tv_black_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="分装体积" />
+
+            <EditText
+                android:id="@+id/et_subpackage_volume"
+                style="@style/describe_tv_gray_8f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/transparent"
+                android:inputType="numberDecimal"
+                android:hint="请填写分装件数"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_sure_subpackage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_blue_press"
+        android:text="提交"
+        android:textColor="@color/white" />
+</LinearLayout>

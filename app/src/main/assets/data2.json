@@ -1,0 +1,127 @@
+{
+  "data": [
+    {
+      "orderNumber": "78-12345678",
+      "roadJunctionNumber": "009",
+      "useDate": "12:30-13:30",
+      "roadNumber": "19",
+      "totalNumber": 12,
+      "totalVolume": 5.2,
+      "totalWeight": 400,
+      "storeWay": "冷藏",
+      "storeTemp": 0,
+      "goodsType": "特货T899",
+      "chargingWeight": 300,
+      "singeData": [
+        {
+          "goodsName": "大豆",
+          "singleNumber": 3,
+          "singleWeight": 300,
+          "singleVolume": 300,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "牛肉",
+          "singleNumber": 2,
+          "singleWeight": 200,
+          "singleVolume": 125,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "狗肉",
+          "singleNumber": 4,
+          "singleWeight": 400,
+          "singleVolume": 555,
+          "packageType": "纸箱"
+        }
+      ],
+      "flightNumber": "3U9999",
+      "arriveTime": "13:12",
+      "realRoadNumber": "4",
+      "flightCompany": "四川航空",
+      "goodsCompany": "中外货运代理"
+    },
+    {
+      "orderNumber": "99-12345678",
+      "roadJunctionNumber": "009",
+      "useDate": "12:30-13:30",
+      "roadNumber": "19",
+      "totalNumber": 12,
+      "totalVolume": 5.2,
+      "totalWeight": 400,
+      "storeWay": "冷藏",
+      "storeTemp": 0,
+      "goodsType": "特货T3333",
+      "chargingWeight": 300,
+      "singeData": [
+        {
+          "goodsName": "大豆",
+          "singleNumber": 3,
+          "singleWeight": 300,
+          "singleVolume": 300,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "牛肉",
+          "singleNumber": 2,
+          "singleWeight": 200,
+          "singleVolume": 125,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "狗肉",
+          "singleNumber": 4,
+          "singleWeight": 400,
+          "singleVolume": 555,
+          "packageType": "纸箱"
+        }
+      ],
+      "flightNumber": "3U9999",
+      "arriveTime": "13:12",
+      "realRoadNumber": "4",
+      "flightCompany": "成都航空",
+      "goodsCompany": "中外货运代理"
+    },
+    {
+      "orderNumber": "sc-12345678",
+      "roadJunctionNumber": "009",
+      "useDate": "12:30-13:30",
+      "roadNumber": "19",
+      "totalNumber": 12,
+      "totalVolume": 5.2,
+      "totalWeight": 400,
+      "storeWay": "冷藏",
+      "storeTemp": 0,
+      "goodsType": "特货T899",
+      "chargingWeight": 300,
+      "singeData": [
+        {
+          "goodsName": "土豆",
+          "singleNumber": 3,
+          "singleWeight": 300,
+          "singleVolume": 300,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "牛肉",
+          "singleNumber": 2,
+          "singleWeight": 200,
+          "singleVolume": 125,
+          "packageType": "纸箱"
+        },
+        {
+          "goodsName": "人肉",
+          "singleNumber": 4,
+          "singleWeight": 400,
+          "singleVolume": 555,
+          "packageType": "纸箱"
+        }
+      ],
+      "flightNumber": "3U9999",
+      "arriveTime": "13:12",
+      "realRoadNumber": "4",
+      "flightCompany": "南方航空",
+      "goodsCompany": "中外货运代理"
+    }
+  ]
+}

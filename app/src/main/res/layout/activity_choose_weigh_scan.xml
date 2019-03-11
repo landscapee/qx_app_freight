@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EFF2F3"
+    tools:context=".activity.ChooseWeighScanActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/ll_chen_1"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rect_white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="165dp">
+            <ImageView
+                android:src="@mipmap/ic_kg_1"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80" />
+            <TextView
+                android:text="1#称"
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_chen_2"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rect_white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="165dp">
+            <ImageView
+                android:src="@mipmap/ic_kg_2"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80" />
+            <TextView
+                android:text="2#称"
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/ll_chen_3"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rect_white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="165dp">
+            <ImageView
+                android:src="@mipmap/ic_kg_3"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80" />
+            <TextView
+                android:text="3#称"
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_chen_4"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rect_white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="165dp">
+            <ImageView
+                android:src="@mipmap/ic_kg_4"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80" />
+            <TextView
+                android:text="4#称"
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

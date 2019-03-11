@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_waybill_number"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="2.2"
+            android:gravity="center"
+            android:text="999 9999"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_waybill_count"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1234"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="9999"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_volume"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="99"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_destination"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="目的站"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_warehouse_area"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="库区"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_tp_type"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="拉货"
+            android:textColor="@color/text_color"
+            android:background="@color/white"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_subpackage"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@drawable/btn_gray_press"
+            >
+
+            <TextView
+                android:id="@+id/tv_subpackage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect_green_45b"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="分装"
+                android:textColor="#FFFFFFFF"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_all"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@drawable/btn_gray_press"
+            >
+
+            <TextView
+                android:id="@+id/tv_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect_blue_5d9"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="全装"
+                android:textColor="#FFFFFFFF"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
