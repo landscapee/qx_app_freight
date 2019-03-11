@@ -71,7 +71,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            VerifyStaffActivity.startActivity(getActivity(),transportListList.get(position).getDeclareWaybillAddition(),transportListList.get(position).getTaskId());
+            VerifyStaffActivity.startActivity(getActivity(),transportListList.get(position).getDeclareWaybillAddition(),transportListList.get(position).getTaskId(),transportListList.get(position).getSpotFlag());
         });
         getData();
     }

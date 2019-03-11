@@ -63,13 +63,15 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private List<AddtionInvoicesBean.AddtionInvoices> mList;
     private String mTaskId;
     private String mFilePath;
+    private String mSpotFlag;
 
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath) {
+    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath,String spotFlag) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
         intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
         intent.putExtra("taskId", taskId);
         intent.putExtra("filePath", filePath);
+        intent.putExtra("spotFlag", spotFlag);
         context.startActivityForResult(intent, 0);
     }
 
@@ -99,6 +101,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
         mTaskId = getIntent().getStringExtra("taskId");
         mFilePath = getIntent().getStringExtra("filePath");
+        mSpotFlag = getIntent().getStringExtra("spotFlag");
         AddtionInvoicesBean addtionInvoicesBean = new AddtionInvoicesBean();
         if (mDeclareData != null) {
             String str = mDeclareData.getAddtionInvoices();
@@ -122,6 +125,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         0,//报检是否合格0合格 1不合格
                         0,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
+                        mSpotFlag,
                         UserInfoSingle.getInstance().getUserId() //当前提交人id
                 );
                 break;

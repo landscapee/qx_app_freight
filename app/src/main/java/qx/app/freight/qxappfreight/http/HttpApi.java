@@ -80,7 +80,7 @@ public interface HttpApi {
     Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId);
 
     /***********收运****************************/
-    //代办收运列表
+    //代办
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);
 

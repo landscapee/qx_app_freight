@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -72,9 +73,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
+    private String mSpotFlag;
 
 
-    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String userId) {
+    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag,String userId) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
         intent.putExtra("waybillId", waybillId);
         intent.putExtra("id", id);
@@ -83,6 +85,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         intent.putExtra("fileCheck", fileCheck);
         intent.putExtra("taskId", taskId);
         intent.putExtra("userId", userId);
+        intent.putExtra("spotFlag", spotFlag);
         context.startActivityForResult(intent, 0);
     }
 
@@ -104,6 +107,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         fileCheck = getIntent().getIntExtra("fileCheck", 0);
         taskId = getIntent().getStringExtra("taskId");
         userId = getIntent().getStringExtra("userId");
+        //0是通过 1是不通过
+        mSpotFlag = getIntent().getStringExtra("spotFlag");
         //货代信息
 //        mPresenter = new FreightInfoPresenter(this);
 //        ((FreightInfoPresenter) mPresenter).freightInfo(id);
@@ -112,11 +117,18 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mStorageCommitEntity = new StorageCommitEntity();
         llReason.setVisibility(View.GONE);
 
-        choiceRelativeLayout.setOnClickListener(v -> {
-            if ("通过".equals(mTvCheck.getText()))
-                initPop1(true);
-            else
-                initPop1(false);
+        mTvCheck.setOnClickListener(v -> {
+            Log.e("SpotFlag", mSpotFlag);
+            //0抽检，要弹，1不抽检，不需要弹
+            if ("1".equals(mSpotFlag)) {
+                ToastUtil.showToast(this, "不需要抽检，默认通过");
+            } else if ("0".equals(mSpotFlag)) {
+                if ("通过".equals(mTvCheck.getText()))
+                    initPop1(true);
+                else
+                    initPop1(false);
+            }
+
         });
 
         BtnReceiveGood.setOnClickListener(v -> {
@@ -200,7 +212,15 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     }
 
-    private void initPop1(boolean sure) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    private void initPop1(boolean tag) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.popwindow, null);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -216,18 +236,24 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         //显示窗口
         popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         //设置PopupWindow的View点击事件
-        setOnPopupViewClick(view, sure);
+        setOnPopupViewClick(view, tag);
         //设置popupWindow消失时的监听
-        popupWindow.setOnDismissListener(() -> makeWindowLight());
+        popupWindow.setOnDismissListener(() ->
+                makeWindowLight()
+        );
         popupWindow.showAsDropDown(view);
     }
 
-    private void setOnPopupViewClick(View view, boolean sure) {
+    private void setOnPopupViewClick(View view, boolean tag) {
         TextView tv_cancel = view.findViewById(R.id.tv_cancel);
         CheckBox cb_adopt = view.findViewById(R.id.cb_adopt);
         CheckBox cb_notpass = view.findViewById(R.id.cb_notpass);
         Button bt_commit = view.findViewById(R.id.btn_commit);
-        cb_adopt.setChecked(sure);
+        if (tag)
+            cb_adopt.setChecked(true);
+        else
+            cb_notpass.setChecked(true);
+
         cb_adopt.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
                 cb_notpass.setChecked(false);
@@ -249,10 +275,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             popupWindow.dismiss();
         });
         tv_cancel.setOnClickListener(v -> {
-            if(cb_adopt.isChecked() == false &&cb_notpass.isChecked()==false){
-                ToastUtil.showToast(this,"请选择");
-            }else
-            popupWindow.dismiss();
+            if (cb_adopt.isChecked() == false && cb_notpass.isChecked() == false) {
+                ToastUtil.showToast(this, "请选择");
+            } else
+                popupWindow.dismiss();
         });
     }
 

@@ -119,6 +119,7 @@ public class TransportListBean implements Serializable {
     private String waybillCount;
     private Object aircraftType;
     private Object associateAirport;
+    private String spotFlag;
     private long etd;
     private List<DeclareItemBean> declareItem;
     private boolean isExpand = false;

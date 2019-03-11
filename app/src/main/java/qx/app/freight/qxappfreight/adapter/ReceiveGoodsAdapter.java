@@ -45,9 +45,7 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
        //删除按钮
 //        helper.getView(R.id.btn_delete).setOnClickListener(v -> Toast.makeText(mContext, "当前删除：" + helper.getAdapterPosition(), Toast.LENGTH_SHORT).show());
 
-        helper.getView(R.id.btn_delete).setOnClickListener(v -> {
-            mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition());
-        });
+        helper.getView(R.id.btn_delete).setOnClickListener(v -> mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition()));
     }
 
     public void setOnDeleteClickListener(OnDeleteClick mOnDeleteClick) {

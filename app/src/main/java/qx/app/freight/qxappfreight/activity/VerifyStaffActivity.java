@@ -71,12 +71,14 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String mTaskId;
     private String fileName;
     private String filePath;
+    private String mSpotFlag;
 
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId) {
+    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId,String spotFlag) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
         intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
         intent.putExtra("taskId", taskId);
+        intent.putExtra("spotFlag", spotFlag);
         context.startActivityForResult(intent, 0);
     }
 
@@ -97,6 +99,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         ImageUtils.setImageHeightFoyWidth(mIvStaffNow, ImageUtils.getScreenWidth(this), 3, 4);
         mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
         mTaskId = getIntent().getStringExtra("taskId");
+        mSpotFlag = getIntent().getStringExtra("spotFlag");
         initData();
     }
 
@@ -138,7 +141,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
