@@ -125,10 +125,13 @@
             </LinearLayout>
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_gray_gap_vertical_line"
-                android:layerType="software" />
+                android:layerType="software"
+                android:layout_marginLeft="-24dp"
+                android:layout_marginRight="-24dp"
+                />
 
             <LinearLayout
                 android:layout_width="wrap_content"

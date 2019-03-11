@@ -45,6 +45,11 @@ public class CargoHandlingWaybillAdapter extends BaseQuickAdapter<FtGroupScooter
         helper.setText(R.id.tv_waybill_count,item.getNumber()+"");
         helper.setText(R.id.tv_weight,item.getWeight()+"");
         helper.setText(R.id.tv_volume,item.getVolume()+"");
+        if (item.getGroupScooterStatus() == 0)
+            helper.setText(R.id.tv_tp_type,"正常");
+        else
+            helper.setText(R.id.tv_tp_type,"拉货");
+
 
     }
     public void setOnSubpackageClickListener(OnOneClickLister listener) {

@@ -9,35 +9,46 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_tp_status"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:background="#FFE1C1"
+                android:textColor="#CD5400"
+                android:text="正在执行"
+                android:gravity="center"
+                android:visibility="gone"
+                />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_car_doing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+            </android.support.v7.widget.RecyclerView>
             <LinearLayout
                 android:id="@+id/ll_add"
                 android:layout_width="match_parent"
-                android:layout_height="183dp"
+                android:layout_height="73dp"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:background="@drawable/shape_rect_gray_eff2"
+                android:layout_marginTop="7dp"
                 >
                 <ImageView
                     android:id="@+id/image_scan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/scan_big"
+                    android:src="@mipmap/new_5"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="请点击扫码添加板车"
+                    android:text="请扫码添加板车"
                     android:layout_marginTop="@dimen/dp_5"
                     />
 
             </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_car_doing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-
         </LinearLayout>
 
     <Button

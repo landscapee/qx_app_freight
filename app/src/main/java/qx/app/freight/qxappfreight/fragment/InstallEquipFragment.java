@@ -86,7 +86,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void loadData() {
         BaseFilterEntity entity=new BaseFilterEntity();
 //        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-        entity.setWorkerId("43544fd5079c481abc3c2102b04b1079");
+        entity.setWorkerId("36dc33c4132d4c96b9d9bce774feda05");
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
@@ -94,7 +94,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             loadData();
             dismissProgessDialog();
@@ -109,7 +109,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void onLoadMore() {
-        mCurrentPage++;
         loadData();
     }
 
@@ -119,6 +118,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mList.clear();
             mMfrvData.finishRefresh();
         }else {
+            mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
         for (LoadAndUnloadTodoBean bean:loadAndUnloadTodoBean){
@@ -211,7 +211,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void slideTaskResult(String result) {
-        Log.e("tagNet","data1111111111======"+result);
+//        Log.e("tagNet","data1111111111======"+result);
         if ("正确".equals(result)){
             mSlideadapter.notifyDataSetChanged();
         }

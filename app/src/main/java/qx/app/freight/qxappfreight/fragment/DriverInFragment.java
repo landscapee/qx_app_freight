@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,6 +54,8 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     ImageView imageScan;
     @BindView(R.id.btn_begin_end)
     Button btnBeginEnd;
+    @BindView(R.id.tv_tp_status)
+    TextView tvTpStatus;
 
     private List <TransportTodoListBean> list;
     private HandcarBacklogTPAdapter mHandcarBacklogTPAdapterDoing;
@@ -148,17 +151,11 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
     }
 
-    @OnClick({R.id.image_scan, R.id.btn_begin_end})
+    @OnClick({R.id.ll_add, R.id.btn_begin_end})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.image_scan:
-//                list.add(true);
-                mHandcarBacklogTPAdapterDoing.notifyDataSetChanged();
-                if (list.size() >= 5) {
-                    ToastUtil.showToast(getContext(), "最多一次 拉5板货");
-                    llAdd.setVisibility(View.GONE);
-                }
-                upDataBtnStatus();
+            case R.id.ll_add:
+                ScanManagerActivity.startActivity(getActivity(), "DriverInFragment");
                 break;
             case R.id.btn_begin_end:
                 if (tpStatus == 1) {
@@ -265,6 +262,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
             llAdd.setVisibility(View.GONE);
             doingSlideRecyclerView.closeMenu();
             doingSlideRecyclerView.setIsmIsSlide(false);
+            tvTpStatus.setVisibility(View.VISIBLE);
         }
         else {
             btnBeginEnd.setText("开始");
@@ -273,8 +271,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
             list.clear();
             mHandcarBacklogTPAdapterDoing.notifyDataSetChanged();
             llAdd.setVisibility(View.VISIBLE);
-            upDataBtnStatus();
-
+            tvTpStatus.setVisibility(View.GONE);
         }
         upDataBtnStatus();
     }

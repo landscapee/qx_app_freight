@@ -48,7 +48,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     private List<AcceptTerminalTodoBean> list;
     private DriverOutTaskAdapter adapter;
-
+    private int currentPage = 1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,7 +82,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     private void getData(){
         mPresenter = new AcceptTerminalTodoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setUserId("u2c2f2a41101e4a14881b1d36337ff7bc");
+        entity.setCurrent(currentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setUserId("u9bca020ce9204662b9902386fd648e86");
 //        entity.setUserId(UserInfoSingle.getInstance().getUserId());
         ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
     }
@@ -98,12 +100,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     @Override
     public void onRefresh() {
+        currentPage = 1;
         getData();
     }
 
     @Override
     public void onLoadMore() {
-//        adapter.notifyDataSetChanged();
+        getData();
     }
      @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
@@ -116,14 +119,21 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     @Override
     public void acceptTerminalTodoResult(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
         if (acceptTerminalTodoBeanList != null) {
-            mMfrvData.finishRefresh();
-            list.clear();
+
+           if (currentPage == 1){
+               mMfrvData.finishRefresh();
+               list.clear();
+           }
+           else {
+               currentPage++;
+               mMfrvData.finishLoadMore();
+           }
+
             //根据BeginAreaId分类
             acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
                 acceptTerminalTodoBean.setUseTasks(new ArrayList <List <OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaId)).values()));
 //                acceptTerminalTodoBean.setCollect(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaId)));
             });
-
             list.addAll(acceptTerminalTodoBeanList);
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
@@ -137,7 +147,12 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     @Override
     public void toastView(String error) {
-
+        if (currentPage == 1){
+            mMfrvData.finishRefresh();
+        }
+        else {
+            mMfrvData.finishLoadMore();
+        }
     }
 
     @Override

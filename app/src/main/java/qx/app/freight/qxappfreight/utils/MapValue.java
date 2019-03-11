@@ -2,6 +2,11 @@ package qx.app.freight.qxappfreight.utils;
 
 public class MapValue {
 
+    /**
+     * 根据code 获取 运输位置type文字
+     * @param code
+     * @return
+     */
     public static String getLocationValue(String code){
         String value ="无";
         if ("temp_area".equals(code))
@@ -14,6 +19,25 @@ public class MapValue {
             value = "行李区";
         else if ("warehouse".equals(code))
             value = "库区";
+
+        return value;
+    }
+    /**
+     * 根据code 获取 板车类型
+     * @param code
+     * @return
+     */
+    public static String getCarTypeValue(String code){
+        String value ="无";
+        if ("1".equals(code))
+            value = "大滚筒";
+        else if ("2".equals(code))
+            value = "小滚筒";
+        else if ("3".equals(code))
+            value = "大平板";
+        else if ("4".equals(code))
+            value = "小平板";
+
 
         return value;
     }

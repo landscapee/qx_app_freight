@@ -87,4 +87,6 @@ public class TransportTodoListBean {
         private String planeType;
         private long etd;
         private String flightRoute;
+        private int num;//板车数量
+        private String carType;//板车类型
 }

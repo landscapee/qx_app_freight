@@ -98,4 +98,10 @@ public class FtGroupScooter implements Serializable {
      * 0: true
      */
     private Short inFlight = 0;
+    /**
+     * 组板记录状态:
+     * 0.正常
+     * 1.拉回
+     */
+    private Integer groupScooterStatus;
 }

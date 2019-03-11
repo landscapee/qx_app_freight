@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,6 +54,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     Button btnBeginEnd;
     @BindView(R.id.image_scan)
     ImageView imageScan;
+
+    @BindView(R.id.tv_tp_status)
+    TextView tvTpStatus;
 
     private List <FlightOfScooterBean> list;
     private List <TransportTodoListBean> listScooter;
@@ -120,7 +124,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser("u2c2f2a41101e4a14881b1d36337ff7bc");
+        ((ScanScooterPresenter) mPresenter).scooterWithUser("u9bca020ce9204662b9902386fd648e86");
     }
 
     @Override
@@ -139,7 +143,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mPresenter = new ScanScooterPresenter(this);
             TransportTodoListBean mainIfos = new TransportTodoListBean();
             mainIfos.setTpScooterCode(scooterCode);
-            mainIfos.setTpOperator("u2c2f2a41101e4a14881b1d36337ff7bc");
+            mainIfos.setTpOperator("u9bca020ce9204662b9902386fd648e86");
 //            mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
@@ -171,7 +175,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
         switch (view.getId()) {
             case R.id.ll_add:
-
+                ScanManagerActivity.startActivity(this);
                 break;
             case R.id.btn_begin_end:
                 if (tpStatus == 1) {
@@ -228,7 +232,6 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         mPresenter = new TransportBeginPresenter(this);
         TransportEndEntity transportEndEntity = new TransportEndEntity();
 
-        List<String> tasks = new ArrayList <>();
         for (TransportTodoListBean tr : mListBeanBegin) {
             tr.setInSeat(true);
             for (OutFieldTaskBean mOutFieldTaskBean : OutFieldTaskBeans) {
@@ -265,12 +268,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             llAdd.setVisibility(View.GONE);
             mDriverOutTaskDoingAdapter.setCheckBoxEnable(true);
             mDriverOutTaskDoingAdapter.setIsmIsSlide(false);
+            tvTpStatus.setVisibility(View.VISIBLE);
         } else {
             if (getMaxHandcarNum() == 0) {
                 btnBeginEnd.setText("开始");
                 llAdd.setVisibility(View.VISIBLE);
                 mDriverOutTaskDoingAdapter.setCheckBoxEnable(false);
                 mDriverOutTaskDoingAdapter.setIsmIsSlide(true);
+                tvTpStatus.setVisibility(View.GONE);
             }
         }
         upDataBtnStatus();
@@ -319,7 +324,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     mTransportTodoListBean.setPlaneType(mOutFieldTaskBean.getFlights().getAircraftType());
                     mTransportTodoListBean.setEtd(mOutFieldTaskBean.getFlights().getEtd());
                     mTransportTodoListBean.setFlightRoute(mOutFieldTaskBean.getFlights().getRouters());
-                    mTransportTodoListBean.setTpDestinationLocate(MapValue.getLocationValue(mOutFieldTaskBean.getEndAreaType()));
+                    mTransportTodoListBean.setTpDestinationLocate(mOutFieldTaskBean.getEndAreaType());
+                    mTransportTodoListBean.setNum(mOutFieldTaskBean.getNum());
+                    mTransportTodoListBean.setCarType(mOutFieldTaskBean.getCargoType());
                 }
 
             }
@@ -336,6 +343,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     mFlightOfScooterBean.setPlaneType(mTransportTodoListBean.getPlaneType());
                     mFlightOfScooterBean.setEtd(mTransportTodoListBean.getEtd());
                     mFlightOfScooterBean.setFlightRoute(mTransportTodoListBean.getFlightRoute());
+                    mFlightOfScooterBean.setCarType(mTransportTodoListBean.getCarType());
+                    mFlightOfScooterBean.setNum(mTransportTodoListBean.getNum());
 
                     List <TransportTodoListBean> listBeans = new ArrayList <>();
                     listBeans.add(mTransportTodoListBean);
@@ -346,8 +355,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 }
             }
 
-
             list.addAll(new ArrayList <FlightOfScooterBean>(mapFlight.values()));
+            mapFlight.clear();
 
             mDriverOutTaskDoingAdapter.notifyDataSetChanged();
             if (result.size() >= 5) {

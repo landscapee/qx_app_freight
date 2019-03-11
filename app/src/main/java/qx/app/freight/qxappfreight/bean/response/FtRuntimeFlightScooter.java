@@ -118,7 +118,6 @@ public class FtRuntimeFlightScooter implements Serializable {
      * 板车上的收运记录
      */
     private List<FtGroupScooter> groupScooters;
-
     /**
      *
      * 1:update

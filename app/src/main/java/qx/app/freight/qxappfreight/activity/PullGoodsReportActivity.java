@@ -118,7 +118,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mPresenter = new ScanScooterPresenter(this);
             TransportTodoListBean mainIfos = new TransportTodoListBean();
             mainIfos.setTpScooterCode(scooterCode);
-            mainIfos.setTpOperator("43544fd5079c481abc3c2102b04b1079");
+            mainIfos.setTpOperator("36dc33c4132d4c96b9d9bce774feda05");
             mainIfos.setDtoType(8);
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
@@ -127,14 +127,15 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     @Override
     public void scanScooterResult(String result) {
         if (!"".equals(result)) {
-//            ((ScanScooterPresenter) mPresenter).scooterWithUser("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-            ((ScanScooterPresenter) mPresenter).scooterWithUser("43544fd5079c481abc3c2102b04b1079");
+
+            ((ScanScooterPresenter) mPresenter).scooterWithUser("36dc33c4132d4c96b9d9bce774feda05");
         }
     }
 
     @Override
     public void scooterWithUserResult(List<TransportTodoListBean> result) {
         if (result != null) {
+            mList.clear();
             mList.addAll(result);
             mGoodsAdapter.notifyDataSetChanged();
             if (mList.size() >= 5) {

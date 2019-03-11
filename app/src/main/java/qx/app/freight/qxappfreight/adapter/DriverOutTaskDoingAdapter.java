@@ -14,7 +14,10 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.FlightOfScooterBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -42,9 +45,9 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         helper.setText(R.id.tv_flight_number,item.getFlightNo());
         helper.setText(R.id.tv_flight_type,item.getPlaneType());
         helper.setText(R.id.tv_flight_place,item.getPlanePlace());
-        helper.setText(R.id.tv_arrive_time, TimeUtils.date2Tasktime3(item.getEtd()));
 
-        helper.setText(R.id.tv_flight_task_type,"几个小滚筒");
+        helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info, TimeUtils.date2Tasktime3(item.getEtd()),TimeUtils.getDay(item.getEtd())));
+        helper.setText(R.id.tv_flight_task_type,item.getNum()+"个"+MapValue.getCarTypeValue(item.getCarType()));
 
         helper.setChecked(R.id.cb_flight,item.isSelect());
 
