@@ -13,6 +13,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ItemBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class DeliveryDetailAdapter extends BaseQuickAdapter<ArrivalDeliveryInfoBean.WaybillsBean, BaseViewHolder> {
     private DeliveryDetailInterface listener;
@@ -44,24 +45,21 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<ArrivalDeliveryInfoB
         }
 
         if (bean.getWaybillStatus()==5){
-            holder.setVisible(R.id.tv_outStorage,false);
+            holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
         }else if (bean.getWaybillStatus() ==6){
             holder.setVisible(R.id.tv_outStorage,true);
-            holder.setVisible(R.id.btn_outStorage,false);
+            holder.setGone(R.id.btn_outStorage,false);
         }
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
-        btnOutStorage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.outStorage(bean.getId(),bean.getOutStorageUser());
-            }
-        });
+        btnOutStorage.setOnClickListener(v ->
+                listener.outStorage(holder.getAdapterPosition(),bean.getId(),bean.getOutStorageUser())
+        );
 
     }
 
     public interface DeliveryDetailInterface{
-        void outStorage(String id,String outStorageUser);
+        void outStorage(int position,String id,String outStorageUser);
 
     }
 }

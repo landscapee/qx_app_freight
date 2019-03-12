@@ -8,7 +8,23 @@
     tools:context=".activity.InportDeliveryDetailActivity">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/r_view"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#2E81FD"
+            android:text="确定"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

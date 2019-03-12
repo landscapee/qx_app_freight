@@ -22,7 +22,7 @@ public class InPortDeliveryAdapter extends BaseQuickAdapter<TransportListBean, B
     protected void convert(BaseViewHolder baseViewHolder, TransportListBean bean) {
         baseViewHolder.setText(R.id.serial_number,"流水号:"+bean.getSerialNumber());
         baseViewHolder.setText(R.id.allocate_flightnumber,bean.getConsignee());
-        baseViewHolder.setText(R.id.complete_num,bean.getOutboundNumber());
-        baseViewHolder.setText(R.id.total_num,bean.getWaybillCount());
+        baseViewHolder.setText(R.id.complete_num,""+bean.getOutboundNumber());
+        baseViewHolder.setText(R.id.total_num,""+bean.getWaybillCount());
     }
 }
