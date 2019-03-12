@@ -193,4 +193,5 @@ public class Tools {
     public static BSLoactionUtil.BSLocationBean getBSLoaction() {
         return (BSLoactionUtil.BSLocationBean) SaveUtils.getInstance().getValue(KEY_BSLoaction);
     }
+
 }

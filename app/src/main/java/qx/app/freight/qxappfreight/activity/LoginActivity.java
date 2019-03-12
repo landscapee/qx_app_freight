@@ -68,6 +68,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             }
         });
         checkPermissions();
+        checkPermissionsForWindow();
     }
 
     /**
