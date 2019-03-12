@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,9 +53,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     @BindView(R.id.et_uldnumber)
     EditText mEtUldNumber;     //Uld号
     @BindView(R.id.tv_cooter_weight)
-    TextView mTvCooterWeight;  //板车重量
+    EditText mTvCooterWeight;  //板车重量
     @BindView(R.id.tv_scooter)
-    TextView mTvScooter;         //板车号
+    EditText mTvScooter;         //板车号
     @BindView(R.id.btn_takeweight)
     Button mBtnTakeWeight;      //重量
     @BindView(R.id.tv_weight)
@@ -161,6 +162,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             }
         });
 
+        //取重
         mBtnTakeWeight.setOnClickListener(v -> {
             mPresenter = new GetWeightPresenter(this);
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
@@ -191,8 +193,14 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
         //超重重量
         mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
-        mMyAgentListBean.setScooterId(scooterInfo.getId());
-        mMyAgentListBean.setScooterType(scooterInfo.getScooterType());
+        if (null == scooterInfo) {
+//            ToastUtil.showToast(this, "id为空不能提交");
+            Toast.makeText(this, "id为空不能提交", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            mMyAgentListBean.setScooterId(scooterInfo.getId());
+            mMyAgentListBean.setScooterType(scooterInfo.getScooterType());
+        }
 //        mMyAgentListBean.setRepPlaceId("2");
 ////            mMyAgentListBean.setRepName("普货01");
 //        mMyAgentListBean.setRepPlaceNum("001");
@@ -229,8 +237,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     }
 
     private void finishAndToast() {
-        ToastUtil.showToast("未获取到板车信息，请重新扫码");
-        finish();
+        ToastUtil.showToast("未获取到板车信息，请手动输入");
     }
 
     //根据扫一扫获取到的板车号查询获得数据
@@ -242,6 +249,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
             //板车重量
             mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
+            //如果有板车号和板车重量，就不能让用户输入
+            mTvScooter.setFocusable(false);
+            mTvScooter.setEnabled(false);
+            mTvCooterWeight.setFocusable(false);
+            mTvCooterWeight.setEnabled(false);
             ((ScooterInfoListPresenter) mPresenter).exist(scooterInfoListBeans.get(0).getId());
         } else {
             finishAndToast();

@@ -186,12 +186,12 @@
             android:text="板车号"
             android:textColor="@color/black_3" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_scooter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:hint="" />
+            android:hint="请手动输入" />
 
     </LinearLayout>
 
@@ -211,15 +211,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="板车自重"
-
             android:textColor="@color/black_3" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_cooter_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:hint="" />
+            android:hint="请手动输入" />
     </LinearLayout>
 
     <LinearLayout

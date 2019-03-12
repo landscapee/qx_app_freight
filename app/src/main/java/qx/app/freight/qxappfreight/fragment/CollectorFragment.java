@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
