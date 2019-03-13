@@ -9,11 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
@@ -38,6 +44,8 @@ public class UpdatePushDialog extends Dialog {
     TextView tvContent;
     @BindView(R.id.slide_right_start)
     SlideRightExecuteView mSlideRightExecuteView;
+    @BindView(R.id.iv_start_gif)
+    ImageView ivStartGif;
 
     private OnTpPushListener mOnTpPushListener;
 
@@ -78,10 +86,28 @@ public class UpdatePushDialog extends Dialog {
         setCancelable(false);
         setCanceledOnTouchOutside(false);
 
-        mSlideRightExecuteView.setLockListener(() -> {
+        Glide.with(mContext).load(R.mipmap.swiperight_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivStartGif);
 
-            dismiss();
+        ivStartGif.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
+                ivStartGif.setVisibility(View.GONE);
+
+                return false;
+            }
+        });
+
+        mSlideRightExecuteView.setLockListener(new SlideRightExecuteView.OnLockListener() {
+            @Override
+            public void onOpenLockSuccess() {
+                dismiss();
+            }
+
+            @Override
+            public void onOpenLockCancel() {
+                ivStartGif.setVisibility(View.VISIBLE);
+            }
         });
 
         setView();

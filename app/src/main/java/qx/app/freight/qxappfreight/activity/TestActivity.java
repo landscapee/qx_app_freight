@@ -41,6 +41,12 @@ public class TestActivity extends BaseActivity {
         mSlideLeftExecuteView.setLockListener(() -> {
             ToastUtil.showToast(TestActivity.this,"执行任务");
         });
+        mSlideLeftExecuteView.setLockListener(new SlideLeftExecuteView.OnLockListener() {
+            @Override
+            public void onOpenLockSuccess() {
+
+            }
+        });
 
     }
 

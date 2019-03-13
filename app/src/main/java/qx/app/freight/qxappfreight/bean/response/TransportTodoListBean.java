@@ -55,7 +55,7 @@ public class TransportTodoListBean {
         /**
          * 是否到机位
          */
-        private boolean inSeat;
+        private Integer inSeat;
         /**
          * 开始区域扫码位置类型
          */

@@ -84,8 +84,8 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setCurrent(currentPage);
         entity.setSize(Constants.PAGE_SIZE);
-        entity.setUserId("u9bca020ce9204662b9902386fd648e86");
-//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//        entity.setUserId("u6911330e59ce46c288181ed11a48ee23");
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
         ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
     }
 

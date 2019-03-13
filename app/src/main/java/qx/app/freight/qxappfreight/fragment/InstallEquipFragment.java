@@ -85,8 +85,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     }
     private void loadData() {
         BaseFilterEntity entity=new BaseFilterEntity();
-//        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-        entity.setWorkerId("36dc33c4132d4c96b9d9bce774feda05");
+        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+//        entity.setWorkerId("36dc33c4132d4c96b9d9bce774feda05");
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);

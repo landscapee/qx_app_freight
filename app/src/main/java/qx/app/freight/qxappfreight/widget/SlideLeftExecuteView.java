@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class SlideLeftExecuteView extends AppCompatTextView {
     private boolean isCanTouch = true;// 是否允许滑动
     private OnLockListener mLockListener;
     private OnTouchListener mOnTouchListener;
-
+    private OnLockCancelListener mOnLockCancelListener;
     private int imgWidth,imgHeight;
 
     public SlideLeftExecuteView(Context context) {
@@ -161,6 +162,12 @@ public class SlideLeftExecuteView extends AppCompatTextView {
                     }
                     Log.e("tagSlide", "解锁成功");
                 }
+                else {
+                    new Handler().postDelayed((Runnable) () -> {
+                        mOnLockCancelListener.onOpenLockCancel();
+                    },300);
+
+                }
                 resetLock();
                 break;
             case MotionEvent.ACTION_OUTSIDE://超出了正常的UI边界
@@ -233,6 +240,13 @@ public class SlideLeftExecuteView extends AppCompatTextView {
 
     public interface OnLockListener {
         void onOpenLockSuccess();
+    }
+
+    public void setLockCancelListener(OnLockCancelListener onLockCancelListener){
+        this.mOnLockCancelListener = onLockCancelListener;
+    }
+    public interface OnLockCancelListener {
+        void onOpenLockCancel();
     }
 
     public void setOnTouchListener(OnTouchListener onTouchListener) {

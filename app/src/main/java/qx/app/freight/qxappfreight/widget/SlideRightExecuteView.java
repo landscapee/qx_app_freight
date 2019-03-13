@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -158,6 +159,12 @@ public class SlideRightExecuteView extends AppCompatTextView {
                     }
                     Log.e(TAG, "解锁成功");
                 }
+                else {
+
+                    new Handler().postDelayed((Runnable) () -> {
+                        mLockListener.onOpenLockCancel();
+                    },300);
+                }
                 resetLock();
                 break;
             case MotionEvent.ACTION_OUTSIDE://超出了正常的UI边界
@@ -213,6 +220,7 @@ public class SlideRightExecuteView extends AppCompatTextView {
 
     public interface OnLockListener {
         void onOpenLockSuccess();
+        void onOpenLockCancel();
     }
 
     // TODO: 是否在滑动
