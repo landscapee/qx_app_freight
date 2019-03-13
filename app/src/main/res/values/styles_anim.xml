@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="anim_bottom_bottom" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_sliding_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_sliding_to_bottom</item>
+    </style>
+</resources>

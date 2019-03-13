@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,24 +7,21 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryDetailAdapter;
-import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
+import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
+import qx.app.freight.qxappfreight.dialog.PopTestDialog;
+import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView {
@@ -78,16 +74,13 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             }
 
         });
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
-            }
-        });
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
-            deliveryComplet();
+//            deliveryComplet();
+            showDialog();
+//            showChooseDialog();
         });
     }
     //根据流水单号获取列表
@@ -113,6 +106,35 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         entity.setTaskId(taskId);
         entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
         ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);
+    }
+
+    private void showDialog(){
+        List<TestBean> list22 = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            if (i==20){
+                list22.add(new TestBean(1,i));
+            }else if (i==25){
+                list22.add(new TestBean(1,i));
+            }else {
+                list22.add(new TestBean(0,i));
+            }
+
+        }
+
+        PopTestDialog dialog = new PopTestDialog();
+        dialog.setData(list22,this);
+        dialog.show(getSupportFragmentManager(),"123");
+    }
+
+    private void showChooseDialog(){
+        List<TestBean> list22 = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            list22.add(new TestBean("库房"+i,false));
+        }
+
+        ChooseStoreroomDialog dialog = new ChooseStoreroomDialog();
+        dialog.setData(list22,this);
+        dialog.show(getSupportFragmentManager(),"123");
     }
 
     @Override
