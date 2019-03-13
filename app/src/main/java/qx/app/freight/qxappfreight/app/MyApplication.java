@@ -14,8 +14,7 @@ public class MyApplication extends Application {
 
     private static Context appContext;
 
-
-
+    public static String currentView; //当前顶层View的类名
 
     @Override
     public void onCreate() {

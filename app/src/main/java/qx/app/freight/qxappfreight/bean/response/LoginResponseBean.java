@@ -33,6 +33,8 @@ public class LoginResponseBean implements Serializable {
     private String token;
     private List<RoleRSBean> roleRS;
 
+    private String currentRole;
+
     @Data
     public static class RoleRSBean implements Serializable{
         private String id;

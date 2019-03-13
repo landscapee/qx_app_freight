@@ -74,7 +74,9 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+                EventBus.getDefault().register(this);
+
         mToolBar.setMainTitle(Color.WHITE, "我的待办");
         mToolBar.setRightTextView(View.VISIBLE, Color.WHITE, "待办列表", v -> {
 
