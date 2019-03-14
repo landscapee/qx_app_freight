@@ -42,6 +42,7 @@
         android:layout_weight="1"
         android:layout_height="@dimen/dp_40"
         android:gravity="center"
+        android:textColor="#5e75c1"
         android:text="舱单核查"/>
     <Button
         android:id="@+id/btn_ffm"

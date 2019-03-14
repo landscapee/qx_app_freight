@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -146,6 +148,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
             mScanGoodsAdapter.notifyDataSetChanged();
         });
+        mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
+        });
         mSlideRvPac.setLayoutManager(new LinearLayoutManager(this));
         mScanPacAdapter = new ScanInfoAdapter(mListPac,flightInfo);
         mSlideRvPac.setAdapter(mScanPacAdapter);
@@ -154,6 +158,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             mSlideRvPac.closeMenu();
             mTvPacNumber.setText(String.valueOf(mListPac.size()));
             mScanPacAdapter.notifyDataSetChanged();
+        });
+        mScanPacAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         setListeners();
     }

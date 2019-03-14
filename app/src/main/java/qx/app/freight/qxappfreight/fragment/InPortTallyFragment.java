@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,10 +17,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
 import qx.app.freight.qxappfreight.adapter.TaskManifestAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /**
@@ -31,8 +28,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
-    private List<String> list;
-    private TaskManifestAdapter adapter;
+    private List<String> mList;
+    private TaskManifestAdapter mAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,12 +48,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     private void initData() {
-        list = new ArrayList<>();
+        mList = new ArrayList<>();
         for (int i=0;i<6;i++){
-            list.add("3U9999");
+            mList.add("3U9999");
         }
-        adapter = new TaskManifestAdapter(list,TaskManifestAdapter.TYPE_INPORT_TALLY);
-        mMfrvData.setAdapter(adapter);
+        mAdapter = new TaskManifestAdapter(mList,TaskManifestAdapter.TYPE_INPORT_TALLY);
+        mMfrvData.setAdapter(mAdapter);
     }
 
     @Override
@@ -75,7 +72,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void onLoadMore() {
-        list.add("8U1234");
-        adapter.notifyDataSetChanged();
+        mList.add("8U1234");
+        mAdapter.notifyDataSetChanged();
     }
 }

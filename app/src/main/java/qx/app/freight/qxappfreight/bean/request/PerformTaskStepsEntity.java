@@ -47,4 +47,9 @@ public class PerformTaskStepsEntity {
      * 执行步骤时间戳
      */
     private long createTime;
+    /**
+     * 类型标识：装卸机：1
+     */
+    private int type;
+    private String loadUnloadDataId;
 }

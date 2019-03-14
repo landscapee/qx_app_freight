@@ -35,7 +35,7 @@ public class TaskManifestAdapter extends BaseQuickAdapter<String, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
-        helper.setText(R.id.tv_flight_number, item);
+        helper.setText(R.id.tv_flight_number, item).setText(R.id.tv_arrive_time,String.format(mContext.getString(R.string.format_arrive_info),"12:34","09"));
         switch (mType) {
             case TYPE_INPORT_TALLY:
                 helper.setText(R.id.tv_type,"进港理货");

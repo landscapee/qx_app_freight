@@ -79,15 +79,14 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         mGoodsAdapter = new PullGoodsInfoAdapter(mList);
         mSrvGoods.setAdapter(mGoodsAdapter);
         mGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-                    if (mList.size() == 5) {
-                        mLlAddScan.setVisibility(View.GONE);
-                    }
                     mList.remove(position);
                     mSrvGoods.closeMenu();
                     mGoodsAdapter.notifyDataSetChanged();
                     upDataBtnStatus();
                 }
         );
+        mGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
+        });
         mBtnCommit.setOnClickListener(v -> {
             if (mList.size()==0){
                 ToastUtil.showToast("请扫描添加板车数据！");
@@ -118,7 +117,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mPresenter = new ScanScooterPresenter(this);
             TransportTodoListBean mainIfos = new TransportTodoListBean();
             mainIfos.setTpScooterCode(scooterCode);
-            mainIfos.setTpOperator("36dc33c4132d4c96b9d9bce774feda05");
+            mainIfos.setTpOperator("5573650c346c487282f1a37cfeeb29e2");
             mainIfos.setDtoType(8);
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
@@ -127,8 +126,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     @Override
     public void scanScooterResult(String result) {
         if (!"".equals(result)) {
-
-            ((ScanScooterPresenter) mPresenter).scooterWithUser("36dc33c4132d4c96b9d9bce774feda05");
+            ((ScanScooterPresenter) mPresenter).scooterWithUser("5573650c346c487282f1a37cfeeb29e2");
         }
     }
 
@@ -138,10 +136,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mList.clear();
             mList.addAll(result);
             mGoodsAdapter.notifyDataSetChanged();
-            if (mList.size() >= 5) {
-                ToastUtil.showToast(this, "最多一次拉5板货");
-                mLlAddScan.setVisibility(View.GONE);
-            }
             upDataBtnStatus();
         } else
             ToastUtil.showToast(this, "返回数据为空");
