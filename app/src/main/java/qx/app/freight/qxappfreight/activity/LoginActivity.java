@@ -18,6 +18,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketSTOMPManager;
@@ -123,8 +124,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void loginResult(LoginResponseBean loginBean) {
         if (loginBean != null) {
             Tools.setLoginUserBean(loginBean);
-            if ("zhuangxieji".equals(loginBean.getLoginName())){
-                loginBean.setUserId(loginBean.getLoginid());
+            //解决 智能调度和货运  装卸机人员id 不一致问题
+            for (LoginResponseBean.RoleRSBean mRoleRSBean :loginBean.getRoleRS()){
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())){
+                    loginBean.setUserId(loginBean.getLoginid());
+                    break;
+                }
+
             }
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
