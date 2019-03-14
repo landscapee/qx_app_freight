@@ -93,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/color_1593c6"
+            android:background="#2e81fd"
             android:gravity="center"
             android:text="确定"
             android:textColor="@color/white" />
