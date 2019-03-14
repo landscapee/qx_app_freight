@@ -8,7 +8,8 @@ public class InPortTallyListModel {
     private String startPlace;
     private String middlePlace;
     private String endPlace;
-    private String docName;//Y | AWBA
+    private String docName;//AWBA
+    private boolean docArrived;//Y N
     private int docNumber;
     private int docWeight;
     private int manifestNumber;//舱单数量

@@ -33,4 +33,11 @@
     <string name="text_newest_version">最新版本</string>
     <string name="format_goods_info">%1$d件|%2$dkg|%3$fm³</string>
     <string name="format_goods_inport">%1$s件|%2$skg</string>
+    <string name="format_doc_arrive_info">文件到达:%1$s</string>
+    <string name="format_doc_number_info">%1$d件/%2$dkg</string>
+    <string name="format_customs_arrive_info">海关监督:%1$s 是否转运:%2$s</string>
+    <string name="format_customs_number_info">舱单:%1$d件/%2$dkg</string>
+    <string name="format_unpackage_info">拆 箱 板:%1$s 是否冷藏:%2$s</string>
+    <string name="format_unpackage_number_info">理货:%1$d件/%2$dkg</string>
+    <string name="format_inport_tally_store_info">%1$s|库位%2$d</string>
 </resources>

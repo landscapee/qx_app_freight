@@ -1,11 +1,9 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
@@ -15,10 +13,8 @@ import com.ouyben.empty.EmptyLayout;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.constant.Constants;

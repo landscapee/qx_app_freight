@@ -1,8 +1,15 @@
 package qx.app.freight.qxappfreight.utils;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.TextAppearanceSpan;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -69,5 +76,47 @@ public class StringUtil {
         }
         return flag;
     }
-
+    public static SpannableStringBuilder getAutoColorText(String text){
+        String splitTexts[]=text.split(":");
+        SpannableStringBuilder builderText = new SpannableStringBuilder(text);
+        ColorStateList blue = ColorStateList.valueOf(Color.parseColor("#31ccbd"));
+        ColorStateList red = ColorStateList.valueOf(Color.RED);
+        if (splitTexts.length==2){
+            int index=text.indexOf(":");
+            boolean flag=text.substring(index+1,index+2).equals("Y");
+            TextAppearanceSpan textAppearanceSpan;
+            if (flag){
+                textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
+            }else {
+                textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
+            }
+            builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            return builderText;
+        }else {
+            List<Integer> indexes=getIndex(text,":");
+            for (Integer index:indexes){
+                boolean flag=text.substring(index+1,index+2).equals("Y");
+                TextAppearanceSpan textAppearanceSpan;
+                if (flag){
+                    textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
+                }else {
+                    textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
+                }
+                builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            }
+            return builderText;
+        }
+    }
+    private static List<Integer> getIndex(String strings, String str){
+        List<Integer> list=new ArrayList<>();
+        int flag=0;
+        while (strings.contains(str)){
+            //截取包含自身在内的前边部分
+            String aa= strings.substring(0,strings.indexOf(str)+str.length());
+            flag=flag+aa.length();
+            list.add(flag-str.length());
+            strings=strings.substring(strings.indexOf(str)+str.length());
+        }
+        return list;
+    }
 }
