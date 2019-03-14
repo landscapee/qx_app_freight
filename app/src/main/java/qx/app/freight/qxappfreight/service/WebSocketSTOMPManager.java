@@ -27,7 +27,8 @@ public class WebSocketSTOMPManager {
     private StompClient mStompClient;
     private Timer mTimer;
     private long nowdate;
-    private String uri = "ws://myyx.nat123.cc:24010/taskAssignCenter?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e";
+    private String uri = "ws://192.168.0.171:7004/socketServer";
+//    private String uri = "ws://myyx.nat123.cc:24010/taskAssignCenter?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e";
     //myyx.nat123.cc:24010
     //private String uri = "http://myyx.nat123.cc:24010/taskAssignCenter?userId=ua1a81dd438b748dc9ddf76896b6a11fb";
     private CompositeDisposable compositeDisposable;
@@ -37,29 +38,10 @@ public class WebSocketSTOMPManager {
     }
 
     //创建连接
-    public void connect(Scheduler scheduler) {
+    public void connect() {
         mStompClient = Stomp.over(WebSocket.class, uri);
-        Disposable dispLifecycle = (Disposable) mStompClient.lifecycle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(scheduler)
-                .subscribe(lifecycleEvent -> {
-                    switch (lifecycleEvent.getType()) {
-                        case ERROR:
-                            Log.e("websocket", "连接出错。。。。。" + lifecycleEvent.getException());
-                            break;
-                        case CLOSED:
-                            Log.e("websocket", "连接关闭。。。。。");
-                            break;
-                        case OPENED:
-                            Log.e("websocket", "连接已开启。。。。。");
-//                    createStompClient();
-                            break;
-                    }
-                });
-        compositeDisposable.add(dispLifecycle);
-        mStompClient.connect();
 
-        Log.e("websocket", "连接中。。。。。");
+        Log.e("websocket", "开始连接。。。。。");
         mStompClient.lifecycle().subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {
                 case ERROR:
@@ -74,6 +56,7 @@ public class WebSocketSTOMPManager {
                     break;
             }
         });
+        mStompClient.connect();
     }
 
 
