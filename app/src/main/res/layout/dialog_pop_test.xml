@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_white_top_10">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择库位"
+            android:layout_centerInParent="true"
+            android:textColor="#ff69778f"
+            android:textSize="18sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_cancel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="13dp"
+            android:src="@mipmap/closed" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:background="@color/test_1"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空库位"
+                android:gravity="center"
+                android:textColor="#ff888888"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:background="@color/test_2"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已经被使用库位"
+                android:gravity="center"
+                android:textColor="#ff888888"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:background="@color/test_3"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="目前选择库位"
+                android:gravity="center"
+                android:textColor="#ff888888"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <GridView
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:id="@+id/grid_view"
+        android:numColumns="auto_fit"
+        android:columnWidth="47dp"
+        android:verticalSpacing="3dp"
+        android:horizontalSpacing="3dp"
+        android:listSelector="#00000000"
+        android:scrollbars="none"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"/>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#2e81fd"
+        android:text="确定"
+        android:textSize="18sp"
+        android:textColor="@color/white" />
+
+</LinearLayout>

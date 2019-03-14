@@ -270,6 +270,11 @@
     <color name="dialog_button_light_green">#CAF1EE</color>
     <color name="divider_line_grey">#7f7f7f</color>
 
+    <color name="test_1">#F1F6F8</color>
+    <color name="test_2">#CDCCCC</color>
+    <color name="test_3">#2E81FD</color>
+
+
 
 
 </resources>

@@ -115,8 +115,8 @@ public class TransportListBean implements Serializable {
     private String flightId;
     private DeclareWaybillAdditionBean declareWaybillAddition;
     private String flightNo;
-    private String outboundNumber;
-    private String waybillCount;
+    private int outboundNumber;
+    private int waybillCount;
     private Object aircraftType;
     private Object associateAirport;
     private String spotFlag;

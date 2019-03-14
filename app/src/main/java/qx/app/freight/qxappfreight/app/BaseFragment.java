@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -77,5 +78,18 @@ public class BaseFragment extends Fragment {
         if (EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MyApplication.currentView = getClass().getSimpleName();
+        Log.e("========="+getClass().getSimpleName(),"onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("========="+getClass().getSimpleName(),"onPause");
     }
 }

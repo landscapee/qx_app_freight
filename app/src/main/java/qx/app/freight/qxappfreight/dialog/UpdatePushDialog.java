@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,11 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,52 +26,47 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
  * 外场运输待办推送
  */
-public class TpPushDialog extends Dialog {
+public class UpdatePushDialog extends Dialog {
 
     private Context mContext;
     private View convertView;
-    @BindView(R.id.tv_num)
-    TextView tvNum;
-    @BindView(R.id.tv_tp_type)
-    TextView tvTpType;
-    @BindView(R.id.rc_new_task)
-    RecyclerView rcNewTask;
-    @BindView(R.id.btn_sure)
-    Button btnSure;
-
-    private AcceptTerminalTodoBean mAcceptTerminalTodoBean;
-    private  List<OutFieldTaskBean> list;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    @BindView(R.id.slide_right_start)
+    SlideRightExecuteView mSlideRightExecuteView;
+    @BindView(R.id.iv_start_gif)
+    ImageView ivStartGif;
 
     private OnTpPushListener mOnTpPushListener;
 
-    public TpPushDialog( @NonNull Context context) {
+    public UpdatePushDialog(@NonNull Context context) {
         super(context);
 
     }
 
-    public TpPushDialog(@NonNull Context context, int themeResId,AcceptTerminalTodoBean mAcceptTerminalTodoBean,OnTpPushListener mOnTpPushListener) {
+    public UpdatePushDialog(@NonNull Context context, int themeResId, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
-        this.mAcceptTerminalTodoBean = mAcceptTerminalTodoBean;
         Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        convertView = getLayoutInflater().inflate(R.layout.popup_new_tp_task, null);
+        convertView = getLayoutInflater().inflate(R.layout.popup_manifest_update, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
         ButterKnife.bind(this,convertView);
         initViews();
 
     }
-    protected TpPushDialog( @NonNull Context context, boolean cancelable,  @Nullable DialogInterface.OnCancelListener cancelListener) {
+    protected UpdatePushDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 
@@ -86,19 +85,29 @@ public class TpPushDialog extends Dialog {
 
         setCancelable(false);
         setCanceledOnTouchOutside(false);
-        //列表设置
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
-        rcNewTask.setLayoutManager(manager);
-        list = new ArrayList<>();
-        TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list);
-        rcNewTask.setAdapter(mTaskFlightAdapter);
 
-        btnSure.setOnClickListener(v -> {
+        Glide.with(mContext).load(R.mipmap.swiperight_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivStartGif);
 
-//            mOnTpPushListener.onSureBtnCallBack(mAcceptTerminalTodoBean.getTaskId());
+        ivStartGif.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
-            dismiss();
+                ivStartGif.setVisibility(View.GONE);
 
+                return false;
+            }
+        });
+
+        mSlideRightExecuteView.setLockListener(new SlideRightExecuteView.OnLockListener() {
+            @Override
+            public void onOpenLockSuccess() {
+                dismiss();
+            }
+
+            @Override
+            public void onOpenLockCancel() {
+                ivStartGif.setVisibility(View.VISIBLE);
+            }
         });
 
         setView();
@@ -106,18 +115,12 @@ public class TpPushDialog extends Dialog {
     }
 
     private void setView() {
-        if (mAcceptTerminalTodoBean != null){
-//            for (List<OutFieldTaskBean> mlist:mAcceptTerminalTodoBean.getUseTasks()){
-//
-//                list.addAll(mlist);
-//            }
-            list.addAll(mAcceptTerminalTodoBean.getTasks());
-        }
+
     }
 
     public interface OnTpPushListener{
 
-            void onSureBtnCallBack(String taskId);
+            void onSureBtnCallBack(String s);
 
     }
 }

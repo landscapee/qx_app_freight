@@ -10,7 +10,7 @@
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         app:cpv_animAutostart="true"
-        app:cpv_color="@color/red"
+        app:cpv_color="@color/flight_a"
         app:cpv_indeterminate="true" />
 
     <TextView

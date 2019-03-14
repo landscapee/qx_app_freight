@@ -19,6 +19,8 @@ import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.activity.TestActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.dialog.TpPushDialog;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class TestFragment extends BaseFragment {
@@ -74,12 +76,22 @@ public class TestFragment extends BaseFragment {
                 ToastUtil.showToast(mContext, "收货");
                 break;
             case R.id.button_add_cargo: //新增
-                ToastUtil.showToast(mContext, "新增");
+                //全屏dialog
+                TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.dialog, null, taskId -> {
+
+                });
+                tpPushDialog.show();
                 break;
             case R.id.button_input_warehouse: //入库
                 TestActivity.startActivity(mContext);
                 break;
             case R.id.button_select_warehouse_position: //选择仓位e
+
+                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.dialog, s -> {
+
+                });
+                updatePushDialog.show();
+
 //                Intent intent1 = new Intent(getContext(), AllocateVehiclesFragment.class);
 //                startActivity(intent1);
 //                ToastUtil.showToast(mContext,"选择仓位");

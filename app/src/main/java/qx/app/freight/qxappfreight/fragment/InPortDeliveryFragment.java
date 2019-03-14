@@ -57,6 +57,13 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+//        loadData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pageCurrent = 1;
         loadData();
     }
 
@@ -69,9 +76,10 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         mAdapter = new InPortDeliveryAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
+                    .putExtra("num1" ,mList.get(position).getOutboundNumber())
+                    .putExtra("num2" ,mList.get(position).getWaybillCount())
                     .putExtra("taskId", mList.get(position).getTaskId())
-                    .putExtra("billId", mList.get(position).getSerialNumber())
-                    .putExtra("flightId", mList.get(position).getFlightId()));
+                    .putExtra("billId", mList.get(position).getSerialNumber()));
 
         });
         mMfrvData.setAdapter(mAdapter);

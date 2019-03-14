@@ -20,6 +20,7 @@ import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
+import qx.app.freight.qxappfreight.service.WebSocketSTOMPManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
@@ -68,6 +69,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             }
         });
         checkPermissions();
+        checkPermissionsForWindow();
     }
 
     /**
@@ -76,7 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     private void login(){
 //            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
 //            //创建连接
-//            webSocketSTOMPManager.connect(Schedulers.newThread());
+//            webSocketSTOMPManager.connect();
 //            //创建订阅
 //            webSocketSTOMPManager.registerStompTopic("/taskTodoUser/ua1a81dd438b748dc9ddf76896b6a11fb/taskTodo/taskTodoList");
         if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){

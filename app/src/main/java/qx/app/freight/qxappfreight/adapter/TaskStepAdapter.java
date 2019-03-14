@@ -84,22 +84,16 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         mSlideLeftExecuteViewS.setLockListener(() -> {
             listener.onSlideExecuteListener(0,helper.getAdapterPosition());
         });
-
-
         mSlideLeftExecuteViewE.setLockListener(() -> {
             listener.onSlideExecuteListener(1,helper.getAdapterPosition());
         });
-
         rlStart.setOnClickListener(v ->{
-
             if(item.get(0).getTaskBeginTime() > 0)
                 listener.onClickListener(0,helper.getAdapterPosition());
-
         });
         rlEnd.setOnClickListener(v ->{
             if(item.get(0).getTaskEndTime() > 0)
                 listener.onClickListener(1,helper.getAdapterPosition());
-
         });
 
     }

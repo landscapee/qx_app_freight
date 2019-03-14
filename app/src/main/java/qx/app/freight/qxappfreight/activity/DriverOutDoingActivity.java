@@ -124,7 +124,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser("u9bca020ce9204662b9902386fd648e86");
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
     }
 
     @Override
@@ -143,8 +143,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mPresenter = new ScanScooterPresenter(this);
             TransportTodoListBean mainIfos = new TransportTodoListBean();
             mainIfos.setTpScooterCode(scooterCode);
-            mainIfos.setTpOperator("u9bca020ce9204662b9902386fd648e86");
-//            mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
+//            mainIfos.setTpOperator("u6911330e59ce46c288181ed11a48ee23");
+            mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");
@@ -218,7 +218,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                     tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
                     tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
-                    tr.setInSeat(true);
+                    tr.setInSeat(1);
                 }
             }
         }
@@ -233,7 +233,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         TransportEndEntity transportEndEntity = new TransportEndEntity();
 
         for (TransportTodoListBean tr : mListBeanBegin) {
-            tr.setInSeat(true);
+            tr.setInSeat(1);
             for (OutFieldTaskBean mOutFieldTaskBean : OutFieldTaskBeans) {
                 if (mOutFieldTaskBean.getFlightNo().equals(tr.getTpFlightNumber())) {
                     tr.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
