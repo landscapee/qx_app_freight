@@ -22,6 +22,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
@@ -194,7 +195,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //超重重量
         mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
         if (null == scooterInfo) {
-//            ToastUtil.showToast(this, "id为空不能提交");
             Toast.makeText(this, "id为空不能提交", Toast.LENGTH_LONG).show();
             return;
         } else {
@@ -202,7 +202,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mMyAgentListBean.setScooterType(scooterInfo.getScooterType());
         }
 //        mMyAgentListBean.setRepPlaceId("2");
-////            mMyAgentListBean.setRepName("普货01");
+//        mMyAgentListBean.setRepName("普货01");
 //        mMyAgentListBean.setRepPlaceNum("001");
 //        mMyAgentListBean.setRepPlaceStatus("3");
 //        mMyAgentListBean.setUldCode("4");

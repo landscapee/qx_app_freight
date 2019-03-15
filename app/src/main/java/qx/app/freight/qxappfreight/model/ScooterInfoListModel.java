@@ -35,7 +35,7 @@ public class ScooterInfoListModel extends BaseModel implements ScooterInfoListCo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
                     if ("朱宇航傻逼".equals(throwable.getMessage())){
-                        ExistBean mExistBean = new ExistBean();
+                        MyAgentListBean mExistBean = new MyAgentListBean();
                         mExistBean.setUldWeight(0);
                         lisenter.onSuccess(mExistBean);
                     }
