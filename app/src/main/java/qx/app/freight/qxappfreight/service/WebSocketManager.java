@@ -19,6 +19,8 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
  * TODO : xxx
  * Created by pr
  */
+
+
 public class WebSocketManager {
 
     private WebSocketConnection mWebSocketConnection;
@@ -26,7 +28,7 @@ public class WebSocketManager {
     private TimerTask mTimerTask;
     private WebSocketOptions mWebSocketOptions;
     public static List<String> list = new ArrayList<String>();
-    private String url = "ws://173.100.1.75:9008/taskAssignCenter?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e";
+    private String url = "ws://192.168.1.129:8080/taskAssignCenter?userId=uefaa7789c18845c2921b717a41d2da3a";
     private long nowdate;
     private String TAG = "websocket";
     private Context mContext;
@@ -60,7 +62,7 @@ public class WebSocketManager {
             mWebSocketConnection.connect(url, new WebSocketHandler() {
                 @Override
                 public void onOpen() {
-                    Log.e(TAG, "Status: Connected to " + url);
+                    Log.e(TAG, "连接以打开" + url);
                     sendHB();
                 }
 
@@ -73,13 +75,15 @@ public class WebSocketManager {
 
                 @Override
                 public void onClose(int code, String reason) {
-                    Log.e(TAG, "Connection lost." + reason);
+                    Log.e(TAG, "连接以关闭" + reason);
                 }
             }, mWebSocketOptions);
 
         } catch (WebSocketException e) {
             Log.e(TAG, "Connection lost." + e.toString());
         }
+
+
     }
 
     //开启心跳包，每一秒发送一次消息，如果返回lost再重连

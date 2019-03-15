@@ -2,24 +2,23 @@ package qx.app.freight.qxappfreight.service;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.java_websocket.WebSocket;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import rx.Scheduler;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
-import ua.naiksoftware.stomp.client.StompClient;
-import ua.naiksoftware.stomp.client.StompMessage;
+import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompHeader;
+
 
 /**
- * TODO : xxx
+ * TODO : WebSocket+Stomp协议+点对点订阅
  * Created by pr
  */
 public class WebSocketSTOMPManager {
@@ -27,11 +26,10 @@ public class WebSocketSTOMPManager {
     private StompClient mStompClient;
     private Timer mTimer;
     private long nowdate;
-    private String uri = "ws://192.168.0.171:7004/socketServer";
-//    private String uri = "ws://myyx.nat123.cc:24010/taskAssignCenter?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e";
-    //myyx.nat123.cc:24010
-    //private String uri = "http://myyx.nat123.cc:24010/taskAssignCenter?userId=ua1a81dd438b748dc9ddf76896b6a11fb";
+    public static final String TAG = "websocket";
     private CompositeDisposable compositeDisposable;
+    private String uri = "ws://192.168.1.129:8080/taskAssignCenter?userId=uefaa7789c18845c2921b717a41d2da3a";
+
     public WebSocketSTOMPManager(Context context) {
         this.mContext = context;
         mTimer = new Timer();
@@ -39,36 +37,51 @@ public class WebSocketSTOMPManager {
 
     //创建连接
     public void connect() {
-        mStompClient = Stomp.over(WebSocket.class, uri);
+        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        //请求头
+        List<StompHeader> headers = new ArrayList<>();
+        headers.add(new StompHeader(TAG, "guest"));
+        headers.add(new StompHeader(TAG, "guest"));
+        //超时连接
+        mStompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
+        resetSubscriptions();
+        //创建连接
+        Disposable dispLifecycle = mStompClient.lifecycle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lifecycleEvent -> {
+                    switch (lifecycleEvent.getType()) {
+                        case OPENED:
+                            Log.e(TAG, "webSocket 打开");
+                            break;
+                        case ERROR:
+                            Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
+                            break;
+                        case CLOSED:
+                            Log.e(TAG, "websocket 关闭");
+                            resetSubscriptions();
+                            break;
+                        case FAILED_SERVER_HEARTBEAT:
+                            Log.e(TAG, "Stomp failed server heartbeat");
+                            break;
+                    }
+                });
+        compositeDisposable.add(dispLifecycle);
 
-        Log.e("websocket", "开始连接。。。。。");
-        mStompClient.lifecycle().subscribe(lifecycleEvent -> {
-            switch (lifecycleEvent.getType()) {
-                case ERROR:
-                    Log.e("websocket", "连接出错。。。。。" + lifecycleEvent.getException());
-                    break;
-                case CLOSED:
-                    Log.e("websocket", "连接关闭。。。。。");
-                    break;
-                case OPENED:
-                    Log.e("websocket", "连接已开启。。。。。");
-//                    createStompClient();
-                    break;
-            }
-        });
-        mStompClient.connect();
+        //订阅
+        Disposable dispTopic = mStompClient.topic("/taskTodoUser/uefaa7789c18845c2921b717a41d2da3a/taskTodo/taskTodoList")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
+//                    addItem(mGson.fromJson(topicMessage.getPayload(), EchoModel.class));
+                }, throwable -> {
+                    Log.e(TAG, "订阅失败", throwable);
+                });
+        compositeDisposable.add(dispTopic);
+        mStompClient.connect(headers);
     }
 
-
-    //订阅消息
-    public void registerStompTopic(String registerMassage) {
-        mStompClient.topic(registerMassage).subscribe(new Action1<StompMessage>() {
-            @Override
-            public void call(StompMessage stompMessage) {
-                Toast.makeText(mContext, "订阅成功", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     //创建长连接，服务器端没有心跳机制的情况下，启动timer来检查长连接是否断开，如果断开就执行重连
     private void createStompClient() {
@@ -76,7 +89,7 @@ public class WebSocketSTOMPManager {
             @Override
             public void run() {
 //                sendMassage("");
-//                Log.e("websocket 心跳包", "发送中");
+                Log.e("websocket 心跳包", "发送中");
             }
         }, 1000, 1000);
         //每次发送心跳包，服务器接收到响应就会返回一个值，如果查过5s还没有收到返回值，
@@ -90,26 +103,12 @@ public class WebSocketSTOMPManager {
         }
     }
 
-
-//    //发送消息
-//    public void sendMassage(String massage) {
-//        mStompClient.send(massage).subscribe(new Subscriber<Void>() {
-//            @Override
-//            public void onCompleted() {
-//                Log.e("websocket send", "发送成功");
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                Log.e("websocket send", "失败" + e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(Void aVoid) {
-//                Log.e("websocket send", "next");
-//            }
-//        });
-//    }
+    private void resetSubscriptions() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
+        compositeDisposable = new CompositeDisposable();
+    }
 
     //停止连接
     public void stop() {

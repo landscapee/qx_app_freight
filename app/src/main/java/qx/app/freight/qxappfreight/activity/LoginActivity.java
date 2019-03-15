@@ -19,9 +19,9 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
+import qx.app.freight.qxappfreight.service.WebSocketManager;
 import qx.app.freight.qxappfreight.service.WebSocketSTOMPManager;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (EditorInfo.IME_ACTION_DONE ==actionId){
+                if (EditorInfo.IME_ACTION_DONE == actionId) {
                     login();
                     return true;
                 }
@@ -86,23 +86,24 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     /**
      * 登录方法
      */
-    private void login(){
-//            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
-//            //创建连接
-//            webSocketSTOMPManager.connect();
-//            //创建订阅
-//            webSocketSTOMPManager.registerStompTopic("/taskTodoUser/ua1a81dd438b748dc9ddf76896b6a11fb/taskTodo/taskTodoList");
-        if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){
-            ToastUtil.showToast("账号或者密码不能为空");
-        }else{
-            ((LoginPresenter) mPresenter).login(getLoginEntity());
-        }
+    private void login() {
+            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
+            //创建连接
+            webSocketSTOMPManager.connect();
+
+//        WebSocketManager webSocketManager = new WebSocketManager(this);
+//        webSocketManager.connect();
+//        if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){
+//            ToastUtil.showToast("账号或者密码不能为空");
+//        }else{
+//            ((LoginPresenter) mPresenter).login(getLoginEntity());
+//        }
     }
 
     /**
      * CommonDialog 的用法
      */
-    private void showDialog(){
+    private void showDialog() {
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("这个是标题")
                 .setMessage("这个是提示内容")
@@ -113,9 +114,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
-                        if (confirm){
+                        if (confirm) {
                             ToastUtil.showToast("点击了左边的按钮");
-                        }else {
+                        } else {
                             ToastUtil.showToast("点击了右边的按钮");
                         }
                     }
@@ -134,13 +135,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void loginResult(LoginResponseBean loginBean) {
         if (loginBean != null) {
             Tools.setLoginUserBean(loginBean);
-            //解决 智能调度和货运  装卸机人员id 不一致问题
-            for (LoginResponseBean.RoleRSBean mRoleRSBean :loginBean.getRoleRS()){
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())){
-                    loginBean.setUserId(loginBean.getLoginid());
-                    break;
-                }
-            }
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
         } else {
