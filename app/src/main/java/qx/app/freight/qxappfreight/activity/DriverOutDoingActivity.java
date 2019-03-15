@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DriverOutTaskDoingAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
@@ -65,7 +68,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private int tpStatus = 1; // 0 运输中 1 运输结束
     private List <OutFieldTaskBean> mAcceptTerminalTodoBean;
 
-
+    private int tpNum = 0; //这个人最多拉的板
 
     public static void startActivity(Context context, List <OutFieldTaskBean> mTasksBean) {
         Intent starter = new Intent(context, DriverOutDoingActivity.class);
@@ -85,8 +88,18 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "正在执行");
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         listScooter = new ArrayList <>();
         mAcceptTerminalTodoBean = (List <OutFieldTaskBean>) getIntent().getSerializableExtra("acceptTerminalTodoBean");
+       if (mAcceptTerminalTodoBean != null){
+           tpNum = 0;
+           for (OutFieldTaskBean mOutFieldTaskBean:mAcceptTerminalTodoBean){
+               tpNum += mOutFieldTaskBean.getNum();
+           }
+
+       }
+
         doingRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         list = new ArrayList <>();
         mDriverOutTaskDoingAdapter = new DriverOutTaskDoingAdapter(list);
@@ -125,6 +138,22 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (tpStatus == 0){
+            ToastUtil.showToast("运输已经开始，无法再次扫版");
+            return;
+        }
+        if (listScooter.size() > tpNum){
+
+            ToastUtil.showToast("任务只分配给你"+tpNum+"个板车");
+            return;
+        }
+        if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
+            //根据扫一扫获取的板车信息查找板车内容
+            addScooterInfo(result.getData());
+        }
     }
 
     @Override
@@ -359,8 +388,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mapFlight.clear();
 
             mDriverOutTaskDoingAdapter.notifyDataSetChanged();
-            if (result.size() >= 5) {
-                ToastUtil.showToast(this, "最多一次拉5板货");
+            if (result.size() >= tpNum) {
+                ToastUtil.showToast(this, "任务只分配给你"+tpNum+"个板车");
                 llAdd.setVisibility(View.GONE);
             }
             //通过 判断是否 拥有开始时间 来设置 运输的状态

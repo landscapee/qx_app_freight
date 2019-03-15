@@ -60,6 +60,12 @@ public class OutFieldTaskBean implements Serializable {
          */
         private long taskEndTime;
 
+        private String beginAreaCargoType;
+
         private OutFieldFlightBean flights;
 
+
+        public String getBeginAreaCargoType() {
+                return beginAreaId+":"+cargoType;
+        }
 }

@@ -164,7 +164,8 @@ public class SlideLeftExecuteView extends AppCompatTextView {
                 }
                 else {
                     new Handler().postDelayed((Runnable) () -> {
-                        mOnLockCancelListener.onOpenLockCancel();
+                        if (mOnLockCancelListener!=null)
+                            mOnLockCancelListener.onOpenLockCancel();
                     },300);
 
                 }

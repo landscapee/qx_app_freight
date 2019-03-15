@@ -54,7 +54,7 @@ public class Constants {
      */
     public static String DRIVEROUT = "offSiteEscort";
     /**
-     * 外场司机
+     * 装卸机
      */
     public static String INSTALL_UNLOAD_EQUIP = "supervision";
 
@@ -64,7 +64,7 @@ public class Constants {
     public static String STOWAGE = "stowage";
 
     /**
-     * 配载
+     * 进港提货
      */
     public static String INPORTDELIVERY = "delivery_in";
 

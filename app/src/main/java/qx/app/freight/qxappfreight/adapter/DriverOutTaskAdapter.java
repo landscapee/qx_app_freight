@@ -29,6 +29,9 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
  *
  */
 public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBean, BaseViewHolder>{
+
+    private OnStepListener mOnStepListener;
+
     public DriverOutTaskAdapter(List<AcceptTerminalTodoBean> mDatas) {
         super(R.layout.item_driver_out_task, mDatas);
     }
@@ -85,9 +88,15 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             public void onSlideExecuteListener(int step, int position) {
                 switch (step){
                     case 0:
-                        DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position));
+                        if ("".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        else
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position));
                         break;
                     case 1:
+                        if ("".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        else
                         DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position));
                         break;
                 }
@@ -107,7 +116,15 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         });
     }
 
+    public interface OnStepListener{
 
+        void onStepListener(int step,int parentPosition,int position);
+
+    }
+
+    public void setmOnStepListener(OnStepListener onStepListener){
+        this.mOnStepListener = onStepListener;
+    }
 
 
 }

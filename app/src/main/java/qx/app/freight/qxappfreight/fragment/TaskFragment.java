@@ -146,10 +146,10 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new TaskDriverOutFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-//                fragmentList.add(new InstallEquipFragment());
-//                list_Title.add("装卸机");
-                fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港理货");
+                fragmentList.add(new InstallEquipFragment());
+                list_Title.add("装卸机");
+//                fragmentList.add(new InPortTallyFragment());
+//                list_Title.add("进港理货");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");

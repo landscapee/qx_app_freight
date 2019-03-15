@@ -77,7 +77,7 @@ public class TestFragment extends BaseFragment {
                 break;
             case R.id.button_add_cargo: //新增
                 //全屏dialog
-                TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.dialog, null, taskId -> {
+                TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.custom_dialog, null, taskId -> {
 
                 });
                 tpPushDialog.show();
@@ -87,7 +87,7 @@ public class TestFragment extends BaseFragment {
                 break;
             case R.id.button_select_warehouse_position: //选择仓位e
 
-                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.dialog, s -> {
+                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, s -> {
 
                 });
                 updatePushDialog.show();
