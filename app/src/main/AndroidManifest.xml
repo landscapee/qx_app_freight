@@ -47,7 +47,6 @@
         <activity android:name=".activity.PullGoodsReportActivity" />
         <activity android:name=".activity.ChooseWeighScanActivity" />
         <activity android:name=".activity.InportDeliveryDetailActivity"/>
-        <activity android:name=".activity.ChooseWeighScanActivity"/>
         <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />

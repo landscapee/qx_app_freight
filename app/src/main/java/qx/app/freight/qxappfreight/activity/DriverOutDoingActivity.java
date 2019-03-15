@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.adapter.DriverOutTaskDoingAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.TpFlightStep;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightOfScooterBean;
@@ -43,8 +44,10 @@ import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.TransportBeginContract;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class DriverOutDoingActivity extends BaseActivity implements TransportBeginContract.transportBeginView, ScanScooterContract.scanScooterView {
@@ -239,6 +242,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
         List <TransportTodoListBean> mListBeanBegin = new ArrayList <>();
         mListBeanBegin.addAll(listScooter);
+
+        List<TpFlightStep> steps = new ArrayList <>();
         for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
             for (TransportTodoListBean tr : mListBeanBegin) {
                 if (mOutFieldTaskBean.getFlightNo().equals(mOutFieldTaskBean.getFlightNo())){
@@ -250,8 +255,24 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     tr.setInSeat(1);
                 }
             }
+            TpFlightStep step = new TpFlightStep();
+            step.setType(0);
+            step.setLoadUnloadDataId(mOutFieldTaskBean.getId());
+            step.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
+            step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
+            step.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
+            step.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
+            step.setOperationCode("CargoOutTransportStart");
+            step.setUserName(UserInfoSingle.getInstance().getUsername());
+            step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+            step.setUserId(UserInfoSingle.getInstance().getUserId());
+            step.setCreateTime(System.currentTimeMillis());
+            step.setDeptId(UserInfoSingle.getInstance().getDepId());
+
+            steps.add(step);
         }
         transportEndEntity.setScooters(mListBeanBegin);
+        transportEndEntity.setSteps(steps);
 
         ((TransportBeginPresenter) mPresenter).transportBegin(transportEndEntity);
     }
@@ -260,7 +281,6 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void doEnd(List <OutFieldTaskBean> OutFieldTaskBeans, List <TransportTodoListBean> mListBeanBegin) {
         mPresenter = new TransportBeginPresenter(this);
         TransportEndEntity transportEndEntity = new TransportEndEntity();
-
         for (TransportTodoListBean tr : mListBeanBegin) {
             tr.setInSeat(1);
             for (OutFieldTaskBean mOutFieldTaskBean : OutFieldTaskBeans) {
@@ -273,7 +293,27 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 }
             }
         }
+        List<TpFlightStep> steps = new ArrayList <>();
+        for (OutFieldTaskBean mOutFieldTaskBean : OutFieldTaskBeans) {
+
+            TpFlightStep step = new TpFlightStep();
+            step.setType(0);
+            step.setLoadUnloadDataId(mOutFieldTaskBean.getId());
+            step.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
+            step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
+            step.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
+            step.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
+            step.setOperationCode("CargoOutTransportEnd");
+            step.setUserName(UserInfoSingle.getInstance().getUsername());
+            step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+            step.setUserId(UserInfoSingle.getInstance().getUserId());
+            step.setCreateTime(System.currentTimeMillis());
+            step.setDeptId(UserInfoSingle.getInstance().getDepId());
+
+            steps.add(step);
+        }
         transportEndEntity.setScooters(mListBeanBegin);
+        transportEndEntity.setSteps(steps);
 
         ((TransportBeginPresenter) mPresenter).transportEnd(transportEndEntity);
     }

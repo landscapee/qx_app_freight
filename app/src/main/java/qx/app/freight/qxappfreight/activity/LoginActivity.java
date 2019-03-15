@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketManager;
@@ -87,17 +88,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * 登录方法
      */
     private void login() {
-            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
-            //创建连接
-            webSocketSTOMPManager.connect();
-
+//            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
+//            //创建连接
+//            webSocketSTOMPManager.connect();
 //        WebSocketManager webSocketManager = new WebSocketManager(this);
 //        webSocketManager.connect();
-//        if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){
-//            ToastUtil.showToast("账号或者密码不能为空");
-//        }else{
-//            ((LoginPresenter) mPresenter).login(getLoginEntity());
-//        }
+        if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){
+            ToastUtil.showToast("账号或者密码不能为空");
+        }else{
+            ((LoginPresenter) mPresenter).login(getLoginEntity());
+        }
     }
 
     /**
@@ -135,6 +135,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void loginResult(LoginResponseBean loginBean) {
         if (loginBean != null) {
             Tools.setLoginUserBean(loginBean);
+            for (LoginResponseBean.RoleRSBean mRoleRSBean :loginBean.getRoleRS()){
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())){
+                    loginBean.setUserId(loginBean.getLoginid());
+                }
+            }
+
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
         } else {

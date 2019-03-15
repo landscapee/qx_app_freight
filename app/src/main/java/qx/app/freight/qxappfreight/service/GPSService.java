@@ -19,9 +19,12 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.concurrent.TimeUnit;
 
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -41,7 +44,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
     private String provider;
     private int time = 1000;
     private boolean isGetGPS;
-//    private BSLoactionUtil mBSLoactionUtil;
+    private BSLoactionUtil mBSLoactionUtil;
 
     private GpsInfoEntity gpsInfoEntity;
 
@@ -91,11 +94,19 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
      */
     private void sendGps(PositionBean bean){
 
+        //临时使用 没有GPS 传0
+        PositionBean bean1 = new PositionBean();
+        bean1.setAltitude(String.valueOf(0.0));//海拔
+        bean1.setLongitude(String.valueOf(0.0));//经度
+        bean1.setLatitude(String.valueOf(0.0));// 纬度
+        bean1.setTime(-1);
+        // 事件上报 使用最新的位置
+        Tools.saveGPSPosition(bean1);
+
         if(null == bean.getLatitude())
         {
-            bean.setLatitude("123");
-            bean.setLongitude("321");
-//            UserInfoSingle.getInstance().setUserId("彭瑞傻逼");
+            bean.setLatitude("102551.2");
+            bean.setLongitude("225412.3");
         }
         gpsInfoEntity.setLatitude(bean.getLatitude());
         gpsInfoEntity.setLongitude(bean.getLongitude());
@@ -172,7 +183,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
     public void onCreate() {
         super.onCreate();
         initSend();
-//        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
+        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
 
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         gpsInfoEntity = new GpsInfoEntity();
@@ -184,7 +195,21 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
         Log.d(TAG, "--定位服务启动--");
 
         //测试
-        sendGps(new PositionBean());
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sendGps(new PositionBean());
+                    TimeUnit.SECONDS.sleep(30000);
+
+                }catch (Exception e){
+
+                }
+
+            }
+        });
+        thread.start();
+
     }
 
     private void initSend() {
@@ -225,7 +250,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
 
     private void startLocation() {
         // 启动基站定位
-//        mBSLoactionUtil.reGetBS();
+        mBSLoactionUtil.reGetBS();
         // 启动GPS定位
         if (ActivityCompat.checkSelfPermission(GPSService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

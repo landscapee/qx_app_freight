@@ -19,4 +19,5 @@ public class TransportEndEntity {
     private String taskId;//用于 识别代办类型
     private List<TransportTodoListBean> mainInfos;
     private List<TransportTodoListBean> scooters;
+    private List<TpFlightStep> steps;
 }

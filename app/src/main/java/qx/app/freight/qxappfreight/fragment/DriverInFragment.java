@@ -87,17 +87,17 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
         list = new ArrayList <>();
         mHandcarBacklogTPAdapterDoing = new HandcarBacklogTPAdapter(list);
         doingSlideRecyclerView.setAdapter(mHandcarBacklogTPAdapterDoing);
-        mHandcarBacklogTPAdapterDoing.setOnDeleteClickListener((view, position) ->
-                {
-                    if (list.size() == 5) {
-                        llAdd.setVisibility(View.VISIBLE);
-                    }
-                    list.remove(position);
-                    doingSlideRecyclerView.closeMenu();
-                    mHandcarBacklogTPAdapterDoing.notifyDataSetChanged();
-                    upDataBtnStatus();
-                }
-        );
+//        mHandcarBacklogTPAdapterDoing.setOnDeleteClickListener((view, position) ->
+//                {
+//                    if (list.size() == 5) {
+//                        llAdd.setVisibility(View.VISIBLE);
+//                    }
+//                    list.remove(position);
+//                    doingSlideRecyclerView.closeMenu();
+//                    mHandcarBacklogTPAdapterDoing.notifyDataSetChanged();
+//                    upDataBtnStatus();
+//                }
+//        );
         mHandcarBacklogTPAdapterDoing.setOnItemClickListener((adapter, view, position) -> {
         });
         imageScan.setOnClickListener(v -> {
