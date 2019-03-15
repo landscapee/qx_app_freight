@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -252,7 +253,7 @@ public interface HttpApi {
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")
-    Observable<BaseEntity<Object>> deliveryInWaybill(@Body BaseFilterEntity model);
+    Observable<BaseEntity<WaybillsBean>> deliveryInWaybill(@Body BaseFilterEntity model);
 
     //运单出库完成
     @POST("service-product-delivery/delivery/completDelivery")

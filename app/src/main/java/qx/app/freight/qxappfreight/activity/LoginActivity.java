@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,6 +23,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketSTOMPManager;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
@@ -71,6 +73,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
+        getDeviceInfo();
+    }
+
+    private void getDeviceInfo(){
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneBrand());
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
     }
 
     /**

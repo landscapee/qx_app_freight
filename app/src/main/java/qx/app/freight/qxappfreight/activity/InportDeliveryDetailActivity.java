@@ -17,6 +17,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
 import qx.app.freight.qxappfreight.dialog.PopTestDialog;
@@ -40,7 +41,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private int num1;
     private int num2;
 
-    private List<ArrivalDeliveryInfoBean.WaybillsBean> mList ;
+    private List<WaybillsBean> mList ;
 
 
     @Override
@@ -78,8 +79,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
-//            deliveryComplet();
-            showDialog();
+            deliveryComplet();
+//            showDialog();
 //            showChooseDialog();
         });
     }
@@ -145,7 +146,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     @Override
-    public void deliveryInWaybillResult(ArrivalDeliveryInfoBean.WaybillsBean result) {
+    public void deliveryInWaybillResult(WaybillsBean result) {
         mList.get(nowPosition).setOutStorageTime(result.getOutStorageTime());
         mList.get(nowPosition).setWaybillStatus(6);
         mAdapter.notifyDataSetChanged();

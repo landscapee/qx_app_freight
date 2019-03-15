@@ -33,4 +33,30 @@ public class DeviceInfoUtil {
     public static String getIMEI(Context ctx) throws SecurityException {
         return ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
     }
+
+    /**
+     * 获取手机品牌
+     *
+     * @return
+     */
+    public static String getPhoneBrand() {
+        return android.os.Build.BRAND;
+    }
+    /**
+     * 获取手机型号
+     *
+     * @return
+     */
+    public static String getPhoneModel() {
+        return android.os.Build.MODEL;
+    }
+
+    /**
+     * 获取设备名
+     *
+     * @return
+     */
+    public static String getPhoneDevice() {
+        return android.os.Build.DEVICE;
+    }
 }
