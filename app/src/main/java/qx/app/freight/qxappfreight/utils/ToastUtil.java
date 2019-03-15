@@ -37,7 +37,7 @@ public class ToastUtil {
 
     public static void showToast( String s){
         Context context= MyApplication.getContext();
-        if (!"318".equals(s)){
+        if ("318".equals(s)){
            return;
         }
         if(toast==null){
