@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ReceiveGoodsAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
@@ -89,6 +92,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         setToolbarShow(View.VISIBLE);
+        EventBus.getDefault().register(this);
         toolbar = getToolbar();
         waybillId = getIntent().getStringExtra("waybillId");
         taskId = getIntent().getStringExtra("taskId");
@@ -100,6 +104,21 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         //提交
         mBtnReceiveGood.setOnClickListener(v -> commit());
         initView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (result.getFunctionFlag().equals("ReceiveGoodsActivity")) {
+            //板车号
+            mScooterCode = result.getData();
+            if (!"".equals(mScooterCode)) {
+                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, mDeclareItemBeans);
+            } else {
+                ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
+            }
+        } else {
+            Log.e("resultCode", "收货页面不是200");
+        }
     }
 
 
@@ -195,7 +214,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             } else {
                 pageCurrent++;
                 mMfrvData.finishLoadMore();
-
             }
             list.addAll(myAgentListBean.getRecords());
             int number = 0;
