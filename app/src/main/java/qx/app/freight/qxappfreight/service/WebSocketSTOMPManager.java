@@ -78,6 +78,7 @@ public class WebSocketSTOMPManager {
                 }, throwable -> {
                     Log.e(TAG, "订阅失败", throwable);
                 });
+
         compositeDisposable.add(dispTopic);
         mStompClient.connect(headers);
     }
