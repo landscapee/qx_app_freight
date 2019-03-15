@@ -25,7 +25,7 @@
     <color name="text_color">#575757</color>
     <!--TODO: mainactivity-->
     <color name="main_tv_normal">#999999</color>
-    <color name="main_tv_press">#00a7ea</color>
+    <color name="main_tv_press">#0566FF</color>
     <color name="main_line">#bbbbbb</color>
     <color name="main_bg">#f8f8f8</color>
 

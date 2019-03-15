@@ -265,7 +265,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //如果返回为空就让用户输入
         int deadWeight = existBean.getUldWeight() == 0 ? 0 : existBean.getUldWeight();
         //uld号
-        mEtUldNumber.setText(existBean.getUldCode() == null ? "" : existBean.getUldType() + existBean.getUldCode() + existBean.getIata());
+//        mEtUldNumber.setText(existBean.getUldCode() == null ? "" : existBean.getUldType() + existBean.getUldCode() + existBean.getIata());
+        mEtUldNumber.setText(existBean.getUldCode() == null ? "" :existBean.getUldCode());
         //uld重量
         mEdtDeadWeight.setText(deadWeight + "");
     }

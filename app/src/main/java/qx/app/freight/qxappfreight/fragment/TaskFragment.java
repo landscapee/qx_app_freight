@@ -120,10 +120,6 @@ public class TaskFragment extends BaseFragment {
             if (Constants.RECEIVE.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskCollectVerifyFragment());
                 list_Title.add("收验");
-//                fragmentList.add(new TaskManifestFragment());
-//                list_Title.add("配载");
-//                fragmentList.add(new InstallEquipFragment());
-//                list_Title.add("装机");
             } else if (Constants.COLLECTION.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new CollectorFragment());
                 list_Title.add("收运");
@@ -135,10 +131,6 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
             } else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                //登录不成功的时候 手动添加 user
-//        LoginResponseBean loginResponseBean = new LoginResponseBean();
-//        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-//        UserInfoSingle.setUser(loginResponseBean);
                 fragmentList.add(new DriverInFragment());
                 list_Title.add("内场司机");
                 goneTitle();
