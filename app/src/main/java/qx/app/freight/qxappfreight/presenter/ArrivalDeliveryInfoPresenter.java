@@ -4,6 +4,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.model.ArrivalDeliveryInfoModel;
 
@@ -32,9 +33,9 @@ public class ArrivalDeliveryInfoPresenter extends BasePresenter {
 
     public void deliveryInWaybill(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((ArrivalDeliveryInfoModel) mRequestModel).deliveryInWaybill(model, new IResultLisenter<ArrivalDeliveryInfoBean.WaybillsBean>() {
+        ((ArrivalDeliveryInfoModel) mRequestModel).deliveryInWaybill(model, new IResultLisenter<WaybillsBean>() {
             @Override
-            public void onSuccess(ArrivalDeliveryInfoBean.WaybillsBean result) {
+            public void onSuccess(WaybillsBean result) {
                 ((ArrivalDeliveryInfoContract.arrivalDeliveryInfoView) mRequestView).deliveryInWaybillResult(result);
                 mRequestView.dissMiss();
             }

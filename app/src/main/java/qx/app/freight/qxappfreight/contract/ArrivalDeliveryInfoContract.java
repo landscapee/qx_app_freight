@@ -4,6 +4,7 @@ import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 
 public class ArrivalDeliveryInfoContract {
     public interface arrivalDeliveryInfoModel {
@@ -18,7 +19,7 @@ public class ArrivalDeliveryInfoContract {
     public interface arrivalDeliveryInfoView extends IBaseView {
         void arrivalDeliveryInfoResult(ArrivalDeliveryInfoBean result);
 
-        void deliveryInWaybillResult(ArrivalDeliveryInfoBean.WaybillsBean result);
+        void deliveryInWaybillResult(WaybillsBean result);
 
         void completDeliveryResult(String result);
     }

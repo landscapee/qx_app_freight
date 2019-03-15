@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -10,14 +9,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
-import qx.app.freight.qxappfreight.bean.response.ItemBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
-public class DeliveryDetailAdapter extends BaseQuickAdapter<ArrivalDeliveryInfoBean.WaybillsBean, BaseViewHolder> {
+public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseViewHolder> {
     private DeliveryDetailInterface listener;
-    public DeliveryDetailAdapter(@Nullable List<ArrivalDeliveryInfoBean.WaybillsBean> data) {
+    public DeliveryDetailAdapter(@Nullable List<WaybillsBean> data) {
         super(R.layout.item_delivery_detail, data);
     }
 
@@ -26,7 +23,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<ArrivalDeliveryInfoB
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, ArrivalDeliveryInfoBean.WaybillsBean bean) {
+    protected void convert(BaseViewHolder holder, WaybillsBean bean) {
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
                 //件数 - 重量
         holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)

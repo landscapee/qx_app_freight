@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
 
@@ -469,8 +470,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
-        return nothingtransform(getService().deliveryInWaybill(model));
+    public Observable<WaybillsBean> deliveryInWaybill(BaseFilterEntity model) {
+        return transform(getService().deliveryInWaybill(model));
     }
 
     /***
