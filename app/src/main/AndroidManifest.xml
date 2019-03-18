@@ -42,7 +42,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.UnloadPlaneActivity"/>
+        <activity android:name=".activity.LaserScanActivity"></activity>
+        <activity android:name=".activity.BaggageListActivity" />
+        <activity android:name=".activity.UnloadPlaneActivity" />
         <activity android:name=".activity.ErrorReportActivity" />
         <activity android:name=".activity.PullGoodsReportActivity" />
         <activity android:name=".activity.ChooseWeighScanActivity" />
@@ -62,8 +64,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VerifyStaffActivity"
             android:screenOrientation="portrait" />
