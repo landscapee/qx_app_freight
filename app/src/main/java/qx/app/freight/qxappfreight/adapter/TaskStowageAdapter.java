@@ -18,7 +18,7 @@ public class TaskStowageAdapter extends BaseQuickAdapter<TransportListBean, Base
     @Override
     protected void convert(BaseViewHolder helper, TransportListBean item) {
         helper.setText(R.id.tv_flight_number, item.getFlightNo());
-        helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info,TimeUtils.date2Tasktime3(item.getEtd()),"04"));
+        helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info,TimeUtils.date2Tasktime3(item.getEtd()),TimeUtils.getDay(item.getEtd())));
         helper.setText(R.id.tv_waybill_count,"运单件数"+item.getTotalNumberPackages());
     }
 }

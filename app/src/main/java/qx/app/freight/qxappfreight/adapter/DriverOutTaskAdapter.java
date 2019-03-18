@@ -88,13 +88,13 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             public void onSlideExecuteListener(int step, int position) {
                 switch (step){
                     case 0:
-                        if ("".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position));
                         break;
                     case 1:
-                        if ("".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         else
                         DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position));

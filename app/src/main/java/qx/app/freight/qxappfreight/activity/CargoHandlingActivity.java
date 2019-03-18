@@ -237,7 +237,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         //删除板车 将板车上的 本航班 分裝记录 拉下 非本航班 分裝记录 加入 删除列表
         mCargoHandlingAdapter.setOnDeleteClickListener((view, position) ->
                 {
-                    if (position == nowHandcarPositionSelect || listHandcar.get(position).isLock()) {
+                    if (listHandcar.get(position).isLock()) {
                         ToastUtil.showToast(CargoHandlingActivity.this, "被锁住的板车不能删除");
                         return;
                     }
@@ -429,7 +429,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             ToastUtil.showToast(CargoHandlingActivity.this, "该板车已被上锁无法操作");
             return;
         }
-        rcinfoToHandcar(listWaybill.get(position), flag);
+        rcinfoToHandcar(listWaybill.get(nowWaybillPosition), flag);
         waybillSlideRecyclerView.closeMenu();
     }
 

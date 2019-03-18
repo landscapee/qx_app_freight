@@ -78,6 +78,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/slide_do_gif"
             android:layout_alignParentRight="true"
+            android:visibility="gone"
             />
 
         <TextView
@@ -122,6 +123,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/slide_do_gif"
             android:layout_alignParentRight="true"
+            android:visibility="gone"
             />
 
         <TextView

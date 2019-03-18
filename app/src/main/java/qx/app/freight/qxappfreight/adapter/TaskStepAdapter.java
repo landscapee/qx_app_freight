@@ -44,8 +44,8 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         helper.setText(R.id.tv_step_time_start,TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
         helper.setText(R.id.tv_step_time_end,TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
 
-        ImageView ivLeftGif = helper.getView(R.id.iv_left_gif);//开始滑动的GIF
-        ImageView ivLeftGifE = helper.getView(R.id.iv_left_gif_e);// 结束滑动的GIF
+//        ImageView ivLeftGif = helper.getView(R.id.iv_left_gif);//开始滑动的GIF
+//        ImageView ivLeftGifE = helper.getView(R.id.iv_left_gif_e);// 结束滑动的GIF
 
         RelativeLayout rlStart = helper.getView(R.id.rl_back_start);
         RelativeLayout rlEnd = helper.getView(R.id.rl_back_end);
@@ -91,28 +91,28 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list1);
         mRecyclerViewFlight.setAdapter(mTaskFlightAdapter);
 
-        Glide.with(mContext).load(R.mipmap.slide_do_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivLeftGif);
-        mSlideLeftExecuteViewS.setVisibility(View.GONE);
-        Glide.with(mContext).load(R.mipmap.slide_do_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivLeftGifE);
-        mSlideLeftExecuteViewE.setVisibility(View.GONE);
+//        Glide.with(mContext).load(R.mipmap.slide_do_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivLeftGif);
+//        mSlideLeftExecuteViewS.setVisibility(View.GONE);
+//        Glide.with(mContext).load(R.mipmap.slide_do_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivLeftGifE);
+//        mSlideLeftExecuteViewE.setVisibility(View.GONE);
 
 
-        ivLeftGif.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ivLeftGif.setVisibility(View.GONE);
-                mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        ivLeftGifE.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ivLeftGifE.setVisibility(View.GONE);
-                mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
+//        ivLeftGif.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                ivLeftGif.setVisibility(View.GONE);
+//                mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
+//                return false;
+//            }
+//        });
+//        ivLeftGifE.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                ivLeftGifE.setVisibility(View.GONE);
+//                mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
+//                return false;
+//            }
+//        });
 
         mSlideLeftExecuteViewS.setLockListener(() -> {
             listener.onSlideExecuteListener(0,helper.getAdapterPosition());
@@ -122,12 +122,12 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         });
         //滑动取消 显示gif
         mSlideLeftExecuteViewS.setLockCancelListener(() ->{
-            ivLeftGif.setVisibility(View.VISIBLE);
-            mSlideLeftExecuteViewS.setVisibility(View.GONE);
+//            ivLeftGif.setVisibility(View.VISIBLE);
+//            mSlideLeftExecuteViewS.setVisibility(View.GONE);
         });
         mSlideLeftExecuteViewE.setLockCancelListener(() ->{
-            ivLeftGifE.setVisibility(View.VISIBLE);
-            mSlideLeftExecuteViewE.setVisibility(View.GONE);
+//            ivLeftGifE.setVisibility(View.VISIBLE);
+//            mSlideLeftExecuteViewE.setVisibility(View.GONE);
         });
         rlStart.setOnClickListener(v ->{
             if(item.get(0).getTaskBeginTime() > 0)
