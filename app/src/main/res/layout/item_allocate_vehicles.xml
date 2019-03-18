@@ -117,7 +117,9 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="10dp"
+            android:layout_width="60dp"
+            android:layout_marginRight="-24dp"
+            android:layout_marginLeft="-24dp"
             android:layout_height="match_parent"
             android:background="@drawable/shape_black_gap_vertical_line"
             android:layerType="software" />
