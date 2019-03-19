@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,20 +9,22 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.List;
+
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ChooseStoreroomAdapter;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
+/**
+ * 选择库区dialog
+ */
 public class ChooseStoreroomDialog extends DialogFragment {
     private RecyclerView mRecyclerView;
     private Button btnConfirm;
@@ -33,19 +34,20 @@ public class ChooseStoreroomDialog extends DialogFragment {
     private ChooseStoreroomAdapter adapter;
     private List<TestBean> mList;
     private Context context;
-    private int selectorPosition=10000;
+    private int selectorPosition = 10000;
 
     private ChooseDialogInterface listener;
 
-    public void setData(List<TestBean> mList, Context context){
+    public void setData(List<TestBean> mList, Context context) {
         this.mList = mList;
 //        this.selectorPosition = selectorPosition;
         this.context = context;
     }
 
-    public void setChooseDialogInterface(ChooseDialogInterface listener){
+    public void setChooseDialogInterface(ChooseDialogInterface listener) {
         this.listener = listener;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -60,42 +62,34 @@ public class ChooseStoreroomDialog extends DialogFragment {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
-
         mRecyclerView = dialog.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter=new ChooseStoreroomAdapter(mList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                updateUI(position);
-            }
-        });
+        adapter = new ChooseStoreroomAdapter(mList);
+        adapter.setOnItemClickListener((adapter, view, position) -> updateUI(position));
         mRecyclerView.setAdapter(adapter);
         btnConfirm = dialog.findViewById(R.id.btn_confirm);
         ivCancel = dialog.findViewById(R.id.iv_cancel);
-        btnConfirm.setOnClickListener(v ->{
-            if (selectorPosition ==10000){
+        btnConfirm.setOnClickListener(v -> {
+            if (selectorPosition == 10000) {
                 ToastUtil.showToast("请选择库区");
-            }else {
+            } else {
                 listener.confirm(selectorPosition);
                 dismiss();
             }
         });
         ivCancel.setOnClickListener(v -> {
-                listener.cancel();
-                dismiss();
+            dismiss();
         });
-
         return dialog;
     }
 
     private void updateUI(int position) {
         selectorPosition = position;
-        if (mList.get(position).isChoose()){
+        if (mList.get(position).isChoose()) {
 
-        }else {
+        } else {
             for (int i = 0; i < mList.size(); i++) {
-                if (mList.get(i).isChoose()){
+                if (mList.get(i).isChoose()) {
                     mList.get(i).setChoose(false);
                 }
             }

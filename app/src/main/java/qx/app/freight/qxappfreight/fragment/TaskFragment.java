@@ -131,6 +131,10 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
             } else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                //登录不成功的时候 手动添加 user
+//        LoginResponseBean loginResponseBean = new LoginResponseBean();
+//        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
+//        UserInfoSingle.setUser(loginResponseBean);
                 fragmentList.add(new DriverInFragment());
                 list_Title.add("内场司机");
                 goneTitle();
@@ -145,6 +149,9 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
+            } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                fragmentList.add(new InPortTallyFragment());
+                list_Title.add("进港理货");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");

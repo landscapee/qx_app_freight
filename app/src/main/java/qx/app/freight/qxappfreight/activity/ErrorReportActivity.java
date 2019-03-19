@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +45,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 异常上报页面
  */
-public class ErrorReportActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView{
+public class ErrorReportActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
     @BindView(R.id.tv_date)
@@ -83,9 +82,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
-        String info=getIntent().getStringExtra("plane_info");
-        mInfoList=info.split("\\*");
-        mFlightNumber=mInfoList[0];
+        String info = getIntent().getStringExtra("plane_info");
+        mInfoList = info.split("\\*");
+        mFlightNumber = mInfoList[0];
         mTvFlightInfo.setText(mFlightNumber);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
@@ -104,16 +103,16 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     .start(ErrorReportActivity.this, REQUEST_IMAGE);
         });
         mBtnCommit.setOnClickListener(v -> {
-            if (mAdapter.getFinalPhotoList().size()==0){
-                mPresenter=new ExceptionReportPresenter(ErrorReportActivity.this);
-                ExceptionReportEntity model=new ExceptionReportEntity();
+            if (mAdapter.getFinalPhotoList().size() == 0) {
+                mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
+                ExceptionReportEntity model = new ExceptionReportEntity();
                 model.setFlightNum(mFlightNumber);
                 model.setExceptionDesc(mEtDetailInfo.getText().toString());
                 model.setReOperator(UserInfoSingle.getInstance().getUserId());
-                model.setReType(getIntent().getIntExtra("error_type",1));
+                model.setReType(getIntent().getIntExtra("error_type", 1));
                 model.setFiles(null);
                 ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
-            }else {
+            } else {
                 pressImage(mAdapter.getFinalPhotoList());
             }
         });
@@ -134,10 +133,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
         // 申请权限
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            if (!hasBasePhoneAuth()) {
-                this.requestPermissions(mAuthPermissions, mAuthBaseRequestCode);
-            }
+        if (!hasBasePhoneAuth()) {
+            this.requestPermissions(mAuthPermissions, mAuthBaseRequestCode);
         }
     }
 
@@ -155,22 +152,23 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             }
         }
     }
+
     /**
      * 压缩图片上传
      *
      * @param paths 文件路径集合
      */
     private void pressImage(List<String> paths) {
-        if (paths == null||paths.size()==0)
+        if (paths == null || paths.size() == 0)
             return;
         List<File> files = new ArrayList<>();
-        for (String path:paths){
+        for (String path : paths) {
             files.add(new File(path));
         }
-        Luban.compress(this,files).setMaxSize(150)
-                    .setMaxHeight(1920)
-                    .setMaxWidth(1080)
-                    .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener(){
+        Luban.compress(this, files).setMaxSize(150)
+                .setMaxHeight(1920)
+                .setMaxWidth(1080)
+                .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener() {
             @Override
             public void onStart() {
 
@@ -179,8 +177,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             @Override
             public void onSuccess(List<File> fileList) {
                 List<MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
-                mPresenter=new UploadsPresenter(ErrorReportActivity.this);
-                ((UploadsPresenter)mPresenter).uploads(upFiles);
+                mPresenter = new UploadsPresenter(ErrorReportActivity.this);
+                ((UploadsPresenter) mPresenter).uploads(upFiles);
             }
 
             @Override
@@ -192,20 +190,20 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void uploadsResult(Object result) {
-        mPresenter=new ExceptionReportPresenter(this);
+        mPresenter = new ExceptionReportPresenter(this);
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
-        List<String> filePaths=new ArrayList<>();
+        List<String> filePaths = new ArrayList<>();
         for (Map.Entry<String, String> entry : entries) {
             filePaths.add(entry.getKey());
         }
-        ExceptionReportEntity model=new ExceptionReportEntity();
+        ExceptionReportEntity model = new ExceptionReportEntity();
         model.setFlightNum(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
         model.setFlightId(Long.valueOf(mInfoList[7]));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
-        model.setReType(getIntent().getIntExtra("error_type",1));
+        model.setReType(getIntent().getIntExtra("error_type", 1));
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
     }
 

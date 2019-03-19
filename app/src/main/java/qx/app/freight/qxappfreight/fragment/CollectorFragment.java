@@ -63,6 +63,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         loadData();
     }
 
+
     private void initView() {
         EventBus.getDefault().register(this);
         list = new ArrayList<>();

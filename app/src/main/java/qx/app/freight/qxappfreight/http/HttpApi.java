@@ -4,11 +4,15 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import qx.app.freight.qxappfreight.bean.InportTallyBean;
+import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
@@ -23,11 +27,13 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
+import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -217,7 +223,6 @@ public interface HttpApi {
     //结束卸机
     @POST("service-product-transport/tp-main-info/flightUnloadInstall")
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
-
     //拉货上报
     @POST("service-product-transport/tp-main-info/saveLoadPullIn")
     Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
@@ -271,4 +276,16 @@ public interface HttpApi {
     //运单出库完成
     @POST("service-product-delivery/delivery/completDelivery")
     Observable<BaseEntity<Object>> completDelivery(@Body BaseFilterEntity model);
+
+    //进港理货列表数据
+    @POST("service-product-cargotallying/inwaybill/getList")
+    Observable<BaseEntity<List<InportTallyBean>>> getInPortTallyList(@Body BaseFilterEntity model);
+
+    //异常立案提交
+    @POST("service-product-cargotallying/inwaybill/errorSubmit")
+    Observable<BaseEntity<Object>> errorFiling(@Body ErrorFilingEntity model);
+
+    //舱单理货列表提交
+    @POST("service-product-cargotallying/inwaybill/submit")
+    Observable<BaseEntity<Object>> inPortTallyCommit(@Body InPortTallyCommitEntity model);
 }

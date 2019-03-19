@@ -41,8 +41,7 @@ public class LoadAndUnloadTodoBean {
     private long acceptTime;
     private long arrivalTime;
     private long openDoorTime;
-    private long loadTime;
-    private long unloadTime;
+    private long loadUnloadTime;
     private long closeDoorTime;
     private long actualTakeoffTime;
     private long actualArriveTime;

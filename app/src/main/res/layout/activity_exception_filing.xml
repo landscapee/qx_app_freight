@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="航班号"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_flight_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="MU9999" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#EFF2F3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="异常类型"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="（可多选）"
+            android:textSize="@dimen/sp_10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
+
+        <CheckBox
+            android:id="@+id/cb_number_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tv_number_error"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="件数异常" />
+
+        <EditText
+            android:id="@+id/et_error_number"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@drawable/shape_rect_gray_line"
+            android:hint="输入件数"
+            android:inputType="numberSigned"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="注：正数为多件，负数为少件"
+            android:textColor="#2AA5E9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_no_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_no_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="有单无货" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_no_bills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_no_bills"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="有货无单" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_broken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_broken"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="破损" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_burke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_burke"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="扣货" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_wrong_transport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_wrong_transport"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="错运" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_decompose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_decompose"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="腐烂" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_leakage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tv_leakage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="泄露" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#EFF2F3" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:text="异常说明"
+        android:textColor="@color/black" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_80" />
+
+    <ImageView
+        android:id="@+id/iv_chose_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/shape_rect_gray_dark"
+        android:padding="@dimen/dp_15"
+        android:src="@mipmap/icon_chose_photo" />
+
+    <EditText
+        android:id="@+id/et_detail_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="请描述详细信息"
+        android:lines="2"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#EFF2F3" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_10"
+        android:text="备注信息"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/et_remark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="请输入备注信息"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10" />
+
+    <TextView
+        android:id="@+id/tv_commit_exception_filing"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#2E81FD"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/white" />
+</LinearLayout>

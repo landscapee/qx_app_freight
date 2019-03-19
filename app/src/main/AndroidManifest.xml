@@ -42,13 +42,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.LaserScanActivity"></activity>
+        <activity android:name=".activity.ExceptionFilingActivity"></activity>
+        <activity android:name=".activity.ModifyInportInfoActivity" />
+        <activity android:name=".activity.UnloadPlaneActivity" />
+        <activity android:name=".activity.LaserScanActivity"/>
         <activity android:name=".activity.BaggageListActivity" />
         <activity android:name=".activity.UnloadPlaneActivity" />
         <activity android:name=".activity.ErrorReportActivity" />
         <activity android:name=".activity.PullGoodsReportActivity" />
         <activity android:name=".activity.ChooseWeighScanActivity" />
         <activity android:name=".activity.InportDeliveryDetailActivity"/>
+        <activity android:name=".activity.ChooseWeighScanActivity"/>
         <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />
@@ -64,8 +68,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.VerifyStaffActivity"
             android:screenOrientation="portrait" />

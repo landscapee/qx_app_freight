@@ -1,8 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,7 +25,6 @@ import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
-import qx.app.freight.qxappfreight.service.WebSocketManager;
 import qx.app.freight.qxappfreight.service.WebSocketSTOMPManager;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -51,7 +48,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         return R.layout.activity_login;
     }
 
-
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
@@ -71,7 +67,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (EditorInfo.IME_ACTION_DONE == actionId) {
+                if (EditorInfo.IME_ACTION_DONE ==actionId){
                     login();
                     return true;
                 }
@@ -83,13 +79,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         getDeviceInfo();
     }
 
-    private void getDeviceInfo() {
-        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getDeviceInfo(this));
-        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneBrand());
-        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneModel());
-        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneDevice());
+    private void getDeviceInfo(){
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneBrand());
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
+        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
     }
-
 
     /**
      * 登录方法
@@ -156,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         //登录接口 崩溃使用
         LoginResponseBean loginBean = new LoginResponseBean();
         loginBean.setUserId("851b9d649bd541989943db577edcfcea");
-        List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList <>();
+        List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList<>();
         LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
         mRoleRSBean.setRoleCode(Constants.DRIVEROUT);
         mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);

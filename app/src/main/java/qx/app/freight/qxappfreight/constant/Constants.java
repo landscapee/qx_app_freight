@@ -67,6 +67,10 @@ public class Constants {
      * 进港提货
      */
     public static String INPORTDELIVERY = "delivery_in";
+    /**
+     * 进港理货
+     */
+    public static String INPORTTALLY = "beforehand_in";
 
     /**
      * 进港提货

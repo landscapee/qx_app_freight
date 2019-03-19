@@ -48,11 +48,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     MultiFunctionRecylerView mMfrvData;
     private List<InstallEquipEntity> mList = new ArrayList<>();
     private int mCurrentPage = 1;
-    private int mCurrentSize=10;
-    private static final String [] mStepNamesInstall={"领受","到位","开启舱门","装机","关闭舱门"};
-    private static final String [] mStepNamesUninstall={"领受","到位","开启舱门","卸机","关闭舱门"};
-    private static final String [] mStepCodeInstall={"FreightPass_receive","FreightPass_ready","FreightPass_open","FreightPass_load","FreightPass_close"};
-    private static final String [] mStepCodeUninstall={"FreightPass_receive","FreightPass_ready","FreightPass_open","FreightPass_unload","FreightPass_close"};
+    private int mCurrentSize = 10;
+    private static final String[] mStepNamesInstall = {"领受", "到位", "开启舱门", "装机", "关闭舱门"};
+    private static final String[] mStepNamesUninstall = {"领受", "到位", "开启舱门", "卸机", "关闭舱门"};
+    private static final String[] mStepCodeInstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_load", "FreightPass_close"};
+    private static final String[] mStepCodeUninstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_unload", "FreightPass_close"};
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
@@ -69,23 +69,25 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         loadData();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("InstallEquipFragment_refresh")) {
             loadData();
         }
     }
+
     private void loadData() {
-        BaseFilterEntity entity=new BaseFilterEntity();
+        BaseFilterEntity entity = new BaseFilterEntity();
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
 //        entity.setWorkerId("5573650c346c487282f1a37cfeeb29e2");
         entity.setCurrent(mCurrentPage);
@@ -115,82 +117,78 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        if (mCurrentPage==1){
+        if (mCurrentPage == 1) {
             mList.clear();
             mMfrvData.finishRefresh();
-        }else {
+        } else {
             mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
-        for (LoadAndUnloadTodoBean bean:loadAndUnloadTodoBean){
+        for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setShowDetail(false);
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
             entity.setTaskTpye(bean.getTaskType());
-            SimpleDateFormat sdf2=new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
-            String time=sdf2.format(new Date(bean.getScheduleTime()));
-            String hourMinute=time.substring(3);
-            String day=time.substring(0,2);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
+            String time = sdf2.format(new Date(bean.getScheduleTime()));
+            String hourMinute = time.substring(3);
+            String day = time.substring(0, 2);
             String result;
-            if (Integer.valueOf(day)<10){
-                result=hourMinute+"("+day.substring(1)+")";
-            }else {
-                result=hourMinute+"("+day+")";
+            if (Integer.valueOf(day) < 10) {
+                result = hourMinute + "(" + day.substring(1) + ")";
+            } else {
+                result = hourMinute + "(" + day + ")";
             }
             entity.setScheduleTime(result);
-            String places=bean.getRoute();
-            places=places.substring(1,places.length()-1).replaceAll("\",\"",",");
-            String [] placeArray=places.substring(1,places.length()-1).split(",");
-            if (placeArray.length==2){
+            String places = bean.getRoute();
+            places = places.substring(1, places.length() - 1).replaceAll("\",\"", ",");
+            String[] placeArray = places.substring(1, places.length() - 1).split(",");
+            if (placeArray.length == 2) {
                 entity.setStartPlace(placeArray[0]);
                 entity.setMiddlePlace("--");
                 entity.setEndPlace(placeArray[1]);
-            }else {
+            } else {
                 entity.setStartPlace(placeArray[0]);
                 entity.setMiddlePlace(placeArray[1]);
                 entity.setEndPlace(placeArray[2]);
             }
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
-            List<Long> times=new ArrayList<>();
+            List<Long> times = new ArrayList<>();
             times.add(bean.getAcceptTime());
             times.add(bean.getArrivalTime());
             times.add(bean.getOpenDoorTime());
-            if (bean.getTaskType()==1){//装机
-                times.add(bean.getLoadTime());
-            }else {
-                times.add(bean.getUnloadTime());
-            }
+            times.add(bean.getLoadUnloadTime());
             times.add(bean.getCloseDoorTime());
-                                //FlightNumber                  AirCraftNo                  StartPlace              MiddlePlace                 EndPlace
-            String planeInfo=entity.getFlightInfo()+"*"+entity.getAirCraftNo()+"*"+entity.getStartPlace()+"*"+entity.getMiddlePlace()+"*"+entity.getEndPlace()
-                                //机位            scheduleTime                    FlightId                ActualTakeoffTime  8             ActualArriveTime 9                 Movement            Id
-                    +"*"+entity.getSeat()+"*"+entity.getScheduleTime()+"*"+bean.getFlightId()+"*"+bean.getActualTakeoffTime()+"*"+bean.getActualArriveTime()+"*"+bean.getMovement()+"*"+bean.getId()+"*"+bean.getTaskId();
-            int posNow=0;
-            for (int i=0; i<times.size();i++){
-                long timeNow=times.get(i);
-                if (timeNow==0){
-                    posNow=i;
+            //FlightNumber                  AirCraftNo                  StartPlace              MiddlePlace                 EndPlace
+            String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
+                    //机位            scheduleTime                    FlightId                ActualTakeoffTime  8             ActualArriveTime 9                 Movement            Id
+                    + "*" + entity.getSeat() + "*" + entity.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
+            int posNow = 0;
+            for (int i = 0; i < times.size(); i++) {
+                long timeNow = times.get(i);
+                if (timeNow == 0) {
+                    posNow = i;
                     break;
                 }
             }
-            for (int i=0;i<5;i++){
+            for (int i = 0; i < 5; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
                 entity1.setLoadUnloadType(bean.getTaskType());
-                if (bean.getTaskType()==1){//装机
+                if (bean.getTaskType() == 1) {//装机
                     entity1.setStepName(mStepNamesInstall[i]);
-                }else {
+                } else {
                     entity1.setStepName(mStepNamesUninstall[i]);
                 }
                 int type;
-                if (i<posNow){
-                   type=0;
-                }else if (i==posNow){
-                    type=1;
-                }else {
-                    type=2;
+                if (i < posNow) {
+                    type = 0;
+                } else if (i == posNow) {
+                    type = 1;
+                } else {
+                    type = 2;
                 }
                 entity1.setItemType(type);
                 entity1.setPlaneInfo(planeInfo);
@@ -202,19 +200,19 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
         InstallEquipAdapter mAdapter = new InstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-        mAdapter.setOnSlideStepListener((bigPos,adapter, smallPos) -> {
-            mOperatePos=smallPos;
-            mSlideadapter=adapter;
-            PerformTaskStepsEntity entity=new PerformTaskStepsEntity();
+        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
+            mOperatePos = smallPos;
+            mSlideadapter = adapter;
+            PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
             entity.setType(1);
             entity.setLoadUnloadDataId(loadAndUnloadTodoBean.get(bigPos).getId());
             entity.setFlightId(Long.valueOf(loadAndUnloadTodoBean.get(bigPos).getFlightId()));
             entity.setFlightTaskId(loadAndUnloadTodoBean.get(bigPos).getTaskId());
-            entity.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
-            entity.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
-            if (loadAndUnloadTodoBean.get(bigPos).getTaskType()==1){
+            entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+            entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+            if (loadAndUnloadTodoBean.get(bigPos).getTaskType() == 1) {
                 entity.setOperationCode(mStepCodeInstall[smallPos]);
-            }else {
+            } else {
                 entity.setOperationCode(mStepCodeUninstall[smallPos]);
             }
             entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
@@ -231,21 +229,21 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void slideTaskResult(String result) {
-        if ("正确".equals(result)){
+        if ("正确".equals(result)) {
             mSlideadapter.notifyDataSetChanged();
-            if (mOperatePos==4){
+            if (mOperatePos == 4) {
                 mCurrentPage = 1;
                 loadData();
-                mOperatePos=0;
+                mOperatePos = 0;
             }
         }
     }
 
     @Override
     public void toastView(String error) {
-        if (mCurrentPage==1){
+        if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
-        }else {
+        } else {
             mMfrvData.finishLoadMore();
         }
     }

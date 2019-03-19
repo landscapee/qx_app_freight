@@ -5,12 +5,15 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import qx.app.freight.qxappfreight.bean.InportTallyBean;
 import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
@@ -511,15 +514,32 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().completDelivery(model));
     }
 
+    /***
+     * 异常立案
+     * @param model
+     * @return
+     */
+    public Observable<String> errorFiling(ErrorFilingEntity model) {
+        return nothingtransform(getService().errorFiling(model));
+    }
 
+    /***
+     * 获取进港理货列表数据
+     * @param model
+     * @return
+     */
+    public Observable<List<InportTallyBean>> getInPortTallyList(BaseFilterEntity model) {
+        return transform(getService().getInPortTallyList(model));
+    }
 
+    /***
+     * 进港理货列表数据提交
+     * @param model
+     * @return
+     */
+    public Observable<String> inPortTallyCommit(InPortTallyCommitEntity model) {
+        return nothingtransform(getService().inPortTallyCommit(model));
+    }
 
-//    /******
-//     * @param param
-//     * @return
-//     */
-//    public Observable<List<ScooterInfoListBean>>scooterInfoList(BaseFilterEntity param){
-//        return transform(getService().scooterInfoList(param));
-//    }
 
 }
