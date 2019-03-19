@@ -9,4 +9,5 @@ import lombok.Data;
 public class LoginEntity {
     private String username;
     private String password;
+    private String type;
 }
