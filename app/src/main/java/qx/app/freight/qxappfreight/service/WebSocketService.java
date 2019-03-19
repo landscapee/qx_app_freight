@@ -10,22 +10,27 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.WebSocketBean;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class WebSocketService extends Service {
+    private static String uri;
     public Context mContext;
     private StompClient mStompClient;
     private Timer mTimer;
@@ -35,13 +40,16 @@ public class WebSocketService extends Service {
     //张硕地址
 //    private String uri = "ws://192.168.1.129:8080/taskAssignCenter?userId=uefaa7789c18845c2921b717a41d2da3a";
     //小猪地址
-    private String uri = "ws://192.168.0.171:7004/socketServer?userId=pengrui&type=1&role=admin";
+//    private String uri = "ws://192.168.0.171:7004/socketServer?userId=pengrui&type=1&role=admin";
+//    private String uri = "ws://173.100.1.75:9008/socketServer?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e&type=MT&role=collection";
     private Gson mGson = new Gson();
+
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        EventBus.getDefault().isRegistered(this);
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         //请求头
         List<StompHeader> headers = new ArrayList<>();
@@ -76,16 +84,13 @@ public class WebSocketService extends Service {
         //订阅
         //小猪地址  user/123/MT/message
         //张硕地址  /taskTodoUser/uefaa7789c18845c2921b717a41d2da3a/taskTodo/taskTodoList
-        Disposable dispTopic = mStompClient.topic("/user/pengrui/MT/message")
+        Disposable dispTopic = mStompClient.topic("/user/"+ UserInfoSingle.getInstance().getUserId()+"/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
                     if (null != topicMessage.getPayload()) {
-                        //将json字符串转为bean对象
-                        WebSocketBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketBean.class);
-                        mWebSocketBean.getContent();
-                        Log.d(TAG, "订阅返回信息 " + mWebSocketBean.toString());
+                        sendEventBus(topicMessage.getPayload());
                     }
 
                 }, throwable -> {
@@ -96,8 +101,13 @@ public class WebSocketService extends Service {
         mStompClient.connect(headers);
     }
 
-    public static void startService(Activity activtity) {
+    public static void startService(Activity activtity,String url) {
+        uri = url;
         actionStart(activtity);
+    }
+
+    public static void sendEventBus(String str){
+        EventBus.getDefault().post(str);
     }
 
 

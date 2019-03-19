@@ -48,7 +48,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         return R.layout.activity_login;
     }
 
-    private boolean TAG;
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {

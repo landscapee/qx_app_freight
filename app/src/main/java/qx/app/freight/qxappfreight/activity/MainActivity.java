@@ -17,7 +17,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
@@ -83,9 +85,11 @@ public class MainActivity extends BaseActivity {
         initFragment();
     }
 
+    //, HttpConstant.WEBSOCKETURL+"userId="+ UserInfoSingle.getInstance().getUserId()+"&type=MT&role=collection"
+
     private void initServices() {
         GPSService.gpsStart(this);
-        WebSocketService.startService(this);
+        WebSocketService.startService(this, HttpConstant.WEBSOCKETURL+"userId="+ UserInfoSingle.getInstance().getUserId()+"&type=MT&role=collection");
     }
 
     private void initFragment() {

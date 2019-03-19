@@ -239,8 +239,13 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
 
-    /***********************交货、提货*****************************/
 
+    //行李区行李数据提交
+    @POST("service-product-transport/tp-main-info/baggageAreaSub")
+    Observable<BaseEntity<Object>> baggageAreaSub(@Body BaseFilterEntity model);
+
+
+    /***********************交货、提货*****************************/
     /****
      * 当流水号里面的对应的运单全部已提货，才能调用完成接口，否则关闭列表不调用
      * @param model

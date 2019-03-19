@@ -410,6 +410,15 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().loadAndUnloadTodo(model));
     }
 
+    /****
+     * 行李区行李数据提交
+     * @param model
+     * @return
+     */
+    public Observable<String> baggageAreaSub(BaseFilterEntity model) {
+        return nothingtransform(getService().baggageAreaSub(model));
+    }
+
     /*****
      * 复重数据获取
      * @param model
