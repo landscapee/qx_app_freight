@@ -1,6 +1,8 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,6 +48,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         return R.layout.activity_login;
     }
 
+    private boolean TAG;
+
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
@@ -77,25 +81,21 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         getDeviceInfo();
     }
 
-    private void getDeviceInfo(){
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneBrand());
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
+    private void getDeviceInfo() {
+        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getDeviceInfo(this));
+        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneBrand());
+        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneModel());
+        Log.e("22222", "getDeviceInfo: " + DeviceInfoUtil.getPhoneDevice());
     }
+
 
     /**
      * 登录方法
      */
     private void login() {
-//            WebSocketSTOMPManager webSocketSTOMPManager = new WebSocketSTOMPManager(this);
-//            //创建连接
-//            webSocketSTOMPManager.connect();
-//        WebSocketManager webSocketManager = new WebSocketManager(this);
-//        webSocketManager.connect();
-        if(TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())){
+        if (TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())) {
             ToastUtil.showToast("账号或者密码不能为空");
-        }else{
+        } else {
             ((LoginPresenter) mPresenter).login(getLoginEntity());
         }
     }
@@ -135,8 +135,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void loginResult(LoginResponseBean loginBean) {
         if (loginBean != null) {
             Tools.setLoginUserBean(loginBean);
-            for (LoginResponseBean.RoleRSBean mRoleRSBean :loginBean.getRoleRS()){
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())){
+            for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
                     loginBean.setUserId(loginBean.getLoginid());
                 }
             }

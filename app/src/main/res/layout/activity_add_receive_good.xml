@@ -34,12 +34,12 @@
         android:paddingLeft="18dp"
         android:paddingRight="18dp">
 
-        <!--android:drawableLeft="@mipmap/xing_red"-->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
+            android:drawableLeft="@mipmap/xing_red"
             android:text="品名"
             android:textColor="@color/black_3" />
 
@@ -47,9 +47,8 @@
             android:id="@+id/ll_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:orientation="horizontal">
 
             <Spinner
                 android:id="@+id/sp_product"
@@ -75,11 +74,11 @@
         android:paddingLeft="18dp"
         android:paddingRight="18dp">
 
-        <!--android:drawableLeft="@mipmap/xing_red"-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableLeft="@mipmap/xing_red"
             android:text="件数"
             android:textColor="@color/black_3" />
 
@@ -178,11 +177,12 @@
         android:orientation="horizontal"
         android:paddingLeft="18dp"
         android:paddingRight="18dp">
-        <!--android:drawableLeft="@mipmap/xing_red"-->
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableLeft="@mipmap/xing_red"
             android:text="板车号"
             android:textColor="@color/black_3" />
 

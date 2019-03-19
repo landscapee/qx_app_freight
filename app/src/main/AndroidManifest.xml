@@ -135,7 +135,7 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".service.GPSService" />
-        <!--<service android:name=".service.WebSocketService"/>-->
+        <service android:name=".service.WebSocketService"/>
 
         <receiver
             android:name=".reciver.ScanReceiver"

@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.fragment.TaskStowageFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.GPSService;
+import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
@@ -84,6 +85,7 @@ public class MainActivity extends BaseActivity {
 
     private void initServices() {
         GPSService.gpsStart(this);
+        WebSocketService.startService(this);
     }
 
     private void initFragment() {

@@ -2,12 +2,10 @@ package qx.app.freight.qxappfreight.service;
 
 import android.content.Context;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
