@@ -145,6 +145,9 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
+            } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                fragmentList.add(new FlightListBaggerFragment());
+                list_Title.add("行李");
             }
 
         }

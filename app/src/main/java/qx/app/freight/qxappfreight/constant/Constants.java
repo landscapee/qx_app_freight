@@ -68,6 +68,11 @@ public class Constants {
      */
     public static String INPORTDELIVERY = "delivery_in";
 
+    /**
+     * 进港提货
+     */
+    public static String PORTER = "porter";
+
 
     //收验type值
     public static final int TYPE_MAIN_LIST_CHECK = 1;
