@@ -290,6 +290,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                     tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
                     tr.setTaskId(mOutFieldTaskBean.getId());
+                    tr.setAcdmDtoId(mOutFieldTaskBean.getAcdmDtoId());
                 }
             }
         }

@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -150,6 +153,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void toastView(String error) {
+        //登录接口 崩溃使用
+        LoginResponseBean loginBean = new LoginResponseBean();
+        loginBean.setUserId("851b9d649bd541989943db577edcfcea");
+        List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList <>();
+        LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
+        mRoleRSBean.setRoleCode(Constants.DRIVEROUT);
+        mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);
+
+        roleRSBeans.add(mRoleRSBean);
+        loginBean.setRoleRS(roleRSBeans);
+        UserInfoSingle.setUser(loginBean);
+        //**************************************************
         MainActivity.startActivity(this);
         Toast.makeText(LoginActivity.this, "错误" + error, Toast.LENGTH_SHORT).show();
     }

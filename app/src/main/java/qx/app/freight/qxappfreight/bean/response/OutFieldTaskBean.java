@@ -62,6 +62,8 @@ public class OutFieldTaskBean implements Serializable {
 
         private String beginAreaCargoType;
 
+        private String acdmDtoId;
+
         private OutFieldFlightBean flights;
 
 

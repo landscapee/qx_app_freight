@@ -65,6 +65,7 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
             mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
 
         }
+
         if(item.get(0).getTaskEndTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_green_light);
             helper.setText(R.id.tv_step_time_end,TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));

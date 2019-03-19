@@ -79,6 +79,8 @@ public class TransportTodoListBean {
         private String taskId;
         private List<String> waybillIds;
 
+        private String acdmDtoId;
+
         /**
          * 用于显示板存在于某航班下
          */
@@ -89,4 +91,6 @@ public class TransportTodoListBean {
         private String flightRoute;
         private int num;//板车数量
         private String carType;//板车类型
+
+
 }
