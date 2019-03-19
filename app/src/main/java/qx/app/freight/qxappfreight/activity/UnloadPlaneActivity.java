@@ -228,6 +228,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setTaskId(mInfo[11]);//代办数据中的id
                 infos.add(entity);
             }
+            model.setSeat(mInfo[5]);
             model.setScooters(infos);
             mPresenter=new ArrivalDataSavePresenter(this);
             ((ArrivalDataSavePresenter)mPresenter).arrivalDataSave(model);

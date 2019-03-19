@@ -99,6 +99,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 entity.setReOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setRpDate(mSdf.format(new Date()));
                 entity.setScooters(mList);
+                entity.setSeat(mInfoList[5]);
                 ((PullGoodsReportPresenter) mPresenter).pullGoodsReport(entity);
             }
         });

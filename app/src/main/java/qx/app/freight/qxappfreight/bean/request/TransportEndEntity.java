@@ -20,5 +20,6 @@ public class TransportEndEntity {
     private List<TransportTodoListBean> mainInfos;
     private List<TransportTodoListBean> scooters;
     private List<TpFlightStep> steps;
+    private String seat;
 
 }

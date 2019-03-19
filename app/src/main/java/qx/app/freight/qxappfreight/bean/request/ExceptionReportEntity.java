@@ -33,6 +33,8 @@ public class ExceptionReportEntity {
 
     private String rpInfo;
 
+    private String seat;
+
     private List<TransportTodoListBean> scooters;//板车数据
 //    private List<TpExceptionScooter> scooters;
 }
