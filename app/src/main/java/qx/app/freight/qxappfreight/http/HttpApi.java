@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
@@ -24,12 +23,11 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
+import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
-import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -219,6 +217,7 @@ public interface HttpApi {
     //结束卸机
     @POST("service-product-transport/tp-main-info/flightUnloadInstall")
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
+
     //拉货上报
     @POST("service-product-transport/tp-main-info/saveLoadPullIn")
     Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
@@ -243,6 +242,15 @@ public interface HttpApi {
     //行李区行李数据提交
     @POST("service-product-transport/tp-main-info/baggageAreaSub")
     Observable<BaseEntity<Object>> baggageAreaSub(@Body BaseFilterEntity model);
+
+
+    //锁定行李扫描航班
+    @POST("service-base-flight/f-flight/lookLUggageScannigFlight")
+    Observable<BaseEntity<List<FlightLuggageBean>>> lookLUggageScannigFlight(@Body BaseFilterEntity model);
+
+    //行李转盘扫描处获取对应航班计划信息
+    @POST("service-base-flight/f-flight/getDepartureFlightByAndroid")
+    Observable<BaseEntity<Object>> getDepartureFlightByAndroid(@Body BaseFilterEntity model);
 
 
     /***********************交货、提货*****************************/

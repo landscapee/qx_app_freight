@@ -28,4 +28,8 @@ public class BaseFilterEntity<T> {
     private String completeUser;
     //复重
     private String scooterCode;
+    //航班锁定
+    private String flightId;
+    private String minutes;
+
 }

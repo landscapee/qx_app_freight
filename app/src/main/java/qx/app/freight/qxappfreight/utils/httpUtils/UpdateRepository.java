@@ -26,6 +26,7 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
+import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -417,6 +418,24 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> baggageAreaSub(BaseFilterEntity model) {
         return nothingtransform(getService().baggageAreaSub(model));
+    }
+
+    /****
+     * 行李转盘扫描处获取对应航班计划信息
+     * @param model
+     * @return
+     */
+    public Observable<List<FlightLuggageBean>> lookLUggageScannigFlight(BaseFilterEntity model) {
+        return transform(getService().lookLUggageScannigFlight(model));
+    }
+
+    /****
+     * 锁定行李扫描航班
+     * @param model
+     * @return
+     */
+    public Observable<String> getDepartureFlightByAndroid(BaseFilterEntity model) {
+        return nothingtransform(getService().getDepartureFlightByAndroid(model));
     }
 
     /*****
