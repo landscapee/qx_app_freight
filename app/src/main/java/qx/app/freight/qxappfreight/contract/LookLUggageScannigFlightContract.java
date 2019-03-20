@@ -16,8 +16,8 @@ public class LookLUggageScannigFlightContract {
     }
 
     public interface lookLUggageScannigFlightView extends IBaseView {
-        void lookLUggageScannigFlightResult(List<FlightLuggageBean> flightLuggageBeans);
+        void lookLUggageScannigFlightResult(String result);
 
-        void getDepartureFlightByAndroidResult(String result);
+        void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans);
     }
 }

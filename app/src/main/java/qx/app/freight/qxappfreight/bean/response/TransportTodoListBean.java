@@ -102,5 +102,12 @@ public class TransportTodoListBean {
         private String baggageSubUserName;
         //出港行李数据上传终端ID
         private String baggageSubTerminal;
-
+        //
+        private String tpAsFlightId;
+        //业务id
+        private String tpFlightBusId;
+        //
+        private int tpFlightType;
+        //仓位
+        private String tpFreightSpace;
 }

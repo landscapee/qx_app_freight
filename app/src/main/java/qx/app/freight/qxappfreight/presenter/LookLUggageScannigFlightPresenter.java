@@ -18,9 +18,9 @@ public class LookLUggageScannigFlightPresenter extends BasePresenter {
 
     public void lookLUggageScannigFlight(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((LookLUggageScannigFlightModel) mRequestModel).lookLUggageScannigFlight(model, new IResultLisenter<List<FlightLuggageBean>>() {
+        ((LookLUggageScannigFlightModel) mRequestModel).lookLUggageScannigFlight(model, new IResultLisenter<String>() {
             @Override
-            public void onSuccess(List<FlightLuggageBean> result) {
+            public void onSuccess(String result) {
                 ((LookLUggageScannigFlightContract.lookLUggageScannigFlightView) mRequestView).lookLUggageScannigFlightResult(result);
                 mRequestView.dissMiss();
             }
@@ -36,9 +36,9 @@ public class LookLUggageScannigFlightPresenter extends BasePresenter {
 
     public void getDepartureFlightByAndroid(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((LookLUggageScannigFlightModel) mRequestModel).getDepartureFlightByAndroid(model, new IResultLisenter<String>() {
+        ((LookLUggageScannigFlightModel) mRequestModel).getDepartureFlightByAndroid(model, new IResultLisenter<List<FlightLuggageBean>>() {
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(List<FlightLuggageBean> result) {
                 ((LookLUggageScannigFlightContract.lookLUggageScannigFlightView) mRequestView).getDepartureFlightByAndroidResult(result);
                 mRequestView.dissMiss();
             }

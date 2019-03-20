@@ -9,7 +9,7 @@ import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 
 public class BaggageAreaSubContract {
     public interface baggageAreaSubModel {
-        void baggageAreaSub(BaseFilterEntity model, IResultLisenter lisenter);
+        void baggageAreaSub(String model, IResultLisenter lisenter);
         void scooterInfoList(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
     }
 

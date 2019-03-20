@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.InportTallyBean;
 import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -419,8 +421,10 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> baggageAreaSub(BaseFilterEntity model) {
-        return nothingtransform(getService().baggageAreaSub(model));
+    public Observable<String> baggageAreaSub(String string) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                string);
+        return nothingtransform(getService().baggageAreaSub(requestBody));
     }
 
     /****
@@ -428,8 +432,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<FlightLuggageBean>> lookLUggageScannigFlight(BaseFilterEntity model) {
-        return transform(getService().lookLUggageScannigFlight(model));
+    public Observable<String> lookLUggageScannigFlight(BaseFilterEntity model) {
+        return nothingtransform(getService().lookLUggageScannigFlight(model));
     }
 
     /****
@@ -437,8 +441,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> getDepartureFlightByAndroid(BaseFilterEntity model) {
-        return nothingtransform(getService().getDepartureFlightByAndroid(model));
+    public Observable<List<FlightLuggageBean>> getDepartureFlightByAndroid(BaseFilterEntity model) {
+        return transform(getService().getDepartureFlightByAndroid(model));
     }
 
     /*****

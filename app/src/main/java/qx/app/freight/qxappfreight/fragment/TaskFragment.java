@@ -158,6 +158,8 @@ public class TaskFragment extends BaseFragment {
             }
 
         }
+
+
         nowRoleCode = list_Title.get(0);
         if (fragmentList.size() == 1)
             mTabLayout.setVisibility(View.GONE);

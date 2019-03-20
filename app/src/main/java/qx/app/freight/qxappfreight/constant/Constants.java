@@ -73,7 +73,7 @@ public class Constants {
     public static String INPORTTALLY = "beforehand_in";
 
     /**
-     * 进港提货
+     * 行李员
      */
     public static String PORTER = "porter";
 

@@ -68,7 +68,7 @@ public class LaserScanActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("ChooseWeighScanActivity")) {
+        if (result.getFunctionFlag().equals("LaserScanActivity")) {
             //板车号
             mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {

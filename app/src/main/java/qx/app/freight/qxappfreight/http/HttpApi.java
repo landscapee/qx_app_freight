@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.InportTallyBean;
 import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -246,16 +247,16 @@ public interface HttpApi {
 
     //行李区行李数据提交
     @POST("service-product-transport/tp-main-info/baggageAreaSub")
-    Observable<BaseEntity<Object>> baggageAreaSub(@Body BaseFilterEntity model);
+    Observable<BaseEntity<Object>> baggageAreaSub(@Body RequestBody model);
 
 
     //锁定行李扫描航班
     @POST("service-base-flight/f-flight/lookLUggageScannigFlight")
-    Observable<BaseEntity<List<FlightLuggageBean>>> lookLUggageScannigFlight(@Body BaseFilterEntity model);
+    Observable<BaseEntity<Object>> lookLUggageScannigFlight(@Body BaseFilterEntity model);
 
     //行李转盘扫描处获取对应航班计划信息
     @POST("service-base-flight/f-flight/getDepartureFlightByAndroid")
-    Observable<BaseEntity<Object>> getDepartureFlightByAndroid(@Body BaseFilterEntity model);
+    Observable<BaseEntity<List<FlightLuggageBean>>> getDepartureFlightByAndroid(@Body BaseFilterEntity model);
 
 
     /***********************交货、提货*****************************/

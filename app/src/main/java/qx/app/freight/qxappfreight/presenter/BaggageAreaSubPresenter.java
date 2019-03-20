@@ -6,6 +6,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
 import qx.app.freight.qxappfreight.model.BaggageAreaSubModel;
 
@@ -15,9 +16,9 @@ public class BaggageAreaSubPresenter extends BasePresenter {
         mRequestModel = new BaggageAreaSubModel();
     }
 
-    public void baggageAreaSub(BaseFilterEntity model) {
+    public void baggageAreaSub(String list) {
         mRequestView.showNetDialog();
-        ((BaggageAreaSubModel) mRequestModel).baggageAreaSub(model, new IResultLisenter<String>() {
+        ((BaggageAreaSubModel) mRequestModel).baggageAreaSub(list, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String result) {
                 ((BaggageAreaSubContract.baggageAreaSubView) mRequestView).baggageAreaSubResult(result);

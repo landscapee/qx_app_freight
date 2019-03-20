@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/mfrv_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
