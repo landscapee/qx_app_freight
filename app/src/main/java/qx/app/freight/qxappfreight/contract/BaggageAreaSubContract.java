@@ -11,10 +11,12 @@ public class BaggageAreaSubContract {
     public interface baggageAreaSubModel {
         void baggageAreaSub(String model, IResultLisenter lisenter);
         void scooterInfoList(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+        void lookLUggageScannigFlight(BaseFilterEntity model, IResultLisenter lisenter);
     }
 
     public interface baggageAreaSubView extends IBaseView {
         void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans);
         void baggageAreaSubResult(String result);
+        void lookLUggageScannigFlightResult(String result);
     }
 }

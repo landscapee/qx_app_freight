@@ -109,12 +109,6 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         }, 2000);
     }
 
-
-    @Override
-    public void lookLUggageScannigFlightResult(String result) {
-
-    }
-
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
         mList.clear();

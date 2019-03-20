@@ -16,23 +16,7 @@ public class LookLUggageScannigFlightPresenter extends BasePresenter {
         mRequestModel = new LookLUggageScannigFlightModel();
     }
 
-    public void lookLUggageScannigFlight(BaseFilterEntity model) {
-        mRequestView.showNetDialog();
-        ((LookLUggageScannigFlightModel) mRequestModel).lookLUggageScannigFlight(model, new IResultLisenter<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ((LookLUggageScannigFlightContract.lookLUggageScannigFlightView) mRequestView).lookLUggageScannigFlightResult(result);
-                mRequestView.dissMiss();
-            }
 
-            @Override
-            public void onFail(String error) {
-                mRequestView.toastView(error);
-                mRequestView.dissMiss();
-            }
-
-        });
-    }
 
     public void getDepartureFlightByAndroid(BaseFilterEntity model) {
         mRequestView.showNetDialog();

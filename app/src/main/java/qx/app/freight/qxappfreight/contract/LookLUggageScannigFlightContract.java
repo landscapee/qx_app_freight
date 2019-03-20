@@ -10,13 +10,13 @@ import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 public class LookLUggageScannigFlightContract {
 
     public interface lookLUggageScannigFlightModel {
-        void lookLUggageScannigFlight(BaseFilterEntity model, IResultLisenter lisenter);
+
 
         void getDepartureFlightByAndroid(BaseFilterEntity model, IResultLisenter lisenter);
     }
 
     public interface lookLUggageScannigFlightView extends IBaseView {
-        void lookLUggageScannigFlightResult(String result);
+
 
         void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans);
     }

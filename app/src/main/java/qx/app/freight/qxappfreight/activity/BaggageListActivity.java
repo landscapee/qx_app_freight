@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -128,6 +129,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             bean.setTpFlightType(flightBean.getTpFlightType());
             mList.add(bean);
             mAdapter.notifyDataSetChanged();
+            bindingUser();
         } else {
             ToastUtil.showToast("无该板信息");
         }
@@ -136,6 +138,12 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     @Override
     public void baggageAreaSubResult(String result) {
         ToastUtil.showToast("提交成功");
+        finish();
+    }
+
+    @Override
+    public void lookLUggageScannigFlightResult(String result) {
+        ToastUtil.showToast("绑定航班成功");
     }
 
     @Override
@@ -160,8 +168,10 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             String mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (flag ==1){
                 submitScooter(mScooterCode);
+
             }else {
                 isIncludeScooterCode(mScooterCode);
+
             }
 
         } else {
@@ -182,6 +192,18 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
+    }
+
+    private void bindingUser(){
+        if (mList.size()==1){
+            if (TextUtils.isEmpty(flightBean.getLuggageScanningUser())){
+                BaseFilterEntity entity = new BaseFilterEntity();
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setFlightId(flightBean.getFlightId());
+                ((BaggageAreaSubPresenter)mPresenter).lookLUggageScannigFlight(entity);
+            }
+        }
+
     }
 
     /**添加板车

@@ -33,4 +33,16 @@ public class BaggageAreaSubModel extends BaseModel implements BaggageAreaSubCont
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void lookLUggageScannigFlight(BaseFilterEntity model, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().lookLUggageScannigFlight(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+
+        mDisposableList.add(subscription);
+    }
 }
