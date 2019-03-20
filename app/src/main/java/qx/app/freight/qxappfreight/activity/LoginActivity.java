@@ -151,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         //登录接口 崩溃使用
         LoginResponseBean loginBean = new LoginResponseBean();
 //        loginBean.setUserId("ub76903ce9f8b4d14b7bdbdf90ef52a53");
-        loginBean.setUserId("bd1782b5fe11436493e62b09cafe845c");
+        loginBean.setUserId("d1b75226b8764d529ce3a6b53e1fc239");
         List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList<>();
         LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
 //        mRoleRSBean.setRoleCode(Constants.DRIVEROUT);

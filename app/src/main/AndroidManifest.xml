@@ -42,24 +42,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.ExceptionFilingActivity"></activity>
+        <activity android:name=".activity.ExceptionFilingActivity"/>
         <activity android:name=".activity.ModifyInportInfoActivity" />
         <activity android:name=".activity.UnloadPlaneActivity" />
         <activity android:name=".activity.LaserScanActivity"/>
         <activity android:name=".activity.BaggageListActivity" />
-        <activity android:name=".activity.UnloadPlaneActivity" />
         <activity android:name=".activity.ErrorReportActivity" />
         <activity android:name=".activity.PullGoodsReportActivity" />
         <activity android:name=".activity.ChooseWeighScanActivity" />
         <activity android:name=".activity.InportDeliveryDetailActivity"/>
-        <activity android:name=".activity.ChooseWeighScanActivity"/>
         <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

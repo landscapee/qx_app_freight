@@ -45,11 +45,15 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                 slideView.setLockListener(() -> {
                     item.setItemType(MultiStepEntity.TYPE_STEP_OVER);
                     int pos = helper.getAdapterPosition();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE);
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
                     if (pos!=4){
                         mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
                     }
+                    if (onSlideListener!=null){
+                        onSlideListener.onSlide(pos);
+                    }
                     if (pos == 3) {
+                        mList.get(pos).setStepDoneDate(sdf.format(new Date())+"-");
                         Intent intent;
                         if (item.getLoadUnloadType()==1){
                             intent = new Intent(mContext, LoadPlaneActivity.class);
@@ -59,9 +63,6 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                         intent.putExtra("plane_info", mList.get(pos).getPlaneInfo());
                         mContext.startActivity(intent);
                     }else {
-                        if (onSlideListener!=null){
-                            onSlideListener.onSlide(pos);
-                        }
                         mList.get(pos).setStepDoneDate(sdf.format(new Date()));
                     }
                 });
