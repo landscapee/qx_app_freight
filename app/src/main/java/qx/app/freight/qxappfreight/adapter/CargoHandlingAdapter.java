@@ -14,6 +14,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
+import qx.app.freight.qxappfreight.utils.MapValue;
 
 public class CargoHandlingAdapter extends BaseQuickAdapter <FtRuntimeFlightScooter, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;
@@ -68,10 +69,7 @@ public class CargoHandlingAdapter extends BaseQuickAdapter <FtRuntimeFlightScoot
             });
         }
 
-        if (item.getScooterType() == 1)
-            helper.setText(R.id.tv_handcar,"大板"+item.getScooterCode());
-        else if (item.getScooterType() == 2)
-            helper.setText(R.id.tv_handcar,"小板"+item.getScooterCode());
+        helper.setText(R.id.tv_handcar, MapValue.getCarTypeValue(item.getScooterType()+"") +item.getScooterCode());
 
         helper.setText(R.id.tv_weight,""+item.getWeight());
         helper.setText(R.id.tv_volume,""+item.getVolume());

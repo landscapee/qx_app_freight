@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -120,6 +121,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mainIfos.setTpScooterCode(scooterCode);
             mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
             mainIfos.setDtoType(8);
+            mainIfos.setTpStartLocate("seat");
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");

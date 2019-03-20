@@ -481,7 +481,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private void submitData() {
 
         setProgressText("数据提交中……");
-
+        mPresenter = new GetScooterListInfoPresenter(this);
         FightScooterSubmitEntity mFightScooterSubmitEntity = new FightScooterSubmitEntity();
         mFightScooterSubmitEntity.setFlightId(flightInfo.getId());
         mFightScooterSubmitEntity.setUserId(UserInfoSingle.getInstance().getUserId());

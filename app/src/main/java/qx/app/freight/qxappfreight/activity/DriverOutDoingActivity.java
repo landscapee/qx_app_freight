@@ -187,6 +187,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 //            mainIfos.setTpOperator("u6911330e59ce46c288181ed11a48ee23");
             mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
             mainIfos.setTpScooterType(transfortType);
+            mainIfos.setTpStartLocate(mAcceptTerminalTodoBean.get(0).getBeginAreaType());
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");
@@ -202,7 +203,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      * 开始按钮是否可以点击
      */
     private void upDataBtnStatus() {
-        if (getMaxHandcarNum() > 0) {
+        if (getMaxHandcarNum() == tpNum) {
             btnBeginEnd.setClickable(true);
             btnBeginEnd.setBackgroundResource(R.drawable.btn_blue_press);
         } else {
@@ -439,7 +440,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mapFlight.clear();
 
             mDriverOutTaskDoingAdapter.notifyDataSetChanged();
-            if (result.size() >= tpNum)
+//            if (result.size() >= tpNum)
             //通过 判断是否 拥有开始时间 来设置 运输的状态
             if (mAcceptTerminalTodoBean.get(0).getTaskBeginTime() > 0)
                 setTpStatus(0);
