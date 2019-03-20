@@ -245,6 +245,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
             scooterInfo = scooterInfoListBeans.get(0);
+
             //板车号
             mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
             //板车重量
