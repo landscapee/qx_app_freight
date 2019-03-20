@@ -51,8 +51,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private int mCurrentSize = 10;
     private static final String[] mStepNamesInstall = {"领受", "到位", "开启舱门", "装机", "关闭舱门"};
     private static final String[] mStepNamesUninstall = {"领受", "到位", "开启舱门", "卸机", "关闭舱门"};
-    private static final String[] mStepCodeInstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_load", "FreightPass_close"};
-    private static final String[] mStepCodeUninstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_unload", "FreightPass_close"};
+    private static final String[] mStepCodeInstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_load_begin", "FreightPass_close"};
+    private static final String[] mStepCodeUninstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_unload_begin", "FreightPass_close"};
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
@@ -156,20 +156,20 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
-            List<Long> times = new ArrayList<>();
-            times.add(bean.getAcceptTime());
-            times.add(bean.getArrivalTime());
-            times.add(bean.getOpenDoorTime());
-            times.add(bean.getLoadUnloadTime());
-            times.add(bean.getCloseDoorTime());
+            List<String> times = new ArrayList<>();
+            times.add(String.valueOf(bean.getAcceptTime()));
+            times.add(String.valueOf(bean.getArrivalTime()));
+            times.add(String.valueOf(bean.getOpenDoorTime()));
+            times.add(bean.getBeginLoadUnloadTime()+":"+bean.getLoadUnloadTime());
+            times.add(String.valueOf(bean.getCloseDoorTime()));
             //FlightNumber                  AirCraftNo                  StartPlace              MiddlePlace                 EndPlace
             String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
                     //机位            scheduleTime                    FlightId                ActualTakeoffTime  8             ActualArriveTime 9                 Movement            Id
                     + "*" + entity.getSeat() + "*" + entity.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
             int posNow = 0;
             for (int i = 0; i < times.size(); i++) {
-                long timeNow = times.get(i);
-                if (timeNow == 0) {
+                String timeNow = times.get(i);
+                if ("0".equals(timeNow)||":".equals(timeNow)) {
                     posNow = i;
                     break;
                 }
@@ -192,7 +192,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
                 entity1.setItemType(type);
                 entity1.setPlaneInfo(planeInfo);
-                entity1.setStepDoneDate(sdf.format(new Date(times.get(i))));
+                if (i==3){
+                    String [] timeArray=times.get(i).split(":");
+                    String start=("0".equals(timeArray[0]))?"":sdf.format(new Date(timeArray[0]));
+                    String end=("0".equals(timeArray[1]))?"":sdf.format(new Date(timeArray[1]));
+                    entity1.setStepDoneDate(start+"-"+end);
+                }else {
+                    entity1.setStepDoneDate(("0".equals(times.get(i))?"":sdf.format(new Date(times.get(i)))));
+                }
                 data.add(entity1);
             }
             entity.setList(data);

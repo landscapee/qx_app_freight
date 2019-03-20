@@ -30,7 +30,7 @@ public class PerformTaskStepsEntity {
      * FreightPass_load 装机
      * FreightPass_unload 卸机
      **/
-    private String operationCode;
+    private String operationCode;//FreightPass_load_begin 开始装机  FreightPass_unload_begin 开始卸机
 
     private long flightId;
 

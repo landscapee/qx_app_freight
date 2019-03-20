@@ -49,4 +49,5 @@ public class LoadAndUnloadTodoBean {
     private String seat;
     private long scheduleTime;
     private String route;
+    private long beginLoadUnloadTime;
 }

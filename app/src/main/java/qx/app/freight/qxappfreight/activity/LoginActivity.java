@@ -150,12 +150,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void toastView(String error) {
         //登录接口 崩溃使用
         LoginResponseBean loginBean = new LoginResponseBean();
-        loginBean.setUserId("ub76903ce9f8b4d14b7bdbdf90ef52a53");
+//        loginBean.setUserId("ub76903ce9f8b4d14b7bdbdf90ef52a53");
+        loginBean.setUserId("bd1782b5fe11436493e62b09cafe845c");
         List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList<>();
         LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
 //        mRoleRSBean.setRoleCode(Constants.DRIVEROUT);
-//        mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);
-        mRoleRSBean.setRoleCode(Constants.DRIVERIN);
+        mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);
+//        mRoleRSBean.setRoleCode(Constants.DRIVERIN);
 
         roleRSBeans.add(mRoleRSBean);
         loginBean.setRoleRS(roleRSBeans);
