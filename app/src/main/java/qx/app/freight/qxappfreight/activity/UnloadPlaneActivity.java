@@ -45,7 +45,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView{
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -106,7 +106,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         String flightInfo = getIntent().getStringExtra("plane_info");
-        mInfo=flightInfo.split("\\*");
+        mInfo = flightInfo.split("\\*");
         toolbar.setMainTitle(Color.WHITE, mInfo[0] + "  卸机");
         mTvPlaneInfo.setText(mInfo[0]);
         mTvFlightType.setText(mInfo[1]);
@@ -114,25 +114,25 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mTvMiddlePlace.setText(mInfo[3]);
         mTvTargetPlace.setText(mInfo[4]);
         mTvSeat.setText(mInfo[5]);
-        long takeOff=Long.valueOf(mInfo[8]);
-        SimpleDateFormat sdf=new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
-        String hourMinuteStart=sdf.format(new Date(takeOff)).substring(3);
-        String dayStart=hourMinuteStart.substring(0,2);
+        long takeOff = Long.valueOf(mInfo[8]);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
+        String hourMinuteStart = sdf.format(new Date(takeOff)).substring(3);
+        String dayStart = hourMinuteStart.substring(0, 2);
         String startTime;
-        if (Integer.valueOf(dayStart)<10){
-            startTime=hourMinuteStart+"("+dayStart.substring(1)+")";
-        }else {
-            startTime=hourMinuteStart+"("+dayStart+")";
+        if (Integer.valueOf(dayStart) < 10) {
+            startTime = hourMinuteStart + "(" + dayStart.substring(1) + ")";
+        } else {
+            startTime = hourMinuteStart + "(" + dayStart + ")";
         }
         mTvStartTime.setText(startTime);
-        long arrive=Long.valueOf(mInfo[9]);
-        String hourMinuteArrive=sdf.format(new Date(arrive)).substring(3);
-        String dayArrive=hourMinuteArrive.substring(0,2);
+        long arrive = Long.valueOf(mInfo[9]);
+        String hourMinuteArrive = sdf.format(new Date(arrive)).substring(3);
+        String dayArrive = hourMinuteArrive.substring(0, 2);
         String arriveTime;
-        if (Integer.valueOf(dayArrive)<10){
-            arriveTime=hourMinuteArrive+"("+dayArrive.substring(1)+")";
-        }else {
-            arriveTime=hourMinuteArrive+"("+dayArrive+")";
+        if (Integer.valueOf(dayArrive) < 10) {
+            arriveTime = hourMinuteArrive + "(" + dayArrive.substring(1) + ")";
+        } else {
+            arriveTime = hourMinuteArrive + "(" + dayArrive + ")";
         }
         mTvArriveTime.setText(arriveTime);
         String scanGoods = "请扫描添加  <font color='#0000ff'>货物</font>  板车";
@@ -140,7 +140,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         String scanPac = "请扫描添加  <font color='#0000ff'>行李</font>  板车";
         mTvScanPac.setText(Html.fromHtml(scanPac));
         mSlideRvGoods.setLayoutManager(new LinearLayoutManager(this));
-        mScanGoodsAdapter = new ScanInfoAdapter(mListGoods,flightInfo);
+        mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, flightInfo);
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
             mListGoods.remove(position);
@@ -151,7 +151,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRvPac.setLayoutManager(new LinearLayoutManager(this));
-        mScanPacAdapter = new ScanInfoAdapter(mListPac,flightInfo);
+        mScanPacAdapter = new ScanInfoAdapter(mListPac, flightInfo);
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
             mListPac.remove(position);
@@ -196,12 +196,12 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                     UnloadPlaneActivity.this.startActivity(intent);
                 });
         mTvEndUnload.setOnClickListener(v -> {
-            TransportEndEntity model=new TransportEndEntity();
+            TransportEndEntity model = new TransportEndEntity();
             model.setTaskId(mInfo[11]);
-            Log.e("tag","卸机id======"+mInfo[11]);
-            List<TransportTodoListBean> infos=new ArrayList<>();
-            for (ScooterInfoListBean bean:mListGoods){
-                TransportTodoListBean entity=new TransportTodoListBean();
+            Log.e("tag", "卸机id======" + mInfo[11]);
+            List<TransportTodoListBean> infos = new ArrayList<>();
+            for (ScooterInfoListBean bean : mListGoods) {
+                TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("cargo");
@@ -214,8 +214,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setTaskId(mInfo[11]);//代办数据中的id
                 infos.add(entity);
             }
-            for (ScooterInfoListBean bean:mListPac){
-                TransportTodoListBean entity=new TransportTodoListBean();
+            for (ScooterInfoListBean bean : mListPac) {
+                TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("baggage");
@@ -230,8 +230,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             }
             model.setSeat(mInfo[5]);
             model.setScooters(infos);
-            mPresenter=new ArrivalDataSavePresenter(this);
-            ((ArrivalDataSavePresenter)mPresenter).arrivalDataSave(model);
+            mPresenter = new ArrivalDataSavePresenter(this);
+            ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
         });
     }
 
@@ -244,7 +244,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     private void addScooterInfo(String scooterCode) {
-        Log.e("tagCode", "scooterCode========"+scooterCode);
+        Log.e("tagCode", "scooterCode========" + scooterCode);
         if (!"".equals(scooterCode)) {
             mPresenter = new ScooterInfoListPresenter(this);
             BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
@@ -287,7 +287,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void toastView(String error) {
-        Log.e("tagError","error========"+error);
+        Log.e("tagError", "error========" + error);
     }
 
     @Override
