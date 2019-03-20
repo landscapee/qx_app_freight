@@ -14,7 +14,7 @@ import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.httpUtils.DisplayUtil;
 
 /**
- * 顶部通用状态栏
+ * 顶部通用的状态栏
  */
 public class CustomToolbar extends LinearLayout {
     private ImageView mLeftIv;//左边图标
