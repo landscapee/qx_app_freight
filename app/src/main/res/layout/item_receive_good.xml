@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/tv_receive_nb"
-                android:layout_width="93dp"
+                android:layout_width="103dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@drawable/shape_rect_blue_cce4"
