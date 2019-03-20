@@ -31,12 +31,5 @@ public class BaseFilterEntity<T> {
     //航班锁定
     private String flightId;
     private String minutes;
-    // 出港行李数据保存时需要的行李转盘标识
-    private String baggageTurntable;
-    //出港行李数据上传用户ID
-    private String baggageSubOperator;
-    //出港行李数据上传用户名称
-    private String baggageSubUserName;
-    //出港行李数据上传终端ID
-    private String baggageSubTerminal;
+
 }
