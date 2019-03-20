@@ -57,12 +57,12 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         if(item.get(0).getTaskBeginTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_green_light);
             helper.setText(R.id.tv_step_time_start,TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
-            mSlideLeftExecuteViewE.setVisibility(View.GONE);
+            mSlideLeftExecuteViewS.setVisibility(View.GONE);
         }
         else {
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
             helper.setText(R.id.tv_step_time_start,"");
-            mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
+            mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
 
         }
 

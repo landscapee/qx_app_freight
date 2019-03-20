@@ -66,6 +66,8 @@ public class OutFieldTaskBean implements Serializable {
 
         private OutFieldFlightBean flights;
 
+        private String transfortType; //0-大滚筒（宽），1-大滚筒（窄），2-小滚筒，3-平板
+
 
         public String getBeginAreaCargoType() {
                 return beginAreaId+":"+cargoType;

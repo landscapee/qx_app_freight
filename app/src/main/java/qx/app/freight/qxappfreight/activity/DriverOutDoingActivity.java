@@ -50,6 +50,9 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
+/**
+ * 外场押运界面
+ */
 public class DriverOutDoingActivity extends BaseActivity implements TransportBeginContract.transportBeginView, ScanScooterContract.scanScooterView {
     @BindView(R.id.ll_add)
     LinearLayout llAdd;
@@ -73,10 +76,13 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private int tpNum = 0; //这个人最多拉的板
 
-    public static void startActivity(Context context, List <OutFieldTaskBean> mTasksBean) {
+    private String transfortType; //该任务 只能拉什么类型的板
+
+    public static void startActivity(Context context, List <OutFieldTaskBean> mTasksBean,String transfortType) {
         Intent starter = new Intent(context, DriverOutDoingActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("acceptTerminalTodoBean", (Serializable) mTasksBean);
+        starter.putExtra("transfortType",transfortType);
         starter.putExtras(mBundle);
         ((Activity) context).startActivityForResult(starter, 0);
     }
@@ -95,7 +101,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             EventBus.getDefault().register(this);
         listScooter = new ArrayList <>();
         mAcceptTerminalTodoBean = (List <OutFieldTaskBean>) getIntent().getSerializableExtra("acceptTerminalTodoBean");
-       if (mAcceptTerminalTodoBean != null){
+
+        transfortType = getIntent().getStringExtra("transfortType");
+
+        if (mAcceptTerminalTodoBean != null){
            tpNum = 0;
            for (OutFieldTaskBean mOutFieldTaskBean:mAcceptTerminalTodoBean){
                tpNum += mOutFieldTaskBean.getNum();
@@ -148,7 +157,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             ToastUtil.showToast("运输已经开始，无法再次扫版");
             return;
         }
-        if (listScooter.size() > tpNum){
+        if (listScooter.size() >= tpNum){
 
             ToastUtil.showToast("任务只分配给你"+tpNum+"个板车");
             return;
@@ -177,6 +186,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mainIfos.setTpScooterCode(scooterCode);
 //            mainIfos.setTpOperator("u6911330e59ce46c288181ed11a48ee23");
             mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
+            mainIfos.setTpScooterType(transfortType);
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");
@@ -429,10 +439,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mapFlight.clear();
 
             mDriverOutTaskDoingAdapter.notifyDataSetChanged();
-            if (result.size() >= tpNum) {
-                ToastUtil.showToast(this, "任务只分配给你"+tpNum+"个板车");
-                llAdd.setVisibility(View.GONE);
-            }
+            if (result.size() >= tpNum)
             //通过 判断是否 拥有开始时间 来设置 运输的状态
             if (mAcceptTerminalTodoBean.get(0).getTaskBeginTime() > 0)
                 setTpStatus(0);

@@ -133,11 +133,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void loginResult(LoginResponseBean loginBean) {
         if (loginBean != null) {
             Tools.setLoginUserBean(loginBean);
-            for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
-                    loginBean.setUserId(loginBean.getLoginid());
-                }
-            }
+//            for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
+//                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
+//                    loginBean.setUserId(loginBean.getLoginid());
+//                }
+//            }
 
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
@@ -149,18 +149,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void toastView(String error) {
         //登录接口 崩溃使用
-        LoginResponseBean loginBean = new LoginResponseBean();
-//        loginBean.setUserId("ub76903ce9f8b4d14b7bdbdf90ef52a53");
-        loginBean.setUserId("d1b75226b8764d529ce3a6b53e1fc239");
-        List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList<>();
-        LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
-//        mRoleRSBean.setRoleCode(Constants.DRIVEROUT);
-        mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);
-//        mRoleRSBean.setRoleCode(Constants.DRIVERIN);
-
-        roleRSBeans.add(mRoleRSBean);
-        loginBean.setRoleRS(roleRSBeans);
-        UserInfoSingle.setUser(loginBean);
+//        LoginResponseBean loginBean = new LoginResponseBean();
+////        loginBean.setUserId("ub76903ce9f8b4d14b7bdbdf90ef52a53");
+//        loginBean.setUserId("bd1782b5fe11436493e62b09cafe845c");
+//        List<LoginResponseBean.RoleRSBean> roleRSBeans = new ArrayList<>();
+//        LoginResponseBean.RoleRSBean mRoleRSBean = new LoginResponseBean.RoleRSBean();
+////        mRoleRSBean.setRoleCode(Constants.DRIVEROUT);
+//        mRoleRSBean.setRoleCode(Constants.INSTALL_UNLOAD_EQUIP);
+////        mRoleRSBean.setRoleCode(Constants.DRIVERIN);
+//
+//        roleRSBeans.add(mRoleRSBean);
+//        loginBean.setRoleRS(roleRSBeans);
+//        UserInfoSingle.setUser(loginBean);
         //**************************************************
         MainActivity.startActivity(this);
         Toast.makeText(LoginActivity.this, "错误" + error, Toast.LENGTH_SHORT).show();

@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -172,12 +175,30 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                currentPage++;
                mMfrvData.finishLoadMore();
            }
+            //把运输的板车类型 赋值大 子任务
+            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean:acceptTerminalTodoBeanList){
+               for (OutFieldTaskBean mOutFieldTaskBean:mAcceptTerminalTodoBean.getTasks()){
+                   mOutFieldTaskBean.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
+               }
+            }
 
-            //根据BeginAreaId分类
-            acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
-                acceptTerminalTodoBean.setUseTasks(new ArrayList <List <OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
-//                acceptTerminalTodoBean.setCollect(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaId)));
-            });
+            //根据BeginAreaId分类 21 以下 用 else
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+
+                acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
+                    acceptTerminalTodoBean.setUseTasks(new ArrayList <List <OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
+                });
+            }
+            else {
+
+                for (AcceptTerminalTodoBean mAcceptTerminalTodoBean:acceptTerminalTodoBeanList){
+
+                    mAcceptTerminalTodoBean.setUseTasks(getUseTasks(mAcceptTerminalTodoBean));
+
+                }
+
+            }
+
             list.addAll(acceptTerminalTodoBeanList);
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
@@ -187,6 +208,31 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         } else {
             Log.e("失败", "外场运输待办");
         }
+    }
+
+    /**
+     * 根据 开始位置和运输类型
+     * @param mAcceptTerminalTodoBean
+     * @return
+     */
+    private List<List<OutFieldTaskBean>> getUseTasks(AcceptTerminalTodoBean mAcceptTerminalTodoBean) {
+
+        Map<String,List<OutFieldTaskBean>> map = new HashMap <>();
+
+        for (OutFieldTaskBean task :mAcceptTerminalTodoBean.getTasks()){
+                if (map.get(task.getBeginAreaCargoType()) == null){
+                    List<OutFieldTaskBean> list = new ArrayList <>();
+                    list.add(task);
+                    map.put(task.getBeginAreaCargoType(),list);
+                }
+                else {
+                    map.get(task.getBeginAreaCargoType()).add(task);
+                }
+
+        }
+        List<List<OutFieldTaskBean>>  OutFieldTaskBeans = new ArrayList <>(map.values());
+
+        return OutFieldTaskBeans;
     }
 
     @Override
