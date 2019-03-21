@@ -52,7 +52,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        toolbar.setLeftIconView(View.GONE, R.mipmap.icon_back, v -> showDialog());
+//        toolbar.setLeftIconView(View.GONE, R.mipmap.icon_back, v -> showDialog());
 //        toolbar.setLeftTextView(View.VISIBLE, Color.RED, "左边文字", v -> Toast.makeText(LoginActivity.this, "点击了左边的文字", Toast.LENGTH_LONG).show());
         toolbar.setMainTitle(Color.WHITE, "登录");
 //        toolbar.setRightIconView(View.VISIBLE, R.mipmap.icon_query, v -> Toast.makeText(LoginActivity.this, "右边图标", Toast.LENGTH_LONG).show());
@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
-        getDeviceInfo();
+//        getDeviceInfo();
     }
 
     private void getDeviceInfo(){
@@ -141,6 +141,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
+            finish();
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
@@ -162,7 +163,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        loginBean.setRoleRS(roleRSBeans);
 //        UserInfoSingle.setUser(loginBean);
         //**************************************************
-        MainActivity.startActivity(this);
+//        MainActivity.startActivity(this);
         Toast.makeText(LoginActivity.this, "错误" + error, Toast.LENGTH_SHORT).show();
     }
 

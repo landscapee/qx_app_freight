@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.LoginContract;
+import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TaskStowageFragment;
@@ -63,6 +64,7 @@ public class MainActivity extends BaseActivity {
     private TestFragment mTestFragment;
     private TaskPutCargoFragment mTaskStowageFragment;
     private TaskPutCargoFragment mTaskPutCargoFragment;
+    private MineFragment mMineFragment;
     private Fragment nowFragment;
 
     public static void startActivity(Context context) {
@@ -117,6 +119,7 @@ public class MainActivity extends BaseActivity {
         mTestFragment = new TestFragment();
         mTaskStowageFragment = new TaskPutCargoFragment();
         mTaskPutCargoFragment = new TaskPutCargoFragment();
+        mMineFragment = new MineFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -124,6 +127,7 @@ public class MainActivity extends BaseActivity {
                 .add(R.id.content, mTestFragment)
                 .add(R.id.content, mTaskStowageFragment)
                 .add(R.id.content, mTaskPutCargoFragment)
+                .add(R.id.content, mMineFragment)
                 .commit();
         nowFragment = mTaskFragment;
         switchFragment(0, mTaskFragment);
@@ -188,7 +192,7 @@ public class MainActivity extends BaseActivity {
                 switchFragment(3, mTaskPutCargoFragment);
                 break;
             case R.id.ll_mine:
-                switchFragment(4, mTaskPutCargoFragment);
+                switchFragment(4, mMineFragment);
                 break;
         }
 
