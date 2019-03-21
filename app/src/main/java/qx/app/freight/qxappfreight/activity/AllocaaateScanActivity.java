@@ -40,7 +40,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
  * 复重扫一扫页面
- * Created by pr
+ * Created by swd
  */
 public class AllocaaateScanActivity extends BaseActivity implements GetScooterByScooterCodeContract.GetScooterByScooterCodeView {
     @BindView(R.id.ll_scan)

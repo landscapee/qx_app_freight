@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -70,12 +72,20 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            ReceiveGoodsActivity.startActivity(getActivity(),
-                    list.get(position).getId(),
-                    list.get(position).getTaskId(),
-                    list.get(position).getWaybillCode(),
-                    list .get(position).getDeclareItem());
+            turnToReceiveGoodsActivity(list.get(position));
         });
+    }
+
+    /**
+     * 跳转到代办详情
+     * @param bean
+     */
+    private void turnToReceiveGoodsActivity(TransportListBean bean){
+        ReceiveGoodsActivity.startActivity(getActivity(),
+                bean.getId(),
+                bean.getTaskId(),
+                bean.getWaybillCode(),
+                bean.getDeclareItem());
     }
 
     private void loadData() {
@@ -114,6 +124,31 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             pageCurrent = 1;
             Log.e("refresh", result);
             loadData();
+        }
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        String daibanCode = result.getData();
+        Log.e("22222","daibanCode"+daibanCode);
+        if (!TextUtils.isEmpty(daibanCode)) {
+            chooseCode(daibanCode);
+        }
+    }
+
+    /**
+     * 通过获取的code，筛选代办，直接进入处理代办
+     * @param daibanCode  代办号
+     */
+    private void chooseCode(String daibanCode){
+        for (TransportListBean item:list) {
+            if (daibanCode.equals(item.getId())){
+                turnToReceiveGoodsActivity(item);
+                return;
+            }
         }
     }
 

@@ -6,18 +6,26 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.ouyben.empty.EmptyLayout;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
+import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -51,6 +59,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this, view);
         initView();
 //        loadData();
     }
@@ -70,11 +79,8 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         mList = new ArrayList<>();
         mAdapter = new InPortDeliveryAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
-                    .putExtra("num1" ,mList.get(position).getOutboundNumber())
-                    .putExtra("num2" ,mList.get(position).getWaybillCount())
-                    .putExtra("taskId", mList.get(position).getTaskId())
-                    .putExtra("billId", mList.get(position).getSerialNumber()));
+            turnToDetailActivity(mList.get(position));
+
 
         });
         mMfrvData.setAdapter(mAdapter);
@@ -87,6 +93,44 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         entity.setUndoType("3");
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+    }
+
+    /**
+     * 跳转到代办详情
+     * @param bean
+     */
+    private void turnToDetailActivity(TransportListBean bean){
+
+        startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
+                .putExtra("num1" ,bean.getOutboundNumber())
+                .putExtra("num2" ,bean.getWaybillCount())
+                .putExtra("taskId", bean.getTaskId())
+                .putExtra("billId", bean.getSerialNumber()));
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        String daibanCode = result.getData();
+        Log.e("22222","daibanCode"+daibanCode);
+        if (!TextUtils.isEmpty(daibanCode)) {
+            chooseCode(daibanCode);
+        }
+    }
+
+    /**
+     * 通过获取的code，筛选代办，直接进入处理代办
+     * @param daibanCode  代办号
+     */
+    private void chooseCode(String daibanCode){
+        for (TransportListBean item:mList) {
+            if (daibanCode.equals(item.getId())){
+                turnToDetailActivity(item);
+                return;
+            }
+        }
     }
 
     @Override

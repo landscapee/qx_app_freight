@@ -80,8 +80,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
         btnConfirm.setOnClickListener(v -> {
             deliveryComplet();
-//            showDialog();
-//            showChooseDialog();
         });
     }
     //根据流水单号获取列表
@@ -107,35 +105,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         entity.setTaskId(taskId);
         entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
         ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);
-    }
-
-    private void showDialog(){
-        List<TestBean> list22 = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            if (i==20){
-                list22.add(new TestBean(1,i));
-            }else if (i==25){
-                list22.add(new TestBean(1,i));
-            }else {
-                list22.add(new TestBean(0,i));
-            }
-
-        }
-
-        PopTestDialog dialog = new PopTestDialog();
-        dialog.setData(list22,this);
-        dialog.show(getSupportFragmentManager(),"123");
-    }
-
-    private void showChooseDialog(){
-        List<TestBean> list22 = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            list22.add(new TestBean("库房"+i,false));
-        }
-
-        ChooseStoreroomDialog dialog = new ChooseStoreroomDialog();
-        dialog.setData(list22,this);
-        dialog.show(getSupportFragmentManager(),"123");
     }
 
     @Override

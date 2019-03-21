@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
 import qx.app.freight.qxappfreight.activity.ChooseWeighScanActivity;
+import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -64,7 +65,8 @@ public class TaskFragment extends BaseFragment {
 //            case "":
 //                break;
             default:
-                ToastUtil.showToast(getContext(), "扫码");
+//                ToastUtil.showToast(getContext(), "扫码");
+                ScanManagerActivity.startActivity(getContext(),"scan");
         }
 
     }

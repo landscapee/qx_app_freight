@@ -1,10 +1,12 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +25,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoHandlingActivity;
+import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
 import qx.app.freight.qxappfreight.adapter.TaskStowageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -34,9 +38,8 @@ import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /**
- *
  * 理货
- *
+ * <p>
  * 出港-配载-组板
  */
 public class TaskStowageFragment extends BaseFragment implements TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
@@ -47,6 +50,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     private TaskStowageAdapter adapter;
 
     private int pageCurrent = 1;//页数
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,24 +71,24 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     }
 
     private void initData() {
-        list = new ArrayList <>();
+        list = new ArrayList<>();
         adapter = new TaskStowageAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
 //            ToastUtil.showToast(getContext(), list.get(position));
-            CargoHandlingActivity.startActivity(mContext,list.get(position).getTaskId(),list.get(position).getFlightId());
+            turnToDetailActivity(list.get(position));
         });
         getData();
     }
 
-    private void setTitleNum(int size){
+    private void setTitleNum(int size) {
         TaskFragment fragment = (TaskFragment) getParentFragment();
         if (fragment != null) {
             fragment.setTitleText(size);
         }
     }
 
-    private void getData(){
+    private void getData() {
         mPresenter = new TransportListPresenter(this);
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setCurrent(pageCurrent);
@@ -99,6 +103,42 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         if (result.equals("CargoHandlingActivity_refresh")) {
             pageCurrent = 1;
             getData();
+        }
+    }
+
+    /**
+     * 跳转到代办详情
+     *
+     * @param bean
+     */
+    private void turnToDetailActivity(TransportListBean bean) {
+        CargoHandlingActivity.startActivity(mContext,bean.getTaskId()
+                ,bean.getFlightId());
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        String daibanCode = result.getData();
+        Log.e("22222", "daibanCode" + daibanCode);
+        if (!TextUtils.isEmpty(daibanCode)) {
+            chooseCode(daibanCode);
+        }
+    }
+
+    /**
+     * 通过获取的code，筛选代办，直接进入处理代办
+     *
+     * @param daibanCode 代办号
+     */
+    private void chooseCode(String daibanCode) {
+        for (TransportListBean item : list) {
+            if (daibanCode.equals(item.getId())) {
+                turnToDetailActivity(item);
+                return;
+            }
         }
     }
 
@@ -121,20 +161,19 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     }
 
     @Override
-    public void transportListContractResult(List <TransportListBean> transportListBeans) {
+    public void transportListContractResult(List<TransportListBean> transportListBeans) {
 
-        if (transportListBeans != null){
+        if (transportListBeans != null) {
             //未分页
             list.clear();
-            if (pageCurrent == 1){
+            if (pageCurrent == 1) {
 //                list.clear();
                 mMfrvData.finishRefresh();
-            }
-            else {
+            } else {
                 mMfrvData.finishLoadMore();
             }
 
-            for (TransportListBean mTransportListBean : transportListBeans){
+            for (TransportListBean mTransportListBean : transportListBeans) {
 
                 if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode()))
                     list.add(mTransportListBean);
@@ -146,11 +185,10 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
 
     @Override
     public void toastView(String error) {
-        if (pageCurrent == 1){
+        if (pageCurrent == 1) {
             list.clear();
             mMfrvData.finishRefresh();
-        }
-        else
+        } else
             mMfrvData.finishLoadMore();
     }
 
