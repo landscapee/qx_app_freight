@@ -108,12 +108,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
         if (transportListBeans != null) {
             TaskFragment fragment= (TaskFragment) getParentFragment();
+            //未分页
+            transportListList.clear();
             if (pageCurrent == 1){
-                transportListList.clear();
+//                transportListList.clear();
                 mMfrvData.finishRefresh();
             }
             else{
-
                 mMfrvData.finishLoadMore();
             }
             transportListList.addAll(transportListBeans);

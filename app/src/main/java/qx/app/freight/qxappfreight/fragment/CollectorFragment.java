@@ -73,6 +73,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             ReceiveGoodsActivity.startActivity(getActivity(),
                     list.get(position).getId(),
                     list.get(position).getTaskId(),
+                    list.get(position).getWaybillCode(),
                     list .get(position).getDeclareItem());
         });
     }
@@ -121,8 +122,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (transportListBeans != null) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
 
+            //未分页
+            list.clear();
             if (pageCurrent == 1) {
-                list.clear();
+//                list.clear();
                 mMfrvData.finishRefresh();
             }
             else{

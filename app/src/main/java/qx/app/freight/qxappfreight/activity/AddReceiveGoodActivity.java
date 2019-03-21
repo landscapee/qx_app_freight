@@ -71,16 +71,17 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private GeneralSpinnerAdapter mSpProductAdapter;
     private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
     private MyAgentListBean mMyAgentListBean;
-    private String waybillId;
+    private String waybillId,waybillCode;
     private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
 
-    public static void startActivity(Activity context, String waybillId, String mScooterCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    public static void startActivity(Activity context, String waybillId, String mScooterCode,String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
+        starter.putExtra("waybillCode", waybillCode);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);
@@ -178,6 +179,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setId("");
         //运单id
         mMyAgentListBean.setWaybillId(waybillId);
+
+        mMyAgentListBean.setWaybillCode(waybillCode);
         //件数
         mMyAgentListBean.setNumber(Integer.valueOf(mEdtNumber.getText().toString().trim()));
         //体积

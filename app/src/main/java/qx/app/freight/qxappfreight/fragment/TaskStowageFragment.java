@@ -124,8 +124,10 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     public void transportListContractResult(List <TransportListBean> transportListBeans) {
 
         if (transportListBeans != null){
+            //未分页
+            list.clear();
             if (pageCurrent == 1){
-                list.clear();
+//                list.clear();
                 mMfrvData.finishRefresh();
             }
             else {

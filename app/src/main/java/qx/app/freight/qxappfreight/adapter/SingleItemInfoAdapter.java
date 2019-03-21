@@ -30,7 +30,7 @@ public class SingleItemInfoAdapter<T extends TransportListBean.DeclareItemBean> 
             helper.itemView.setBackgroundColor(Color.parseColor("#e7f5fb"));
         }
         //序号
-        helper.setText(R.id.tv_num, helper.getAdapterPosition()+"");
+        helper.setText(R.id.tv_num, helper.getAdapterPosition()+1+"");
         //品名
         helper.setText(R.id.tv_goods_name, item.getCargoCn());
         //件数

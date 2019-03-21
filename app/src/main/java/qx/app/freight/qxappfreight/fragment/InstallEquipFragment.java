@@ -118,8 +118,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         List<Boolean> checkedList = new ArrayList<>();
+        //未分页
+        mList.clear();
         if (mCurrentPage == 1) {
-            mList.clear();
+//            mList.clear();
             mMfrvData.finishRefresh();
         } else {
             mCurrentPage++;

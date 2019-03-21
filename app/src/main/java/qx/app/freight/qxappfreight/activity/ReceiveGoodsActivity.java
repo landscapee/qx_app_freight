@@ -65,7 +65,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     private ReceiveGoodsAdapter mAdapter;
     private List<MyAgentListBean> list;
-    private String waybillId, taskId;
+    private String waybillId, taskId,waybillCode;
     private CustomToolbar toolbar;
     private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
     private TransportListCommitEntity transportListCommitEntity;
@@ -73,10 +73,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     private int pageCurrent = 1;
 
-    public static void startActivity(Activity context, String waybillId, String taskId, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    public static void startActivity(Activity context, String waybillId, String taskId,String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("waybillId", waybillId);
+        starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("taskId", taskId);
+
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);
@@ -111,7 +113,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             //板车号
             mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, mDeclareItemBeans);
+                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode,waybillCode, mDeclareItemBeans);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }
@@ -301,7 +303,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         } else if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, mDeclareItemBeans);
+                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode,waybillCode, mDeclareItemBeans);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }

@@ -91,6 +91,7 @@ public class TransportListBean implements Serializable {
     private String totalNumberPackages;
     private String billingWeight;
     private String totalWeight;
+    private String totalVolume;
     private String refrigeratedTemperature;
     private String activitiId;
     private Object internalTransferDate;
@@ -108,7 +109,7 @@ public class TransportListBean implements Serializable {
     private String delFlag;
     private Object applyTime;
     private long expectedDeliveryTime;
-    private Object expectedDeliveryGate;
+    private String expectedDeliveryGate;
     private String chargeFlag;
     private String virtualFlag;
     private String otherFlag;

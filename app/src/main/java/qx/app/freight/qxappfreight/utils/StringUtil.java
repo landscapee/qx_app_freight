@@ -10,6 +10,7 @@ import android.text.style.TextAppearanceSpan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -119,4 +120,16 @@ public class StringUtil {
         }
         return list;
     }
+
+    /**
+     * 转换为 保留两位小数的 字符串
+     * @param value
+     * @return
+     */
+    public static String formatString2(Object value){
+
+        return  String.format("%.1f", value);
+    }
+
+
 }

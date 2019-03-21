@@ -94,4 +94,5 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     implementation 'com.contrarywind:Android-PickerView:4.1.4'
     implementation 'org.jetbrains:annotations:15.0'
+    implementation files('libs/nineoldandroids-2.4.0.jar')
 }

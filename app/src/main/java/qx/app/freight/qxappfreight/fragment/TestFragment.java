@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nineoldandroids.view.ViewHelper;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,6 +24,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.PowerFullLayout;
 
 public class TestFragment extends BaseFragment {
 
@@ -55,7 +58,8 @@ public class TestFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.button_input_check: //收验列表
 //                ToastUtil.showToast(mContext, "收验列表");
-
+                ViewHelper.setScaleX(getView(), 1.5f);// x方向上缩放
+                ViewHelper.setScaleY(getView(), 1.5f);// y方向上缩放
                 //发送消息
                 ///taskTodoUser/ua1a81dd438b748dc9ddf76896b6a11fb/taskTodo/taskTodoList
 //                webSocketSTOMPManager.sendMassage("/todoCenter/autoSend");

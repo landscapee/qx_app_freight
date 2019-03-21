@@ -10,6 +10,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListBean, BaseViewHolder> {
@@ -25,19 +26,20 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
 
         //板车类型 - 板车号
         helper.setText(R.id.tv_handcar_num,String.format(mContext.getString(R.string.format_company_info)
-        ,item.getTpCargoType()
+        ,item.getTpScooterType()
         ,item.getTpScooterCode()));
         //件数 - 重量 - 体积
+
         helper.setText(R.id.allocate_info,String.format(mContext.getString(R.string.format_store_number_goods_info)
         ,item.getTpCargoNumber()
         ,item.getTpCargoWeight()
-        ,item.getTpCargoVolume()));
+        , StringUtil.formatString2(item.getTpCargoVolume())));
         //航班号
         helper.setText(R.id.allocate_flightnumber,item.getTpFlightNumber());
         //机位号
         helper.setText(R.id.allocate_machinenumber,item.getTpFlightLocate());
         // 时间
-        helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getTpFlightTime()));
+        helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getEtd())+"("+TimeUtils.getDay(item.getEtd())+")");
         //仓位
         helper.setText(R.id.allocate_time_info,item.getTpFregihtSpace());
 

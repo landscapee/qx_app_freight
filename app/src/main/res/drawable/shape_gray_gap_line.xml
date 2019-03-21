@@ -5,7 +5,7 @@
     <stroke
         android:width="@dimen/dp_1"
         android:color="@color/gray"
-        android:dashWidth="@dimen/dp_10"
+        android:dashWidth="5dp"
         android:dashGap="3dp" />
 
 </shape>
