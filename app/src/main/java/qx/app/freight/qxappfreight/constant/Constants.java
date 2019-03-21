@@ -123,4 +123,8 @@ public class Constants {
     //===================================================分页数据获取条数======================================================
     public static final int PAGE_SIZE = 10;//列表分页获取的单页最大的数量
 
+
+    //im加的字段常量
+    public final static int NOTIFY_ID_PUSH_QUIET = 0x07;//静音通知id
+    public final static int NOTIFY_ID_CHAT = 0x04;//聊天通知id
 }

@@ -7,8 +7,14 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.beidouapp.imlibapi.IMLIBContext;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.utils.AppIPConfig;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 
 public class MyApplication extends Application {
 
@@ -23,7 +29,7 @@ public class MyApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
-
+        initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -62,8 +68,17 @@ public class MyApplication extends Application {
         });
     }
 
-    public static Context getContext() {
+    public static void initIM() {
+        try {
+            IMUtils.initIM();
+//            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl(AppIPConfig.getSchduleApiHost() + HttpConstant.IM_NOTICE_URL);
+        } catch (Exception e) {
+            Log.d("tagMsg","im初始化失败");
+        }
+    }
 
+
+    public static Context getContext() {
         return appContext;
     }
 

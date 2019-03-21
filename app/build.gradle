@@ -33,7 +33,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -76,10 +79,11 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation(name: 'Empty-release', ext: 'aar')
+    implementation(name: 'IMLibApi-release', ext: 'aar')
     implementation 'com.jwenfeng.pulltorefresh:library:1.0.3'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     implementation files('libs/afinal_0.5.1_bin.jar')
-    implementation 'com.alibaba:fastjson:1.2.44'
+//    implementation 'com.alibaba:fastjson:1.2.44'
     implementation files('libs/autobahn-0.5.0.jar')
     //websocket STOMP 协议
     implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.6.4'

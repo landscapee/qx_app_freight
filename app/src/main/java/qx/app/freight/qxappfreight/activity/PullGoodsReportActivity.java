@@ -27,11 +27,13 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
+import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
+import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -40,7 +42,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 拉货上报页面
  */
-public class PullGoodsReportActivity extends BaseActivity implements ScanScooterContract.scanScooterView, PullGoodsReportContract.pullGoodsView{
+public class PullGoodsReportActivity extends BaseActivity implements ScanScooterContract.scanScooterView, PullGoodsReportContract.pullGoodsView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
     @BindView(R.id.tv_date)
@@ -54,7 +56,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private List<TransportTodoListBean> mList = new ArrayList<>();
     private PullGoodsInfoAdapter mGoodsAdapter;
     private String[] mInfoList;
-    private SimpleDateFormat mSdf=new SimpleDateFormat("yyyy-MM-dd",Locale.CHINESE);
+    private SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+    private int mDeletePos = -1;
 
     @Override
     public int getLayoutId() {
@@ -64,14 +67,16 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
+        mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "拉货上报");
-        String info=getIntent().getStringExtra("plane_info");
-        mInfoList=info.split("\\*");
-        Log.e("tagId","id========="+mInfoList[7]);
+        String info = getIntent().getStringExtra("plane_info");
+        mInfoList = info.split("\\*");
+        Log.e("tagId", "id=========" + mInfoList[7]);
         mTvFlightInfo.setText(mInfoList[0]);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
@@ -81,18 +86,18 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         mGoodsAdapter = new PullGoodsInfoAdapter(mList);
         mSrvGoods.setAdapter(mGoodsAdapter);
         mGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-                    mList.remove(position);
-                    mSrvGoods.closeMenu();
-                    mGoodsAdapter.notifyDataSetChanged();
-                    upDataBtnStatus();
+                    mDeletePos = position;
+                    TransportEndEntity transportEndEntity = new TransportEndEntity();
+                    transportEndEntity.setId(mList.get(position).getId());
+                    ((PullGoodsReportPresenter) mPresenter).scanScooterDelete(transportEndEntity);
                 }
         );
         mGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mBtnCommit.setOnClickListener(v -> {
-            if (mList.size()==0){
+            if (mList.size() == 0) {
                 ToastUtil.showToast("请扫描添加板车数据！");
-            }else {
+            } else {
                 mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
                 ExceptionReportEntity entity = new ExceptionReportEntity();
                 entity.setFlightId(Long.valueOf(mInfoList[7]));
@@ -106,6 +111,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             }
         });
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("PullGoodsReportActivity".equals(result.getFunctionFlag())) {
@@ -127,6 +133,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         } else
             ToastUtil.showToast("扫描结果为空请重新扫描");
     }
+
     @Override
     public void scanScooterResult(String result) {
         if (!"".equals(result)) {
@@ -171,8 +178,16 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Override
     public void pullGoodsReportResult(String result) {
-        Log.e("tag","result======="+result);
+        Log.e("tag", "result=======" + result);
         ToastUtil.showToast("拉货上报成功");
         finish();
+    }
+
+    @Override
+    public void scanScooterDeleteResult(String result) {
+        mList.remove(mDeletePos);
+        mSrvGoods.closeMenu();
+        mGoodsAdapter.notifyDataSetChanged();
+        upDataBtnStatus();
     }
 }

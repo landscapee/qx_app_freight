@@ -193,5 +193,17 @@ public class Tools {
     public static BSLoactionUtil.BSLocationBean getBSLoaction() {
         return (BSLoactionUtil.BSLocationBean) SaveUtils.getInstance().getValue(KEY_BSLoaction);
     }
+    public static String getToken() {
+        String token = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.token, "");
+        return token;
+    }
+    public static String getRealName() {
+        String realName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
+        return realName;
+    }
 
+    public static String getLoginName() {
+        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
+        return loginName;
+    }
 }

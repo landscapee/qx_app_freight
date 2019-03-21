@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.beidouapp.imlibapi.IMLIBContext;
+import com.beidouapp.imlibapi.activity.ImLibSpecialHomeFragment;
+import com.beidouapp.imlibapi.common.ImLibConstants;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,7 +34,10 @@ import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.GPSService;
 import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 主页面
@@ -62,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
     private TaskFragment mTaskFragment;
     private TestFragment mTestFragment;
-    private TaskPutCargoFragment mTaskStowageFragment;
+    private ImLibSpecialHomeFragment mIMFragment;
     private TaskPutCargoFragment mTaskPutCargoFragment;
     private MineFragment mMineFragment;
     private Fragment nowFragment;
@@ -117,7 +125,7 @@ public class MainActivity extends BaseActivity {
 
         mTaskFragment = new TaskFragment();
         mTestFragment = new TestFragment();
-        mTaskStowageFragment = new TaskPutCargoFragment();
+        mIMFragment = new ImLibSpecialHomeFragment();
         mTaskPutCargoFragment = new TaskPutCargoFragment();
         mMineFragment = new MineFragment();
 
@@ -125,14 +133,23 @@ public class MainActivity extends BaseActivity {
                 .beginTransaction()
                 .add(R.id.content, mTaskFragment)
                 .add(R.id.content, mTestFragment)
-                .add(R.id.content, mTaskStowageFragment)
+                .add(R.id.content, mIMFragment)
                 .add(R.id.content, mTaskPutCargoFragment)
                 .add(R.id.content, mMineFragment)
                 .commit();
         nowFragment = mTaskFragment;
         switchFragment(0, mTaskFragment);
+//        IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
+        IMUtils.imLibLogin(Tools.getLoginName(), Tools.getRealName(), Tools.getToken());
     }
-
+//    public void setDeviceIdentify(String deviceIdentify) {
+//        if (deviceIdentify != null && !"null".equals(deviceIdentify) && !"".equals(deviceIdentify)) {
+//            ImLibConstants.IMLIB_DEVICE_IDENTIFY = deviceIdentify;
+//        } else {
+//            Toast.makeText(c, "必须设置设备标识码", 1).show();
+//        }
+//
+//    }
     private void switchFragment(int index, Fragment fragment) {
 
         getSupportFragmentManager()
@@ -186,7 +203,7 @@ public class MainActivity extends BaseActivity {
                 switchFragment(1, mTestFragment);
                 break;
             case R.id.ll_search:
-                switchFragment(2, mTaskStowageFragment);
+                switchFragment(2, mIMFragment);
                 break;
             case R.id.ll_message:
                 switchFragment(3, mTaskPutCargoFragment);

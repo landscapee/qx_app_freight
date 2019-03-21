@@ -167,7 +167,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             times.add(String.valueOf(bean.getCloseDoorTime()));
             //FlightNumber                  AirCraftNo                  StartPlace              MiddlePlace                 EndPlace
             String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
-                    //机位            scheduleTime                    FlightId                ActualTakeoffTime  8             ActualArriveTime 9                 Movement            Id
+                            //机位                     scheduleTime                         FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10               Id 11
                     + "*" + entity.getSeat() + "*" + entity.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
             int posNow = 0;
             boolean hasChecked = false;
