@@ -23,8 +23,6 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         this.mDeleteClickListener = listener;
     }
 
-
-
     @Override
     protected void convert(BaseViewHolder helper, TransportTodoListBean item) {
         String scooterName;

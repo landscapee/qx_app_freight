@@ -238,7 +238,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mCargoHandlingAdapter.setOnDeleteClickListener((view, position) ->
                 {
                     if (listHandcar.get(position).isLock()) {
-                        ToastUtil.showToast(CargoHandlingActivity.this, "被锁住的板车不能删除");
+                        ToastUtil.showToast("被锁住的板车不能删除");
                         return;
                     }
                     List <FtGroupScooter> listRcInfo = new ArrayList <>();
@@ -426,7 +426,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             ToastUtil.showToast(CargoHandlingActivity.this, "请先选择一个板车");
             return;
         } else if (listHandcar.get(position).isLock()) {
-            ToastUtil.showToast(CargoHandlingActivity.this, "该板车已被上锁无法操作");
+            ToastUtil.showToast("该板车已被上锁无法操作");
             return;
         }
         rcinfoToHandcar(listWaybill.get(nowWaybillPosition), flag);
@@ -436,13 +436,13 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private void subpackage(int position) {
 
         if (-1 == nowHandcarPositionSelect) {
-            ToastUtil.showToast(CargoHandlingActivity.this, "请先选择一个板车");
+            ToastUtil.showToast("请先选择一个板车");
             return;
         } else if (listHandcar.get(position).isLock()) {
-            ToastUtil.showToast(CargoHandlingActivity.this, "该板车已被上锁无法操作");
+            ToastUtil.showToast("该板车已被上锁无法操作");
             return;
         } else if (listWaybill.get(nowWaybillPosition).getNumber() <= 1) {
-            ToastUtil.showToast(CargoHandlingActivity.this, "该收运记录无法再拆分");
+            ToastUtil.showToast("该收运记录无法再拆分");
             return;
         }
 
@@ -469,7 +469,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 if (isOK)
                     submitData();
                 else
-                    ToastUtil.showToast(this, "板车上还有其他航班数据，请拉下后再提交！");
+                    ToastUtil.showToast( "板车上还有其他航班数据，请拉下后再提交！");
                 break;
 
         }

@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_marginTop="1dp"
-    android:layout_marginLeft="1dp"
-    >
+    android:layout_marginLeft="1dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="33dp"
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:textColor="@color/text_color"
         android:textSize="@dimen/sp_12"
-        android:text="1H标准载量"
+        tools:text="1H标准载量"
         android:gravity="center"
         android:background="@color/gray_eff"
         />
@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:textColor="@color/text_color"
         android:textSize="@dimen/sp_12"
-        android:text="@string/format_cargo_cabin"
+        tools:text="@string/format_cargo_cabin"
         android:gravity="center_vertical|left"
         android:paddingLeft="10dp"
         />
@@ -37,5 +37,5 @@
         android:layout_height="2dp"
         android:background="@drawable/shape_gray_gap_line"
         android:layerType="software"
-        ></View>
+        />
 </LinearLayout>

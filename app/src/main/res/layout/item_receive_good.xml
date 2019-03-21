@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/dp_10"
     android:orientation="horizontal">
 
@@ -27,7 +28,7 @@
                 android:drawableStart="@mipmap/dray"
                 android:gravity="center_horizontal"
                 android:padding="13dp"
-                android:text="12321"
+                tools:text="12321"
                 android:textColor="@color/blue" />
 
             <TextView
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:paddingLeft="@dimen/dp_20"
-                android:text="0.03kg" />
+                tools:text="0.03kg" />
 
             <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -53,7 +54,7 @@
                 android:gravity="end"
                 android:paddingTop="20dp"
                 android:paddingRight="13dp"
-                android:text="3件/" />
+                tools:text="3件/" />
 
             <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
@@ -80,7 +81,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:padding="13dp"
-                android:text="ULD:" />
+                tools:text="ULD:" />
 
 
             <TextView
@@ -90,7 +91,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:padding="13dp"
-                android:text="超重102kg" />
+                tools:text="超重102kg" />
         </LinearLayout>
 
         <TextView
@@ -113,7 +114,7 @@
                 android:paddingLeft="13dp"
                 android:paddingTop="11dp"
                 android:paddingBottom="10dp"
-                android:text="冻库 | 库位12" />
+                tools:text="冻库 | 库位12" />
 
             <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->

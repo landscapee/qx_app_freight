@@ -190,7 +190,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mainIfos.setTpStartLocate(mAcceptTerminalTodoBean.get(0).getBeginAreaType());
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
-            ToastUtil.showToast(this, "扫描结果为空请重新扫描");
+            ToastUtil.showToast("扫描结果为空请重新扫描");
     }
 
     private int getMaxHandcarNum() {

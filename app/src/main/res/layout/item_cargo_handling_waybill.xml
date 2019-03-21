@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -18,7 +19,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="2.2"
             android:gravity="center"
-            android:text="999 9999"
+            tools:text="999 9999"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -30,7 +31,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1234"
+            tools:text="1234"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -42,7 +43,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="9999"
+            tools:text="9999"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -54,7 +55,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="99"
+            tools:text="99"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -66,7 +67,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1.5"
             android:gravity="center"
-            android:text="目的站"
+            tools:text="目的站"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -78,7 +79,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="库区"
+            tools:text="库区"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -90,7 +91,7 @@
             android:layout_marginLeft="1px"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="拉货"
+            tools:text="拉货"
             android:textColor="@color/text_color"
             android:background="@color/white"
             />
@@ -116,7 +117,7 @@
                 android:background="@drawable/shape_rect_green_45b"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="分装"
+                tools:text="分装"
                 android:textColor="#FFFFFFFF"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -136,7 +137,7 @@
                 android:background="@drawable/shape_rect_blue_5d9"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="全装"
+                tools:text="全装"
                 android:textColor="#FFFFFFFF"
                 android:textSize="14sp" />
         </RelativeLayout>

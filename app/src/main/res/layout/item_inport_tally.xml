@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="@dimen/dp_10">
    <LinearLayout
        android:layout_width="match_parent"
@@ -26,7 +27,7 @@
                android:paddingEnd="9dp"
                android:paddingBottom="@dimen/dp_8"
                android:textColor="@color/blue_093"
-               android:text="000-99999999"
+               tools:text="000-99999999"
                android:textStyle="bold" />
            <Space
                android:layout_width="0dp"
@@ -37,7 +38,7 @@
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:gravity="center_vertical"
-               android:text="PEK" />
+               tools:text="PEK" />
 
            <TextView
                android:id="@+id/tv_middle_place"
@@ -46,14 +47,14 @@
                android:drawableStart="@mipmap/airlane"
                android:drawableEnd="@mipmap/airlane"
                android:gravity="center_vertical"
-               android:text="CTU" />
+               tools:text="CTU" />
 
            <TextView
                android:id="@+id/tv_target_place"
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:gravity="center_vertical"
-               android:text="MXP" />
+               tools:text="MXP" />
        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,13 +64,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/format_doc_arrive_info"
+                tools:text="@string/format_doc_arrive_info"
                 android:gravity="center_vertical"
                 android:id="@+id/tv_doc_arrive_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/format_doc_number_info"
+                tools:text="@string/format_doc_number_info"
                 android:id="@+id/tv_doc_number_info"
                 android:gravity="center_vertical"/>
         </LinearLayout>
@@ -81,13 +82,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/format_customs_arrive_info"
+                tools:text="@string/format_customs_arrive_info"
                 android:gravity="center_vertical"
                 android:id="@+id/tv_customs_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/format_customs_number_info"
+                tools:text="@string/format_customs_number_info"
                 android:id="@+id/tv_customs_number_info"
                 android:gravity="center_vertical"/>
         </LinearLayout>
@@ -99,20 +100,20 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/format_unpackage_info"
+                tools:text="@string/format_unpackage_info"
                 android:gravity="center_vertical"
                 android:id="@+id/tv_unpackage_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/format_unpackage_number_info"
+                tools:text="@string/format_unpackage_number_info"
                 android:id="@+id/tv_unpackage_number_info"
                 android:gravity="center_vertical"/>
         </LinearLayout>
        <TextView
            android:layout_width="match_parent"
            android:layout_height="@dimen/dp_40"
-           android:text="@string/format_inport_tally_store_info"
+           tools:text="@string/format_inport_tally_store_info"
            android:id="@+id/tv_store_info"
            android:gravity="center_vertical|end"/>
        <LinearLayout

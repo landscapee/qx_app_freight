@@ -51,7 +51,7 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightId
         helper.setText(R.id.allocate_machinenumber, item.getAircraftNo());
         //预计起飞时间~仓位
         //航班预计起飞时间
-        helper.setText(R.id.allocate_time_info, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getStd()) , 04)+" "+item.getSuggestRepository()+"舱位");
+        helper.setText(R.id.allocate_time_info, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getStd()) ,  TimeUtils.getDay((item.getStd())))+" "+item.getSuggestRepository()+"舱位");
 //        helper.setText(R.id.allocate_time_info, item.getStd()+"   "+item.getSuggestRepository());
 //        helper.itemView.setOnClickListener(v -> {
 //            Intent intent = new Intent(mContext, AllocaaateScanActivity.class);

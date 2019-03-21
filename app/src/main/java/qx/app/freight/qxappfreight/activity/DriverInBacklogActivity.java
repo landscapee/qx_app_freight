@@ -49,7 +49,7 @@ public class DriverInBacklogActivity extends BaseActivity implements TransportTo
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "待办列表");
-        toolbar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> ToastUtil.showToast(this, "搜索"));
+        toolbar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> ToastUtil.showToast( "搜索"));
 
         //正常货物
         backlogSlideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

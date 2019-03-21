@@ -36,10 +36,10 @@ public class TestActivity extends BaseActivity {
         toolbar.setMainTitle(Color.WHITE, "test");
 
         toolbar.setRightTextViewImage(this,View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v ->
-                ToastUtil.showToast(TestActivity.this,"新增"));
+                ToastUtil.showToast("新增"));
 
         mSlideLeftExecuteView.setLockListener(() -> {
-            ToastUtil.showToast(TestActivity.this,"执行任务");
+            ToastUtil.showToast("执行任务");
         });
         mSlideLeftExecuteView.setLockListener(new SlideLeftExecuteView.OnLockListener() {
             @Override

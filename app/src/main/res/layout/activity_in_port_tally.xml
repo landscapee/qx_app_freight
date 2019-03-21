@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:text="@string/format_tally_info" />
+                tools:text="@string/format_tally_info" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:text="@string/format_tally_info" />
+                tools:text="@string/format_tally_info" />
         </LinearLayout>
     </LinearLayout>
 

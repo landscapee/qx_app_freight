@@ -47,7 +47,6 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
 /**
- * TODO :出港收货页面
  * Created by pr
  */
 public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {

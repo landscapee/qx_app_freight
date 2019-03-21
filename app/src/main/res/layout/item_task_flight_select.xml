@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <CheckBox
         android:id="@+id/cb_flight"
@@ -51,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
-                    android:text="B-2310"
+                    tools:text="B-2310"
                     android:textColor="@color/black_3" />
 
                 <Space
@@ -102,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:drawableLeft="@mipmap/placement"
-                    android:text="101"
+                    tools:text="101"
                     android:textColor="@color/black_3"
                     android:layout_weight="1"
                     />
@@ -112,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:drawableLeft="@mipmap/ji"
-                    android:text="@string/format_arrive_info"
+                    tools:text="@string/format_arrive_info"
                     android:textSize="@dimen/sp_12"
                     android:layout_weight="1"
                     />
@@ -122,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:text="2个小滚筒"
+                    tools:text="2个小滚筒"
                     android:textColor="@color/gray_888"
                     android:layout_weight="1"
                     />

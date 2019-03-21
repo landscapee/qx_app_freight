@@ -195,7 +195,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //超重重量
         mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
         if (null == scooterInfo) {
-            Toast.makeText(this, "id为空不能提交", Toast.LENGTH_LONG).show();
+            ToastUtil.showToast("id为空不能提交");
             return;
         } else {
             mMyAgentListBean.setScooterId(scooterInfo.getId());

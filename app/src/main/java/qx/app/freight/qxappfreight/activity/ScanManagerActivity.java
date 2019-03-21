@@ -138,7 +138,7 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
     @Override
     public void onScanQRCodeOpenCameraError() {
-        ToastUtil.showToast(this, "扫描失败，请重试。");
+        ToastUtil.showToast("扫描失败，请重试。");
 
 
     }

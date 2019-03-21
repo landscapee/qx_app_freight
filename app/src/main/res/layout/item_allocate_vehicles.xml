@@ -44,8 +44,7 @@
                     android:drawablePadding="5dp"
                     android:drawableLeft="@mipmap/dray"
                     android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:text="我是谁" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,7 +60,7 @@
                         android:textColor="#333333"
                         android:singleLine="true"
                         android:textSize="13sp"
-                        android:text="3件/" />
+                        />
 
                 </LinearLayout>
             </LinearLayout>

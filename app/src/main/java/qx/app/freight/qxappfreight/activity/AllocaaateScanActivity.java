@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +60,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @BindView(R.id.tv_dvalue_front)
     TextView tvDvalueFront;
     @BindView(R.id.tv_grossweight_front)
-    TextView tvGrossweightFront;
+    EditText tvGrossweightFront;
     @BindView(R.id.tv_gradient_front)
     TextView tvGradientFront;
     @BindView(R.id.tv_revise_front)
@@ -107,12 +108,36 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
     private void initView() {
 //        ScanManagerActivity.startActivity(this);
+        changeClicked(false);
         getScooterInfo(mScooterCode);
         //品名
         mRemarksList = new ArrayList<>();
         mRemarksList.add("加雨棚");
         mRemarksList.add("加垫板");
         mRemarksList.add("其他");
+
+        tvGrossweightFront.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String ss = s.toString();
+                if (TextUtils.isEmpty(ss)){
+                    changeClicked(false);
+                }else {
+                    changeClicked(true);
+                }
+                if (StringUtil.isDouble(ss)){
+                    calculateWeight();
+                }
+            }
+        });
 
     }
 
@@ -274,6 +299,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         }
         if (mData == null){
             ToastUtil.showToast("无该板车信息");
+            finish();
             return;
         }
         tvFlightid.setText(mData.getFlightNo());

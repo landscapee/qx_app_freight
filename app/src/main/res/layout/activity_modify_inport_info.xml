@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/white">
     <LinearLayout
@@ -20,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="999-0000000"
+            tools:text="999-0000000"
             android:gravity="center_vertical"
             android:id="@+id/tv_way_bill"/>
     </LinearLayout>
@@ -45,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="3"
+            tools:text="3"
             android:gravity="center_vertical"
             android:id="@+id/tv_transport_number"/>
     </LinearLayout>
@@ -70,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="300kg"
+            tools:text="300kg"
             android:gravity="center_vertical"
             android:id="@+id/tv_transport_weight"/>
     </LinearLayout>
@@ -95,7 +96,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="4"
+            tools:text="4"
             android:gravity="center_vertical"
             android:id="@+id/tv_bill_number"/>
     </LinearLayout>
@@ -120,7 +121,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="300kg"
+            tools:text="300kg"
             android:gravity="center_vertical"
             android:id="@+id/tv_bill_weight"/>
     </LinearLayout>

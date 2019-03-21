@@ -67,7 +67,7 @@ public class HandcarDetailsActivity extends BaseActivity {
         {
 
             if (mFtRuntimeFlightScooter.isLock()){
-                ToastUtil.showToast(this,"被锁定的板车不能操作");
+                ToastUtil.showToast("被锁定的板车不能操作");
                 return;
             }
 

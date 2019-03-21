@@ -121,7 +121,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             Log.e("SpotFlag", mSpotFlag);
             //0抽检，要弹，1不抽检，不需要弹
             if ("1".equals(mSpotFlag)) {
-                ToastUtil.showToast(this, "不需要抽检，默认通过");
+                ToastUtil.showToast( "不需要抽检，默认通过");
             } else if ("0".equals(mSpotFlag)) {
                 if ("通过".equals(mTvCheck.getText()))
                     initPop1(true);

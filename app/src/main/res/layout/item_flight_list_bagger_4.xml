@@ -38,14 +38,14 @@
                     android:drawableLeft="@mipmap/flight"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:text="我是谁" />
+                    />
 
                 <TextView
                     android:id="@+id/tv_flight_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
-                    android:text="B-2310"
+
                     android:textColor="@color/black_3" />
 
                 <Space
@@ -127,7 +127,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:drawableLeft="@mipmap/placement"
-                    android:text="101"
                     android:textColor="@color/black_3"
                     android:layout_weight="1"
                     />
@@ -137,7 +136,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:drawableLeft="@mipmap/ji"
-                    android:text="@string/format_arrive_info"
                     android:textSize="@dimen/sp_12"
                     android:layout_weight="1"
                     />

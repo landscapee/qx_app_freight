@@ -58,7 +58,7 @@ public class ReturnGoodsActivity extends BaseActivity implements LoginContract.l
             adapter = new ReturnGoodAdapter(loginBean.getRoleRS());
             mMfrvAllocateList.setAdapter(adapter);
         } else {
-            ToastUtil.showToast(this, "数据错误");
+            ToastUtil.showToast("数据错误");
         }
     }
 

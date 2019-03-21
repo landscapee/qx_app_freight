@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -115,7 +116,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     private void addScooterInfo(String scooterCode) {
         Log.e("scooterCode", scooterCode);
-        if (!"".equals(scooterCode)) {
+        if (!TextUtils.isEmpty(scooterCode)) {
             mPresenter = new ScanScooterPresenter(this);
             TransportTodoListBean mainIfos = new TransportTodoListBean();
             mainIfos.setTpScooterCode(scooterCode);
@@ -124,7 +125,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mainIfos.setTpStartLocate("seat");
             ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
         } else
-            ToastUtil.showToast(this, "扫描结果为空请重新扫描");
+            ToastUtil.showToast("扫描结果为空请重新扫描");
     }
     @Override
     public void scanScooterResult(String result) {

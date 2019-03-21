@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/shape_rect_white"
     android:layout_marginTop="@dimen/dp_10"
@@ -25,7 +26,7 @@
             android:drawablePadding="5dp"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="000-999999999" />
+            tools:text="000-999999999" />
 
         <LinearLayout
             android:layout_marginTop="10dp"
@@ -40,7 +41,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/black_3"
                 android:layout_marginLeft="@dimen/dp_4"
-                android:text="3件/200kg" />
+                tools:text="3件/200kg" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/black_3"
-                    android:text="3件/200kg" />
+                    tools:text="3件/200kg" />
 
 
             </LinearLayout>
@@ -98,7 +99,7 @@
                 android:textSize="14sp"
                 android:textColor="#676C8B"
                 android:layout_marginLeft="@dimen/dp_4"
-                android:text="四川省成都机场大厅" />
+                tools:text="四川省成都机场大厅" />
         </LinearLayout>
 
         <LinearLayout
@@ -115,7 +116,7 @@
                 android:textColor="@color/color_676c8e"
                 android:drawablePadding="5dp"
                 android:drawableStart="@mipmap/ic_person_mobil"
-                android:text="13888888888" />
+                tools:text="13888888888" />
             <View
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -128,7 +129,7 @@
                 android:textColor="@color/color_676c8e"
                 android:drawablePadding="5dp"
                 android:drawableStart="@mipmap/ic_person_card"
-                android:text="511289199899121234" />
+                tools:text="511289199899121234" />
         </LinearLayout>
     </LinearLayout>
 

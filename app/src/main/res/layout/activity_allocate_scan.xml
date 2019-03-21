@@ -176,13 +176,15 @@
                     android:text="本次复磅毛重"
                     android:textColor="#888888"
                     android:textSize="16sp" />
-                <TextView
+                <EditText
                     android:id="@+id/tv_grossweight_front"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
                     android:textColor="#333333"
+                    android:inputType="numberDecimal"
+                    android:background="@null"
                     android:hint="请点击取重"
                     android:singleLine="true"
                     android:textSize="16sp" />
@@ -277,9 +279,9 @@
                     android:gravity="center_vertical|end"
                     android:textColor="#333333"
                     android:hint="请输入重量"
+                    android:inputType="numberDecimal"
                     android:background="@null"
                     android:maxLength="15"
-                    android:inputType="numberSigned"
                     android:textSize="16sp" />
             </LinearLayout>
             <View
@@ -382,6 +384,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#bcbcbc"
+
             android:text="确定"
             android:textSize="18sp"
             android:textColor="@color/white" />

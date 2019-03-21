@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/dp_10"
     android:layout_marginEnd="@dimen/dp_10"
     android:orientation="horizontal">
@@ -34,7 +35,7 @@
                     android:paddingTop="@dimen/dp_8"
                     android:paddingEnd="9dp"
                     android:paddingBottom="@dimen/dp_8"
-                    android:text="大板0009"
+                    tools:text="大板0009"
                     android:textColor="@color/blue_093"
                     android:textStyle="bold" />
 
@@ -60,7 +61,7 @@
                         android:layout_marginEnd="@dimen/dp_10"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="3U9999" />
+                        tools:text="3U9999" />
 
                     <TextView
                         android:id="@+id/tv_seat"
@@ -70,7 +71,7 @@
                         android:drawableStart="@mipmap/placement"
                         android:drawablePadding="@dimen/dp_10"
                         android:gravity="center_vertical"
-                        android:text="101" />
+                        tools:text="101" />
 
                     <TextView
                         android:id="@+id/tv_flight_arrive_time"
@@ -80,7 +81,7 @@
                         android:drawableStart="@mipmap/shi"
                         android:drawablePadding="@dimen/dp_10"
                         android:gravity="center_vertical"
-                        android:text="13:12(4)" />
+                        tools:text="13:12(4)" />
 
                 </LinearLayout>
             </LinearLayout>
