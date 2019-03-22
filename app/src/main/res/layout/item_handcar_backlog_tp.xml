@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="13dp"
-        android:paddingRight="13dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@color/white"
         >
 
@@ -75,45 +75,36 @@
                     android:layout_marginTop="5dp"
                     >
 
-                    <ImageView
-                        android:id="@+id/tv_in_out"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/li"
-                        />
-
                     <TextView
                         android:id="@+id/allocate_flightnumber"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
+                        android:drawableLeft="@mipmap/li"
+                        android:drawablePadding="5dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        tools:text=""
-                        android:layout_weight="1"
+                        tools:text="H32132"
+                        android:textSize="13sp"
                         />
 
 
                     <TextView
                         android:id="@+id/allocate_machinenumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_20"
-                        android:drawableStart="@mipmap/placement"
-                        tools:text="101"
-                        android:layout_weight="1"
-                        />
-
-                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ji"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:drawableStart="@mipmap/placement"
+                        tools:text="101"
+                        android:textSize="13sp"
                         />
+
                     <TextView
                         android:id="@+id/tv_plan_time"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:drawableLeft="@mipmap/ji"
+                        android:drawablePadding="5dp"
                         android:layout_height="wrap_content"
                         tools:text=""
-                        android:layout_weight="1"
+                        android:textSize="13sp"
                         />
 
                     <TextView
@@ -122,6 +113,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
+                        android:textSize="13sp"
                         tools:text="1H舱位" />
 
                 </LinearLayout>
@@ -146,7 +138,7 @@
                     android:id="@+id/tv_origin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="13sp"
                     android:text="库区" />
 
                 <ImageView
@@ -158,7 +150,7 @@
                     android:id="@+id/tv_destination"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="13sp"
                     android:text="待运区" />
 
             </LinearLayout>

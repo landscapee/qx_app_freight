@@ -39,9 +39,9 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
         //机位号
         helper.setText(R.id.allocate_machinenumber,item.getTpFlightLocate());
         // 时间
-        helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getEtd())+"("+TimeUtils.getDay(item.getEtd())+")");
+        helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getTpFlightTime())+"("+TimeUtils.getDay(item.getTpFlightTime())+")");
         //仓位
-        helper.setText(R.id.allocate_time_info,item.getTpFregihtSpace());
+        helper.setText(R.id.allocate_time_info,item.getTpFreightSpace()+"舱位");
 
         helper.setText(R.id.tv_origin, MapValue.getLocationValue(item.getTpStartLocate()));
         helper.setText(R.id.tv_destination,MapValue.getLocationValue(item.getTpDestinationLocate()));

@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,7 +27,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DriverInBacklogActivity;
+import qx.app.freight.qxappfreight.activity.ErrorReportActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
+import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.adapter.HandcarBacklogTPAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -54,8 +57,12 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     ImageView imageScan;
     @BindView(R.id.btn_begin_end)
     Button btnBeginEnd;
+    @BindView(R.id.btn_error)
+    Button btnError;
     @BindView(R.id.tv_tp_status)
     TextView tvTpStatus;
+    @BindView(R.id.ll_btn)
+    LinearLayout llBtn;
 
     private List <TransportTodoListBean> list;
     private HandcarBacklogTPAdapter mHandcarBacklogTPAdapterDoing;
@@ -70,12 +77,11 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
         return view;
     }
 
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (!EventBus.getDefault().isRegistered(this))
-                EventBus.getDefault().register(this);
+            EventBus.getDefault().register(this);
 
         mToolBar.setMainTitle(Color.WHITE, "我的待办");
         mToolBar.setRightTextView(View.VISIBLE, Color.WHITE, "待办列表", v -> {
@@ -98,13 +104,13 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 //                    upDataBtnStatus();
 //                }
 //        );
-        mHandcarBacklogTPAdapterDoing.setOnItemClickListener((adapter, view, position) -> {
+        mHandcarBacklogTPAdapterDoing.setOnItemClickListener((adapter, view1, position) -> {
         });
         imageScan.setOnClickListener(v -> {
             ScanManagerActivity.startActivity(getActivity(), "DriverInFragment");
         });
         //删除
-        mHandcarBacklogTPAdapterDoing.setOnDeleteClickListener((view, position) -> {
+        mHandcarBacklogTPAdapterDoing.setOnDeleteClickListener((view1, position) -> {
             doingSlideRecyclerView.closeMenu();
             mPresenter = new TransportBeginPresenter(this);
             TransportEndEntity transportEndEntity = new TransportEndEntity();
@@ -113,8 +119,8 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
         });
 
         getData();
-
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
@@ -146,14 +152,14 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
      */
     private void upDataBtnStatus() {
         if (list.size() > 0) {
-            btnBeginEnd.setVisibility(View.VISIBLE);
+            llBtn.setVisibility(View.VISIBLE);
         } else {
-            btnBeginEnd.setVisibility(View.GONE);
+            llBtn.setVisibility(View.GONE);
         }
 
     }
 
-    @OnClick({R.id.ll_add, R.id.btn_begin_end})
+    @OnClick({R.id.ll_add, R.id.btn_begin_end, R.id.btn_error})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_add:
@@ -167,6 +173,12 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
                     doEnd();
 
                 }
+                break;
+            case R.id.btn_error:
+                Intent intent = new Intent(getContext(), ErrorReportActivity.class);
+                intent.putExtra("plane_info", list.get(0).getTpFlightNumber());
+                intent.putExtra("error_type", 3);
+                getContext().startActivity(intent);
                 break;
         }
     }

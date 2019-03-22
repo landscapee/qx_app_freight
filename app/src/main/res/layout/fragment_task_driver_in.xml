@@ -30,13 +30,11 @@
             android:paddingRight="7dp"
             >
 
-
-
             <qx.app.freight.qxappfreight.widget.SlideRecyclerView
                 android:id="@+id/slrv_car_doing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                ></qx.app.freight.qxappfreight.widget.SlideRecyclerView>
+                />
             <LinearLayout
                 android:id="@+id/ll_add"
                 android:layout_width="match_parent"
@@ -65,18 +63,31 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
     <LinearLayout
+        android:id="@+id/ll_btn"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="75dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
         android:gravity="center"
         >
         <Button
             android:id="@+id/btn_begin_end"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_width="300dp"
+            android:layout_height="33dp"
             android:text="开始"
             android:textColor="@color/white"
-            android:background="@drawable/btn_blue_press"
-            android:visibility="gone"
+            android:background="@drawable/shape_rect_blue"
+
+            />
+        <Button
+            android:layout_marginTop="5dp"
+            android:id="@+id/btn_error"
+            android:layout_width="300dp"
+            android:layout_height="33dp"
+            android:text="异常上报"
+            android:textColor="#FF6400"
+            android:background="@drawable/shape_white_stroke_grey"
+
             />
     </LinearLayout>
 </LinearLayout>
