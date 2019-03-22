@@ -64,14 +64,16 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private String mTaskId;
     private String mFilePath;
     private String mSpotFlag;
+    private int insCheck; //报检是否合格1合格 0不合格
 
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath,String spotFlag) {
+    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath,String spotFlag,int insCheck) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
         intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
         intent.putExtra("taskId", taskId);
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotFlag", spotFlag);
+        intent.putExtra("insCheck", insCheck);
         context.startActivityForResult(intent, 0);
     }
 
@@ -102,6 +104,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mTaskId = getIntent().getStringExtra("taskId");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
+        insCheck =getIntent().getIntExtra("insCheck",0);
         AddtionInvoicesBean addtionInvoicesBean = new AddtionInvoicesBean();
         if (mDeclareData != null) {
             String str = mDeclareData.getAddtionInvoices();
@@ -122,7 +125,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         mDeclareData.getWaybillId(),
                         mDeclareData.getId(),
                         mFilePath,//图片路径
-                        0,//报检是否合格0合格 1不合格
+                        insCheck,//报检是否合格0合格 1不合格
                         0,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
                         mSpotFlag,
@@ -131,6 +134,17 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 break;
             case R.id.refuse_tv:
                 ToastUtil.showToast(this, "不合格");
+                ToastUtil.showToast(this, "合格");
+                VerifyCargoActivity.startActivity(this,
+                        mDeclareData.getWaybillId(),
+                        mDeclareData.getId(),
+                        mFilePath,//图片路径
+                        insCheck,//报检是否合格0合格 1不合格
+                        1,//资质是否合格0合格 1不合格
+                        mTaskId, //当前任务id
+                        mSpotFlag,
+                        UserInfoSingle.getInstance().getUserId() //当前提交人id
+                );
                 break;
         }
     }

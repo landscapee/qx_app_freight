@@ -145,7 +145,7 @@
             android:text="重量"
             android:textColor="@color/black_3" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -178,6 +179,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<MyAgentListBean> exist(String scooterId) {
         return transform(getService().exist(scooterId));
+    }
+
+    /****
+     * 查询库区
+     * @param model
+     * @return
+     */
+    public Observable<AutoReservoirBean> autoReservoirv(BaseFilterEntity model) {
+        return transform(getService().autoReservoirv(model));
     }
 
     /****
@@ -388,6 +398,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> pullGoodsReport(ExceptionReportEntity transportEndEntity) {
         return nothingtransform(getService().pullGoodsReport(transportEndEntity));
     }
+
     /***
      *  装机单
      * @param flightId

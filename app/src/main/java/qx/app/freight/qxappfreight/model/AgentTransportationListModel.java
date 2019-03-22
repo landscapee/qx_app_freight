@@ -16,6 +16,17 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 public class AgentTransportationListModel extends BaseModel implements AgentTransportationListContract.agentTransportationListModel {
 
     @Override
+    public void autoReservoirv(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().autoReservoirv(baseFilterEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
+
+    @Override
     public void agentTransportationList(BaseFilterEntity param, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().agentTransportationList(param)
                 .subscribeOn(Schedulers.io())

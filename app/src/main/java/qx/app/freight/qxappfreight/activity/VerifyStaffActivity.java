@@ -72,6 +72,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String fileName;
     private String filePath;
     private String mSpotFlag;
+    private String insCheck; //报检是否合格1合格 0不合格
 
 
     public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId,String spotFlag) {
@@ -141,12 +142,17 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,1);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
             case R.id.refuse_tv:
-                ToastUtil.showToast(this, "不合格");
+//                ToastUtil.showToast(this, "不合格");
+                if (!"".equals(filePath)) {
+                    ToastUtil.showToast(this, "不合格");
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,0);
+                } else
+                    ToastUtil.showToast(this, "请先上传照片");
                 break;
             case R.id.iv_staff_photo_now:
 //                ImageSelectorActivity.start(VerifyStaffActivity.this,

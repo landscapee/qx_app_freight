@@ -38,10 +38,8 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
                 ,item.getUldWeight()));
         //超重重量
         helper.setText(R.id.tv_receive_sw,"超重"+item.getOverWeight()+"kg");
-        //库区~库位号
-        helper.setText(R.id.tv_receice_repplace,String.format(mContext.getString(R.string.format_company_info)
-        ,item.getRepType()
-        ,item.getRepPlaceId()));
+        //库区
+        helper.setText(R.id.tv_receice_repplace,item.getReservoirName());
        //删除按钮
 //        helper.getView(R.id.btn_delete).setOnClickListener(v -> Toast.makeText(mContext, "当前删除：" + helper.getAdapterPosition(), Toast.LENGTH_SHORT).show());
 

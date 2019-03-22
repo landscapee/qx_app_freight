@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -114,6 +115,10 @@ public interface HttpApi {
     //判断板车是否被占用
     @GET("service-product-receivecargo/rc/exist/{scooterId}")
     Observable<BaseEntity<MyAgentListBean>> exist(@Path("scooterId") String scooterId);
+
+    //查询库区
+    @POST("service-bussiness-reservoir/reservoir/autoReservoir")
+    Observable<BaseEntity<AutoReservoirBean>> autoReservoirv(@Body BaseFilterEntity model);
 
     //板车列表信息
     @POST("service-base-sysmanage/bd/list")

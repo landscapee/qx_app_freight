@@ -31,5 +31,7 @@ public class TransportListCommitEntity {
         private int overWeight;
         private String repType;
         private String repPlaceId;
+        private String reservoirName;
+        private String reservoirType;
     }
 }

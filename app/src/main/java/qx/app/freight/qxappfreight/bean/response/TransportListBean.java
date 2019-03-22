@@ -70,6 +70,7 @@ public class TransportListBean implements Serializable {
     private String stepOwner;
     private String taskId;
     private String taskType;
+    private String deptCode;
     private String taskTypeCode;
     private Object taskStartTime;
     private Object taskEndTime;

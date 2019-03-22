@@ -14,6 +14,7 @@ public class LoginResponseBean implements Serializable {
     private String userId;
     private String loginid;
     private String username;
+    private String deptCode;
     private String orgId;
     private String orgName;
     private String depId;

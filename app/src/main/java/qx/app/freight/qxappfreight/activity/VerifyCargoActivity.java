@@ -112,8 +112,6 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         //货代信息
 //        mPresenter = new FreightInfoPresenter(this);
 //        ((FreightInfoPresenter) mPresenter).freightInfo(id);
-
-
         mStorageCommitEntity = new StorageCommitEntity();
         llReason.setVisibility(View.GONE);
 

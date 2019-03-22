@@ -85,7 +85,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 bean.getId(),
                 bean.getTaskId(),
                 bean.getWaybillCode(),
-                bean.getDeclareItem());
+                bean.getDeclareItem(),
+                bean.getColdStorage()
+        );
     }
 
     private void loadData() {

@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
+import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -47,6 +48,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
 /**
+ * TODO :出港收货页面
  * Created by pr
  */
 public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
@@ -65,7 +67,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     private ReceiveGoodsAdapter mAdapter;
     private List<MyAgentListBean> list;
-    private String waybillId, taskId,waybillCode;
+    private String waybillId, taskId, reservoirType, waybillCode;
     private CustomToolbar toolbar;
     private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
     private TransportListCommitEntity transportListCommitEntity;
@@ -73,12 +75,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     private int pageCurrent = 1;
 
-    public static void startActivity(Activity context, String waybillId, String taskId,String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    //库区
+    private String reservoirName;
+
+    public static void startActivity(Activity context, String waybillId, String taskId, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean, String reservoirType) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("taskId", taskId);
-
+        starter.putExtra("reservoirType", reservoirType);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);
@@ -97,6 +102,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         toolbar = getToolbar();
         waybillId = getIntent().getStringExtra("waybillId");
         taskId = getIntent().getStringExtra("taskId");
+        reservoirType = getIntent().getStringExtra("reservoirType");
         mDeclareItemBeans = (List<TransportListBean.DeclareItemBean>) getIntent().getSerializableExtra("transportListBeans");
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             //扫一扫
@@ -104,7 +110,16 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         //提交
         mBtnReceiveGood.setOnClickListener(v -> commit());
+        getAutoReservoir();
         initView();
+    }
+
+    public void getAutoReservoir() {
+        mPresenter = new AgentTransportationListPresent(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setDeptCode(UserInfoSingle.getInstance().getDeptCode());
+        entity.setReservoirType(Integer.valueOf(reservoirType));
+        ((AgentTransportationListPresent) mPresenter).autoReservoirv(entity);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -113,7 +128,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             //板车号
             mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode,waybillCode, mDeclareItemBeans);
+                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }
@@ -136,6 +151,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
                 rcInfosEntity.setId(mMyAgentListBean.getId());
+                rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
+                rcInfosEntity.setReservoirType(reservoirType);
                 rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
                 rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
                 rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
@@ -169,8 +186,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void initView() {
-        mPresenter = new AgentTransportationListPresent(this);
-
         mTvTotalNumber.setText("总件数:" + 0 + "");
         mTvTotalVolume.setText("总体积:" + 0 + "m³");
         mTvTotalWeight.setText("总重量" + 0 + "kg");
@@ -224,6 +239,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 number += myAgentListBean1.getNumber();
                 weight += myAgentListBean1.getWeight();
                 volume += myAgentListBean1.getVolume();
+                if (!"".equals(reservoirName))
+                    myAgentListBean1.setReservoirName(reservoirName);
             }
             mTvTotalNumber.setText("总件数:" + number + "");
             mTvTotalVolume.setText("总体积:" + volume + "m³");
@@ -232,6 +249,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
+    }
+
+    @Override
+    public void autoReservoirvResult(AutoReservoirBean myAgentListBean) {
+        if (null != myAgentListBean) {
+            reservoirName = myAgentListBean.getReservoirName();
+        } else
+            ToastUtil.showToast("数据为空");
     }
 
     @Override
@@ -294,6 +319,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     number += list.get(i).getNumber();
                     weight += list.get(i).getWeight();
                     volume += list.get(i).getVolume();
+                    if (!"".equals(reservoirName))
+                        mMyAgentListBean.setReservoirName(reservoirName);
                 }
                 mTvTotalNumber.setText("总件数:" + number + "");
                 mTvTotalVolume.setText("总体积:" + volume + "m³");
@@ -303,7 +330,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         } else if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode,waybillCode, mDeclareItemBeans);
+                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }

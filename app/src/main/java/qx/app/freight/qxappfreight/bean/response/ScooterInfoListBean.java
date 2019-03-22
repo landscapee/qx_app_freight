@@ -19,4 +19,7 @@ public class ScooterInfoListBean {
     private long updateDate;
     private String updateUser;
 
+
+
+
 }

@@ -32,4 +32,8 @@ public class BaseFilterEntity<T> {
     private String flightId;
     private String minutes;
 
+    //查询库区
+    private String deptCode;
+    private int reservoirType;
+
 }
