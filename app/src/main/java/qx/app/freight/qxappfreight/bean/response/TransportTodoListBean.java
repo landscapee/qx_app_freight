@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 import lombok.Data;
@@ -9,7 +11,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class TransportTodoListBean {
+public class TransportTodoListBean implements MultiItemEntity {
         /**
          * id : aec574f5254c20c7fa9c04685293e581
          * tpScooterId : 123
@@ -110,4 +112,13 @@ public class TransportTodoListBean {
         private int tpFlightType;
         //仓位
         private String tpFreightSpace;
+        //运单号码
+        private String billNumber;
+        //是板车下拉还是运单下拉type值
+        private int infoType;
+
+        @Override
+        public int getItemType() {
+                return infoType;
+        }
 }

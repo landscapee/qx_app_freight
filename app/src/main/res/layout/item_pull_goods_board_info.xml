@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_fff"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -86,19 +87,63 @@
 
                 <TextView
                     android:id="@+id/tv_cangwei_info"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/dp_60"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="center_vertical|end"
-                    tools:text="1H舱位" />
+                    android:text="1号舱位" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/shape_gray_gap_line"
+                android:layerType="software" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="拉下件数:"
+                    android:gravity="center"/>
+                <EditText
+                    android:id="@+id/et_pull_number"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:textColor="#f00"
+                    android:background="@drawable/shape_rect_gray_line"/>
+                <Space
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="拉下质量:"
+                    android:gravity="center"/>
+                <EditText
+                    android:id="@+id/et_pull_weight"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="#f00"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:background="@drawable/shape_rect_gray_line"/>
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/shape_gray_gap_line"
-            android:layerType="software" />
+            android:layout_height="1px"
+            android:background="#eff2f3"
+             />
     </LinearLayout>
 
 

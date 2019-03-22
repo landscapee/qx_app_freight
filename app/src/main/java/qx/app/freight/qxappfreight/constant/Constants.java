@@ -127,4 +127,8 @@ public class Constants {
     //im加的字段常量
     public final static int NOTIFY_ID_PUSH_QUIET = 0x07;//静音通知id
     public final static int NOTIFY_ID_CHAT = 0x04;//聊天通知id
+    //拉货上报定义的板车或者运单type值
+    public final static int TYPE_PULL_BOARD = 0;//板车下拉
+    public final static int TYPE_PULL_BILL = 1;//运单下拉
+
 }
