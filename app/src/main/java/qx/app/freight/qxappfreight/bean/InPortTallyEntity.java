@@ -9,4 +9,5 @@ public class InPortTallyEntity {
     private String dateHM;
     private String dateDay;
     private String taskId;
+    private String id;
 }

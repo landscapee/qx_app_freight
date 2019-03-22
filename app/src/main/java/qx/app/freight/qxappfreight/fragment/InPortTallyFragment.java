@@ -1,10 +1,13 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +27,19 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.FFMActivity;
+import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
+import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
 import qx.app.freight.qxappfreight.adapter.InportTallyAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.InPortTallyEntity;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
@@ -43,6 +51,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
     private List<InPortTallyEntity> mList = new ArrayList<>();
+    private InportTallyAdapter mAdapter;
 
     @Nullable
     @Override
@@ -61,6 +70,19 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
+        mAdapter = new InportTallyAdapter(mList);
+        mAdapter.setInportTallyListener(new InportTallyInterface() {
+            @Override
+            public void toDetail(InPortTallyEntity item) {
+                turnToDetailActivity(item);
+            }
+
+            @Override
+            public void toFFM(InPortTallyEntity item) {
+                startActivity(new Intent(mContext, FFMActivity.class));
+            }
+        });
+        mMfrvData.setAdapter(mAdapter);
         mPresenter = new TransportListPresenter(this);
         initData();
     }
@@ -72,6 +94,43 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setUndoType("2");
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+    }
+
+    /**
+     * 跳转到代办详情
+     * @param bean
+     */
+    private void turnToDetailActivity(InPortTallyEntity bean){
+        Intent intent = new Intent(mContext, InPortTallyActivity.class);
+        intent.putExtra("flight_number", bean.getFlightName());
+        intent.putExtra("flight_id", bean.getFlightId());
+        intent.putExtra("task_id", bean.getTaskId());
+        mContext.startActivity(intent);
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        String daibanCode = result.getData();
+        Log.e("22222","daibanCode"+daibanCode);
+        if (!TextUtils.isEmpty(daibanCode)) {
+            chooseCode(daibanCode);
+        }
+    }
+
+    /**
+     * 通过获取的code，筛选代办，直接进入处理代办
+     * @param daibanCode  代办号
+     */
+    private void chooseCode(String daibanCode){
+        for (InPortTallyEntity item:mList) {
+            if (daibanCode.equals(item.getId())){
+                turnToDetailActivity(item);
+                return;
+            }
+        }
     }
 
     @Override
@@ -134,6 +193,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                 model.setTaskId(bean.getTaskId());
                 model.setFlightName(bean.getFlightNo());
                 model.setFlightId(bean.getFlightId());
+                model.setId(bean.getId());
                 String date = sdf.format(new Date(bean.getEtd()));
                 String texts[] = date.split("\\*");
                 model.setDateHM(texts[1]);
@@ -141,7 +201,6 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                 mList.add(model);
             }
         }
-        InportTallyAdapter adapter = new InportTallyAdapter(mList);
-        mMfrvData.setAdapter(adapter);
+        mAdapter.notifyDataSetChanged();
     }
 }

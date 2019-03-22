@@ -13,11 +13,17 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FFMActivity;
 import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
 import qx.app.freight.qxappfreight.bean.InPortTallyEntity;
+import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 
 public class InportTallyAdapter extends BaseQuickAdapter<InPortTallyEntity, BaseViewHolder> {
+    private InportTallyInterface listener;
 
     public InportTallyAdapter(List<InPortTallyEntity> list) {
         super(R.layout.item_task_manifest, list);
+    }
+
+    public void setInportTallyListener(InportTallyInterface listener){
+        this.listener = listener;
     }
 
 
@@ -28,14 +34,10 @@ public class InportTallyAdapter extends BaseQuickAdapter<InPortTallyEntity, Base
         TextView tvType = helper.getView(R.id.tv_type);
         Button btnFfm = helper.getView(R.id.btn_ffm);
         tvType.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, InPortTallyActivity.class);
-            intent.putExtra("flight_number", item.getFlightName());
-            intent.putExtra("flight_id", item.getFlightId());
-            intent.putExtra("task_id", item.getTaskId());
-            mContext.startActivity(intent);
+            listener.toDetail(item);
         });
         btnFfm.setOnClickListener(v -> {
-            mContext.startActivity(new Intent(mContext, FFMActivity.class));
+            listener.toFFM(item);
         });
     }
 }
