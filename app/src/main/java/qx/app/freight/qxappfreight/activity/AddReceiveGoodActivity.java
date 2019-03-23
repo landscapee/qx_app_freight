@@ -82,6 +82,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
+        starter.putExtra("waybillCode", waybillCode);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);

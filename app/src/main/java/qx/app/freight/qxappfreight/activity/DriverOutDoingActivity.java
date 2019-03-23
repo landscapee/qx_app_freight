@@ -59,8 +59,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @BindView(R.id.rv_car_doing)
     RecyclerView doingRecyclerView;
-    @BindView(R.id.btn_begin_end)
-    Button btnBeginEnd;
+    @BindView(R.id.tv_start)
+    TextView tvStart;
+    @BindView(R.id.tv_error_report)
+    TextView tvErrorReport;
     @BindView(R.id.image_scan)
     ImageView imageScan;
 
@@ -70,6 +72,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private List <FlightOfScooterBean> list;
     private List <TransportTodoListBean> listScooter;
     private DriverOutTaskDoingAdapter mDriverOutTaskDoingAdapter;
+
+    private List<String> flightNumList = new ArrayList<>();
 
     private int tpStatus = 1; // 0 运输中 1 运输结束
     private List <OutFieldTaskBean> mAcceptTerminalTodoBean;
@@ -116,13 +120,11 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         list = new ArrayList <>();
         mDriverOutTaskDoingAdapter = new DriverOutTaskDoingAdapter(list);
         doingRecyclerView.setAdapter(mDriverOutTaskDoingAdapter);
-        mDriverOutTaskDoingAdapter.setOnDeleteClickListener((view, parentPosition, childPosition) ->
-                {
+        mDriverOutTaskDoingAdapter.setOnDeleteClickListener((view, parentPosition, childPosition) -> {
 
-                    deleteHandcar(list.get(parentPosition).getMTransportTodoListBeans().get(childPosition));
+            deleteHandcar(list.get(parentPosition).getMTransportTodoListBeans().get(childPosition));
 
-                }
-        );
+        });
         mDriverOutTaskDoingAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         imageScan.setOnClickListener(v -> {
@@ -151,6 +153,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (tpStatus == 0){
@@ -204,23 +207,37 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      */
     private void upDataBtnStatus() {
         if (getMaxHandcarNum() == tpNum) {
-            btnBeginEnd.setClickable(true);
-            btnBeginEnd.setBackgroundResource(R.drawable.btn_blue_press);
+            tvStart.setClickable(true);
+            tvStart.setBackgroundResource(R.drawable.btn_blue_press);
         } else {
-            btnBeginEnd.setClickable(false);
-            btnBeginEnd.setBackgroundColor(getResources().getColor(R.color.gray));
+            tvStart.setClickable(false);
+            tvStart.setBackgroundColor(getResources().getColor(R.color.gray));
         }
 
     }
 
-    @OnClick({R.id.ll_add, R.id.btn_begin_end})
+    @OnClick({R.id.ll_add, R.id.tv_start, R.id.tv_error_report})
     public void onClick(View view) {
 
         switch (view.getId()) {
             case R.id.ll_add:
                 ScanManagerActivity.startActivity(this);
                 break;
-            case R.id.btn_begin_end:
+            case R.id.tv_error_report:
+                flightNumList.clear();
+                for (FlightOfScooterBean item: list) {
+                    if (!flightNumList.contains(item.getFlightNo())){
+                        flightNumList.add(item.getFlightNo());
+                    }
+                }
+                if (!flightNumList.isEmpty()) {
+                    Intent intent = new Intent(this, ErrorReportActivity.class);
+                    intent.putStringArrayListExtra("plane_info_list", (ArrayList<String>) flightNumList);
+                    intent.putExtra("error_type", 4);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.tv_start:
                 if (tpStatus == 1) {
                     doStart();
 
@@ -345,14 +362,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void setTpStatus(int flag) {
         tpStatus = flag;
         if (flag == 0) {
-            btnBeginEnd.setText("结束");
+            tvStart.setText("结束");
             llAdd.setVisibility(View.GONE);
             mDriverOutTaskDoingAdapter.setCheckBoxEnable(true);
             mDriverOutTaskDoingAdapter.setIsmIsSlide(false);
             tvTpStatus.setVisibility(View.VISIBLE);
         } else {
             if (getMaxHandcarNum() == 0) {
-                btnBeginEnd.setText("开始");
+                tvStart.setText("开始");
                 llAdd.setVisibility(View.VISIBLE);
                 mDriverOutTaskDoingAdapter.setCheckBoxEnable(false);
                 mDriverOutTaskDoingAdapter.setIsmIsSlide(true);

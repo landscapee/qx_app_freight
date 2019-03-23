@@ -3,8 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_10"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="航班号" />
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_flight_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:gravity="center_vertical"
+            tools:text="UFO" />
+
+        <LinearLayout
+
+            android:id="@+id/ll_spinner"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <Spinner
+                android:id="@+id/sp_filight_num"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
+                android:spinnerMode="dropdown" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/drop_select" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView
         android:id="@+id/slide_left"

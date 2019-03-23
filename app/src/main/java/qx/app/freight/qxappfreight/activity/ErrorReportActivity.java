@@ -8,10 +8,16 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
@@ -58,6 +64,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     EditText mEtDetailInfo;
     @BindView(R.id.btn_commit)
     Button mBtnCommit;
+    @BindView(R.id.sp_filight_num)
+    Spinner mSpinner;
+
     private static final int REQUEST_IMAGE = 5;
     private List<String> mPhotoPath = new ArrayList<>();
     private static final String[] mAuthPermissions = {
@@ -68,6 +77,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private ImageRvAdapter mAdapter;
     private String mFlightNumber;
     private String[] mInfoList;
+    private ArrayList<String> mFlightNumberList; //传过来的航班号列表
+    private String info; //传过来的航班信息 用*号隔开
 
     @Override
     public int getLayoutId() {
@@ -82,10 +93,36 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
-        String info = getIntent().getStringExtra("plane_info");
-        mInfoList = info.split("\\*");
-        mFlightNumber = mInfoList[0];
-        mTvFlightInfo.setText(mFlightNumber);
+
+        //根据过来的参数判断
+        info = getIntent().getStringExtra("plane_info");
+        mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
+        if (TextUtils.isEmpty(info) && mFlightNumberList!=null){
+            mSpinner.setVisibility(View.VISIBLE);
+
+            mFlightNumber = mFlightNumberList.get(0);
+            mTvFlightInfo.setText(mFlightNumber);
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,R.layout.item_spinner_general, mFlightNumberList);
+            mSpinner.setAdapter(spinnerAdapter);
+            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    mFlightNumber = mFlightNumberList.get(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        }else{
+            mTvFlightInfo.setVisibility(View.VISIBLE);
+            mInfoList = info.split("\\*");
+            mFlightNumber = mInfoList[0];
+            mTvFlightInfo.setText(mFlightNumber);
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
         mIvChosePhoto.setOnClickListener(v -> {

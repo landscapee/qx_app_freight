@@ -51,11 +51,33 @@
             </LinearLayout>
         </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_begin_end"
+    <View
+        android:background="#F0F2F5"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/btn_blue_press"
-        android:text="开始"
-        android:textColor="@color/white" />
+        android:layout_height="3dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_error_report"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="偏离上报"
+            android:textColor="#FF6400" />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue_press"
+            android:gravity="center"
+            android:text="开始"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>
