@@ -243,4 +243,9 @@ public class MainActivity extends BaseActivity {
     public void onRecBroad(String broadString) {
         ToastUtil.showToast(this, broadString);
     }
+
+    @Override
+    public void onBackPressed() {
+        quitApp();
+    }
 }

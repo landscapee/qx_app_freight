@@ -176,4 +176,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void dissMiss() {
         dismissProgessDialog();
     }
+
+    @Override
+    public void onBackPressed() {
+        quitApp();
+    }
 }

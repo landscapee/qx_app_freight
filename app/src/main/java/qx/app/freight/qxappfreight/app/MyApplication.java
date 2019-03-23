@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import qx.app.freight.qxappfreight.utils.IMUtils;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 
 public class MyApplication extends Application {
@@ -75,7 +76,6 @@ public class MyApplication extends Application {
     public static Context getContext() {
         return appContext;
     }
-
 
 
 }

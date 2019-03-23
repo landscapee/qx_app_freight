@@ -22,10 +22,14 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.ButterKnife;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -219,5 +223,26 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.e("========="+getClass().getSimpleName(),"onPause");
+    }
+
+    //两次返回退出
+    protected int isFirstBack;
+    private Timer mQuitTimer;
+    protected void quitApp() {
+        if (this.isFirstBack == 0) {
+            ToastUtil.showToast("是否退出程序？");
+            this.isFirstBack = 1;
+            if (null == this.mQuitTimer) {
+                this.mQuitTimer = new Timer();
+            }
+            this.mQuitTimer.schedule(new TimerTask() {
+                public void run() {
+                    BaseActivity.this.isFirstBack = 0;
+                }
+            }, 1000L);
+        } else if (this.isFirstBack == 1) {
+            this.finish();
+            System.exit(0);
+        }
     }
 }
