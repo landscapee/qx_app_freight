@@ -2,14 +2,17 @@ package qx.app.freight.qxappfreight.service;
 
 import android.content.Context;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
@@ -36,6 +39,7 @@ public class WebSocketSTOMPManager {
     //创建连接
     public void connect() {
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        Log.e(TAG, uri);
         //请求头
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
@@ -66,7 +70,7 @@ public class WebSocketSTOMPManager {
                 });
         compositeDisposable.add(dispLifecycle);
 
-        //订阅
+        //订阅   小猪地址
         Disposable dispTopic = mStompClient.topic("/taskTodoUser/uefaa7789c18845c2921b717a41d2da3a/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -78,6 +82,19 @@ public class WebSocketSTOMPManager {
                 });
 
         compositeDisposable.add(dispTopic);
+
+        //订阅   张硕地址
+        Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
+//                    addItem(mGson.fromJson(topicMessage.getPayload(), EchoModel.class));
+                }, throwable -> {
+                    Log.e(TAG, "张硕订阅失败", throwable);
+                });
+
+        compositeDisposable.add(dispTopic1);
         mStompClient.connect(headers);
     }
 

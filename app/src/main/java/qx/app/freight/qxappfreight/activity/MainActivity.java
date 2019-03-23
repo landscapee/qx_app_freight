@@ -14,6 +14,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
@@ -66,6 +69,8 @@ public class MainActivity extends BaseActivity {
     private MineFragment mMineFragment;
     private Fragment nowFragment;
 
+    private int taskAssignType = 0;
+
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
@@ -86,11 +91,22 @@ public class MainActivity extends BaseActivity {
         initFragment();
     }
 
-    //, HttpConstant.WEBSOCKETURL+"userId="+ UserInfoSingle.getInstance().getUserId()+"&type=MT&role=collection"
 
     private void initServices() {
         GPSService.gpsStart(this);
-        WebSocketService.startService(this, HttpConstant.WEBSOCKETURL+"userId="+ UserInfoSingle.getInstance().getUserId()+"&type=MT&role=collection");
+        //根据登录返回的
+        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+        if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+            taskAssignType = 1;
+        } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+            taskAssignType = 3;
+        } else
+            taskAssignType = 2;
+        WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
+                + "userId=" + UserInfoSingle.getInstance().getUserId()
+                + "&taskAssignType=" + taskAssignType
+                + "&type=MT"
+                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
     }
 
     private void initFragment() {
@@ -133,7 +149,8 @@ public class MainActivity extends BaseActivity {
 //        IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
         IMUtils.imLibLogin(Tools.getLoginName(), Tools.getRealName(), Tools.getToken());
     }
-//    public void setDeviceIdentify(String deviceIdentify) {
+
+    //    public void setDeviceIdentify(String deviceIdentify) {
 //        if (deviceIdentify != null && !"null".equals(deviceIdentify) && !"".equals(deviceIdentify)) {
 //            ImLibConstants.IMLIB_DEVICE_IDENTIFY = deviceIdentify;
 //        } else {

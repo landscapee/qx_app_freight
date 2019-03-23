@@ -36,4 +36,7 @@ public class BaseFilterEntity<T> {
     private String deptCode;
     private int reservoirType;
 
+    //代办查询增加字段
+    private String roleCode;
+
 }

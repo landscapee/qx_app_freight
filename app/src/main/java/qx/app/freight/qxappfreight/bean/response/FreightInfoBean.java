@@ -18,9 +18,15 @@ public class FreightInfoBean {
      * freightCode :
      */
     private String id;
-    private String freightName;
-    private String riskFlag;
-    private String preciousFlag;
-    private String aliveFlag;
-    private String freightCode;
+    private String iata;
+    private String icao;
+    private String fullname;
+    private String memo;
+    private int status;
+    private int delFlag;
+    private String require;
+    private long createDate;
+    private String createUser;
+    private long updateDate;
+    private String param;
 }

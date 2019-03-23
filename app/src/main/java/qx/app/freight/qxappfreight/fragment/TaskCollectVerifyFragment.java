@@ -85,6 +85,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
 
     }
@@ -98,7 +99,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         VerifyStaffActivity.startActivity(getActivity(),
                 bean.getDeclareWaybillAddition()
                 ,bean.getTaskId()
-                ,bean.getSpotFlag());
+                ,bean.getSpotFlag()
+                ,bean.getFlightNumber()
+                ,bean.getShipperCompanyId());
     }
 
     /**

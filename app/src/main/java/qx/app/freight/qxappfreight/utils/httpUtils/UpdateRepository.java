@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -247,12 +248,22 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /****
-     * 货代资质
-     * @param id
+     * 航司资质
+     * @param iata
      * @return
      */
-    public Observable<FreightInfoBean> freightInfo(String id) {
-        return transform(getService().freightInfo(id));
+    public Observable<FreightInfoBean> freightInfo(String iata) {
+        return transform(getService().freightInfo(iata));
+    }
+
+    /****
+     * 货代资质
+     * @param freightId
+     * @return
+     */
+
+    public Observable<ForwardInfoBean> forwardInfo(String freightId) {
+        return transform(getService().forwardInfo(freightId));
     }
 
     /****

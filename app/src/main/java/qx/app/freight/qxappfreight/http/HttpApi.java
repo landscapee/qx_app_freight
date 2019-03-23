@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -141,9 +142,14 @@ public interface HttpApi {
     @Multipart
     Observable<BaseEntity<Object>> upLoads(@Part List<MultipartBody.Part> files);
 
+    //航空公司资质
+    @GET("service-bussiness-market/marketAirlinesProxy/getByIata/{iata}")
+    Observable<BaseEntity<FreightInfoBean>> freightInfo(@Path("iata") String iata);
+
     //货代资质
-    @GET("service-base-sysmanage/freightForwardingInfo/get/{id}")
-    Observable<BaseEntity<FreightInfoBean>> freightInfo(@Path("id") String Id);
+    @GET("service-bussiness-shipper/freightInfo/getById/{freightId}")
+    Observable<BaseEntity<ForwardInfoBean>> forwardInfo(@Path("freightId") String freightId);
+
 
     //航司资质
     @POST("service-base-sysmanage/airlineRequire/list")

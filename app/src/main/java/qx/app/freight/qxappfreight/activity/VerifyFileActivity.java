@@ -1,46 +1,34 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.zxing.common.StringUtils;
 import com.ouyben.empty.EmptyLayout;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.VerifyFileAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
-import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.presenter.AirlineRequirePresenter;
@@ -53,7 +41,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
  */
 public class VerifyFileActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, AirlineRequireContract.airlineRequireView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_verify)
-    MultiFunctionRecylerView mMfrvData;
+    RecyclerView mMfrvData;
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
 
@@ -64,16 +52,20 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private String mTaskId;
     private String mFilePath;
     private String mSpotFlag;
+    private String mFlightNumber;
     private int insCheck; //报检是否合格1合格 0不合格
+    private String mShipperCompanyId;
 
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath,String spotFlag,int insCheck) {
+    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath, String spotFlag, int insCheck, String flightNumber, String shipperCompanyId) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
         intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
         intent.putExtra("taskId", taskId);
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("insCheck", insCheck);
+        intent.putExtra("flightNumber", flightNumber);
+        intent.putExtra("shipperCompanyId", shipperCompanyId);
         context.startActivityForResult(intent, 0);
     }
 
@@ -87,8 +79,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查证明文件");
-        //获取航司资质
-//        mPresenter = new AirlineRequirePresenter(this);
+        //获取航司资质   shipperCompanyId
 //        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
 //        MyAgentListBean myAgentListBean = new MyAgentListBean();
 //        myAgentListBean.setIata("");
@@ -97,6 +88,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 //        baseFilterEntity.setFilter(myAgentListBean);
 
         initData();
+        mPresenter = new AirlineRequirePresenter(this);
+        ((AirlineRequirePresenter) mPresenter).forwardInfo(mShipperCompanyId);
     }
 
     private void initData() {
@@ -104,7 +97,9 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mTaskId = getIntent().getStringExtra("taskId");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
-        insCheck =getIntent().getIntExtra("insCheck",0);
+        mFlightNumber = getIntent().getStringExtra("flightNumber");
+        mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
+        insCheck = getIntent().getIntExtra("insCheck", 0);
         AddtionInvoicesBean addtionInvoicesBean = new AddtionInvoicesBean();
         if (mDeclareData != null) {
             String str = mDeclareData.getAddtionInvoices();
@@ -129,7 +124,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         0,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
                         mSpotFlag,
-                        UserInfoSingle.getInstance().getUserId() //当前提交人id
+                        UserInfoSingle.getInstance().getUserId(), //当前提交人id
+                        mFlightNumber
                 );
                 break;
             case R.id.refuse_tv:
@@ -143,7 +139,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         1,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
                         mSpotFlag,
-                        UserInfoSingle.getInstance().getUserId() //当前提交人id
+                        UserInfoSingle.getInstance().getUserId(), //当前提交人id
+                        mFlightNumber
                 );
                 break;
         }
@@ -191,8 +188,17 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     }
 
     @Override
-    public void toastView(String error) {
+    public void forwardInfoResult(ForwardInfoBean forwardInfoBean) {
+        if (null != forwardInfoBean) {
+            String str = Arrays.toString(forwardInfoBean.getFreightAptitudeName());
+            mTvCollectRequire.setText(str);
+        } else
+            Log.e("核查证明文件空", "");
+    }
 
+    @Override
+    public void toastView(String error) {
+        Log.e(error, error);
     }
 
     @Override

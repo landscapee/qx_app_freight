@@ -73,13 +73,16 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String filePath;
     private String mSpotFlag;
     private String insCheck; //报检是否合格1合格 0不合格
+    private String mFlightNumber;//航班号
+    private String mShipperCompanyId;
 
-
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId,String spotFlag) {
+    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId,String spotFlag,String flightNumber,String shipperCompanyId) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
         intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
         intent.putExtra("taskId", taskId);
         intent.putExtra("spotFlag", spotFlag);
+        intent.putExtra("flightNumber", flightNumber);
+        intent.putExtra("shipperCompanyId", shipperCompanyId);
         context.startActivityForResult(intent, 0);
     }
 
@@ -101,6 +104,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
         mTaskId = getIntent().getStringExtra("taskId");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
+        mFlightNumber = getIntent().getStringExtra("flightNumber");
+        mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
         initData();
     }
 
@@ -142,7 +147,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,1);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,1,mFlightNumber,mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -150,7 +155,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,0);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,0,mFlightNumber,mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;

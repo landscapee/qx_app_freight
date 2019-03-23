@@ -24,7 +24,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
@@ -45,12 +47,12 @@ public class WebSocketService extends Service {
     private Gson mGson = new Gson();
 
 
-
     @Override
     public void onCreate() {
         super.onCreate();
         EventBus.getDefault().isRegistered(this);
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        Log.e(TAG, uri);
         //请求头
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
@@ -81,33 +83,54 @@ public class WebSocketService extends Service {
                 });
         compositeDisposable.add(dispLifecycle);
 
-        //订阅
-        //小猪地址  user/123/MT/message
-        //张硕地址  /taskTodoUser/uefaa7789c18845c2921b717a41d2da3a/taskTodo/taskTodoList
-        Disposable dispTopic = mStompClient.topic("/user/"+ UserInfoSingle.getInstance().getUserId()+"/MT/message")
+        //订阅  小猪啊地址
+        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
                     if (null != topicMessage.getPayload()) {
-                        sendEventBus(topicMessage.getPayload());
+                        sendLoginEventBus(topicMessage.getPayload());
                     }
-
                 }, throwable -> {
                     Log.e(TAG, "订阅失败", throwable);
                 });
 
         compositeDisposable.add(dispTopic);
+
+        //订阅   张硕地址
+        Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
+                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                    sendReshEventBus(mWebSocketBean);
+                    //N是新增, D是删除
+//                    if ("N".equals(mWebSocketBean.getFlag())) {
+//                    } else if ("D".equals(mWebSocketBean.getFlag())) {
+//                    }
+                }, throwable -> {
+                    Log.e(TAG, "张硕订阅失败", throwable);
+                });
+
+        compositeDisposable.add(dispTopic1);
         mStompClient.connect(headers);
     }
 
-    public static void startService(Activity activtity,String url) {
+    public static void startService(Activity activtity, String url) {
         uri = url;
         actionStart(activtity);
     }
 
-    public static void sendEventBus(String str){
+    //用于登录
+    public static void sendLoginEventBus(String str) {
         EventBus.getDefault().post(str);
+    }
+
+    //用于代办刷新
+    public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
     }
 
 

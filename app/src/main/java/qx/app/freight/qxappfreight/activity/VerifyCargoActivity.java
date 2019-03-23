@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
+import qx.app.freight.qxappfreight.presenter.FreightInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.SubmissionPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -73,10 +74,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
-    private String mSpotFlag;
+    private String mSpotFlag,mFlightNumber;
 
 
-    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag,String userId) {
+    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag,String userId,String flightNumber) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
         intent.putExtra("waybillId", waybillId);
         intent.putExtra("id", id);
@@ -86,6 +87,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         intent.putExtra("taskId", taskId);
         intent.putExtra("userId", userId);
         intent.putExtra("spotFlag", spotFlag);
+        intent.putExtra("flightNumber", flightNumber);
         context.startActivityForResult(intent, 0);
     }
 
@@ -107,14 +109,15 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         fileCheck = getIntent().getIntExtra("fileCheck", 0);
         taskId = getIntent().getStringExtra("taskId");
         userId = getIntent().getStringExtra("userId");
+        mFlightNumber = getIntent().getStringExtra("flightNumber");
         //0是通过 1是不通过
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         //货代信息
-//        mPresenter = new FreightInfoPresenter(this);
-//        ((FreightInfoPresenter) mPresenter).freightInfo(id);
+        mPresenter = new FreightInfoPresenter(this);
+        ((FreightInfoPresenter) mPresenter).freightInfo(mFlightNumber.substring(0,2));
+
         mStorageCommitEntity = new StorageCommitEntity();
         llReason.setVisibility(View.GONE);
-
         mTvCheck.setOnClickListener(v -> {
             Log.e("SpotFlag", mSpotFlag);
             //0抽检，要弹，1不抽检，不需要弹
@@ -177,7 +180,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     @Override
     public void freightInfoResult(FreightInfoBean freightInfoBean) {
         if (freightInfoBean != null) {
-            mTvCollectRequire.setText(freightInfoBean.getFreightName());
+            mTvCollectRequire.setText(freightInfoBean.getRequire());
         } else {
             Log.i("freightInfoBean", "freightInfoBean为空");
         }

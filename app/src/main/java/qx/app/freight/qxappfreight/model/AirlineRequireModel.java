@@ -25,4 +25,15 @@ public class AirlineRequireModel extends BaseModel implements AirlineRequireCont
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void forwardInfo(String freightId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().forwardInfo(freightId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }
