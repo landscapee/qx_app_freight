@@ -19,6 +19,8 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class MineFragment extends BaseFragment {
@@ -66,8 +68,11 @@ public class MineFragment extends BaseFragment {
 
     private void loginOut() {
         UserInfoSingle.setUserNil();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(getContext());
         Intent intent = new Intent(getContext(),LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+
     }
 }

@@ -37,6 +37,9 @@ import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
+/**
+ * 行李上报
+ */
 public class FlightListBaggerFragment extends BaseFragment implements LookLUggageScannigFlightContract.lookLUggageScannigFlightView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     RecyclerView mMfrvData;

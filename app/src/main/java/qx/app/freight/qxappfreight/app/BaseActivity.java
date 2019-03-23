@@ -28,6 +28,7 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -241,6 +242,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             }, 1000L);
         } else if (this.isFirstBack == 1) {
+            ActManager.getAppManager().finishAllActivity();
+            WebSocketService.stopServer(this);
             this.finish();
             System.exit(0);
         }

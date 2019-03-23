@@ -71,7 +71,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void getData() {
         BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
-
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
     }
 

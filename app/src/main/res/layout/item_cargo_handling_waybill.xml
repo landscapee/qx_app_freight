@@ -109,7 +109,6 @@
             android:gravity="center"
             android:background="@drawable/btn_gray_press"
             >
-
             <TextView
                 android:id="@+id/tv_subpackage"
                 android:layout_width="wrap_content"

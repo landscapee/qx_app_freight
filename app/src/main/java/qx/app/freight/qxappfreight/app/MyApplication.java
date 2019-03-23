@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.beidouapp.imlibapi.IMLIBContext;
+
+import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.utils.AppIPConfig;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 

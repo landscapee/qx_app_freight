@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
@@ -94,6 +95,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         entity.setUndoType("2");
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
@@ -126,6 +128,22 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         if (!TextUtils.isEmpty(daibanCode)) {
             chooseCode(daibanCode);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+
+            list.addAll(mWebSocketResultBean.getChgData());
+        }
+        else if ("D".equals(mWebSocketResultBean.getFlag())){
+
+            for (TransportListBean mTransportListBean:list){
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                    list.remove(mTransportListBean);
+            }
+        }
+        mMfrvData.notifyForAdapter(adapter);
     }
 
     /**

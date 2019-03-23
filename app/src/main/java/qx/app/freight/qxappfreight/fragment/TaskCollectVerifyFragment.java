@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
@@ -177,6 +178,21 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
             Log.e("refresh", refresh);
             initData();
         }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean  mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+
+            transportListList.addAll(mWebSocketResultBean.getChgData());
+        }
+        else if ("D".equals(mWebSocketResultBean.getFlag())){
+
+            for (TransportListBean mTransportListBean:transportListList){
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                    transportListList.remove(mTransportListBean);
+            }
+        }
+        mMfrvData.notifyForAdapter(adapter);
     }
 
 

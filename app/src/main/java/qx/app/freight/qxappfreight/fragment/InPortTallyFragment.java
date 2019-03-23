@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
@@ -50,7 +51,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List<InPortTallyEntity> mList = new ArrayList<>();
+    private List<TransportListBean> mList = new ArrayList<>();
     private InportTallyAdapter mAdapter;
 
     @Nullable
@@ -73,12 +74,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter = new InportTallyAdapter(mList);
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
-            public void toDetail(InPortTallyEntity item) {
+            public void toDetail(TransportListBean item) {
                 turnToDetailActivity(item);
             }
 
             @Override
-            public void toFFM(InPortTallyEntity item) {
+            public void toFFM(TransportListBean item) {
                 startActivity(new Intent(mContext, FFMActivity.class));
             }
         });
@@ -93,6 +94,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         entity.setSize(Constants.PAGE_SIZE);
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setUndoType("2");
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 
@@ -100,9 +102,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * 跳转到代办详情
      * @param bean
      */
-    private void turnToDetailActivity(InPortTallyEntity bean){
+    private void turnToDetailActivity(TransportListBean bean){
         Intent intent = new Intent(mContext, InPortTallyActivity.class);
-        intent.putExtra("flight_number", bean.getFlightName());
+        intent.putExtra("flight_number", bean.getFlightNo());
         intent.putExtra("flight_id", bean.getFlightId());
         intent.putExtra("task_id", bean.getTaskId());
         mContext.startActivity(intent);
@@ -125,7 +127,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * @param daibanCode  代办号
      */
     private void chooseCode(String daibanCode){
-        for (InPortTallyEntity item:mList) {
+        for (TransportListBean item:mList) {
             if (daibanCode.equals(item.getId())){
                 turnToDetailActivity(item);
                 return;
@@ -157,6 +159,21 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             initData();
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+
+            mList.addAll(mWebSocketResultBean.getChgData());
+        }
+        else if ("D".equals(mWebSocketResultBean.getFlag())){
+
+            for (TransportListBean mTransportListBean:mList){
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                    mList.remove(mTransportListBean);
+            }
+        }
+        mMfrvData.notifyForAdapter(mAdapter);
+    }
 
     @Override
     public void toastView(String error) {
@@ -179,28 +196,15 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
+        mList.clear();
         if (mCurrentPage == 1) {
-            mList.clear();
             mMfrvData.finishRefresh();
         } else {
             mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd*HH:mm", Locale.CHINESE);
-        for (TransportListBean bean : transportListBeans) {
-            if ("DA_tallyAndInStorage".equals(bean.getTaskTypeCode())) {
-                InPortTallyEntity model = new InPortTallyEntity();
-                model.setTaskId(bean.getTaskId());
-                model.setFlightName(bean.getFlightNo());
-                model.setFlightId(bean.getFlightId());
-                model.setId(bean.getId());
-                String date = sdf.format(new Date(bean.getEtd()));
-                String texts[] = date.split("\\*");
-                model.setDateHM(texts[1]);
-                model.setDateDay(texts[0]);
-                mList.add(model);
-            }
-        }
+        mList.addAll(transportListBeans);
+
         mAdapter.notifyDataSetChanged();
     }
 }

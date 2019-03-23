@@ -220,12 +220,12 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      * 结束按钮是否可以点击
      */
     private void upDataBtnStatusEnd() {
-        btnBeginEnd.setClickable(false);
-        btnBeginEnd.setBackgroundColor(getResources().getColor(R.color.gray));
+        tvStart.setClickable(false);
+        tvStart.setBackgroundColor(getResources().getColor(R.color.gray));
         for (FlightOfScooterBean mFlightOfScooterBean :list){
             if (mFlightOfScooterBean.isSelect()) {
-                btnBeginEnd.setClickable(true);
-                btnBeginEnd.setBackgroundResource(R.drawable.btn_blue_press);
+                tvStart.setClickable(true);
+                tvStart.setBackgroundResource(R.drawable.btn_blue_press);
                 break;
             }
         }

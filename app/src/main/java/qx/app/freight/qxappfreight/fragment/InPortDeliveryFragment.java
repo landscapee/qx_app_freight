@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
@@ -92,6 +93,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         entity.setSize(Constants.PAGE_SIZE);
         entity.setUndoType("3");
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 
@@ -119,6 +121,24 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
             chooseCode(daibanCode);
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+
+            mList.addAll(mWebSocketResultBean.getChgData());
+        }
+        else if ("D".equals(mWebSocketResultBean.getFlag())){
+
+            for (TransportListBean mTransportListBean:mList){
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                    mList.remove(mTransportListBean);
+            }
+        }
+        mMfrvData.notifyForAdapter(mAdapter);
+    }
+
+
+
 
     /**
      * 通过获取的code，筛选代办，直接进入处理代办

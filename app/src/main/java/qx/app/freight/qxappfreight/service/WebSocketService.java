@@ -34,7 +34,7 @@ import ua.naiksoftware.stomp.dto.StompHeader;
 public class WebSocketService extends Service {
     private static String uri;
     public Context mContext;
-    private StompClient mStompClient;
+    private static StompClient mStompClient;
     private Timer mTimer;
     private long nowdate;
     public static final String TAG = "websocket";
@@ -52,7 +52,7 @@ public class WebSocketService extends Service {
         super.onCreate();
         EventBus.getDefault().isRegistered(this);
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
-        Log.e(TAG, uri);
+//        Log.e(TAG, uri);
         //请求头
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
@@ -188,7 +188,11 @@ public class WebSocketService extends Service {
     }
 
     //停止连接
-    public void stop() {
+    public static void stopServer(Context context) {
         mStompClient.disconnect();
+        mStompClient = null;
+
+        Intent startSrv = new Intent(context, WebSocketService.class);
+        context.stopService(startSrv);
     }
 }
