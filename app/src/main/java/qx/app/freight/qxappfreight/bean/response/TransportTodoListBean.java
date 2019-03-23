@@ -40,7 +40,7 @@ public class TransportTodoListBean implements MultiItemEntity {
         private String tpScooterCode;
         private String tpCargoType;
         private int tpCargoNumber;
-        private int tpCargoWeight;
+        private double tpCargoWeight;
         private double tpCargoVolume;
         private String tpFlightId;
         private String tpFlightNumber;

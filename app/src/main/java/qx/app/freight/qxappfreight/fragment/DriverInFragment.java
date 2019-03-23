@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -292,7 +293,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
     @Override
     public void toastView(String error) {
-
+        Log.e("DriverInFragment",error);
     }
 
     @Override

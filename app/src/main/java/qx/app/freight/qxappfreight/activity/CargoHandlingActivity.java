@@ -142,8 +142,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         taskId = getIntent().getStringExtra("taskId");
         flightId = getIntent().getStringExtra("flightId");
 
-
-
         mPresenter = new GetScooterListInfoPresenter(this);
         GetScooterListInfoEntity mGetScooterListInfoEntity = new GetScooterListInfoEntity();
         mGetScooterListInfoEntity.setFlightId(flightId);

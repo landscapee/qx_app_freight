@@ -136,6 +136,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 list.get(position).setSelect(false);
             else
                 list.get(position).setSelect(true);
+
+            upDataBtnStatusEnd();
         });
         upDataBtnStatus();
         getData();
@@ -212,6 +214,20 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         } else {
             tvStart.setClickable(false);
             tvStart.setBackgroundColor(getResources().getColor(R.color.gray));
+        }
+    }
+    /**
+     * 结束按钮是否可以点击
+     */
+    private void upDataBtnStatusEnd() {
+        btnBeginEnd.setClickable(false);
+        btnBeginEnd.setBackgroundColor(getResources().getColor(R.color.gray));
+        for (FlightOfScooterBean mFlightOfScooterBean :list){
+            if (mFlightOfScooterBean.isSelect()) {
+                btnBeginEnd.setClickable(true);
+                btnBeginEnd.setBackgroundResource(R.drawable.btn_blue_press);
+                break;
+            }
         }
 
     }
@@ -351,6 +367,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     public void transportBeginResult(String result) {
         if (!"".equals(result)) {
             setTpStatus(0);
+            upDataBtnStatusEnd();
         } else
             Log.e("开始失败", "开始失败");
     }

@@ -28,6 +28,10 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
             helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info, TimeUtils.date2Tasktime3(item.getFlights().getEtd()),TimeUtils.getDay(item.getFlights().getEtd())));
             helper.setText(R.id.tv_num,item.getNum()+"个"+ MapValue.getCarTypeValue(item.getTransfortType()));
 
+            helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()));
+            helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()));
+
+
         }
 
 

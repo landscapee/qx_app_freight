@@ -51,9 +51,12 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
 
         helper.setChecked(R.id.cb_flight,item.isSelect());
 
+        helper.setText(R.id.tv_begin, item.getMTransportTodoListBeans().get(0).getTpStartLocate());
+        helper.setText(R.id.tv_end, item.getMTransportTodoListBeans().get(0).getTpDestinationLocate());
 
         CheckBox checkBox = helper.getView(R.id.cb_flight);
         checkBox.setEnabled(isEnable);
+
         if (isEnable)
             checkBox.setVisibility(View.VISIBLE);
         else

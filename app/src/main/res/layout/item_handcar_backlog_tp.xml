@@ -81,7 +81,7 @@
                         android:drawableLeft="@mipmap/li"
                         android:drawablePadding="5dp"
                         android:layout_height="wrap_content"
-                        tools:text="H32132"
+                        tools:text=""
                         android:textSize="13sp"
                         />
 
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_15"
                         android:drawableStart="@mipmap/placement"
-                        tools:text="101"
+                        tools:text=""
                         android:textSize="13sp"
                         />
 

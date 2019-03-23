@@ -46,7 +46,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
-                android:src="@mipmap/channel" />
+                android:src="@mipmap/channel"
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/tv_road_info"
@@ -56,7 +58,9 @@
                 android:layout_marginEnd="0dp"
                 android:gravity="center"
                 android:text="@string/format_main_list_way"
-                android:textColor="@color/black_3" />
+                android:textColor="@color/black_3"
+                android:visibility="gone"
+                />
         </LinearLayout>
 
         <LinearLayout
