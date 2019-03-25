@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,12 +13,14 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.bean.UnloadPlaneEntity;
 import qx.app.freight.qxappfreight.bean.UnloadPlaneVersionEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -52,7 +55,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @BindView(R.id.tv_end_install_equip)
     TextView mTvEndInstall;
     private List<UnloadPlaneVersionEntity> mList = new ArrayList<>();
-    private List<GetFlightCargoResBean> mData = new ArrayList<>();
+    private List<LocalBillBean> mBillList=new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -80,6 +83,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvPullGoodsReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
             intent.putExtra("plane_info", flightInfo);
+            intent.putParcelableArrayListExtra("bill_list", (ArrayList<? extends Parcelable>) mBillList);
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvErrorReport.setOnClickListener(v -> {
@@ -97,10 +101,28 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         });
     }
 
+    /**
+     * 数据去重
+     * @param list 要去重的列表
+     * @return  去重后的列表
+     */
+    private  List<LocalBillBean> removeDuplicate(List<LocalBillBean> list) {
+        HashSet h = new HashSet(list);
+        list.clear();
+        list.addAll(h);
+        return list;
+    }
     @Override
     public void getFlightCargoResResult(List<GetFlightCargoResBean> getFlightCargoResBeanList) {
-        mData.clear();
-        mData.addAll(getFlightCargoResBeanList);
+        for (GetFlightCargoResBean.ContentObjectBean bean:getFlightCargoResBeanList.get(0).getContentObject()){
+           for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode: bean.getGroupScooters()){
+               LocalBillBean billBean=new LocalBillBean();
+               billBean.setWayBillCode(groupCode.getWayBillCode());
+               billBean.setWaybillId(groupCode.getWaybillId());
+               mBillList.add(billBean);
+           }
+        }
+        mBillList=removeDuplicate(mBillList);
         for (GetFlightCargoResBean bean : getFlightCargoResBeanList) {
             UnloadPlaneVersionEntity entity = new UnloadPlaneVersionEntity();
             entity.setVersion(Integer.valueOf(bean.getVersion()));

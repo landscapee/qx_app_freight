@@ -4,6 +4,9 @@ import java.util.List;
 
 import lombok.Data;
 
+/**
+ * 装机单数据
+ */
 @Data
 public class GetFlightCargoResBean {
 
@@ -118,6 +121,7 @@ public class GetFlightCargoResBean {
             private String repPlaceNum;
             private int updateStatus;
             private String waybillId;
+            private String wayBillCode;
             private String scooterCode;
             private String id;
             private long createDate;

@@ -25,6 +25,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.PullGoodsInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
@@ -36,8 +37,6 @@ import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.dialog.ChooseGoodsBillDialog;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
-import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -65,6 +64,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
     private int mDeletePos = -1;        //左滑删除时的下标标记值
     private boolean mIsScanBill=false;//是否是扫描运单拉下，默认是扫板
+    private List<LocalBillBean> mBillList=new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -74,6 +74,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
+        mBillList=getIntent().getParcelableArrayListExtra("bill_list");
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
         CustomToolbar toolbar = getToolbar();
@@ -156,8 +157,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 if (mFlag%2!=0) {
                     ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();
                     List<String> list = new ArrayList<>();
-                    for (int j = 1; j < 7; j++) {
-                        list.add("测试运单号00" + j);
+                    for (LocalBillBean billBean:mBillList) {
+                        list.add(billBean.getWayBillCode());
                     }
                     dialog.setData(PullGoodsReportActivity.this, list);
                     dialog.show(getSupportFragmentManager(), "123");
