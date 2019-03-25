@@ -15,6 +15,9 @@ public class CalculateUtil {
      * @return 返回一个乘了100的数  加%就是百分比
      */
     public static double calculateGradient(int num,double a ,double b){
+        if (b==0){
+            return 100;
+        }
         return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
     }
 }

@@ -85,6 +85,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private double dRate; //差率
     private double reviseWeight; //修订重量
     private double crossWeight; //毛重
+    private double goodsWeight; //收运净重
     private int selectorOption = 10;
     private GetInfosByFlightIdBean mData;
 
@@ -116,6 +117,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mRemarksList.add("加垫板");
         mRemarksList.add("其他");
 
+        //负重重量
         tvGrossweightFront.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,6 +135,24 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 }else {
                     changeClicked(true);
                 }
+                if (StringUtil.isDouble(ss)){
+                    calculateWeight();
+                }
+            }
+        });
+        //人工干预值
+        tvReviseFront.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String ss = s.toString();
                 if (StringUtil.isDouble(ss)){
                     calculateWeight();
                 }
@@ -166,7 +186,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      */
     private void getScooterInfo(String scooterCode) {
         BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserId("weighter");
         ((GetScooterByScooterCodePresenter) mPresenter).getInfosByFlightId(entity);
     }
 
@@ -174,14 +195,22 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 退回板车
      */
     private void returnScooter() {
-
+        if (-3<dRate&&dRate<3){
+            ToastUtil.showToast("复重差率合格,不能退回");
+            return;
+        }
         if (selectorOption ==2){
             mData.setRemark(etOther.getText().toString());
         }else {
             mData.setRemark(tvScan.getText().toString());
         }
+        mData.setReWeight(crossWeight);
+        mData.setReDifference(dValue);
+        mData.setReDifferenceRate(dRate);
+        mData.setWeight(goodsWeight);
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
         ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
+
         returnWeighingEntity.setScooter(mData);
 
         ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
@@ -211,7 +240,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 mData.setRemark(tvScan.getText().toString());
             }
         }
-
+        mData.setReWeight(crossWeight);
+        mData.setReDifference(dValue);
+        mData.setReDifferenceRate(dRate);
+        mData.setWeight(goodsWeight);
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
 
         ((GetScooterByScooterCodePresenter) mPresenter).saveScooter(mData);
@@ -263,28 +295,33 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      *
      */
     private void calculateWeight(){
+        //获取复磅毛重
         String s1 = tvGrossweightFront.getText().toString().trim();
         if (TextUtils.isEmpty(s1)){
             crossWeight =0;
         }else {
             crossWeight = Double.valueOf(s1);
         }
+        //获取人工干预值
         String s2 = tvReviseFront.getText().toString().trim();
         if (TextUtils.isEmpty(s2)){
             reviseWeight =0;
         }else {
             reviseWeight = Double.valueOf(s2);
         }
-        dValue =crossWeight -(mData.getScooterWeight()+5000+mData.getUldWeight());
+        //获取收运净重
+        goodsWeight = reviseWeight+mData.getWeight();
+
+        dValue =crossWeight -(mData.getScooterWeight()+goodsWeight+mData.getUldWeight());
 //        dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight());
-        dRate = CalculateUtil.calculateGradient(4, dValue+reviseWeight, crossWeight);
-        mData.setReWeight(crossWeight);
-        mData.setReDifference(dValue);
-        mData.setReDifferenceRate(dRate);
+        dRate = CalculateUtil.calculateGradient(4, dValue+goodsWeight, crossWeight);
+
         //复磅差值
         tvDvalueFront.setText(dValue+"kg");
         //复磅差率
         tvGradientFront.setText(dRate+"%");
+        //收运净重
+        tvNetweightFront.setText(goodsWeight+"kg");
     }
 
     @Override
@@ -308,10 +345,14 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         tvUld.setText(mData.getUldType()+" "+mData.getUldCode()+" "+mData.getIata());
         tvUldSelf.setText(mData.getUldWeight()+"kg");
         //收运净重
-        tvNetweightFront.setText(5000.0+"kg");
+        tvNetweightFront.setText(mData.getWeight()+"kg");
 
     }
 
+    /**
+     * 未使用
+     * @param bean
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean bean) {
@@ -323,7 +364,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             tvUld.setText(bean.getUldType()+" "+bean.getUldCode()+" "+bean.getIata());
             tvUldSelf.setText(bean.getUldWeight()+"kg");
             //收运净重
-            tvNetweightFront.setText(5000.0+"kg");
+            tvNetweightFront.setText(bean.getWeight()+"kg");
 //            tvNetweightFront.setText(bean.getWeight()+"kg");
 
         }
@@ -346,23 +387,6 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         tvGrossweightFront.setText(result);
         changeClicked(true);
         calculateWeight();
-        tvReviseFront.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String ss = s.toString();
-                if (StringUtil.isDouble(ss)){
-                    calculateWeight();
-                }
-            }
-        });
     }
 
     @Override

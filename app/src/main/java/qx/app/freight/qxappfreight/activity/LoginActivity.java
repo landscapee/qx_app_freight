@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        toolbar.setRightTextView(View.VISIBLE, Color.GREEN, "右边文字", v -> Toast.makeText(LoginActivity.this, "点击了右边的文字", Toast.LENGTH_LONG).show());
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("");
+        mEtUserName.setText("fuzhongyuan");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();

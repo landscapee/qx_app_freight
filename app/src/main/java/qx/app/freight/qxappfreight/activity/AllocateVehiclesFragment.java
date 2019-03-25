@@ -64,13 +64,14 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
 //            CargoHandlingActivity.startActivity(mContext,list.get(position).getTaskId(),list.get(position).getFlightId());
         });
         mPresenter = new GetInfosByFlightIdPresenter(this);
-        getData();
+//        getData();
     }
 
 
     public void getData() {
         BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserId("weighter");
         entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
     }
