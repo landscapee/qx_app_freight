@@ -129,7 +129,7 @@ public class IMUtils {
      * 初始化服务器
      */
     public static void initIM() {
-        String host = AppIPConfig.getIMIP();
+        String host = HttpConstant.CMCC;
         IMLIBInitializer.initialize(MyApplication.getContext());//IM初始化
         if (HttpConstant.IM_WEB_HOST.equals(host)) {//如果是测试环境 地址不同
             IMLIBContext.getInstance().setServerInfo(host, 8080, host,

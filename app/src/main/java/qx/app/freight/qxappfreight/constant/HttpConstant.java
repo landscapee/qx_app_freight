@@ -29,4 +29,6 @@ public class HttpConstant {
     public static final String IM_APPKEY = "0be5cb1c-a650-b58451";//ilink_key
     public static final String IM_SECUREKEY = "b1cb1dad27636403bf125b78d98f00b2";//ilink_securekey
 
+    public static final String IM_NOTICE_URL = "notice/noticeInfoInterface";//特情通知公告接口
+
 }

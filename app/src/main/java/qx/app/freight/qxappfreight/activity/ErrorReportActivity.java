@@ -202,7 +202,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         for (String path : paths) {
             files.add(new File(path));
         }
-        Luban.compress(this, files).setMaxSize(150)
+
+        Luban.get(this).load(files)
+                .setMaxSize(150)
                 .setMaxHeight(1920)
                 .setMaxWidth(1080)
                 .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener() {

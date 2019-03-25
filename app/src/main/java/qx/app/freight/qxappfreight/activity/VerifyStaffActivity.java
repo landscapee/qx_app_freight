@@ -205,7 +205,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (file == null)
             return;
         int size = 150;
-        Luban.compress(this, file)
+        Luban.get(this).load(file)
                 .setMaxSize(size)
                 .setMaxHeight(1920)
                 .setMaxWidth(1080)

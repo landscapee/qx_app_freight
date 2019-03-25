@@ -71,6 +71,7 @@ public class MyApplication extends Application {
         try {
             IMUtils.initIM();
 //            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl(AppIPConfig.getSchduleApiHost() + HttpConstant.IM_NOTICE_URL);
+            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl("http://" + HttpConstant.CMCC + ":86/api/schedule/" + HttpConstant.IM_NOTICE_URL);
         } catch (Exception e) {
             Log.d("tagMsg","im初始化失败");
         }
