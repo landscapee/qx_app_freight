@@ -159,7 +159,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        UserInfoSingle.setUser(loginBean);
         //**************************************************
 //        MainActivity.startActivity(this);
-        Toast.makeText(LoginActivity.this, "错误" + error, Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(error);
     }
 
     @Override

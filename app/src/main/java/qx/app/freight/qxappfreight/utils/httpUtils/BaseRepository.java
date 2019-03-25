@@ -45,7 +45,10 @@ public abstract class BaseRepository {
                 .map(baseEntity -> {
                     if (null != baseEntity && "200".equals(baseEntity.getStatus())) {
                         return baseEntity.getMessage();
-                    } else {
+                    }else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
+                        ToastUtil.showToast(baseEntity.getMessage());
+                        throw new DefaultException("318");
+                    }else {
                         throw new DefaultException("服务器数据异常");
                     }
                 });
@@ -64,7 +67,10 @@ public abstract class BaseRepository {
                 .map(baseEntity -> {
                     if (null != baseEntity && "200".equals(baseEntity.getStatus())) {
                         return baseEntity.getData().toString();
-                    } else {
+                    } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
+                        ToastUtil.showToast(baseEntity.getMessage());
+                        throw new DefaultException("318");
+                    }  else {
                         throw new DefaultException("服务器数据异常");
                     }
                 });
