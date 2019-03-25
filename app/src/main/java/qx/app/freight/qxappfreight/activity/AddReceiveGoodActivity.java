@@ -82,7 +82,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
-        starter.putExtra("waybillCode", waybillCode);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);
@@ -130,6 +129,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean = new MyAgentListBean();
         waybillId = getIntent().getStringExtra("waybillId");
         mScooterCode = getIntent().getStringExtra("mScooterCode");
+        waybillCode = getIntent().getStringExtra("waybillCode");
         mDeclareItemBeans = (List<TransportListBean.DeclareItemBean>) getIntent().getSerializableExtra("transportListBeans");
         //品名  coldStorage  deptCode
         mSpProductList = new ArrayList<>();

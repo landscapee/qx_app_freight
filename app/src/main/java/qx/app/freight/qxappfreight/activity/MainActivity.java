@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beidouapp.imlibapi.activity.ImLibSpecialHomeFragment;
-import com.beidouapp.imlibapi.common.ImLibConstants;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,10 +28,6 @@ import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
-import qx.app.freight.qxappfreight.reciver.LoginCrashReciver;
-import qx.app.freight.qxappfreight.reciver.MessageReciver;
-import qx.app.freight.qxappfreight.reciver.ProtectReciver;
-import qx.app.freight.qxappfreight.reciver.ScheduleNoticeReciver;
 import qx.app.freight.qxappfreight.service.GPSService;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.IMUtils;

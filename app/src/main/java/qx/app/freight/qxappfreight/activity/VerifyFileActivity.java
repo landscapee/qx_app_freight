@@ -13,9 +13,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.zxing.common.StringUtils;
 import com.ouyben.empty.EmptyLayout;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.presenter.AirlineRequirePresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -79,14 +82,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查证明文件");
-        //获取航司资质   shipperCompanyId
-//        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
-//        MyAgentListBean myAgentListBean = new MyAgentListBean();
-//        myAgentListBean.setIata("");
-//        baseFilterEntity.setSize(10);
-//        baseFilterEntity.setCurrent(1);
-//        baseFilterEntity.setFilter(myAgentListBean);
-
         initData();
         mPresenter = new AirlineRequirePresenter(this);
         ((AirlineRequirePresenter) mPresenter).forwardInfo(mShipperCompanyId);
@@ -109,6 +104,13 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             mMfrvData.setAdapter(mAdapter);
         } else
             ToastUtil.showToast(this, addtionInvoicesBean.getId());
+
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+                    List<String> array = new ArrayList<>();
+                    array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
+                    ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
+                }
+        );
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
@@ -130,7 +132,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 break;
             case R.id.refuse_tv:
                 ToastUtil.showToast(this, "不合格");
-                ToastUtil.showToast(this, "合格");
                 VerifyCargoActivity.startActivity(this,
                         mDeclareData.getWaybillId(),
                         mDeclareData.getId(),

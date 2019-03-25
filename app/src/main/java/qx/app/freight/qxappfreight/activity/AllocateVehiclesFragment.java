@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.ouyben.empty.EmptyLayout;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
@@ -98,6 +101,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     }
 
     private List<GetInfosByFlightIdBean> mList = new ArrayList<>();
+
     @Override
     public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
         list.clear();

@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -20,5 +22,8 @@ public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.Addt
         helper.setText(R.id.tv_name, item.getFileTypeName());
         //文件
         helper.setText(R.id.tv_accessory, item.getFileName());
+
+
+
     }
 }

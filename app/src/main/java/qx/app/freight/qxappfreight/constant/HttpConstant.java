@@ -11,6 +11,7 @@ public class HttpConstant {
     public static final String TEST = "http://173.100.1.75:9008";
     //websocket 地址
     public static final String WEBSOCKETURL = "ws://173.100.1.78:7004/socketServer?";
+    public static final String IMAGEURL = "http://173.100.1.74/";
 //    public static final String TEST = "http://173.101.2.8:80";
 //    public static final String TEST = "http://192.168.1.17:9008";
 
