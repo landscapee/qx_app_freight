@@ -1,59 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="#EFF2F3"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    android:background="#EFF2F3"
+    android:orientation="vertical">
 
     <qx.app.freight.qxappfreight.widget.CustomToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    
+
     <RelativeLayout
-        android:background="@color/white"
-        android:padding="@dimen/dp_10"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="95dp">
+        android:layout_height="95dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/shape_mind_gray"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
         <ImageView
             android:id="@+id/user_image"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/default_img"
             android:layout_width="@dimen/dp_60"
-            android:layout_height="@dimen/dp_60" />
+            android:layout_height="@dimen/dp_60"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/default_img" />
+
         <LinearLayout
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_toEndOf="@+id/user_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/user_image"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="黑曼巴_布莱恩特"
                 android:textColor="#ff333333"
                 android:textSize="16sp"
-                />
+                tools:text="黑曼巴_布莱恩特" />
+
             <TextView
                 android:id="@+id/user_role"
-                android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="司机"
+                android:layout_marginTop="5dp"
                 android:textColor="#ff888888"
                 android:textSize="12sp"
-                />
+                tools:text="司机" />
 
         </LinearLayout>
+
+
     </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="7dp"
+        android:background="@drawable/shape_mind_gray">
+
+        <LinearLayout
+            android:id="@+id/ll_mind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_mind_ms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/ic_message_notify" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/ic_red_point" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ll_mind"
+            android:text="系统消息"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="33dp"
+            android:text="2" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="17dp"
+            android:background="@mipmap/mind_info"/>
+
+
+    </RelativeLayout>
+
     <View
-        android:layout_weight="1"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/btn_login_out"
         android:layout_width="match_parent"
@@ -63,7 +129,7 @@
         android:layout_marginBottom="35dp"
         android:background="@drawable/selector_white_20"
         android:text="退出登录"
-        android:textSize="16sp"
-        android:textColor="@color/black_3"/>
+        android:textColor="@color/black_3"
+        android:textSize="16sp" />
 
 </LinearLayout>
