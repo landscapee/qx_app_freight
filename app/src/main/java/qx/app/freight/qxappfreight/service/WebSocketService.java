@@ -26,6 +26,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -83,7 +84,7 @@ public class WebSocketService extends Service {
                 });
         compositeDisposable.add(dispLifecycle);
 
-        //订阅  小猪啊地址
+        //订阅  小猪登录地址
         Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,7 +99,7 @@ public class WebSocketService extends Service {
 
         compositeDisposable.add(dispTopic);
 
-        //订阅   张硕地址
+        //订阅   张硕地址运输
         Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,15 +107,21 @@ public class WebSocketService extends Service {
                     Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
                     WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                     sendReshEventBus(mWebSocketBean);
-                    //N是新增, D是删除
-//                    if ("N".equals(mWebSocketBean.getFlag())) {
-//                    } else if ("D".equals(mWebSocketBean.getFlag())) {
-//                    }
-                }, throwable -> {
-                    Log.e(TAG, "张硕订阅失败", throwable);
-                });
+                }, throwable -> Log.e(TAG, "张硕订阅失败", throwable));
 
         compositeDisposable.add(dispTopic1);
+
+        //周弦  消息中心地址
+        Disposable dispTopic2 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "周弦订阅成功 " + topicMessage.getPayload());
+                    WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
+                    sendMessageEventBus(mWebSocketMessBean);
+                }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
+
+        compositeDisposable.add(dispTopic2);
         mStompClient.connect(headers);
     }
 
@@ -130,6 +137,11 @@ public class WebSocketService extends Service {
 
     //用于代办刷新
     public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+
+    //消息推送
+    public static void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
 

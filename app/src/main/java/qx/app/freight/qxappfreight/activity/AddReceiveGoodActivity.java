@@ -71,13 +71,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private GeneralSpinnerAdapter mSpProductAdapter;
     private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
     private MyAgentListBean mMyAgentListBean;
-    private String waybillId,waybillCode;
+    private String waybillId, waybillCode;
     private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
 
-    public static void startActivity(Activity context, String waybillId, String mScooterCode,String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
@@ -204,7 +204,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         } else {
             mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
         }
-
         if (null == scooterInfo) {
             ToastUtil.showToast("id为空不能提交");
             return;

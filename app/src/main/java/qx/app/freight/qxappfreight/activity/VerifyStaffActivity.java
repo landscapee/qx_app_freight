@@ -147,7 +147,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,1,mFlightNumber,mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,0,mFlightNumber,mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -155,7 +155,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,0,mFlightNumber,mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath,mSpotFlag,1,mFlightNumber,mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
