@@ -12,12 +12,10 @@ public class MessageContract {
     public interface messageModel {
         void pageList(BaseFilterEntity baseEntity, IResultLisenter lisenter);
         void msMessageView(BaseFilterEntity baseEntity, IResultLisenter lisenter);
-        void noReadCount(PageListEntity pageListEntity, IResultLisenter lisenter);
     }
 
     public interface messageView extends IBaseView {
         void pageListResult(PageListBean pageListBean);
         void msMessageViewResult(MsMessageViewBean msMessageViewBean);
-        void noReadCountResult(String result);
     }
 }

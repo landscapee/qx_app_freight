@@ -50,21 +50,5 @@ public class MessagePresenter extends BasePresenter {
         });
     }
 
-    public void noReadCount(PageListEntity model) {
-        mRequestView.showNetDialog();
-        ((MessageModel) mRequestModel).noReadCount(model, new IResultLisenter<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ((MessageContract.messageView) mRequestView).noReadCountResult(result);
-                mRequestView.dissMiss();
-            }
-
-            @Override
-            public void onFail(String error) {
-                mRequestView.toastView(error);
-                mRequestView.dissMiss();
-            }
-        });
-    }
 
 }

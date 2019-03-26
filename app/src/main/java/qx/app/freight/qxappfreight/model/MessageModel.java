@@ -33,14 +33,4 @@ public class MessageModel extends BaseModel implements MessageContract.messageMo
         mDisposableList.add(subscription);
     }
 
-    @Override
-    public void noReadCount(PageListEntity pageListEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().noReadCount(pageListEntity)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lisenter::onSuccess, throwable -> {
-                    lisenter.onFail(throwable.getMessage());
-                });
-        mDisposableList.add(subscription);
-    }
 }
