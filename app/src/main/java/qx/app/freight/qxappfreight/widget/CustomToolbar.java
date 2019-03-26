@@ -9,9 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.httpUtils.DisplayUtil;
+import qx.app.freight.qxappfreight.utils.DisplayUtil;
 
 /**
  * 顶部通用的状态栏

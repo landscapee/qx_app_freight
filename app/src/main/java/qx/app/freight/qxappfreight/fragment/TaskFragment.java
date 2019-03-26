@@ -160,9 +160,12 @@ public class TaskFragment extends BaseFragment {
             }
 
         }
+        if(list_Title.size() > 0)
+            nowRoleCode = list_Title.get(0);
+        else
+            ToastUtil.showToast("该用户没有被分配角色");
 
 
-        nowRoleCode = list_Title.get(0);
         if (fragmentList.size() == 1)
             mTabLayout.setVisibility(View.GONE);
         else

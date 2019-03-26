@@ -40,11 +40,6 @@ public class WebSocketService extends Service {
     private long nowdate;
     public static final String TAG = "websocket";
     private CompositeDisposable compositeDisposable;
-    //张硕地址
-//    private String uri = "ws://192.168.1.129:8080/taskAssignCenter?userId=uefaa7789c18845c2921b717a41d2da3a";
-    //小猪地址
-//    private String uri = "ws://192.168.0.171:7004/socketServer?userId=pengrui&type=1&role=admin";
-//    private String uri = "ws://173.100.1.75:9008/socketServer?userId=ud8eecd98a3ea4e7aaa2f24ab2808680e&type=MT&role=collection";
     private Gson mGson = new Gson();
 
 
@@ -201,9 +196,10 @@ public class WebSocketService extends Service {
 
     //停止连接
     public static void stopServer(Context context) {
-        mStompClient.disconnect();
-        mStompClient = null;
-
+        if (mStompClient != null){
+            mStompClient.disconnect();
+            mStompClient = null;
+        }
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
     }

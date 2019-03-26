@@ -47,14 +47,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-//        toolbar.setLeftIconView(View.GONE, R.mipmap.icon_back, v -> showDialog());
-//        toolbar.setLeftTextView(View.VISIBLE, Color.RED, "左边文字", v -> Toast.makeText(LoginActivity.this, "点击了左边的文字", Toast.LENGTH_LONG).show());
         toolbar.setMainTitle(Color.WHITE, "登录");
-//        toolbar.setRightIconView(View.VISIBLE, R.mipmap.icon_query, v -> Toast.makeText(LoginActivity.this, "右边图标", Toast.LENGTH_LONG).show());
-//        toolbar.setRightTextView(View.VISIBLE, Color.GREEN, "右边文字", v -> Toast.makeText(LoginActivity.this, "点击了右边的文字", Toast.LENGTH_LONG).show());
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("fuzhongyuan");
+        mEtUserName.setText("");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();

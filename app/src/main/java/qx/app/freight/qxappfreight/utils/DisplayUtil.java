@@ -1,4 +1,4 @@
-package qx.app.freight.qxappfreight.utils.httpUtils;
+package qx.app.freight.qxappfreight.utils;
 
 import android.app.Activity;
 import android.content.Context;

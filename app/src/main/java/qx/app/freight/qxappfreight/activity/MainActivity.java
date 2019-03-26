@@ -163,11 +163,7 @@ public class MainActivity extends BaseActivity {
 //
 //    }
     private void switchFragment(int index, Fragment fragment) {
-//        if (index == 2){
-////            if (mIMFragment != null)
-////                mIMFragment.is
-//            mIMFragment = new ImLibSpecialHomeFragment();
-//        }
+
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mTaskFragment)
@@ -224,10 +220,10 @@ public class MainActivity extends BaseActivity {
                 switchFragment(1, mTestFragment);
                 break;
             case R.id.ll_search:
-                switchFragment(2, mIMFragment);
+                switchFragment(2, mTaskPutCargoFragment);
                 break;
             case R.id.ll_message:
-                switchFragment(3, mTaskPutCargoFragment);
+                switchFragment(3, mIMFragment);
                 break;
             case R.id.ll_mine:
                 switchFragment(4, mMineFragment);
@@ -271,7 +267,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRecBroad(String broadString) {
-        ToastUtil.showToast(this, broadString);
+//        ToastUtil.showToast(this, broadString);
     }
 
     @Override
