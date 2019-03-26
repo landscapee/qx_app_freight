@@ -1,6 +1,9 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,6 +23,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTodoListBean, BaseViewHolder> {
 
     private PullGoodsInfoAdapter.OnDeleteClickLister mDeleteClickListener;
+    private PullGoodsInfoAdapter.OnTextWatcher onTextWatcher;
 
     public PullGoodsInfoAdapter(List<TransportTodoListBean> data) {
         super(data);
@@ -56,6 +60,44 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
                 }
             });
         }
+        EditText etBillNumber = helper.getView(R.id.et_pull_number);
+        EditText etBillWeight = helper.getView(R.id.et_pull_weight);
+        etBillNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (onTextWatcher != null) {
+                    onTextWatcher.onTextChanged(helper.getAdapterPosition(), etBillNumber, null);
+                }
+            }
+        });
+        etBillWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (onTextWatcher != null) {
+                    onTextWatcher.onTextChanged(helper.getAdapterPosition(), null, etBillWeight);
+                }
+            }
+        });
     }
 
     public void setOnDeleteClickListener(PullGoodsInfoAdapter.OnDeleteClickLister listener) {
@@ -66,4 +108,11 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         void onDeleteClick(View view, int position);
     }
 
+    public interface OnTextWatcher {
+        void onTextChanged(int index, EditText etNumber, EditText etWeight);
+    }
+
+    public void setOnTextWatcher(OnTextWatcher onTextWatcher) {
+        this.onTextWatcher = onTextWatcher;
+    }
 }

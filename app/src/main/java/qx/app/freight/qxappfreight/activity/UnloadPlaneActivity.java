@@ -115,26 +115,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mTvTargetPlace.setText(mInfo[4]);
         mTvSeat.setText(mInfo[5]);
         long takeOff = Long.valueOf(mInfo[8]);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
-        String hourMinuteStart = sdf.format(new Date(takeOff)).substring(3);
-        String dayStart = hourMinuteStart.substring(0, 2);
-        String startTime;
-        if (Integer.valueOf(dayStart) < 10) {
-            startTime = hourMinuteStart + "(" + dayStart.substring(1) + ")";
-        } else {
-            startTime = hourMinuteStart + "(" + dayStart + ")";
-        }
-        mTvStartTime.setText(startTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm(dd)", Locale.CHINESE);
+        mTvStartTime.setText(sdf.format(new Date(takeOff)));
         long arrive = Long.valueOf(mInfo[9]);
-        String hourMinuteArrive = sdf.format(new Date(arrive)).substring(3);
-        String dayArrive = hourMinuteArrive.substring(0, 2);
-        String arriveTime;
-        if (Integer.valueOf(dayArrive) < 10) {
-            arriveTime = hourMinuteArrive + "(" + dayArrive.substring(1) + ")";
-        } else {
-            arriveTime = hourMinuteArrive + "(" + dayArrive + ")";
-        }
-        mTvArriveTime.setText(arriveTime);
+        mTvArriveTime.setText(sdf.format(new Date(arrive)));
         String scanGoods = "请扫描添加  <font color='#0000ff'>货物</font>  板车";
         mTvScanGoods.setText(Html.fromHtml(scanGoods));
         String scanPac = "请扫描添加  <font color='#0000ff'>行李</font>  板车";

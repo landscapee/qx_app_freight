@@ -121,7 +121,7 @@ public class GetFlightCargoResBean {
             private String repPlaceNum;
             private int updateStatus;
             private String waybillId;
-            private String wayBillCode;
+            private String waybillCode;
             private String scooterCode;
             private String id;
             private long createDate;

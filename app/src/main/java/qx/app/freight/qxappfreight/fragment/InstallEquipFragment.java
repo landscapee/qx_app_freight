@@ -89,7 +89,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void loadData() {
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-//        entity.setWorkerId("5573650c346c487282f1a37cfeeb29e2");
+//        entity.setWorkerId("3628f73591914a48ab5613d6c7b7ce64");
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
@@ -117,6 +117,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+        if (loadAndUnloadTodoBean.size()==0)return;
         List<Boolean> checkedList = new ArrayList<>();
         //未分页
         mList.clear();
@@ -124,16 +125,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 //            mList.clear();
             mMfrvData.finishRefresh();
         } else {
-            mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
+        mCurrentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setShowDetail(false);
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
-            entity.setTaskTpye(bean.getTaskType());
+            entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机
             SimpleDateFormat sdf2 = new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
             String time = sdf2.format(new Date(bean.getScheduleTime()));
             String hourMinute = time.substring(3);

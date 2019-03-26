@@ -43,26 +43,28 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                 SlideLeftExecuteView slideView = helper.getView(R.id.slev_do_task);
                 slideView.setCanTouch(true);
                 slideView.setLockListener(() -> {
-                    item.setItemType(MultiStepEntity.TYPE_STEP_OVER);
-                    int pos = helper.getAdapterPosition();
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
-                    if (pos!=4){
+                    int pos = helper.getAdapterPosition();
+                    if (pos != 3) {
+                        item.setItemType(MultiStepEntity.TYPE_STEP_OVER);
+                    }
+                    if (pos != 4 && pos != 3) {
                         mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
                     }
-                    if (onSlideListener!=null){
+                    if (onSlideListener != null) {
                         onSlideListener.onSlide(pos);
                     }
                     if (pos == 3) {
-                        mList.get(pos).setStepDoneDate(sdf.format(new Date())+"-");
+                        mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
                         Intent intent;
-                        if (item.getLoadUnloadType()==1){
+                        if (item.getLoadUnloadType() == 1) {
                             intent = new Intent(mContext, LoadPlaneActivity.class);
-                        }else {
+                        } else {
                             intent = new Intent(mContext, UnloadPlaneActivity.class);
                         }
                         intent.putExtra("plane_info", mList.get(pos).getPlaneInfo());
                         mContext.startActivity(intent);
-                    }else {
+                    } else {
                         mList.get(pos).setStepDoneDate(sdf.format(new Date()));
                     }
                 });
@@ -72,7 +74,8 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                 break;
         }
     }
-    public interface OnSlideListener{
+
+    public interface OnSlideListener {
         void onSlide(int pos);
     }
 

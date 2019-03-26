@@ -10,12 +10,20 @@ import lombok.Data;
 public class LocalBillBean implements Parcelable {
     private String waybillId;
     private String wayBillCode;
+    private int maxNumber;
+    private double maxWeight;
+    private int billItemNumber;
+    private double billItemWeight;
     public LocalBillBean(){
         super();
     }
     private LocalBillBean(Parcel in) {
         waybillId = in.readString();
         wayBillCode = in.readString();
+        maxNumber=in.readInt();
+        maxWeight=in.readDouble();
+        billItemNumber=in.readInt();
+        billItemWeight=in.readDouble();
     }
 
     public static final Creator<LocalBillBean> CREATOR = new Creator<LocalBillBean>() {
@@ -39,5 +47,9 @@ public class LocalBillBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(waybillId);
         dest.writeString(wayBillCode);
+        dest.writeInt(maxNumber);
+        dest.writeDouble(maxWeight);
+        dest.writeInt(billItemNumber);
+        dest.writeDouble(billItemWeight);
     }
 }

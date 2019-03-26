@@ -117,6 +117,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_10"
                     android:textColor="#f00"
+                    android:inputType="number"
                     android:background="@drawable/shape_rect_gray_line"/>
                 <Space
                     android:layout_width="@dimen/dp_40"
@@ -133,6 +134,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="#f00"
+                    android:inputType="number|numberDecimal"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_10"
                     android:background="@drawable/shape_rect_gray_line"/>

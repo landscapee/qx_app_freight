@@ -116,6 +116,9 @@ public class TransportTodoListBean implements MultiItemEntity {
         private String billNumber;
         //是板车下拉还是运单下拉type值
         private int infoType;
+        private int maxBillNumber;
+        private double maxBillWeight;
+        private String billCode;
 
         @Override
         public int getItemType() {
