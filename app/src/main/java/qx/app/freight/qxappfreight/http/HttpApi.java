@@ -16,6 +16,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
+import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
@@ -40,7 +41,9 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -300,4 +303,21 @@ public interface HttpApi {
     //舱单理货列表提交
     @POST("service-product-cargotallying/inwaybill/submit")
     Observable<BaseEntity<Object>> inPortTallyCommit(@Body InPortTallyCommitEntity model);
+
+
+    /***********************消息中心*****************************/
+
+    //查看系统消息接口
+    @POST("service-base-message/msMessage/pageList")
+    Observable<BaseEntity<PageListBean>> pageList(@Body BaseFilterEntity model);
+
+    //消息查看
+    @POST("service-base-message/msMessage/view")
+    Observable<BaseEntity<MsMessageViewBean>> msMessageView(@Body BaseFilterEntity model);
+
+    //未读系统消息
+    @POST("service-base-message/msMessage/noReadCount")
+    Observable<BaseEntity<Object>> noReadCount(@Body PageListEntity model);
+
+
 }

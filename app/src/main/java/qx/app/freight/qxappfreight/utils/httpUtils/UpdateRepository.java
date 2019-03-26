@@ -18,6 +18,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
+import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
@@ -42,7 +43,9 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -440,7 +443,7 @@ public class UpdateRepository extends BaseRepository {
 
     /****
      * 行李区行李数据提交
-     * @param model
+     * @param string
      * @return
      */
     public Observable<String> baggageAreaSub(String string) {
@@ -565,6 +568,34 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> inPortTallyCommit(InPortTallyCommitEntity model) {
         return nothingtransform(getService().inPortTallyCommit(model));
+    }
+
+
+    /*****
+     * 查看系统消息接口
+     * @param model
+     * @return
+     */
+    public Observable<PageListBean> pageList(BaseFilterEntity model) {
+        return transform(getService().pageList(model));
+    }
+
+    /****
+     * 消息查看
+     * @param model
+     * @return
+     */
+    public Observable<MsMessageViewBean> msMessageView(BaseFilterEntity model) {
+        return transform(getService().msMessageView(model));
+    }
+
+    /****
+     * 未读系统消息
+     * @param model
+     * @return
+     */
+    public Observable<String> noReadCount(PageListEntity model) {
+        return nothingtransform(getService().noReadCount(model));
     }
 
 

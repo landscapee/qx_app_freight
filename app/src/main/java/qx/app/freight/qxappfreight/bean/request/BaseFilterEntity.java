@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.request;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -38,5 +40,10 @@ public class BaseFilterEntity<T> {
 
     //代办查询增加字段
     private String roleCode;
+    //消息中心
+    private List<String> desc;
+    private String messageId;
+//    private String userId;  需要添加
+
 
 }
