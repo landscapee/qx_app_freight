@@ -20,16 +20,18 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/rb_yesterday"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/selector_blue_7"
+                android:background="@drawable/selector_blue_left_7"
                 android:button="@null"
                 android:gravity="center"
                 android:text="昨天"
                 android:textColor="@color/white" />
 
             <RadioButton
+                android:id="@+id/rb_today"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -39,10 +41,11 @@
                 android:textColor="@color/white" />
 
             <RadioButton
+                android:id="@+id/rb_tomrro"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/shape_dynamic_t_blue"
+                android:background="@drawable/selector_blue_right_7"
                 android:button="@null"
                 android:gravity="center"
                 android:text="明天"

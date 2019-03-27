@@ -3,13 +3,14 @@ package qx.app.freight.qxappfreight.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,9 +19,16 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 
 public class DynamicFragment extends BaseFragment {
     @BindView(R.id.tb_title)
-    TabLayout mTbTitle;
+    RadioGroup mRgTitle;
     @BindView(R.id.fl_content)
     FrameLayout mFlContent;
+    @BindView(R.id.rb_yesterday)
+    RadioButton mRbyesterday;
+    @BindView(R.id.rb_today)
+    RadioButton mToday;
+    @BindView(R.id.rb_tomrro)
+    RadioButton mTomrro;
+
 
     private YesterdayFragment mYFragment;
     private TodayFragment mTFragment;
@@ -44,39 +52,22 @@ public class DynamicFragment extends BaseFragment {
     }
 
     public void initView() {
-        mTbTitle.addTab(mTbTitle.newTab().setText("昨天"));
-        mTbTitle.addTab(mTbTitle.newTab().setText("今天"),true);
-        mTbTitle.addTab(mTbTitle.newTab().setText("明天"));
 
-
-        mTbTitle.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-//                int position = tab.getPosition();
-                switch (tab.getPosition()) {
-                    case 0:
-                        nowFragment = mYFragment; //昨天
-                        break;
-                    case 1:
-                        nowFragment = mTFragment; //今天
-                        break;
-                    case 2:
-                        nowFragment = mToFragment; //明天
-                        break;
-                }
-                showFragment(nowFragment);
+        mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.rb_yesterday:
+                    nowFragment = mYFragment;  //昨天
+                    break;
+                case R.id.rb_today:
+                    nowFragment = mTFragment; //今天
+                    break;
+                case R.id.rb_tomrro:
+                    nowFragment = mToFragment; //明天
+                    break;
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            showFragment(nowFragment);
         });
+
     }
 
     public void showFragment(Fragment fragment) {
