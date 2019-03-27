@@ -43,6 +43,8 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
@@ -238,6 +240,7 @@ public interface HttpApi {
     //结束卸机
     @POST("service-product-transport/tp-main-info/flightUnloadInstall")
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
+
     //拉货上报
     @POST("service-product-transport/tp-main-info/saveLoadPullIn")
     Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
@@ -318,6 +321,17 @@ public interface HttpApi {
     //未读系统消息
     @POST("service-base-message/msMessage/noReadCount")
     Observable<BaseEntity<Object>> noReadCount(@Body PageListEntity model);
+
+    /***********************通知公告*****************************/
+
+
+    //通知公告查看
+    @POST("service-base-message/bazaar-announcement-notice/findUserNoticeByPage")
+    Observable<BaseEntity<NoticeBean>> findUserNoticeByPage(@Body BaseFilterEntity model);
+
+    //查看记录
+    @POST("service-base-message/bazaar-announcement-notice/view")
+    Observable<BaseEntity<NoticeViewBean>> NoticeView(@Body BaseFilterEntity model);
 
 
 }

@@ -11,14 +11,44 @@
         android:background="@color/blue_2e8"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TabLayout
+        <RadioGroup
             android:id="@+id/tb_title"
             android:layout_width="200dp"
             android:layout_height="33dp"
             android:layout_centerInParent="true"
-            app:tabTextColor="@color/white"
             android:background="@drawable/shape_dynamic_blue"
-            ></android.support.design.widget.TabLayout>
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_blue_7"
+                android:button="@null"
+                android:gravity="center"
+                android:text="昨天"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="今天"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/shape_dynamic_t_blue"
+                android:button="@null"
+                android:gravity="center"
+                android:text="明天"
+                android:textColor="@color/white" />
+
+        </RadioGroup>
 
 
         <ImageView
@@ -34,10 +64,7 @@
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-    </FrameLayout>
-
+        android:layout_height="match_parent"></FrameLayout>
 
 
 </LinearLayout>

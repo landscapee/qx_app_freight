@@ -49,7 +49,6 @@ public class DynamicFragment extends BaseFragment {
         mTbTitle.addTab(mTbTitle.newTab().setText("明天"));
 
 
-
         mTbTitle.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

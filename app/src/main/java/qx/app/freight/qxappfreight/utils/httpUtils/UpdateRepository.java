@@ -45,6 +45,8 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
@@ -596,6 +598,24 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> noReadCount(PageListEntity model) {
         return nothingtransform(getService().noReadCount(model));
+    }
+
+    /****
+     * 通知公告查看
+     * @param model
+     * @return
+     */
+    public Observable<NoticeBean> findUserNoticeByPage(BaseFilterEntity model) {
+        return transform(getService().findUserNoticeByPage(model));
+    }
+
+    /****
+     * 查看记录
+     * @param model
+     * @return
+     */
+    public Observable<NoticeViewBean> NoticeView(BaseFilterEntity model) {
+        return transform(getService().NoticeView(model));
     }
 
 
