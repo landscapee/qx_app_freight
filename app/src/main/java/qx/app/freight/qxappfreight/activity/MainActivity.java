@@ -24,15 +24,13 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
-import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.service.GPSService;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.IMUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 主页面
@@ -64,7 +62,7 @@ public class MainActivity extends BaseActivity {
 
 
     private TaskFragment mTaskFragment;
-    private TestFragment mTestFragment;
+    private DynamicFragment mDynamicFragment;
     private ImLibSpecialHomeFragment mIMFragment;
     private TaskPutCargoFragment mTaskPutCargoFragment;
     private MineFragment mMineFragment;
@@ -135,7 +133,7 @@ public class MainActivity extends BaseActivity {
 //        switchFragment(mViewPager.getCurrentItem());
 
         mTaskFragment = new TaskFragment();
-        mTestFragment = new TestFragment();
+        mDynamicFragment = new DynamicFragment();
         mIMFragment = new ImLibSpecialHomeFragment();
         mTaskPutCargoFragment = new TaskPutCargoFragment();
         mMineFragment = new MineFragment();
@@ -143,7 +141,7 @@ public class MainActivity extends BaseActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, mTaskFragment)
-                .add(R.id.content, mTestFragment)
+                .add(R.id.content, mDynamicFragment)
                 .add(R.id.content, mIMFragment)
                 .add(R.id.content, mTaskPutCargoFragment)
                 .add(R.id.content, mMineFragment)
@@ -167,7 +165,7 @@ public class MainActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mTaskFragment)
-                .hide(mTestFragment)
+                .hide(mDynamicFragment)
                 .hide(mIMFragment)
                 .hide(mTaskPutCargoFragment)
                 .hide(mMineFragment);
@@ -217,7 +215,7 @@ public class MainActivity extends BaseActivity {
                 switchFragment(0, mTaskFragment);
                 break;
             case R.id.ll_flight:
-                switchFragment(1, mTestFragment);
+                switchFragment(1, mDynamicFragment);
                 break;
             case R.id.ll_search:
                 switchFragment(2, mTaskPutCargoFragment);

@@ -23,6 +23,9 @@ import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
+/**
+ * 我的页面
+ */
 public class MineFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
