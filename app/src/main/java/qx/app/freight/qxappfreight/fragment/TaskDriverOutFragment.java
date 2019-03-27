@@ -75,7 +75,6 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         mMfrvData.setOnRetryLisenter(this);
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
-
         initData();
     }
 

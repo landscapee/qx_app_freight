@@ -6,9 +6,9 @@
         <size android:height="1dp" />
         <stroke
             android:width="@dimen/dp_1"
-            android:color="@color/color_receive"
-            android:dashWidth="@dimen/dp_10"
-            android:dashGap="@dimen/dp_5" />
+            android:color="#FF979797"
+            android:dashWidth="5dp"
+            android:dashGap="3dp" />
     </shape>
 
 
