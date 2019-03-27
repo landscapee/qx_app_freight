@@ -43,7 +43,8 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.MessageActivity"></activity>
+        <activity android:name=".activity.MessageDetailActivity"></activity>
+        <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.FlightMainActivity" />
         <activity android:name=".activity.ExceptionFilingActivity" />
         <activity android:name=".activity.ModifyInportInfoActivity" />

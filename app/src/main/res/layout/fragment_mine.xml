@@ -61,6 +61,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_message"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="7dp"

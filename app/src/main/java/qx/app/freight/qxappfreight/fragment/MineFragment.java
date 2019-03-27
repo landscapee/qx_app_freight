@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -37,6 +39,8 @@ public class MineFragment extends BaseFragment {
     TextView userRole;
     @BindView(R.id.btn_login_out)
     Button btnLoginOut;
+    @BindView(R.id.rl_message)
+    RelativeLayout rlMessage;
 
     @Nullable
     @Override
@@ -58,13 +62,16 @@ public class MineFragment extends BaseFragment {
         userRole.setText(UserInfoSingle.getInstance().getUsername());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
                 break;
             case R.id.btn_login_out:
                 loginOut();
+                break;
+            case R.id.rl_message:
+                startActivity(new Intent(getContext(), MessageActivity.class));
                 break;
         }
     }
@@ -73,8 +80,8 @@ public class MineFragment extends BaseFragment {
         UserInfoSingle.setUserNil();
         ActManager.getAppManager().finishAllActivity();
         WebSocketService.stopServer(getContext());
-        Intent intent = new Intent(getContext(),LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
     }

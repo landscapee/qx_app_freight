@@ -180,7 +180,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(waybillId);
         baseFilterEntity.setSize(10);
-        baseFilterEntity.setCurrent(1);
+        baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
         ((AgentTransportationListPresent) mPresenter).agentTransportationList(baseFilterEntity);
     }
@@ -212,7 +212,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void onRefresh() {
         pageCurrent = 1;
-        mAdapter.notifyDataSetChanged();
+        upData();
     }
 
     @Override
