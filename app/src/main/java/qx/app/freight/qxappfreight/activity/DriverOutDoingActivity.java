@@ -76,7 +76,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private List<String> flightNumList = new ArrayList<>();
 
     private int tpStatus = 1; // 0 运输中 1 运输结束
-        private List <OutFieldTaskBean> mAcceptTerminalTodoBean;
+    private List <OutFieldTaskBean> mAcceptTerminalTodoBean;
 
     private int tpNum = 0; //这个人最多拉的板
 
@@ -241,7 +241,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 break;
             case R.id.tv_error_report:
                 flightNumList.clear();
-                for (FlightOfScooterBean item: list) {
+                for (OutFieldTaskBean item: mAcceptTerminalTodoBean) {
                     if (!flightNumList.contains(item.getFlightNo())){
                         flightNumList.add(item.getFlightNo());
                     }
