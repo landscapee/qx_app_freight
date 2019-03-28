@@ -45,7 +45,6 @@ import qx.app.freight.qxappfreight.dialog.ChooseGoodsBillDialog;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
-import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -162,7 +161,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 ToastUtil.showToast("请扫描添加板车数据！");
             } else {
                 boolean infoFull = true;
-                if (mPullBoardList.size()!=0) {
+                if (mPullBoardList.size() != 0) {
                     for (TransportTodoListBean bean : mPullBoardList) {
                         if (bean.getTpCargoNumber() == 0 && bean.getTpCargoWeight() == 0.0) {//板车信息中有一条件数并且重量都为0，则不能提交
                             infoFull = false;
@@ -170,9 +169,9 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         }
                     }
                 }
-                if (mPullBoardList.size()!=0) {
+                if (mPullBoardList.size() != 0) {
                     for (TransportTodoListBean bean : mPullBoardList) {
-                        if (bean.getTpCargoNumber() == 0&&bean.getTpCargoWeight() == 0.0) {//运单信息中有一条件数并且重量都为0，则不能提交
+                        if (bean.getTpCargoNumber() == 0 && bean.getTpCargoWeight() == 0.0) {//运单信息中有一条件数并且重量都为0，则不能提交
                             infoFull = false;
                             break;
                         }
@@ -229,11 +228,13 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         } else {
                             mPullBillList.get(index).setTpCargoNumber(number);//输入的分装件数持久化到数据中去
                         }
+                        int usedNumber = 0;
                         for (TransportTodoListBean bean1 : mPullBillList) {
                             if (bean1.getBillCode().equals(billCode)) {
-                                billBean.setBillItemNumber(billBean.getBillItemNumber() - bean1.getTpCargoNumber());
+                                usedNumber += bean1.getTpCargoNumber();
                             }
                         }
+                        billBean.setBillItemNumber(billBean.getMaxNumber()-usedNumber);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etNumber.getText().toString())) {
@@ -262,11 +263,13 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         } else {
                             mPullBillList.get(index).setTpCargoWeight(weight);//输入的分装质量持久化到数据中去
                         }
+                        double usedNumber = 0;
                         for (TransportTodoListBean bean1 : mPullBillList) {
                             if (bean1.getBillCode().equals(billCode)) {
-                                billBean.setBillItemWeight(billBean.getBillItemWeight() - bean1.getTpCargoWeight());
+                                usedNumber += bean1.getTpCargoWeight();
                             }
                         }
+                        billBean.setBillItemWeight(billBean.getMaxWeight()-usedNumber);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etWeight.getText().toString())) {
@@ -391,7 +394,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         TransportTodoListBean bean = new TransportTodoListBean();
         bean.setTpScooterId(entity.getId());
         bean.setTpScooterCode(entity.getScooterCode());
-        bean.setTpScooterType(entity.getScooterType()+"");
+        bean.setTpScooterType(entity.getScooterType() + "");
         bean.setTpFlightNumber(mInfoList[0]);
         bean.setTpFlightLocate(mInfoList[5]);
         bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
