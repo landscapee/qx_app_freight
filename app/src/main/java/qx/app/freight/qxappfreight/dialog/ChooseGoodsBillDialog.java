@@ -20,20 +20,24 @@ import android.widget.TextView;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class ChooseGoodsBillDialog extends DialogFragment {
     private Context context;
-    private List<String> billTexts;
+    private List<LocalBillBean> billList;
+    private String boardText;
     private OnBillSelectListener onBillSelectListener;
 
-    public void setData(Context context, List<String> billTexts) {
+    public void setData(Context context,String boardText, List<LocalBillBean> billList) {
         this.context = context;
-        this.billTexts=billTexts;
-        this.billTexts.add(0,"请选择需要下拉的运单号");
+        this.boardText=boardText;
+        this.billList=billList;
+//        this.billTexts.add(0,"请选择需要下拉的运单号");
     }
 
     @NonNull
@@ -55,11 +59,15 @@ public class ChooseGoodsBillDialog extends DialogFragment {
             dismiss();
         });
         TextView tvBoard=dialog.findViewById(R.id.tv_board_number);
-        tvBoard.setText("板车:板车名字");
+        tvBoard.setText("板车:"+boardText);
         Spinner spinner=dialog.findViewById(R.id.sp_chose_bill);
-        String[] array = billTexts.toArray(new String[billTexts.size()]);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,R.layout.item_spinner_general, array);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        List<String> billTexts=new ArrayList<>();
+        for (LocalBillBean billBean:billList){
+            billTexts.add(billBean.getWayBillCode());
+        }
+        String[] array = billTexts.toArray(new String[billList.size()]);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_dropdown_item, array);
+        spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_general);
         spinner.setAdapter(spinnerAdapter);
         final int[] pos = {0};
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -75,14 +83,10 @@ public class ChooseGoodsBillDialog extends DialogFragment {
         });
         TextView tvConfirm=dialog.findViewById(R.id.tv_confirm);
         tvConfirm.setOnClickListener(v->{
-            if (pos[0] !=0) {
                 if (onBillSelectListener != null) {
                     onBillSelectListener.onBillSelected(pos[0]);
                 }
                 dismiss();
-            }else {
-                ToastUtil.showToast("请选择需要下拉的运单号再提交");
-            }
         });
         return dialog;
     }

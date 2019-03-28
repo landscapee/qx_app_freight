@@ -56,6 +56,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvEndInstall;
     private List<UnloadPlaneVersionEntity> mList = new ArrayList<>();
     private List<LocalBillBean> mBillList = new ArrayList<>();
+    private String mFregihtSpace;//舱位名称
 
     @Override
     public int getLayoutId() {
@@ -84,6 +85,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvPullGoodsReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
             intent.putExtra("plane_info", flightInfo);
+            intent.putExtra("fregiht_space", mFregihtSpace);
             intent.putParcelableArrayListExtra("bill_list", (ArrayList<? extends Parcelable>) mBillList);
             LoadPlaneActivity.this.startActivity(intent);
         });
@@ -132,6 +134,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             billBean.setWaybillId(id);
             billBean.setMaxNumber(number);
             billBean.setMaxWeight(weight);
+            billBean.setBillItemNumber(number);
+            billBean.setBillItemWeight(weight);
             result.add(billBean);
         }
         return result;
@@ -142,6 +146,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (getFlightCargoResBeanList==null||getFlightCargoResBeanList.size()==0)return;
         List<LocalBillBean> list3 = new ArrayList<>();
         for (GetFlightCargoResBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
+            mFregihtSpace=bean.getSuggestRepository();
             for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
                 LocalBillBean billBean = new LocalBillBean();
                 billBean.setWayBillCode(groupCode.getWaybillCode());

@@ -166,10 +166,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             times.add(String.valueOf(bean.getOpenDoorTime()));
             times.add(bean.getBeginLoadUnloadTime() + ":" + bean.getLoadUnloadTime());
             times.add(String.valueOf(bean.getCloseDoorTime()));
-            //FlightNumber                  AirCraftNo                  StartPlace              MiddlePlace                 EndPlace
+                                    //FlightNumber   0               AirCraftNo   1               StartPlace   2           MiddlePlace     3            EndPlace    4
             String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
-                            //机位                     scheduleTime                         FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10               Id 11
-                    + "*" + entity.getSeat() + "*" + entity.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
+                            //机位     5              6， scheduleTime                         7，FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10      Id   11
+                    + "*" + entity.getSeat() + "*" + bean.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
             int posNow = 0;
             boolean hasChecked = false;
             for (int i = 0; i < times.size(); i++) {
