@@ -29,4 +29,21 @@ public class NoReadCountPresenter extends BasePresenter {
             }
         });
     }
+
+    public void noReadNoticeCount(String userId) {
+        mRequestView.showNetDialog();
+        ((NoReadCountModel) mRequestModel).noReadNoticeCount(userId, new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((NoReadCountContract.noReadCountView) mRequestView).noReadNoticeCountResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
 }

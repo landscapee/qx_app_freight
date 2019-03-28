@@ -5,7 +5,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.exception.DefaultException;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
@@ -45,10 +44,10 @@ public abstract class BaseRepository {
                 .map(baseEntity -> {
                     if (null != baseEntity && "200".equals(baseEntity.getStatus())) {
                         return baseEntity.getMessage();
-                    }else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
+                    } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
                         ToastUtil.showToast(baseEntity.getMessage());
                         throw new DefaultException("318");
-                    }else {
+                    } else {
                         throw new DefaultException("服务器数据异常");
                     }
                 });
@@ -70,11 +69,26 @@ public abstract class BaseRepository {
                     } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
                         ToastUtil.showToast(baseEntity.getMessage());
                         throw new DefaultException("318");
-                    }  else {
+                    } else {
                         throw new DefaultException("服务器数据异常");
                     }
                 });
     }
 
+
+    protected static <T> Observable<T> flightTransform(Observable<BaseEntity<T>> observable) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap((Function<BaseEntity<T>, Observable<T>>) baseEntity -> {
+                    if (null != baseEntity && "1000".equals(baseEntity.getResponseCode())) {
+                        return Observable.just(baseEntity.getData());
+                    } else if (baseEntity == null) {
+                        throw new DefaultException("服务器数据异常");
+                    } else {
+                        throw new DefaultException(baseEntity.getMessage());
+                    }
+                });
+    }
 
 }

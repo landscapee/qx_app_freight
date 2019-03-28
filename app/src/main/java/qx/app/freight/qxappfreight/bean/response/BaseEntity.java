@@ -7,5 +7,6 @@ public class BaseEntity<T> {
     private String status;
     private String message;
     private String rowCount;
+    private String responseCode;
     private T data;
 }

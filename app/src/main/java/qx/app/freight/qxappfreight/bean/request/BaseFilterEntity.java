@@ -45,6 +45,8 @@ public class BaseFilterEntity<T> {
     private String messageId;
     private String noticeId;
 //    private String userId;  需要添加
+    //航班动态
+    private String day;
 
 
 }

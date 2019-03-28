@@ -28,17 +28,18 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="昨天"
-                android:textColor="@color/white" />
+                android:textColor="@drawable/selector_text_blue" />
 
             <RadioButton
                 android:id="@+id/rb_today"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/selector_blue_center"
                 android:button="@null"
                 android:gravity="center"
                 android:text="今天"
-                android:textColor="@color/white" />
+                android:textColor="@drawable/selector_text_blue" />
 
             <RadioButton
                 android:id="@+id/rb_tomrro"
@@ -49,7 +50,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="明天"
-                android:textColor="@color/white" />
+                android:textColor="@drawable/selector_text_blue" />
 
         </RadioGroup>
 

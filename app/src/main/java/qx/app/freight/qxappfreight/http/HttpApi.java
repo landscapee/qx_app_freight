@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
+import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
@@ -333,5 +334,13 @@ public interface HttpApi {
     @POST("service-base-message/bazaar-announcement-notice/view")
     Observable<BaseEntity<NoticeViewBean>> NoticeView(@Body BaseFilterEntity model);
 
+    //通知公告未读信息
+    @GET("service-base-message/bazaar-announcement-notice/noReadCount/{userId}")
+    Observable<BaseEntity<Object>> noReadNoticeCount(@Path("userId") String userId);
+
+    /***********************航班动态*****************************/
+
+    @POST("scheduling/getFlightList")
+    Observable<BaseEntity<FlightBean>> flightdynamic(@Body BaseFilterEntity model);
 
 }

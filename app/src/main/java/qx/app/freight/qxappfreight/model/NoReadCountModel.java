@@ -21,4 +21,16 @@ public class NoReadCountModel extends BaseModel implements NoReadCountContract.n
 
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void noReadNoticeCount(String userId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().noReadNoticeCount(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+
+        mDisposableList.add(subscription);
+    }
 }

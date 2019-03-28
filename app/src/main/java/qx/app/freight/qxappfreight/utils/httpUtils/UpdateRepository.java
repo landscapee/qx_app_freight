@@ -1,14 +1,12 @@
 package qx.app.freight.qxappfreight.utils.httpUtils;
 
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.InportTallyBean;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
@@ -31,15 +29,13 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
-import qx.app.freight.qxappfreight.bean.response.BaseEntity;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
+import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
-import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -73,6 +69,7 @@ public class UpdateRepository extends BaseRepository {
     public HttpApi getService() {
         return mUpdateApis;
     }
+
 
     public static UpdateRepository getInstance() {
         if (instance == null) {
@@ -616,6 +613,25 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<NoticeViewBean> NoticeView(BaseFilterEntity model) {
         return transform(getService().NoticeView(model));
+    }
+
+    /***
+     * 通知公告未读信息
+     * @param userId
+     * @return
+     */
+    public Observable<String> noReadNoticeCount(String userId) {
+        return nothingtransform(getService().noReadNoticeCount(userId));
+    }
+
+
+    /*****
+     * 航班动态
+     */
+    public Observable<FlightBean> flightdynamic(BaseFilterEntity model) {
+        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
+        mUpdateApis = factory.getApiService(HttpApi.class);
+        return flightTransform(mUpdateApis.flightdynamic(model));
     }
 
 

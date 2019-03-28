@@ -122,6 +122,9 @@
             android:name=".activity.FFMActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.DynamicDetailsAcitvity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.LoadPlaneActivity"
             android:screenOrientation="portrait" />
         <activity
