@@ -41,9 +41,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.MessageDetailActivity"></activity>
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.NoticeActivity"></activity>
+        <activity android:name=".activity.NoticeDetailActivity" />
         <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.FlightMainActivity" />
         <activity android:name=".activity.ExceptionFilingActivity" />

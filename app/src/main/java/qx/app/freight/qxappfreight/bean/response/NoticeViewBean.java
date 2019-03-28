@@ -1,10 +1,12 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class NoticeViewBean {
+public class NoticeViewBean implements Serializable {
 
     /**
      * id : e9ca784ef149cfed9ad52da8bfdeced9

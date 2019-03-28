@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MessageActivity;
+import qx.app.freight.qxappfreight.activity.NoticeActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -62,7 +63,7 @@ public class MineFragment extends BaseFragment {
         userRole.setText(UserInfoSingle.getInstance().getUsername());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message,R.id.rl_notice})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
@@ -72,6 +73,9 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.rl_message:
                 startActivity(new Intent(getContext(), MessageActivity.class));
+                break;
+            case R.id.rl_notice:
+                startActivity(new Intent(getContext(), NoticeActivity.class));
                 break;
         }
     }

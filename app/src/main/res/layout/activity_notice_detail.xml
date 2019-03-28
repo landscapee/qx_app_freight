@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.NoticeDetailActivity">
+
+    <LinearLayout
+        android:padding="13dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="关于公示2017年度中央组织部代中央管理费、 省委组织部代省委管理党费收支…"
+            android:textColor="@color/black_3"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2018-12-22 12:27"
+                android:textColor="#ff888888"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2018-12-22 12:27"
+                android:textColor="#ff888888"
+                android:textSize="12sp"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+    <ScrollView
+        android:paddingRight="13dp"
+        android:paddingLeft="13dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="111111代中央管理党情况7部代省委管理党费收支情况的通知11111111 中共四川省委组织部关于公示2017年度中央组织部代中央管理党费及省委组织部代省委管理党费收支情况的通知 二、公示范围：集 中共四川省委组织部关于公示2017年度中央组织部代中央管理党费及省委组织部代省委管理党费收支情况的通知 二、公示范围：集111111111111111111111111111111一、公示时间： 2018年11月14日至11月22日（7个工作日） 中共四川省委组织部关于公示2017年度中央组织部代中央管理党费及省委组织部代省委管理党费收支情况的通知 二、公示范围：集团公司各级党组织、全体党员 三、公示方式：集团办公网 四、要求： 请各二级党组织及时向基层党组织和党员传达《通知》精神，认真听取大家的意见建议，并及时将收集到的意见建议反馈集团公司党委组织部，联系电话85205026。 党员个人如有意见，可以向集团公司党委组织部反映，联系电话85205026，也可以直接联系省国资委党委组织部，联系电话87598975。"
+                android:textColor="#ff333333"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:id="@+id/tv_creat_person"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                tools:text="集团公司党委组织部"
+                android:textColor="#ff333333"
+                android:textSize="11sp"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

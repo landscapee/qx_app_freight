@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginLeft="@dimen/dp_10"
+    android:layout_marginRight="@dimen/dp_10"
+    android:background="@drawable/shape_rect_gray"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_red_point"
+            android:gravity="center"
+            android:layout_width="17dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:src="@mipmap/ic_red_point"
+                android:layout_width="5dp"
+                android:layout_height="5dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingEnd="13dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="关于公示2017年度中央组织部代中央管理费、 省委组织部代省委管理党费收支…"
+                android:textColor="@color/black_3"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2018-12-22 12:27"
+                    android:textColor="#ff888888"
+                    android:textSize="12sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2018-12-22 12:27"
+                    android:textColor="#ff888888"
+                    android:textSize="12sp"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/btn_delete"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:background="@color/red"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/delete_white"
+            android:id="@+id/iv_receive"
+            />
+
+        <TextView
+            android:layout_below="@+id/iv_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="刪除"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</LinearLayout>

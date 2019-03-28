@@ -1,52 +1,49 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.ouyben.empty.EmptyLayout;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.MessageAdapter;
+import qx.app.freight.qxappfreight.adapter.NoticeAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
-import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
-import qx.app.freight.qxappfreight.contract.MessageContract;
+import qx.app.freight.qxappfreight.contract.FindUserNoticeByPageContract;
+import qx.app.freight.qxappfreight.presenter.FindUserNoticeByPagePresenter;
 import qx.app.freight.qxappfreight.presenter.MessagePresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
-/**
- * 消息列表页面
- * Created by swd
- */
-public class MessageActivity extends BaseActivity implements MessageContract.messageView ,MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
-
-    @BindView(R.id.mfrv_message)
-    MultiFunctionSlideRecylerView mfrvMessage;
+public class NoticeActivity extends BaseActivity implements FindUserNoticeByPageContract.findUserNoticeByPageView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+    @BindView(R.id.mfrv_notice)
+    MultiFunctionSlideRecylerView mfrvNotice;
 
     private CustomToolbar toolbar;
-    private MessageAdapter mAdapter;
-    private List<PageListBean.RecordsBean> list;
+    private NoticeAdapter mAdapter;
+    private List<NoticeBean.RecordsBean> list;
     private int pageCurrent =1;
     private int nowPosition;
-
     @Override
     public int getLayoutId() {
-        return R.layout.activity_message;
+        return R.layout.activity_notice;
     }
 
     @Override
@@ -68,47 +65,46 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
     }
 
     private void initView() {
-        mPresenter = new MessagePresenter(this);
+        mPresenter = new FindUserNoticeByPagePresenter(this);
         list = new ArrayList<>();
-        mAdapter = new MessageAdapter(list);
-        mfrvMessage.setLayoutManager(new LinearLayoutManager(this));
-        mfrvMessage.setRefreshListener(this);
-        mfrvMessage.setOnRetryLisenter(this);
+        mAdapter = new NoticeAdapter(list);
+        mfrvNotice.setLayoutManager(new LinearLayoutManager(this));
+        mfrvNotice.setRefreshListener(this);
+        mfrvNotice.setOnRetryLisenter(this);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (list.get(position).getReadingStatus()==0){
                 readMessage(position);
                 nowPosition = position;
-            }
+
 
         });
         mAdapter.setOnDeleteClickListener((view, position) -> {
             if (list.size() != 0) {
-                mfrvMessage.closeMenu();
+                mfrvNotice.closeMenu();
 //                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        mfrvMessage.setAdapter(mAdapter);
-    }
-    //
-    private void requestData(){
-        BaseFilterEntity bean = new BaseFilterEntity();
-        PageListEntity listBean =new PageListEntity();
-        List<String> requestList = new ArrayList();
-        requestList.add("create_date");
-        listBean.setUserId(UserInfoSingle.getInstance().getUserId());
-        listBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        bean.setSize(20);
-        bean.setCurrent(pageCurrent);
-        bean.setDesc(requestList);
-        bean.setFilter(listBean);
-        ((MessagePresenter)mPresenter).pageList(bean);
+        mfrvNotice.setAdapter(mAdapter);
     }
 
-    private void readMessage(int position){
+    private void requestData(){
         BaseFilterEntity bean = new BaseFilterEntity();
-        bean.setMessageId(list.get(position).getId());
+        NoticeViewBean viewBean = new NoticeViewBean();
+        viewBean.setCreateUser(UserInfoSingle.getInstance().getUserId());
+        bean.setSize(20);
+        bean.setCurrent(pageCurrent);
+        bean.setFilter(viewBean);
+        ((FindUserNoticeByPagePresenter)mPresenter).findUserNoticeByPage(bean);
+    }
+
+    /**查看详情
+     *
+     * @param position
+     */
+    private void readMessage(int position) {
+        BaseFilterEntity bean = new BaseFilterEntity();
         bean.setUserId(UserInfoSingle.getInstance().getUserId());
-        ((MessagePresenter)mPresenter).msMessageView(bean);
+        bean.setNoticeId(list.get(position).getId());
+        ((FindUserNoticeByPagePresenter)mPresenter).noticeView(bean);
     }
 
     @Override
@@ -132,43 +128,47 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
     }
 
     @Override
-    public void pageListResult(PageListBean pageListBean) {
-
+    public void noticeResult(NoticeBean result) {
         if (pageCurrent == 1) {
             list.clear();
-            mfrvMessage.finishRefresh();
+            mfrvNotice.finishRefresh();
         } else {
-            mfrvMessage.finishLoadMore();
+            mfrvNotice.finishLoadMore();
         }
-        if (pageListBean.getPages()>=pageCurrent){
+        if (result.getPages()>=pageCurrent){
             pageCurrent++;
         }else {
             ToastUtil.showToast("没有更多数据！");
             return;
         }
 
-        list.addAll(pageListBean.getRecords());
+        list.addAll(result.getRecords());
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void msMessageViewResult(MsMessageViewBean msMessageViewBean) {
-        list.get(nowPosition).setReadingStatus(1);
-        mAdapter.notifyItemChanged(nowPosition);
+    public void noticeViewResult(NoticeViewBean result) {
+        startActivity(new Intent(this,NoticeDetailActivity.class).putExtra("NoticeViewBean", result));
+        if (list.get(nowPosition).getReadingStatus()==0){
+            list.get(nowPosition).setReadingStatus(1);
+            mAdapter.notifyItemChanged(nowPosition);
+        }
     }
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(error);
+
     }
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+
     }
 
     @Override
     public void dissMiss() {
-        dismissProgessDialog();
+
     }
+
+
 }

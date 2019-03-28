@@ -43,6 +43,7 @@ public class BaseFilterEntity<T> {
     //消息中心
     private List<String> desc;
     private String messageId;
+    private String noticeId;
 //    private String userId;  需要添加
 
 
