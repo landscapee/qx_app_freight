@@ -16,6 +16,7 @@ import java.util.Locale;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.utils.MapValue;
 
 /**
  * 拉货上报信息列表适配器
@@ -36,7 +37,7 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         if (item.getInfoType() == Constants.TYPE_PULL_BILL) {
             helper.setText(R.id.tv_bill_number, item.getBillNumber());
         }
-        helper.setText(R.id.tv_board_number, item.getTpScooterId());
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue( item.getTpScooterType()+ ""));//板车类型
         View viewDelete = helper.getView(R.id.ll_delete);
         //件数 - 重量 - 体积
         helper.setText(R.id.tv_goods_info, String.format(mContext.getString(R.string.format_goods_info)
@@ -50,7 +51,7 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         // 时间
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm(dd)", Locale.CHINESE);
         helper.setText(R.id.tv_plan_time, sdf.format(new Date(item.getTpFlightTime())));
-        //仓位
+        //舱位
         helper.setText(R.id.tv_cangwei_info, item.getTpFregihtSpace());
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
@@ -61,7 +62,11 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
             });
         }
         EditText etBillNumber = helper.getView(R.id.et_pull_number);
+        etBillNumber.setText(item.getTpCargoNumber() == 0 ? "1" : String.valueOf(item.getTpCargoNumber()));
+        item.setTpCargoNumber(1);
         EditText etBillWeight = helper.getView(R.id.et_pull_weight);
+        etBillWeight.setText(item.getTpCargoWeight() == 0 ? "1" : String.valueOf(item.getTpCargoWeight()));
+        item.setTpCargoWeight(1);
         etBillNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,13 +75,12 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (onTextWatcher != null) {
-                    onTextWatcher.onTextChanged(helper.getAdapterPosition(), etBillNumber, null);
+                    onTextWatcher.onNumberTextChanged(helper.getAdapterPosition(), etBillNumber);
                 }
             }
         });
@@ -88,13 +92,12 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (onTextWatcher != null) {
-                    onTextWatcher.onTextChanged(helper.getAdapterPosition(), null, etBillWeight);
+                    onTextWatcher.onWeightTextChanged(helper.getAdapterPosition(), etBillWeight);
                 }
             }
         });
@@ -109,7 +112,9 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
     }
 
     public interface OnTextWatcher {
-        void onTextChanged(int index, EditText etNumber, EditText etWeight);
+        void onNumberTextChanged(int index, EditText etNumber);
+
+        void onWeightTextChanged(int index, EditText etWeight);
     }
 
     public void setOnTextWatcher(OnTextWatcher onTextWatcher) {

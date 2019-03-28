@@ -119,6 +119,7 @@ public class TransportTodoListBean implements MultiItemEntity {
         private int maxBillNumber;
         private double maxBillWeight;
         private String billCode;
+        private String waybillId;
 
         @Override
         public int getItemType() {

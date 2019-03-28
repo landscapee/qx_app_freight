@@ -12,8 +12,8 @@ public class LocalBillBean implements Parcelable {
     private String wayBillCode;
     private int maxNumber;
     private double maxWeight;
-    private int billItemNumber;
-    private double billItemWeight;
+    private int billItemNumber;//可分装的运单件数
+    private double billItemWeight;//可分装的运单重量
     public LocalBillBean(){
         super();
     }

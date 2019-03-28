@@ -7,8 +7,9 @@ public class HttpConstant {
     //张硕ip  http://myyx.nat123.cc:24010/
 //    public static final String TEST = "http://myyx.nat123.cc:24010";
 //    public static final String TEST = "http://192.168.1.17:9008";
-    public static final String TEST = "http://173.101.2.8:80";//测试环境
-//    public static final String TEST = "http://173.100.1.75:9008";
+//    public static final String TEST = "http://173.101.2.8:80";//测试环境
+    public static final String TEST = "http://173.100.1.75:9008";//开发环境
+//    public static final String TEST = "http://192.168.1.16:7001";//刘磊环境
     //websocket 地址
 //    public static final String WEBSOCKETURL = "ws://173.100.1.78:7004/socketServer?";
     public static final String WEBSOCKETURL = "ws://173.101.2.8:7004/socketServer?";//测试环境
