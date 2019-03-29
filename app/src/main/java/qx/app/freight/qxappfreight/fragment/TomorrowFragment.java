@@ -81,9 +81,13 @@ public class TomorrowFragment extends BaseFragment {
 
         //创建fragment
         pageAdapter = new MyPageAdapter(getFragmentManager());
-        for (int i = 0; i < 5; i++) {
-            mListFragment.add(DynamicInfoFragment.getInstance(mData.get(i)));
-        }
+
+        mListFragment.add(DynamicInfoFragment.getInstance("", "","tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "A","tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "D","tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("2", "","tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("1", "","tomorrow"));
+
         //viewpager根据数据创建多个tab
         viewPager.setOffscreenPageLimit(mData.size());
         viewPager.setAdapter(pageAdapter);
@@ -117,7 +121,7 @@ public class TomorrowFragment extends BaseFragment {
             simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
             simplePagerTitleView.setOnClickListener(v -> {
                 viewPager.setCurrentItem(index);
-                ToastUtil.showToast("明天"+index + "");
+                ToastUtil.showToast("明天" + index + "");
             });
 
             return simplePagerTitleView;

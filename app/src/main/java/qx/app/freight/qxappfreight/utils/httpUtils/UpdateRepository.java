@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
+import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
@@ -284,6 +285,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> fightScooterSubmit(FightScooterSubmitEntity model) {
         return nothingtransform(getService().fightScooterSubmit(model));
+    }
+
+    /***
+     * 新增板车
+     * @return
+     */
+    public Observable<AddScooterBean> addScooter() {
+        return transform(getService().addScooter());
     }
 
     /*****

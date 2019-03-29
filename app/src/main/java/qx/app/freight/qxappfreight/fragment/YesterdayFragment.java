@@ -82,9 +82,11 @@ public class YesterdayFragment extends BaseFragment {
 
         //创建fragment
         pageAdapter = new MyPageAdapter(getFragmentManager());
-        for (int i = 0; i < 5; i++) {
-            mListFragment.add(DynamicInfoFragment.getInstance(mData.get(i)));
-        }
+        mListFragment.add(DynamicInfoFragment.getInstance("", "","yesterday"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "A","yesterday"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "D","yesterday"));
+        mListFragment.add(DynamicInfoFragment.getInstance("2", "","yesterday"));
+        mListFragment.add(DynamicInfoFragment.getInstance("1", "","yesterday"));
         //viewpager根据数据创建多个tab
         viewPager.setOffscreenPageLimit(mData.size());
         viewPager.setAdapter(pageAdapter);

@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
+import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
@@ -170,6 +171,10 @@ public interface HttpApi {
     @POST("service-product-cargotallying/fightScooter/submit")
     Observable<BaseEntity<Object>> fightScooterSubmit(@Body FightScooterSubmitEntity model);
 
+    //新增板
+    @GET("service-product-cargotallying/fightScooter/addScooter")
+    Observable<BaseEntity<AddScooterBean>> addScooter();
+
     //数据获取(获取该航班的板车/板车的收运记录/无板收运记录)
     @POST("service-product-cargotallying/fightScooter/listByFightId")
     Observable<BaseEntity<GetScooterListInfoBean>> getScooterListInfo(@Body GetScooterListInfoEntity getScooterListInfoEntity);
@@ -215,6 +220,8 @@ public interface HttpApi {
     //扫描板车查询
     @GET("service-product-transport/tp-main-info/scooterWithUser/{user}")
     Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user);
+
+
 
 
     //查询出待运输

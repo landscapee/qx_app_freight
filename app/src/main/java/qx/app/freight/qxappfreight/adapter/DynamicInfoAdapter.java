@@ -24,16 +24,15 @@ public class DynamicInfoAdapter extends BaseQuickAdapter<FlightBean.FlightsBean,
     TextView tvActualTime;
     @BindView(R.id.tv_state)
     TextView tvState;
-    private int mTag;
+    private String mTag;
 
-    public DynamicInfoAdapter(List<FlightBean.FlightsBean> list, int tag) {
+    public DynamicInfoAdapter(List<FlightBean.FlightsBean> list, String tag) {
         super(R.layout.item_dynamic_info, list);
         mTag = tag;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, FlightBean.FlightsBean item) {
-
         //航线
         helper.setText(R.id.tv_flight_route, item.getRoutes());
         //计划起飞时间 scheduleTime
@@ -50,7 +49,6 @@ public class DynamicInfoAdapter extends BaseQuickAdapter<FlightBean.FlightsBean,
         }
         //状态
         helper.setText(R.id.tv_state, item.getFlightStatus());
-
 
     }
 }
