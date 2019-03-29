@@ -33,7 +33,9 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
@@ -348,7 +350,17 @@ public interface HttpApi {
 
     /***********************航班动态*****************************/
 
+    //列表
     @POST("scheduling/getFlightList")
     Observable<BaseEntity<FlightBean>> flightdynamic(@Body BaseFilterEntity model);
+
+    //详情
+    @POST("scheduling/getFlightInfoByFlightIdForCargo")
+    Observable<BaseEntity<FlightInfoBean>> flightInfo(@Body BaseFilterEntity model);
+
+    //里程碑
+    @POST("app/milepost/getMilepostDataForCargo")
+    Observable<BaseEntity<FlightServiceBean>> getMilepostData(@Body BaseFilterEntity model);
+
 
 }

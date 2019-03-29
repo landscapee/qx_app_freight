@@ -88,10 +88,7 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new DynamicInfoAdapter(mList, type);
         rlDynamic.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            DynamicDetailsAcitvity.startActivity(getActivity(),mList.get(position).getFlightId());
-            ToastUtil.showToast(position+"");
-        });
+        mAdapter.setOnItemClickListener((adapter, view, position) -> DynamicDetailsAcitvity.startActivity(getActivity(),mList.get(position).getFlightId(),mList.get(position).getFlightNo()));
     }
 
     @Override

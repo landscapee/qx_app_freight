@@ -31,7 +31,9 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
@@ -641,6 +643,28 @@ public class UpdateRepository extends BaseRepository {
         RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
         mUpdateApis = factory.getApiService(HttpApi.class);
         return flightTransform(mUpdateApis.flightdynamic(model));
+    }
+
+    /***
+     * 航班详情
+     * @param model
+     * @return
+     */
+    public Observable<FlightInfoBean> flightInfo(BaseFilterEntity model) {
+        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
+        mUpdateApis = factory.getApiService(HttpApi.class);
+        return flightTransform(mUpdateApis.flightInfo(model));
+    }
+
+    /***
+     * 航班详情
+     * @param model
+     * @return
+     */
+    public Observable<FlightServiceBean> getMilepostData(BaseFilterEntity model) {
+        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
+        mUpdateApis = factory.getApiService(HttpApi.class);
+        return flightTransform(mUpdateApis.getMilepostData(model));
     }
 
 

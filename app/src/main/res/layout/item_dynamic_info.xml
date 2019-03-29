@@ -14,7 +14,6 @@
             android:id="@+id/tv_flight_id"
             android:layout_width="65dp"
             android:layout_height="wrap_content"
-            android:text="MU9999"
             android:textSize="14sp" />
 
         <TextView
@@ -22,7 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="35dp"
-            android:text="成都-西宁"
             android:textColor="@color/item_right_text"
             android:textSize="14sp" />
 
@@ -35,7 +33,6 @@
             android:id="@+id/tv_plant_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15:30"
             android:textColor="@color/item_right_text"
             android:textSize="14sp" />
 
@@ -44,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="16:49"
             android:textColor="@color/item_right_text"
             android:textSize="14sp" />
 
@@ -53,7 +49,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="正常"
             android:textColor="@color/item_right_text"
             android:textSize="14sp" />
 

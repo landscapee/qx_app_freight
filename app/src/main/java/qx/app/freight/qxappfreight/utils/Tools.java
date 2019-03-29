@@ -246,5 +246,14 @@ public class Tools {
         }
         return false;
     }
+    /**
+     * TODO: 字符串为空返回 --
+     */
+    public static String returnTime(long s) {
+        if (s == 0)
+            return "- -";
+        else
+            return TimeUtils.date2Tasktime(s);
+    }
 
 }

@@ -24,12 +24,12 @@
                 android:background="@mipmap/ic_air_company" />
 
             <TextView
+                android:id="@+id/tv_airline_company"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="35dp"
                 android:layout_toRightOf="@+id/iv_jiwei"
-                android:text="中国东方航空公司"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
@@ -44,18 +44,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="20dp"
-                android:text="成都"
                 android:textColor="@color/white"
                 android:textSize="27sp" />
 
 
             <TextView
+                android:id="@+id/tv_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_originating"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="3dp"
-                android:text="14:25/14:26"
                 android:textColor="@color/white" />
 
             <ImageView
@@ -72,17 +71,16 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="40dp"
-                android:text="西宁"
                 android:textColor="@color/white"
                 android:textSize="27sp" />
 
             <TextView
+                android:id="@+id/tv_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_destination"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="30dp"
-                android:text="20:15/20:26"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
@@ -102,31 +100,30 @@
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/tv_seat_nub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_seat"
                 android:layout_marginLeft="41dp"
                 android:layout_marginTop="5dp"
-                android:text="164"
                 android:textColor="@color/white" />
 
 
             <TextView
-                android:id="@+id/iv_luggage"
+                android:id="@+id/tv_luggage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="28dp"
-                android:text="行李"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/tv_luggage_nub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_luggage"
+                android:layout_below="@+id/tv_luggage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:text="164"
                 android:textColor="@color/white" />
 
             <TextView
@@ -140,13 +137,13 @@
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/tv_runway_nub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_runway"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="42dp"
-                android:text="164"
                 android:textColor="@color/white" />
 
 
@@ -177,7 +174,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:text="19℃"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -204,7 +200,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:text="400m"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -231,7 +226,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:text="3m/s"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -258,7 +252,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:text="2级"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 

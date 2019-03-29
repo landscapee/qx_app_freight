@@ -45,6 +45,8 @@ public class DynamicInfoAdapter extends BaseQuickAdapter<FlightBean.FlightsBean,
             helper.setTextColor(R.id.tv_flight_id, Color.parseColor("#2E81FD"));
         } else if ("D".equals(item.getMovement())) {
             helper.setText(R.id.tv_actual_time, TimeUtils.date2Tasktime3(item.getAtd()));
+            //航班号
+            helper.setText(R.id.tv_flight_id, item.getFlightNo());
             helper.setTextColor(R.id.tv_flight_id, Color.parseColor("#1FC41E"));
         }
         //状态
