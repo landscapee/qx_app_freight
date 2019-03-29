@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="欢迎使用智慧货运系统"
                 android:textColor="#ff2e81fd"
-                android:textSize="22sp"/>
+                android:textSize="18sp"/>
 
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_60"
@@ -119,7 +120,7 @@
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_40"
                 android:layout_marginLeft="@dimen/dp_50"
                 android:layout_marginRight="@dimen/dp_50"
                 android:layout_marginTop="@dimen/dp_40"
