@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,11 +24,13 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
+import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.GPSService;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.IMUtils;
@@ -69,6 +72,7 @@ public class MainActivity extends BaseActivity {
     private Fragment nowFragment;
 
     private int taskAssignType = 0;
+    private MessageReciver mMessageReciver;//聊天消息广播接收器
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -87,6 +91,9 @@ public class MainActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         initServices();
         setToolbarShow(View.GONE);
+        mMessageReciver = new MessageReciver(this);
+        IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
+        registerReceiver(mMessageReciver, filter3);
         initFragment();
     }
 
@@ -271,5 +278,15 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         quitApp();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(mMessageReciver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

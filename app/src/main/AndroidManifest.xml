@@ -145,7 +145,12 @@
         <!-- 测试 -->
         <activity
             android:name=".activity.TestActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MsgDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />

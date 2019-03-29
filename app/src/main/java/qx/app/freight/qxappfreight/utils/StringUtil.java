@@ -170,5 +170,9 @@ public class StringUtil {
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
     }
-
+    public static boolean isContains(String str1, String str2) {
+        if (isEmpty(str1))
+            return false;
+        else return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
+    }
 }
