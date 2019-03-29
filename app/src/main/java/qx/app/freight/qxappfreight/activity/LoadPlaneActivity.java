@@ -171,6 +171,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     item.setTarget("");
                     item.setType(String.valueOf(model.getScooterType()));
                     item.setWeight(model.getReWeight());
+                    item.setGoodsPosition(model.getGoodsLocation());
                     list.add(item);
                 }
             }

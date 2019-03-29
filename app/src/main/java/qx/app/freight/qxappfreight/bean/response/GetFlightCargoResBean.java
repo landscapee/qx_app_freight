@@ -88,6 +88,7 @@ public class GetFlightCargoResBean {
         private double personUpdateValue;
         private long createDate;
         private String uldCode;
+        private String goodsLocation;
         private List<GroupScootersBean> groupScooters;
         @Data
         public static class GroupScootersBean {

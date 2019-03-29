@@ -9,14 +9,12 @@ import android.os.StrictMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -97,12 +95,12 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         //根据过来的参数判断
         info = getIntent().getStringExtra("plane_info");
         mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
-        if (TextUtils.isEmpty(info) && mFlightNumberList!=null){
+        if (TextUtils.isEmpty(info) && mFlightNumberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
 
             mFlightNumber = mFlightNumberList.get(0);
             mTvFlightInfo.setText(mFlightNumber);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,R.layout.item_spinner_general, mFlightNumberList);
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
             mSpinner.setAdapter(spinnerAdapter);
             mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -116,7 +114,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                 }
             });
 
-        }else{
+        } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
             mInfoList = info.split("\\*");
             mFlightNumber = mInfoList[0];

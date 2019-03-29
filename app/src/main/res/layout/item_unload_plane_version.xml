@@ -39,7 +39,6 @@
         android:id="@+id/cll_version_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:orientation="vertical">
 
         <LinearLayout
@@ -57,6 +56,21 @@
                 android:textColor="#e5e5e5" />
 
             <TextView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#e5e5e5" />
+
+            <TextView
+                android:id="@+id/tv_goods_pos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.2"
+                android:background="#7b8a9b"
+                android:gravity="center"
+                android:text="货位"
+                android:textColor="#e5e5e5" />
+            <TextView
+                android:id="@+id/tv_divider"
                 android:layout_width="1px"
                 android:layout_height="match_parent"
                 android:background="#e5e5e5" />
@@ -124,20 +138,6 @@
                 android:background="#7b8a9b"
                 android:gravity="center"
                 android:text="重量"
-                android:textColor="#e5e5e5" />
-
-            <TextView
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#e5e5e5" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.2"
-                android:background="#7b8a9b"
-                android:gravity="center"
-                android:text="备注"
                 android:textColor="#e5e5e5" />
 
             <TextView
