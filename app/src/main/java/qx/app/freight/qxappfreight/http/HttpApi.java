@@ -64,6 +64,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * app所有接口
@@ -342,8 +343,8 @@ public interface HttpApi {
     Observable<BaseEntity<NoticeViewBean>> NoticeView(@Body BaseFilterEntity model);
 
     //通知公告未读信息
-    @GET("service-base-message/bazaar-announcement-notice/noReadCount/{userId}")
-    Observable<BaseEntity<Object>> noReadNoticeCount(@Path("userId") String userId);
+    @GET("service-base-message/bazaar-announcement-notice/noReadCount")
+    Observable<BaseEntity<Object>> noReadNoticeCount(@Query("userId") String userId);
 
     /***********************航班动态*****************************/
 

@@ -74,6 +74,27 @@ public abstract class BaseRepository {
                     }
                 });
     }
+    /*******
+     * Data是个int，直接返回data
+     * @param observable
+     * @param <T>
+     * @return
+     */
+    protected static <T> Observable<Integer> intDatatransform(Observable<BaseEntity<Integer>> observable) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(baseEntity -> {
+                    if (null != baseEntity && "200".equals(baseEntity.getStatus())) {
+                        return baseEntity.getData();
+                    } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
+                        ToastUtil.showToast(baseEntity.getMessage());
+                        throw new DefaultException("318");
+                    } else {
+                        throw new DefaultException("服务器数据异常");
+                    }
+                });
+    }
 
 
     protected static <T> Observable<T> flightTransform(Observable<BaseEntity<T>> observable) {

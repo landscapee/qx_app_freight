@@ -59,116 +59,129 @@
 
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/rl_message"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+    <LinearLayout
+        android:background="@drawable/shape_mind_gray"
+        android:orientation="vertical"
         android:layout_margin="7dp"
-        android:background="@drawable/shape_mind_gray">
-
-        <LinearLayout
-            android:id="@+id/ll_mind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_mind_ms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/ic_message_notify" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/ic_red_point" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/ll_mind"
-            android:text="系统消息"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="33dp"
-            android:text="2" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="17dp"
-            android:background="@mipmap/mind_info"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_notice"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="7dp"
-        android:background="@drawable/shape_mind_gray">
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_notice"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-        <LinearLayout
-            android:id="@+id/ll_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_notice"
+            <LinearLayout
+                android:id="@+id/ll_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/ic_notice" />
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/ic_notice" />
+
+                <ImageView
+                    android:id="@+id/iv_notice_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/ic_red_point" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ll_notice"
+                android:text="通知公告"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_notice_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="33dp"
+                android:text="2" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/ic_red_point" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/ll_notice"
-            android:text="系统消息"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="33dp"
-            android:text="2" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="17dp"
-            android:background="@mipmap/mind_info"/>
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"
+                android:background="@mipmap/mind_info"/>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            style="@style/line_horizontal"
+            android:layout_marginLeft="40dp"
+            />
+        <RelativeLayout
+            android:id="@+id/rl_message"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+
+            android:background="@drawable/shape_mind_gray">
+
+            <LinearLayout
+                android:id="@+id/ll_mind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_mind_ms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/ic_message_notify" />
+
+                <ImageView
+                    android:id="@+id/iv_message_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/ic_red_point" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ll_mind"
+                android:text="消息提醒"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_message_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="33dp"
+                android:text="2" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"
+                android:background="@mipmap/mind_info"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <View
         android:layout_width="wrap_content"

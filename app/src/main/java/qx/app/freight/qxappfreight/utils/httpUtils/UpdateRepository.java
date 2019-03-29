@@ -603,7 +603,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
     public Observable<String> noReadCount(PageListEntity model) {
-        return nothingtransform(getService().noReadCount(model));
+        return nothingDatatransform(getService().noReadCount(model));
     }
 
     /****
@@ -630,7 +630,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
     public Observable<String> noReadNoticeCount(String userId) {
-        return nothingtransform(getService().noReadNoticeCount(userId));
+        return nothingDatatransform(getService().noReadNoticeCount(userId));
     }
 
 
