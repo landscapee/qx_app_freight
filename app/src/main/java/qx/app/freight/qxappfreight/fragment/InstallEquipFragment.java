@@ -10,11 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,10 +34,10 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadUnloadTpBean;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -94,10 +89,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(LoadUnloadTpBean result) {
+    public void onEventMainThread(CommonJson4List result) {
         if (result!=null) {
-            if (result.getTaskType()==1||result.getTaskType()==2){
-                List<LoadAndUnloadTodoBean> list = JSON.parseArray(result.getTaskData(),LoadAndUnloadTodoBean.class);
+                List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 if (list != null)
                     mListCache.addAll(list);
                 PushLoadUnloadDialog dialog=new PushLoadUnloadDialog(getContext(), list, success -> {
@@ -110,7 +104,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 });
                 dialog.show();
-            }
         }
     }
 

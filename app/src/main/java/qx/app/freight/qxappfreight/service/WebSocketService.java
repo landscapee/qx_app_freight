@@ -22,9 +22,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.LoadUnloadTpBean;
+import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
@@ -120,9 +122,27 @@ public class WebSocketService extends Service {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
-                    Log.d(TAG, "运输装卸机 订阅 " + topicMessage.getPayload());
-                    LoadUnloadTpBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), LoadUnloadTpBean.class);
-                    sendLoadUnLoadGroupBoard(mWebSocketBean);
+                    if (topicMessage.getPayload().contains("\"cancelFlag\":true")){//任务取消的推送
+                        if (topicMessage.getPayload().contains("\"taskType\":1")){//装卸机
+                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                            sendLoadUnLoadGroupBoard(data);
+                        }else if (topicMessage.getPayload().contains("\"taskType\":2")){//运输
+                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
+                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
+                            sendLoadUnLoadGroupBoard(data);
+                        }
+                    }else {
+                        if (topicMessage.getPayload().contains("\"taskType\":1")||topicMessage.getPayload().contains("\"taskType\":2")){//装卸机
+                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                            sendLoadUnLoadGroupBoard(data);
+                        }else if (topicMessage.getPayload().contains("\"taskType\":0")){//运输
+                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
+                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
+                            sendLoadUnLoadGroupBoard(data);
+                        }
+                    }
                 }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
         compositeDisposable.add(dispTopic3);
@@ -145,7 +165,7 @@ public class WebSocketService extends Service {
         EventBus.getDefault().post(bean);
     }
     //用于装卸机组板推送刷新弹窗
-    public static void sendLoadUnLoadGroupBoard(LoadUnloadTpBean bean) {
+    public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
         EventBus.getDefault().post(bean);
     }
 
