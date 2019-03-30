@@ -15,6 +15,7 @@ import qx.app.freight.qxappfreight.adapter.ReturnGoodAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.ItemBean;
+import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
@@ -60,6 +61,11 @@ public class ReturnGoodsActivity extends BaseActivity implements LoginContract.l
         } else {
             ToastUtil.showToast("数据错误");
         }
+    }
+
+    @Override
+    public void loginQxAiResult(LoginBean loginBean) {
+
     }
 
     @Override
