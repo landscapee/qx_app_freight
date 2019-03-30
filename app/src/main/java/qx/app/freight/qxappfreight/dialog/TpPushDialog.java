@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 
 /**
  * 外场运输待办推送
@@ -95,7 +96,7 @@ public class TpPushDialog extends Dialog {
 
         btnSure.setOnClickListener(v -> {
 
-//            mOnTpPushListener.onSureBtnCallBack(mAcceptTerminalTodoBean.getTaskId());
+            mOnTpPushListener.onSureBtnCallBack(mAcceptTerminalTodoBean.getTasks());
 
             dismiss();
 
@@ -111,13 +112,15 @@ public class TpPushDialog extends Dialog {
 //
 //                list.addAll(mlist);
 //            }
+            tvTpType.setText(MapValue.getProjectName(mAcceptTerminalTodoBean.getProjectName()));
+
             list.addAll(mAcceptTerminalTodoBean.getTasks());
         }
     }
 
     public interface OnTpPushListener{
 
-            void onSureBtnCallBack(String taskId);
+            void onSureBtnCallBack(List<OutFieldTaskBean> list);
 
     }
 }

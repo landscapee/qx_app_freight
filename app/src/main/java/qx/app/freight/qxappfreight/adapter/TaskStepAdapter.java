@@ -40,32 +40,45 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         helper.setText(R.id.tv_step_start, "开始");
         helper.setText(R.id.tv_step_name_end, "结束");
 
-        helper.setText(R.id.tv_step_time_accept, TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
-        helper.setText(R.id.tv_step_time_start,TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
-        helper.setText(R.id.tv_step_time_end,TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
-
 //        ImageView ivLeftGif = helper.getView(R.id.iv_left_gif);//开始滑动的GIF
 //        ImageView ivLeftGifE = helper.getView(R.id.iv_left_gif_e);// 结束滑动的GIF
 
+        RelativeLayout rlAccept = helper.getView(R.id.rl_back_accept);
         RelativeLayout rlStart = helper.getView(R.id.rl_back_start);
         RelativeLayout rlEnd = helper.getView(R.id.rl_back_end);
 
+        SlideLeftExecuteView mSlideLeftExecuteViewA = helper.getView(R.id.slide_left_accept);
         SlideLeftExecuteView mSlideLeftExecuteViewS = helper.getView(R.id.slide_left_start);
         SlideLeftExecuteView mSlideLeftExecuteViewE = helper.getView(R.id.slide_left_end);
 
 
+        //领受是否可以滑动
+        if(item.get(0).getAcceptTime() > 0){
+            rlAccept.setBackgroundResource(R.drawable.shape_rect_green_light);
+            helper.setText(R.id.tv_step_time_accept,TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
+            mSlideLeftExecuteViewA.setVisibility(View.GONE);
+        }
+        else {
+            rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
+            helper.setText(R.id.tv_step_time_accept,"");
+            mSlideLeftExecuteViewA.setVisibility(View.VISIBLE);
+        }
+        //开始是否可以滑动
         if(item.get(0).getTaskBeginTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_green_light);
             helper.setText(R.id.tv_step_time_start,TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
             mSlideLeftExecuteViewS.setVisibility(View.GONE);
+        } else if (item.get(0).getAcceptTime() > 0){
+            rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
+            helper.setText(R.id.tv_step_time_start,"");
+            mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
         }
         else {
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
             helper.setText(R.id.tv_step_time_start,"");
-            mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
-
+            mSlideLeftExecuteViewS.setVisibility(View.GONE);
         }
-
+        //结束是否可以滑动
         if(item.get(0).getTaskEndTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_green_light);
             helper.setText(R.id.tv_step_time_end,TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
@@ -114,7 +127,9 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
 //                return false;
 //            }
 //        });
-
+        mSlideLeftExecuteViewA.setLockListener(() -> {
+            listener.onSlideExecuteListener(2,helper.getAdapterPosition());
+        });
         mSlideLeftExecuteViewS.setLockListener(() -> {
             listener.onSlideExecuteListener(0,helper.getAdapterPosition());
         });
@@ -140,6 +155,7 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         });
 
     }
+
 
 
     public interface onSlideExecuteListener{

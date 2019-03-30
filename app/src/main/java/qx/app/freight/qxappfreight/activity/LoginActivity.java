@@ -135,7 +135,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             Tools.setLoginUserBean(loginBean);
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
                 if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
-                    loginBean.setUserId(loginBean.getLoginid());
+//                    loginBean.setUserId(loginBean.getLoginid());
                     loginIm(loginBean);
                 }
             }

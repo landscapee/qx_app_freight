@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:drawableLeft="@mipmap/new_mission"
-                android:text="新任务派达（3）"
+                android:text="新任务派达"
                 android:textColor="@color/white" />
             <Space
                 android:layout_width="0dp"

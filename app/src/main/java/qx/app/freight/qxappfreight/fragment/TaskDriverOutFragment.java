@@ -38,6 +38,7 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoMyBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadUnloadTpBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
 import qx.app.freight.qxappfreight.bean.response.StepBean;
@@ -45,9 +46,11 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AcceptTerminalTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.GsonUtil;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -59,6 +62,8 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 public class TaskDriverOutFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, AcceptTerminalTodoContract.acceptTerminalTodoView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
+
+    List<AcceptTerminalTodoBean> listCache;
 
     private List<AcceptTerminalTodoBean> list;
     private int slidePosition,slidePositionChild,step;
@@ -84,6 +89,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     }
 
     private void initData() {
+        listCache = new ArrayList <>();
         list = new ArrayList<>();
         adapter = new DriverOutTaskAdapter(list);
         mMfrvData.setAdapter(adapter);
@@ -94,13 +100,12 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             /**
              * 同时开启多个航班
              */
-            for (OutFieldTaskBean mOutFieldTaskBean: list.get(parentPosition).getUseTasks().get(position)){
-                slidePosition = parentPosition;
-                slidePositionChild = position;
-                this.step = step;
-                submitStep(mOutFieldTaskBean,step);
-            }
-
+                for (OutFieldTaskBean mOutFieldTaskBean: list.get(parentPosition).getUseTasks().get(position)){
+                    slidePosition = parentPosition;
+                    slidePositionChild = position;
+                    this.step = step;
+                    submitStep(mOutFieldTaskBean,step);
+                }
 
         });
         getData();
@@ -111,7 +116,6 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setCurrent(currentPage);
         entity.setSize(Constants.PAGE_SIZE);
-//        entity.setUserId("u6911330e59ce46c288181ed11a48ee23");
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
     }
@@ -127,11 +131,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
         entity.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
 
-        if (step == 0){
+        if (step == 0)
             entity.setOperationCode("CargoOutTransportStart");
-        }else {
+        else if(step == 1)
             entity.setOperationCode("CargoOutTransportEnd");
-        }
+        else
+            entity.setOperationCode("CargoOutTransportReceived");
+
         entity.setUserName(UserInfoSingle.getInstance().getUsername());
 
         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
@@ -168,6 +174,35 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             getData();
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoadUnloadTpBean result) {
+
+        List<AcceptTerminalTodoBean> list = JSON.parseArray(result.getTaskData(),AcceptTerminalTodoBean.class);
+        if (list != null)
+            listCache.addAll(list);
+        showTpNewTaskDialog();
+
+
+//        if (result.equals("TaskDriverOutFragment_refresh")) {
+//
+//            getData();
+//        }
+    }
+    //全屏dialog
+    private void showTpNewTaskDialog() {
+
+        if (listCache.size() > 0){
+            TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.custom_dialog, listCache.get(0), OutFieldTaskBeans -> {
+                for (OutFieldTaskBean mOutFieldTaskBean:OutFieldTaskBeans){
+                    submitStep(mOutFieldTaskBean,0);
+                }
+                showTpNewTaskDialog();
+            });
+            tpPushDialog.show();
+            listCache.remove(0);
+        }
+    }
+
 
     @Override
     public void acceptTerminalTodoResult(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {

@@ -41,7 +41,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
     @Override
     protected void convert(BaseViewHolder helper, AcceptTerminalTodoBean item) {
 
-        helper.setText(R.id.tv_task_id,"00"+helper.getAdapterPosition());
+        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
         helper.setText(R.id.tv_task_num,"任务单号:"+item.getTaskId());
         helper.setText(R.id.tv_task_type, MapValue.getProjectName(item.getProjectName()));
         helper.setText(R.id.tv_task_status,"#执行中#");
@@ -99,6 +99,9 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                        break;
+                    case 2:
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         break;
                 }
             }
