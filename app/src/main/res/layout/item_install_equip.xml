@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/shape_rect_green_light"
-            android:drawableStart="@mipmap/ic_flight_blue"
+            android:drawableStart="@mipmap/flight"
             android:drawablePadding="@dimen/dp_6"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/dp_10"

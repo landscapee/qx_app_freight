@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.widget.ImageView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -30,7 +32,11 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
 
             helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()));
             helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()));
-
+            ImageView ivFlag = helper.getView(R.id.iv_flag);
+            if ("D".equals(item.getFlights().getMovement()))
+                ivFlag.setImageResource(R.mipmap.li);
+            else if ("A".equals(item.getFlights().getMovement()))
+                ivFlag.setImageResource(R.mipmap.jin);
 
         }
 

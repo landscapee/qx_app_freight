@@ -13,8 +13,7 @@ public class AcceptTerminalTodoBean implements Serializable {
 
     private String taskNumber;
 
-    private String projectName;
-
+    private String projectName; //FollowMeCar 牵引车 ；CargoOutTransport 货运运输 ；CargoSiteClearing 货物清楚 ；LuggageTransport 行李运输；EquipmentGuarantee 设备保障
     private String userId;
 
     private List<OutFieldTaskBean> tasks;

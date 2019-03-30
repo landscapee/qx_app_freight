@@ -8,13 +8,16 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_not_data" />
+        android:src="@mipmap/ic_empty_image"
+        />
 
     <TextView
         android:id="@+id/tvEmptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="@string/no_data" />
+        android:text="@string/no_data"
+        android:textSize="16sp"
+        android:textColor="#FF97B0C9"/>
 </LinearLayout>

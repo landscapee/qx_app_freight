@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoMyBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
+import qx.app.freight.qxappfreight.bean.response.StepBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AcceptTerminalTodoContract;
@@ -57,6 +61,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     MultiFunctionRecylerView mMfrvData;
 
     private List<AcceptTerminalTodoBean> list;
+    private int slidePosition,slidePositionChild,step;
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
     @Nullable
@@ -90,7 +95,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
              * 同时开启多个航班
              */
             for (OutFieldTaskBean mOutFieldTaskBean: list.get(parentPosition).getUseTasks().get(position)){
-
+                slidePosition = parentPosition;
+                slidePositionChild = position;
+                this.step = step;
                 submitStep(mOutFieldTaskBean,step);
             }
 
@@ -263,6 +270,36 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     public void slideTaskResult(String result) {
 
         ToastUtil.showToast("任务执行成功");
+        getData();
+//        StepBean stepBean = JSON.parseObject(result,StepBean.class);
+//        upDateStepStatus(stepBean);
+
+
+    }
+
+    /**
+     * 更新步骤状态
+     * @param stepBean
+     */
+    private void upDateStepStatus(StepBean stepBean) {
+        for (OutFieldTaskBean taskBeans:list.get(slidePosition).getUseTasks().get(slidePositionChild)){
+
+            if (taskBeans.getFlightId().equals(stepBean.getData().getFlightId()+"")){
+                switch (step){
+                    case 0:
+                        taskBeans.setAcceptTime(stepBean.getData().getCreateTime());
+                        break;
+                    case 1:
+                        taskBeans.setTaskBeginTime(stepBean.getData().getCreateTime());
+                        break;
+                    case 2:
+                        taskBeans.setTaskEndTime(stepBean.getData().getCreateTime());
+                        break;
+                }
+            }
+
+        }
+        adapter.notifyDataSetChanged();
 
     }
 }

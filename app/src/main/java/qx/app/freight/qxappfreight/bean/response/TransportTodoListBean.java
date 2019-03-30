@@ -109,7 +109,7 @@ public class TransportTodoListBean implements MultiItemEntity {
         //业务id
         private String tpFlightBusId;
         //
-        private int tpFlightType;
+        private int tpFlightType; //航班类型,0 国内出港,1,国内进港 2国外出港 3国内进港
         //仓位
         private String tpFreightSpace;
         //运单号码

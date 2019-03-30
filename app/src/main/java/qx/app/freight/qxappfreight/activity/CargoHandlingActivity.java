@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
+import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
@@ -50,12 +51,14 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.AddScooterContract;
 import qx.app.freight.qxappfreight.contract.GetScooterListInfoContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.presenter.GetScooterListInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -492,6 +495,10 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     }
 
+    /**
+     * 新增板车
+     * @param handcarId
+     */
     private void addHandcar(String handcarId) {
 
         mPresenter = new ScooterInfoListPresenter(this);
@@ -694,12 +701,18 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 mFtRuntimeFlightScooter.setScooterId(mScooterInfoListBean.getId());
                 mFtRuntimeFlightScooter.setScooterCode(mScooterInfoListBean.getScooterCode());
                 mFtRuntimeFlightScooter.setScooterWeight(mScooterInfoListBean.getScooterWeight());
+                //忽悠姚日天 接口 后面改
+                mFtRuntimeFlightScooter.setId(Tools.generateUniqueKey());
+                mFtRuntimeFlightScooter.setUldId("");
+                mFtRuntimeFlightScooter.setUldType("");
+                mFtRuntimeFlightScooter.setUldCode("");
+                mFtRuntimeFlightScooter.setUldWeight(0);
 //                mFtRuntimeFlightScooter.setScooterType(mScooterInfoListBean.getScooterType());
                 mFtRuntimeFlightScooter.setDelFlag(mScooterInfoListBean.getDelFlag());
-                mFtRuntimeFlightScooter.setCreateDate(mScooterInfoListBean.getCreateDate());
-                mFtRuntimeFlightScooter.setCreateUser(mScooterInfoListBean.getCreateUser());
-                mFtRuntimeFlightScooter.setUpdateDate(mScooterInfoListBean.getUpdateDate());
-                mFtRuntimeFlightScooter.setUpdateUser(mScooterInfoListBean.getUpdateUser());
+//                mFtRuntimeFlightScooter.setCreateDate(mScooterInfoListBean.getCreateDate());
+//                mFtRuntimeFlightScooter.setCreateUser(mScooterInfoListBean.getCreateUser());
+//                mFtRuntimeFlightScooter.setUpdateDate(mScooterInfoListBean.getUpdateDate());
+//                mFtRuntimeFlightScooter.setUpdateUser(mScooterInfoListBean.getUpdateUser());
                 mFtRuntimeFlightScooter.setGroupScooters(new ArrayList <FtGroupScooter>());
                 mFtRuntimeFlightScooter.setWeight((double)0);
                 mFtRuntimeFlightScooter.setVolume((double)0);
@@ -751,5 +764,4 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         finish();
 
     }
-
 }

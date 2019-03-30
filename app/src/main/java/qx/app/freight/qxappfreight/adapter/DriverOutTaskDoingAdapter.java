@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -53,8 +54,13 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         helper.setChecked(R.id.cb_flight,item.isSelect());
 
         helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpStartLocate()));
-        helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpDestinationLocate()));
+        helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpDestinationLocate()) );
 
+        ImageView ivFlag = helper.getView(R.id.iv_flag);
+        if (item.getMTransportTodoListBeans().get(0).getTpFlightType() == 0||item.getMTransportTodoListBeans().get(0).getTpFlightType() == 2)
+            ivFlag.setImageResource(R.mipmap.li);
+        else
+            ivFlag.setImageResource(R.mipmap.jin);
         CheckBox checkBox = helper.getView(R.id.cb_flight);
         checkBox.setEnabled(isEnable);
 

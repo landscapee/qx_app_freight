@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.http;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -44,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
@@ -61,6 +63,8 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -75,6 +79,11 @@ public interface HttpApi {
     //登录接口
     @POST("/service-base-sysmanage/auth/login")
     Observable<BaseEntity<LoginResponseBean>> login(@Body LoginEntity model);
+
+    //登录一期智能调度 获取im使用 token
+    @POST("app/appLogin")
+    @FormUrlEncoded
+    Observable<BaseEntity<LoginBean>> loginQxAi(@FieldMap Map<String, String> map);
 
     /***********收验****************************/
     //获取货代公司资质

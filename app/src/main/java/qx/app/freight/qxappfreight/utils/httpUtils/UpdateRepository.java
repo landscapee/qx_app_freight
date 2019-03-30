@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.utils.httpUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MediaType;
@@ -41,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
@@ -62,17 +64,22 @@ import qx.app.freight.qxappfreight.http.HttpApi;
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
     private volatile static HttpApi mUpdateApis;
+    private volatile static HttpApi mUpdateApisQxAi;
 
     private UpdateRepository() {
         //基类解析
         RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.TEST);
         mUpdateApis = factory.getApiService(HttpApi.class);
+        RetrofitFactory factoryQxAi = RetrofitHelper.getRetrofit(HttpConstant.QXAITEST);
+        mUpdateApisQxAi = factoryQxAi.getApiService(HttpApi.class);
     }
 
     public HttpApi getService() {
         return mUpdateApis;
     }
-
+    public HttpApi getServiceQxAi() {
+        return mUpdateApisQxAi;
+    }
 
     public static UpdateRepository getInstance() {
         if (instance == null) {
@@ -92,6 +99,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<LoginResponseBean> login(LoginEntity loginEntity) {
         return transform(getService().login(loginEntity));
+    }
+    /****
+     * 登录智能调度一期
+     * @param
+     * @return
+     */
+    public Observable<LoginBean> loginQxAi(Map<String, String> map) {
+        return transform(getServiceQxAi().loginQxAi(map));
     }
 
     /*****

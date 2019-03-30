@@ -20,6 +20,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoMyBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
@@ -40,9 +41,9 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
     @Override
     protected void convert(BaseViewHolder helper, AcceptTerminalTodoBean item) {
 
-        helper.setText(R.id.tv_task_id,item.getTaskNumber());
+        helper.setText(R.id.tv_task_id,"00"+helper.getAdapterPosition());
         helper.setText(R.id.tv_task_num,"任务单号:"+item.getTaskId());
-        helper.setText(R.id.tv_task_type,item.getProjectName());
+        helper.setText(R.id.tv_task_type, MapValue.getProjectName(item.getProjectName()));
         helper.setText(R.id.tv_task_status,"#执行中#");
         //列表设置
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
@@ -60,12 +61,12 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         view.setOnClickListener(v -> {
 
             if (item.isExpand()) {
-                mRecyclerView.setVisibility(View.GONE);
+//                mRecyclerView.setVisibility(View.GONE);
                 collView.collapse();
                 item.setExpand(false);
                 imageExpand.setImageResource(R.mipmap.down);
             } else {
-                mRecyclerView.setVisibility(View.VISIBLE);
+//                mRecyclerView.setVisibility(View.VISIBLE);
                 collView.expand();
                 item.setExpand(true);
                 imageExpand.setImageResource(R.mipmap.up);
@@ -73,12 +74,12 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         });
 
         if (item.isExpand()){
-            mRecyclerView.setVisibility(View.VISIBLE);
+//            mRecyclerView.setVisibility(View.VISIBLE);
             collView.expand();
             imageExpand.setImageResource(R.mipmap.up);
         }
         else {
-            mRecyclerView.setVisibility(View.GONE);
+//            mRecyclerView.setVisibility(View.GONE);
             collView.collapse();
             imageExpand.setImageResource(R.mipmap.down);
 
@@ -97,7 +98,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         else
-                        DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
                 }
             }

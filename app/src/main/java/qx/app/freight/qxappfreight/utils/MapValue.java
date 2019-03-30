@@ -41,6 +41,25 @@ public class MapValue {
 
         return value;
     }
+
+    /**
+     * 获取运输任务类型
+     * @param code
+     * @return
+     */
+    public static String getProjectName(String code){
+        String projectName = "";
+        if ("CargoOutTransport".equals(code))
+            projectName = "货物运输";
+        else if ("CargoSiteClearing".equals(code))
+            projectName = "货物清场";
+        else if ("LuggageTransport".equals(code))
+            projectName = "行李运输";
+        else if ("EquipmentGuarantee".equals(code))
+            projectName = "设备保障";
+
+        return projectName;
+    }
     public static int getAreaType(String code){
         int areaType = 0;
         if ("temp_area".equals(code))

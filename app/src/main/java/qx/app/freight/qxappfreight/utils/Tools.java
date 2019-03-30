@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -256,4 +257,12 @@ public class Tools {
             return TimeUtils.date2Tasktime(s);
     }
 
+
+    /**
+     * 自动生成 板车业务id
+     * @return
+     */
+    public static String generateUniqueKey(){
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 }
