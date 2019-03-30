@@ -14,6 +14,7 @@ public class CommonJson4List<T> implements Serializable {
     private String workerId;
     private int taskType;
     private boolean cancelFlag;
+    private int taskId;
     private List<T> taskData;
     public  CommonJson4List<T> fromJson(String json, Class clazz) {
         Gson gson = new Gson();
