@@ -1,9 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_40"
-    android:orientation="horizontal"
-    >
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/tv_plane_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_rect_green_light"
+            android:drawableStart="@mipmap/flight"
+            android:drawablePadding="@dimen/dp_6"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:text="3U8375"
+            android:textColor="#00f" />
+
+        <TextView
+            android:id="@+id/tv_craft_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:gravity="center_vertical"
+            android:text="B2310" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@mipmap/ji"
+            android:drawablePadding="@dimen/dp_3"
+            android:gravity="center_vertical"
+            android:text="13:12(4)" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_start_place"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="PEK" />
+
+        <TextView
+            android:id="@+id/tv_middle_place"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@mipmap/airlane"
+            android:drawableEnd="@mipmap/airlane"
+            android:gravity="center_vertical"
+            android:text="CTU" />
+
+        <TextView
+            android:id="@+id/tv_end_place"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="MXP" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/divider_line_grey" />
 </LinearLayout>

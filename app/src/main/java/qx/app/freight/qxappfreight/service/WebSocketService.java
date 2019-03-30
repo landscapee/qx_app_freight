@@ -17,16 +17,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.LoadUnloadGroupBoardBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketBean;
+import qx.app.freight.qxappfreight.bean.response.LoadUnloadTpBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import ua.naiksoftware.stomp.Stomp;
@@ -125,7 +121,7 @@ public class WebSocketService extends Service {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(TAG, "运输装卸机 订阅 " + topicMessage.getPayload());
-                    LoadUnloadGroupBoardBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), LoadUnloadGroupBoardBean.class);
+                    LoadUnloadTpBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), LoadUnloadTpBean.class);
                     sendLoadUnLoadGroupBoard(mWebSocketBean);
                 }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
@@ -149,7 +145,7 @@ public class WebSocketService extends Service {
         EventBus.getDefault().post(bean);
     }
     //用于装卸机组板推送刷新弹窗
-    public static void sendLoadUnLoadGroupBoard(LoadUnloadGroupBoardBean bean) {
+    public static void sendLoadUnLoadGroupBoard(LoadUnloadTpBean bean) {
         EventBus.getDefault().post(bean);
     }
 

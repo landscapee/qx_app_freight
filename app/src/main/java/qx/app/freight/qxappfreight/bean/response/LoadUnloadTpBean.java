@@ -1,12 +1,11 @@
 package qx.app.freight.qxappfreight.bean.response;
 
-import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class LoadUnloadGroupBoardBean {
+public class LoadUnloadTpBean {
     private String workerId;
     private int taskType;
-    private List<String> taskData;
+    private String taskData;
 }

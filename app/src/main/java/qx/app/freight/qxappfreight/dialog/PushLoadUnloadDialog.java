@@ -63,7 +63,7 @@ public class PushLoadUnloadDialog extends Dialog {
     }
     private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean,BaseViewHolder> {
         public DialogLoadUnloadPushAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
-            super(data);
+            super(R.layout.item_push_load_unload_rv,data);
         }
 
         @Override
