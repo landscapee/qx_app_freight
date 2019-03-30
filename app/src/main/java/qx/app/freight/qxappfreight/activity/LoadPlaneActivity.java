@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private List<UnloadPlaneVersionEntity> mList = new ArrayList<>();
     private List<LocalBillBean> mBillList = new ArrayList<>();
     private String mFregihtSpace;//舱位名称
+    private String mTargetPlace;
 
     @Override
     public int getLayoutId() {
@@ -76,6 +78,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvFlightType.setText(info[1]);
         mTvStartPlace.setText(info[2]);
         mTvMiddlePlace.setText(info[3]);
+        mTargetPlace = info[4];
         mTvTargetPlace.setText(info[4]);
         mTvSeat.setText(info[5]);
         mRvData.setLayoutManager(new LinearLayoutManager(this));
@@ -143,10 +146,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void getFlightCargoResResult(List<GetFlightCargoResBean> getFlightCargoResBeanList) {
-        if (getFlightCargoResBeanList==null||getFlightCargoResBeanList.size()==0)return;
+        if (getFlightCargoResBeanList == null || getFlightCargoResBeanList.size() == 0) return;
         List<LocalBillBean> list3 = new ArrayList<>();
         for (GetFlightCargoResBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
-            mFregihtSpace=bean.getSuggestRepository();
+            mFregihtSpace = bean.getSuggestRepository();
             for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
                 LocalBillBean billBean = new LocalBillBean();
                 billBean.setWayBillCode(groupCode.getWaybillCode());
@@ -167,9 +170,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     UnloadPlaneEntity item = new UnloadPlaneEntity();
                     item.setBerth(model.getSuggestRepository());
                     item.setBoardNumber(model.getGroupScooters().get(0).getScooterCode());
-                    item.setUldNumber(model.getUldCode());
-                    item.setTarget("");
-                    item.setType(String.valueOf(model.getScooterType()));
+                    item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
+                    item.setTarget(mTargetPlace);
+                    item.setType(model.getCargoType());
                     item.setWeight(model.getReWeight());
                     item.setGoodsPosition(model.getGoodsLocation());
                     list.add(item);
