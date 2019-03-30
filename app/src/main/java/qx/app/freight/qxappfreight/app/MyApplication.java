@@ -71,7 +71,6 @@ public class MyApplication extends Application {
     public static void initIM() {
         try {
             IMUtils.initIM();
-            IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(appContext));
 //            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl(AppIPConfig.getSchduleApiHost() + HttpConstant.IM_NOTICE_URL);
             IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl("http://" + HttpConstant.CMCC + ":86/api/schedule/" + HttpConstant.IM_NOTICE_URL);
         } catch (Exception e) {
