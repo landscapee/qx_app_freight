@@ -323,6 +323,26 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+    /**
+     * 时间戳获取12:34(05)
+     *
+     * @param second
+     * @return
+     */
+    public static String getHMDay(long second) {
+        if (second <= 0) {
+            return "";
+        }
+        String seconds = (second / 1000) + "";
+        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+            return "";
+        }
+        String format = "HH:mm(dd)";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
+        return re;
+    }
 
 
     /**

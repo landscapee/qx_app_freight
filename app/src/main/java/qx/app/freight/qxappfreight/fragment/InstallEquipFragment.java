@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,8 +39,9 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.bean.response.LoadUnloadTpBean;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -57,6 +63,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
+    private List<LoadAndUnloadTodoBean> mListCache=new ArrayList<>();
 
 
     @Nullable
@@ -87,9 +94,23 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean result) {
-        if (result.equals("InstallEquipFragment_refresh")) {
-            loadData();
+    public void onEventMainThread(LoadUnloadTpBean result) {
+        if (result!=null) {
+            if (result.getTaskType()==1||result.getTaskType()==2){
+                List<LoadAndUnloadTodoBean> list = JSON.parseArray(result.getTaskData(),LoadAndUnloadTodoBean.class);
+                if (list != null)
+                    mListCache.addAll(list);
+                PushLoadUnloadDialog dialog=new PushLoadUnloadDialog(getContext(), list, success -> {
+                    if (success){
+                        loadData();
+                        mListCache.clear();
+                    }else {
+                        mListCache.clear();
+                        Log.e("tagPush","推送出错了");
+                    }
+                });
+                dialog.show();
+            }
         }
     }
 

@@ -14,8 +14,9 @@ public class HttpConstant {
 
     public static final String QXAITEST = "http://10.16.23.156:805/mas-main/";//一期智能 生产环境
     //websocket 地址
+    public static final String WEBSOCKETURL = "ws://173.100.1.75:9008/socketServer?";
 //    public static final String WEBSOCKETURL = "ws://173.100.1.78:7004/socketServer?";
-    public static final String WEBSOCKETURL = "ws://173.101.2.8:7004/socketServer?";//测试环境
+//    public static final String WEBSOCKETURL = "ws://173.101.2.8:7004/socketServer?";//测试环境
 
 //    public static final String IMAGEURL = "http://173.100.1.74/";
     public static final String IMAGEURL = "http://173.101.2.26/";//测试环境
