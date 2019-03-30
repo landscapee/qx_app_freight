@@ -11,6 +11,7 @@ import com.beidouapp.imlibapi.IMLIBContext;
 
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.AppIPConfig;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
@@ -70,6 +71,7 @@ public class MyApplication extends Application {
     public static void initIM() {
         try {
             IMUtils.initIM();
+            IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(appContext));
 //            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl(AppIPConfig.getSchduleApiHost() + HttpConstant.IM_NOTICE_URL);
             IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl("http://" + HttpConstant.CMCC + ":86/api/schedule/" + HttpConstant.IM_NOTICE_URL);
         } catch (Exception e) {

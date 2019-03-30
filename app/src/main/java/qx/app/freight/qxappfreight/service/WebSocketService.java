@@ -46,6 +46,11 @@ public class WebSocketService extends Service {
     public void onCreate() {
         super.onCreate();
 //        EventBus.getDefault().isRegistered(this);
+        if (uri == null){
+            Log.e(TAG, "推送服务url为null");
+            return;
+        }
+
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
 //        Log.e(TAG, uri);
         //请求头
