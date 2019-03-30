@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.TransportBeginContract;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -170,6 +171,16 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
             //根据扫一扫获取的板车信息查找板车内容
             addScooterInfo(result.getData());
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result.isCancelFlag()) {
+            if (result.getTaskId()!=null && result.getTaskId().equals(mAcceptTerminalTodoBean.get(0).getTaskId()));
+            {
+                ToastUtil.showToast("该任务已被取消！");
+                finish();
+            }
         }
     }
 

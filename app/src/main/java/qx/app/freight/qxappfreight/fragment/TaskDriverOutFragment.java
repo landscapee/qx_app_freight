@@ -169,7 +169,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
 
-        if (result.isCancelFlag()){
+        if (result.isCancelFlag()&&result.getTaskId() !=null){
             canCelTask(result.getTaskId());
         }
         else {
@@ -186,13 +186,19 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     }
 
     /**
-     *
-     * @param workerId
+     *  取消任务
+     * @param taskId
      */
-    private void canCelTask(String workerId) {
+    private void canCelTask(String taskId) {
 
-//        for (list)
-
+        for (AcceptTerminalTodoBean mAcceptTerminalTodoBean:list){
+            if (taskId.equals(mAcceptTerminalTodoBean.getTaskId())){
+                list.remove(mAcceptTerminalTodoBean);
+                break;
+            }
+        }
+        adapter.notifyDataSetChanged();
+        Log.e("TaskDriverOutFragment","取消任务");
 
     }
 
