@@ -46,7 +46,7 @@ public class WebSocketService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        EventBus.getDefault().isRegistered(this);
+//        EventBus.getDefault().isRegistered(this);
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
 //        Log.e(TAG, uri);
         //请求头
@@ -94,7 +94,7 @@ public class WebSocketService extends Service {
 
         compositeDisposable.add(dispTopic);
 
-        //订阅   张硕地址运输
+        //订阅   张硕地址待办
         Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,6 +117,19 @@ public class WebSocketService extends Service {
                 }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
 
         compositeDisposable.add(dispTopic2);
+
+        //订阅   运输 装卸机
+        Disposable dispTopic3 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "运输装卸机 订阅 " + topicMessage.getPayload());
+                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                    sendReshEventBus(mWebSocketBean);
+                }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
+
+        compositeDisposable.add(dispTopic3);
+
         mStompClient.connect(headers);
     }
 
