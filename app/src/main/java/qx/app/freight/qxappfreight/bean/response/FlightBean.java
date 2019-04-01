@@ -1,11 +1,12 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class FlightBean {
+public class FlightBean  implements Serializable {
 
     private int total;
     private int departure;
@@ -15,7 +16,7 @@ public class FlightBean {
     private List<FlightsBean> flights;
 
     @Data
-    public static class FlightsBean {
+    public static class FlightsBean  implements Serializable{
         /**
          * flightId : 12005903
          * flightNo : ZH9484

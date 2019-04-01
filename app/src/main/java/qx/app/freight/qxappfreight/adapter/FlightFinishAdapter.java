@@ -19,8 +19,7 @@ import qx.app.freight.qxappfreight.widget.BubbleTextVew;
 
 /**
  * TODO :  航班完成进度适配器
- * Created by owen
- * on 2016-09-18.
+ * Created by pr
  */
 public class FlightFinishAdapter extends BaseAdapter {
     private Context mContext;

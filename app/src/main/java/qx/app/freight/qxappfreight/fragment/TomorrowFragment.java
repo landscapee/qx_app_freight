@@ -31,9 +31,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
+import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
-public class TomorrowFragment extends BaseFragment {
+public class TomorrowFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {
     @BindView(R.id.magic_indicator_tomor)
     MagicIndicator magicIndicator;
     @BindView(R.id.view_pager_tomor)
@@ -63,13 +67,22 @@ public class TomorrowFragment extends BaseFragment {
     private void initView() {
         mData = new ArrayList<>();
         mListFragment = new ArrayList<>();
-        mData.add("全部(99)");
-        mData.add("进港(99)");
-        mData.add("离岗(99)");
-        mData.add("返航(99)");
-        mData.add("备降(99)");
-        tabAdapter = new MyTabAdapter(mData);
+        //明天数据请求
+        mPresenter = new FlightdynamicPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setDay("tomorrow");
+        ((FlightdynamicPresenter) mPresenter).flightdynamic(entity);
+    }
 
+    @Override
+    public void flightdynamicResult(FlightBean result) {
+        mData.add("全部(" + result.getTotal() + ")");
+        mData.add("进港(" + result.getArrive() + ")");
+        mData.add("离岗(" + result.getDeparture() + ")");
+        mData.add("返航(" + result.getReversal() + ")");
+        mData.add("备降(" + result.getPreparation() + ")");
+
+        tabAdapter = new MyTabAdapter(mData);
         CommonNavigator navigator = new CommonNavigator(getContext());
         // 自适应模式，适用于数目固定的、少量的title
         navigator.setAdjustMode(true);
@@ -78,21 +91,32 @@ public class TomorrowFragment extends BaseFragment {
         navigator.setEnablePivotScroll(true);
         navigator.setScrollPivotX(0.35f);
         magicIndicator.setNavigator(navigator);
-
         //创建fragment
         pageAdapter = new MyPageAdapter(getFragmentManager());
-
-        mListFragment.add(DynamicInfoFragment.getInstance("", "","tomorrow"));
-        mListFragment.add(DynamicInfoFragment.getInstance("", "A","tomorrow"));
-        mListFragment.add(DynamicInfoFragment.getInstance("", "D","tomorrow"));
-        mListFragment.add(DynamicInfoFragment.getInstance("2", "","tomorrow"));
-        mListFragment.add(DynamicInfoFragment.getInstance("1", "","tomorrow"));
-
+        mListFragment.add(DynamicInfoFragment.getInstance("", "", "tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "A", "tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("", "D", "tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("2", "", "tomorrow"));
+        mListFragment.add(DynamicInfoFragment.getInstance("1", "", "tomorrow"));
         //viewpager根据数据创建多个tab
         viewPager.setOffscreenPageLimit(mData.size());
         viewPager.setAdapter(pageAdapter);
-
         ViewPagerHelper.bind(magicIndicator, viewPager);
+    }
+
+    @Override
+    public void toastView(String error) {
+
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
     }
 
     public class MyTabAdapter extends CommonNavigatorAdapter {

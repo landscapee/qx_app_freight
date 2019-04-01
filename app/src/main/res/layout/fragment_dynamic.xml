@@ -39,6 +39,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="今天"
+                android:checked="true"
                 android:textColor="@drawable/selector_text_blue" />
 
             <RadioButton
