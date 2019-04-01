@@ -28,14 +28,17 @@
                 android:drawableStart="@mipmap/dray"
                 android:gravity="center_horizontal"
                 android:padding="13dp"
+                android:textSize="16sp"
                 tools:text="12321"
-                android:textColor="@color/blue" />
+                android:textStyle="bold"
+                android:textColor="#136BEF" />
 
             <TextView
                 android:id="@+id/tv_receive_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:textStyle="bold"
                 android:paddingLeft="@dimen/dp_20"
                 tools:text="0.03kg" />
 
@@ -53,7 +56,8 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:paddingTop="20dp"
-                android:paddingRight="13dp"
+                android:paddingRight="14sp"
+                android:textStyle="bold"
                 tools:text="3件/" />
 
             <!--<TextView-->
@@ -81,6 +85,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:padding="13dp"
+                android:textStyle="bold"
                 tools:text="ULD:" />
 
 
@@ -89,6 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textStyle="bold"
                 android:gravity="end"
                 android:padding="13dp"
                 tools:text="超重102kg" />
