@@ -124,9 +124,11 @@ public class TransportListBean implements Serializable {
     private String spotFlag;
     private long etd;
     private List<DeclareItemBean> declareItem;
-    private boolean isExpand = false;
-
+    private boolean isExpand = false; //是否展开
+    private String freightName; //货代公司名字
+    private String flightName; //航空公司名字
     private String serialNumber;  //流水号
+
     @Data
     public static class DeclareWaybillAdditionBean implements Serializable{
         /**

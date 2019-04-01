@@ -94,8 +94,11 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        if (UserInfoSingle.getInstance()!=null&&UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()>0)
+        {
+            entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        }
         entity.setUndoType("2");
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }

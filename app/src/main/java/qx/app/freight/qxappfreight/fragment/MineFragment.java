@@ -128,6 +128,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
 
     private void requestNoReadMessage() {
         PageListEntity bean = new PageListEntity();
+
         bean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         bean.setUserId(UserInfoSingle.getInstance().getUserId());
         ((NoReadCountPresenter) mPresenter).noReadCount(bean);

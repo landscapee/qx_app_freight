@@ -188,7 +188,7 @@ public class TimeUtils {
      */
     public static String date2Tasktime3(long second) {
         if (second <= 0) {
-            return "0";
+            return "--:--";
         }
         String seconds = (second / 1000) + "";
         if (seconds.isEmpty() || seconds.equals("null")) {
@@ -311,7 +311,7 @@ public class TimeUtils {
      */
     public static String getDay(long second) {
         if (second <= 0) {
-            return "";
+            return "-";
         }
         String seconds = (second / 1000) + "";
         if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {

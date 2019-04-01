@@ -9,7 +9,7 @@ public class HttpConstant {
 //    public static final String TEST = "http://192.168.1.17:9008";
 //    public static final String TEST = "http://173.101.2.8:80";//测试环境
     public static final String TEST = "http://173.100.1.75:9008";//开发环境
-//    public static final String TEST = "http://192.168.1.16:7001";//刘磊环境
+//    public static final String TEST = "http://192.168. 1.16:7001";//刘磊环境
     public static final String HUOYUN = "http://173.100.1.51:80";//航班环境
 
     public static final String QXAITEST = "http://10.16.23.156:805/mas-main/";//一期智能 生产环境

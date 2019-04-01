@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import qx.app.freight.qxappfreight.app.MyApplication;
 
@@ -23,15 +24,20 @@ public class ToastUtil {
      * 显示toast
      */
     public static void showToast(Context c, String s) {
+
+        if ("318".equals(s)){
+            return;
+        }
+        oldMsg = s;
         if (toast == null) {
             int time = Toast.LENGTH_SHORT;
-            toast = Toast.makeText(c.getApplicationContext(), s, time);
+            toast = Toast.makeText(c, s, time);
+            Log.e("toast==null","2个==========="+s);
         } else {
             toast.setText(s);
+            Log.e("toast！=null","2个==========="+s);
         }
-        if (!"318".equals(s)){
-            toast.show();
-        }
+        toast.show();
 
     }
 
@@ -44,13 +50,16 @@ public class ToastUtil {
             toast =Toast.makeText(context, s, Toast.LENGTH_SHORT);
             toast.show();
             oneTime=System.currentTimeMillis();
+            Log.e("toast==null",s);
         }else{
             twoTime=System.currentTimeMillis();
             if(s.equals(oldMsg)){
                 if(twoTime-oneTime>Toast.LENGTH_SHORT){
                     toast.show();
+                    Log.e("toast!=null&&","twoTime-oneTime>Toast.LENGTH_SHORT===="+s);
                 }
             }else{
+                Log.e("toast!=null&&","twoTime-oneTime>Toast.LENGTH_SHORT222===="+s);
                 oldMsg = s;
                 toast.setText(s);
                 toast.show();

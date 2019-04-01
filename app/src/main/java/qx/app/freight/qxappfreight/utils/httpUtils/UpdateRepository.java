@@ -64,6 +64,7 @@ import qx.app.freight.qxappfreight.http.HttpApi;
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
     private volatile static HttpApi mUpdateApis;
+    private volatile static HttpApi mUpdateApisFlight;
     private volatile static HttpApi mUpdateApisQxAi;
 
     private UpdateRepository() {
@@ -72,6 +73,8 @@ public class UpdateRepository extends BaseRepository {
         mUpdateApis = factory.getApiService(HttpApi.class);
         RetrofitFactory factoryQxAi = RetrofitHelper.getRetrofit(HttpConstant.QXAITEST);
         mUpdateApisQxAi = factoryQxAi.getApiService(HttpApi.class);
+        RetrofitFactory factoryFlight = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
+        mUpdateApisFlight = factoryFlight.getApiService(HttpApi.class);
     }
 
     public HttpApi getService() {
@@ -655,9 +658,7 @@ public class UpdateRepository extends BaseRepository {
      * 航班动态
      */
     public Observable<FlightBean> flightdynamic(BaseFilterEntity model) {
-        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
-        mUpdateApis = factory.getApiService(HttpApi.class);
-        return flightTransform(mUpdateApis.flightdynamic(model));
+        return flightTransform(mUpdateApisFlight.flightdynamic(model));
     }
 
     /***
@@ -666,9 +667,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
     public Observable<FlightInfoBean> flightInfo(BaseFilterEntity model) {
-        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
-        mUpdateApis = factory.getApiService(HttpApi.class);
-        return flightTransform(mUpdateApis.flightInfo(model));
+        return flightTransform(mUpdateApisFlight.flightInfo(model));
     }
 
     /***
@@ -677,9 +676,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
     public Observable<FlightServiceBean> getMilepostData(BaseFilterEntity model) {
-        RetrofitFactory factory = RetrofitHelper.getRetrofit(HttpConstant.HUOYUN);
-        mUpdateApis = factory.getApiService(HttpApi.class);
-        return flightTransform(mUpdateApis.getMilepostData(model));
+        return flightTransform(mUpdateApisFlight.getMilepostData(model));
     }
 
 

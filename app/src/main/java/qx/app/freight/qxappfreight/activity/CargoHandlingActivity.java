@@ -150,50 +150,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mGetScooterListInfoEntity.setFlightId(flightId);
         ((GetScooterListInfoPresenter) mPresenter).getScooterListInfo(mGetScooterListInfoEntity);
 
-//        //模拟 带货板车数据
-//        for (int i = 0; i < 5; i++) {
-//            FtRuntimeFlightScooter mFtRuntimeFlightScooter = new FtRuntimeFlightScooter();
-//            List <RcInfo> mRcInfos = new ArrayList <>();
-//            for (int j = 0; j < 5; j++) {
-//                RcInfo mRcInfo = new RcInfo();
-//                mRcInfo.setId("456" + j);
-//                mRcInfo.setNumber(j+1);
-//                mRcInfo.setWeight((double) 2);
-//                mRcInfo.setVolume((double) 2);
-//                mRcInfo.setWaybillId("123" + j);
-//                mRcInfo.setWaybillCode("123" + j);
-//                mRcInfo.setUpdateStatus((short) 0);
-//                if (j == 1)
-//                    mRcInfo.setInFlight((short) 1);
-//                else
-//                    mRcInfo.setInFlight((short) 0);
-//                mRcInfos.add(mRcInfo);
-//            }
-//            mFtRuntimeFlightScooter.setScooterCode("00000" + i);
-//            mFtRuntimeFlightScooter.setRcInfoList(mRcInfos);
-//            mFtRuntimeFlightScooter.setSelect(false);
-//            mFtRuntimeFlightScooter.setWeight((double)2);
-//            mFtRuntimeFlightScooter.setVolume((double)2);
-//            mFtRuntimeFlightScooter.setInFlight((short)1);
-//            listHandcar.add(mFtRuntimeFlightScooter);
-//        }
-//        mCargoHandlingAdapter.notifyDataSetChanged();
-//
-//        //模拟无板运单数据
-//        for (int j = 0; j < 5; j++) {
-//            RcInfo mRcInfo = new RcInfo();
-//            mRcInfo.setId("456" + j);
-//            mRcInfo.setNumber(j+1);
-//            mRcInfo.setWeight((double) 2);
-//            mRcInfo.setVolume((double) 2);
-//            mRcInfo.setWaybillId("1234" + j);
-//            mRcInfo.setWaybillCode("123" + j);
-//            mRcInfo.setUpdateStatus((short) 0);
-//            mRcInfo.setInFlight((short) 0);
-//            listWaybill.add(mRcInfo);
-//        }
-//        mCargoHandlingWaybillAdapter.notifyDataSetChanged();
-
     }
 
     private void initView() {

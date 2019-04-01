@@ -79,7 +79,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
         //航班预计起飞时间
         helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info),TimeUtils.date2Tasktime3(item.getEtd()) , TimeUtils.getDay(item.getEtd())));
         //航空公司-代理公司
-        helper.setText(R.id.tv_company_info, String.format(mContext.getString(R.string.format_company_info), "四川航空", "中外货运代理"));
+        helper.setText(R.id.tv_company_info, String.format(mContext.getString(R.string.format_company_info),item.getFlightName(), item.getFreightName()));
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         RecyclerView rvDetail = helper.getView(R.id.rv_detail_list);
         rvDetail.setLayoutManager(manager);
