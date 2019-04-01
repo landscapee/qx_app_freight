@@ -1,5 +1,8 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -58,7 +61,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
-    private List<LoadAndUnloadTodoBean> mListCache=new ArrayList<>();
+    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
 
 
     @Nullable
@@ -88,22 +91,25 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             loadData();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result!=null) {
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                if (list != null)
-                    mListCache.addAll(list);
-                PushLoadUnloadDialog dialog=new PushLoadUnloadDialog(getContext(), list, success -> {
-                    if (success){
-                        loadData();
-                        mListCache.clear();
-                    }else {
-                        mListCache.clear();
-                        Log.e("tagPush","推送出错了");
-                    }
-                });
-                dialog.show();
+        Log.e("tagDialog","收到装卸机新任务推送");
+        if (result != null) {
+            List<LoadAndUnloadTodoBean> list = result.getTaskData();
+            if (list != null)
+                mListCache.addAll(list);
+            PushLoadUnloadDialog dialog = new PushLoadUnloadDialog();
+            dialog.setData(getContext(), list, success -> {
+                if (success) {
+                    loadData();
+                    mListCache.clear();
+                } else {
+                    mListCache.clear();
+                    Log.e("tagPush", "推送出错了");
+                }
+            });
+            dialog.show(getFragmentManager(), "333");
         }
     }
 
@@ -138,7 +144,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        if (loadAndUnloadTodoBean.size()==0)return;
+        if (loadAndUnloadTodoBean.size() == 0) return;
         List<Boolean> checkedList = new ArrayList<>();
         //未分页
         mList.clear();
@@ -187,9 +193,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             times.add(String.valueOf(bean.getOpenDoorTime()));
             times.add(bean.getBeginLoadUnloadTime() + ":" + bean.getLoadUnloadTime());
             times.add(String.valueOf(bean.getCloseDoorTime()));
-                                    //FlightNumber   0               AirCraftNo   1               StartPlace   2           MiddlePlace     3            EndPlace    4
+            //FlightNumber   0               AirCraftNo   1               StartPlace   2           MiddlePlace     3            EndPlace    4
             String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
-                            //机位     5              6， scheduleTime                         7，FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10      Id   11
+                    //机位     5              6， scheduleTime                         7，FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10      Id   11
                     + "*" + entity.getSeat() + "*" + bean.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
             int posNow = 0;
             boolean hasChecked = false;

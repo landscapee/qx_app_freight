@@ -3,7 +3,11 @@ package qx.app.freight.qxappfreight.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,17 +16,21 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -35,28 +43,16 @@ import qx.app.freight.qxappfreight.utils.Tools;
 /**
  * 装卸机推送弹窗
  */
-public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoContract.loadAndUnloadTodoView {
+public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     private List<LoadAndUnloadTodoBean> list;
     private Context context;
     private View convertView;
     private OnDismissListener onDismissListener;
 
-    public PushLoadUnloadDialog(Context context) {
-        super(context);
-    }
-
-    public PushLoadUnloadDialog(Context context, List<LoadAndUnloadTodoBean> list,OnDismissListener onDismissListener) {
-        super(context);
-        this.list = list;
+    public void setData(Context context, List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
         this.context = context;
+        this.list = list;
         this.onDismissListener = onDismissListener;
-        Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        convertView = getLayoutInflater().inflate(R.layout.dialog_load_unload, null);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setCanceledOnTouchOutside(false); // 外部点击取消
-        setContentView(convertView);
-        ButterKnife.bind(this, convertView);
-        initViews();
     }
 
     private void initViews() {
@@ -90,21 +86,49 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
                 return true;
             }).subscribe(aBoolean -> {
                 Log.e("tagTest", "循环结束，弹窗消失");
-                PushLoadUnloadDialog.this.dissMiss();
+                super.dismiss();
                 onDismissListener.refreshUI(true);
             }, throwable -> onDismissListener.refreshUI(false));
         });
     }
 
+    @NonNull
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        Objects.requireNonNull(getWindow()).setGravity(Gravity.BOTTOM); //显示在顶部
-        WindowManager m = getWindow().getWindowManager();
-        Display d = m.getDefaultDisplay();
-        WindowManager.LayoutParams p = getWindow().getAttributes();
-        p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
-        getWindow().setAttributes(p);
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(context, R.style.dialog2);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_load_unload);
+        convertView = dialog.findViewById(R.id.content_view);
+        dialog.setCanceledOnTouchOutside(false); // 外部点击取消
+        // 设置宽度为屏宽, 靠近屏幕底部。
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER; // 紧贴底部
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+        window.setAttributes(lp);
+        window.setWindowAnimations(R.style.anim_bottom_bottom);
+        initViews();
+        return dialog;
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            Class c = Class.forName("android.support.v4.app.DialogFragment");
+            Constructor con = c.getConstructor();
+            Object obj = con.newInstance();
+            Field dismissed = c.getDeclaredField(" mDismissed");
+            dismissed.setAccessible(true);
+            dismissed.set(obj, false);
+            Field shownByMe = c.getDeclaredField("mShownByMe");
+            shownByMe.setAccessible(true);
+            shownByMe.set(obj, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.add(this, tag);
+        ft.commitAllowingStateLoss();
     }
 
     @Override
@@ -153,7 +177,6 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
             helper.setText(R.id.tv_start_place, placeArray[0]);
             helper.setText(R.id.tv_middle_place, placeArray.length == 2 ? "-" : placeArray[1]);
             helper.setText(R.id.tv_end_place, placeArray[placeArray.length - 1]);
-            helper.setText(R.id.tv_seat, item.getSeat());
             helper.setText(R.id.tv_time, TimeUtils.getHMDay(item.getScheduleTime()));
         }
     }
