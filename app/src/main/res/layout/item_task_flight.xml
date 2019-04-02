@@ -92,7 +92,7 @@
             android:layout_marginLeft="5dp"
             android:drawableLeft="@mipmap/placement"
             android:text="101"
-            android:textColor="@color/black_3"
+            android:textColor="@color/gray_888"
             android:layout_weight="1"
             android:textSize="14sp"
             />
@@ -121,7 +121,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:text=""
             android:textColor="@color/gray_888"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:gravity="right"
             android:textSize="14sp"
             />
@@ -151,6 +151,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/path3"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             />
         <TextView
             android:id="@+id/tv_end"

@@ -112,7 +112,7 @@ public class TpPushDialog extends Dialog {
 //
 //                list.addAll(mlist);
 //            }
-            tvTpType.setText(MapValue.getProjectName(mAcceptTerminalTodoBean.getProjectName()));
+            tvTpType.setText(mAcceptTerminalTodoBean.getProjectName());
 
             list.addAll(mAcceptTerminalTodoBean.getTasks());
         }

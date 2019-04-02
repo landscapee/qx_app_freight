@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginLeft="18dp"
-            android:drawableLeft="@mipmap/yu"
+            android:drawableLeft="@mipmap/ji"
             android:gravity="center_vertical"
             android:text="@string/format_arrive_info" />
 

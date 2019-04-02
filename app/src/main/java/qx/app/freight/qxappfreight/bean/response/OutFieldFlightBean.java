@@ -119,4 +119,6 @@ public class OutFieldFlightBean implements Serializable {
     private Object tobt;
 
     private String routers;
+
+    private String route;//航线信息 "[\"KMG\",\"CTU\"]"
 }

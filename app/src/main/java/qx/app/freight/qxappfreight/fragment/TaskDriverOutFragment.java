@@ -60,6 +60,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     private int slidePosition,slidePositionChild,step;
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
+
+    private int max = 0,index = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,11 +94,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             /**
              * 同时开启多个航班
              */
-                for (OutFieldTaskBean mOutFieldTaskBean: list.get(parentPosition).getUseTasks().get(position)){
+                max = list.get(parentPosition).getUseTasks().get(position).size();
+
+                for (int i= 0;i< list.get(parentPosition).getUseTasks().get(position).size();i++){
                     slidePosition = parentPosition;
                     slidePositionChild = position;
                     this.step = step;
-                    submitStep(mOutFieldTaskBean,step);
+                    submitStep(list.get(parentPosition).getUseTasks().get(position).get(i),step);
                 }
 
         });
@@ -111,8 +116,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
     }
 
+    /**
+     *x循环执行 步骤任务。最后一条 再去拉去 列表
+     * @param mOutFieldTaskBean
+     * @param step
+     */
     private void submitStep(OutFieldTaskBean mOutFieldTaskBean,int step){
-
+        index++;
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         PerformTaskStepsEntity entity=new PerformTaskStepsEntity();
         entity.setType(0);
@@ -134,7 +144,6 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setCreateTime(System.currentTimeMillis());
-
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
 
     }
@@ -206,9 +215,14 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     private void showTpNewTaskDialog() {
 
         if (listCache.size() > 0){
+
+
+
             TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.custom_dialog, listCache.get(0), OutFieldTaskBeans -> {
-                for (OutFieldTaskBean mOutFieldTaskBean:OutFieldTaskBeans){
-                    submitStep(mOutFieldTaskBean,0);
+
+                max = OutFieldTaskBeans.size();
+                for (int i = 0;i<OutFieldTaskBeans.size();i++){
+                    submitStep(OutFieldTaskBeans.get(i),0);
                 }
                 showTpNewTaskDialog();
             });
@@ -318,8 +332,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     @Override
     public void slideTaskResult(String result) {
 
-        ToastUtil.showToast("任务执行成功");
-        getData();
+        if (index == max){
+            ToastUtil.showToast("任务执行成功");
+            getData();
+            index = 0;
+        }
 //        StepBean stepBean = JSON.parseObject(result,StepBean.class);
 //        upDateStepStatus(stepBean);
 

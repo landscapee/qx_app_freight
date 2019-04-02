@@ -41,9 +41,10 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
     @Override
     protected void convert(BaseViewHolder helper, AcceptTerminalTodoBean item) {
 
-        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
+//        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
+        helper.setText(R.id.tv_task_id,item.getTaskNumber());
         helper.setText(R.id.tv_task_num,"任务单号:"+item.getTaskId());
-        helper.setText(R.id.tv_task_type, MapValue.getProjectName(item.getProjectName()));
+        helper.setText(R.id.tv_task_type, item.getProjectName());
         helper.setText(R.id.tv_task_status,"#执行中#");
         //列表设置
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);

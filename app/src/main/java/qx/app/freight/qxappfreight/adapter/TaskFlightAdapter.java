@@ -1,10 +1,12 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -29,6 +31,9 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
             helper.setText(R.id.tv_flight_place, item.getFlights().getSeat());
             helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info, TimeUtils.date2Tasktime3(item.getFlights().getScheduleTime()),TimeUtils.getDay(item.getFlights().getScheduleTime())));
             helper.setText(R.id.tv_num,item.getNum()+"个"+ MapValue.getCarTypeValue(item.getTransfortType()));
+            List<String> rotes = new ArrayList <>();
+//            rotes = item.getFlights().getRoute().split(",")
+            TextView link = helper.getView(R.id.tv_flight_link1);
 
             helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()));
             helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()));

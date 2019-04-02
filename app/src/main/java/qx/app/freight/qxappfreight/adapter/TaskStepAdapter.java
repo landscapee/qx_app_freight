@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,48 +52,56 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         SlideLeftExecuteView mSlideLeftExecuteViewS = helper.getView(R.id.slide_left_start);
         SlideLeftExecuteView mSlideLeftExecuteViewE = helper.getView(R.id.slide_left_end);
 
+        TextView tvAccept = helper.getView(R.id.tv_step_time_accept);
+        TextView tvStart = helper.getView(R.id.tv_step_time_start);
+        TextView tvEnd = helper.getView(R.id.tv_step_time_end);
+
+
 
         //领受是否可以滑动
         if(item.get(0).getAcceptTime() > 0){
             rlAccept.setBackgroundResource(R.drawable.shape_rect_green_light);
-            helper.setText(R.id.tv_step_time_accept,TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
+            tvAccept.setText(TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
             mSlideLeftExecuteViewA.setVisibility(View.GONE);
+            tvAccept.setVisibility(View.VISIBLE);
         }
         else {
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
-            helper.setText(R.id.tv_step_time_accept,"");
             mSlideLeftExecuteViewA.setVisibility(View.VISIBLE);
+            tvAccept.setVisibility(View.GONE);
         }
         //开始是否可以滑动
         if(item.get(0).getTaskBeginTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_green_light);
-            helper.setText(R.id.tv_step_time_start,TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
+            tvStart.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
             mSlideLeftExecuteViewS.setVisibility(View.GONE);
+            tvStart.setVisibility(View.VISIBLE);
         } else if (item.get(0).getAcceptTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
-            helper.setText(R.id.tv_step_time_start,"");
             mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
+            tvStart.setVisibility(View.GONE);
         }
         else {
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
-            helper.setText(R.id.tv_step_time_start,"");
             mSlideLeftExecuteViewS.setVisibility(View.GONE);
+            tvStart.setVisibility(View.GONE);
         }
         //结束是否可以滑动
         if(item.get(0).getTaskEndTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_green_light);
-            helper.setText(R.id.tv_step_time_end,TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
+            tvEnd.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
             mSlideLeftExecuteViewE.setVisibility(View.GONE);
+            tvEnd.setVisibility(View.VISIBLE);
         }
         else if (item.get(0).getTaskBeginTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_gray_dark);
-            helper.setText(R.id.tv_step_time_end,"");
             mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
+            tvEnd.setVisibility(View.GONE);
         }
         else {
             rlEnd.setBackgroundResource(R.drawable.shape_rect_gray_dark);
-            helper.setText(R.id.tv_step_time_end,"");
             mSlideLeftExecuteViewE.setVisibility(View.GONE);
+            tvEnd.setVisibility(View.GONE);
         }
 
         //列表设置
