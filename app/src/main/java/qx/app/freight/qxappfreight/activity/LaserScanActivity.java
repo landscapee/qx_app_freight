@@ -1,11 +1,17 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -13,9 +19,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.LaserAndZxingBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -23,8 +32,10 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  */
 public class LaserScanActivity extends BaseActivity {
 
-    private String chenNum;
     private String mScooterCode;
+    private String flag;
+
+    private boolean laserAndZxing;
 
     @Override
     public int getLayoutId() {
@@ -34,25 +45,110 @@ public class LaserScanActivity extends BaseActivity {
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
-        chenNum = getIntent().getStringExtra("chenNum");
         initTitle();
+        flag = getIntent().getStringExtra("flag");
+        laserAndZxing = getIntent().getBooleanExtra("laserAndZxing",false);
 
+        LinearLayout llZxing = findViewById(R.id.ll_zxing);
+        LinearLayout llInput = findViewById(R.id.ll_input);
+        llZxing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //如果laserAndZxing 是true 就是从二维码扫码跳转过来的，就直接关闭 回到二维码扫码界面
+                if (laserAndZxing){
+                    finish();
+                }else {
+                    ScanManagerActivity.startActivityFromLaser(LaserScanActivity.this,flag);
+                }
+
+            }
+        });
+        llInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+
+    }
+    /**
+     * 普通启动
+     */
+    public static void startActivity(Context mContext) {
+        Intent starter = new Intent(mContext, LaserScanActivity.class);
+        ((Activity) mContext).startActivityForResult(starter, 0);
+    }
+
+    /**
+     * 带参数启动
+     */
+    public static void startActivity(Context mContext, String flag) {
+        Intent starter = new Intent(mContext, LaserScanActivity.class);
+        starter.putExtra("flag", flag);
+        ((Activity) mContext).startActivityForResult(starter, 0);
+    }
+
+    /**
+     *从二维码扫码界面跳转过来
+     */
+    public static void startActivityFromZxing(Context mContext, String flag){
+        Intent starter = new Intent(mContext, ScanManagerActivity.class);
+        starter.putExtra("flag", flag)
+                .putExtra("laserAndZxing",true);
+        mContext.startActivity(starter);
+    }
+
+    /**
+     * CommonDialog 的用法
+     */
+    private void showDialog() {
+        InputDialog dialog1 = new InputDialog(this);
+        dialog1.setTitle("这个是标题")
+                .setHint("这个是提示内容")
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new InputDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+
+                        } else {
+                            if (TextUtils.isEmpty(dialog1.getMessage())){
+                                ToastUtil.showToast("输入为空");
+                            }else {
+                                getBackMessage(dialog1.getMessage());
+                            }
+
+                        }
+                    }
+                })
+                .show();
     }
 
     private void initTitle() {
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
-        toolbar.setMainTitle(Color.WHITE, "扫一扫");
-        toolbar.setRightIconView(View.VISIBLE, R.mipmap.switch_scan, v -> {
-            ScanManagerActivity.startActivity(this);
-        });
+        toolbar.setMainTitle(Color.WHITE, "激光扫码");
     }
 
-    private void startAllocaaateScanActivity(String chenNum, String mScooterCode) {
-        Intent intent = new Intent(this, AllocaaateScanActivity.class);
-        intent.putExtra("chenNum", chenNum);
-        intent.putExtra("scooterCode", mScooterCode);
-        startActivity(intent);
+    /**
+     * 获取回调的扫码信息
+     * @param result
+     */
+    private void getBackMessage(String result){
+        if (flag == null) {
+            Intent intent = new Intent();
+            intent.putExtra(Constants.SACN_DATA, result);
+            setResult(Constants.SCAN_RESULT, intent);
+        } else {
+            ScanDataBean dataBean = new ScanDataBean();
+            dataBean.setFunctionFlag(flag);
+            dataBean.setData(result);
+            EventBus.getDefault().post(dataBean);
+        }
+        finish();
     }
 
     @Override
@@ -60,24 +156,20 @@ public class LaserScanActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            startAllocaaateScanActivity(chenNum, mScooterCode);
+            getBackMessage(mScooterCode);
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("LaserScanActivity")) {
+    public void onEventMainThread(LaserAndZxingBean result) {
+        if (!TextUtils.isEmpty(result.getData())) {
             //板车号
             mScooterCode = result.getData();
-            if (!"".equals(mScooterCode)) {
-                startAllocaaateScanActivity(chenNum, mScooterCode);
-            } else {
-                ToastUtil.showToast("扫码数据为空请重新扫码");
-            }
-        } else {
-            Log.e("resultCode", "收货页面不是200");
+            getBackMessage(mScooterCode);
+
         }
+        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
 }

@@ -6,9 +6,61 @@
     android:orientation="vertical"
     android:background="#1f1f1f"
     tools:context=".activity.LaserScanActivity">
-    <ImageView
-        android:src="@mipmap/laser_code"
-        android:scaleType="centerInside"
+    <RelativeLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp">
+        <ImageView
+            android:src="@mipmap/laser_code"
+            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+        <LinearLayout
+            android:id="@+id/ll_zxing"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@mipmap/ic_zxing_scan"
+                android:layout_width="37dp"
+                android:layout_height="37dp" />
+            <TextView
+                android:layout_marginTop="7dp"
+                android:text="普通扫描"
+                android:textSize="11dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_input"
+            android:layout_marginLeft="@dimen/dp_80"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@mipmap/ic_input_scan"
+                android:layout_width="37dp"
+                android:layout_height="37dp" />
+            <TextView
+                android:layout_marginTop="7dp"
+                android:text="手动输入"
+                android:textSize="11dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

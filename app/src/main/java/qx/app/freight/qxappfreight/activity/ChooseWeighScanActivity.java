@@ -32,6 +32,9 @@ public class ChooseWeighScanActivity extends BaseActivity {
     @BindView(R.id.ll_chen_4)
     LinearLayout llChen4;
 
+    private String chenNum;
+    private String mScooterCode;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_choose_weigh_scan;
@@ -55,22 +58,47 @@ public class ChooseWeighScanActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_chen_1:
-                startLaserScanActivity("1#称");
+                chenNum = "1#称";
+                startLaserScanActivity(chenNum);
                 break;
             case R.id.ll_chen_2:
-                startLaserScanActivity("2#称");
+                chenNum = "2#称";
+                startLaserScanActivity(chenNum);
                 break;
             case R.id.ll_chen_3:
-                startLaserScanActivity("3#称");
+                chenNum = "3#称";
+                startLaserScanActivity(chenNum);
                 break;
             case R.id.ll_chen_4:
-                startLaserScanActivity("4#称");
+                chenNum = "4#称";
+                startLaserScanActivity(chenNum);
                 break;
         }
     }
     private void startLaserScanActivity(String num){
-        Intent intent = new Intent(this, LaserScanActivity.class);
-        intent.putExtra("chenNum", num);
+        LaserScanActivity.startActivity(this);
+    }
+
+    /**
+     *跳转到复重操作
+     */
+    private void startAllocaaateScanActivity(String chenNum, String mScooterCode) {
+        Intent intent = new Intent(this, AllocaaateScanActivity.class);
+        intent.putExtra("chenNum", chenNum);
+        intent.putExtra("scooterCode", mScooterCode);
         startActivity(intent);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (Constants.SCAN_RESULT == resultCode) {
+            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+            startAllocaaateScanActivity(chenNum, mScooterCode);
+        } else {
+            Log.e("resultCode", "收货页面不是200");
+        }
+    }
+
+
 }
