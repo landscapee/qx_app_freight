@@ -12,12 +12,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -28,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -59,6 +65,32 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private List<LocalBillBean> mBillList = new ArrayList<>();
     private String mFregihtSpace;//舱位名称
     private String mTargetPlace;
+    private String mCurrentTaskId;
+    private String mCurrentFlightId;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+            if (result.isCancelFlag()) {
+                String taskId = result.getTaskId();
+                if (taskId.equals(mCurrentTaskId)) {
+                    ToastUtil.showToast("当前装机任务已取消");
+                    Observable.timer(2, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .subscribe(aLong -> finish());
+                }
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result != null && result.equals(mCurrentFlightId)) {
+            Log.e("tagPush","当前航班装机单数据改变");
+            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -67,12 +99,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         String flightInfo = getIntent().getStringExtra("plane_info");
         String[] info = flightInfo.split("\\*");
+        mCurrentTaskId = info[12];
         toolbar.setMainTitle(Color.WHITE, info[0] + "  装机");
         mTvPlaneInfo.setText(info[0]);
         mTvFlightType.setText(info[1]);
@@ -83,6 +119,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvSeat.setText(info[5]);
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mPresenter = new GetFlightCargoResPresenter(this);
+        mCurrentFlightId = info[7];
+        Log.e("tagTest", "id=====" + mCurrentFlightId);
 //        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(info[7]);
         ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
         mTvPullGoodsReport.setOnClickListener(v -> {
@@ -169,7 +207,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     GetFlightCargoResBean.ContentObjectBean model = bean.getContentObject().get(i);
                     UnloadPlaneEntity item = new UnloadPlaneEntity();
                     item.setBerth(model.getSuggestRepository());
-                    item.setBoardNumber(model.getGroupScooters().get(0).getScooterCode());
+                    item.setBoardNumber((model.getGroupScooters()==null)?"-":model.getGroupScooters().get(0).getScooterCode());
                     item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
                     item.setTarget(mTargetPlace);
                     item.setType(model.getCargoType());

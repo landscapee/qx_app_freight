@@ -1,8 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -42,6 +39,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
@@ -94,22 +92,27 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        Log.e("tagDialog","收到装卸机新任务推送");
         if (result != null) {
-            List<LoadAndUnloadTodoBean> list = result.getTaskData();
-            if (list != null)
-                mListCache.addAll(list);
-            PushLoadUnloadDialog dialog = new PushLoadUnloadDialog();
-            dialog.setData(getContext(), list, success -> {
-                if (success) {
-                    loadData();
-                    mListCache.clear();
-                } else {
-                    mListCache.clear();
-                    Log.e("tagPush", "推送出错了");
-                }
-            });
-            dialog.show(getFragmentManager(), "333");
+            if (result.isCancelFlag()) {
+                loadData();
+            } else {
+                List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                if (list != null)
+                    mListCache.addAll(list);
+                PushLoadUnloadDialog dialog = new PushLoadUnloadDialog();
+                dialog.setData(getContext(), mListCache, success -> {
+                    if (success) {
+                        ToastUtil.showToast("领受装卸机新任务成功");
+                        loadData();
+                        mListCache.clear();
+                    } else {
+                        mListCache.clear();
+                        Log.e("tagPush", "推送出错了");
+                    }
+                });
+                dialog.setCancelable(false);
+                dialog.show(getFragmentManager(), "333");
+            }
         }
     }
 

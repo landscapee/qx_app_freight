@@ -97,7 +97,21 @@ public class WebSocketService extends Service {
                 });
 
         compositeDisposable.add(dispTopic);
+        //订阅  装机单变更推送
+        Log.e("tagPush","userid====="+UserInfoSingle.getInstance().getUserId());
+        Disposable loadingListPush = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
+                    if (null != topicMessage.getPayload()) {
+                        sendLoadingListPush(topicMessage.getPayload());
+                    }
+                }, throwable -> {
+                    Log.e(TAG, "订阅失败", throwable);
+                });
 
+        compositeDisposable.add(loadingListPush);
         //订阅   张硕地址待办
         Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
@@ -155,6 +169,10 @@ public class WebSocketService extends Service {
         mStompClient.connect(headers);
     }
 
+    private void sendLoadingListPush(String result) {
+        EventBus.getDefault().post(result);
+    }
+
     public static void startService(Activity activtity, String url) {
         uri = url;
         actionStart(activtity);
@@ -169,7 +187,7 @@ public class WebSocketService extends Service {
     public static void sendReshEventBus(WebSocketResultBean bean) {
         EventBus.getDefault().post(bean);
     }
-    //用于装卸机组板推送刷新弹窗
+    //用于装卸机运输推送刷新弹窗
     public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
         EventBus.getDefault().post(bean);
     }

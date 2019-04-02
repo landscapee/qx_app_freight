@@ -18,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,8 +30,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import me.shaohui.advancedluban.Luban;
@@ -42,6 +50,7 @@ import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -76,7 +85,23 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private String mFlightNumber;
     private String[] mInfoList;
     private ArrayList<String> mFlightNumberList; //传过来的航班号列表
-    private String info; //传过来的航班信息 用*号隔开
+    private String mCurrentTaskId;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+            if (result.isCancelFlag()) {
+                String taskId = result.getTaskId();
+                if (taskId.equals(mCurrentTaskId)) {
+                    ToastUtil.showToast("当前卸机任务已取消");
+                    Observable.timer(2, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .subscribe(aLong -> finish());
+                }
+            }
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -85,6 +110,10 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        ;
         initNavi();//权限方法
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
@@ -93,7 +122,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         toolbar.setMainTitle(Color.WHITE, "异常上报");
 
         //根据过来的参数判断
-        info = getIntent().getStringExtra("plane_info");
+        //传过来的航班信息 用*号隔开
+        String info = getIntent().getStringExtra("plane_info");
         mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
         if (TextUtils.isEmpty(info) && mFlightNumberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
@@ -118,6 +148,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             mTvFlightInfo.setVisibility(View.VISIBLE);
             mInfoList = info.split("\\*");
             mFlightNumber = mInfoList[0];
+            mCurrentTaskId = mInfoList[12];
             mTvFlightInfo.setText(mFlightNumber);
         }
 

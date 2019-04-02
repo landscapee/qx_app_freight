@@ -26,8 +26,8 @@
             android:id="@+id/tv_craft_number"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_marginEnd="@dimen/dp_6"
             android:gravity="center_vertical"
             android:text="B2310" />
 

@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -22,8 +20,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ScanInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -38,6 +40,7 @@ import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -92,6 +95,23 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     private ScanInfoAdapter mScanGoodsAdapter;//扫描货物适配器
     private ScanInfoAdapter mScanPacAdapter;//扫描行李适配器
     private String[] mInfo;
+    private String mCurrentTaskId;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+            if (result.isCancelFlag()) {
+                String taskId = result.getTaskId();
+                if (taskId.equals(mCurrentTaskId)) {
+                    ToastUtil.showToast("当前卸机任务已取消");
+                    Observable.timer(2, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .subscribe(aLong -> finish());
+                }
+            }
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -100,13 +120,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        ;
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         String flightInfo = getIntent().getStringExtra("plane_info");
         mInfo = flightInfo.split("\\*");
+        mCurrentTaskId = mInfo[12];
         toolbar.setMainTitle(Color.WHITE, mInfo[0] + "  卸机");
         mTvPlaneInfo.setText(mInfo[0]);
         mTvFlightType.setText(mInfo[1]);

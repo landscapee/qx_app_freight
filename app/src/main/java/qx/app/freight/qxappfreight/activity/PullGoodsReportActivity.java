@@ -23,8 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.PullGoodsInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -45,6 +49,7 @@ import qx.app.freight.qxappfreight.dialog.ChooseGoodsBillDialog;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -74,6 +79,23 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private boolean mIsScanBill = false;//是否是扫描运单拉下，默认是扫板
     private List<LocalBillBean> mBillList = new ArrayList<>();
     private Map<String, LocalBillBean> mCodeMap = new HashMap<>();//以运单code为键，对应的对象为值的map
+    private String mCurrentTaskId;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+            if (result.isCancelFlag()) {
+                String taskId = result.getTaskId();
+                if (taskId.equals(mCurrentTaskId)) {
+                    ToastUtil.showToast("当前卸机任务已取消");
+                    Observable.timer(2, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .subscribe(aLong -> finish());
+                }
+            }
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -82,7 +104,10 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        ;
         mBillList = getIntent().getParcelableArrayListExtra("bill_list");
         for (LocalBillBean bean : mBillList) {
             mCodeMap.put(bean.getWayBillCode(), bean);
@@ -96,6 +121,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         toolbar.setMainTitle(Color.WHITE, "拉货上报");
         String info = getIntent().getStringExtra("plane_info");
         mInfoList = info.split("\\*");
+        mCurrentTaskId = mInfoList[12];
         mTvFlightInfo.setText(mInfoList[0]);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
@@ -234,7 +260,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                                 usedNumber += bean1.getTpCargoNumber();
                             }
                         }
-                        billBean.setBillItemNumber(billBean.getMaxNumber()-usedNumber);
+                        billBean.setBillItemNumber(billBean.getMaxNumber() - usedNumber);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etNumber.getText().toString())) {
@@ -269,7 +295,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                                 usedNumber += bean1.getTpCargoWeight();
                             }
                         }
-                        billBean.setBillItemWeight(billBean.getMaxWeight()-usedNumber);
+                        billBean.setBillItemWeight(billBean.getMaxWeight() - usedNumber);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etWeight.getText().toString())) {

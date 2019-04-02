@@ -11,26 +11,21 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -110,26 +105,14 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         initViews();
         return dialog;
     }
-
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        try {
-            Class c = Class.forName("android.support.v4.app.DialogFragment");
-            Constructor con = c.getConstructor();
-            Object obj = con.newInstance();
-            Field dismissed = c.getDeclaredField(" mDismissed");
-            dismissed.setAccessible(true);
-            dismissed.set(obj, false);
-            Field shownByMe = c.getDeclaredField("mShownByMe");
-            shownByMe.setAccessible(true);
-            shownByMe.set(obj, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.add(this, tag);
-        ft.commitAllowingStateLoss();
-    }
+//
+//    @Override
+//    public void show(FragmentManager manager, String tag) {
+//        FragmentTransaction ft = manager.beginTransaction();
+//        ft.add(this, tag);
+//        // 这里吧原来的commit()方法换成了commitAllowingStateLoss()
+//        ft.commitAllowingStateLoss();
+//    }
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
@@ -171,12 +154,17 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
             helper.setText(R.id.tv_plane_info, item.getFlightNo());
             helper.setText(R.id.tv_craft_number, item.getAircraftno());
-            String places = item.getRoute();
-            places = places.substring(1, places.length() - 1).replaceAll("\",\"", ",");
-            String[] placeArray = places.substring(1, places.length() - 1).split(",");
-            helper.setText(R.id.tv_start_place, placeArray[0]);
-            helper.setText(R.id.tv_middle_place, placeArray.length == 2 ? "-" : placeArray[1]);
-            helper.setText(R.id.tv_end_place, placeArray[placeArray.length - 1]);
+            String [] placeArray=item.getRoute().split(",");
+            List<String> placeList=new ArrayList<>();
+            List<String> result=new ArrayList<>();
+            placeList.addAll(Arrays.asList(placeArray));
+            for (String str:placeList){
+               String temp=str.replaceAll("[^a-z^A-Z]", "");
+               result.add(temp);
+            }
+            helper.setText(R.id.tv_start_place, result.get(0));
+            helper.setText(R.id.tv_middle_place, result.size() == 2 ? "-" : result.get(1));
+            helper.setText(R.id.tv_end_place, result.get(result.size()-1));
             helper.setText(R.id.tv_time, TimeUtils.getHMDay(item.getScheduleTime()));
         }
     }
