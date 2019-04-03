@@ -57,7 +57,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @BindView(R.id.btn_receive_good)
     Button mBtnReceiveGood;         //提交
     @BindView(R.id.btn_printing)
-    Button mBtnPrinting;            //打印
+    TextView mBtnPrinting;            //打印
     @BindView(R.id.tv_total_number)
     TextView mTvTotalNumber;        //总件数
     @BindView(R.id.tv_total_volume)
