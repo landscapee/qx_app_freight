@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -176,17 +177,21 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 result = hourMinute + "(" + day + ")";
             }
             entity.setScheduleTime(result);
-            String places = bean.getRoute();
-            places = places.substring(1, places.length() - 1).replaceAll("\",\"", ",");
-            String[] placeArray = places.substring(1, places.length() - 1).split(",");
+            String [] placeArray=bean.getRoute().split(",");
+            List<String> resultList=new ArrayList<>();
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str:placeList){
+                String temp=str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                resultList.add(temp);
+            }
             if (placeArray.length == 2) {
-                entity.setStartPlace(placeArray[0]);
+                entity.setStartPlace(resultList.get(0));
                 entity.setMiddlePlace("--");
-                entity.setEndPlace(placeArray[1]);
+                entity.setEndPlace(resultList.get(resultList.size()-1));
             } else {
-                entity.setStartPlace(placeArray[0]);
-                entity.setMiddlePlace(placeArray[1]);
-                entity.setEndPlace(placeArray[2]);
+                entity.setStartPlace(resultList.get(0));
+                entity.setMiddlePlace(resultList.get(1));
+                entity.setEndPlace(resultList.get(2));
             }
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();

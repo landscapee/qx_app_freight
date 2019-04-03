@@ -237,7 +237,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         mPullBillList.add(bean);
         mGoodsAdapter = new PullGoodsInfoAdapter(mPullBillList);
         mSrvGoods.setAdapter(mGoodsAdapter);
-        upDataBtnStatus();
         mGoodsAdapter.setOnTextWatcher(new PullGoodsInfoAdapter.OnTextWatcher() {
             @Override
             public void onNumberTextChanged(int index, EditText etNumber) {
@@ -366,22 +365,9 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mPullBoardList.clear();
             mPullBoardList.addAll(result);
             mGoodsAdapter.notifyDataSetChanged();
-            upDataBtnStatus();
         } else
             ToastUtil.showToast(this, "返回数据为空");
     }
-
-    /**
-     * 开始按钮是否可以点击
-     */
-    private void upDataBtnStatus() {
-        if (mPullBoardList.size() > 0 || mPullBillList.size() > 0) {
-            mBtnCommit.setClickable(true);
-        } else {
-            mBtnCommit.setClickable(false);
-        }
-    }
-
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
@@ -411,7 +397,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         }
         mSrvGoods.closeMenu();
         mGoodsAdapter.notifyDataSetChanged();
-        upDataBtnStatus();
     }
 
     @Override

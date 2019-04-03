@@ -10,6 +10,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
  * 卸机页面扫描货物或行李的适配器
@@ -38,7 +39,7 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         String []infos=mInfo.split("\\*");
         helper.setText(R.id.tv_flight_type,infos[0]);
         helper.setText(R.id.tv_seat,infos[5]);
-        helper.setText(R.id.tv_flight_arrive_time,infos[6]);
+        helper.setText(R.id.tv_flight_arrive_time, TimeUtils.getHMDay(Long.valueOf(infos[6])));
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {

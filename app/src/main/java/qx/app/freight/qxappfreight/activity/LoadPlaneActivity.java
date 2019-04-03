@@ -88,7 +88,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     public void onEventMainThread(String result) {
         if (result != null && result.equals(mCurrentFlightId)) {
             Log.e("tagPush","当前航班装机单数据改变");
-            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
+            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
         }
     }
 
@@ -120,15 +120,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = info[7];
-        Log.e("tagTest", "id=====" + mCurrentFlightId);
-//        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(info[7]);
-        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
+        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
+//        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
         mTvPullGoodsReport.setOnClickListener(v -> {
-            Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
-            intent.putExtra("plane_info", flightInfo);
-            intent.putExtra("fregiht_space", mFregihtSpace);
-            intent.putParcelableArrayListExtra("bill_list", (ArrayList<? extends Parcelable>) mBillList);
-            LoadPlaneActivity.this.startActivity(intent);
+            if (mBillList.size()==0){
+                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
+            }else {
+                Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
+                intent.putExtra("plane_info", flightInfo);
+                intent.putExtra("fregiht_space", mFregihtSpace);
+                intent.putParcelableArrayListExtra("bill_list", (ArrayList<? extends Parcelable>) mBillList);
+                LoadPlaneActivity.this.startActivity(intent);
+            }
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
@@ -137,11 +140,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvEndInstall.setOnClickListener(v -> {
-            GetFlightCargoResBean bean = new GetFlightCargoResBean();
-            bean.setTpFlightId(info[7]);
-            bean.setTaskId(info[11]);
-            bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-            ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+            if (mBillList.size()==0){
+                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
+            }else {
+                GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                bean.setTpFlightId(info[7]);
+                bean.setTaskId(info[11]);
+                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+            }
         });
     }
 

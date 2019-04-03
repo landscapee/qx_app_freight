@@ -120,14 +120,15 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
-
+        mAdapter = new ImageRvAdapter(mPhotoPath);
+        mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
+        mRvPhoto.setAdapter(mAdapter);
         //根据过来的参数判断
         //传过来的航班信息 用*号隔开
         String info = getIntent().getStringExtra("plane_info");
         mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
         if (TextUtils.isEmpty(info) && mFlightNumberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
-
             mFlightNumber = mFlightNumberList.get(0);
             mTvFlightInfo.setText(mFlightNumber);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
@@ -143,7 +144,6 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
                 }
             });
-
         } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
             mInfoList = info.split("\\*");
@@ -169,17 +169,21 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     .start(ErrorReportActivity.this, REQUEST_IMAGE);
         });
         mBtnCommit.setOnClickListener(v -> {
-            if (mAdapter.getFinalPhotoList().size() == 0) {
-                mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
-                ExceptionReportEntity model = new ExceptionReportEntity();
-                model.setFlightNum(mFlightNumber);
-                model.setExceptionDesc(mEtDetailInfo.getText().toString());
-                model.setReOperator(UserInfoSingle.getInstance().getUserId());
-                model.setReType(getIntent().getIntExtra("error_type", 1));
-                model.setFiles(null);
-                ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
-            } else {
-                pressImage(mAdapter.getFinalPhotoList());
+            if (mAdapter.getFinalPhotoList().size()==0&&TextUtils.isEmpty(mEtDetailInfo.getText().toString())){
+                ToastUtil.showToast("请添加文字或图片说明（至少一种）");
+            }else {
+                if (mAdapter.getFinalPhotoList().size() == 0) {
+                    mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
+                    ExceptionReportEntity model = new ExceptionReportEntity();
+                    model.setFlightNum(mFlightNumber);
+                    model.setExceptionDesc(mEtDetailInfo.getText().toString());
+                    model.setReOperator(UserInfoSingle.getInstance().getUserId());
+                    model.setReType(getIntent().getIntExtra("error_type", 1));
+                    model.setFiles(null);
+                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+                } else {
+                    pressImage(mAdapter.getFinalPhotoList());
+                }
             }
         });
     }
@@ -282,7 +286,11 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("图片上传中");
+        if (mAdapter.getFinalPhotoList().size()!=0){
+            showProgessDialog("图片上传中");
+        }else {
+            showProgessDialog("");
+        }
     }
 
     @Override
