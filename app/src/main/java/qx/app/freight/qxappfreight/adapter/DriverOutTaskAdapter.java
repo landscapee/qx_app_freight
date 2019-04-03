@@ -108,14 +108,23 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             }
             @Override
             public void onClickListener(int step, int position) {
+
                 switch (step){
                     case 0:
-                        DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        else
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
                     case 1:
-                        DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        else
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
-
+                    case 2:
+                        mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        break;
                 }
             }
         });

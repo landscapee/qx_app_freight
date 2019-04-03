@@ -222,7 +222,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
                 max = OutFieldTaskBeans.size();
                 for (int i = 0;i<OutFieldTaskBeans.size();i++){
-                    submitStep(OutFieldTaskBeans.get(i),0);
+                    submitStep(OutFieldTaskBeans.get(i),2);
                 }
                 showTpNewTaskDialog();
             });
