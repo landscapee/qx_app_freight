@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="@dimen/dp_10"
+    android:layout_marginTop="@dimen/dp_10"
     android:orientation="horizontal">
 
 
@@ -21,13 +21,16 @@
 
             <TextView
                 android:id="@+id/tv_receive_nb"
-                android:layout_width="103dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@drawable/shape_rect_blue_cce4"
                 android:drawableStart="@mipmap/dray"
                 android:gravity="center_horizontal"
-                android:padding="13dp"
+                android:paddingLeft="@dimen/dp_4"
+                android:paddingRight="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
                 android:textSize="16sp"
                 tools:text="12321"
                 android:textStyle="bold"
@@ -38,8 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:textStyle="bold"
-                android:paddingLeft="@dimen/dp_20"
+                android:textColor="@color/text_main"
+                android:paddingLeft="@dimen/dp_2"
                 tools:text="0.03kg" />
 
             <!--<LinearLayout-->
@@ -58,6 +61,7 @@
                 android:paddingTop="20dp"
                 android:paddingRight="14sp"
                 android:textStyle="bold"
+                android:textColor="@color/text_main"
                 tools:text="3件/" />
 
             <!--<TextView-->
@@ -85,6 +89,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:padding="13dp"
+                android:textColor="#FF333333"
                 android:textStyle="bold"
                 tools:text="ULD:" />
 
@@ -97,6 +102,7 @@
                 android:textStyle="bold"
                 android:gravity="end"
                 android:padding="13dp"
+                android:textColor="#FF333333"
                 tools:text="超重102kg" />
         </LinearLayout>
 
@@ -110,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_5">
+            android:padding="@dimen/dp_3">
 
             <TextView
                 android:id="@+id/tv_receice_repplace"
@@ -120,6 +126,7 @@
                 android:paddingLeft="13dp"
                 android:paddingTop="11dp"
                 android:paddingBottom="10dp"
+                android:textColor="#FF999999"
                 tools:text="冻库 | 库位12" />
 
             <!--<LinearLayout-->

@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/format_number_info"
-                android:textColor="@color/black_3" />
+                android:textColor="@color/text_main" />
 
             <Space
                 android:layout_width="0dp"
@@ -89,7 +89,7 @@
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="0dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/black_3" />
+                android:textColor="@color/text_main" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,7 +103,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/format_store_info"
-                android:textColor="@color/black_3" />
+                android:textColor="@color/text_main2" />
 
             <Space
                 android:layout_width="0dp"
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <View
                     android:layout_width="match_parent"

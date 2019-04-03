@@ -22,7 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginLeft="10dp"
-            android:background="#FF6100"
+            android:background="@drawable/shape_corners"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
             android:text="总计"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -35,6 +39,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:textSize="15sp"
+            android:textColor="@color/text_main"
             tools:text="总计件数：56" />
 
         <TextView
@@ -45,6 +50,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:textSize="15sp"
+            android:textColor="@color/text_main"
             tools:text="总计重量：56" />
 
         <TextView
@@ -55,6 +61,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:textSize="15sp"
+            android:textColor="@color/text_main"
             tools:text="总体积：56" />
     </LinearLayout>
 
@@ -62,12 +69,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/shape_top">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:gravity="center">
 
             <TextView
@@ -76,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:drawableLeft="@mipmap/print"
-                android:textSize="18sp"
+                android:textColor="@color/text_main"
+                android:textSize="21sp"
                 android:text="打印标签" />
         </LinearLayout>
 
@@ -84,7 +93,8 @@
             android:id="@+id/btn_receive_good"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="0.6"
+            android:textSize="21sp"
             android:background="@color/blue_2e8"
             android:text="提交"
             android:textColor="@color/white" />
