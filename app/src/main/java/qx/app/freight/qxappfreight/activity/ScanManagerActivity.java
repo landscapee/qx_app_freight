@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,12 +50,14 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     LinearLayout llZxing;
     @BindView(R.id.ll_input)
     LinearLayout llInput;
+    @BindView(R.id.flashlight_close)
+    ImageView flashlightClose;
 
     private Boolean isOpen = false;
 
     private String flag = null;
 
-    private boolean laserAndZxing;
+    private boolean laserAndZxing;//是否是从激光扫描界面过来的
 
     /**
      * 普通启动
@@ -108,6 +111,17 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
             startZXing();
         });
         btnOpen.setOnClickListener(v -> {
+            if (isOpen) {
+                mZXingView.closeFlashlight();
+                isOpen = false;
+                btnOpen.setText("打开闪光灯");
+            } else {
+                mZXingView.openFlashlight();
+                isOpen = true;
+                btnOpen.setText("关闭闪光灯");
+            }
+        });
+        flashlightClose.setOnClickListener(v -> {
             if (isOpen) {
                 mZXingView.closeFlashlight();
                 isOpen = false;

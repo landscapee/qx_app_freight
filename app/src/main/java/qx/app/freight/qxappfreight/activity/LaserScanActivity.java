@@ -34,8 +34,7 @@ public class LaserScanActivity extends BaseActivity {
 
     private String mScooterCode;
     private String flag;
-
-    private boolean laserAndZxing;
+    private boolean laserAndZxing; //是否是从二维码扫描界面过来的
 
     @Override
     public int getLayoutId() {
@@ -92,7 +91,7 @@ public class LaserScanActivity extends BaseActivity {
      *从二维码扫码界面跳转过来
      */
     public static void startActivityFromZxing(Context mContext, String flag){
-        Intent starter = new Intent(mContext, ScanManagerActivity.class);
+        Intent starter = new Intent(mContext, LaserScanActivity.class);
         starter.putExtra("flag", flag)
                 .putExtra("laserAndZxing",true);
         mContext.startActivity(starter);
@@ -103,8 +102,8 @@ public class LaserScanActivity extends BaseActivity {
      */
     private void showDialog() {
         InputDialog dialog1 = new InputDialog(this);
-        dialog1.setTitle("这个是标题")
-                .setHint("这个是提示内容")
+        dialog1.setTitle("手动输入")
+                .setHint("请输入......")
                 .setPositiveButton("取消")
                 .setNegativeButton("确定")
                 .isCanceledOnTouchOutside(false)
@@ -168,7 +167,6 @@ public class LaserScanActivity extends BaseActivity {
             //板车号
             mScooterCode = result.getData();
             getBackMessage(mScooterCode);
-
         }
         ToastUtil.showToast("扫码数据为空请重新扫码");
     }

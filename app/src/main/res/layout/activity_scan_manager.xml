@@ -38,6 +38,7 @@
         app:qrcv_topOffset="80dp">
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_30"
@@ -64,6 +65,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_bottom"
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
@@ -110,6 +112,15 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <ImageView
+            android:layout_marginBottom="100dp"
+            android:id="@+id/flashlight_close"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:src="@mipmap/flashlight_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
     </cn.bingoogolapple.qrcode.zxing.ZXingView>
