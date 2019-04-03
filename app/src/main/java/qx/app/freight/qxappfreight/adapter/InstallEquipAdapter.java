@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -26,6 +27,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
     @Override
     protected void convert(BaseViewHolder helper, InstallEquipEntity item) {
         ImageView ivControl = helper.getView(R.id.iv_control);
+        LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         if (item.getTaskTpye()==1){
             ivType.setImageResource(R.mipmap.li);
@@ -59,6 +61,18 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
             collView.collapse();
         }
         ivControl.setOnClickListener(v -> {
+            item.setShowDetail(!item.isShowDetail());
+            if (item.isShowDetail()) {
+                rvStep.setVisibility(View.VISIBLE);
+                ivControl.setImageResource(R.mipmap.up);
+                collView.expand();
+            } else {
+                rvStep.setVisibility(View.GONE);
+                ivControl.setImageResource(R.mipmap.down);
+                collView.collapse();
+            }
+        });
+        llBg.setOnClickListener(v -> {
             item.setShowDetail(!item.isShowDetail());
             if (item.isShowDetail()) {
                 rvStep.setVisibility(View.VISIBLE);

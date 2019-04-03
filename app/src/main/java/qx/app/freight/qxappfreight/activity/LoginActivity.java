@@ -184,8 +184,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        loginBean.setRoleRS(roleRSBeans);
 //        UserInfoSingle.setUser(loginBean);
         //**************************************************
-        loginIm(null);
-        MainActivity.startActivity(this);
+
+//        loginIm(null);
+//        MainActivity.startActivity(this);
         ToastUtil.showToast(error);
     }
 
