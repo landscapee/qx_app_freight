@@ -31,7 +31,8 @@
                 android:paddingStart="@dimen/dp_10"
                 android:paddingEnd="@dimen/dp_10"
                 tools:text="3U8375"
-                android:textColor="#00f" />
+                android:textStyle="bold"
+                android:textColor="@color/blue_093" />
 
             <TextView
                 android:id="@+id/tv_flight_craft"

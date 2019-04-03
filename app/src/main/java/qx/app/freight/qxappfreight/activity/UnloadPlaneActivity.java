@@ -143,9 +143,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mTvStartTime.setText(sdf.format(new Date(takeOff)));
         long arrive = Long.valueOf(mInfo[9]);
         mTvArriveTime.setText(sdf.format(new Date(arrive)));
-        String scanGoods = "请扫描添加  <font color='#0000ff'>货物</font>  板车";
+        String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
         mTvScanGoods.setText(Html.fromHtml(scanGoods));
-        String scanPac = "请扫描添加  <font color='#0000ff'>行李</font>  板车";
+        String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";
         mTvScanPac.setText(Html.fromHtml(scanPac));
         mSlideRvGoods.setLayoutManager(new LinearLayoutManager(this));
         mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, flightInfo);
