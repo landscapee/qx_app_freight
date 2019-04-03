@@ -14,7 +14,7 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class NoticeAdapter extends BaseQuickAdapter<NoticeBean.RecordsBean, BaseViewHolder> {
 
-    private OnDeleteClick mOnDeleteClick;
+//    private OnDeleteClick mOnDeleteClick;
 
     public NoticeAdapter(@Nullable List<NoticeBean.RecordsBean> data) {
         super(R.layout.item_notice, data);
@@ -33,15 +33,15 @@ public class NoticeAdapter extends BaseQuickAdapter<NoticeBean.RecordsBean, Base
             helper.setVisible(R.id.ll_red_point,false);
         }
 
-        helper.getView(R.id.btn_delete).setOnClickListener(v -> mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition()));
+//        helper.getView(R.id.btn_delete).setOnClickListener(v -> mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition()));
     }
 
-    public void setOnDeleteClickListener(OnDeleteClick mOnDeleteClick) {
-        this.mOnDeleteClick = mOnDeleteClick;
-    }
-
-    public interface OnDeleteClick {
-        void onDeleteClick(View view, int position);
-    }
+//    public void setOnDeleteClickListener(OnDeleteClick mOnDeleteClick) {
+//        this.mOnDeleteClick = mOnDeleteClick;
+//    }
+//
+//    public interface OnDeleteClick {
+//        void onDeleteClick(View view, int position);
+//    }
 
 }

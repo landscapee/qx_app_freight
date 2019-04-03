@@ -13,7 +13,7 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class MessageAdapter extends BaseQuickAdapter<PageListBean.RecordsBean, BaseViewHolder>  {
 
-    private OnDeleteClick mOnDeleteClick;
+//    private OnDeleteClick mOnDeleteClick;
 
     public MessageAdapter(@Nullable List<PageListBean.RecordsBean> data) {
         super(R.layout.item_message, data);
@@ -31,15 +31,15 @@ public class MessageAdapter extends BaseQuickAdapter<PageListBean.RecordsBean, B
             helper.setVisible(R.id.ll_red_point,false);
         }
 
-        helper.getView(R.id.btn_delete).setOnClickListener(v -> mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition()));
+//        helper.getView(R.id.btn_delete).setOnClickListener(v -> mOnDeleteClick.onDeleteClick(v, helper.getAdapterPosition()));
     }
-
-    public void setOnDeleteClickListener(OnDeleteClick mOnDeleteClick) {
-        this.mOnDeleteClick = mOnDeleteClick;
-    }
-
-    public interface OnDeleteClick {
-        void onDeleteClick(View view, int position);
-    }
+//
+//    public void setOnDeleteClickListener(OnDeleteClick mOnDeleteClick) {
+//        this.mOnDeleteClick = mOnDeleteClick;
+//    }
+//
+//    public interface OnDeleteClick {
+//        void onDeleteClick(View view, int position);
+//    }
 
 }

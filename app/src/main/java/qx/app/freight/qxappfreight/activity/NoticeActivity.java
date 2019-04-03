@@ -30,11 +30,12 @@ import qx.app.freight.qxappfreight.presenter.FindUserNoticeByPagePresenter;
 import qx.app.freight.qxappfreight.presenter.MessagePresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
-public class NoticeActivity extends BaseActivity implements FindUserNoticeByPageContract.findUserNoticeByPageView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class NoticeActivity extends BaseActivity implements FindUserNoticeByPageContract.findUserNoticeByPageView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_notice)
-    MultiFunctionSlideRecylerView mfrvNotice;
+    MultiFunctionRecylerView mfrvNotice;
 
     private CustomToolbar toolbar;
     private NoticeAdapter mAdapter;
@@ -77,12 +78,12 @@ public class NoticeActivity extends BaseActivity implements FindUserNoticeByPage
 
 
         });
-        mAdapter.setOnDeleteClickListener((view, position) -> {
-            if (list.size() != 0) {
-                mfrvNotice.closeMenu();
-//                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mAdapter.setOnDeleteClickListener((view, position) -> {
+//            if (list.size() != 0) {
+//                mfrvNotice.closeMenu();
+////                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
         mfrvNotice.setAdapter(mAdapter);
     }
 

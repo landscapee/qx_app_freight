@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".activity.NoticeActivity">
 
-    <qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_notice"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

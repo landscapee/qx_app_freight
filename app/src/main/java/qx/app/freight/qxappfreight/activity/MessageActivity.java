@@ -27,16 +27,17 @@ import qx.app.freight.qxappfreight.presenter.MessagePresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
 /**
  * 消息列表页面
  * Created by swd
  */
-public class MessageActivity extends BaseActivity implements MessageContract.messageView ,MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class MessageActivity extends BaseActivity implements MessageContract.messageView ,MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
 
     @BindView(R.id.mfrv_message)
-    MultiFunctionSlideRecylerView mfrvMessage;
+    MultiFunctionRecylerView mfrvMessage;
 
     private CustomToolbar toolbar;
     private MessageAdapter mAdapter;
@@ -81,12 +82,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
             }
 
         });
-        mAdapter.setOnDeleteClickListener((view, position) -> {
-            if (list.size() != 0) {
-                mfrvMessage.closeMenu();
-//                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+
         mfrvMessage.setAdapter(mAdapter);
     }
     //
