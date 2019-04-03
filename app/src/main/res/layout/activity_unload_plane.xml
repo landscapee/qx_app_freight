@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
@@ -22,6 +23,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_marginTop="13dp"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_40"
                     android:layout_marginStart="@dimen/dp_15"
@@ -32,7 +34,7 @@
                         android:id="@+id/tv_plane_info"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@drawable/shape_rect_green_light"
+                        android:background="@drawable/shape_rect_blue_b3d1fb"
                         android:drawableStart="@mipmap/flight"
                         android:drawablePadding="@dimen/dp_6"
                         android:gravity="center_vertical"
@@ -48,7 +50,9 @@
                         android:layout_marginStart="@dimen/dp_20"
                         android:layout_marginEnd="@dimen/dp_20"
                         android:gravity="center_vertical"
-                        android:text="B2310" />
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="B2310" />
 
                     <Space
                         android:layout_width="0dp"
@@ -60,7 +64,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="PEK" />
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="PEK" />
 
                     <TextView
                         android:id="@+id/tv_middle_place"
@@ -69,14 +75,18 @@
                         android:drawableStart="@mipmap/airlane"
                         android:drawableEnd="@mipmap/airlane"
                         android:gravity="center_vertical"
-                        android:text="CTU" />
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="CTU" />
 
                     <TextView
                         android:id="@+id/tv_target_place"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="MXP" />
+                        android:textColor="@color/black_3"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="MXP" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,7 +146,7 @@
 
                 <TextView
                     android:layout_width="3dp"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_15"
                     android:layout_gravity="center_vertical"
                     android:background="#00f"
                     android:gravity="center_vertical" />
@@ -144,10 +154,11 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginStart="7dp"
                     android:layout_marginEnd="@dimen/dp_10"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:textColor="#7C8BA3"
                     android:text="货物板车信息" />
 
                 <TextView
@@ -213,7 +224,7 @@
 
                 <TextView
                     android:layout_width="3dp"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_15"
                     android:layout_gravity="center_vertical"
                     android:background="#00f"
                     android:gravity="center_vertical" />
@@ -221,10 +232,11 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginStart="7dp"
                     android:layout_marginEnd="@dimen/dp_10"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:textColor="#7C8BA3"
                     android:text="行李板车信息" />
 
                 <TextView
@@ -294,6 +306,7 @@
             android:background="@color/white"
             android:gravity="center"
             android:text="偏离上报"
+            android:textSize="@dimen/sp_18"
             android:textColor="@color/red" />
 
         <TextView
@@ -301,9 +314,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00f"
+            android:background="#2E67F6"
             android:gravity="center"
             android:text="结束卸机"
+            android:textSize="@dimen/sp_18"
             android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>
