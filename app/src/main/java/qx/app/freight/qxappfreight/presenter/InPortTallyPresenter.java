@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.InportTallyBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
+import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.contract.InPortTallyContract;
 import qx.app.freight.qxappfreight.model.InPortTallyModel;
 
@@ -23,10 +24,10 @@ public class InPortTallyPresenter extends BasePresenter {
 
     public void getInPortTallyList(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((InPortTallyModel) mRequestModel).getInPortTallyList(model, new IResultLisenter<List<InportTallyBean>>() {
+        ((InPortTallyModel) mRequestModel).getInPortTallyList(model, new IResultLisenter<InPortResponseBean>() {
             @Override
-            public void onSuccess(List<InportTallyBean> result) {
-                ((InPortTallyContract.InPortTallyListView) mRequestView).getInPortTallyListResult(result);
+            public void onSuccess(InPortResponseBean result) {
+                ((InPortTallyContract.InPortTallyListView) mRequestView).getInPortTallyListResult(result.getList());
                 mRequestView.dissMiss();
             }
 

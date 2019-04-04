@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,6 +68,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     EditText mEdtNumber;        //件数
     @BindView(R.id.btn_commit)
     Button mBtnCommit;          //提交
+    @BindView(R.id.tv_info)
+    TextView mTvInfo;
 
     private GeneralSpinnerAdapter mSpProductAdapter;
     private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
@@ -126,6 +129,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     }
 
     private void initView() {
+        String content = "带<font color='#FF0000'>" + "*" + "</font>为必填项";
+        mTvInfo.setText(Html.fromHtml(content));
+
         mMyAgentListBean = new MyAgentListBean();
         waybillId = getIntent().getStringExtra("waybillId");
         mScooterCode = getIntent().getStringExtra("mScooterCode");
@@ -276,7 +282,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //uld号
         mEtUldNumber.setText(existBean.getUldCode() == null ? "" : existBean.getUldCode());
         //uld重量
-        mEdtDeadWeight.setText(deadWeight + "");
+        if (deadWeight == 0)
+            mEdtDeadWeight.setText("");
+        else
+            mEdtDeadWeight.setText(deadWeight + "");
     }
 
     //提交

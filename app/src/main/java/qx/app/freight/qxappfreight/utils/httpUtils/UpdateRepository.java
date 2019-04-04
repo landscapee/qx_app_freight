@@ -41,6 +41,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -585,7 +586,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<InportTallyBean>> getInPortTallyList(BaseFilterEntity model) {
+    public Observable<InPortResponseBean> getInPortTallyList(BaseFilterEntity model) {
         return transform(getService().getInPortTallyList(model));
     }
 

@@ -141,6 +141,7 @@ public class WebSocketService extends Service {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
+                    Log.e(TAG,topicMessage.getPayload());
                     if (topicMessage.getPayload().contains("\"cancelFlag\":true")){//任务取消的推送
                         if (topicMessage.getPayload().contains("\"taskType\":1")){//装卸机
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();

@@ -95,9 +95,10 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     /**
      * 跳转到代办详情
+     *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean bean){
+    private void turnToDetailActivity(TransportListBean bean) {
         Intent intent = new Intent(mContext, InPortTallyActivity.class);
         intent.putExtra("flight_number", bean.getFlightNo());
         intent.putExtra("flight_id", bean.getFlightId());
@@ -111,7 +112,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222","daibanCode"+daibanCode);
+        Log.e("22222", "daibanCode" + daibanCode);
         if (!TextUtils.isEmpty(daibanCode)) {
             chooseCode(daibanCode);
         }
@@ -119,11 +120,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     /**
      * 通过获取的code，筛选代办，直接进入处理代办
-     * @param daibanCode  代办号
+     *
+     * @param daibanCode 代办号
      */
-    private void chooseCode(String daibanCode){
-        for (TransportListBean item:mList) {
-            if (daibanCode.equals(item.getId())){
+    private void chooseCode(String daibanCode) {
+        for (TransportListBean item : mList) {
+            if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
             }
@@ -154,17 +156,17 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             initData();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
             mList.addAll(mWebSocketResultBean.getChgData());
-        }
-        else if ("D".equals(mWebSocketResultBean.getFlag())){
-
-            for (TransportListBean mTransportListBean:mList){
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                    mList.remove(mTransportListBean);
+        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+            for (TransportListBean mTransportListBean : mList) {
+                if (mWebSocketResultBean.getChgData().get(0).getId() != null) {
+                    if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                        mList.remove(mTransportListBean);
+                }
             }
         }
         mMfrvData.notifyForAdapter(mAdapter);

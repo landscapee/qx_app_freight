@@ -177,21 +177,27 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 result = hourMinute + "(" + day + ")";
             }
             entity.setScheduleTime(result);
-            String [] placeArray=bean.getRoute().split(",");
-            List<String> resultList=new ArrayList<>();
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
-            for (String str:placeList){
-                String temp=str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
-                resultList.add(temp);
-            }
-            if (placeArray.length == 2) {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace("--");
-                entity.setEndPlace(resultList.get(resultList.size()-1));
-            } else {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace(resultList.get(1));
-                entity.setEndPlace(resultList.get(2));
+            if (bean.getRoute()==null){
+                    entity.setStartPlace("-");
+                    entity.setMiddlePlace("-");
+                    entity.setEndPlace("-");
+            }else {
+                String [] placeArray=bean.getRoute().split(",");
+                List<String> resultList=new ArrayList<>();
+                List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+                for (String str:placeList){
+                    String temp=str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                    resultList.add(temp);
+                }
+                if (placeArray.length == 2) {
+                    entity.setStartPlace(resultList.get(0));
+                    entity.setMiddlePlace("--");
+                    entity.setEndPlace(resultList.get(resultList.size()-1));
+                } else {
+                    entity.setStartPlace(resultList.get(0));
+                    entity.setMiddlePlace(resultList.get(1));
+                    entity.setEndPlace(resultList.get(2));
+                }
             }
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();

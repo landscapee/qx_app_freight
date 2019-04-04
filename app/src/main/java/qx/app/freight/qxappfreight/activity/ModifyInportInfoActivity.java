@@ -160,13 +160,27 @@ public class ModifyInportInfoActivity extends BaseActivity {
         });
         mTvCommitInfo.setOnClickListener(v -> {
             if (!mTvStoreName.getText().toString().equals("请选择库区") && !mTvStoreNumber.getText().toString().equals("请选择库位")) {
+                if ("".equals(mEtTallyNumber.getText().toString())) {
+                    ToastUtil.showToast("请输入理货件数");
+                    return;
+                }
                 mData.setTallyNumber(Integer.valueOf(mEtTallyNumber.getText().toString()));
-                mData.setTallyWeight(Double.valueOf(mEtTallyWeight.getText().toString().substring(0, mEtTallyWeight.getText().toString().length() - 2)));
+                String text1 = mEtTallyWeight.getText().toString();
+                double weight;
+                if (text1.contains("kg")) {
+                    weight = Double.valueOf(text1.substring(0, text1.length() - 2));
+                } else if (text1.equals("")) {
+                    ToastUtil.showToast("请输入理货重量");
+                    return;
+                } else {
+                    weight = Double.valueOf(text1);
+                }
+                mData.setTallyWeight(weight);
                 mData.setStoreName(mTvStoreName.getText().toString());
                 String text = mTvStoreNumber.getText().toString();
                 mData.setStoreNumber(Integer.valueOf(text.substring(0, text.indexOf("号"))));
                 mData.setErrorList(mErrorCodeList);
-                mData.setNumberError(Integer.valueOf(mEtNumberError.getText().toString()));
+                mData.setNumberError(("".equals(mEtNumberError.getText().toString())) ? 0 : Integer.valueOf(mEtNumberError.getText().toString()));
                 Intent intent = new Intent();
                 intent.putExtra("data", mData);
                 setResult(234, intent);

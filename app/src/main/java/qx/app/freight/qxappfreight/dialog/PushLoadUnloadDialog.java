@@ -154,17 +154,23 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
             helper.setText(R.id.tv_plane_info, item.getFlightNo());
             helper.setText(R.id.tv_craft_number, item.getAircraftno());
-            String [] placeArray=item.getRoute().split(",");
-            List<String> placeList=new ArrayList<>();
-            List<String> result=new ArrayList<>();
-            placeList.addAll(Arrays.asList(placeArray));
-            for (String str:placeList){
-               String temp=str.replaceAll("[^a-z^A-Z]", "");
-               result.add(temp);
+            if (item.getRoute() != null &&item.getRoute().contains(",")){
+                String [] placeArray=item.getRoute().split(",");
+                List<String> placeList=new ArrayList<>();
+                List<String> result=new ArrayList<>();
+                placeList.addAll(Arrays.asList(placeArray));
+                for (String str:placeList){
+                    String temp=str.replaceAll("[^a-z^A-Z]", "");
+                    result.add(temp);
+                }
+                helper.setText(R.id.tv_start_place, result.get(0));
+                helper.setText(R.id.tv_middle_place, result.size() == 2 ? "-" : result.get(1));
+                helper.setText(R.id.tv_end_place, result.get(result.size()-1));
+            }else {
+                helper.setText(R.id.tv_start_place, "-");
+                helper.setText(R.id.tv_middle_place, "-");
+                helper.setText(R.id.tv_end_place, "-");
             }
-            helper.setText(R.id.tv_start_place, result.get(0));
-            helper.setText(R.id.tv_middle_place, result.size() == 2 ? "-" : result.get(1));
-            helper.setText(R.id.tv_end_place, result.get(result.size()-1));
             helper.setText(R.id.tv_time, TimeUtils.getHMDay(item.getScheduleTime()));
         }
     }

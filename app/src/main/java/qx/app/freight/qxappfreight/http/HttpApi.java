@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -317,7 +318,7 @@ public interface HttpApi {
 
     //进港理货列表数据
     @POST("service-product-cargotallying/inwaybill/getList")
-    Observable<BaseEntity<List<InportTallyBean>>> getInPortTallyList(@Body BaseFilterEntity model);
+    Observable<BaseEntity<InPortResponseBean>> getInPortTallyList(@Body BaseFilterEntity model);
 
     //异常立案提交
     @POST("service-product-cargotallying/inwaybill/errorSubmit")
