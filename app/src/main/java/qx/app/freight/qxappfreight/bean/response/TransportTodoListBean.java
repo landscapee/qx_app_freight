@@ -90,7 +90,7 @@ public class TransportTodoListBean implements MultiItemEntity {
         private String planePlace;
         private String planeType;
         private long etd;
-        private String flightRoute;
+        private List<String> flightRoute;
         private int num;//板车数量
         private String carType;//板车类型
 

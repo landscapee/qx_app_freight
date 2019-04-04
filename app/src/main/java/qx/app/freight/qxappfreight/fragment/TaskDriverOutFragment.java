@@ -133,11 +133,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
 
         if (step == 0)
-            entity.setOperationCode("CargoOutTransportStart");
+            entity.setOperationCode("CargoOutTransportStart");//任务开始
         else if(step == 1)
-            entity.setOperationCode("CargoOutTransportEnd");
+            entity.setOperationCode("CargoOutTransportEnd");//任务结束
         else
-            entity.setOperationCode("CargoOutTransportReceived");
+            entity.setOperationCode("CargoOutTransportReceived");//任务领受
 
         entity.setUserName(UserInfoSingle.getInstance().getUsername());
 

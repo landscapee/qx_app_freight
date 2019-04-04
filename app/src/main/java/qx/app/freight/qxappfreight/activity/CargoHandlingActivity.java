@@ -45,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
+import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
 import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
@@ -82,8 +83,10 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     @BindView(R.id.rv_cargo_cabin)
     RecyclerView recyclerView;
 
-    //货物舱位列表
-    private List <String> listCargoCabinInfo = new ArrayList <>();
+    //可选货物舱位列表
+    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList <>();
+    //显示可选货物舱位列表
+    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfoShow = new ArrayList <>();
     private CargoCabinAdapter mCargoCabinAdapter;
     //带货板车列表
     private List <FtRuntimeFlightScooter> listHandcar = new ArrayList <>();
@@ -103,7 +106,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private int nowWaybillPosition;//当前点击进入的 无板收运记录
 
-    private GetScooterListInfoBean.FlightBean flightInfo;//航班信息
+    private FlightCabinInfo flightInfo;//航班信息
 
     private String taskId = null;//待办任务ID
     private String flightId = null;//待办航班id
@@ -170,7 +173,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mSpProductAdapter = new CabinAdapter(listCargoCabinInfo);
         mSpProductAdapter.setOnItemClickListener((adapter, view, position) -> {
 
-            listHandcar.get(nowHandcarPositionSelect).setSuggestRepository(listCargoCabinInfo.get(position));
+            listHandcar.get(nowHandcarPositionSelect).setSuggestRepository(listCargoCabinInfo.get(position).getPos());
             mCargoHandlingAdapter.notifyDataSetChanged();
             dismissPopWindowsCabin();
 
@@ -248,7 +251,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         });
         //仓位信息
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mCargoCabinAdapter = new CargoCabinAdapter(listCargoCabinInfo);
+        mCargoCabinAdapter = new CargoCabinAdapter(listCargoCabinInfoShow);
         recyclerView.setAdapter(mCargoCabinAdapter);
         recyclerView.setNestedScrollingEnabled(false);
 
@@ -440,7 +443,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         setProgressText("数据提交中……");
         mPresenter = new GetScooterListInfoPresenter(this);
         FightScooterSubmitEntity mFightScooterSubmitEntity = new FightScooterSubmitEntity();
-        mFightScooterSubmitEntity.setFlightId(flightInfo.getId());
+        mFightScooterSubmitEntity.setFlightId(flightInfo.getFlightInfo().getId());
         mFightScooterSubmitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
         mFightScooterSubmitEntity.setTaskId(taskId);//外层待办传入
         mFightScooterSubmitEntity.setDeleteRedRcInfos(listDeleteNo);
@@ -508,15 +511,50 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
      *
      * @param flightInfo
      */
-    private void setFlightInfo(GetScooterListInfoBean.FlightBean flightInfo) {
-        tvFlightNumber.setText(flightInfo.getFlightNo());
-        tvArriveTime.setText(TimeUtils.date2Tasktime3(flightInfo.getEtd()));
-        tvPlaneInfo.setText("飞机货仓信息");
+    private void setFlightInfo(FlightCabinInfo flightInfo) {
+        tvFlightNumber.setText(flightInfo.getFlightInfo().getFlightNo());
+        tvArriveTime.setText(TimeUtils.date2Tasktime3(flightInfo.getFlightInfo().getEtd())+"("+TimeUtils.getDay(flightInfo.getFlightInfo().getEtd())+")");
 
-        listCargoCabinInfo.add("1H");
-        listCargoCabinInfo.add("2H");
-        listCargoCabinInfo.add("3H");
-        listCargoCabinInfo.add("4H");
+       //组装飞机货仓基本信息
+        String flightCabinInfo = flightInfo.getAircraftTypes().get(0).getTypeName()
+                +" | "+flightInfo.getFlightInfo().getAircraftNo()+" | 0-"+flightInfo.getAircraftNoRS().getFlightMaxWgt()+"KG";
+        tvPlaneInfo.setText(flightCabinInfo);
+        listCargoCabinInfo.clear();
+        listCargoCabinInfo.addAll(flightInfo.getAircraftNoRS().getCargos());
+        listCargoCabinInfoShow.clear();
+        for (int i = 0;i<5;i++){
+            FlightCabinInfo.AircraftNoRSBean.CargosBean mCargosBean = new FlightCabinInfo.AircraftNoRSBean.CargosBean();
+            switch (i){
+                case 0:
+                    mCargosBean.setPos("1H");
+                    mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld1vol());
+                    mCargosBean.setHldMaxWgt(flightInfo.getAircraftNoRS().getHld1maxWgt());
+                    break;
+                case 1:
+                    mCargosBean.setPos("2H");
+                    mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld2vol());
+                    mCargosBean.setHldMaxWgt(flightInfo.getAircraftNoRS().getHld2maxWgt());
+                    break;
+                case 2:
+                    mCargosBean.setPos("3H");
+                    mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld3vol());
+                    mCargosBean.setHldMaxWgt(flightInfo.getAircraftNoRS().getHld3maxWgt());
+                    break;
+                case 3:
+                    mCargosBean.setPos("4H");
+                    mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld4vol());
+                    mCargosBean.setHldMaxWgt(flightInfo.getAircraftNoRS().getHld4maxWgt());
+                    break;
+                case 4:
+                    mCargosBean.setPos("5H");
+                    mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld5vol());
+                    mCargosBean.setHldMaxWgt(flightInfo.getAircraftNoRS().getHld5maxWgt());
+                    break;
+            }
+
+            listCargoCabinInfoShow.add(mCargosBean);
+        }
+
         mCargoCabinAdapter.notifyDataSetChanged();
     }
 

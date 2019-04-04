@@ -10,7 +10,7 @@ public class FlightOfScooterBean {
     private String planePlace;//机位
     private String planeType;//飞机类型
     private long etd;
-    private String flightRoute;//航线
+    private List<String> flightRoute;//航线
     private int num;//板车数量
     private String carType;//板车类型
     private List<TransportTodoListBean> mTransportTodoListBeans;//板车集合

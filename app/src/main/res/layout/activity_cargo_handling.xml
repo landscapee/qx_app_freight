@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_eff"
@@ -47,10 +48,10 @@
                             android:drawableLeft="@mipmap/flight"
                             android:drawablePadding="@dimen/dp_10"
                             android:gravity="center"
-                            android:padding="5dp"
+                            android:padding="8dp"
                             android:text=""
                             android:textColor="@color/blue_093"
-                            android:textSize="@dimen/sp_12"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -65,7 +66,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dp_10"
-                                android:layout_marginEnd="@dimen/dp_10"
+                                android:layout_marginEnd="5dp"
                                 android:src="@mipmap/ji"
                                 />
 
@@ -74,14 +75,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
-                                android:text="@string/format_arrive_info" />
+                                android:textColor="@color/black_3"
+                                android:textSize="16sp"
+                                android:text="" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        >
 
                         <TextView
                             android:id="@+id/tv_plane_info"
@@ -89,7 +94,10 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:padding="5dp"
-                            android:text="@string/format_company_info1" />
+                            android:text=""
+                            android:textSize="14sp"
+                            android:textColor="#FF68789A"
+                            />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -122,15 +130,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableLeft="@mipmap/style"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="7dp"
                     android:text="理货设备"
-                    android:textColor="@color/text_color" />
+                    android:textColor="#FF7C8BA3"
+                    android:textSize="14sp"
+                    />
 
                 <TextView
                     android:id="@+id/tv_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_blue_press"
+                    android:background="@drawable/shape_rect_blue_press"
                     android:drawableLeft="@mipmap/new_1"
                     android:drawablePadding="@dimen/dp_3"
                     android:paddingLeft="@dimen/dp_5"
@@ -138,6 +148,7 @@
                     android:paddingRight="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_2"
                     android:text="新增"
+                    android:textSize="11sp"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -153,7 +164,10 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="板车"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"
+                    />
 
                 <TextView
                     android:layout_width="0dp"
@@ -163,7 +177,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="ULD"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -173,7 +189,10 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="重量"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"
+                    />
 
                 <TextView
                     android:layout_width="0dp"
@@ -183,7 +202,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="体积"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -193,7 +214,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="舱位"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -237,7 +260,10 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="运单号"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"
+                    />
 
                 <TextView
                     android:layout_width="0dp"
@@ -247,7 +273,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="件数"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -257,7 +285,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="重量"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
 
                 <TextView
@@ -268,7 +298,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="体积"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -278,7 +310,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="目的站"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -288,7 +322,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="库区"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -298,7 +334,9 @@
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:text="类型"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:padding="9dp"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -320,7 +358,9 @@
         android:id="@+id/btn_sure_cargo_handing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/flight_a"
+        android:background="@drawable/btn_blue_press"
         android:text="提交"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        />
 </LinearLayout>

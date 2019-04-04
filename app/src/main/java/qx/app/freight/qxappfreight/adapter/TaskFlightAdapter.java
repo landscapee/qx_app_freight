@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,9 +32,21 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
             helper.setText(R.id.tv_flight_place, item.getFlights().getSeat());
             helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext,R.string.format_arrive_info, TimeUtils.date2Tasktime3(item.getFlights().getScheduleTime()),TimeUtils.getDay(item.getFlights().getScheduleTime())));
             helper.setText(R.id.tv_num,item.getNum()+"个"+ MapValue.getCarTypeValue(item.getTransfortType()));
-            List<String> rotes = new ArrayList <>();
-//            rotes = item.getFlights().getRoute().split(",")
+
             TextView link = helper.getView(R.id.tv_flight_link1);
+            List<String>  routes = item.getFlights().getRoute();
+            if (routes!=null && routes.size() >= 2){
+                helper.setText(R.id.tv_flight_start, routes.get(0));
+                if (routes.size() > 2){
+                    link.setVisibility(View.VISIBLE);
+                    link.setText(routes.get(1));
+                    helper.setText(R.id.tv_flight_end, routes.get(2));
+                }
+                else{
+                    link.setVisibility(View.GONE);
+                    helper.setText(R.id.tv_flight_end,routes.get(1));
+                }
+            }
 
             helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()));
             helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()));

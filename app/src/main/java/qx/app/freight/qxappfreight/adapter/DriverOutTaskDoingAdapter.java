@@ -56,6 +56,21 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpStartLocate()));
         helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpDestinationLocate()) );
 
+        TextView link = helper.getView(R.id.tv_flight_link1);
+
+        List<String>  routes = item.getFlightRoute();
+        if (routes!=null && routes.size() >= 2){
+            helper.setText(R.id.tv_flight_start, routes.get(0));
+            if (routes.size() > 2){
+                link.setVisibility(View.VISIBLE);
+                link.setText(routes.get(1));
+                helper.setText(R.id.tv_flight_end, routes.get(2));
+            }
+            else{
+                link.setVisibility(View.GONE);
+                helper.setText(R.id.tv_flight_end,routes.get(1));
+            }
+        }
         ImageView ivFlag = helper.getView(R.id.iv_flag);
         if (item.getMTransportTodoListBeans().get(0).getTpFlightType() == 0||item.getMTransportTodoListBeans().get(0).getTpFlightType() == 2)
             ivFlag.setImageResource(R.mipmap.li);

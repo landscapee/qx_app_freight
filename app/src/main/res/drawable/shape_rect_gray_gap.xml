@@ -9,8 +9,8 @@
         android:topRightRadius="@dimen/dp_3" />
     <stroke
         android:width="@dimen/dp_1"
-        android:color="@color/gray"
-        android:dashWidth="10dp"
+        android:color="#FF979797"
+        android:dashWidth="5dp"
         android:dashGap="3dp"
         />
 </shape>

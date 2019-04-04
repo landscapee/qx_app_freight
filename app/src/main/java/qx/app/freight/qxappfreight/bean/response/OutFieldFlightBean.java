@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 @Data
@@ -120,5 +121,5 @@ public class OutFieldFlightBean implements Serializable {
 
     private String routers;
 
-    private String route;//航线信息 "[\"KMG\",\"CTU\"]"
+    private List<String> route;//航线信息 "[\"KMG\",\"CTU\"]"
 }
