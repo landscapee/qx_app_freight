@@ -103,6 +103,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         waybillId = getIntent().getStringExtra("waybillId");
         taskId = getIntent().getStringExtra("taskId");
         reservoirType = getIntent().getStringExtra("reservoirType");
+        waybillCode = getIntent().getStringExtra("waybillCode");
         mDeclareItemBeans = (List<TransportListBean.DeclareItemBean>) getIntent().getSerializableExtra("transportListBeans");
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             //扫一扫
