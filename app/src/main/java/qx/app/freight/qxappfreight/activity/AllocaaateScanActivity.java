@@ -314,7 +314,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
         dValue =crossWeight -(mData.getScooterWeight()+goodsWeight+mData.getUldWeight());
 //        dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight());
-        dRate = CalculateUtil.calculateGradient(4, dValue+goodsWeight, crossWeight);
+        dRate = CalculateUtil.calculateGradient(4, dValue, crossWeight);
 
         //复磅差值
         tvDvalueFront.setText(dValue+"kg");
