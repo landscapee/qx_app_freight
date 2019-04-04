@@ -123,7 +123,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        ;
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
@@ -236,10 +235,14 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setTaskId(mInfo[11]);//代办数据中的id
                 infos.add(entity);
             }
-            model.setSeat(mInfo[5]);
-            model.setScooters(infos);
-            mPresenter = new ArrivalDataSavePresenter(this);
-            ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
+            if (infos.size() == 0) {
+                ToastUtil.showToast("请选择上传板车信息再提交");
+            } else {
+                model.setSeat(mInfo[5]);
+                model.setScooters(infos);
+                mPresenter = new ArrivalDataSavePresenter(this);
+                ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
+            }
         });
     }
 

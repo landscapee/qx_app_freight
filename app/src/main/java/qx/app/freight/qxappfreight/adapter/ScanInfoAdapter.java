@@ -18,11 +18,11 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;
     private String mInfo;
-    public ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data) {
+    private ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data) {
         super(R.layout.item_scan_info,data);
     }
     public ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data,String info) {
-        super(R.layout.item_scan_info,data);
+        this(data);
         mInfo=info;
     }
 

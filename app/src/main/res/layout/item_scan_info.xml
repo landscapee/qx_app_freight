@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@mipmap/point1"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
                         android:text="进"
                         android:textColor="@color/white" />
 
@@ -80,6 +80,7 @@
                         android:layout_weight="1"
                         android:drawableStart="@mipmap/shi"
                         android:drawablePadding="@dimen/dp_10"
+                        android:textSize="@dimen/sp_14"
                         android:gravity="center_vertical"
                         tools:text="13:12(4)" />
 
@@ -87,7 +88,7 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="@dimen/dp_40"
+                android:layout_width="@dimen/dp_30"
                 android:layout_height="match_parent"
                 android:layerType="software"
                 android:layout_marginLeft="-15dp"
@@ -97,7 +98,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/sp_12"
                 android:textColor="#999999"
