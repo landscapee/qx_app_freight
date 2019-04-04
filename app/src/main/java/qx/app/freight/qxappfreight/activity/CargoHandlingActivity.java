@@ -716,10 +716,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 listHandcar.add(mFtRuntimeFlightScooter);
                 mCargoHandlingAdapter.notifyDataSetChanged();
             }
-
-
         }
-
 
     }
 
