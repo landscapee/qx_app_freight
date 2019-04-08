@@ -72,7 +72,7 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
             }
         }
         ImageView ivFlag = helper.getView(R.id.iv_flag);
-        if (item.getMTransportTodoListBeans().get(0).getTpFlightType() == 0||item.getMTransportTodoListBeans().get(0).getTpFlightType() == 2)
+        if ("离".equals(item.getMTransportTodoListBeans().get(0).getTpType())||"拉".equals(item.getMTransportTodoListBeans().get(0).getTpType()))
             ivFlag.setImageResource(R.mipmap.li);
         else
             ivFlag.setImageResource(R.mipmap.jin);

@@ -447,8 +447,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 for (OutFieldTaskBean mOutFieldTaskBean:mAcceptTerminalTodoBean)
                 {
                     mTransportTodoListBean.setPlanePlace(mOutFieldTaskBean.getFlights().getSeat());
-                    mTransportTodoListBean.setPlaneType(mOutFieldTaskBean.getFlights().getAircraftType());
-                    mTransportTodoListBean.setEtd(mOutFieldTaskBean.getFlights().getEtd());
+                    mTransportTodoListBean.setPlaneType(mOutFieldTaskBean.getFlights().getAircraftNo());
+                    mTransportTodoListBean.setEtd(mOutFieldTaskBean.getFlights().getScheduleTime());
                     mTransportTodoListBean.setFlightRoute(mOutFieldTaskBean.getFlights().getRoute());
                     mTransportTodoListBean.setTpDestinationLocate(mOutFieldTaskBean.getEndAreaType());
                     mTransportTodoListBean.setNum(mOutFieldTaskBean.getNum());

@@ -19,7 +19,7 @@ public class OutFieldFlightBean implements Serializable {
 
     private String aircraftNo;
 
-    private long scheduleTime;
+    private long scheduleTime; //进港 预计到港时间，出港 预计出港时间
 
     private long estimateTime;
 
