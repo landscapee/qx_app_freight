@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +24,10 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DynamicDetailsAcitvity;
 import qx.app.freight.qxappfreight.adapter.DynamicInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
 
@@ -62,12 +68,50 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         initView();
     }
 
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.e("chage", "123");
+        if (mPresenter != null) {
+            if (isVisibleToUser) {
+                initData();
+            }
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     private void initView() {
+        EventBus.getDefault().register(this);
+
         type = getArguments().getString("type");
         movement = getArguments().getString("movement");
         day = getArguments().getString("day");
-
         mPresenter = new FlightdynamicPresenter(this);
+
+        initData();
+        Log.e("info", type + "");
+        Log.e("movement", movement + "");
+        Log.e("day", day + "");
+
+        mList = new ArrayList<>();
+        rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new DynamicInfoAdapter(mList, type);
+        rlDynamic.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo()));
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(FlightEventBusBean result) {
+        String flight = result.getFlight();
+        Log.e("航班刷新", flight);
+       if (!TextUtils.isEmpty(day)&&day.equals(flight))
+           initData();
+    }
+
+    public void initData() {
+
         BaseFilterEntity entity = new BaseFilterEntity();
         if ("today".equals(day))
             entity.setDay("today");
@@ -77,15 +121,6 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
             entity.setDay("tomorrow");
         ((FlightdynamicPresenter) mPresenter).flightdynamic(entity);
 
-        Log.e("info", type + "");
-        Log.e("movement", movement + "");
-        Log.e("day", day + "");
-
-        mList = new ArrayList<>();
-        rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new DynamicInfoAdapter(mList, type);
-        rlDynamic.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> DynamicDetailsAcitvity.startActivity(getActivity(),mList.get(position).getFlightId(),mList.get(position).getFlightNo()));
     }
 
     @Override

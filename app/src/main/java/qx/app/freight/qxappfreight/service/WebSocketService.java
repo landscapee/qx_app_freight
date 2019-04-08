@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.service;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +22,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
@@ -84,13 +89,14 @@ public class WebSocketService extends Service {
         compositeDisposable.add(dispLifecycle);
 
         //订阅  小猪登录地址
-        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/message")
+        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() +"/"+ UserInfoSingle.getInstance().getUserToken()+ "/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
                     if (null != topicMessage.getPayload()) {
-                        sendLoginEventBus(topicMessage.getPayload());
+                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
+                        loginOut();
                     }
                 }, throwable -> {
                     Log.e(TAG, "订阅失败", throwable);
@@ -177,6 +183,17 @@ public class WebSocketService extends Service {
     public static void startService(Activity activtity, String url) {
         uri = url;
         actionStart(activtity);
+    }
+
+    //强制登出
+    private void loginOut() {
+        UserInfoSingle.setUserNil();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(MyApplication.getContext());
+        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     //用于登录

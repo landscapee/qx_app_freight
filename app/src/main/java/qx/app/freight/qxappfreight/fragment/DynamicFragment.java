@@ -12,10 +12,13 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 
 public class DynamicFragment extends BaseFragment {
     @BindView(R.id.tb_title)
@@ -52,23 +55,29 @@ public class DynamicFragment extends BaseFragment {
     }
 
     public void initView() {
-
         mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_yesterday:
-                    nowFragment = mYFragment;  //昨天
+                    nowFragment = mYFragment; //昨天
+                    setEvnt("yesterday");
                     break;
                 case R.id.rb_today:
                     nowFragment = mTFragment; //今天
+                    setEvnt("today");
                     break;
                 case R.id.rb_tomrro:
                     nowFragment = mToFragment; //明天
+                    setEvnt("tomorrow");
                     break;
             }
             showFragment(nowFragment);
         });
-
     }
+
+    public void setEvnt(String str) {
+        EventBus.getDefault().post(new FlightEventBusBean(str));
+    }
+
 
     public void showFragment(Fragment fragment) {
         FragmentTransaction transaction = getChildFragmentManager()

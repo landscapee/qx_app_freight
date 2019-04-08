@@ -21,7 +21,7 @@ public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.Addt
         //名字
         helper.setText(R.id.tv_name, item.getFileTypeName());
         //文件
-        helper.setText(R.id.tv_accessory, item.getFileName());
+        helper.setText(R.id.tv_accessory, "电子文件预览");
 
 
 

@@ -33,6 +33,7 @@ public class LoginResponseBean implements Serializable {
     private String pwd;
     private int sort;
     private String token;
+    private String userToken;
     private List<RoleRSBean> roleRS;
 
     private String currentRole;

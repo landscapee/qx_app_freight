@@ -61,6 +61,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     RelativeLayout choiceRelativeLayout;
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
+    @BindView(R.id.ll_baozhuang)
+    LinearLayout mLlBaoZhuang;
+    @BindView(R.id.ll_yaoqiu)
+    LinearLayout mLlYaoQiu;
 
     private String waybillId; //运单id
     private String insFile;  //报检员资质路径
@@ -74,10 +78,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
-    private String mSpotFlag,mFlightNumber;
+    private String mSpotFlag, mFlightNumber;
 
 
-    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag,String userId,String flightNumber) {
+    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, String userId, String flightNumber) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
         intent.putExtra("waybillId", waybillId);
         intent.putExtra("id", id);
@@ -114,7 +118,26 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
-        ((FreightInfoPresenter) mPresenter).freightInfo(mFlightNumber.substring(0,2));
+        ((FreightInfoPresenter) mPresenter).freightInfo(mFlightNumber.substring(0, 2));
+
+
+        //默认选中
+        CbPack.setChecked(true);
+        mLlBaoZhuang.setOnClickListener(v -> {
+            if (CbPack.isChecked()) {
+                CbPack.setChecked(false);
+            } else {
+                CbPack.setChecked(true);
+            }
+        });
+        CbCollectRequire.setChecked(true);
+        mLlYaoQiu.setOnClickListener(v -> {
+            if (CbCollectRequire.isChecked()) {
+                CbCollectRequire.setChecked(false);
+            } else {
+                CbCollectRequire.setChecked(true);
+            }
+        });
 
         mStorageCommitEntity = new StorageCommitEntity();
         llReason.setVisibility(View.GONE);
@@ -122,7 +145,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             Log.e("SpotFlag", mSpotFlag);
             //0抽检，要弹，1不抽检，不需要弹
             if ("1".equals(mSpotFlag)) {
-                ToastUtil.showToast( "不需要抽检，默认通过");
+                ToastUtil.showToast("不需要抽检，默认通过");
             } else if ("0".equals(mSpotFlag)) {
                 if ("通过".equals(mTvCheck.getText()))
                     initPop1(true);
@@ -266,10 +289,12 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         bt_commit.setOnClickListener(v -> {
             if (cb_notpass.isChecked()) {
                 mTvCheck.setText("不通过");
+                mTvCheck.setTextColor(Color.parseColor("#FF0000"));
                 isSpSpot = 1;
                 llReason.setVisibility(View.VISIBLE);
             } else if (cb_adopt.isChecked()) {
                 mTvCheck.setText("通过");
+                mTvCheck.setTextColor(Color.parseColor("#05B324"));
                 llReason.setVisibility(View.GONE);
                 isSpSpot = 0;
             }
