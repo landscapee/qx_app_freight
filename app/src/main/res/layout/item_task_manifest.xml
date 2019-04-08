@@ -4,19 +4,23 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/shape_rect_gray"
-    android:padding="5dp"
+    android:paddingTop="13dp"
+    android:paddingBottom="13dp"
+    android:paddingLeft="9dp"
+    android:paddingRight="9dp"
     >
     <TextView
         android:id="@+id/tv_flight_number"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_rect_black"
+        android:layout_height="33dp"
+        android:background="@drawable/shape_rect_blue_b3d1fb"
+        android:drawableStart="@mipmap/flight"
         android:drawablePadding="@dimen/dp_10"
         android:gravity="center"
-        android:textColor="@color/color_fff"
-        android:textSize="@dimen/sp_12"
+        android:textColor="@color/blue_093"
+        android:textSize="@dimen/sp_16"
         android:text="3U12523"
-        android:padding="5dp"
+        android:padding="7dp"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -34,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
         android:gravity="center_vertical"
+        android:textColor="@color/text_main"
         android:text="@string/format_arrive_info" />
 
     <TextView
@@ -42,15 +47,16 @@
         android:layout_weight="1"
         android:layout_height="@dimen/dp_40"
         android:gravity="center"
-        android:textColor="#5e75c1"
+        android:textColor="@color/text_3"
         android:text="舱单核查"/>
     <Button
         android:id="@+id/btn_ffm"
-        android:layout_width="80dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_width="53dp"
+        android:layout_height="27dp"
         android:gravity="center"
         android:text="FFM报"
+        android:textSize="@dimen/sp_12"
         android:textColor="@color/white"
-        android:background="@drawable/shape_rect_blue"
+        android:background="@drawable/shape_rect_blue2"
         />
 </LinearLayout>
