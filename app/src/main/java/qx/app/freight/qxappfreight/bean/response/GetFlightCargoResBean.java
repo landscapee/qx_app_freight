@@ -52,10 +52,10 @@ public class GetFlightCargoResBean {
          * reWeightFinish : 1
          * scooterWeight : 555.0
          * scooterId : 852cda98f16f496cbf72a43b62ebdfe3
-         * uldWeight : 1200.0
+         * uldWeight : 1200.0       uld自重
          * volume : 200.0
          * updateStatus : 0
-         * reWeight : 0.0
+         * reWeight : 0.0           复重重量
          * scooterCode : 12923
          * id : a962f45f9cc24e2b8aaf919c283454e1
          * suggestRepository : H1

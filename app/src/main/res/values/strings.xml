@@ -31,7 +31,7 @@
     <string name="format_tally_info">总件数：%1$d 总重量：%2$fKG</string>
     <string name="format_version_name">版本号：%1$d</string>
     <string name="text_newest_version">最新版本</string>
-    <string name="format_goods_info">%1$d件|%2$fkg|%3$fm³</string>
+    <string name="format_goods_info">%1$d件|%2$.2fkg|%3$.2fm³</string>
     <string name="format_goods_inport">%1$s件|%2$skg</string>
     <string name="format_doc_arrive_info">文件到达:%1$s</string>
     <string name="format_doc_number_info">%1$d件/%2$dkg</string>

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +50,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvFlightType;
     @BindView(R.id.tv_start_place)
     TextView mTvStartPlace;
+    @BindView(R.id.iv_two_place)
+    ImageView mIvTwoPlace;
     @BindView(R.id.tv_middle_place)
     TextView mTvMiddlePlace;
     @BindView(R.id.tv_target_place)
@@ -112,10 +115,33 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setMainTitle(Color.WHITE, info[0] + "  装机");
         mTvPlaneInfo.setText(info[0]);
         mTvFlightType.setText(info[1]);
-        mTvStartPlace.setText(info[2]);
-        mTvMiddlePlace.setText(info[3]);
+        String start=info[2];
+        String middle=info[3];
+        String end=info[4];
+        if (TextUtils.isEmpty(start)){//起点都没有，说明没有航线信息，全部隐藏
+            mTvStartPlace.setVisibility(View.GONE);
+            mIvTwoPlace.setVisibility(View.GONE);
+            mTvMiddlePlace.setVisibility(View.GONE);
+            mTvTargetPlace.setVisibility(View.GONE);
+        }else {
+            if (TextUtils.isEmpty(middle)){//没有中转站信息
+                mTvStartPlace.setVisibility(View.VISIBLE);
+                mTvStartPlace.setText(start);
+                mIvTwoPlace.setVisibility(View.VISIBLE);
+                mTvMiddlePlace.setVisibility(View.GONE);
+                mTvTargetPlace.setVisibility(View.VISIBLE);
+                mTvTargetPlace.setText(end);
+            }else {
+                mTvStartPlace.setVisibility(View.VISIBLE);
+                mIvTwoPlace.setVisibility(View.GONE);
+                mTvMiddlePlace.setVisibility(View.VISIBLE);
+                mTvTargetPlace.setVisibility(View.VISIBLE);
+                mTvStartPlace.setText(start);
+                mTvMiddlePlace.setText(middle);
+                mTvTargetPlace.setText(end);
+            }
+        }
         mTargetPlace = info[4];
-        mTvTargetPlace.setText(info[4]);
         mTvSeat.setText(info[5]);
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mPresenter = new GetFlightCargoResPresenter(this);
@@ -218,7 +244,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
                     item.setTarget(mTargetPlace);
                     item.setType(model.getCargoType());
-                    item.setWeight(model.getReWeight());
+                    item.setWeight(model.getWeight());
                     item.setGoodsPosition(model.getGoodsLocation());
                     list.add(item);
                 }

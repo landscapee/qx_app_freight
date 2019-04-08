@@ -16,7 +16,8 @@ public class InstallEquipEntity {
     private String middlePlace;//中转地
     private String endPlace;//目的地
     private String seat;//座位数
-    private String scheduleTime;//时间（13：:14（4））4代表4号
+    private String scheduleTime;//计划时间（13：:14（4））4代表4号
+    private String actualTime;//实际时间（13：:14（4））4代表4号
     private List<MultiStepEntity> list;
     private int loadUnloadType;
     private int taskTpye;

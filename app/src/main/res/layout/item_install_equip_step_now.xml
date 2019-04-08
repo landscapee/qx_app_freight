@@ -7,15 +7,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_40"
         android:background="@drawable/shape_rect_gray_dark">
 
         <TextView
             android:id="@+id/tv_step_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginStart="@dimen/dp_15"
             android:gravity="center_vertical"
+            android:textSize="@dimen/sp_14"
             android:text="XXX" />
 
         <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView

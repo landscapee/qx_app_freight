@@ -17,6 +17,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
  * 拉货上报信息列表适配器
@@ -37,7 +38,7 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         if (item.getInfoType() == Constants.TYPE_PULL_BILL) {
             helper.setText(R.id.tv_bill_number, item.getBillNumber());
         }
-        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue( item.getTpScooterType()+ ""));//板车类型
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getTpScooterType()) + item.getTpScooterCode());//板车类型
         View viewDelete = helper.getView(R.id.ll_delete);
         //件数 - 重量 - 体积
         helper.setText(R.id.tv_goods_info, String.format(mContext.getString(R.string.format_goods_info)
@@ -49,10 +50,9 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         //机位号
         helper.setText(R.id.tv_place_number, item.getTpFlightLocate());
         // 时间
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm(dd)", Locale.CHINESE);
-        helper.setText(R.id.tv_plan_time, sdf.format(new Date(item.getTpFlightTime())));
+        helper.setText(R.id.tv_plan_time, TimeUtils.getHMDay(item.getTpFlightTime()));
         //舱位
-        helper.setText(R.id.tv_cangwei_info, item.getTpFregihtSpace());
+        helper.setText(R.id.tv_cangwei_info, item.getTpFreightSpace());
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {

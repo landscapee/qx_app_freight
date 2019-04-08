@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,6 +56,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     TextView mTvFlightType;//航班类型
     @BindView(R.id.tv_start_place)
     TextView mTvStartPlace;//航班起点
+    @BindView(R.id.iv_two_place)
+    ImageView mIvTwoPlace;
     @BindView(R.id.tv_middle_place)
     TextView mTvMiddlePlace;//航班中转点
     @BindView(R.id.tv_target_place)
@@ -133,9 +136,32 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         toolbar.setMainTitle(Color.WHITE, mInfo[0] + "  卸机");
         mTvPlaneInfo.setText(mInfo[0]);
         mTvFlightType.setText(mInfo[1]);
-        mTvStartPlace.setText(mInfo[2]);
-        mTvMiddlePlace.setText(mInfo[3]);
-        mTvTargetPlace.setText(mInfo[4]);
+        String start=mInfo[2];
+        String middle=mInfo[3];
+        String end=mInfo[4];
+        if (TextUtils.isEmpty(start)){//起点都没有，说明没有航线信息，全部隐藏
+            mTvStartPlace.setVisibility(View.GONE);
+            mIvTwoPlace.setVisibility(View.GONE);
+            mTvMiddlePlace.setVisibility(View.GONE);
+            mTvTargetPlace.setVisibility(View.GONE);
+        }else {
+            if (TextUtils.isEmpty(middle)){//没有中转站信息
+                mTvStartPlace.setVisibility(View.VISIBLE);
+                mTvStartPlace.setText(start);
+                mIvTwoPlace.setVisibility(View.VISIBLE);
+                mTvMiddlePlace.setVisibility(View.GONE);
+                mTvTargetPlace.setVisibility(View.VISIBLE);
+                mTvTargetPlace.setText(end);
+            }else {
+                mTvStartPlace.setVisibility(View.VISIBLE);
+                mIvTwoPlace.setVisibility(View.GONE);
+                mTvMiddlePlace.setVisibility(View.VISIBLE);
+                mTvTargetPlace.setVisibility(View.VISIBLE);
+                mTvStartPlace.setText(start);
+                mTvMiddlePlace.setText(middle);
+                mTvTargetPlace.setText(end);
+            }
+        }
         mTvSeat.setText(mInfo[5]);
         long takeOff = Long.valueOf(mInfo[8]);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm(dd)", Locale.CHINESE);

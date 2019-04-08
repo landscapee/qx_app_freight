@@ -128,7 +128,6 @@ public class StringUtil {
      * @return
      */
     public static String formatString2(Object value){
-
         return  String.format("%.1f", value);
     }
 

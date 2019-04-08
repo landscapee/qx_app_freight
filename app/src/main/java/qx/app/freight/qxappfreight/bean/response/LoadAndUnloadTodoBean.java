@@ -44,10 +44,10 @@ public class LoadAndUnloadTodoBean {
     private long loadUnloadTime;
     private long closeDoorTime;
     private long actualTakeoffTime;
-    private long actualArriveTime;
+    private long actualArriveTime;//实际到达时间
     private String aircraftno;
     private String seat;
-    private long scheduleTime;
+    private long scheduleTime;//预计起飞时间
     private String route;
     private long beginLoadUnloadTime;
 }

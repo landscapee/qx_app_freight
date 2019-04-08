@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -166,21 +167,15 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
             entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd HH:mm", Locale.CHINESE);
-            String time = sdf2.format(new Date(bean.getScheduleTime()));
-            String hourMinute = time.substring(3);
-            String day = time.substring(0, 2);
-            String result;
-            if (Integer.valueOf(day) < 10) {
-                result = hourMinute + "(" + day.substring(1) + ")";
-            } else {
-                result = hourMinute + "(" + day + ")";
+            if (bean.getActualArriveTime()!=0){
+                entity.setActualTime(TimeUtils.getHMDay(bean.getActualArriveTime()));
+            }else {
+                entity.setScheduleTime(TimeUtils.getHMDay(bean.getScheduleTime()));
             }
-            entity.setScheduleTime(result);
             if (bean.getRoute()==null){
-                    entity.setStartPlace("-");
-                    entity.setMiddlePlace("-");
-                    entity.setEndPlace("-");
+                    entity.setStartPlace("");
+                    entity.setMiddlePlace("");
+                    entity.setEndPlace("");
             }else {
                 String [] placeArray=bean.getRoute().split(",");
                 List<String> resultList=new ArrayList<>();
@@ -191,7 +186,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
                 if (placeArray.length == 2) {
                     entity.setStartPlace(resultList.get(0));
-                    entity.setMiddlePlace("--");
+                    entity.setMiddlePlace("");
                     entity.setEndPlace(resultList.get(resultList.size()-1));
                 } else {
                     entity.setStartPlace(resultList.get(0));
