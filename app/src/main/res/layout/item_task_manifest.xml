@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/tv_flight_number"
         android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_height="@dimen/dp_33"
         android:background="@drawable/shape_rect_blue_b3d1fb"
         android:drawableStart="@mipmap/flight"
         android:drawablePadding="@dimen/dp_10"
@@ -20,7 +20,7 @@
         android:textColor="@color/blue_093"
         android:textSize="@dimen/sp_16"
         android:text="3U12523"
-        android:padding="7dp"
+        android:padding="@dimen/dp_7"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -39,6 +39,7 @@
         android:layout_height="@dimen/dp_40"
         android:gravity="center_vertical"
         android:textColor="@color/text_main"
+        android:textSize="@dimen/sp_14"
         android:text="@string/format_arrive_info" />
 
     <TextView
@@ -47,14 +48,19 @@
         android:layout_weight="1"
         android:layout_height="@dimen/dp_40"
         android:gravity="center"
+        android:textSize="@dimen/sp_14"
         android:textColor="@color/text_3"
         android:text="舱单核查"/>
     <Button
         android:id="@+id/btn_ffm"
-        android:layout_width="53dp"
-        android:layout_height="27dp"
+        android:layout_width="@dimen/dp_53"
+        android:layout_height="@dimen/dp_27"
         android:gravity="center"
         android:text="FFM报"
+        android:paddingTop="6dp"
+        android:paddingBottom="@dimen/dp_4"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_7"
         android:textSize="@dimen/sp_12"
         android:textColor="@color/white"
         android:background="@drawable/shape_rect_blue2"
