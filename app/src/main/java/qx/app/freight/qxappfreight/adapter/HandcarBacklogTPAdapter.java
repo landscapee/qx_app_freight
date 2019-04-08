@@ -26,7 +26,7 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
 
         //板车类型 - 板车号
         helper.setText(R.id.tv_handcar_num,String.format(mContext.getString(R.string.format_company_info)
-        ,item.getTpScooterType()
+        ,MapValue.getCarTypeValue(item.getTpScooterType())
         ,item.getTpScooterCode()));
         //件数 - 重量 - 体积
 

@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,6 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class DynamicInfoFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {
     @BindView(R.id.rl_dynamic)
