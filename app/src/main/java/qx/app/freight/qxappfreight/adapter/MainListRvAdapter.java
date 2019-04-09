@@ -16,6 +16,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
@@ -46,7 +47,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
 //        String roadStr = item.getExpectedDeliveryGate()+" | "+TimeUtils.date2Tasktime3(item.getExpectedDeliveryTime())+"("+TimeUtils.getDay(item.getExpectedDeliveryTime())+")";
 //        helper.setText(R.id.tv_road_info, roadStr);
         //总件数-总体积-总重量
-        helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), item.getTotalNumberPackages(), item.getTotalVolume(), item.getTotalWeight()));
+        helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), StringUtil.formatStringDeleteDot(item.getTotalNumberPackages()), item.getTotalVolume(), item.getTotalWeight()));
        String coldStr = "";
        switch (item.getColdStorage()){
            case "0":
@@ -77,7 +78,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
         //航班号
         helper.setText(R.id.tv_flight_number, item.getFlightNumber());
         //航班预计起飞时间
-        helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info),TimeUtils.date2Tasktime3(item.getEtd()) , TimeUtils.getDay(item.getEtd())));
+        helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info),TimeUtils.date2Tasktime3(item.getFlightDate()) , TimeUtils.getDay(item.getFlightDate())));
         //航空公司-代理公司
         helper.setText(R.id.tv_company_info, String.format(mContext.getString(R.string.format_company_info),item.getFlightName(), item.getFreightName()));
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);

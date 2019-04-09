@@ -130,6 +130,23 @@ public class StringUtil {
     public static String formatString2(Object value){
         return  String.format("%.1f", value);
     }
+    /**
+     * 去掉后面无用的零
+     * @param value
+     * @return
+     */
+    public static String formatStringDeleteDot(String value){
+        if(value.indexOf(".") > 0){
+
+            //正则表达
+
+            value = value.replaceAll("0+?$", "");//去掉后面无用的零
+
+            value = value.replaceAll("[.]$", "");//如小数点后面全是零则去掉小数点
+
+        }
+        return value;
+    }
 
 
     public static boolean isEmpty(String str) {

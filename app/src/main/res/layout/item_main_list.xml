@@ -245,6 +245,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_blue_cce4"
                         android:drawableLeft="@mipmap/flight"
+                        android:drawablePadding="3dp"
                         android:paddingLeft="@dimen/dp_5"
                         android:paddingTop="@dimen/dp_4"
                         android:paddingRight="@dimen/dp_5"

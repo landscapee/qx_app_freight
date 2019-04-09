@@ -180,7 +180,8 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         });
         mCargoHandlingAdapter.setOnSpinnerClickLister((view, position) ->
                 {
-                    showPopWindowListCabin(position);
+                    if (!isPopWindow)
+                        showPopWindowListCabin(position);
 
                 });
         mCargoHandlingAdapter.setOnLockClickListener((view, position) -> {
@@ -356,7 +357,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                     getWindow().setAttributes(lp);
 //                    nowHandcarPositionSelect = -1;
-                    isPopWindow = false;
+//                    isPopWindow = false;
                 });
             }
         };
@@ -364,7 +365,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private void showPopWindowListCabin(int position) {
 
-        isPopWindow = true;
+//        isPopWindow = true;
         dataRc.setAdapter(mSpProductAdapter);
         nowHandcarPositionSelect = position;
         WindowManager.LayoutParams lp = getWindow().getAttributes();

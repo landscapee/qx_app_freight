@@ -36,7 +36,8 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
-            android:textColor="@color/black_3" />
+            android:textColor="@color/black_3"
+            />
 
         <View
             android:layout_width="1px"

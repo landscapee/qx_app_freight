@@ -54,6 +54,7 @@
             android:text="运单件数：33"
             android:textColor="#FF999999"
             android:textSize="14sp"
+            android:visibility="gone"
             />
     </LinearLayout>
 </LinearLayout>
