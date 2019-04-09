@@ -61,6 +61,7 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                             intent = new Intent(mContext, LoadPlaneActivity.class);
                         } else {
                             intent = new Intent(mContext, UnloadPlaneActivity.class);
+                            intent.putExtra("flight_type",mList.get(pos).getFlightType());
                         }
                         intent.putExtra("plane_info", mList.get(pos).getPlaneInfo());
                         mContext.startActivity(intent);

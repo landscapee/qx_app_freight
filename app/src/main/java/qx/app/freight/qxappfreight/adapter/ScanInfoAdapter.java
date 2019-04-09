@@ -35,6 +35,11 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         }else {
             type="小板";
         }
+        if (item.getFlightType().equals("I")){
+            helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
+        }else {
+            helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
+        }
         helper.setText(R.id.tv_board_number,type+item.getScooterCode());
         String []infos=mInfo.split("\\*");
         helper.setText(R.id.tv_flight_type,infos[0]);

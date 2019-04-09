@@ -39,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
+import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -297,6 +298,37 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> result) {
+        String flightType=getIntent().getStringExtra("flight_type");
+        if ("D".equals(flightType)||"I".equals(flightType)){
+            for (ScooterInfoListBean bean:result){
+                bean.setFlightType(flightType);
+            }
+            showBoardInfos(result);
+        }else {
+            ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+            dialog.setData(this, isLocal -> {
+                if (isLocal) {
+                    for (ScooterInfoListBean bean:result){
+                        bean.setFlightType("D");
+                    }
+                    showBoardInfos(result);
+                } else {
+                    for (ScooterInfoListBean bean:result){
+                        bean.setFlightType("I");
+                    }
+                    showBoardInfos(result);
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.show(getSupportFragmentManager(), "111");
+        }
+    }
+
+    /**
+     * 显示最后生成的板车信息列表
+     * @param result    板车信息
+     */
+    private void showBoardInfos(List<ScooterInfoListBean> result){
         if (mIsScanGoods) {
             mSlideRvGoods.setVisibility(View.VISIBLE);
             mListGoods.addAll(result);
@@ -311,7 +343,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             mScanPacAdapter.notifyDataSetChanged();
         }
     }
-
     @Override
     public void existResult(MyAgentListBean result) {
 

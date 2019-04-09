@@ -50,4 +50,5 @@ public class LoadAndUnloadTodoBean {
     private long scheduleTime;//预计起飞时间
     private String route;
     private long beginLoadUnloadTime;
+    private String flightType;//D、I类航班可由系统判定板车是国内还是国际，而M类混合航班则需要人工去辨别板车是属于国内还是国际。
 }

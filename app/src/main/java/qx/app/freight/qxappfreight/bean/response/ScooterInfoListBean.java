@@ -18,6 +18,7 @@ public class ScooterInfoListBean {
     private String createUser;
     private long updateDate;
     private String updateUser;
+    private String flightType;
 
 
 

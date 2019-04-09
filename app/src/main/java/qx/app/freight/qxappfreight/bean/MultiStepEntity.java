@@ -14,4 +14,5 @@ public class MultiStepEntity implements MultiItemEntity {
     private String stepName;
     private String stepDoneDate;
     private String planeInfo;
+    private String flightType;
 }

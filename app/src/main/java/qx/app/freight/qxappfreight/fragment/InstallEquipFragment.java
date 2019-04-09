@@ -167,6 +167,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
             entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机
+            entity.setFlightType("M");
             if (bean.getActualArriveTime()!=0){
                 entity.setActualTime(TimeUtils.getHMDay(bean.getActualArriveTime()));
             }else {
@@ -222,6 +223,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             checkedList.add(hasChecked);
             for (int i = 0; i < 5; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
+                entity1.setFlightType(entity.getFlightType());
                 entity1.setLoadUnloadType(bean.getTaskType());
                 if (bean.getTaskType() == 1) {//装机
                     entity1.setStepName(mStepNamesInstall[i]);

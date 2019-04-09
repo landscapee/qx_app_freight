@@ -21,4 +21,5 @@ public class InstallEquipEntity {
     private List<MultiStepEntity> list;
     private int loadUnloadType;
     private int taskTpye;
+    private String flightType;
 }
