@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -129,13 +128,17 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             //板车号
             mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
+                startAct(mScooterCode);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
+    }
+
+    public void startAct(String mScooterCode) {
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
     }
 
 
@@ -312,17 +315,21 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             MyAgentListBean mMyAgentListBean = (MyAgentListBean) data.getSerializableExtra("mMyAgentListBean");
             //总重量，总体积，总件数 计算
             if (mMyAgentListBean != null) {
-                list.add(mMyAgentListBean);
                 int number = 0;
                 int weight = 0;
                 int volume = 0;
                 for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getCargoCn().equals(mMyAgentListBean.getCargoCn())&&list.get(i).getScooterCode().equals(mMyAgentListBean.getScooterCode())){
+                        ToastUtil.showToast("当前板车号已在列表中请勿重复添加");
+                        return;
+                    }
                     number += list.get(i).getNumber();
                     weight += list.get(i).getWeight();
                     volume += list.get(i).getVolume();
                     if (!"".equals(reservoirName))
                         mMyAgentListBean.setReservoirName(reservoirName);
                 }
+                list.add(mMyAgentListBean);
                 mTvTotalNumber.setText("总件数:" + number + "");
                 mTvTotalVolume.setText("总体积:" + volume + "m³");
                 mTvTotalWeight.setText("总重量" + weight + "kg");
@@ -331,7 +338,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         } else if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
-                AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
+                startAct(mScooterCode);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }

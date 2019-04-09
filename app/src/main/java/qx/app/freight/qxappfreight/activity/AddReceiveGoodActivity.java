@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +14,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,10 +23,8 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -203,7 +201,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //ULD号
         mMyAgentListBean.setUldCode(mEtUldNumber.getText().toString().trim());
         //ULD自重
-        mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
+        if (!TextUtils.isEmpty(mEdtDeadWeight.getText().toString().trim()))
+            mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
+        else
+            mMyAgentListBean.setUldWeight(0);
         //超重重量
         if ("".equals(mEdtOverWeight.getText().toString())) {
             mMyAgentListBean.setOverWeight(0);
