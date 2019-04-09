@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -25,8 +27,17 @@ public class InPortTallyListAdapter extends BaseQuickAdapter<InPortTallyListEnti
 
     @Override
     protected void convert(BaseViewHolder helper, InPortTallyListEntity item) {
-        helper.setText(R.id.tv_way_bill, item.getWaybill()).setText(R.id.tv_start_place, item.getStartPlace()).setText(R.id.tv_middle_place, item.getMiddlePlace())
-                .setText(R.id.tv_target_place, item.getEndPlace());
+        if (TextUtils.isEmpty(item.getStartPlace())){
+            helper.getView(R.id.tv_start_place).setVisibility(View.GONE);
+            helper.getView(R.id.iv_two_place).setVisibility(View.GONE);
+            helper.getView(R.id.tv_end_place).setVisibility(View.GONE);
+        }else {
+            helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
+            helper.getView(R.id.iv_two_place).setVisibility(View.VISIBLE);
+            helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
+            helper.setText(R.id.tv_start_place,item.getStartPlace()).setText(R.id.tv_end_place,item.getEndPlace());
+        }
+        helper.setText(R.id.tv_way_bill, item.getWaybill());
         String docText = String.format(mContext.getString(R.string.format_doc_arrive_info), (item.isDocArrived()) ? "Y|" + item.getDocName() : "N");
         helper.setText(R.id.tv_doc_arrive_info, StringUtil.getAutoColorText(docText));
         helper.setText(R.id.tv_doc_number_info, String.format(mContext.getString(R.string.format_doc_number_info), item.getDocNumber(), (int) item.getDocWeight()));

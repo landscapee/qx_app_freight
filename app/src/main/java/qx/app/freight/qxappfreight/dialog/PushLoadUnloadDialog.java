@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -154,22 +152,38 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
             helper.setText(R.id.tv_plane_info, item.getFlightNo());
             helper.setText(R.id.tv_craft_number, item.getAircraftno());
-            if (item.getRoute() != null &&item.getRoute().contains(",")){
-                String [] placeArray=item.getRoute().split(",");
-                List<String> placeList=new ArrayList<>();
-                List<String> result=new ArrayList<>();
+            List<String> result = new ArrayList<>();
+            if (item.getRoute() != null && item.getRoute().contains(",")) {
+                String[] placeArray = item.getRoute().split(",");
+                List<String> placeList = new ArrayList<>();
                 placeList.addAll(Arrays.asList(placeArray));
-                for (String str:placeList){
-                    String temp=str.replaceAll("[^a-z^A-Z]", "");
+                for (String str : placeList) {
+                    String temp = str.replaceAll("[^a-z^A-Z]", "");
                     result.add(temp);
                 }
-                helper.setText(R.id.tv_start_place, result.get(0));
-                helper.setText(R.id.tv_middle_place, result.size() == 2 ? "-" : result.get(1));
-                helper.setText(R.id.tv_end_place, result.get(result.size()-1));
-            }else {
-                helper.setText(R.id.tv_start_place, "-");
-                helper.setText(R.id.tv_middle_place, "-");
-                helper.setText(R.id.tv_end_place, "-");
+            }
+            if (result.size() == 0) {//没有航线信息
+                helper.getView(R.id.tv_start_place).setVisibility(View.GONE);
+                helper.getView(R.id.iv_two_place).setVisibility(View.GONE);
+                helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
+                helper.getView(R.id.tv_end_place).setVisibility(View.GONE);
+            } else {
+                if (result.size() == 2) {//只有起点和终点
+                    helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.iv_two_place).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
+                    helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
+                    helper.setText(R.id.tv_start_place, result.get(0));
+                    helper.setText(R.id.tv_end_place, result.get(result.size() - 1));
+                } else {//至少有三个地方
+                    helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.iv_two_place).setVisibility(View.GONE);
+                    helper.getView(R.id.tv_middle_place).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
+                    helper.setText(R.id.tv_start_place, result.get(0));
+                    helper.setText(R.id.tv_middle_place, result.get(1));
+                    helper.setText(R.id.tv_end_place, result.get(result.size() - 1));
+                }
             }
             helper.setText(R.id.tv_time, TimeUtils.getHMDay(item.getScheduleTime()));
         }

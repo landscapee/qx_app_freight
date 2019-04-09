@@ -51,16 +51,11 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="PEK" />
-
-        <TextView
-            android:id="@+id/tv_middle_place"
+        <ImageView
+            android:id="@+id/iv_two_place"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:drawableStart="@mipmap/airlane"
-            android:drawableEnd="@mipmap/airlane"
-            android:gravity="center_vertical"
-            android:text="CTU" />
-
+            android:src="@mipmap/airlane"/>
         <TextView
             android:id="@+id/tv_end_place"
             android:layout_width="wrap_content"

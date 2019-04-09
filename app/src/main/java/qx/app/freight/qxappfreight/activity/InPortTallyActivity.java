@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -126,9 +127,12 @@ public class InPortTallyActivity extends BaseActivity implements MultiFunctionRe
         for (InportTallyBean bean : result) {
             InPortTallyListEntity model = new InPortTallyListEntity();
             model.setWaybill(bean.getWaybillCode());
-            model.setStartPlace(bean.getOriginatingStation());
-            model.setMiddlePlace("--");
-            model.setEndPlace(bean.getDestinationStation());
+            if (!TextUtils.isEmpty(bean.getRoute())){
+                String[]info=bean.getRoute().split("-");
+                model.setStartPlace(info[0]);
+                model.setMiddlePlace("");
+                model.setEndPlace(info[info.length-1]);
+            }
             model.setDocName(bean.getMailType());
             model.setDocArrived(bean.getDocumentDelivery() == 1);
             model.setDocNumber(bean.getTotalNumberPackages());
