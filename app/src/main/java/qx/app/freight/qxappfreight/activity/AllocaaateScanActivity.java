@@ -207,7 +207,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mData.setReWeight(crossWeight);
         mData.setReDifference(dValue);
         mData.setReDifferenceRate(dRate);
-        mData.setWeight(goodsWeight);
+//        mData.setWeight(goodsWeight);
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
         ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
 
@@ -243,7 +243,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mData.setReWeight(crossWeight);
         mData.setReDifference(dValue);
         mData.setReDifferenceRate(dRate);
-        mData.setWeight(goodsWeight);
+//        mData.setWeight(goodsWeight);
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
 
         ((GetScooterByScooterCodePresenter) mPresenter).saveScooter(mData);
@@ -310,9 +310,9 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             reviseWeight = Double.valueOf(s2);
         }
         //获取收运净重
-        goodsWeight = reviseWeight+mData.getWeight();
+//        goodsWeight = mData.getWeight();
 
-        dValue =crossWeight -(mData.getScooterWeight()+goodsWeight+mData.getUldWeight());
+        dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight()+reviseWeight);
 //        dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight());
         dRate = CalculateUtil.calculateGradient(4, dValue, crossWeight);
 
@@ -320,8 +320,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         tvDvalueFront.setText(dValue+"kg");
         //复磅差率
         tvGradientFront.setText(dRate+"%");
-        //收运净重
-        tvNetweightFront.setText(goodsWeight+"kg");
+//        //收运净重
+//        tvNetweightFront.setText(goodsWeight+"kg");
     }
 
     @Override
@@ -339,13 +339,25 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             finish();
             return;
         }
-        tvFlightid.setText(mData.getFlightNo());
-        tvNameFront.setText(mData.getScooterCode());
-        tvDeadweightFront.setText(mData.getScooterWeight()+"kg");
-        tvUld.setText(mData.getUldType()+" "+mData.getUldCode()+" "+mData.getIata());
-        tvUldSelf.setText(mData.getUldWeight()+"kg");
-        //收运净重
-        tvNetweightFront.setText(mData.getWeight()+"kg");
+        switch (mData.getReWeightFinish()){
+            case 0:
+                tvFlightid.setText(mData.getFlightNo());
+                tvNameFront.setText(mData.getScooterCode());
+                tvDeadweightFront.setText(mData.getScooterWeight()+"kg");
+                tvUld.setText(mData.getUldType()+" "+mData.getUldCode()+" "+mData.getIata());
+                tvUldSelf.setText(mData.getUldWeight()+"kg");
+                //收运净重
+                tvNetweightFront.setText(mData.getWeight()+"kg");
+                break;
+            case 1:
+                ToastUtil.showToast("该板车已复重");
+                finish();
+                break;
+            case 2:
+                ToastUtil.showToast("该板车复重异常");
+                finish();
+                break;
+        }
 
     }
 
