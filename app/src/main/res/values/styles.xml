@@ -129,4 +129,96 @@
         <item name="android:paddingRight">21dp</item>
         <item name="android:textColor">@color/color_fff</item>
     </style>
+
+    <!--公共 TextView 样式-->
+    <!-- ===============================================================================================-->
+    <!--12字体-->
+    <style name="public_tv_12sp" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FF707689</item>
+    </style>
+    <style name="public_tv_12sp_2" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="public_tv_12sp_3" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+    <style name="public_tv_12sp_4" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FF91A4B5</item>
+    </style>
+    <style name="public_tv_12sp_5" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FFDD4F8D</item>
+    </style>
+    <style name="public_tv_12sp_6" parent="android:Widget.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FF888888</item>
+    </style>
+    
+    <!--14字体-->
+    <style name="public_tv_14sp" parent="android:Widget.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FF333333</item>
+    </style>
+    <!--适用于： 1、出港收运item第三行 左侧灰字-->
+    <style name="public_tv_14sp_2" parent="public_tv_14sp">
+        <item name="android:textColor">#FF7E8D9A</item>
+    </style>
+    <!--适用于： 1、出港收运item第三行 右侧蓝字-->
+    <style name="public_tv_14sp_3" parent="public_tv_14sp">
+        <item name="android:textColor">#FF2E81FD</item>
+    </style>
+    <style name="public_tv_14sp_4" parent="public_tv_14sp">
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+    <style name="public_tv_14sp_5" parent="public_tv_14sp">
+        <item name="android:textColor">#FF738598</item>
+    </style>
+    <style name="public_tv_14sp_6" parent="public_tv_14sp">
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="public_tv_14sp_7" parent="public_tv_14sp">
+        <item name="android:textColor">#FF888888</item>
+    </style>
+
+    <!--16sp字体-->
+    <style name="public_tv_16sp" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FF333333</item>
+    </style>
+    <style name="public_tv_16sp_2" parent="public_tv_16sp">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="public_tv_16sp_3" parent="public_tv_16sp">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FF888888</item>
+    </style>
+    <style name="public_tv_16sp_4" parent="public_tv_16sp">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FF999999</item>
+    </style>
+
+    <!--18sp字体-->
+    <style name="public_tv_18sp" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+    <style name="public_tv_18sp_2" parent="public_tv_18sp">
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="public_tv_18sp_3" parent="public_tv_18sp">
+        <item name="android:textColor">#FF333333</item>
+    </style>
+    <style name="public_tv_18sp_4" parent="public_tv_18sp">
+        <item name="android:textColor">#FF888888</item>
+    </style>
+    <style name="public_tv_18sp_5" parent="public_tv_18sp">
+        <item name="android:textColor">#FFFF6400</item>
+    </style>
+
+    <!--公共的带图标的TextView-->
 </resources>
