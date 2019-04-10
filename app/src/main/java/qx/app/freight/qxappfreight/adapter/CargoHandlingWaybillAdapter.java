@@ -9,6 +9,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 public class CargoHandlingWaybillAdapter extends BaseQuickAdapter<FtGroupScooter, BaseViewHolder> {
 
@@ -45,6 +46,11 @@ public class CargoHandlingWaybillAdapter extends BaseQuickAdapter<FtGroupScooter
         helper.setText(R.id.tv_waybill_count,item.getNumber()+"");
         helper.setText(R.id.tv_weight,item.getWeight()+"");
         helper.setText(R.id.tv_volume,item.getVolume()+"");
+//        helper.setText(R.id.tv_destination,item.get+"");//目的站
+        if (!StringUtil.isEmpty(item.getRepName()))
+            helper.setText(R.id.tv_warehouse_area,item.getRepName());
+        else
+            helper.setText(R.id.tv_warehouse_area,"/");
 
         helper.setText(R.id.tv_subpackage,"分装");
         helper.setText(R.id.tv_all,"全装");

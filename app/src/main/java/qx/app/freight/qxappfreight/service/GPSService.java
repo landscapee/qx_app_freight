@@ -195,20 +195,20 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
         Log.d(TAG, "--定位服务启动--");
 
         //测试
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    sendGps(new PositionBean());
-                    TimeUnit.SECONDS.sleep(30000);
-
-                }catch (Exception e){
-
-                }
-
-            }
-        });
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    sendGps(new PositionBean());
+//                    TimeUnit.SECONDS.sleep(30000);
+//
+//                }catch (Exception e){
+//
+//                }
+//
+//            }
+//        });
+//        thread.start();
 
     }
 

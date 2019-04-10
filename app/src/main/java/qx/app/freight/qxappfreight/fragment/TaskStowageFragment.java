@@ -200,7 +200,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
                     list.add(mTransportListBean);
             }
         }
-        adapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(adapter);
         setTitleNum(list.size());
     }
 
