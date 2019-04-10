@@ -22,6 +22,7 @@ public class TransportListCommitEntity {
         private String waybillId;
         private String waybillCode;
         private String cargoId;
+        private String cargoCn;
         private int number;
         private double weight;
         private double volume;

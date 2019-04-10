@@ -155,6 +155,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
                 rcInfosEntity.setId(mMyAgentListBean.getId());
+                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
+                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
                 rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
                 rcInfosEntity.setReservoirType(reservoirType);
                 rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
