@@ -1,21 +1,14 @@
 package qx.app.freight.qxappfreight.adapter;
 
-import android.content.Intent;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.FFMActivity;
-import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
-import qx.app.freight.qxappfreight.bean.InPortTallyEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -27,7 +20,7 @@ public class InportTallyAdapter extends BaseQuickAdapter<TransportListBean, Base
         super(R.layout.item_task_manifest, list);
     }
 
-    public void setInportTallyListener(InportTallyInterface listener){
+    public void setInportTallyListener(InportTallyInterface listener) {
         this.listener = listener;
     }
 
@@ -35,7 +28,7 @@ public class InportTallyAdapter extends BaseQuickAdapter<TransportListBean, Base
     @Override
     protected void convert(BaseViewHolder helper, TransportListBean item) {
         helper.setText(R.id.tv_flight_number, item.getFlightNo());
-        helper.setText(R.id.tv_arrive_time, TimeUtils.date2Tasktime3(item.getEtd())+"("+TimeUtils.getDay(item.getEtd())+")");
+        helper.setText(R.id.tv_arrive_time, TimeUtils.date2Tasktime3(item.getEtd()) + "(" + TimeUtils.getDay(item.getEtd()) + ")");
         helper.setText(R.id.tv_type, "进港理货");
         TextView tvType = helper.getView(R.id.tv_type);
         Button btnFfm = helper.getView(R.id.btn_ffm);

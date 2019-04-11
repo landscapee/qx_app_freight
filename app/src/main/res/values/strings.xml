@@ -28,7 +28,7 @@
     <string name="load_error">加载失败</string>
     <string name="loading">正在加载...</string>
     <string name="format_store_number_goods_info">%1$d件 | %2$skg | %3$sm³</string>
-    <string name="format_tally_info">总件数：%1$d 总重量：%2$fKG</string>
+    <string name="format_tally_info">总件数：%1$d 总重量：%2$.2fKG</string>
     <string name="format_version_name">版本号：%1$d</string>
     <string name="text_newest_version">最新版本</string>
     <string name="format_goods_info">%1$d件|%2$.2fkg|%3$.2fm³</string>

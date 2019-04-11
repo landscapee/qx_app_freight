@@ -123,11 +123,9 @@ public class ModifyInportInfoActivity extends BaseActivity {
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     mErrorCodeList.add(finalI + 1);
-                    checkBox.setBackgroundColor(Color.RED);
                     textView.setTextColor(Color.RED);
                 } else {
                     mErrorCodeList = mErrorCodeList.stream().filter(o -> o != finalI + 1).collect(Collectors.toList());
-                    checkBox.setBackgroundColor(Color.WHITE);
                     textView.setTextColor(Color.parseColor("#738598"));
                 }
             });

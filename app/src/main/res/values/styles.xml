@@ -219,6 +219,8 @@
     <style name="public_tv_18sp_5" parent="public_tv_18sp">
         <item name="android:textColor">#FFFF6400</item>
     </style>
-
+    <style name="mycheckbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_custom_checkbox</item>
+    </style>
     <!--公共的带图标的TextView-->
 </resources>

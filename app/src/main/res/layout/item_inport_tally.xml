@@ -18,16 +18,17 @@
                android:id="@+id/tv_way_bill"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:background="@drawable/shape_rect_blue_cce4"
+               android:background="@drawable/shape_rect_blue_2e81fd"
                android:drawableStart="@mipmap/tracking_number"
-               android:drawablePadding="@dimen/dp_10"
+               android:drawablePadding="@dimen/dp_6"
                android:gravity="center"
+               android:textSize="@dimen/sp_16"
                android:paddingStart="9dp"
                android:paddingTop="@dimen/dp_8"
                android:paddingEnd="9dp"
                android:paddingBottom="@dimen/dp_8"
-               android:textColor="@color/blue_093"
-               tools:text="000-99999999"
+               android:textColor="#136BEF"
+               android:text="000-99999999"
                android:textStyle="bold" />
            <Space
                android:layout_width="0dp"
@@ -38,87 +39,105 @@
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:gravity="center_vertical"
+               android:textSize="@dimen/sp_14"
+               android:textColor="#333333"
                tools:text="PEK" />
-
-           <TextView
-               android:id="@+id/tv_middle_place"
+           <ImageView
+               android:id="@+id/iv_two_place"
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
-               android:drawableStart="@mipmap/airlane"
-               android:drawableEnd="@mipmap/airlane"
-               android:gravity="center_vertical"
-               tools:text="CTU" />
+               android:src="@mipmap/airlane"/>
 
            <TextView
-               android:id="@+id/tv_target_place"
+               android:id="@+id/tv_end_place"
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:gravity="center_vertical"
+               android:textSize="@dimen/sp_14"
+               android:textColor="#333333"
                tools:text="MXP" />
        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 tools:text="@string/format_doc_arrive_info"
-                android:gravity="center_vertical"
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"
                 android:id="@+id/tv_doc_arrive_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 tools:text="@string/format_doc_number_info"
                 android:id="@+id/tv_doc_number_info"
-                android:gravity="center_vertical"/>
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                tools:text="@string/format_customs_arrive_info"
-                android:gravity="center_vertical"
+                android:text="@string/format_customs_arrive_info"
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"
                 android:id="@+id/tv_customs_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                tools:text="@string/format_customs_number_info"
+                android:text="@string/format_customs_number_info"
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"
                 android:id="@+id/tv_customs_number_info"
-                android:gravity="center_vertical"/>
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 tools:text="@string/format_unpackage_info"
-                android:gravity="center_vertical"
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"
                 android:id="@+id/tv_unpackage_info"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 tools:text="@string/format_unpackage_number_info"
                 android:id="@+id/tv_unpackage_number_info"
-                android:gravity="center_vertical"/>
+                android:textColor="#888888"
+                android:textSize="@dimen/sp_14"/>
         </LinearLayout>
        <TextView
            android:layout_width="match_parent"
-           android:layout_height="@dimen/dp_40"
-           tools:text="@string/format_inport_tally_store_info"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/dp_10"
+           android:layout_marginBottom="@dimen/dp_10"
+           android:text="@string/format_inport_tally_store_info"
            android:id="@+id/tv_store_info"
+           android:textColor="#888888"
+           android:textSize="@dimen/sp_14"
            android:gravity="center_vertical|end"/>
        <LinearLayout
            android:layout_width="match_parent"
-           android:layout_height="@dimen/dp_40"
+           android:layout_height="wrap_content"
            android:orientation="horizontal">
            <TextView
                android:layout_width="0dp"
@@ -126,16 +145,15 @@
                android:layout_weight="1"
                android:text="无异常"
                android:id="@+id/tv_exception"
+               android:textColor="#888888"
+               android:textSize="@dimen/sp_14"
                android:gravity="center_vertical"/>
            <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-               android:background="@drawable/shape_rect_blue"
+               android:layout_width="73dp"
+               android:layout_height="27dp"
+               android:background="@drawable/shape_rect_blue_1aa6ff"
                android:text="修改"
-               android:paddingTop="@dimen/dp_10"
-               android:paddingBottom="@dimen/dp_10"
-               android:paddingStart="@dimen/dp_30"
-               android:paddingEnd="@dimen/dp_30"
+               android:gravity="center"
                android:textColor="@color/white"
                android:id="@+id/tv_modify"/>
        </LinearLayout>
@@ -152,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_8"
             android:orientation="horizontal"
-            android:layout_marginBottom="@dimen/dp_50"
+            android:layout_marginBottom="@dimen/dp_40"
             >
             <TextView
                 android:layout_width="@dimen/dp_4"

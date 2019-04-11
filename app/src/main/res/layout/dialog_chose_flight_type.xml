@@ -35,7 +35,7 @@
             android:gravity="center"
             android:textSize="@dimen/sp_15"
             android:textColor="#fff"
-            android:background="@drawable/shape_rect_blue_2e81fd"
+            android:background="@drawable/shape_rect_blue_2e81fd_dialog"
             android:layout_marginEnd="13dp"/>
         <TextView
             android:id="@+id/tv_inland_type"
