@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="@dimen/dp_5"
     android:background="@color/white"
     >
 
@@ -23,11 +24,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:drawableEnd="@mipmap/icon_down_black"
         android:gravity="end"
         android:text="电子文件预览"
         android:textColor="@color/main_tv_normal"
         android:textSize="@dimen/sp_12" />
+
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/right"/>
     </LinearLayout>
     <View style="@style/line_horizontal"/>
 

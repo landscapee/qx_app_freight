@@ -1,13 +1,17 @@
 package qx.app.freight.qxappfreight.service;
 
 import android.app.Activity;
-import android.app.Application;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
@@ -31,7 +35,7 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
@@ -51,7 +55,7 @@ public class WebSocketService extends Service {
     public void onCreate() {
         super.onCreate();
 //        EventBus.getDefault().isRegistered(this);
-        if (uri == null){
+        if (uri == null) {
             Log.e(TAG, "推送服务url为null");
             return;
         }
@@ -89,14 +93,15 @@ public class WebSocketService extends Service {
         compositeDisposable.add(dispLifecycle);
 
         //订阅  小猪登录地址
-        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() +"/"+ UserInfoSingle.getInstance().getUserToken()+ "/MT/message")
+        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
                     if (null != topicMessage.getPayload()) {
-                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
-                        loginOut();
+//                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
+//                        showdialog1();
+                        showDialog();
                     }
                 }, throwable -> {
                     Log.e(TAG, "订阅失败", throwable);
@@ -104,7 +109,7 @@ public class WebSocketService extends Service {
 
         compositeDisposable.add(dispTopic);
         //订阅  装机单变更推送
-        Log.e("tagPush","userid====="+UserInfoSingle.getInstance().getUserId());
+        Log.e("tagPush", "userid=====" + UserInfoSingle.getInstance().getUserId());
         Disposable loadingListPush = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -147,23 +152,23 @@ public class WebSocketService extends Service {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
-                    Log.e(TAG,topicMessage.getPayload());
-                    if (topicMessage.getPayload().contains("\"cancelFlag\":true")){//任务取消的推送
-                        if (topicMessage.getPayload().contains("\"taskType\":1")){//装卸机
+                    Log.e(TAG, topicMessage.getPayload());
+                    if (topicMessage.getPayload().contains("\"cancelFlag\":true")) {//任务取消的推送
+                        if (topicMessage.getPayload().contains("\"taskType\":1")) {//装卸机
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
-                        }else if (topicMessage.getPayload().contains("\"taskType\":2")){//运输
+                        } else if (topicMessage.getPayload().contains("\"taskType\":2")) {//运输
                             CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
                         }
-                    }else {
-                        if (topicMessage.getPayload().contains("\"taskType\":1")||topicMessage.getPayload().contains("\"taskType\":2")){//装卸机
+                    } else {
+                        if (topicMessage.getPayload().contains("\"taskType\":1") || topicMessage.getPayload().contains("\"taskType\":2")) {//装卸机
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
-                        }else if (topicMessage.getPayload().contains("\"taskType\":0")){//运输
+                        } else if (topicMessage.getPayload().contains("\"taskType\":0")) {//运输
                             CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
@@ -205,6 +210,7 @@ public class WebSocketService extends Service {
     public static void sendReshEventBus(WebSocketResultBean bean) {
         EventBus.getDefault().post(bean);
     }
+
     //用于装卸机运输推送刷新弹窗
     public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
         EventBus.getDefault().post(bean);
@@ -271,11 +277,26 @@ public class WebSocketService extends Service {
 
     //停止连接
     public static void stopServer(Context context) {
-        if (mStompClient != null){
+        if (mStompClient != null) {
             mStompClient.disconnect();
             mStompClient = null;
         }
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
+    }
+
+    private void showDialog() {
+        CommonDialog dialog = new CommonDialog(getApplicationContext());
+        dialog.setTitle("提示")
+                .setMessage("你的账号在其他地方登陆！请重新登陆")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog1, confirm) -> {
+                        loginOut();
+                });
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> dialog.show());
     }
 }
