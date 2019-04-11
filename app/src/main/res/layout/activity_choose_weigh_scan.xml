@@ -29,7 +29,7 @@
 
             <TextView
                 android:text="1#称"
-                android:style="@style/public_tv_12sp_6"
+                style="@style/public_tv_12sp_6"
                 android:gravity="center"
                 android:background="@drawable/shape_circle_gray"
                 android:layout_width="67dp"
@@ -55,7 +55,7 @@
                 android:layout_height="@dimen/dp_80" />
             <TextView
                 android:text="2#称"
-                android:style="@style/public_tv_12sp_6"
+                style="@style/public_tv_12sp_6"
                 android:gravity="center"
                 android:background="@drawable/shape_circle_gray"
                 android:layout_width="67dp"
@@ -85,7 +85,7 @@
                 android:layout_height="@dimen/dp_80" />
             <TextView
                 android:text="3#称"
-                android:style="@style/public_tv_12sp_6"
+                style="@style/public_tv_12sp_6"
                 android:gravity="center"
                 android:background="@drawable/shape_circle_gray"
                 android:layout_width="67dp"
@@ -111,7 +111,7 @@
                 android:layout_height="@dimen/dp_80" />
             <TextView
                 android:text="4#称"
-                android:style="@style/public_tv_12sp_6"
+                style="@style/public_tv_12sp_6"
                 android:gravity="center"
                 android:background="@drawable/shape_circle_gray"
                 android:layout_width="67dp"

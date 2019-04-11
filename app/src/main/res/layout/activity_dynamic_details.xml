@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="35dp"
+                android:textSize="@dimen/sp_11"
                 android:layout_toRightOf="@+id/iv_jiwei"
                 android:textColor="@color/white" />
 
@@ -55,6 +56,7 @@
                 android:layout_below="@+id/tv_originating"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="3dp"
+                android:textSize="@dimen/sp_11"
                 android:textColor="@color/white" />
 
             <ImageView
@@ -81,6 +83,7 @@
                 android:layout_below="@+id/tv_destination"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="30dp"
+                android:textSize="@dimen/sp_11"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
@@ -97,6 +100,7 @@
                 android:layout_marginLeft="41dp"
                 android:layout_marginTop="28dp"
                 android:text="机位"
+                android:textSize="13sp"
                 android:textColor="@color/white" />
 
             <TextView
@@ -106,7 +110,8 @@
                 android:layout_below="@+id/iv_seat"
                 android:layout_marginLeft="41dp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/white" />
+                android:textStyle="bold"
+                style="@style/public_tv_18sp" />
 
 
             <TextView
@@ -115,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="28dp"
+                android:textSize="13sp"
                 android:textColor="@color/white" />
 
             <TextView
@@ -124,7 +130,8 @@
                 android:layout_below="@+id/tv_luggage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/white" />
+                android:textStyle="bold"
+                style="@style/public_tv_18sp" />
 
             <TextView
                 android:id="@+id/iv_runway"
@@ -134,6 +141,7 @@
                 android:layout_marginTop="28dp"
                 android:layout_marginRight="41dp"
                 android:text="跑道"
+                android:textSize="13sp"
                 android:textColor="@color/white" />
 
             <TextView
@@ -144,7 +152,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="42dp"
-                android:textColor="@color/white" />
+                android:textStyle="bold"
+                style="@style/public_tv_18sp" />
 
 
         </RelativeLayout>
@@ -166,6 +175,7 @@
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="20dp"
                     android:text="成都温度"
+                    android:textSize="13sp"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -174,8 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textStyle="bold"
+                    style="@style/public_tv_18sp"  />
 
 
             </LinearLayout>
@@ -192,6 +202,7 @@
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="20dp"
                     android:text="能见度"
+                    android:textSize="13sp"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -200,8 +211,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textStyle="bold"
+                    style="@style/public_tv_18sp"  />
 
 
             </LinearLayout>
@@ -218,6 +229,7 @@
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="20dp"
                     android:text="风速"
+                    android:textSize="13sp"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -226,8 +238,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textStyle="bold"
+                    style="@style/public_tv_18sp" />
 
 
             </LinearLayout>
@@ -244,6 +256,7 @@
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="20dp"
                     android:text="风级"
+                    android:textSize="13sp"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -252,8 +265,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="33dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textStyle="bold"
+                    style="@style/public_tv_18sp"  />
 
             </LinearLayout>
 
@@ -265,7 +278,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"
             android:text="发布时间:2019-03-28      10:00:00"
-            android:textColor="@color/white" />
+            android:textColor="#FFBFE2FE"
+            android:textSize="11sp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -279,8 +293,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="MU9999"
-                android:textColor="#333333"
-                android:textSize="14sp" />
+                style="@style/public_tv_14sp"/>
 
             <TextView
                 android:id="@+id/tv_progress"
@@ -290,8 +303,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="45%"
-                android:textColor="#2E81FD"
-                android:textSize="14sp" />
+                style="@style/public_tv_14sp_3"/>
 
             <ProgressBar
                 android:id="@+id/progress"
