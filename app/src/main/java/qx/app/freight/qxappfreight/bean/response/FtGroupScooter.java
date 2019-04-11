@@ -49,6 +49,11 @@ public class FtGroupScooter implements Serializable {
      */
     private Double volume;
 
+    /**
+     * 目的站
+     */
+    private String destinationStation;
+
 //--------------------------------
     /**
      * 板车
@@ -102,6 +107,9 @@ public class FtGroupScooter implements Serializable {
      * 组板记录状态:
      * 0.正常
      * 1.拉回
+     *  2.转运
      */
     private Integer groupScooterStatus;
+
+
 }

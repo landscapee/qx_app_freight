@@ -9,8 +9,7 @@
     <LinearLayout
         android:id="@+id/item_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_height="match_parent"
         android:background="@drawable/shape_rect_gray"
         android:orientation="vertical"
         android:padding="@dimen/dp_10">
@@ -47,8 +46,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:src="@mipmap/channel"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_road_info"
@@ -59,8 +57,7 @@
                 android:gravity="center"
                 android:text="@string/format_main_list_way"
                 android:textColor="@color/black_3"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -133,8 +130,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_2"
-                    android:background="@drawable/shape_gray_gap_line"
+                    android:layout_height="13dp"
+                    android:background="@drawable/shape_gray_gap_line_9797"
                     android:layerType="software" />
 
                 <LinearLayout
@@ -227,10 +224,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_2"
-                    android:background="@drawable/shape_gray_gap_line"
-                    android:layerType="software"
                     android:layout_marginTop="13dp"
-                    />
+                    android:background="@drawable/shape_gray_gap_line_9797"
+                    android:layerType="software" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -256,19 +253,17 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ji"
                         android:layout_marginLeft="@dimen/dp_10"
-                        />
+                        android:src="@mipmap/ji" />
 
                     <TextView
                         android:id="@+id/tv_arrive_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:gravity="center_vertical"
                         android:text="@string/format_arrive_info"
-                        android:textSize="@dimen/sp_12"
-                        android:layout_marginLeft="5dp"
-                        />
+                        android:textSize="@dimen/sp_12" />
 
                     <Space
                         android:layout_width="0dp"
@@ -285,12 +280,14 @@
                 </LinearLayout>
             </LinearLayout>
         </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
+        <ImageView
+            android:id="@+id/iv_control_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="9dp"
+            android:src="@mipmap/expand" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/iv_control_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:src="@mipmap/expand" />
+
 </FrameLayout>
