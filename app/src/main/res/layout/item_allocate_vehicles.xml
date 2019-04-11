@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginLeft="2dp"
             android:padding="8dp">
 
 
@@ -130,7 +130,7 @@
             android:layout_marginRight="10dp"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="11sp"
-            android:singleLine="true"
+
             android:textColor="#999999"
             android:text="待复重" />
 
@@ -139,8 +139,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
         android:background="@drawable/shape_black_gap_line"
         android:layerType="software" />
 </LinearLayout>

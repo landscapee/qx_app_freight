@@ -42,7 +42,7 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightId
         //板车类型~板车号
         helper.setText(R.id.tv_scooter_type, scooterType);
         //板车类型~板车号
-        helper.setText(R.id.allocate_address, String.format(mContext.getString(R.string.format_allocate_ddress_info), scooterName, item.getScooterCode()));
+        helper.setText(R.id.allocate_address, scooterName+item.getScooterCode());
         //件数~重量~体积
         helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTotal(), item.getWeight(), item.getVolume()));
         //航班号
