@@ -61,7 +61,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
 
-    private int max = 0,index = 0;
+    private int max = 0,index = 0; //用于执行多个子任务的领受操作
 
     @Nullable
     @Override
