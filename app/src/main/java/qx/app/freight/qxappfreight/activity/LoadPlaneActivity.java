@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -58,6 +59,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvTargetPlace;
     @BindView(R.id.tv_seat)
     TextView mTvSeat;
+    @BindView(R.id.tv_start_time)
+    TextView mTvStartTime;
     @BindView(R.id.tv_pull_goods_report)
     TextView mTvPullGoodsReport;
     @BindView(R.id.tv_error_report)
@@ -143,6 +146,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         }
         mTargetPlace = info[4];
         mTvSeat.setText(info[5]);
+        mTvStartTime.setText(TimeUtils.getHMDay(Long.valueOf(info[6])));
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = info[7];
