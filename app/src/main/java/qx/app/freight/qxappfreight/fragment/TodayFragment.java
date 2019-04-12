@@ -162,9 +162,9 @@ public class TodayFragment extends BaseFragment implements FlightdynamicContract
             linePagerIndicator.setLineHeight(6f);
             linePagerIndicator.setRoundRadius(4f);
             //底线的高度
-            linePagerIndicator.setLineHeight(UIUtil.dip2px(context, 6));
+            linePagerIndicator.setLineHeight(UIUtil.dip2px(context, 2));
             //底线的宽度
-            linePagerIndicator.setLineWidth(UIUtil.dip2px(context, 50));
+            linePagerIndicator.setLineWidth(UIUtil.dip2px(context, 20));
             linePagerIndicator.setRoundRadius(UIUtil.dip2px(context, 3));
             linePagerIndicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
             return linePagerIndicator;
