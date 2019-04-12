@@ -73,12 +73,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        getDeviceInfo();
     }
 
-    private void getDeviceInfo(){
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneBrand());
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
-        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
-    }
+//    private void getDeviceInfo(){
+//        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
+//        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneBrand());
+//        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
+//        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
+//    }
 
     /**
      * 登录方法
