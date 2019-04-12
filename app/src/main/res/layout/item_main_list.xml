@@ -45,7 +45,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/format_number_info"
-                android:textColor="@color/text_main" />
+                android:textColor="@color/text_main"
+                android:textStyle="bold"
+                />
 
             <ImageView
                 android:id="@+id/tv_road"
@@ -95,7 +97,7 @@
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="0dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/text_main" />
+                android:textColor="@color/text_main2" />
         </LinearLayout>
 
         <LinearLayout
