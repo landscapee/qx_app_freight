@@ -136,6 +136,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
                 if (canScan) {//可以扫描
                     ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
+                }else {
+                    ToastUtil.showToast("当前已无可以分装的运单");
                 }
             } else {
                 ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
@@ -189,7 +191,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 boolean infoFull = true;
                 if (mPullBoardList.size() != 0) {
                     for (TransportTodoListBean bean : mPullBoardList) {
-                        if (bean.getTpCargoNumber() == 0 && bean.getTpCargoWeight() == 0.0) {//板车信息中有一条件数并且重量都为0，则不能提交
+                        if (bean.getPullInNumber() == 0 && bean.getPullInWeight() == 0.0) {//板车信息中有一条件数并且重量都为0，则不能提交
                             infoFull = false;
                             break;
                         }
@@ -197,7 +199,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
                 if (mPullBoardList.size() != 0) {
                     for (TransportTodoListBean bean : mPullBoardList) {
-                        if (bean.getTpCargoNumber() == 0 && bean.getTpCargoWeight() == 0.0) {//运单信息中有一条件数并且重量都为0，则不能提交
+                        if (bean.getPullInNumber() == 0 && bean.getPullInWeight() == 0.0) {//运单信息中有一条件数并且重量都为0，则不能提交
                             infoFull = false;
                             break;
                         }
@@ -249,14 +251,14 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         if (number > leftNumber) {
                             ToastUtil.showToast("数量输入不合法，已设置为允许的件数最大值");
                             etNumber.setText("" + leftNumber);
-                            mPullBillList.get(index).setTpCargoNumber(leftNumber);//输入的分装件数持久化到数据中去
+                            mPullBillList.get(index).setPullInNumber(leftNumber);//输入的分装件数持久化到数据中去
                         } else {
-                            mPullBillList.get(index).setTpCargoNumber(number);//输入的分装件数持久化到数据中去
+                            mPullBillList.get(index).setPullInNumber(number);//输入的分装件数持久化到数据中去
                         }
                         int usedNumber = 0;
                         for (TransportTodoListBean bean1 : mPullBillList) {
                             if (bean1.getBillCode().equals(billCode)) {
-                                usedNumber += bean1.getTpCargoNumber();
+                                usedNumber += bean1.getPullInNumber();
                             }
                         }
                         billBean.setBillItemNumber(billBean.getMaxNumber() - usedNumber);
@@ -268,7 +270,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                             ToastUtil.showToast("数量输入不合法，已设置为允许的件数最大值");
                             etNumber.setText(mPullBoardList.get(index).getMaxBillNumber() + "");
                         }
-                        mPullBoardList.get(index).setTpCargoNumber(Integer.valueOf(etNumber.getText().toString()));
+                        mPullBoardList.get(index).setPullInNumber(Integer.valueOf(etNumber.getText().toString()));
                     }
                 }
             }
@@ -284,17 +286,17 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         if (weight > leftWeight) {
                             ToastUtil.showToast("质量输入不合法，已设置为允许的质量最大值");
                             etWeight.setText("" + leftWeight);
-                            mPullBillList.get(index).setTpCargoWeight(leftWeight);//输入的分装质量持久化到数据中去
+                            mPullBillList.get(index).setPullInWeight(leftWeight);//输入的分装质量持久化到数据中去
                         } else {
-                            mPullBillList.get(index).setTpCargoWeight(weight);//输入的分装质量持久化到数据中去
+                            mPullBillList.get(index).setPullInWeight(weight);//输入的分装质量持久化到数据中去
                         }
-                        double usedNumber = 0;
+                        double usedWeight = 0;
                         for (TransportTodoListBean bean1 : mPullBillList) {
                             if (bean1.getBillCode().equals(billCode)) {
-                                usedNumber += bean1.getTpCargoWeight();
+                                usedWeight += bean1.getPullInWeight();
                             }
                         }
-                        billBean.setBillItemWeight(billBean.getMaxWeight() - usedNumber);
+                        billBean.setBillItemWeight(billBean.getMaxWeight() - usedWeight);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etWeight.getText().toString())) {
@@ -303,7 +305,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                             ToastUtil.showToast("质量输入不合法，已设置为允许的质量最大值");
                             etWeight.setText(mPullBoardList.get(index).getMaxBillWeight() + "");
                         }
-                        mPullBoardList.get(index).setTpCargoWeight(Double.valueOf(etWeight.getText().toString()));
+                        mPullBoardList.get(index).setPullInWeight(Double.valueOf(etWeight.getText().toString()));
                     }
                 }
             }

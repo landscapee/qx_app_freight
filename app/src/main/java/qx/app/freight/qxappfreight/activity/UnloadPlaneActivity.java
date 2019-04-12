@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -65,8 +66,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     TextView mTvTargetPlace;//航班终点
     @BindView(R.id.tv_seat)
     TextView mTvSeat;//航班机位数
-    @BindView(R.id.tv_start_time)
-    TextView mTvStartTime;//航班起飞时间
     @BindView(R.id.tv_arrive_time)
     TextView mTvArriveTime;//航班到达时间
     @BindView(R.id.tv_board_goods_number)
@@ -137,23 +136,23 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         toolbar.setMainTitle(Color.WHITE, mInfo[0] + "  卸机");
         mTvPlaneInfo.setText(mInfo[0]);
         mTvFlightType.setText(mInfo[1]);
-        String start=mInfo[2];
-        String middle=mInfo[3];
-        String end=mInfo[4];
-        if (TextUtils.isEmpty(start)){//起点都没有，说明没有航线信息，全部隐藏
+        String start = mInfo[2];
+        String middle = mInfo[3];
+        String end = mInfo[4];
+        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
             mTvStartPlace.setVisibility(View.GONE);
             mIvTwoPlace.setVisibility(View.GONE);
             mTvMiddlePlace.setVisibility(View.GONE);
             mTvTargetPlace.setVisibility(View.GONE);
-        }else {
-            if (TextUtils.isEmpty(middle)){//没有中转站信息
+        } else {
+            if (TextUtils.isEmpty(middle)) {//没有中转站信息
                 mTvStartPlace.setVisibility(View.VISIBLE);
                 mTvStartPlace.setText(start);
                 mIvTwoPlace.setVisibility(View.VISIBLE);
                 mTvMiddlePlace.setVisibility(View.GONE);
                 mTvTargetPlace.setVisibility(View.VISIBLE);
                 mTvTargetPlace.setText(end);
-            }else {
+            } else {
                 mTvStartPlace.setVisibility(View.VISIBLE);
                 mIvTwoPlace.setVisibility(View.GONE);
                 mTvMiddlePlace.setVisibility(View.VISIBLE);
@@ -164,11 +163,13 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             }
         }
         mTvSeat.setText(mInfo[5]);
-        long takeOff = Long.valueOf(mInfo[8]);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm(dd)", Locale.CHINESE);
-        mTvStartTime.setText(sdf.format(new Date(takeOff)));
-        long arrive = Long.valueOf(mInfo[9]);
-        mTvArriveTime.setText(sdf.format(new Date(arrive)));
+        long arrive;
+        if (!TextUtils.isEmpty(mInfo[9]) && !"0".equals(mInfo[9])) {//有实际到达时间
+            arrive = Long.valueOf(mInfo[9]);
+        } else {
+            arrive = Long.valueOf(mInfo[6]);
+        }
+        mTvArriveTime.setText(TimeUtils.getHMDay(arrive));
         String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
         mTvScanGoods.setText(Html.fromHtml(scanGoods));
         String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";
@@ -298,22 +299,22 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> result) {
-        String flightType=getIntent().getStringExtra("flight_type");
-        if ("D".equals(flightType)||"I".equals(flightType)){
-            for (ScooterInfoListBean bean:result){
+        String flightType = getIntent().getStringExtra("flight_type");
+        if ("D".equals(flightType) || "I".equals(flightType)) {
+            for (ScooterInfoListBean bean : result) {
                 bean.setFlightType(flightType);
             }
             showBoardInfos(result);
-        }else {
+        } else {
             ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
             dialog.setData(this, isLocal -> {
                 if (isLocal) {
-                    for (ScooterInfoListBean bean:result){
+                    for (ScooterInfoListBean bean : result) {
                         bean.setFlightType("D");
                     }
                     showBoardInfos(result);
                 } else {
-                    for (ScooterInfoListBean bean:result){
+                    for (ScooterInfoListBean bean : result) {
                         bean.setFlightType("I");
                     }
                     showBoardInfos(result);
@@ -326,9 +327,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     /**
      * 显示最后生成的板车信息列表
-     * @param result    板车信息
+     *
+     * @param result 板车信息
      */
-    private void showBoardInfos(List<ScooterInfoListBean> result){
+    private void showBoardInfos(List<ScooterInfoListBean> result) {
         if (mIsScanGoods) {
             mSlideRvGoods.setVisibility(View.VISIBLE);
             mListGoods.addAll(result);
@@ -343,6 +345,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             mScanPacAdapter.notifyDataSetChanged();
         }
     }
+
     @Override
     public void existResult(MyAgentListBean result) {
 
