@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +37,14 @@ import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
+import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.TransportListCommitContract;
 import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
+import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -50,7 +54,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
  * TODO :出港收货页面
  * Created by pr
  */
-public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ScooterInfoListContract.scooterInfoListView {
     @BindView(R.id.mfrv_receive_good)
     MultiFunctionSlideRecylerView mMfrvData;
     @BindView(R.id.btn_receive_good)
@@ -321,7 +325,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 int weight = 0;
                 int volume = 0;
                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getCargoCn().equals(mMyAgentListBean.getCargoCn())&&list.get(i).getScooterCode().equals(mMyAgentListBean.getScooterCode())){
+                    if (list.get(i).getCargoCn().equals(mMyAgentListBean.getCargoCn()) && list.get(i).getScooterCode().equals(mMyAgentListBean.getScooterCode())) {
                         ToastUtil.showToast("当前板车号已在列表中请勿重复添加");
                         return;
                     }
@@ -340,13 +344,25 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         } else if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
-                startAct(mScooterCode);
+                getNumberInfo(mScooterCode);
             } else {
                 ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
             }
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
+    }
+
+    //获取板车信息
+    public void getNumberInfo(String str) {
+        mPresenter = new ScooterInfoListPresenter(this);
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
+        MyAgentListBean myAgentListBean = new MyAgentListBean();
+        baseFilterEntity.setSize(10);
+        baseFilterEntity.setCurrent(1);
+        myAgentListBean.setScooterCode(str);
+        baseFilterEntity.setFilter(myAgentListBean);
+        ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
     }
 
     @Override
@@ -356,5 +372,23 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             upData();
             dismissProgessDialog();
         }, 2000);
+    }
+
+    @Override
+    public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
+        if (scooterInfoListBeans.size() != 0)
+            startAct(scooterInfoListBeans.get(0).getScooterCode());
+        else
+            ToastUtil.showToast("当前板车号不正确请重新输入");
+
+    }
+
+    @Override
+    public void existResult(MyAgentListBean existBean) {
+    }
+
+    @Override
+    public void addInfoResult(MyAgentListBean result) {
+
     }
 }
