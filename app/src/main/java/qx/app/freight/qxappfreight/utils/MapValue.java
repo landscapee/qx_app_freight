@@ -30,15 +30,13 @@ public class MapValue {
     public static String getCarTypeValue(String code){
         String value ="无";
         if ("0".equals(code))
-            value = "大滚筒（宽）";
+            value = "大滚筒(宽)";
         else if ("1".equals(code))
-            value = "大滚筒（窄）";
+            value = "大滚筒(窄)";
         else if ("2".equals(code))
             value = "小滚筒";
         else if ("3".equals(code))
             value = "平板";
-
-
         return value;
     }
 
