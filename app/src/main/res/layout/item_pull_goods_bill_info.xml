@@ -78,12 +78,12 @@
                     android:id="@+id/tv_plan_time"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     android:drawableStart="@mipmap/ji"
                     android:drawablePadding="@dimen/dp_10"
                     android:gravity="center_vertical"
                     android:paddingStart="@dimen/dp_15"
-                    tools:text="13:12(4)" />
+                    tools:text="13:12(14)" />
 
                 <TextView
                     android:id="@+id/tv_cangwei_info"
@@ -109,7 +109,7 @@
                     android:id="@+id/tv_board_number"
                     android:text="大滚筒1234"
                     android:layout_marginStart="0dp"
-                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_10"
                     android:gravity="center"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,14 +122,11 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_6"
+                    android:layout_marginEnd="0dp"
                     android:textColor="#f00"
                     android:inputType="number"
                     android:background="@drawable/shape_rect_gray_line"/>
-                <Space
-                    android:layout_width="@dimen/dp_20"
-                    android:layout_height="match_parent" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -143,8 +140,8 @@
                     android:gravity="center"
                     android:textColor="#f00"
                     android:inputType="number|numberDecimal"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_6"
+                    android:layout_marginEnd="0dp"
                     android:background="@drawable/shape_rect_gray_line"/>
             </LinearLayout>
         </LinearLayout>
