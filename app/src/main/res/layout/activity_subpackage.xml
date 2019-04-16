@@ -253,11 +253,17 @@
                 />
         </RelativeLayout>
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_sure_subpackage"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_blue_press"
-        android:text="提交"
-        android:textColor="@color/white" />
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_sure_subpackage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            style="@style/btn_submit"
+            />s
+    </RelativeLayout>
 </LinearLayout>

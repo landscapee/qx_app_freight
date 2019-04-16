@@ -111,12 +111,17 @@
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_commit"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:background="@color/blue"
-        android:text="提交"
-        android:textColor="@color/white" />
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
 </LinearLayout>

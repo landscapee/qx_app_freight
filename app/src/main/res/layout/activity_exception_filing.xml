@@ -319,12 +319,18 @@
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10" />
 
-    <TextView
-        android:id="@+id/tv_commit_exception_filing"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#2E81FD"
-        android:gravity="center"
-        android:text="提交"
-        android:textColor="@color/white" />
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/tv_commit_exception_filing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
 </LinearLayout>

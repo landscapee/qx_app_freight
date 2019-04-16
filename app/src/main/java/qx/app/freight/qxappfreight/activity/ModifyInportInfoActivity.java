@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -80,7 +81,7 @@ public class ModifyInportInfoActivity extends BaseActivity {
     @BindView(R.id.tv_leakage)
     TextView mTvLeakage;//泄露
     @BindView(R.id.tv_commit_inport_info)
-    TextView mTvCommitInfo;//提交
+    Button mTvCommitInfo;//提交
     private List<Integer> mErrorCodeList = new ArrayList<>();
 
     @Override
