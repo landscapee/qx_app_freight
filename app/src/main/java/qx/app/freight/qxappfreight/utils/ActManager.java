@@ -6,10 +6,13 @@ import android.content.Context;
 
 import java.util.Stack;
 
+/**
+ * activity 单列
+ */
 public class ActManager {
 
     private static Stack<Activity> activityStack;
-    private static ActManager instance;
+    private static volatile ActManager instance;
 
     private ActManager() {
     }
@@ -19,7 +22,12 @@ public class ActManager {
      */
     public static ActManager getAppManager() {
         if (instance == null) {
-            instance = new ActManager();
+            synchronized (ActManager.class)
+            {
+                if (instance == null)
+                    instance = new ActManager();
+            }
+
         }
         return instance;
     }

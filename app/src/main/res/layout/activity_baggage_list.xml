@@ -50,12 +50,18 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_next"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/btn_blue_press"
-        android:text="下一步"
-        android:textColor="@color/white" />
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -85,7 +86,7 @@ public class ExceptionFilingActivity extends BaseActivity implements UploadsCont
     @BindView(R.id.et_remark)
     EditText mEtRemark;
     @BindView(R.id.tv_commit_exception_filing)
-    TextView mTvCommitErrorFiling;//提交
+    Button mTvCommitErrorFiling;//提交
     private static final int REQUEST_IMAGE = 5;
     private List<String> mPhotoPath = new ArrayList<>();
     private static final String[] mAuthPermissions = {

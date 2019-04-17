@@ -353,14 +353,17 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
     <Button
         android:id="@+id/btn_sure_cargo_handing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_blue_press"
         android:text="提交"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        style="@style/btn_submit"
         />
+    </RelativeLayout>
 </LinearLayout>

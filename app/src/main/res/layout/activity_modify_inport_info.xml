@@ -572,14 +572,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="7dp"
                 android:background="#EFF2F3" />
-            <TextView
-                android:id="@+id/tv_commit_inport_info"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="#2E81FD"
-                android:gravity="center"
-                android:text="提交"
-                android:textColor="@color/white" />
+                android:background="@color/white"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/tv_commit_inport_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="提交"
+                    style="@style/btn_submit"
+                    />
+
+            </RelativeLayout>
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>

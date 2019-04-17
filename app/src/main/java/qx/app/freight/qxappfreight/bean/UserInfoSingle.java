@@ -5,6 +5,9 @@ import android.util.Log;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.utils.Tools;
 
+/**
+ * 用户单列
+ */
 public class UserInfoSingle {
 
     private static volatile UserInfoSingle singleton;

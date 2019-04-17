@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_eff"
     android:orientation="vertical">
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -312,19 +316,19 @@
             android:singleLine="true"
             android:textSize="16sp" />
     </LinearLayout>
-
+</LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:orientation="vertical">
+        android:layout_height="48dp"
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <Button
             android:id="@+id/btn_commit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_blue_press"
+            style="@style/btn_submit"
             android:text="提交"
             android:textColor="@color/white" />
     </RelativeLayout>

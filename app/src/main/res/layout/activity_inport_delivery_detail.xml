@@ -12,19 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         />
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
         <Button
             android:id="@+id/btn_confirm"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2E81FD"
             android:text="确定"
-            android:textSize="18sp"
-            android:textColor="@color/white" />
-    </LinearLayout>
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
 </LinearLayout>

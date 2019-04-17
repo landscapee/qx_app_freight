@@ -6,11 +6,13 @@
 
     <TextView
         android:id="@+id/refuse_tv"
+        android:layout_marginLeft="7dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@drawable/shape_dynamic_black"
         android:gravity="center"
+        android:layout_marginRight="3.5dp"
         android:text="@string/unqualified"
         android:textColor="@color/text_666" />
 
@@ -19,8 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:layout_marginRight="7dp"
         android:background="@drawable/shape_dynamic_blue"
         android:gravity="center"
+        android:layout_marginLeft="3.5dp"
         android:text="@string/qualified"
         android:textColor="@color/white" />
 </LinearLayout>

@@ -567,6 +567,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
      */
     private void rcinfoToHandcar(FtGroupScooter mRcInfo, int flag) {
 
+        listHandcar.get(nowHandcarPositionSelect).setTotal(listHandcar.get(nowHandcarPositionSelect).getTotal() + mRcInfo.getNumber());
         listHandcar.get(nowHandcarPositionSelect).setWeight(listHandcar.get(nowHandcarPositionSelect).getWeight() + mRcInfo.getWeight());
         listHandcar.get(nowHandcarPositionSelect).setVolume(listHandcar.get(nowHandcarPositionSelect).getVolume() + mRcInfo.getVolume());
 
