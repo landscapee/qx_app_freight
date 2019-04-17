@@ -38,6 +38,7 @@ import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 进港理货fragment
@@ -47,6 +48,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
     private List<TransportListBean> mList = new ArrayList<>();
+    private List<TransportListBean> mListTemp = new ArrayList<>();
     private InportTallyAdapter mAdapter;
 
     @Nullable
@@ -80,7 +82,29 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         });
         mMfrvData.setAdapter(mAdapter);
         mPresenter = new TransportListPresenter(this);
+        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
+            @Override
+            public void onSearched(String text) {
+                Log.e("dime", "搜索关键字：" + text);
+                //搜索关键字为空，则不显示全部数据
+                if(text == ""){
+                    mList = mListTemp;
+                    mAdapter.notifyDataSetChanged();
+                }else {
+                    //开始搜索匹配
+                    mList.clear();
+                    for (TransportListBean itemData : mListTemp) {
+                        if(itemData.getFlightNo().toLowerCase().contains(text.toLowerCase())){
+                            mList.add(itemData);
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         initData();
+        Log.e("dime", "进港理货");
     }
 
     private void initData() {
@@ -159,6 +183,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        mList = mListTemp;
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             mList.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
@@ -169,6 +194,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                 }
             }
         }
+        mListTemp.clear();
+        mListTemp.addAll(mList);
         mMfrvData.notifyForAdapter(mAdapter);
     }
 
@@ -194,6 +221,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Override
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
         mList.clear();
+        mListTemp.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
@@ -201,6 +229,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             mMfrvData.finishLoadMore();
         }
         mList.addAll(transportListBeans);
+        mListTemp.addAll(mList);
 
         mAdapter.notifyDataSetChanged();
     }
