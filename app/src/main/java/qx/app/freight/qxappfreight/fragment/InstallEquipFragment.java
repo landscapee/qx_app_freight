@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 装机fragment
@@ -82,6 +83,13 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadAndUnloadTodoPresenter(this);
+        SearchToolbar searchToolbar=((TaskFragment)getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入汉字", new SearchToolbar.OnTextSearchedListener() {
+            @Override
+            public void onSearched(String text) {
+                ToastUtil.showToast(text);
+            }
+        });
         loadData();
     }
 

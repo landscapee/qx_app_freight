@@ -30,12 +30,15 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 public class TaskFragment extends BaseFragment {
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
+    @BindView(R.id.search_toolbar)
+    SearchToolbar mSearchBar;
     @BindView(R.id.tablayout)
     TabLayout mTabLayout;
 
@@ -49,10 +52,22 @@ public class TaskFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_task, container, false);
         unbinder = ButterKnife.bind(this, view);
         mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
-        mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> ToastUtil.showToast(getContext(), "搜索"));
+        mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
+            mToolBar.setVisibility(View.GONE);
+            mSearchBar.setVisibility(View.VISIBLE);
+        });
+        mSearchBar.setVisibility(View.GONE);
+        if (mSearchBar.getVisibility()==View.VISIBLE){
+            mSearchBar.getCloseView().setOnClickListener(v->{
+                mToolBar.setVisibility(View.VISIBLE);
+                mSearchBar.setVisibility(View.GONE);
+            });
+        }
         return view;
     }
-
+    public SearchToolbar getSearchView(){
+        return mSearchBar;
+    }
     private void gotoScan() {
         if (TextUtils.isEmpty(nowRoleCode)){
             return;

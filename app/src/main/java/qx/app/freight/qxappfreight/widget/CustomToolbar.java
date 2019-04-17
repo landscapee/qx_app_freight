@@ -116,7 +116,6 @@ public class CustomToolbar extends LinearLayout {
         mRightTextTv.setBackgroundResource(R.drawable.background_press_white);
         mRightTextTv.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
         mRightTextTv.setCompoundDrawablePadding(5);
-
     }
 
     /**
