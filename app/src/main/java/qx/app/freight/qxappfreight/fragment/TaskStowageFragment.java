@@ -1,8 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoHandlingActivity;
-import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
 import qx.app.freight.qxappfreight.adapter.TaskStowageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -37,6 +34,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 理货
@@ -47,10 +45,12 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
-    private List<TransportListBean> list;
+    private List<TransportListBean> list = new ArrayList<>();
+    private List<TransportListBean> mCacheList = new ArrayList<>();
     private TaskStowageAdapter adapter;
 
     private int pageCurrent = 1;//页数
+    private String mSearchText;
 
     @Nullable
     @Override
@@ -69,10 +69,28 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         initData();
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入航班号", text -> {
+            mSearchText = text;
+            seachByText();
+        });
+    }
+
+    private void seachByText() {
+        list.clear();
+        if (TextUtils.isEmpty(mSearchText)) {
+            list.addAll(mCacheList);
+        } else {
+            for (TransportListBean item : mCacheList) {
+                if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                    list.add(item);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void initData() {
-        list = new ArrayList<>();
         adapter = new TaskStowageAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -94,8 +112,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
-        if (UserInfoSingle.getInstance()!=null&&UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()>0)
-        {
+        if (UserInfoSingle.getInstance() != null && UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
             entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
             entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         }
@@ -117,8 +134,8 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
      * @param bean
      */
     private void turnToDetailActivity(TransportListBean bean) {
-        CargoHandlingActivity.startActivity(mContext,bean.getTaskId()
-                ,bean.getFlightId());
+        CargoHandlingActivity.startActivity(mContext, bean.getTaskId()
+                , bean.getFlightId());
     }
 
     /**
@@ -136,17 +153,14 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
-            list.addAll(mWebSocketResultBean.getChgData());
-        }
-        else if ("D".equals(mWebSocketResultBean.getFlag())){
-
-            for (TransportListBean mTransportListBean:list){
+            mCacheList.addAll(mWebSocketResultBean.getChgData());
+        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+            for (TransportListBean mTransportListBean : list) {
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                    list.remove(mTransportListBean);
+                    mCacheList.remove(mTransportListBean);
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
+        seachByText();
     }
 
     /**
@@ -155,7 +169,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean item : list) {
+        for (TransportListBean item : mCacheList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -183,31 +197,28 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
 
     @Override
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
-
         if (transportListBeans != null) {
             //未分页
-            list.clear();
+            mCacheList.clear();
             if (pageCurrent == 1) {
 //                list.clear();
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();
             }
-
             for (TransportListBean mTransportListBean : transportListBeans) {
-
                 if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode()))
-                    list.add(mTransportListBean);
+                    mCacheList.add(mTransportListBean);
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
-        setTitleNum(list.size());
+        seachByText();
+        setTitleNum(mCacheList.size());
     }
 
     @Override
     public void toastView(String error) {
         if (pageCurrent == 1) {
-            list.clear();
+            mCacheList.clear();
             mMfrvData.finishRefresh();
         } else
             mMfrvData.finishLoadMore();

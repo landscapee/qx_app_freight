@@ -54,6 +54,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<InstallEquipEntity> mList = new ArrayList<>();
+    private List<InstallEquipEntity> mCacheList = new ArrayList<>();
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
     private static final String[] mStepNamesInstall = {"领受", "到位", "开启舱门", "装机", "关闭舱门"};
@@ -64,6 +65,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
+    private String mSearchText;
+    private InstallEquipAdapter mAdapter;
 
 
     @Nullable
@@ -84,15 +87,28 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadAndUnloadTodoPresenter(this);
-        SearchToolbar searchToolbar=((TaskFragment)getParentFragment()).getSearchView();
+        mAdapter = new InstallEquipAdapter(mList);
+        mMfrvData.setAdapter(mAdapter);
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", text -> {
-            if (TextUtils.isEmpty(text)){
-                ToastUtil.showToast("空");
-            }else {
-                ToastUtil.showToast(text);
-            }
+            mSearchText = text;
+            seachByText();
         });
         loadData();
+    }
+
+    private void seachByText() {
+        mList.clear();
+        if (TextUtils.isEmpty(mSearchText)) {
+            mList.addAll(mCacheList);
+        } else {
+            for (InstallEquipEntity item : mCacheList) {
+                if (item.getFlightInfo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                    mList.add(item);
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -162,7 +178,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if (loadAndUnloadTodoBean.size() == 0) return;
         List<Boolean> checkedList = new ArrayList<>();
         //未分页
-        mList.clear();
+        mCacheList.clear();
         if (mCurrentPage == 1) {
 //            mList.clear();
             mMfrvData.finishRefresh();
@@ -178,27 +194,27 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setSeat(bean.getSeat());
             entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机
             entity.setFlightType("M");
-            if (bean.getActualArriveTime()!=0){
+            if (bean.getActualArriveTime() != 0) {
                 entity.setActualTime(TimeUtils.getHMDay(bean.getActualArriveTime()));
-            }else {
+            } else {
                 entity.setScheduleTime(TimeUtils.getHMDay(bean.getScheduleTime()));
             }
-            if (bean.getRoute()==null){
-                    entity.setStartPlace("");
-                    entity.setMiddlePlace("");
-                    entity.setEndPlace("");
-            }else {
-                String [] placeArray=bean.getRoute().split(",");
-                List<String> resultList=new ArrayList<>();
+            if (bean.getRoute() == null) {
+                entity.setStartPlace("");
+                entity.setMiddlePlace("");
+                entity.setEndPlace("");
+            } else {
+                String[] placeArray = bean.getRoute().split(",");
+                List<String> resultList = new ArrayList<>();
                 List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
-                for (String str:placeList){
-                    String temp=str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                for (String str : placeList) {
+                    String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                     resultList.add(temp);
                 }
                 if (placeArray.length == 2) {
                     entity.setStartPlace(resultList.get(0));
                     entity.setMiddlePlace("");
-                    entity.setEndPlace(resultList.get(resultList.size()-1));
+                    entity.setEndPlace(resultList.get(resultList.size() - 1));
                 } else {
                     entity.setStartPlace(resultList.get(0));
                     entity.setMiddlePlace(resultList.get(1));
@@ -261,10 +277,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 data.add(entity1);
             }
             entity.setList(data);
-            mList.add(entity);
+            mCacheList.add(entity);
         }
-        InstallEquipAdapter mAdapter = new InstallEquipAdapter(mList);
-        mMfrvData.setAdapter(mAdapter);
+        seachByText();
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             if (smallPos == 3 && checkedList.get(bigPos)) {
                 Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
@@ -292,7 +307,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         });
         TaskFragment fragment = (TaskFragment) getParentFragment();
         if (fragment != null) {
-            fragment.setTitleText(mList.size());
+            fragment.setTitleText(mCacheList.size());
         }
     }
 

@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import qx.app.freight.qxappfreight.R;
 public class SearchToolbar extends LinearLayout {
     private EditText mEtSearch;
     private ImageView mIvClose;
+
     public SearchToolbar(Context context) {
         this(context, null);
     }
@@ -31,7 +33,8 @@ public class SearchToolbar extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-    public void setHintAndListener(String hint,OnTextSearchedListener listener){
+
+    public void setHintAndListener(String hint, OnTextSearchedListener listener) {
         mEtSearch.setHint(hint);
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -46,26 +49,32 @@ public class SearchToolbar extends LinearLayout {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s.toString().trim())){
+                if (!TextUtils.isEmpty(s.toString().trim())) {
                     listener.onSearched(s.toString().trim());
-                }else {
+                } else {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mEtSearch.getWindowToken(), 0);
                     listener.onSearched("");
                 }
             }
         });
     }
-    public View getCloseView(){
+
+    public View getCloseView() {
         return mIvClose;
     }
-    public EditText getSearchView(){
+
+    public EditText getSearchView() {
         return mEtSearch;
     }
+
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.layout_search_toolbar, this);
-        mEtSearch=findViewById(R.id.et_search_text);
-        mIvClose=findViewById(R.id.iv_close_search);
+        mEtSearch = findViewById(R.id.et_search_text);
+        mIvClose = findViewById(R.id.iv_close_search);
     }
-    public interface OnTextSearchedListener{
+
+    public interface OnTextSearchedListener {
         void onSearched(String text);
     }
 }
