@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /****
  * 收运
@@ -45,8 +46,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
+    private List<TransportListBean> list1;
     private List<TransportListBean> list;
     private int pageCurrent = 1;
+    private String seachString = "";
 
     @Nullable
     @Override
@@ -63,13 +66,33 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         initView();
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入运单号", text -> {
+            seachString = text;
+            seachWith();
+        });
         loadData();
+    }
+
+    private void seachWith() {
+        list.clear();
+        if (TextUtils.isEmpty(seachString)) {
+            list.addAll(list1);
+        } else {
+            for (TransportListBean team: list1){
+                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())){
+                    list.add(team);
+                }
+            }
+        }
+        mMfrvData.notifyForAdapter(adapter);
     }
 
 
     private void initView() {
         EventBus.getDefault().register(this);
         list = new ArrayList<>();
+        list1 = new ArrayList<>();
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -146,13 +169,13 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
 
-            list.addAll(mWebSocketResultBean.getChgData());
+            list1.addAll(mWebSocketResultBean.getChgData());
         }
         else if ("D".equals(mWebSocketResultBean.getFlag())){
 
-            for (TransportListBean mTransportListBean:list){
+            for (TransportListBean mTransportListBean:list1){
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                    list.remove(mTransportListBean);
+                    list1.remove(mTransportListBean);
             }
         }
         mMfrvData.notifyForAdapter(adapter);
@@ -175,9 +198,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
         if (transportListBeans != null) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
-
             //未分页
-            list.clear();
+            list1.clear();
             if (pageCurrent == 1) {
 //                list.clear();
                 mMfrvData.finishRefresh();
@@ -186,8 +208,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
                 mMfrvData.finishLoadMore();
             }
-            list.addAll(transportListBeans);
-            mMfrvData.notifyForAdapter(adapter);
+            list1.addAll(transportListBeans);
+            seachWith();
+//            mMfrvData.notifyForAdapter(adapter);
             if (fragment != null) {
                 fragment.setTitleText(transportListBeans.size());
             }

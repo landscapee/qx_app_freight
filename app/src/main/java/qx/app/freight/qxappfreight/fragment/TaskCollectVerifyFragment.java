@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 出港-收验
@@ -46,7 +47,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
     private int pageCurrent = 1;
 
+    private List<TransportListBean> transportListList1;
     private List<TransportListBean> transportListList;
+    private String seachString = "";
 
     @Nullable
     @Override
@@ -64,11 +67,32 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         mMfrvData.setOnRetryLisenter(this);
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
+
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入运单号", text -> {
+            seachString = text;
+            seachWith();
+        });
         initData();
+    }
+
+    public void seachWith() {
+        transportListList.clear();
+        if (TextUtils.isEmpty(seachString)) {
+            transportListList.addAll(transportListList1);
+        } else {
+            for (TransportListBean team: transportListList1){
+                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())){
+                    transportListList.add(team);
+                }
+            }
+        }
+        mMfrvData.notifyForAdapter(adapter);
     }
 
     private void initData() {
         transportListList = new ArrayList<>();
+        transportListList1= new ArrayList<>();
         mPresenter = new TransportListPresenter(this);
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
@@ -96,10 +120,10 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     private void turnToDetailActivity(TransportListBean bean) {
         VerifyStaffActivity.startActivity(getActivity(),
                 bean.getDeclareWaybillAddition()
-                ,bean.getTaskId()
-                ,bean.getSpotFlag()
-                ,bean.getFlightNumber()
-                ,bean.getShipperCompanyId());
+                , bean.getTaskId()
+                , bean.getSpotFlag()
+                , bean.getFlightNumber()
+                , bean.getShipperCompanyId());
     }
 
     /**
@@ -152,18 +176,19 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         if (transportListBeans != null) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
             //未分页
-            transportListList.clear();
+            transportListList1.clear();
             if (pageCurrent == 1) {
 //                transportListList.clear();
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();
             }
-            transportListList.addAll(transportListBeans);
+            transportListList1.addAll(transportListBeans);
             if (fragment != null) {
-                fragment.setTitleText(transportListList.size());
+                fragment.setTitleText(transportListList1.size());
             }
-            mMfrvData.notifyForAdapter(adapter);
+            seachWith();
+//            mMfrvData.notifyForAdapter(adapter);
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
@@ -176,17 +201,17 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
             initData();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean  mWebSocketResultBean) {
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
 
-            transportListList.addAll(mWebSocketResultBean.getChgData());
-        }
-        else if ("D".equals(mWebSocketResultBean.getFlag())){
+            transportListList1.addAll(mWebSocketResultBean.getChgData());
+        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
 
-            for (TransportListBean mTransportListBean:transportListList){
+            for (TransportListBean mTransportListBean : transportListList1) {
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                    transportListList.remove(mTransportListBean);
+                    transportListList1.remove(mTransportListBean);
             }
         }
         mMfrvData.notifyForAdapter(adapter);
