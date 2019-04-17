@@ -19,6 +19,7 @@
         android:inputType="text"
         android:paddingStart="@dimen/dp_13"
         android:paddingEnd="@dimen/dp_13"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:textColor="@color/color_fff"
         android:textColorHint="#4cffffff" />
 

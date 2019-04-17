@@ -48,12 +48,17 @@ public class SearchToolbar extends LinearLayout {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString().trim())){
                     listener.onSearched(s.toString().trim());
+                }else {
+                    listener.onSearched("");
                 }
             }
         });
     }
     public View getCloseView(){
         return mIvClose;
+    }
+    public EditText getSearchView(){
+        return mEtSearch;
     }
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.layout_search_toolbar, this);

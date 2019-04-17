@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,9 +85,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         SearchToolbar searchToolbar=((TaskFragment)getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入汉字", new SearchToolbar.OnTextSearchedListener() {
-            @Override
-            public void onSearched(String text) {
+        searchToolbar.setHintAndListener("请输入航班号", text -> {
+            if (TextUtils.isEmpty(text)){
+                ToastUtil.showToast("空");
+            }else {
                 ToastUtil.showToast(text);
             }
         });
