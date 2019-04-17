@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,10 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
+import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 出港-配载-复重页面
@@ -35,7 +39,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     RecyclerView mMfrvAllocateList;
 
     private AllocateVehiclesAdapter adapter;
-    private List<GetInfosByFlightIdBean> list;
+
+    private List<GetInfosByFlightIdBean> list; //条件list
+    private List<GetInfosByFlightIdBean> list1; //原始list
+
+    private String searchString = "";
 
     @Nullable
     @Override
@@ -55,11 +63,33 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+        searchToolbar.setHintAndListener("请输入板车号", text -> {
+            searchString = text;
+            seachWithNum();
+        });
         initData();
+    }
+
+    //根据条件筛选数据
+    private void seachWithNum() {
+        list.clear();
+        if (TextUtils.isEmpty(searchString)) {
+            list.addAll(list1);
+        } else {
+            for (GetInfosByFlightIdBean item : list1) {
+                if (item.getScooterCode().toLowerCase().contains(searchString.toLowerCase())) {
+                    list.add(item);
+                }
+            }
+            ToastUtil.showToast(searchString);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void initData() {
         list = new ArrayList<>();
+        list1 = new ArrayList<>();
         adapter = new AllocateVehiclesAdapter(list);
         mMfrvAllocateList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -73,7 +103,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
 
     public void getData() {
         BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
-//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserId("weighter");
         entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
@@ -100,12 +129,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
         }, 2000);
     }
 
-    private List<GetInfosByFlightIdBean> mList = new ArrayList<>();
-
     @Override
     public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
-        list.clear();
-        list.addAll(getInfosByFlightIdBeans);
-        adapter.notifyDataSetChanged();
+        list1.clear();
+        list1.addAll(getInfosByFlightIdBeans);
+        seachWithNum();
     }
 }
