@@ -57,12 +57,10 @@ public class TaskFragment extends BaseFragment {
             mSearchBar.setVisibility(View.VISIBLE);
         });
         mSearchBar.setVisibility(View.GONE);
-        if (mSearchBar.getVisibility()==View.VISIBLE){
             mSearchBar.getCloseView().setOnClickListener(v->{
                 mToolBar.setVisibility(View.VISIBLE);
                 mSearchBar.setVisibility(View.GONE);
             });
-        }
         return view;
     }
     public SearchToolbar getSearchView(){
