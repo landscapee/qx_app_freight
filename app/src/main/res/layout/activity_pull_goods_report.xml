@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/color_fff"
         android:orientation="vertical">
 
         <LinearLayout
@@ -69,6 +70,7 @@
             app:tabIndicatorColor="#2e81fd"
             app:tabIndicatorHeight="1dp"
             app:tabMode="fixed"
+            android:background="#EFF2F3"
             app:tabSelectedTextColor="#2e81fd"
             app:tabTextColor="@color/color_000" />
 
@@ -89,7 +91,7 @@
                 <LinearLayout
                     android:id="@+id/ll_add_scan"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_80"
+                    android:layout_height="74dp"
                     android:layout_margin="@dimen/dp_10"
                     android:background="@drawable/shape_rect_gray_dark"
                     android:orientation="vertical">

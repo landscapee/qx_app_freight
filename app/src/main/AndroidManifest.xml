@@ -62,6 +62,7 @@
         <activity android:name=".activity.ErrorReportActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.PullGoodsReportActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ChooseWeighScanActivity"
             android:screenOrientation="portrait"/>

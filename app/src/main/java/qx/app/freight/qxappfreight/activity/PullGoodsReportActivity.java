@@ -160,6 +160,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                     mGoodsAdapter = new PullGoodsInfoAdapter(mPullBillList);
                 }
                 mSrvGoods.setAdapter(mGoodsAdapter);
+                setDeleteListener();
             }
 
             @Override
@@ -170,20 +171,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        mGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-                    mDeletePos = position;
-                    if (!mIsScanBill) {
-                        TransportEndEntity transportEndEntity = new TransportEndEntity();
-                        transportEndEntity.setId(mPullBoardList.get(position).getId());
-                        ((PullGoodsReportPresenter) mPresenter).scanScooterDelete(transportEndEntity);
-                    } else {
-                        //删除扫描的运单上拉数据
-                        scanScooterDeleteResult("");
-                    }
-                }
-        );
-        mGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
-        });
+       setDeleteListener();
         mBtnCommit.setOnClickListener(v -> {
             if (mPullBoardList.size() == 0 && mPullBillList.size() == 0) {//板车和运单列表数据都为空
                 ToastUtil.showToast("请扫描添加板车数据！");
@@ -221,6 +209,23 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                     ToastUtil.showToast("信息输入不完整，请检查");
                 }
             }
+        });
+    }
+
+    private void setDeleteListener() {
+        mGoodsAdapter.setOnDeleteClickListener((view, position) -> {
+                    mDeletePos = position;
+                    if (!mIsScanBill) {
+                        TransportEndEntity transportEndEntity = new TransportEndEntity();
+                        transportEndEntity.setId(mPullBoardList.get(position).getId());
+                        ((PullGoodsReportPresenter) mPresenter).scanScooterDelete(transportEndEntity);
+                    } else {
+                        //删除扫描的运单上拉数据
+                        scanScooterDeleteResult("");
+                    }
+                }
+        );
+        mGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
     }
 

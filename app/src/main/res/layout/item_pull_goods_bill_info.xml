@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rect_blue_cce4"
-                    android:drawableStart="@mipmap/tracking_number"
+                    android:drawableStart="@mipmap/dray"
                     android:drawablePadding="@dimen/dp_10"
                     android:gravity="center"
                     android:paddingStart="9dp"
@@ -158,13 +158,13 @@
         android:id="@+id/ll_delete"
         android:layout_width="@dimen/dp_60"
         android:layout_height="match_parent"
-        android:background="@color/blue_btn_bg_color"
+        android:background="@color/red"
         android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/delete" />
+            android:src="@mipmap/delete_white" />
     </LinearLayout>
 
 </LinearLayout>

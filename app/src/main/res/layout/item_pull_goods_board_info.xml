@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rect_blue_cce4"
-                    android:drawableStart="@mipmap/tracking_number"
+                    android:drawableStart="@mipmap/dray"
                     android:drawablePadding="@dimen/dp_10"
                     android:gravity="center"
                     android:paddingStart="9dp"
@@ -59,7 +59,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:drawableStart="@mipmap/li"
-                    android:drawablePadding="@dimen/dp_10"
+                    android:drawablePadding="@dimen/dp_5"
                     android:gravity="center_vertical"
                     tools:text="3U9999" />
 
@@ -69,9 +69,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:drawableStart="@mipmap/placement"
-                    android:drawablePadding="@dimen/dp_10"
+                    android:drawablePadding="@dimen/dp_5"
                     android:gravity="center_vertical"
-                    android:paddingStart="@dimen/dp_15"
                     tools:text="101" />
 
                 <TextView
@@ -80,9 +79,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:drawableStart="@mipmap/ji"
-                    android:drawablePadding="@dimen/dp_10"
+                    android:drawablePadding="@dimen/dp_5"
                     android:gravity="center_vertical"
-                    android:paddingStart="@dimen/dp_15"
                     tools:text="13:12(4)" />
 
                 <TextView
@@ -153,13 +151,13 @@
         android:id="@+id/ll_delete"
         android:layout_width="@dimen/dp_60"
         android:layout_height="match_parent"
-        android:background="@color/blue_btn_bg_color"
+        android:background="@color/red"
         android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/delete" />
+            android:src="@mipmap/delete_white" />
     </LinearLayout>
 
 </LinearLayout>
