@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,10 +47,11 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     RecyclerView mMfrvData;
 
     FlightListAdapter mAdapter;
-    List<FlightLuggageBean> mList;
-    List<FlightLuggageBean> mListTemp;
+    List<FlightLuggageBean> mList;  //筛选过后的数据
+    List<FlightLuggageBean> mListTemp; //原始数据
 
     private int pageCurrent = 1;
+    private String searchString = "";
 
     @Nullable
     @Override
@@ -82,20 +84,27 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
             @Override
             public void onSearched(String text) {
-                if(text == ""){
-                    mList = mListTemp;
-                    mAdapter.notifyDataSetChanged();
-                }else{
-                    mList.clear();
-                    for(FlightLuggageBean itemData: mListTemp){
-                        if(itemData.getFlightNo().toLowerCase().contains(text.toLowerCase())){
-                            mList.add(itemData);
-                        }
-                    }
-                    mAdapter.notifyDataSetChanged();
-                }
+                searchString = text;
+                seachWithNum();
             }
         });
+    }
+
+    /**
+     * 通过条件筛选数据
+     */
+    private void seachWithNum() {
+        mList.clear();
+        if(TextUtils.isEmpty(searchString)){
+            mList.addAll(mListTemp);
+        }else{
+            for(FlightLuggageBean itemData: mListTemp){
+                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                    mList.add(itemData);
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -137,10 +146,8 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-        mList.clear();
         mListTemp.clear();
-        mList.addAll(flightLuggageBeans);
-        mListTemp.addAll(mList);
-        mAdapter.notifyDataSetChanged();
+        mListTemp.addAll(flightLuggageBeans);
+        seachWithNum();
     }
 }

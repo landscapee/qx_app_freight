@@ -178,7 +178,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                     list1.remove(mTransportListBean);
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
+        seachWith();
     }
 
     /**

@@ -156,7 +156,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
                     list1.remove(mTransportListBean);
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
+        seachWithNum();
     }
 
 

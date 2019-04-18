@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -47,9 +48,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List<TransportListBean> mList = new ArrayList<>();
-    private List<TransportListBean> mListTemp = new ArrayList<>();
+    private List<TransportListBean> mList = new ArrayList<>();  //筛选过后的数据
+    private List<TransportListBean> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
+
+    private String searchString = "";
 
     @Nullable
     @Override
@@ -86,25 +89,26 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
             @Override
             public void onSearched(String text) {
-                Log.e("dime", "搜索关键字：" + text);
-                //搜索关键字为空，则不显示全部数据
-                if(text == ""){
-                    mList = mListTemp;
-                    mAdapter.notifyDataSetChanged();
-                }else {
-                    //开始搜索匹配
-                    mList.clear();
-                    for (TransportListBean itemData : mListTemp) {
-                        if(itemData.getFlightNo().toLowerCase().contains(text.toLowerCase())){
-                            mList.add(itemData);
-                        }
-                    }
-                    mAdapter.notifyDataSetChanged();
-                }
+               searchString = text;
+               seachWithNum();
             }
         });
         initData();
-        Log.e("dime", "进港理货");
+    }
+
+    private void seachWithNum() {
+        mList.clear();
+        //搜索关键字为空，则不显示全部数据
+        if(TextUtils.isEmpty(searchString)){
+            mList.addAll(mListTemp);
+        }else{
+            for(TransportListBean itemData: mListTemp){
+                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                    mList.add(itemData);
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initData() {
@@ -183,20 +187,17 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        mList = mListTemp;
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            mList.addAll(mWebSocketResultBean.getChgData());
+            mListTemp.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportListBean mTransportListBean : mList) {
                 if (mWebSocketResultBean.getChgData().get(0).getId() != null) {
                     if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                        mList.remove(mTransportListBean);
+                        mListTemp.remove(mTransportListBean);
                 }
             }
         }
-        mListTemp.clear();
-        mListTemp.addAll(mList);
-        mMfrvData.notifyForAdapter(mAdapter);
+        seachWithNum();
     }
 
     @Override
@@ -220,17 +221,15 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
-        mList.clear();
-        mListTemp.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
             mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
-        mList.addAll(transportListBeans);
-        mListTemp.addAll(mList);
 
-        mAdapter.notifyDataSetChanged();
+        mListTemp.clear();
+        mListTemp.addAll(transportListBeans);
+        seachWithNum();
     }
 }

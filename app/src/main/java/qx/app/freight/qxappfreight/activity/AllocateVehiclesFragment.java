@@ -27,7 +27,6 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
@@ -82,7 +81,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
                     list.add(item);
                 }
             }
-            ToastUtil.showToast(searchString);
         }
         adapter.notifyDataSetChanged();
     }

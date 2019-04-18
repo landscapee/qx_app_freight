@@ -208,13 +208,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
             transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-
             for (TransportListBean mTransportListBean : transportListList1) {
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
                     transportListList1.remove(mTransportListBean);
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
+        seachWith();
     }
 
 
