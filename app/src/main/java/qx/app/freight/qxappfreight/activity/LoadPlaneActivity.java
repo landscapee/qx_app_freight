@@ -202,13 +202,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             String id = "";
             int number = 0;
             double weight = 0d;
+            String type="";
             for (LocalBillBean bean : list) {
                 if (code.equals(bean.getWayBillCode())) {
                     id = bean.getWaybillId();
+                    type=bean.getCargoType();
                     number += bean.getMaxNumber();
                     weight += bean.getMaxWeight();
                 }
             }
+            billBean.setCargoType(type);
             billBean.setWaybillId(id);
             billBean.setMaxNumber(number);
             billBean.setMaxWeight(weight);
@@ -225,13 +228,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         List<LocalBillBean> list3 = new ArrayList<>();
         for (GetFlightCargoResBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
             mFregihtSpace = bean.getSuggestRepository();
-            for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
-                LocalBillBean billBean = new LocalBillBean();
-                billBean.setWayBillCode(groupCode.getWaybillCode());
-                billBean.setWaybillId(groupCode.getWaybillId());
-                billBean.setMaxNumber(groupCode.getNumber());
-                billBean.setMaxWeight(groupCode.getWeight());
-                list3.add(billBean);
+            if (bean.getGroupScooters()!=null) {
+                for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
+                    LocalBillBean billBean = new LocalBillBean();
+                    billBean.setWayBillCode(groupCode.getWaybillCode());
+                    billBean.setWaybillId(groupCode.getWaybillId());
+                    billBean.setMaxNumber(groupCode.getNumber());
+                    billBean.setMaxWeight(groupCode.getWeight());
+                    billBean.setCargoType("C".equals(bean.getCargoType())?"cargo":"mail");
+                    list3.add(billBean);
+                }
             }
         }
         mBillList = removeDuplicate(list3);
@@ -244,7 +250,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     GetFlightCargoResBean.ContentObjectBean model = bean.getContentObject().get(i);
                     UnloadPlaneEntity item = new UnloadPlaneEntity();
                     item.setBerth(model.getSuggestRepository());
-                    item.setBoardNumber((model.getGroupScooters()==null)?"-":model.getGroupScooters().get(0).getScooterCode());
+                    String boardNumber;
+                    if (!TextUtils.isEmpty(model.getScooterCode())){
+                        boardNumber=model.getScooterCode();
+                    }else {
+                        boardNumber=(model.getGroupScooters()==null)?"-":model.getGroupScooters().get(0).getScooterCode();
+                    }
+                    item.setBoardNumber(boardNumber);
                     item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
                     item.setTarget(mTargetPlace);
                     item.setType(model.getCargoType());

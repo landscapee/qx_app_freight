@@ -136,7 +136,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
                 if (canScan) {//可以扫描
                     ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
-                }else {
+                } else {
                     ToastUtil.showToast("当前已无可以分装的运单");
                 }
             } else {
@@ -197,8 +197,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         }
                     }
                 }
-                if (mPullBoardList.size() != 0) {
-                    for (TransportTodoListBean bean : mPullBoardList) {
+                if (mPullBillList.size() != 0) {
+                    for (TransportTodoListBean bean : mPullBillList) {
                         if (bean.getPullInNumber() == 0 && bean.getPullInWeight() == 0.0) {//运单信息中有一条件数并且重量都为0，则不能提交
                             infoFull = false;
                             break;
@@ -370,6 +370,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         } else
             ToastUtil.showToast(this, "返回数据为空");
     }
+
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
@@ -403,38 +404,41 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
-        ScooterInfoListBean entity = scooterInfoListBeans.get(0);
-        TransportTodoListBean bean = new TransportTodoListBean();
-        bean.setTpScooterId(entity.getId());
-        bean.setTpScooterCode(entity.getScooterCode());
-        bean.setTpScooterType(entity.getScooterType() + "");
-        bean.setTpFlightNumber(mInfoList[0]);
-        bean.setTpFlightLocate(mInfoList[5]);
-        bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
-        bean.setTpFregihtSpace(getIntent().getStringExtra("fregiht_space"));
-        bean.setMaxBillWeight(entity.getScooterWeight());
-        bean.setBillNumber(entity.getScooterCode());
-        if (mBillList.size() != 0) {
-            ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();
-            List<LocalBillBean> list = new ArrayList<>();
-            //筛选没有拉完的运单
-            for (LocalBillBean mLocalBillBean : mBillList) {
-                if (mLocalBillBean.getBillItemNumber() > 0 && mLocalBillBean.getBillItemWeight() > 0)
-                    list.add(mLocalBillBean);
-            }
-            if (list.size() == 0) {
-                ToastUtil.showToast("当前航班已无运单任务可分配");
+        if (scooterInfoListBeans != null && scooterInfoListBeans.size() != 0) {
+            ScooterInfoListBean entity = scooterInfoListBeans.get(0);
+            TransportTodoListBean bean = new TransportTodoListBean();
+            bean.setTpScooterId(entity.getId());
+            bean.setTpScooterCode(entity.getScooterCode());
+            bean.setTpScooterType(entity.getScooterType() + "");
+            bean.setTpFlightNumber(mInfoList[0]);
+            bean.setTpFlightLocate(mInfoList[5]);
+            bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
+            bean.setTpFregihtSpace(getIntent().getStringExtra("fregiht_space"));
+            bean.setMaxBillWeight(entity.getScooterWeight());
+            bean.setBillNumber(entity.getScooterCode());
+            if (mBillList.size() != 0) {
+                ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();
+                List<LocalBillBean> list = new ArrayList<>();
+                //筛选没有拉完的运单
+                for (LocalBillBean mLocalBillBean : mBillList) {
+                    if (mLocalBillBean.getBillItemNumber() > 0 && mLocalBillBean.getBillItemWeight() > 0)
+                        list.add(mLocalBillBean);
+                }
+                if (list.size() == 0) {
+                    ToastUtil.showToast("当前航班已无运单任务可分配");
+                } else {
+                    dialog.setData(PullGoodsReportActivity.this, entity.getScooterCode(), list);
+                    dialog.show(getSupportFragmentManager(), "123");
+                    dialog.setOnBillSelectListener(pos -> {
+                        String bill = list.get(pos).getWayBillCode();
+                        bean.setCarType(list.get(pos).getCargoType());
+                        bean.setWaybillId(list.get(pos).getWaybillId());
+                        setBillDataList(bill, bean);
+                    });
+                }
             } else {
-                dialog.setData(PullGoodsReportActivity.this, entity.getScooterCode(), list);
-                dialog.show(getSupportFragmentManager(), "123");
-                dialog.setOnBillSelectListener(pos -> {
-                    String bill = list.get(pos).getWayBillCode();
-                    bean.setWaybillId(list.get(pos).getWaybillId());
-                    setBillDataList(bill, bean);
-                });
+                ToastUtil.showToast("当前航班已无运单任务可分配");
             }
-        } else {
-            ToastUtil.showToast("当前航班已无运单任务可分配");
         }
     }
 

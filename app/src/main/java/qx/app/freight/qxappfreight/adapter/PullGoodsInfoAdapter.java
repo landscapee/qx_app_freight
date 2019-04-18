@@ -63,10 +63,10 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
         }
         EditText etBillNumber = helper.getView(R.id.et_pull_number);
         etBillNumber.setText(item.getTpCargoNumber() == 0 ? "1" : String.valueOf(item.getTpCargoNumber()));
-        item.setTpCargoNumber(item.getTpCargoNumber() == 0 ? 1 : item.getTpCargoNumber());
+        item.setPullInNumber(item.getTpCargoNumber() == 0 ? 1 : item.getTpCargoNumber());
         EditText etBillWeight = helper.getView(R.id.et_pull_weight);
         etBillWeight.setText(item.getTpCargoWeight() == 0 ? "1" : String.valueOf(item.getTpCargoWeight()));
-        item.setTpCargoWeight(item.getTpCargoWeight() == 0 ? 1 : item.getTpCargoWeight());
+        item.setPullInWeight(item.getTpCargoWeight() == 0 ? 1 : item.getTpCargoWeight());
         etBillNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

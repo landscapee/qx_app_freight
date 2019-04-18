@@ -14,6 +14,7 @@ public class LocalBillBean implements Parcelable {
     private double maxWeight;
     private int billItemNumber;//可分装的运单件数
     private double billItemWeight;//可分装的运单重量
+    private String cargoType;//M,邮件,C，货物
     public LocalBillBean(){
         super();
     }
@@ -24,6 +25,7 @@ public class LocalBillBean implements Parcelable {
         maxWeight=in.readDouble();
         billItemNumber=in.readInt();
         billItemWeight=in.readDouble();
+        cargoType=in.readString();
     }
 
     public static final Creator<LocalBillBean> CREATOR = new Creator<LocalBillBean>() {
@@ -51,5 +53,6 @@ public class LocalBillBean implements Parcelable {
         dest.writeDouble(maxWeight);
         dest.writeInt(billItemNumber);
         dest.writeDouble(billItemWeight);
+        dest.writeString(cargoType);
     }
 }
