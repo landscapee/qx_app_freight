@@ -5,79 +5,79 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="报检员"
-            android:textColor="@color/black" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="报检员"-->
+            <!--android:textColor="@color/black" />-->
 
-        <Spinner
-            android:id="@+id/verify_sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="5dp" />
-    </RelativeLayout>
+        <!--<Spinner-->
+            <!--android:id="@+id/verify_sp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_margin="5dp" />-->
+    <!--</RelativeLayout>-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/black" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="报检资质有效期限"
-            android:textColor="@color/black" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="报检资质有效期限"-->
+            <!--android:textColor="@color/black" />-->
 
-        <TextView
-            android:id="@+id/verify_tv_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="5dp"
-            android:text="2018.12.01至2019.12.01" />
-    </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <!--<TextView-->
+            <!--android:id="@+id/verify_tv_bt"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="2018.12.01至2019.12.01" />-->
+    <!--</RelativeLayout>-->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/black" />-->
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="危险品资质有效期"
-            android:textColor="@color/black" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="危险品资质有效期"-->
+            <!--android:textColor="@color/black" />-->
 
-        <TextView
-            android:id="@+id/verify_tv_wt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="5dp"
-            android:text="2018.12.01至2019.12.01" />
-    </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black" />
+        <!--<TextView-->
+            <!--android:id="@+id/verify_tv_wt"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="2018.12.01至2019.12.01" />-->
+    <!--</RelativeLayout>-->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/black" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -168,12 +168,12 @@
                 android:orientation="vertical"
                 android:padding="@dimen/dp_15">
 
-                <ImageView
-                    android:id="@+id/iv_staff_photo_old1"
-                    android:layout_width="@dimen/dp_200"
-                    android:layout_height="@dimen/dp_250"
-                    android:src="@mipmap/ic_launcher"
-                     />
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_staff_photo_old1"-->
+                    <!--android:layout_width="@dimen/dp_200"-->
+                    <!--android:layout_height="@dimen/dp_250"-->
+                    <!--android:src="@mipmap/ic_launcher"-->
+                     <!--/>-->
 
 
                 <ImageView
