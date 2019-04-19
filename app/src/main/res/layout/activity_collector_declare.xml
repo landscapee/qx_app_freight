@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.CollectorDeclareActivity">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@drawable/shape_rect_blue_b3d1fb"
+                        android:id="@+id/allocate_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="33dp"
+                        android:gravity="center_vertical"
+                        android:textColor="#136bef"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@mipmap/dray"
+                        android:textStyle="bold"
+                        tools:text="333-333333"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/allocate_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#333333"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            tools:text="中外货运代理"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@drawable/shape_rect_blue_b3d1fb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="33dp"
+                        android:gravity="center_vertical"
+                        android:textColor="#136bef"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@mipmap/dray"
+                        android:textStyle="bold"
+                        tools:text="333-333333"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#333333"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            tools:text="中外货运代理"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        tools:text="总件数"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical|end"
+                        tools:text="33"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+                <View style="@style/line_horizontal_979797" />
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        tools:text="总重量"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical|end"
+                        tools:text="33"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+                <View style="@style/line_horizontal_979797" />
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        tools:text="总体积"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical|end"
+                        tools:text="33"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+                <View style="@style/line_horizontal_979797" />
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        tools:text="计费重量"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical|end"
+                        tools:text="33"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+                <View style="@style/line_horizontal_979797" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>
