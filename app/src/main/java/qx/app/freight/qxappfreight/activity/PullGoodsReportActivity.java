@@ -428,7 +428,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
             bean.setTpFregihtSpace(getIntent().getStringExtra("fregiht_space"));
             bean.setMaxBillWeight(entity.getScooterWeight());
-            bean.setBillNumber(entity.getScooterCode());
             if (mBillList.size() != 0) {
                 ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();
                 List<LocalBillBean> list = new ArrayList<>();
@@ -446,6 +445,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         String bill = list.get(pos).getWayBillCode();
                         bean.setCarType(list.get(pos).getCargoType());
                         bean.setWaybillId(list.get(pos).getWaybillId());
+                        bean.setBillNumber(list.get(pos).getWaybillId());
                         setBillDataList(bill, bean);
                     });
                 }

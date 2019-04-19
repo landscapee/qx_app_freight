@@ -22,4 +22,9 @@ public class InstallEquipEntity {
     private int loadUnloadType;
     private int taskTpye;
     private String flightType;
+    private String id;
+    private long flightId;
+    private String taskId;
+    private int taskType;
+    private String workerName;
 }

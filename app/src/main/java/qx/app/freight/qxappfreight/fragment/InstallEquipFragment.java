@@ -194,6 +194,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setSeat(bean.getSeat());
             entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机
             entity.setFlightType("M");
+            entity.setId(bean.getId());
+            entity.setFlightId(Long.valueOf(bean.getFlightId()));
+            entity.setTaskId(bean.getTaskId());
+            entity.setTaskTpye(bean.getTaskType());
+            entity.setWorkerName(bean.getWorkerName());
             if (bean.getActualArriveTime() != 0) {
                 entity.setActualTime(TimeUtils.getHMDay(bean.getActualArriveTime()));
             } else {
@@ -288,19 +293,19 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mSlideadapter = adapter;
                 PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
                 entity.setType(1);
-                entity.setLoadUnloadDataId(loadAndUnloadTodoBean.get(bigPos).getId());
-                entity.setFlightId(Long.valueOf(loadAndUnloadTodoBean.get(bigPos).getFlightId()));
-                entity.setFlightTaskId(loadAndUnloadTodoBean.get(bigPos).getTaskId());
+                entity.setLoadUnloadDataId(mList.get(bigPos).getId());
+                entity.setFlightId(mList.get(bigPos).getFlightId());
+                entity.setFlightTaskId(mList.get(bigPos).getTaskId());
                 entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
                 entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                if (loadAndUnloadTodoBean.get(bigPos).getTaskType() == 1) {
+                if (mList.get(bigPos).getTaskType() == 1) {
                     entity.setOperationCode(mStepCodeInstall[smallPos]);
                 } else {
                     entity.setOperationCode(mStepCodeUninstall[smallPos]);
                 }
                 entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                entity.setUserName(loadAndUnloadTodoBean.get(bigPos).getWorkerName());
+                entity.setUserName(mList.get(bigPos).getWorkerName());
                 entity.setCreateTime(System.currentTimeMillis());
                 ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
             }
