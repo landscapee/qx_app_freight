@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -96,7 +98,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            turnToReceiveGoodsActivity(list.get(position));
+//            turnToReceiveGoodsActivity(list.get(position));
+            startActivity(new Intent(getContext(), CollectorDeclareActivity.class).putExtra("wayBillId",list.get(position).getWaybillCode()));
         });
     }
 
