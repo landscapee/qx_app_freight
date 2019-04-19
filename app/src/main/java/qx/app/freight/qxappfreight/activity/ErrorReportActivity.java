@@ -103,6 +103,14 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result != null && result.equals(mInfoList[7])) {
+
+            finish();
+        }
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_error_report;

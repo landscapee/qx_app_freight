@@ -91,7 +91,7 @@ public class TestFragment extends BaseFragment {
                 break;
             case R.id.button_select_warehouse_position: //选择仓位e
 
-                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, s -> {
+                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog,"", s -> {
 
                 });
                 updatePushDialog.show();

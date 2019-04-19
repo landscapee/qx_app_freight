@@ -46,6 +46,8 @@ import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChooseGoodsBillDialog;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
+import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
@@ -96,6 +98,13 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             }
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result != null && result.equals(mInfoList[7])) {
+
+            finish();
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -107,7 +116,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        ;
         mBillList = getIntent().getParcelableArrayListExtra("bill_list");
         for (LocalBillBean bean : mBillList) {
             mCodeMap.put(bean.getWayBillCode(), bean);

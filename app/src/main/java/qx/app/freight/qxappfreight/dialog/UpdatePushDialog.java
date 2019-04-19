@@ -47,6 +47,8 @@ public class UpdatePushDialog extends Dialog {
     @BindView(R.id.iv_start_gif)
     ImageView ivStartGif;
 
+    private String flightId;
+
     private OnTpPushListener mOnTpPushListener;
 
     public UpdatePushDialog(@NonNull Context context) {
@@ -54,7 +56,7 @@ public class UpdatePushDialog extends Dialog {
 
     }
 
-    public UpdatePushDialog(@NonNull Context context, int themeResId, OnTpPushListener mOnTpPushListener) {
+    public UpdatePushDialog(@NonNull Context context, int themeResId,String flightId, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
@@ -63,6 +65,8 @@ public class UpdatePushDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
         ButterKnife.bind(this,convertView);
+        this.flightId = flightId;
+
         initViews();
 
     }
@@ -101,6 +105,7 @@ public class UpdatePushDialog extends Dialog {
         mSlideRightExecuteView.setLockListener(new SlideRightExecuteView.OnLockListener() {
             @Override
             public void onOpenLockSuccess() {
+                mOnTpPushListener.onSureBtnCallBack(flightId);
                 dismiss();
             }
 

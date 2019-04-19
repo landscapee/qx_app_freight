@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.UnloadPlaneVersionEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -93,9 +94,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result != null && result.equals(mCurrentFlightId)) {
-            Log.e("tagPush","当前航班装机单数据改变");
-            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
+
+            showCargoResUpdate(mCurrentFlightId);
         }
+    }
+
+    private void showCargoResUpdate(String flightId) {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,flightId, s -> {
+            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
+        });
+        updatePushDialog.show();
+
     }
 
     @Override
