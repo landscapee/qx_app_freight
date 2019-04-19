@@ -82,6 +82,7 @@ public class UpdatePushDialog extends Dialog {
         Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
+        p.height = d.getHeight();
         getWindow().setAttributes(p);
     }
 
