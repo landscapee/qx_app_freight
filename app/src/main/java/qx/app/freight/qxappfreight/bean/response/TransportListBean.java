@@ -98,6 +98,10 @@ public class TransportListBean implements Serializable {
     private Object internalTransferDate;
     private Object internalTransferFlight;
     private Object internalTransferWaybill;
+
+    private String exchangeFlag;//换单标记 1:换单运单,0:未换单运单
+    private String exchangeBeforeCode; //换单之前的运单号
+
     private Object exchangeWaybillId;
     private Object exchangeNewWaybill;
     private Object exchangeWaybillBefore;
