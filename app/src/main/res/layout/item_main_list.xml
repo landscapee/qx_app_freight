@@ -116,7 +116,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textColor="@color/color_00f" />
+                android:textColor="@color/black_3"
+                android:text="退货待出库"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:id="@+id/tv_old_waybill_code"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="#7C879C"
+                android:text="原运单:1234567891"
+                android:textSize="14sp"
+                android:layout_marginLeft="7dp"
+                />
         </LinearLayout>
 
         <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
@@ -285,13 +298,22 @@
             </LinearLayout>
         </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/rl_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:paddingTop="9dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            >
         <ImageView
             android:id="@+id/iv_control_show"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginTop="9dp"
             android:src="@mipmap/expand" />
+        </RelativeLayout>
     </LinearLayout>
 
 

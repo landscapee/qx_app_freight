@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -89,6 +90,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
 
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
         ImageView view = helper.getView(R.id.iv_control_show);
+        RelativeLayout rlExpand = helper.getView(R.id.rl_expand);
         View llMore = helper.getView(R.id.ll_more);
         llMore.setTag(helper.getAdapterPosition());
 
@@ -103,7 +105,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
             collView.collapse();
 
         }
-        view.setOnClickListener(v -> {
+        rlExpand.setOnClickListener(v -> {
             if (item.isExpand()) {
                 llMore.setVisibility(View.GONE);
                 view.setImageResource(R.mipmap.expand);
