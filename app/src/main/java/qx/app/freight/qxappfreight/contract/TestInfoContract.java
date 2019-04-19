@@ -10,7 +10,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
  */
 public class TestInfoContract {
     public interface testInfoModel {
-        void testInfo(String waybillId, IResultLisenter lisenter);
+        void testInfo(String waybillId, String freightId,IResultLisenter lisenter);
     }
 
     public interface testInfoView extends IBaseView {

@@ -36,14 +36,18 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
+import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.TransportListCommitContract;
 import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -54,7 +58,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
  * TODO :出港收货页面
  * Created by pr
  */
-public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ScooterInfoListContract.scooterInfoListView {
+public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ScooterInfoListContract.scooterInfoListView, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
     @BindView(R.id.mfrv_receive_good)
     MultiFunctionSlideRecylerView mMfrvData;
     @BindView(R.id.btn_receive_good)
@@ -75,8 +79,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
     private TransportListCommitEntity transportListCommitEntity;
     private String mScooterCode;
-
     private int pageCurrent = 1;
+
+    private DeclareWaybillBean mDeclare = new DeclareWaybillBean();
 
     //库区
     private String reservoirName;
@@ -114,8 +119,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         //提交
         mBtnReceiveGood.setOnClickListener(v -> commit());
+        getWayBill();
         getAutoReservoir();
         initView();
+    }
+
+    private void getWayBill() {
+        mPresenter = new GetWayBillInfoByIdPresenter(this);
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(waybillId);
     }
 
     public void getAutoReservoir() {
@@ -155,6 +166,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setTaskId(taskId);//当前任务id
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
             transportListCommitEntity.setWaybillId(waybillId);
+            transportListCommitEntity.setWaybillInfo(mDeclare);
             List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
@@ -390,5 +402,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void addInfoResult(MyAgentListBean result) {
 
+    }
+
+    @Override
+    public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
+        if (result !=null){
+            mDeclare = result;
+        }
     }
 }

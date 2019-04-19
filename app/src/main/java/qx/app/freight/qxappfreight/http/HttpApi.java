@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
@@ -104,13 +105,17 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> modifyTest(@Body ModifyTextEntity model);
 
     //收验详情
-    @GET("service-product-transportcheck/ins/get/{waybillId}")
-    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId);
+    @GET("service-product-transportcheck/ins/get/{waybillId}/{freightId}")
+    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId,@Path("freightId") String freightId);
 
     /***********收运****************************/
     //代办
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);
+
+    //编辑修改页面
+    @GET("service-product-waybill/declare-waybill/getWayBillInfoById/{id}")
+    Observable<BaseEntity<DeclareWaybillBean>> getWayBillInfoById(@Path("id") String id);
 
     //提交或者暂存
     @POST("service-product-receivecargo/rc/commit")

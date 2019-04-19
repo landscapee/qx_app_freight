@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.request;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 /**
@@ -36,4 +38,33 @@ public class StorageCommitEntity {
     private int type;
     private String taskId;
     private String userId;
+    /**
+     * 报检员名称
+     */
+    private String insUserName;
+
+    /**
+     * 报检员危险开始时间
+     */
+    private long insDangerStart;
+
+    /**
+     * 报检员危险结束时间
+     */
+    private long insDangerEnd;
+
+    /**
+     * 报检员资质起始时间
+     */
+    private long insStartTime;
+
+    /**
+     * 报检员资质结束时间
+     */
+    private long insEndTime;
+
+    /**
+     * 报检员头像地址
+     */
+    private String insUserHead;
 }

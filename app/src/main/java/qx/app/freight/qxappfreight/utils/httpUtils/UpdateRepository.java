@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -166,8 +167,8 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<TestInfoListBean> testInfo(String waybillId) {
-        return transform(getService().testInfo(waybillId));
+    public Observable<TestInfoListBean> testInfo(String waybillId,String freightId) {
+        return transform(getService().testInfo(waybillId,freightId));
     }
 
     /****
@@ -232,6 +233,16 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<TransportListBean>> transportList(BaseFilterEntity model) {
         return transform(getService().transportList(model));
+    }
+
+    /**
+     * 收运编辑提交页面
+     * @param id
+     * @return
+     */
+
+    public Observable<DeclareWaybillBean> getWayBillInfoById(String id) {
+        return transform(getService().getWayBillInfoById(id));
     }
 
     /*****

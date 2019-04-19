@@ -34,8 +34,11 @@ import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
+import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.contract.TestInfoContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
+import qx.app.freight.qxappfreight.presenter.TestInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.ImageUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -46,7 +49,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 核查报检员身份页面
  */
-public class VerifyStaffActivity extends BaseActivity implements UploadsContract.uploadsView {
+public class VerifyStaffActivity extends BaseActivity implements UploadsContract.uploadsView, TestInfoContract.testInfoView {
     @BindView(R.id.sp_select_staff)
     Spinner mSpSelectStaff; //选择报检员
     @BindView(R.id.tv_certificate_in_date)
@@ -110,8 +113,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     }
 
     private void initData() {
-        mPresenter = new UploadsPresenter(this);
-
+        mPresenter = new TestInfoPresenter(this);
+        ((TestInfoPresenter) mPresenter).testInfo(mDeclareData.getWaybillId(),mShipperCompanyId);
         List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
@@ -202,6 +205,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
      * @param file 文件
      */
     private void pressImage(File file) {
+        mPresenter = new UploadsPresenter(this);
         if (file == null)
             return;
         int size = 150;
@@ -253,6 +257,11 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     }
 
     @Override
+    public void testInfoResult(TestInfoListBean testInfoListBeanList) {
+
+    }
+
+    @Override
     public void toastView(String error) {
         ToastUtil.showToast(this, error);
     }
@@ -266,4 +275,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     public void dissMiss() {
         dismissProgessDialog();
     }
+
+
 }

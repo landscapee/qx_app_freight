@@ -118,8 +118,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
      * @param bean
      */
     private void turnToDetailActivity(TransportListBean bean) {
-        VerifyStaffActivity.startActivity(getActivity(),
-                bean.getDeclareWaybillAddition()
+        VerifyStaffActivity.startActivity(getActivity()
+                , bean.getDeclareWaybillAddition()
                 , bean.getTaskId()
                 , bean.getSpotFlag()
                 , bean.getFlightNumber()

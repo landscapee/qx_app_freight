@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.sql.Timestamp;
+
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -178,6 +180,13 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             mStorageCommitEntity.setType(1);
             mStorageCommitEntity.setTaskId(taskId);
             mStorageCommitEntity.setUserId(userId);
+            //新加
+            mStorageCommitEntity.setInsUserName("");
+            mStorageCommitEntity.setInsDangerEnd(123);
+            mStorageCommitEntity.setInsDangerStart(123);
+            mStorageCommitEntity.setInsStartTime(123);
+            mStorageCommitEntity.setInsEndTime(123);
+            mStorageCommitEntity.setInsUserHead("");
             ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
         });
 
