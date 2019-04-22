@@ -39,6 +39,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
+        android:persistent="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity android:name=".activity.CollectorDeclareActivity"></activity>
@@ -74,9 +75,6 @@
         <activity android:name=".activity.InportDeliveryDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.InportDeliveryDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -94,7 +92,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
