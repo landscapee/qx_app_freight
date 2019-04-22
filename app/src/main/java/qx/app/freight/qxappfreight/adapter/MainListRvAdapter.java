@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -36,12 +37,6 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
     @SuppressLint("StringFormatMatches")
     @Override
     protected void convert(BaseViewHolder helper, T item) {
-        if (item instanceof TransportListBean) {
-            helper.getView(R.id.tv_step_name).setVisibility(View.VISIBLE);
-            helper.setText(R.id.tv_step_name, "");
-        } else {
-            helper.getView(R.id.tv_step_name).setVisibility(View.GONE);
-        }
         //运单号
         helper.setText(R.id.tv_order, item.getWaybillCode());
         //预交道口-预交时段
@@ -49,7 +44,33 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
 //        helper.setText(R.id.tv_road_info, roadStr);
         //总件数-总体积-总重量
         helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), StringUtil.formatStringDeleteDot(item.getTotalNumberPackages()), item.getTotalVolume(), item.getTotalWeight()));
-       String coldStr = "";
+
+        TextView tvStatusName = helper.getView(R.id.tv_step_name);
+        TextView  tvOldWayBillCode = helper.getView(R.id.tv_old_waybill_code);
+        tvOldWayBillCode.setVisibility(View.GONE);
+        helper.getView(R.id.ll_collection).setVisibility(View.VISIBLE);
+        switch (item.getTaskTypeCode()){
+            case "changeApply":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setText("换单审核");
+                tvOldWayBillCode.setVisibility(View.VISIBLE);
+                tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
+                break;
+            case "collection":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+                tvStatusName.setText("出港收货");
+                break;
+            case "RR_collectReturn":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.orange_D67));
+                tvStatusName.setText("出港退货");
+                break;
+            case "receive":
+                helper.getView(R.id.ll_collection).setVisibility(View.GONE);
+                break;
+        }
+
+
+        String coldStr = "";
        switch (item.getColdStorage()){
            case "0":
                coldStr = "普通  ";

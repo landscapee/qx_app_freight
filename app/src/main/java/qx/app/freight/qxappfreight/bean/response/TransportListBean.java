@@ -71,7 +71,7 @@ public class TransportListBean implements Serializable {
     private String taskId;
     private String taskType;
     private String deptCode;
-    private String taskTypeCode;
+    private String taskTypeCode;//collection 收货  ；RR_collectReturn收运退货 changeApply 换单审核
     private Object taskStartTime;
     private Object taskEndTime;
     private Object taskResult;
@@ -99,12 +99,13 @@ public class TransportListBean implements Serializable {
     private Object internalTransferFlight;
     private Object internalTransferWaybill;
 
-    private String exchangeFlag;//换单标记 1:换单运单,0:未换单运单
-    private String exchangeBeforeCode; //换单之前的运单号
+    private String newDeclareWaybillCode; // 新运单号
 
     private Object exchangeWaybillId;
     private Object exchangeNewWaybill;
-    private Object exchangeWaybillBefore;
+    private String exchangeWaybillBefore;
+
+    //运单状态:0:待退货,-1:已退货,-2:系统数据异常,-3收验失败,-4:安检失败,1:未申报,2:已申报,3:已收验,4:已安检,5:已收货,6:待收费,7:已收费,8,已预配,9:已组板,10:已报载,11:已复重,12:已串板,13:已起飞,14:已拉货
     private String status;
     private String shipperCompanyId;
     private Object createUser;
