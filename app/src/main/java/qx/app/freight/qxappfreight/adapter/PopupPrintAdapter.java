@@ -12,6 +12,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 
 public class PopupPrintAdapter extends PagerAdapter {
 
@@ -46,7 +47,10 @@ public class PopupPrintAdapter extends PagerAdapter {
         tvWaybillCode.setText(list.get(position).getWaybillCode());
         tvNum.setText(list.get(position).getNumber()+"件");
         tvWeight.setText(list.get(position).getWeight()+"kg");
-//        tvArea.setText(list.get(position).get);
+        tvArea.setText(list.get(position).getRepName());
+        String str = "   第"+position+"板/共"+list.size()+"板";
+        tvHandcar.setText(MapValue.getCarTypeValue(list.get(position).getScooterType()+"")+list.get(position).getScooterCode()+str);
+
         container.addView(view);
         return view;
     }

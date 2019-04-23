@@ -249,9 +249,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             }
         });
         mBtnPrinting.setOnClickListener(v -> {
-
-            showPopWindowList();
-
+            if (list.size() > 0)
+                showPopWindowList();
+            else
+                ToastUtil.showToast("请先添加收运记录");
         });
 
 

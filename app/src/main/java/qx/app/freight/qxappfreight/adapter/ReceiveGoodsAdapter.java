@@ -10,6 +10,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 
 public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseViewHolder> {
     private OnDeleteClick mOnDeleteClick;
@@ -21,11 +22,8 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
     @SuppressLint("StringFormatMatches")
     @Override
     protected void convert(BaseViewHolder helper, MyAgentListBean item) {
-        //板车号    * scooterType : 1:大板  2:小板
-        if (1 == item.getScooterType())
-            helper.setText(R.id.tv_receive_nb, "大板" + item.getScooterCode());
-        else
-            helper.setText(R.id.tv_receive_nb, "小板" + item.getScooterCode());
+
+        helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType()+"")+ item.getScooterCode());
         //板车自重
         helper.setText(R.id.tv_receive_weight, item.getScooterWeight() + "kg");
         //品名~件数~重量~体积
