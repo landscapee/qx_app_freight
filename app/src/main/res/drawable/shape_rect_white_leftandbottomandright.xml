@@ -1,0 +1,31 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        实线框
+        create by guohao 2019/4/19
+    -->
+
+    <!-- 连框颜色值 -->
+    <!--<item>-->
+        <!--<shape>-->
+            <!--<solid android:color="#FF979797" />-->
+        <!--</shape>-->
+    <!--</item>-->
+
+
+    <item
+        android:top="-2dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:bottom="1dp"><!--设置只有底部有边框-->
+        <shape>
+            <!--背景填充色-->
+            <solid android:color="@color/white" />
+            <!--线的样式：虚线，线色，大小-->
+            <stroke
+                android:width="@dimen/dp_1"
+                android:color="#FFDBDBDB"
+                />
+        </shape>
+    </item>
+</layer-list>

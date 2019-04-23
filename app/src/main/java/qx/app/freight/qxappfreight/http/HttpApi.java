@@ -7,6 +7,8 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
+import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
@@ -105,6 +107,15 @@ public interface HttpApi {
     Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId);
 
     /***********收运****************************/
+
+    //换单审核 - 获取数据 - guohao
+    @POST("service-product-receivecargo/rc/selectChangeWaybill")
+    Observable<BaseEntity<DeclareWaybillBean>> getChangeWaybill(@Body DeclareWaybillEntity declareWaybillEntity);
+
+    //换单审核 - 提交（接受或拒绝） - guohao
+    @POST("service-product-receivecargo/rc/changeSubmit")
+    Observable<BaseEntity<Object>> changeSubmit(@Body ChangeWaybillEntity changeWaybillEntity);
+
     //代办
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);

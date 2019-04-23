@@ -65,6 +65,18 @@ public class TimeUtils {
     }
 
     /**
+     * 将时间戳转为年月日
+     * @param time 毫秒数
+     * @return 年-月-日
+     */
+    public static String getTime2_1(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Log.e("time", "time2=" + format.format(date));
+        return format.format(date);
+    }
+
+    /**
      * 年/月/日
      *
      * @return

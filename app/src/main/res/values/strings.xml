@@ -44,4 +44,6 @@
     <string name="format_inport_tally_store_info">%1$s|库位%2$d</string>
     <string name="format_dynamic_info">%1$s/%2$s</string>
     <string name="format_new_task_push">新任务到达(%1$d)</string>
+    <string name="format_delivery_verify_no_origin">原运单号: %1$s</string>
+    <string name="format_delivery_verify_no_new">新运单号: %1$s</string>
 </resources>

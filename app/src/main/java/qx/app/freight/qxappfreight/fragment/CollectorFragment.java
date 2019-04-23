@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
+import qx.app.freight.qxappfreight.activity.DeliveryVerifyActivity;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.activity.ReturnGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
@@ -102,6 +103,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         adapter.setOnItemClickListener((adapter, view, position) -> {
             switch (list.get(position).getTaskTypeCode()){
                 case "changeApply": //换单审核
+                    DeliveryVerifyActivity.startActivity(getContext(),list.get(position).getId(), list.get(position).getTaskId());
                     break;
                 case "collection"://出港收货
                     turnToReceiveGoodsActivity(list.get(position));
