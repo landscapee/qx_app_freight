@@ -110,7 +110,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     });
                     if (!mDialog.isAdded()) {
                         Log.e("tagPuth", "显示推送任务=========");
-                        mDialog.showDialog(getFragmentManager());
+                        mDialog.show(getFragmentManager(),"11");
                         mShouldNewDialog = false;
                     }
                 } else {

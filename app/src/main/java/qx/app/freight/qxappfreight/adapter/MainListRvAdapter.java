@@ -46,14 +46,18 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
         helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), StringUtil.formatStringDeleteDot(item.getTotalNumberPackages()), item.getTotalVolume(), item.getTotalWeight()));
 
         TextView tvStatusName = helper.getView(R.id.tv_step_name);
+        ImageView ivFlag = helper.getView(R.id.iv_flag);
         TextView  tvOldWayBillCode = helper.getView(R.id.tv_old_waybill_code);
+
         tvOldWayBillCode.setVisibility(View.GONE);
         helper.getView(R.id.ll_collection).setVisibility(View.VISIBLE);
+        ivFlag.setVisibility(View.GONE);
         switch (item.getTaskTypeCode()){
             case "changeApply":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 tvStatusName.setText("换单审核");
-//                tvStatusName.setDr
+                ivFlag.setVisibility(View.VISIBLE);
+                ivFlag.setImageResource(R.mipmap.collect_switch);
                 tvOldWayBillCode.setVisibility(View.VISIBLE);
                 tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
                 break;
@@ -62,6 +66,8 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
                 tvStatusName.setText("出港收货");
                 break;
             case "RR_collectReturn":
+                ivFlag.setVisibility(View.VISIBLE);
+                ivFlag.setImageResource(R.mipmap.collect_wait);
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.orange_D67));
                 tvStatusName.setText("出港退货");
                 break;

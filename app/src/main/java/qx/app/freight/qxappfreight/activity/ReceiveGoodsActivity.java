@@ -56,6 +56,7 @@ import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.TransportListCommitContract;
 import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
+import qx.app.freight.qxappfreight.presenter.GetScooterListInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
@@ -103,6 +104,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     ImageView ivLeft;
     ImageView ivRight;
     Button btnPrint;
+    int vpPage = 0;
+    boolean isPrint = false;
 
     public static void startActivity(Activity context, String waybillId, String taskId, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean, String reservoirType) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
@@ -440,24 +443,27 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         }
     }
 
+    //打印成功
     @Override
     public void sendPrintMessageResult(String result) {
-
+        isPrint = true;
+       ToastUtil.showToast(result);
     }
-
+    private void printWayBill() {
+        mPresenter = new GetWayBillInfoByIdPresenter(this);
+        ((GetWayBillInfoByIdPresenter)mPresenter).sendPrintMessage(waybillCode);
+    }
     /**
      * 初始化popWindow
      */
     private void initPopupWindow() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenHeight = metrics.heightPixels;
-
         window = new CommonPopupWindow(this, R.layout.popup_print_fr, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) {
             @Override
             protected void initView() {
-                View view = getContentView();
 
+                View view = getContentView();
                 ivClose = view.findViewById(R.id.iv_close);
                 ivLeft = view.findViewById(R.id.iv_left);
                 ivRight = view.findViewById(R.id.iv_right);
@@ -465,10 +471,40 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 vp = (ViewPager)view.findViewById(R.id.view_pager);
                 mPopupPrintAdapter = new PopupPrintAdapter(ReceiveGoodsActivity.this,list);
                 vp.setAdapter(mPopupPrintAdapter);
+                vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int i, float v, int i1) {
 
-                ivClose = view.findViewById(R.id.iv_close);
+                    }
+
+                    @Override
+                    public void onPageSelected(int i) {
+                        vpPage = i;
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int i) {
+
+                    }
+                });
                 ivClose.setOnClickListener((v) -> {
                     dismissPopWindows();
+                });
+                ivLeft.setOnClickListener((v) -> {
+                    if (vpPage != 0){
+                        vpPage--;
+                        vp.setCurrentItem(vpPage);
+                    }
+
+                });
+                ivRight.setOnClickListener((v) -> {
+                    if (vpPage < list.size()){
+                        vpPage++;
+                        vp.setCurrentItem(vpPage);
+                    }
+                });
+                btnPrint.setOnClickListener((v) -> {
+                    printWayBill();
                 });
             }
 
@@ -490,6 +526,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             }
         };
     }
+
+
 
     private void showPopWindowList() {
         mPopupPrintAdapter.notifyDataSetChanged();
