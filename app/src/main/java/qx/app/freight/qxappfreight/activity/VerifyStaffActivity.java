@@ -86,7 +86,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String insCheck; //报检是否合格1合格 0不合格
     private String mFlightNumber;//航班号
     private String mShipperCompanyId;
-    private TestInfoListBean AcTestInfoListBean = new TestInfoListBean();
+    private TestInfoListBean mAcTestInfoListBean = new TestInfoListBean();
 
     public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String spotFlag, String flightNumber, String shipperCompanyId) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
@@ -178,7 +178,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 break;
 
             case R.id.gh_user:
-                ChoiceUserActivity.startActivity(this, AcTestInfoListBean);
+                ChoiceUserActivity.startActivity(this, mAcTestInfoListBean);
                 break;
 
 //            case R.id.btn_take_photo_re:
@@ -288,7 +288,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     @Override
     public void testInfoResult(TestInfoListBean testInfoListBeanList) {
         if (testInfoListBeanList != null) {
-            AcTestInfoListBean = testInfoListBeanList;
+            mAcTestInfoListBean = testInfoListBeanList;
             //报检员姓名
             tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
             //报检开始时间
