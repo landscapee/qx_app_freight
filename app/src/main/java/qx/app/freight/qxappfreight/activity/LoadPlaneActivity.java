@@ -100,7 +100,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     private void showCargoResUpdate(String flightId) {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,flightId, s -> {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, flightId, s -> {
             ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
         });
         updatePushDialog.show();
@@ -127,23 +127,23 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setMainTitle(Color.WHITE, info[0] + "  装机");
         mTvPlaneInfo.setText(info[0]);
         mTvFlightType.setText(info[1]);
-        String start=info[2];
-        String middle=info[3];
-        String end=info[4];
-        if (TextUtils.isEmpty(start)){//起点都没有，说明没有航线信息，全部隐藏
+        String start = info[2];
+        String middle = info[3];
+        String end = info[4];
+        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
             mTvStartPlace.setVisibility(View.GONE);
             mIvTwoPlace.setVisibility(View.GONE);
             mTvMiddlePlace.setVisibility(View.GONE);
             mTvTargetPlace.setVisibility(View.GONE);
-        }else {
-            if (TextUtils.isEmpty(middle)){//没有中转站信息
+        } else {
+            if (TextUtils.isEmpty(middle)) {//没有中转站信息
                 mTvStartPlace.setVisibility(View.VISIBLE);
                 mTvStartPlace.setText(start);
                 mIvTwoPlace.setVisibility(View.VISIBLE);
                 mTvMiddlePlace.setVisibility(View.GONE);
                 mTvTargetPlace.setVisibility(View.VISIBLE);
                 mTvTargetPlace.setText(end);
-            }else {
+            } else {
                 mTvStartPlace.setVisibility(View.VISIBLE);
                 mIvTwoPlace.setVisibility(View.GONE);
                 mTvMiddlePlace.setVisibility(View.VISIBLE);
@@ -162,9 +162,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
 //        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
         mTvPullGoodsReport.setOnClickListener(v -> {
-            if (mBillList.size()==0){
+            if (mBillList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
-            }else {
+            } else {
                 Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
                 intent.putExtra("plane_info", flightInfo);
                 intent.putExtra("fregiht_space", mFregihtSpace);
@@ -179,9 +179,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvEndInstall.setOnClickListener(v -> {
-            if (mBillList.size()==0){
+            if (mBillList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
-            }else {
+            } else {
                 GetFlightCargoResBean bean = new GetFlightCargoResBean();
                 bean.setTpFlightId(info[7]);
                 bean.setTaskId(info[11]);
@@ -211,19 +211,22 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             String id = "";
             int number = 0;
             double weight = 0d;
-            String type="";
+            double volume = 0d;
+            String type = "";
             for (LocalBillBean bean : list) {
                 if (code.equals(bean.getWayBillCode())) {
                     id = bean.getWaybillId();
-                    type=bean.getCargoType();
+                    type = bean.getCargoType();
                     number += bean.getMaxNumber();
                     weight += bean.getMaxWeight();
+                    volume += bean.getMaxVolume();
                 }
             }
             billBean.setCargoType(type);
             billBean.setWaybillId(id);
             billBean.setMaxNumber(number);
             billBean.setMaxWeight(weight);
+            billBean.setMaxVolume(volume);
             billBean.setBillItemNumber(number);
             billBean.setBillItemWeight(weight);
             result.add(billBean);
@@ -237,14 +240,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         List<LocalBillBean> list3 = new ArrayList<>();
         for (GetFlightCargoResBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
             mFregihtSpace = bean.getSuggestRepository();
-            if (bean.getGroupScooters()!=null) {
+            if (bean.getGroupScooters() != null) {
                 for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
                     LocalBillBean billBean = new LocalBillBean();
                     billBean.setWayBillCode(groupCode.getWaybillCode());
                     billBean.setWaybillId(groupCode.getWaybillId());
                     billBean.setMaxNumber(groupCode.getNumber());
                     billBean.setMaxWeight(groupCode.getWeight());
-                    billBean.setCargoType("C".equals(bean.getCargoType())?"cargo":"mail");
+                    billBean.setCargoType("C".equals(bean.getCargoType()) ? "cargo" : "mail");
+                    billBean.setMaxVolume(groupCode.getVolume());
                     list3.add(billBean);
                 }
             }
@@ -260,10 +264,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     UnloadPlaneEntity item = new UnloadPlaneEntity();
                     item.setBerth(model.getSuggestRepository());
                     String boardNumber;
-                    if (!TextUtils.isEmpty(model.getScooterCode())){
-                        boardNumber=model.getScooterCode();
-                    }else {
-                        boardNumber=(model.getGroupScooters()==null)?"-":model.getGroupScooters().get(0).getScooterCode();
+                    if (!TextUtils.isEmpty(model.getScooterCode())) {
+                        boardNumber = model.getScooterCode();
+                    } else {
+                        boardNumber = (model.getGroupScooters() == null) ? "-" : model.getGroupScooters().get(0).getScooterCode();
                     }
                     item.setBoardNumber(boardNumber);
                     item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());

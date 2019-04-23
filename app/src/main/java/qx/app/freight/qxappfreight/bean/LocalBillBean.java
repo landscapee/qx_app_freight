@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 import lombok.Data;
 
 @Data
@@ -15,17 +14,21 @@ public class LocalBillBean implements Parcelable {
     private int billItemNumber;//可分装的运单件数
     private double billItemWeight;//可分装的运单重量
     private String cargoType;//M,邮件,C，货物
-    public LocalBillBean(){
+    private double maxVolume;//最大体积
+
+    public LocalBillBean() {
         super();
     }
+
     private LocalBillBean(Parcel in) {
         waybillId = in.readString();
         wayBillCode = in.readString();
-        maxNumber=in.readInt();
-        maxWeight=in.readDouble();
-        billItemNumber=in.readInt();
-        billItemWeight=in.readDouble();
-        cargoType=in.readString();
+        maxNumber = in.readInt();
+        maxWeight = in.readDouble();
+        billItemNumber = in.readInt();
+        billItemWeight = in.readDouble();
+        cargoType = in.readString();
+        maxVolume = in.readDouble();
     }
 
     public static final Creator<LocalBillBean> CREATOR = new Creator<LocalBillBean>() {
@@ -54,5 +57,6 @@ public class LocalBillBean implements Parcelable {
         dest.writeInt(billItemNumber);
         dest.writeDouble(billItemWeight);
         dest.writeString(cargoType);
+        dest.writeDouble(maxVolume);
     }
 }

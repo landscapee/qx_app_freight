@@ -16,11 +16,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -34,13 +31,16 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
+import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
+import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -51,7 +51,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView {
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -99,6 +99,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     private ScanInfoAdapter mScanPacAdapter;//扫描行李适配器
     private String[] mInfo;
     private String mCurrentTaskId;
+    private List<String> mTpScooterCodeList = new ArrayList<>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -178,6 +179,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, flightInfo);
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
+            mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
             mListGoods.remove(position);
             mSlideRvGoods.closeMenu();
             mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
@@ -189,6 +191,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanPacAdapter = new ScanInfoAdapter(mListPac, flightInfo);
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
+            mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
             mListPac.remove(position);
             mSlideRvPac.closeMenu();
             mTvPacNumber.setText(String.valueOf(mListPac.size()));
@@ -274,11 +277,19 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         });
     }
 
+    private String mNowScooterCode;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("UnloadPlaneActivity".equals(result.getFunctionFlag())) {
             //根据扫一扫获取的板车信息查找板车内容
-            addScooterInfo(result.getData());
+            if (!mTpScooterCodeList.contains(result.getData())) {
+                mNowScooterCode = result.getData();
+                mPresenter = new ScanScooterCheckUsedPresenter(this);
+                ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+            } else {
+                ToastUtil.showToast("操作不合法，不能重复扫描");
+            }
         }
     }
 
@@ -299,29 +310,33 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> result) {
-        String flightType = getIntent().getStringExtra("flight_type");
-        if ("D".equals(flightType) || "I".equals(flightType)) {
-            for (ScooterInfoListBean bean : result) {
-                bean.setFlightType(flightType);
-            }
-            showBoardInfos(result);
+        if (result.size() == 0) {
+            ToastUtil.showToast("板车扫描错误，请检查");
         } else {
-            ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-            dialog.setData(this, isLocal -> {
-                if (isLocal) {
-                    for (ScooterInfoListBean bean : result) {
-                        bean.setFlightType("D");
-                    }
-                    showBoardInfos(result);
-                } else {
-                    for (ScooterInfoListBean bean : result) {
-                        bean.setFlightType("I");
-                    }
-                    showBoardInfos(result);
+            String flightType = getIntent().getStringExtra("flight_type");
+            if ("D".equals(flightType) || "I".equals(flightType)) {
+                for (ScooterInfoListBean bean : result) {
+                    bean.setFlightType(flightType);
                 }
-            });
-            dialog.setCancelable(false);
-            dialog.show(getSupportFragmentManager(), "111");
+                showBoardInfos(result);
+            } else {
+                ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+                dialog.setData(this, isLocal -> {
+                    if (isLocal) {
+                        for (ScooterInfoListBean bean : result) {
+                            bean.setFlightType("D");
+                        }
+                        showBoardInfos(result);
+                    } else {
+                        for (ScooterInfoListBean bean : result) {
+                            bean.setFlightType("I");
+                        }
+                        showBoardInfos(result);
+                    }
+                });
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "111");
+            }
         }
     }
 
@@ -331,6 +346,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
      * @param result 板车信息
      */
     private void showBoardInfos(List<ScooterInfoListBean> result) {
+        for (ScooterInfoListBean entity : result) {
+            mTpScooterCodeList.add(entity.getScooterCode());
+        }
         if (mIsScanGoods) {
             mSlideRvGoods.setVisibility(View.VISIBLE);
             mListGoods.addAll(result);
@@ -376,5 +394,14 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         ToastUtil.showToast("结束卸机成功");
         EventBus.getDefault().post("InstallEquipFragment_refresh");
         finish();
+    }
+
+    @Override
+    public void checkScooterCodeResult(BaseEntity<Object> result) {
+        if ("200".equals(result.getStatus())) {
+            addScooterInfo(mNowScooterCode);
+        } else {
+            ToastUtil.showToast("操作不合法，不能重复扫描");
+        }
     }
 }

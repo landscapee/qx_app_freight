@@ -1,20 +1,13 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import android.util.Log;
-
 import java.util.List;
 
-import io.reactivex.annotations.Nullable;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
-import qx.app.freight.qxappfreight.contract.AddInfoContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
-import qx.app.freight.qxappfreight.model.AddInfoModel;
 import qx.app.freight.qxappfreight.model.ScooterInfoListModel;
 
 /**

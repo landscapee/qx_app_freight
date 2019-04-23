@@ -122,7 +122,6 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 float xPos = event.getX();
                 float yPos = event.getY();
                 if (isCanTouch && isTouchLock(xPos, yPos)) {
-                    Log.d(TAG, "触摸目标");
                     mLocationX = xPos - imgWidth/2;
                     mIsDragable = true;
                     invalidate();
@@ -131,14 +130,12 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 }
                 return true;
             case MotionEvent.ACTION_CANCEL://手势被取消了
-                Log.e(TAG, "手势被取消");
                 callTouch(false);
                 if (!mIsDragable)
                     return true;
                 resetLock();
                 break;
             case MotionEvent.ACTION_MOVE://移动
-                Log.e(TAG, "手势移动");
                 // 如果不在焦点
                 if (!mIsDragable)
                     return true;
@@ -147,7 +144,6 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 return true;
             case MotionEvent.ACTION_UP://抬起了手指
                 callTouch(false);
-                Log.e(TAG, "抬起手指");
                 if (!mIsDragable)
                     return true;
                 if (mLocationX >= rightMax) {
@@ -157,10 +153,8 @@ public class SlideRightExecuteView extends AppCompatTextView {
                     if (mLockListener != null) {
                         mLockListener.onOpenLockSuccess();
                     }
-                    Log.e(TAG, "解锁成功");
                 }
                 else {
-
                     new Handler().postDelayed((Runnable) () -> {
                         mLockListener.onOpenLockCancel();
                     },300);
@@ -168,7 +162,6 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 resetLock();
                 break;
             case MotionEvent.ACTION_OUTSIDE://超出了正常的UI边界
-                Log.e(TAG, "超出边界");
                 break;
         }
         return super.onTouchEvent(event);

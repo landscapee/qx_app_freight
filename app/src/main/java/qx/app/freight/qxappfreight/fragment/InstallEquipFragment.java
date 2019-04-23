@@ -68,6 +68,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private String mSearchText;
     private InstallEquipAdapter mAdapter;
 
+    private boolean mShouldNewDialog = true;
+    private PushLoadUnloadDialog mDialog = null;
 
     @Nullable
     @Override
@@ -75,6 +77,41 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         View view = inflater.inflate(R.layout.fragment_install_equip, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+            if (result.isCancelFlag()) {
+                loadData();
+            } else {
+                List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                if (list != null) {
+                    mListCache.addAll(list);
+                }
+                if (mDialog == null) {
+                    mDialog = new PushLoadUnloadDialog();
+                }
+                mDialog.setData(getContext(), mListCache, success -> {
+                    if (success) {
+                        ToastUtil.showToast("领受装卸机新任务成功");
+                        loadData();
+                        mListCache.clear();
+                    } else {
+                        Log.e("tagPush", "推送出错了");
+                        mListCache.clear();
+                    }
+//                        mShouldNewDialog = true;
+                });
+//                if (!mDialog.isAdded()) {
+                    Log.e("tagPuth", "显示推送任务=========");
+                    mDialog.showDialog(getFragmentManager());
+//                        mShouldNewDialog = false;
+//                } else {
+//                    Log.e("tagPuth", "添加过了=========");
+//                }
+            }
+        }
     }
 
     @Override
@@ -109,38 +146,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
         }
         mAdapter.notifyDataSetChanged();
+        TaskFragment fragment = (TaskFragment) getParentFragment();
+        if (fragment != null) {
+            fragment.setTitleText(mList.size());
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("InstallEquipFragment_refresh")) {
             loadData();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            if (result.isCancelFlag()) {
-                loadData();
-            } else {
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                if (list != null)
-                    mListCache.addAll(list);
-                PushLoadUnloadDialog dialog = new PushLoadUnloadDialog();
-                dialog.setData(getContext(), mListCache, success -> {
-                    if (success) {
-                        ToastUtil.showToast("领受装卸机新任务成功");
-                        loadData();
-                        mListCache.clear();
-                    } else {
-                        mListCache.clear();
-                        Log.e("tagPush", "推送出错了");
-                    }
-                });
-                dialog.setCancelable(false);
-                dialog.show(getFragmentManager(), "333");
-            }
         }
     }
 
@@ -312,7 +327,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         });
         TaskFragment fragment = (TaskFragment) getParentFragment();
         if (fragment != null) {
-            fragment.setTitleText(mCacheList.size());
+            fragment.setTitleText(mList.size());
         }
     }
 

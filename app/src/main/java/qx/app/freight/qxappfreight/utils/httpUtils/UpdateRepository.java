@@ -7,7 +7,6 @@ import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import qx.app.freight.qxappfreight.bean.InportTallyBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
@@ -31,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
@@ -82,6 +82,7 @@ public class UpdateRepository extends BaseRepository {
     public HttpApi getService() {
         return mUpdateApis;
     }
+
     public HttpApi getServiceQxAi() {
         return mUpdateApisQxAi;
     }
@@ -105,6 +106,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<LoginResponseBean> login(LoginEntity loginEntity) {
         return transform(getService().login(loginEntity));
     }
+
     /****
      * 登录智能调度一期
      * @param
@@ -167,8 +169,8 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<TestInfoListBean> testInfo(String waybillId,String freightId) {
-        return transform(getService().testInfo(waybillId,freightId));
+    public Observable<TestInfoListBean> testInfo(String waybillId, String freightId) {
+        return transform(getService().testInfo(waybillId, freightId));
     }
 
     /****
@@ -237,6 +239,7 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * 收运编辑提交页面
+     *
      * @param id
      * @return
      */
@@ -691,5 +694,12 @@ public class UpdateRepository extends BaseRepository {
         return flightTransform(mUpdateApisFlight.getMilepostData(model));
     }
 
-
+    /*****
+     * 扫描板车并锁定 (添加)
+     * @param scooterCode
+     * @return
+     */
+    public Observable<BaseEntity<Object>> checkScooterCode(String scooterCode) {
+        return getService().checkScooterCode(scooterCode);
+    }
 }

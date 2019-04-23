@@ -6,8 +6,6 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import qx.app.freight.qxappfreight.bean.InportTallyBean;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
@@ -33,7 +31,6 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -43,7 +40,6 @@ import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
-import qx.app.freight.qxappfreight.bean.response.GetScooterByScooterCodeBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -106,7 +102,7 @@ public interface HttpApi {
 
     //收验详情
     @GET("service-product-transportcheck/ins/get/{waybillId}/{freightId}")
-    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId,@Path("freightId") String freightId);
+    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId);
 
     /***********收运****************************/
     //代办
@@ -240,8 +236,6 @@ public interface HttpApi {
     Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user);
 
 
-
-
     //查询出待运输
     @GET("service-product-transport/tp-main-info/transportTodoList")
     Observable<BaseEntity<List<TransportTodoListBean>>> transportTodoList();
@@ -278,6 +272,10 @@ public interface HttpApi {
     //装机 - 装机单
     @GET("service-product-transport/tp-main-info/getFlightCargoRes/{flightId}")
     Observable<BaseEntity<List<GetFlightCargoResBean>>> getFlightCargoRes(@Path("flightId") String flightId);
+
+    //判断板车是否被扫描上传过
+    @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}")
+    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode);
 
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")
