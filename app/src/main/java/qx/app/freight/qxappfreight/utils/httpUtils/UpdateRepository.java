@@ -266,6 +266,14 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().transportListCommit(transportListCommitEntity));
     }
 
+    /***
+     * 出港退货提交
+     * @param transportListCommitEntity
+     * @return
+     */
+    public Observable<String> returnCargoCommit(TransportListCommitEntity transportListCommitEntity) {
+        return nothingtransform(getService().returnCargoCommit(transportListCommitEntity));
+    }
 
     /****
      * 板车信息查询

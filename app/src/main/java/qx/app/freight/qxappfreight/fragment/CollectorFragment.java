@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
+import qx.app.freight.qxappfreight.activity.ReturnGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -52,6 +53,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private List<TransportListBean> list;
     private int pageCurrent = 1;
     private String seachString = "";
+
 
     @Nullable
     @Override
@@ -106,6 +108,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 //                    startActivity(new Intent(getContext(), CollectorDeclareActivity.class).putExtra("wayBillId",list.get(position).getWaybillCode()));
                     break;
                 case "RR_collectReturn"://出港退货
+                    ReturnGoodsActivity.startActivity(getActivity(),list.get(position));
                     break;
             }
 

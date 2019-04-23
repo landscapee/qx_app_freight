@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_rect_gray"
     android:layout_margin="@dimen/dp_10"
+    android:background="@drawable/shape_rect_gray"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="7dp">
 
         <TextView
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:background="@drawable/shape_rect_black"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="大板001"
-            android:textColor="@color/white" />
+            android:id="@+id/tv_receive_nb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/shape_rect_blue_cce4"
+            android:drawableStart="@mipmap/dray"
+            android:padding="7dp"
+            android:textColor="#136BEF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="12321" />
 
         <TextView
             android:id="@+id/tv_rerutn_good_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="14dp"
             android:text="123" />
 
     </LinearLayout>
@@ -34,16 +43,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:orientation="horizontal">
+        android:paddingRight="5dp">
 
         <TextView
             android:id="@+id/tv_return_good_nu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="11dp"
             android:gravity="right"
-            android:padding="10dp"
+            android:textSize="14sp"
+            android:textColor="#999999"
+            android:layout_marginBottom="14dp"
             android:text="123123" />
 
     </LinearLayout>

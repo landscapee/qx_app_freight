@@ -107,6 +107,9 @@
             android:name=".activity.ReceiveGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ChoiceUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.AddReceiveGoodActivity"
             android:screenOrientation="portrait" />
         <activity

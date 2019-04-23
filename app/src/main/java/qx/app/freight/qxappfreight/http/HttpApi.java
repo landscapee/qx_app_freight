@@ -117,6 +117,10 @@ public interface HttpApi {
     @POST("service-product-receivecargo/rc/commit")
     Observable<BaseEntity<Object>> transportListCommit(@Body TransportListCommitEntity model);
 
+    //出港退货提交
+    @POST("service-product-receivecargo/rc/returnCargo")
+    Observable<BaseEntity<Object>> returnCargoCommit(@Body TransportListCommitEntity model);
+
 
     //出港收货 -收运
     @POST("service-product-receivecargo/rc/list")
