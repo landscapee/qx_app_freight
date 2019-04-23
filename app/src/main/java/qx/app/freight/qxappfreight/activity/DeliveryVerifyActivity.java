@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -106,6 +108,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         //获取id参数，从前一个页面
         id = getIntent().getStringExtra("id");
         taskId = getIntent().getStringExtra("taskId");
+        setToolbarShow(View.VISIBLE);
         //设置toolbar
         customToolbar = getToolbar();
         customToolbar.setMainTitle(Color.WHITE, "换单审核");

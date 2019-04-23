@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ReturnGoodAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -158,11 +155,9 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     @Override
     public void returnCargoCommitResult(String result) {
         if (!TextUtils.isEmpty(result)) {
-            new Handler().postDelayed(() -> {
-                EventBus.getDefault().post("collector_refresh");
-                ToastUtil.showToast(result);
-                finish();
-            }, 3000);
+            EventBus.getDefault().post("collector_refresh");
+            ToastUtil.showToast(result);
+            finish();
         }
     }
 
