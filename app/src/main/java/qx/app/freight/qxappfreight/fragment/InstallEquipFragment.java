@@ -92,24 +92,27 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
-                mDialog.setData(getContext(), mListCache, success -> {
-                    if (success) {
-                        ToastUtil.showToast("领受装卸机新任务成功");
-                        loadData();
-                        mListCache.clear();
-                    } else {
-                        Log.e("tagPush", "推送出错了");
-                        mListCache.clear();
+                if (mShouldNewDialog) {
+                    mDialog.setData(getContext(), mListCache, success -> {
+                        if (success) {
+                            ToastUtil.showToast("领受装卸机新任务成功");
+                            loadData();
+                            mListCache.clear();
+                        } else {
+                            Log.e("tagPush", "推送出错了");
+                            mListCache.clear();
+                        }
+                        mShouldNewDialog = true;
+                    });
+                    if (!mDialog.isAdded()) {
+                        Log.e("tagPuth", "显示推送任务=========");
+                        mDialog.showDialog(getFragmentManager());
+                        mShouldNewDialog = false;
                     }
-//                        mShouldNewDialog = true;
-                });
-//                if (!mDialog.isAdded()) {
-                    Log.e("tagPuth", "显示推送任务=========");
-                    mDialog.showDialog(getFragmentManager());
-//                        mShouldNewDialog = false;
-//                } else {
-//                    Log.e("tagPuth", "添加过了=========");
-//                }
+                } else {
+                    Log.e("tagPuth", "添加过了=========");
+                    mDialog.refreshData();
+                }
             }
         }
     }

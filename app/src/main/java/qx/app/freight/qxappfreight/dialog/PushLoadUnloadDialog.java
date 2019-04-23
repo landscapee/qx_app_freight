@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,7 +49,6 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     private Context context;
     private View convertView;
     private OnDismissListener onDismissListener;
-    private RecyclerView mRvData;
     private TextView mTvTitle;
     private ImageView mIvGif;
     private SlideRightExecuteView mSlideView;
@@ -60,7 +61,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     }
 
     private void initViews() {
-        mRvData = convertView.findViewById(R.id.rv_load_unload_list);
+        RecyclerView mRvData = convertView.findViewById(R.id.rv_load_unload_list);
         mTvTitle = convertView.findViewById(R.id.tv_title_new_task);
         mIvGif = convertView.findViewById(R.id.iv_start_gif);
         mSlideView = convertView.findViewById(R.id.slide_right_start);
@@ -70,9 +71,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         setListeners();
     }
 
-    public void refreshData(List<LoadAndUnloadTodoBean> newData) {
-        list.clear();
-        list.addAll(newData);
+    public void refreshData() {
         mAdapter.notifyDataSetChanged();
         setListeners();
     }
@@ -148,17 +147,12 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         return dialog;
     }
     public void showDialog(FragmentManager fragmentManager) {
-        if(this == null) return;
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
         FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment prev = fragmentManager.findFragmentByTag(getTag());
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
-        // Create and show the dialog.
         show(ft, getTag());
     }
 
@@ -194,7 +188,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     }
 
     private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
-        public DialogLoadUnloadPushAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
+        DialogLoadUnloadPushAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
             super(R.layout.item_push_load_unload_rv, data);
         }
 
@@ -223,8 +217,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             List<String> result = new ArrayList<>();
             if (item.getRoute() != null && item.getRoute().contains(",")) {
                 String[] placeArray = item.getRoute().split(",");
-                List<String> placeList = new ArrayList<>();
-                placeList.addAll(Arrays.asList(placeArray));
+                List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
                 for (String str : placeList) {
                     String temp = str.replaceAll("[^a-z^A-Z]", "");
                     result.add(temp);
