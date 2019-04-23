@@ -302,7 +302,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             //报检员备案照片
             GlideUtil.load(HttpConstant.IMAGEURLVERIFY + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
-
         } else
             ToastUtil.showToast("数据为空");
     }

@@ -19,4 +19,15 @@ public class GetWayBillInfoByIdModel extends BaseModel implements GetWayBillInfo
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void sendPrintMessage(String waybillId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().sendPrintMessage(waybillId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

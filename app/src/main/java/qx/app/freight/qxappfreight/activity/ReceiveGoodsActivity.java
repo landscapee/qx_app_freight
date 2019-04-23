@@ -440,6 +440,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         }
     }
 
+    @Override
+    public void sendPrintMessageResult(String result) {
+
+    }
+
     /**
      * 初始化popWindow
      */

@@ -116,6 +116,10 @@ public interface HttpApi {
     @POST("service-product-receivecargo/rc/changeSubmit")
     Observable<BaseEntity<Object>> changeSubmit(@Body ChangeWaybillEntity changeWaybillEntity);
 
+    //收运打印
+    @GET("service-product-receivecargo/rc/sendPrintMessage/{waybillId}")
+    Observable<BaseEntity<Object>> sendPrintMessage(@Path("waybillId") String waybillId);
+
     //代办
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);
