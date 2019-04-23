@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#EFF2F3"
     tools:context=".activity.CollectorDeclareActivity">
 
     <android.support.v4.widget.NestedScrollView
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none">
         <LinearLayout
-            android:background="#EFF2F3"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -30,7 +31,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:background="@drawable/shape_rect_blue_b3d1fb"
-                        android:id="@+id/allocate_address"
+                        android:id="@+id/waybill_id"
                         android:layout_width="wrap_content"
                         android:layout_height="33dp"
                         android:gravity="center_vertical"
@@ -49,7 +50,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/allocate_info"
+                            android:id="@+id/declare_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#333333"
@@ -68,33 +69,47 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/flight_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#333333"
                         android:singleLine="true"
                         android:textSize="13sp"
-                        tools:text="中外货运代理"
+                        tools:text="3u3333"
                         />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="center_vertical|end"
                         android:layout_gravity="center_vertical"
                         android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/flight_line"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:textColor="#333333"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            tools:text="四川航空"
+                            />
 
                         <TextView
+                            android:id="@+id/flight_company"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#333333"
                             android:singleLine="true"
                             android:textSize="13sp"
-                            tools:text="中外货运代理"
+                            tools:text="四川航空"
                             />
 
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_marginTop="7dp"
                 android:background="@color/white"
@@ -102,10 +117,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -114,7 +131,12 @@
                         android:gravity="center_vertical"
                         android:text="总件数"
                         style="@style/public_tv_16sp_3" />
-                    <TextView
+                    <EditText
+                        android:background="@null"
+                        android:hint="请输入总件数"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:id="@+id/tv_total_num"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -127,7 +149,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -136,7 +158,12 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="总重量" />
-                    <TextView
+                    <EditText
+                        android:background="@null"
+                        android:hint="请输入总重量"
+                        android:inputType="numberSigned"
+                        android:singleLine="true"
+                        android:id="@+id/tv_total_weight"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -149,7 +176,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -158,7 +185,12 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="总体积" />
-                    <TextView
+                    <EditText
+                        android:background="@null"
+                        android:hint="请输入总体积"
+                        android:inputType="numberSigned"
+                        android:singleLine="true"
+                        android:id="@+id/tv_total_volume"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -171,7 +203,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -180,7 +212,12 @@
                         android:gravity="center_vertical"
                         android:text="计费重量"
                         style="@style/public_tv_16sp_3" />
-                    <TextView
+                    <EditText
+                        android:background="@null"
+                        android:hint="请输入计费重量"
+                        android:inputType="numberSigned"
+                        android:singleLine="true"
+                        android:id="@+id/tv_weight"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -193,7 +230,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -202,7 +239,12 @@
                         android:gravity="center_vertical"
                         android:text="特货代码"
                         style="@style/public_tv_16sp_3" />
-                    <TextView
+                    <EditText
+                        android:background="@null"
+                        android:hint="请输入特货代码"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:id="@+id/tv_goods_code"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -210,35 +252,54 @@
                         tools:text="33"
                         style="@style/public_tv_16sp" />
                 </LinearLayout>
+
                 <View style="@style/line_horizontal_979797" />
+
                 <LinearLayout
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="包装大小"
-                        style="@style/public_tv_16sp_3" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/public_tv_16sp_3"/>
+                    <LinearLayout
                         android:layout_marginStart="10dp"
-                        android:gravity="center_vertical|end"
-                        tools:text="33"
-                        style="@style/public_tv_16sp" />
+                        android:id="@+id/ll_baozhuang"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp">
+                        <TextView
+                            android:id="@+id/tv_baozhuang"
+                            android:layout_width="0dp"
+                            android:layout_height="45dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|end"
+                            android:spinnerMode="dropdown"
+                            style="@style/public_tv_16sp" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@mipmap/drop_select"
+                            android:layout_width="@dimen/dp_15"
+                            android:layout_height="@dimen/dp_15" />
+                    </LinearLayout>
                 </LinearLayout>
+
                 <View style="@style/line_horizontal_979797" />
+
                 <LinearLayout
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -246,81 +307,114 @@
                         android:gravity="center_vertical"
                         android:text="储存类型"
                         style="@style/public_tv_16sp_3" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:gravity="center_vertical|end"
-                        tools:text="33"
-                        style="@style/public_tv_16sp" />
-                </LinearLayout>
-                <View style="@style/line_horizontal_979797" />
-                <LinearLayout
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="冷藏温度"
-                        style="@style/public_tv_16sp_3" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:gravity="center_vertical|end"
-                        tools:text="33"
-                        style="@style/public_tv_16sp" />
-                </LinearLayout>
-                <View style="@style/line_horizontal_979797" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:padding="@dimen/dp_5"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#333333"
-                        android:singleLine="true"
-                        android:textSize="13sp"
-                        android:text="品名"
-                        />
-
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="horizontal">
-
+                        android:layout_marginStart="10dp"
+                        android:id="@+id/ll_storage_type"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp">
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#333333"
-                            android:singleLine="true"
-                            android:textSize="13sp"
-                            android:text="新增"
-                            />
 
+                            android:id="@+id/tv_storage_type"
+                            android:layout_width="0dp"
+                            android:layout_height="45dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|end"
+                            android:spinnerMode="dropdown"
+                            style="@style/public_tv_16sp" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@mipmap/drop_select"
+                            android:layout_width="@dimen/dp_15"
+                            android:layout_height="@dimen/dp_15" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/ll_base_temperature"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View style="@style/line_horizontal_979797" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="冷藏温度"
+                            style="@style/public_tv_16sp_3" />
+                        <LinearLayout
+                            android:layout_marginStart="10dp"
+                            android:id="@+id/ll_temperature"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="45dp">
+                            <TextView
+                                android:id="@+id/tv_temperature"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical|end"
+                                android:spinnerMode="dropdown"
+                                style="@style/public_tv_16sp" />
+                            <ImageView
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="5dp"
+                                android:src="@mipmap/drop_select"
+                                android:layout_width="@dimen/dp_15"
+                                android:layout_height="@dimen/dp_15" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--<LinearLayout-->
+                    <!--android:padding="@dimen/dp_5"-->
+                    <!--android:layout_marginTop="@dimen/dp_5"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textColor="#333333"-->
+                        <!--android:singleLine="true"-->
+                        <!--android:textSize="13sp"-->
+                        <!--android:text="品名"-->
+                        <!--/>-->
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="end"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/tv_add"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:textColor="#333333"-->
+                            <!--android:singleLine="true"-->
+                            <!--android:textSize="13sp"-->
+                            <!--android:text="新增"-->
+                            <!--/>-->
+
+                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+            <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_40"
                     android:background="@color/gray_576"
@@ -386,15 +480,35 @@
                         android:text="@string/goods_package_type"
                         android:textColor="@color/white" />
                 </LinearLayout>
-
+            <RelativeLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants">
                 <qx.app.freight.qxappfreight.widget.SlideRecyclerView
                     android:id="@+id/rv_detail_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_commit"
+            style="@style/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            android:textColor="@color/white" />
+    </RelativeLayout>
 
 </LinearLayout>

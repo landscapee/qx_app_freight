@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class DeclareItem {
+public class DeclareItem implements Serializable {
 
 
         private String itemId;

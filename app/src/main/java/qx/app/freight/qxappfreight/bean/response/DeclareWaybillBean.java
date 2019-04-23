@@ -232,8 +232,14 @@ public class DeclareWaybillBean {
 
     private List<DeclareItem> declareItem;
 
+    /**
+     * 货代公司名
+     */
     private String freightName;
 
+    /**
+     * 航空公司名
+     */
     private String flightName;
 
     /**

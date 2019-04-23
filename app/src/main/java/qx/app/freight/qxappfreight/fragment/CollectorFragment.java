@@ -55,7 +55,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private int pageCurrent = 1;
     private String seachString = "";
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
