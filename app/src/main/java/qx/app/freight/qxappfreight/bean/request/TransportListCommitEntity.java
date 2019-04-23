@@ -18,6 +18,7 @@ public class TransportListCommitEntity {
     private String waybillId;
     private DeclareWaybillBean waybillInfo;
     private List<RcInfosEntity> rcInfos;
+    private SecurityCheckResult securityResultList;
 
     @Data
     public static class RcInfosEntity {
@@ -38,4 +39,58 @@ public class TransportListCommitEntity {
         private String reservoirName;
         private String reservoirType;
     }
+    @Data
+    public class SecurityCheckResult {
+
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * 已检查id
+         */
+        private String id;
+
+        /**
+         * 安检id
+         */
+        private String securityId;
+
+        /**
+         * 件数
+         */
+        private Long piece;
+
+        /**
+         * 品名
+         */
+        private String commodity;
+
+        /**
+         * 0退运 1扣货 2移交公安
+         */
+        private Integer processMode;
+
+        /**
+         * 原因
+         */
+        private String reason;
+
+        /**
+         * 0删除 1正常
+         */
+        private Short delFlag;
+
+        /**
+         * 品名id
+         */
+        private String cargoId;
+
+
+        /**
+         * 0收验 1收运
+         */
+        private Integer reType;
+
+
+    }
+
 }

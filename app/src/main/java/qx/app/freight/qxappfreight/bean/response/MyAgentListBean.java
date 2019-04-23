@@ -70,6 +70,7 @@ public class MyAgentListBean implements Serializable {
     private String uldType;
     private int uldWeight;
     private String iata;
+    private String repName;
     private String repPlaceNum;
     private String repPlaceStatus;
     private String reservoirName;

@@ -102,7 +102,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 case "changeApply": //换单审核
                     break;
                 case "collection"://出港收货
-                    startActivity(new Intent(getContext(), CollectorDeclareActivity.class).putExtra("wayBillId",list.get(position).getWaybillCode()));
+                    turnToReceiveGoodsActivity(list.get(position));
+//                    startActivity(new Intent(getContext(), CollectorDeclareActivity.class).putExtra("wayBillId",list.get(position).getWaybillCode()));
                     break;
                 case "RR_collectReturn"://出港退货
                     break;

@@ -7,6 +7,6 @@ import lombok.Data;
 
 @Data
 public class AgentBean  implements Serializable {
-    public List<MyAgentListBean> records;
+    public List<MyAgentListBean> rcInfo;
 
 }

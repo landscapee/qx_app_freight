@@ -6,12 +6,20 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.PopupPrintAdapter;
 import qx.app.freight.qxappfreight.adapter.ReceiveGoodsAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -51,6 +60,7 @@ import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
@@ -82,9 +92,17 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private int pageCurrent = 1;
 
     private DeclareWaybillBean mDeclare = new DeclareWaybillBean();
-
     //库区
     private String reservoirName;
+
+    //显示打印预览
+    private CommonPopupWindow window;
+    ViewPager vp;
+    PopupPrintAdapter mPopupPrintAdapter;
+    ImageView ivClose;
+    ImageView ivLeft;
+    ImageView ivRight;
+    Button btnPrint;
 
     public static void startActivity(Activity context, String waybillId, String taskId, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean, String reservoirType) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
@@ -122,6 +140,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         getWayBill();
         getAutoReservoir();
         initView();
+        initPopupWindow();
     }
 
     private void getWayBill() {
@@ -167,6 +186,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
             transportListCommitEntity.setWaybillId(waybillId);
             transportListCommitEntity.setWaybillInfo(mDeclare);
+            transportListCommitEntity.setSecurityResultList(null);
             List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
@@ -228,6 +248,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
             }
         });
+        mBtnPrinting.setOnClickListener(v -> {
+
+            showPopWindowList();
+
+        });
+
+
+
         upData();
     }
 
@@ -244,7 +272,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     public void agentTransportationListResult(AgentBean myAgentListBean) {
-        toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + myAgentListBean.getRecords().size() + ")");
+        toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + myAgentListBean.getRcInfo().size() + ")");
         if (myAgentListBean != null) {
             if (pageCurrent == 1) {
                 list.clear();
@@ -253,7 +281,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 pageCurrent++;
                 mMfrvData.finishLoadMore();
             }
-            list.addAll(myAgentListBean.getRecords());
+            list.addAll(myAgentListBean.getRcInfo());
             int number = 0;
             int weight = 0;
             int volume = 0;
@@ -409,5 +437,67 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         if (result !=null){
             mDeclare = result;
         }
+    }
+
+    /**
+     * 初始化popWindow
+     */
+    private void initPopupWindow() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenHeight = metrics.heightPixels;
+
+        window = new CommonPopupWindow(this, R.layout.popup_print_fr, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) {
+            @Override
+            protected void initView() {
+                View view = getContentView();
+
+                ivClose = view.findViewById(R.id.iv_close);
+                ivLeft = view.findViewById(R.id.iv_left);
+                ivRight = view.findViewById(R.id.iv_right);
+                btnPrint = view.findViewById(R.id.btn_print);
+                vp = (ViewPager)view.findViewById(R.id.view_pager);
+                mPopupPrintAdapter = new PopupPrintAdapter(ReceiveGoodsActivity.this,list);
+                vp.setAdapter(mPopupPrintAdapter);
+
+                ivClose = view.findViewById(R.id.iv_close);
+                ivClose.setOnClickListener((v) -> {
+                    dismissPopWindows();
+                });
+            }
+
+            @Override
+            protected void initEvent() {
+
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(() -> {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    lp.alpha = 1.0f;
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                    getWindow().setAttributes(lp);
+                });
+            }
+        };
+    }
+
+    private void showPopWindowList() {
+        mPopupPrintAdapter.notifyDataSetChanged();
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.3f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+        window.getPopupWindow().setAnimationStyle(R.style.animTranslate);
+        window.showAtLocation(mBtnPrinting, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void dismissPopWindows() {
+
+        window.getPopupWindow().dismiss();
+
     }
 }

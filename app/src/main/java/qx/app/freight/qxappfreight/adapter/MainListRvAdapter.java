@@ -53,6 +53,7 @@ public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAda
             case "changeApply":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 tvStatusName.setText("换单审核");
+//                tvStatusName.setDr
                 tvOldWayBillCode.setVisibility(View.VISIBLE);
                 tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
                 break;
