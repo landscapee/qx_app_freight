@@ -345,6 +345,7 @@
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/ll_base_temperature"
                     android:orientation="vertical"
                     android:layout_width="match_parent"

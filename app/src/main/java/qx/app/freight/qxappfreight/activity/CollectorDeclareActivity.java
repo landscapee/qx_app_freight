@@ -282,7 +282,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             mData.setBillingWeight(jifeiWeight);
             mData.setColdStorage(storageOption);
             mData.setBigFlag(baozhuangOption);
-            mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
+            if (storageOption==4){
+                mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
+            }
 
             turnToReceiveGoodsActivity();
         }catch (Exception e){
