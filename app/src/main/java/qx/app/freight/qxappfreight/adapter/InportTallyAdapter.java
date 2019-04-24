@@ -29,7 +29,7 @@ public class InportTallyAdapter extends BaseQuickAdapter<TransportListBean, Base
     protected void convert(BaseViewHolder helper, TransportListBean item) {
         helper.setText(R.id.tv_flight_number, item.getFlightNo());
         helper.setText(R.id.tv_arrive_time, TimeUtils.date2Tasktime3(item.getEtd()) + "(" + TimeUtils.getDay(item.getEtd()) + ")");
-        helper.setText(R.id.tv_type, "进港理货");
+        helper.setText(R.id.tv_type, "进港分拣");
         TextView tvType = helper.getView(R.id.tv_type);
         Button btnFfm = helper.getView(R.id.btn_ffm);
         tvType.setOnClickListener(v -> {

@@ -125,6 +125,7 @@
                 android:textColor="@color/black_3"
                 android:text="退货待出库"
                 android:textSize="14sp"
+                android:layout_marginLeft="5dp"
                 />
             <TextView
                 android:id="@+id/tv_old_waybill_code"
