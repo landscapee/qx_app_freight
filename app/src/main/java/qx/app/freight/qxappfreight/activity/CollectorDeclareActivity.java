@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -41,8 +43,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     TextView declareType;
     @BindView(R.id.flight_code)
     TextView flightCode;
-    @BindView(R.id.flight_line)
-    TextView flightLine;
+    @BindView(R.id.flight_line_start)
+    TextView flightLineStart;
+    @BindView(R.id.flight_line_end)
+    TextView flightLineEnd;
     @BindView(R.id.flight_company)
     TextView flightCompany;
     @BindView(R.id.tv_total_num)
@@ -86,6 +90,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private int baozhuangOption; //选中得包装大小
     private int storageOption;//选中得储存类型
 
+    private CustomToolbar toolbar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_collector_declare;
@@ -93,11 +99,17 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        initTitle();
         wayBillId = getIntent().getStringExtra("wayBillId");
         taskId = getIntent().getStringExtra("taskId");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
+    }
+    private void initTitle() {
+        setToolbarShow(View.VISIBLE);
+        toolbar = getToolbar();
+        toolbar.setMainTitle(Color.WHITE, "修改申报信息");
     }
 
     private void initVIew() {
@@ -140,7 +152,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     @OnClick({R.id.btn_commit,R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btnSubmit:
+            case R.id.btn_commit:
                 nextSteep();
                 break;
             case R.id.ll_baozhuang:
@@ -175,12 +187,12 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     private void showBaozhuangPickView() {
@@ -221,7 +233,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 if (options2<=options1){
                     ToastUtil.showToast("请选择正确的温度");
+                }else {
+                    tvTemperature.setText(temperatureList.get(options1)+"*"+temperatureList.get(options2));
                 }
+
 
             }
         }).build();
@@ -231,6 +246,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         pickerView.show();
     }
 
+    /**
+     * 提交到下一步
+     */
     private void nextSteep(){
         if (TextUtils.isEmpty(tvTotalNum.getText().toString().trim())){
             ToastUtil.showToast("总件数不能为空");
@@ -247,6 +265,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         if (TextUtils.isEmpty(tvWeight.getText().toString().trim())){
             ToastUtil.showToast("计费重量不能为空");
             return;
+        }
+        if (!TextUtils.isEmpty(tvGoodsCode.getText().toString().trim())){
+            mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
         }
         try {
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
@@ -269,15 +290,23 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     }
 
-
     /**
-     * 刷新列表
+     * 界面ui赋值
      */
     private void refreshView() {
         waybillId.setText(mData.getWaybillCode());
         declareType.setText(mData.getFreightName());
         flightCode.setText(mData.getFlightNumber());
-        flightLine.setText(mData.getOriginatingStation() + mData.getDestinationStation());
+        if (TextUtils.isEmpty(mData.getOriginatingStation())){
+            flightLineStart.setText("--");
+        }else {
+            flightLineStart.setText(mData.getOriginatingStation());
+        }
+         if (TextUtils.isEmpty(mData.getDestinationStation())){
+             flightLineEnd.setText("--");
+        }else {
+             flightLineEnd.setText(mData.getDestinationStation());
+         }
         flightCompany.setText(mData.getFlightName());
         tvTotalNum.setText(String.valueOf(mData.getTotalNumberPackages()));
         tvTotalWeight.setText(String.valueOf(mData.getTotalWeight()));

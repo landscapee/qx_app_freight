@@ -63,7 +63,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -79,15 +80,27 @@
                         />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical|end"
+                        android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/flight_line"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:id="@+id/flight_line_start"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#333333"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            tools:text="四川航空"
+                            />
+                        <TextView
+                            android:id="@+id/flight_line_end"
+                            android:drawableLeft="@mipmap/airlane"
+                            android:drawablePadding="5dp"
+                            android:layout_width="wrap_content"
                             android:gravity="center"
                             android:layout_height="wrap_content"
                             android:textColor="#333333"
@@ -96,17 +109,17 @@
                             tools:text="四川航空"
                             />
 
-                        <TextView
-                            android:id="@+id/flight_company"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#333333"
-                            android:singleLine="true"
-                            android:textSize="13sp"
-                            tools:text="四川航空"
-                            />
-
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/flight_company"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#333333"
+                        android:singleLine="true"
+                        android:textSize="13sp"
+                        tools:text="四川航空"
+                        />
                 </LinearLayout>
             </LinearLayout>
 
@@ -414,7 +427,7 @@
                     <!--</LinearLayout>-->
                 <!--</LinearLayout>-->
             <LinearLayout
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginTop="7dp"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_40"
                     android:background="@color/gray_576"
@@ -496,7 +509,7 @@
     </android.support.v4.widget.NestedScrollView>
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white"
