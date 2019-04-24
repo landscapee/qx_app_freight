@@ -28,6 +28,7 @@ public class HttpConstant {
 //    public static final String TEST = "http://192.168.1.17:9008";
 
 
+
     public static final String CMCC = "10.16.23.156";//中国移动
     public static final String CT = "222.209.86.130";//中国电信
 //    public static final String TEST = "172.18.57.223";//内网测试
