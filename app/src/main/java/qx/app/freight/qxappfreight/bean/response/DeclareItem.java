@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class DeclareItem implements Serializable {
 
-
         private String itemId;
 
         /**

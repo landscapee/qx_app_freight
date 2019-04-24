@@ -100,35 +100,28 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            switch (list.get(position).getTaskTypeCode()){
-                case "changeApply": //换单审核
-                    DeliveryVerifyActivity.startActivity(getContext(),list.get(position).getId(), list.get(position).getTaskId());
-                    break;
-                case "collection"://出港收货
-                    turnToReceiveGoodsActivity(list.get(position));
-//                    startActivity(new Intent(getContext(), CollectorDeclareActivity.class).putExtra("wayBillId",list.get(position).getWaybillCode()));
-                    break;
-                case "RR_collectReturn"://出港退货
-                    ReturnGoodsActivity.startActivity(getActivity(),list.get(position));
-                    break;
-            }
+            trunToCollectorActivity(list.get(position));
 
         });
     }
 
-    /**
-     * 跳转到代办详情
-     * @param bean
-     */
-    private void turnToReceiveGoodsActivity(TransportListBean bean){
-        ReceiveGoodsActivity.startActivity(getActivity(),
-                bean.getId(),
-                bean.getTaskId(),
-                bean.getWaybillCode(),
-                bean.getDeclareItem(),
-                bean.getColdStorage()
-        );
+    private void trunToCollectorActivity(TransportListBean bean){
+        switch (bean.getTaskTypeCode()){
+            case "changeApply": //换单审核
+                DeliveryVerifyActivity.startActivity(getContext(),bean.getId(), bean.getTaskId());
+                break;
+            case "collection"://出港收货
+
+                startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
+                        .putExtra("wayBillId",bean.getId())
+                        .putExtra("taskId",bean.getTaskId()));
+                break;
+            case "RR_collectReturn"://出港退货
+                ReturnGoodsActivity.startActivity(getActivity(),bean);
+                break;
+        }
     }
+
 
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
@@ -204,7 +197,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private void chooseCode(String daibanCode){
         for (TransportListBean item:list) {
             if (daibanCode.equals(item.getId())){
-                turnToReceiveGoodsActivity(item);
+                trunToCollectorActivity(item);
                 return;
             }
         }

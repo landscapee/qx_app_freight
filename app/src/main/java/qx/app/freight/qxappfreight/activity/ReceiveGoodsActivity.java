@@ -45,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
@@ -87,7 +88,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private List<MyAgentListBean> list;
     private String waybillId, taskId, reservoirType, waybillCode;
     private CustomToolbar toolbar;
-    private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
+    private List<DeclareItem> mDeclareItemBeans;
     private TransportListCommitEntity transportListCommitEntity;
     private String mScooterCode;
     private int pageCurrent = 1;
@@ -107,15 +108,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     int vpPage = 0;
     boolean isPrint = false;
 
-    public static void startActivity(Activity context, String waybillId, String taskId, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean, String reservoirType) {
+    public static void startActivity(Activity context,String taskId ,DeclareWaybillBean declareWaybillBean){
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
-        starter.putExtra("waybillId", waybillId);
-        starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("taskId", taskId);
-        starter.putExtra("reservoirType", reservoirType);
-        Bundle mBundle = new Bundle();
-        mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
-        starter.putExtras(mBundle);
+        starter.putExtra("DeclareWaybillBean",declareWaybillBean);
         context.startActivityForResult(starter, 0);
     }
 
@@ -128,27 +124,22 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     public void businessLogic(Bundle savedInstanceState) {
         setToolbarShow(View.VISIBLE);
         EventBus.getDefault().register(this);
-        toolbar = getToolbar();
-        waybillId = getIntent().getStringExtra("waybillId");
+        mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
         taskId = getIntent().getStringExtra("taskId");
-        reservoirType = getIntent().getStringExtra("reservoirType");
-        waybillCode = getIntent().getStringExtra("waybillCode");
-        mDeclareItemBeans = (List<TransportListBean.DeclareItemBean>) getIntent().getSerializableExtra("transportListBeans");
+        waybillId = mDeclare.getId();
+        waybillCode = mDeclare.getWaybillCode();
+        reservoirType = mDeclare.getColdStorage()+"";
+        toolbar = getToolbar();
+        mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             //扫一扫
             ScanManagerActivity.startActivity(this);
         });
         //提交
         mBtnReceiveGood.setOnClickListener(v -> commit());
-        getWayBill();
         getAutoReservoir();
         initView();
         initPopupWindow();
-    }
-
-    private void getWayBill() {
-        mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(waybillId);
     }
 
     public void getAutoReservoir() {
@@ -438,9 +429,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
-        if (result !=null){
-            mDeclare = result;
-        }
+
     }
 
     //打印成功

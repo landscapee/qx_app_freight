@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import qx.app.freight.qxappfreight.adapter.CollectorDeclareAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -73,6 +75,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     LinearLayout llBaseTemperature;
 
     private String wayBillId;
+    private String taskId;
     private CollectorDeclareAdapter mAdapter;
     private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
@@ -91,6 +94,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         wayBillId = getIntent().getStringExtra("wayBillId");
+        taskId = getIntent().getStringExtra("taskId");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
@@ -137,7 +141,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnSubmit:
-
+                nextSteep();
                 break;
             case R.id.ll_baozhuang:
                 showBaozhuangPickView();
@@ -227,6 +231,44 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         pickerView.show();
     }
 
+    private void nextSteep(){
+        if (TextUtils.isEmpty(tvTotalNum.getText().toString().trim())){
+            ToastUtil.showToast("总件数不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(tvTotalWeight.getText().toString().trim())){
+            ToastUtil.showToast("总重量不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(tvTotalVolume.getText().toString().trim())){
+            ToastUtil.showToast("总体积不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(tvWeight.getText().toString().trim())){
+            ToastUtil.showToast("计费重量不能为空");
+            return;
+        }
+        try {
+            int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
+            int weight = Integer.parseInt(tvTotalWeight.getText().toString().trim());
+            int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
+            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
+
+            mData.setTotalNumberPackages(number);
+            mData.setTotalWeight(weight);
+            mData.setTotalVolume(volume);
+            mData.setBillingWeight(jifeiWeight);
+            mData.setColdStorage(storageOption);
+            mData.setBigFlag(baozhuangOption);
+            mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
+
+            turnToReceiveGoodsActivity();
+        }catch (Exception e){
+            ToastUtil.showToast("输入值格式不对，请重新输入");
+        }
+
+    }
+
 
     /**
      * 刷新列表
@@ -242,7 +284,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvTotalVolume.setText(String.valueOf(mData.getTotalVolume()));
         tvWeight.setText(String.valueOf(mData.getBillingWeight()));
 
-        tvGoodsCode.setText("T8899");
+        tvGoodsCode.setText(mData.getSpecialCargoCode());
         if (mData.getBigFlag() == 1) {
             tvBaozhuang.setText("大件");
         } else {
@@ -274,6 +316,14 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvStorageType.setText(coldStorage);
         tvTemperature.setText(mData.getRefrigeratedTemperature());
 
+    }
+
+    /**
+     * 跳转到代办详情
+     * @param
+     */
+    private void turnToReceiveGoodsActivity(){
+        ReceiveGoodsActivity.startActivity(this,taskId,mData);
     }
 
 }

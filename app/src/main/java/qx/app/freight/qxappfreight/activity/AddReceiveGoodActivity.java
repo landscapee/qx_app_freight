@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -73,12 +74,12 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
     private MyAgentListBean mMyAgentListBean;
     private String waybillId, waybillCode;
-    private List<TransportListBean.DeclareItemBean> mDeclareItemBeans;
+    private List<DeclareItem> mDeclareItemBeans;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
 
-    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<DeclareItem> declareItemBean) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
@@ -134,7 +135,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         waybillId = getIntent().getStringExtra("waybillId");
         mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
-        mDeclareItemBeans = (List<TransportListBean.DeclareItemBean>) getIntent().getSerializableExtra("transportListBeans");
+        mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
         //品名  coldStorage  deptCode
         mSpProductList = new ArrayList<>();
         if (mDeclareItemBeans != null) {
