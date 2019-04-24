@@ -18,7 +18,7 @@ public class TransportListCommitEntity {
     private String waybillId;
     private DeclareWaybillBean waybillInfo;
     private List<RcInfosEntity> rcInfos;
-    private SecurityCheckResult securityResultList;
+    private List<SecurityCheckResult> securityResultList;
 
     @Data
     public static class RcInfosEntity {
@@ -40,7 +40,7 @@ public class TransportListCommitEntity {
         private String reservoirType;
     }
     @Data
-    public class SecurityCheckResult {
+    public static class SecurityCheckResult {
 
         private static final long serialVersionUID = 1L;
 

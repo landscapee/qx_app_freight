@@ -32,7 +32,7 @@ public class GetWayBillInfoByIdPresenter extends BasePresenter {
 
     public void sendPrintMessage(String waybillId) {
         mRequestView.showNetDialog();
-        ((GetWayBillInfoByIdModel) mRequestModel).getWayBillInfoById(waybillId, new IResultLisenter<String>() {
+        ((GetWayBillInfoByIdModel) mRequestModel).sendPrintMessage(waybillId, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String result) {
                 ((GetWayBillInfoByIdContract.getWayBillInfoByIdView) mRequestView).sendPrintMessageResult(result);

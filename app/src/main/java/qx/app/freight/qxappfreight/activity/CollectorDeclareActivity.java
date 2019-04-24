@@ -175,6 +175,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         mAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void sendPrintMessageResult(String result) {
 

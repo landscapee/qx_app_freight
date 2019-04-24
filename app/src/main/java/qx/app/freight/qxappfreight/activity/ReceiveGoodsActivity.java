@@ -8,8 +8,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,7 +27,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,16 +45,13 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
-import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.TransportListCommitContract;
 import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
-import qx.app.freight.qxappfreight.presenter.GetScooterListInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
@@ -94,6 +88,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private int pageCurrent = 1;
 
     private DeclareWaybillBean mDeclare = new DeclareWaybillBean();
+    private List<TransportListCommitEntity.SecurityCheckResult> mSecuriBean = new ArrayList<>();
+
     //库区
     private String reservoirName;
 
@@ -108,10 +104,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     int vpPage = 0;
     boolean isPrint = false;
 
-    public static void startActivity(Activity context,String taskId ,DeclareWaybillBean declareWaybillBean){
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
-        starter.putExtra("DeclareWaybillBean",declareWaybillBean);
+        starter.putExtra("DeclareWaybillBean", declareWaybillBean);
         context.startActivityForResult(starter, 0);
     }
 
@@ -128,7 +124,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         taskId = getIntent().getStringExtra("taskId");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
-        reservoirType = mDeclare.getColdStorage()+"";
+        reservoirType = mDeclare.getColdStorage() + "";
         toolbar = getToolbar();
         mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
@@ -180,7 +176,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
             transportListCommitEntity.setWaybillId(waybillId);
             transportListCommitEntity.setWaybillInfo(mDeclare);
-            transportListCommitEntity.setSecurityResultList(null);
+            transportListCommitEntity.setSecurityResultList(mSecuriBean);
             List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
@@ -248,9 +244,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             else
                 ToastUtil.showToast("请先添加收运记录");
         });
-
-
-
         upData();
     }
 
@@ -307,15 +300,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void transportListCommitResult(String result) {
         if (!"".equals(result)) {
-            MaterialDialog normalDialog = new MaterialDialog(this);
-            View mView = LayoutInflater.from(this).inflate(R.layout.dialog_progressbar, null);
-            normalDialog.setMessage("提交中");
-            normalDialog.setContentView(mView);
-            normalDialog.show();
-            new Handler().postDelayed(() -> {
                 EventBus.getDefault().post("collector_refresh");
-                finish();
-            }, 3000);
+                startActivity(new Intent(this,MainActivity.class));
         }
     }
 
@@ -364,13 +350,16 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                         ToastUtil.showToast("当前板车号已在列表中请勿重复添加");
                         return;
                     }
+                }
+                list.add(mMyAgentListBean);
+                toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");
+                for (int i = 0; i < list.size(); i++) {
                     number += list.get(i).getNumber();
                     weight += list.get(i).getWeight();
                     volume += list.get(i).getVolume();
                     if (!"".equals(reservoirName))
                         mMyAgentListBean.setReservoirName(reservoirName);
                 }
-                list.add(mMyAgentListBean);
                 mTvTotalNumber.setText("总件数:" + number + "");
                 mTvTotalVolume.setText("总体积:" + volume + "m³");
                 mTvTotalWeight.setText("总重量" + weight + "kg");
@@ -436,12 +425,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void sendPrintMessageResult(String result) {
         isPrint = true;
-       ToastUtil.showToast(result);
+        ToastUtil.showToast(result);
     }
+
     private void printWayBill() {
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter)mPresenter).sendPrintMessage(waybillCode);
+        ((GetWayBillInfoByIdPresenter) mPresenter).sendPrintMessage(waybillId);
     }
+
     /**
      * 初始化popWindow
      */
@@ -457,8 +448,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 ivLeft = view.findViewById(R.id.iv_left);
                 ivRight = view.findViewById(R.id.iv_right);
                 btnPrint = view.findViewById(R.id.btn_print);
-                vp = (ViewPager)view.findViewById(R.id.view_pager);
-                mPopupPrintAdapter = new PopupPrintAdapter(ReceiveGoodsActivity.this,list);
+                vp = (ViewPager) view.findViewById(R.id.view_pager);
+                mPopupPrintAdapter = new PopupPrintAdapter(ReceiveGoodsActivity.this, list);
                 vp.setAdapter(mPopupPrintAdapter);
                 vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -480,14 +471,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     dismissPopWindows();
                 });
                 ivLeft.setOnClickListener((v) -> {
-                    if (vpPage != 0){
+                    if (vpPage != 0) {
                         vpPage--;
                         vp.setCurrentItem(vpPage);
                     }
 
                 });
                 ivRight.setOnClickListener((v) -> {
-                    if (vpPage < list.size()){
+                    if (vpPage < list.size()) {
                         vpPage++;
                         vp.setCurrentItem(vpPage);
                     }
@@ -515,7 +506,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             }
         };
     }
-
 
 
     private void showPopWindowList() {
