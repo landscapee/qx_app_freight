@@ -38,6 +38,19 @@ public class TransportListCommitEntity {
         private String repPlaceId;
         private String reservoirName;
         private String reservoirType;
+        private  List<RcInfoOverweight> rcInfoOverweight;
+
+        @Data
+        public static class RcInfoOverweight{
+            private String id;
+            private String rcId;
+            private String cargoCn;
+            private int count;
+            private int weight;
+            private int volume;
+            private int overWeight;
+            private int delFlag;
+        }
     }
     @Data
     public static class SecurityCheckResult {
