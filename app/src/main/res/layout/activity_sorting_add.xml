@@ -239,7 +239,7 @@
                             android:layout_weight="2"
                             android:layout_height="wrap_content"
                             style="@style/public_tv_16sp"
-                            android:background=""
+                            android:background="@color/transparent"
                             android:gravity="center"
                             android:hint="输入异常件数" />
                         <View

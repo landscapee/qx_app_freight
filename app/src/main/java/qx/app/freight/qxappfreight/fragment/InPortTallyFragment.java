@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FFMActivity;
 import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
+import qx.app.freight.qxappfreight.activity.SortingActivity;
 import qx.app.freight.qxappfreight.adapter.InportTallyAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -127,10 +128,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * @param bean
      */
     private void turnToDetailActivity(TransportListBean bean) {
-        Intent intent = new Intent(mContext, InPortTallyActivity.class);
-        intent.putExtra("flight_number", bean.getFlightNo());
-        intent.putExtra("flight_id", bean.getFlightId());
-        intent.putExtra("task_id", bean.getTaskId());
+        Intent intent = new Intent(mContext, SortingActivity.class);
+        intent.putExtra("TASK_INFO", bean);
         mContext.startActivity(intent);
     }
 

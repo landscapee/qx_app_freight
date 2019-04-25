@@ -153,7 +153,7 @@
                 android:background="@color/transparent"
                 />
             <RelativeLayout
-                android:id="@+id/rl_ok"
+                android:id="@+id/rl_add"
                 android:layout_width="@dimen/dp_47"
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_blue_press"
@@ -166,6 +166,7 @@
             </RelativeLayout>
         </LinearLayout>
         <Button
+            android:id="@+id/btn_sure"
             android:layout_width="167dp"
             android:layout_height="33dp"
             android:text="确定"

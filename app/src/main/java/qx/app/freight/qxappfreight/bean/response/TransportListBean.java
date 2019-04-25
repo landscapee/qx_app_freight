@@ -134,6 +134,9 @@ public class TransportListBean implements Serializable {
     private String flightName; //航空公司名字
     private String serialNumber;  //流水号
 
+    private int totalScooterNum; //总板车数
+    private int arriveWarehouseNum;//已到板车数
+
     @Data
     public static class DeclareWaybillAdditionBean implements Serializable{
         /**

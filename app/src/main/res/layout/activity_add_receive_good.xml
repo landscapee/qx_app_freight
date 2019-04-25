@@ -55,17 +55,28 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tv_product_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="品名"
+                    android:textSize="16sp"
+                    />
+
                 <Spinner
                     android:id="@+id/sp_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rectangle_menu_gray"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    android:visibility="gone"
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/drop_select" />
+                    android:src="@mipmap/drop_select"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 
