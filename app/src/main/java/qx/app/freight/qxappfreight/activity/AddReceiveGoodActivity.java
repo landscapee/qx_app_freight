@@ -45,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetWeightContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
+import qx.app.freight.qxappfreight.dialog.ReturnGoodsDialog;
 import qx.app.freight.qxappfreight.presenter.GetWeightPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -144,7 +145,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                     mEdtNumber.setText("");
                 });
         initView();
-        initPopupWindow();
+//        initPopupWindow();
         //提交
         mBtnCommit.setOnClickListener(v -> {
             if ("".equals(mEdtNumber.getText().toString().trim())) {
@@ -453,14 +454,24 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     private void showPopWindowList() {
 
-        overweightRecordAdapter.notifyDataSetChanged();
+//        overweightRecordAdapter.notifyDataSetChanged();
+//
+//        WindowManager.LayoutParams lp = getWindow().getAttributes();
+//        lp.alpha = 0.3f;
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        getWindow().setAttributes(lp);
+//        window.getPopupWindow().setAnimationStyle(R.style.animTranslate);
+//        window.showAtLocation(tvProductName, Gravity.CENTER, 0, 0);
+        ReturnGoodsDialog dialog = new ReturnGoodsDialog(this);
+        dialog.setData(rcInfoOverweight)
+                .setOnClickListener(new ReturnGoodsDialog.OnClickListener() {
+                    @Override
+                    public void onClick(String text) {
+                        mEdtOverWeight.setText(text);
+                    }
+                })
+                .show();
 
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.3f;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().setAttributes(lp);
-        window.getPopupWindow().setAnimationStyle(R.style.animTranslate);
-        window.showAtLocation(tvProductName, Gravity.CENTER, 0, 0);
     }
 
     private void dismissPopWindows() {
