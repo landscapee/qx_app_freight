@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- 运单号 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_13"
+        android:background="@drawable/shape_rect_gray_bottom"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_13"
+        android:paddingBottom="@dimen/dp_13">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="运单号" />
+
+        <TextView
+            style="@style/public_tv_16sp_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="00-999999999" />
+    </LinearLayout>
+
+    <!-- 实际分拣 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_13">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_13"
+            android:text=" * "
+            android:textColor="@color/red" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="实际分拣数" />
+
+            <TextView
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!-- 库区 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_13">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_13"
+            android:text=" * "
+            android:textColor="@color/red" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="库区" />
+
+            <TextView
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@mipmap/drop_select"
+                android:gravity="right"
+                android:text="请选择库区 " />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 库位 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_rect_gray_bottom"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/dp_13"
+        android:paddingBottom="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_13"
+        android:paddingTop="@dimen/dp_13">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="库位" />
+
+        <TextView
+            style="@style/public_tv_16sp_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@mipmap/drop_select"
+            android:gravity="right"
+            android:text="请选择库位 " />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_13">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="是否转关" />
+        <TextView
+            style="@style/public_tv_16sp_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@mipmap/drop_select"
+            android:gravity="right"
+            android:text="否 " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_13">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/public_tv_16sp"
+            android:text="异常情况  "/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="(可多选)"/>
+        <Button
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_27"
+            android:background="@mipmap/add_2_bg"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="#FFEFF2F3">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_13">
+
+            <!--异常的item-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="@drawable/shape_white_stroke_grey">
+                <TextView
+                    android:layout_width="26dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    style="@style/public_tv_16sp"
+                    android:text="1"/>
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:background="#FFBCBCBC"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp"
+                        android:gravity="center">
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="2.5"
+                            android:gravity="center"
+                            android:layout_height="match_parent">
+                            <TextView
+                                style="@style/public_tv_16sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@mipmap/drop_select"
+                                android:gravity="center"
+                                android:text="请选择 " />
+                        </RelativeLayout>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#FFBCBCBC"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            style="@style/public_tv_16sp"
+                            android:background=""
+                            android:gravity="center"
+                            android:hint="输入异常件数" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#FFBCBCBC"/>
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_height="match_parent">
+                            <ImageButton
+                                android:layout_width="21dp"
+                                android:layout_weight="1"
+                                android:layout_height="24dp"
+                                android:background="@mipmap/delete_all" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFBCBCBC"/>
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/dp_15"
+                            android:paddingRight="@dimen/dp_15"
+                            android:gravity="center_vertical">
+                            
+                            <RelativeLayout
+                                android:layout_width="58dp"
+                                android:layout_height="58dp"
+                                android:layout_marginRight="@dimen/dp_13">
+                                <ImageView
+                                    android:layout_width="53dp"
+                                    android:layout_height="53dp"
+                                    android:background="@mipmap/tracking_number"
+                                    android:layout_alignParentBottom="true"
+                                    />
+                                <ImageButton
+                                    android:layout_width="17dp"
+                                    android:layout_height="17dp"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@mipmap/delete_3"/>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="58dp"
+                                android:layout_height="58dp"
+                                android:layout_marginRight="@dimen/dp_13">
+                                <ImageView
+                                    android:layout_width="53dp"
+                                    android:layout_height="53dp"
+                                    android:background="@mipmap/tracking_number"
+                                    android:layout_alignParentBottom="true"
+                                    />
+                                <ImageButton
+                                    android:layout_width="17dp"
+                                    android:layout_height="17dp"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@mipmap/delete_3"/>
+                            </RelativeLayout>
+                            
+                            <LinearLayout
+                                android:layout_width="53dp"
+                                android:layout_height="53dp"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="20dp"
+                                    android:background="@mipmap/icon_chose_photo"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/sp_9"
+                                    android:text="添加图片"/>
+                            </LinearLayout>
+                            
+
+                            
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                    
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4"
+        android:paddingTop="@dimen/dp_4">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="提交"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:background="#FF2E81FD"/>
+
+    </LinearLayout>
+
+</LinearLayout>
