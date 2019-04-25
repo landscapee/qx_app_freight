@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_rect_7"
+    android:background="@color/white"
     android:orientation="vertical"
+    android:layout_marginLeft="13dp"
+    android:layout_marginRight="13dp"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,15 +98,15 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_overweight"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginTop="7dp"
             ></android.support.v7.widget.RecyclerView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="47sp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="27dp"
             android:orientation="horizontal"
-            android:background="@drawable/shape_rect_7"
+            android:background="@drawable/shape_white_stroke_grey"
             >
 
             <EditText
@@ -117,6 +119,10 @@
                 android:textColor="@color/black_3"
                 android:textSize="13sp"
                 android:background="@color/transparent"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="4"
+                android:nextFocusDown="@+id/et_weight"
                 />
 
             <EditText
@@ -129,9 +135,13 @@
                 android:textColor="#737B8B"
                 android:textSize="13sp"
                 android:background="@color/transparent"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="4"
+                android:nextFocusDown="@+id/et_volume"
                 />
             <EditText
-                android:id="@+id/et_volue"
+                android:id="@+id/et_volume"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -140,6 +150,10 @@
                 android:textColor="#737B8B"
                 android:textSize="13sp"
                 android:background="@color/transparent"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="4"
+                android:nextFocusDown="@+id/et_overweight"
                 />
             <EditText
                 android:id="@+id/et_overweight"
@@ -151,6 +165,10 @@
                 android:textColor="#737B8B"
                 android:textSize="13sp"
                 android:background="@color/transparent"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="4"
+                android:nextFocusDown="@+id/rl_add"
                 />
             <RelativeLayout
                 android:id="@+id/rl_add"

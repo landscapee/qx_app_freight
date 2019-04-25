@@ -1,17 +1,28 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,7 +33,9 @@ import java.util.List;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
+import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
@@ -34,7 +47,9 @@ import qx.app.freight.qxappfreight.contract.GetWeightContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.presenter.GetWeightPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -47,16 +62,21 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     Spinner mSpProduct; //品名
     @BindView(R.id.ll_product)
     LinearLayout llProduct;
+    @BindView(R.id.ll_overweight)
+    LinearLayout llOverweight;
     @BindView(R.id.edt_overweight)
-    EditText mEdtOverWeight;    //超重重量
+    TextView mEdtOverWeight;    //超重重量
+    @BindView(R.id.tv_product_name)
+    TextView tvProductName;    //品名
+
     @BindView(R.id.edt_dead_weight)
     EditText mEdtDeadWeight;   //ULD自重
     @BindView(R.id.et_uldnumber)
     EditText mEtUldNumber;     //Uld号
     @BindView(R.id.tv_cooter_weight)
-    EditText mTvCooterWeight;  //板车重量
+    TextView mTvCooterWeight;  //板车重量
     @BindView(R.id.tv_scooter)
-    EditText mTvScooter;         //板车号
+    TextView mTvScooter;         //板车号
     @BindView(R.id.btn_takeweight)
     Button mBtnTakeWeight;      //重量
     @BindView(R.id.tv_weight)
@@ -78,6 +98,17 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
+    List<RcInfoOverweight> rcInfoOverweight;
+    /**
+     * 弹出取重
+     */
+    private CommonPopupWindow window;
+    RecyclerView dataRc;
+    ImageView ivClose;
+    RelativeLayout rlAdd;
+    Button btnSure;
+    EditText etNum,etWeight,etVolume,etOverweight;
+    private OverweightRecordAdapter overweightRecordAdapter;
 
     public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<DeclareItem> declareItemBean) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
@@ -113,6 +144,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                     mEdtNumber.setText("");
                 });
         initView();
+        initPopupWindow();
         //提交
         mBtnCommit.setOnClickListener(v -> {
             if ("".equals(mEdtNumber.getText().toString().trim())) {
@@ -136,6 +168,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
+        tvProductName.setText(mDeclareItemBeans.get(0).getCargoCn());
+        mMyAgentListBean.setCargoId(mDeclareItemBeans.get(0).getCargoId());
         //品名  coldStorage  deptCode
         mSpProductList = new ArrayList<>();
         if (mDeclareItemBeans != null) {
@@ -168,6 +202,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mBtnTakeWeight.setOnClickListener(v -> {
             mPresenter = new GetWeightPresenter(this);
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
+        });
+        llOverweight.setOnClickListener(v->{
+
+            showPopWindowList();
+
         });
         //板车号
         getNumberInfo();
@@ -207,11 +246,14 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         else
             mMyAgentListBean.setUldWeight(0);
         //超重重量
-        if ("".equals(mEdtOverWeight.getText().toString())) {
-            mMyAgentListBean.setOverWeight(0);
-        } else {
-            mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
-        }
+//        if ("".equals(mEdtOverWeight.getText().toString())) {
+//            mMyAgentListBean.setOverWeight(0);
+//        } else {
+//            mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
+//        }
+        mMyAgentListBean.setRcInfoOverweight(rcInfoOverweight);
+
+
         if (null == scooterInfo) {
             ToastUtil.showToast("id为空不能提交");
             return;
@@ -317,6 +359,113 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void dissMiss() {
+
+    }
+
+    /**
+     * 初始化popWindow
+     */
+    private void initPopupWindow() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//        int screenHeight = metrics.heightPixels;
+
+        rcInfoOverweight = new ArrayList <>();//超重记录列表初始化
+
+        window = new CommonPopupWindow(this, R.layout.popup_add_overweight, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                dataRc = view.findViewById(R.id.rv_overweight);
+                ivClose = view.findViewById(R.id.iv_close);
+                rlAdd = view.findViewById(R.id.rl_add);
+                btnSure = view.findViewById(R.id.btn_sure);
+
+                etNum = view.findViewById(R.id.et_num);
+                etWeight = view.findViewById(R.id.et_weight);
+                etVolume = view.findViewById(R.id.et_volume);
+                etOverweight = view.findViewById(R.id.et_overweight);
+                overweightRecordAdapter = new OverweightRecordAdapter(rcInfoOverweight);
+                dataRc.setLayoutManager(new LinearLayoutManager(AddReceiveGoodActivity.this, LinearLayoutManager.VERTICAL, false));
+                dataRc.setAdapter(overweightRecordAdapter);
+                ivClose.setOnClickListener((v) -> {
+                    dismissPopWindows();
+                });
+                rlAdd.setOnClickListener((v) -> {
+                    RcInfoOverweight mRcInfoOverweight = new RcInfoOverweight();
+                    if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())&&!StringUtil.isEmpty(etVolume.getText().toString())&&!StringUtil.isEmpty(etOverweight.getText().toString())){
+
+                        mRcInfoOverweight.setCount(Integer.valueOf(etNum.getText().toString()));
+                        mRcInfoOverweight.setWeight(Integer.valueOf(etWeight.getText().toString()));
+                        mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
+                        mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
+                        rcInfoOverweight.add(mRcInfoOverweight);
+                        overweightRecordAdapter.notifyDataSetChanged();
+                        etNum.setText("");
+                        etWeight.setText("");
+                        etVolume.setText("");
+                        etOverweight.setText("");
+                        etNum.setFocusable(true);
+
+                    }
+                    else {
+                        ToastUtil.showToast("请填写完整的超重记录");
+                    }
+
+                });
+                btnSure.setOnClickListener((v) -> {
+                    dismissPopWindows();
+                    int overweight = 0;
+                    for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
+                        overweight += mRcInfoOverweight.getOverWeight();
+
+                    }
+                    mEdtOverWeight.setText(overweight+"kg");
+
+                });
+                overweightRecordAdapter.setOnDeleteClickListener((view1, position) -> {
+                    rcInfoOverweight.remove(position);
+                    overweightRecordAdapter.notifyDataSetChanged();
+                });
+            }
+
+            @Override
+            protected void initEvent() {
+
+            }
+
+            @SuppressLint("WrongConstant")
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+                instance.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                instance.setOnDismissListener(() -> {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    lp.alpha = 1.0f;
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                    getWindow().setAttributes(lp);
+                });
+            }
+        };
+    }
+
+    private void showPopWindowList() {
+
+        overweightRecordAdapter.notifyDataSetChanged();
+
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.3f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+        window.getPopupWindow().setAnimationStyle(R.style.animTranslate);
+        window.showAtLocation(tvProductName, Gravity.CENTER, 0, 0);
+    }
+
+    private void dismissPopWindows() {
+
+        window.getPopupWindow().dismiss();
 
     }
 

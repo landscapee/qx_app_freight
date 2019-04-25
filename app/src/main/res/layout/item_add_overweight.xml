@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="47dp"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_white_stroke_grey"
+    android:gravity="center_vertical"
+    android:layout_marginTop="7dp"
+    >
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="件数"
+        android:textColor="@color/black_3"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_weight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="重量"
+        android:textColor="@color/black_3"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_volume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="体积"
+        android:textColor="@color/black_3"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_overweight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="超重重量"
+        android:textColor="@color/red"
+        android:textSize="13sp" />
+<RelativeLayout
+    android:id="@+id/rl_delete"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:gravity="center">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/delete_gray"/>
+</RelativeLayout>
+
+</LinearLayout>
