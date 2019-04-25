@@ -55,6 +55,7 @@ import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -160,6 +161,10 @@ public interface HttpApi {
     //查询库区
     @POST("service-bussiness-reservoir/reservoir/autoReservoir")
     Observable<BaseEntity<AutoReservoirBean>> autoReservoirv(@Body BaseFilterEntity model);
+
+    //查询所有库区
+    @POST("service-bussiness-reservoir/reservoir/list")
+    Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
     //板车列表信息
     @POST("service-base-sysmanage/bd/list")

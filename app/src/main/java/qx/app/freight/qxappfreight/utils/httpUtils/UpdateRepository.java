@@ -56,6 +56,7 @@ import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -218,6 +219,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<AutoReservoirBean> autoReservoirv(BaseFilterEntity model) {
         return transform(getService().autoReservoirv(model));
+    }
+
+    /****
+     * 查询所有库区
+     * @param model
+     * @return
+     */
+    public Observable<ReservoirBean> reservoir(BaseFilterEntity model) {
+        return transform(getService().reservoir(model));
     }
 
     /****
