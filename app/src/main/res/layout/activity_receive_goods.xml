@@ -4,7 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_47"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_13"
+        android:paddingEnd="@dimen/dp_13"
+        android:id="@+id/ll_not_transport">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="未收运记录"
+            android:textColor="#333333"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/tv_not_transport_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="9"
+            android:textColor="#333333"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center_vertical"
+            android:drawableEnd="@mipmap/right"
+            android:drawablePadding="5dp"/>
+    </LinearLayout>
     <qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView
         android:id="@+id/mfrv_receive_good"
         android:layout_width="match_parent"

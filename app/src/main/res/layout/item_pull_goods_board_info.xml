@@ -100,6 +100,8 @@
                 android:layout_height="@dimen/dp_40"
                 android:paddingTop="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_5"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,6 +118,8 @@
                     android:layout_marginEnd="@dimen/dp_10"
                     android:textColor="#f00"
                     android:inputType="number"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:background="@drawable/shape_rect_gray_line"/>
                 <Space
                     android:layout_width="@dimen/dp_40"

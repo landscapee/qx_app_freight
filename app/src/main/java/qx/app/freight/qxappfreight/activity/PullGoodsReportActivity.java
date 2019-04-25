@@ -352,6 +352,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 mPresenter = new ScanScooterPresenter(this);
                 TransportTodoListBean mainIfos = new TransportTodoListBean();
                 mainIfos.setTpScooterCode(scooterCode);
+                mainIfos.setTpFlightId(mInfoList[7]);
                 mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 mainIfos.setDtoType(8);
                 mainIfos.setTpStartLocate("seat");
@@ -472,7 +473,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Override
     public void checkScooterCodeResult(BaseEntity<Object> result) {
-        if ("200".equals(result.getResponseCode())) {
+        if ("200".equals(result.getStatus())) {
             addScooterInfo(mNowScooterCode);
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");

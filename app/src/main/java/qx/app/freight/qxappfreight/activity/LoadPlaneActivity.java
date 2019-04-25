@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -254,6 +255,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             }
         }
         mBillList = removeDuplicate(list3);
+        mList.clear();
         for (GetFlightCargoResBean bean : getFlightCargoResBeanList) {
             UnloadPlaneVersionEntity entity = new UnloadPlaneVersionEntity();
             entity.setVersion(Integer.valueOf(bean.getVersion()));
@@ -282,6 +284,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             entity.setShowDetail(false);
             mList.add(entity);
         }
+        Collections.reverse(mList);
         UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mList);
         mRvData.setAdapter(adapter);
     }

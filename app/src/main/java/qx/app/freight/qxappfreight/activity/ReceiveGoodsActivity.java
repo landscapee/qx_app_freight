@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
@@ -65,6 +68,10 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
  * Created by pr
  */
 public class ReceiveGoodsActivity extends BaseActivity implements AgentTransportationListContract.agentTransportationListView, TransportListCommitContract.transportListCommitView, MultiFunctionSlideRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ScooterInfoListContract.scooterInfoListView, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
+    @BindView(R.id.ll_not_transport)
+    LinearLayout mLlNotTransport;//跳转到未收运记录查看页面的控件
+    @BindView(R.id.tv_not_transport_number)
+    TextView mTvNotTransport;//显示未收运记录条数的控件
     @BindView(R.id.mfrv_receive_good)
     MultiFunctionSlideRecylerView mMfrvData;
     @BindView(R.id.btn_receive_good)
@@ -92,6 +99,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     //库区
     private String reservoirName;
+    private List<ReturnGoodsEntity> mNotTransportList = new ArrayList<>();
 
     //显示打印预览
     private CommonPopupWindow window;
@@ -130,6 +138,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             //扫一扫
             ScanManagerActivity.startActivity(this);
+        });
+        mTvNotTransport.setText(String.valueOf(mNotTransportList.size()));
+        mLlNotTransport.setOnClickListener(v -> {
+            String goodsName = mDeclare.getDeclareItems().get(0).getCargoCn();
+            Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
+            intent.putExtra("goods_name", goodsName);
+            intent.putParcelableArrayListExtra("start_data", (ArrayList<? extends Parcelable>) mNotTransportList);
+            ReceiveGoodsActivity.this.startActivityForResult(intent, 123);
         });
         //提交
         mBtnReceiveGood.setOnClickListener(v -> commit());
@@ -338,6 +354,13 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123 && resultCode == RESULT_OK) {
+            if (data != null && data.getParcelableArrayExtra("not_transport_list").length != 0) {
+                mNotTransportList.clear();
+                mNotTransportList.addAll(data.getParcelableArrayListExtra("not_transport_list"));
+                mTvNotTransport.setText(String.valueOf(mNotTransportList.size()));
+            }
+        }
         if (resultCode == 200) {
             MyAgentListBean mMyAgentListBean = (MyAgentListBean) data.getSerializableExtra("mMyAgentListBean");
             //总重量，总体积，总件数 计算

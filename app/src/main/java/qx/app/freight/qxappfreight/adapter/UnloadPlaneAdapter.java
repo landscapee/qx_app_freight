@@ -27,6 +27,11 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<UnloadPlaneVersionEntit
 
     @Override
     protected void convert(BaseViewHolder helper, UnloadPlaneVersionEntity item) {
+        if (helper.getAdapterPosition()==0){
+            helper.setText(R.id.tv_version_type,"最新版本");
+        }else {
+            helper.setText(R.id.tv_version_type,"历史版本");
+        }
         helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
         ImageView ivControl = helper.getView(R.id.iv_control);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);

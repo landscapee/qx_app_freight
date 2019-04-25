@@ -46,4 +46,6 @@
     <string name="format_new_task_push">新任务到达(%1$d)</string>
     <string name="format_delivery_verify_no_origin">原运单号: %1$s</string>
     <string name="format_delivery_verify_no_new">新运单号: %1$s</string>
+    <string name="format_return_name_number">%1$s|%2$d件</string>
+    <string name="format_return_reason">原因： %1$s</string>
 </resources>

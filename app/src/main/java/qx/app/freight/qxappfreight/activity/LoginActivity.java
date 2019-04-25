@@ -4,14 +4,12 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
@@ -23,7 +21,6 @@ import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -53,7 +50,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         toolbar.setMainTitle(Color.WHITE, "登录");
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("");
+        mEtUserName.setText("shouyun");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();
@@ -61,7 +58,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (EditorInfo.IME_ACTION_DONE ==actionId){
+                if (EditorInfo.IME_ACTION_DONE == actionId) {
                     login();
                     return true;
                 }
@@ -122,6 +119,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setType("MT");
         return mLoginEntity;
     }
+
     private LoginEntity getLoginQxAiEntity() {
         LoginEntity mLoginEntity = new LoginEntity();
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
@@ -150,7 +148,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void loginQxAiResult(LoginBean loginBean) {
 
-        IMUtils.imLibLogin(loginBean.getLoginName(),loginBean.getUsername(),loginBean.getToken());
+        IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getUsername(), loginBean.getToken());
         MainActivity.startActivity(this);
         finish();
 
