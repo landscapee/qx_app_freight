@@ -48,7 +48,8 @@ public class PopupPrintAdapter extends PagerAdapter {
         tvNum.setText(list.get(position).getNumber()+"件");
         tvWeight.setText(list.get(position).getWeight()+"kg");
         tvArea.setText(list.get(position).getRepName());
-        String str = "   第"+position+"板/共"+list.size()+"板";
+        tvCabinNum.setText("无");
+        String str = "   第"+(position+1)+"板/共"+list.size()+"板";
         tvHandcar.setText(MapValue.getCarTypeValue(list.get(position).getScooterType()+"")+list.get(position).getScooterCode()+str);
 
         container.addView(view);

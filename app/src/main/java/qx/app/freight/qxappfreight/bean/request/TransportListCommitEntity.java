@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.bean.request;
 import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
 
@@ -18,7 +19,7 @@ public class TransportListCommitEntity {
     private String waybillId;
     private DeclareWaybillBean waybillInfo;
     private List<RcInfosEntity> rcInfos;
-    private SecurityCheckResult securityResultList;
+    private List<SecurityCheckResult> securityResultList;
 
     @Data
     public static class RcInfosEntity {
@@ -38,9 +39,11 @@ public class TransportListCommitEntity {
         private String repPlaceId;
         private String reservoirName;
         private String reservoirType;
+        private  List<RcInfoOverweight> rcInfoOverweight;
+
     }
     @Data
-    public class SecurityCheckResult {
+    public static class SecurityCheckResult {
 
         private static final long serialVersionUID = 1L;
 

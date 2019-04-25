@@ -128,7 +128,7 @@ public class TransportListBean implements Serializable {
     private Object associateAirport;
     private String spotFlag;
     private long etd;
-    private List<DeclareItemBean> declareItem;
+    private List<DeclareItem> declareItem;
     private boolean isExpand = false; //是否展开
     private String freightName; //货代公司名字
     private String flightName; //航空公司名字
@@ -145,25 +145,5 @@ public class TransportListBean implements Serializable {
         private String waybillId;
         private String addtionInvoices;
     }
-    @Data
-    public static class DeclareItemBean implements Serializable {
-        /**
-         * itemId : null
-         * waybillId : b77f73826693dc6a3e6245404b7f103f
-         * cargoId : 7192c890c57d90b76cec8c5e53063ff7
-         * number : 100
-         * weight : 1400
-         * volume : 100
-         * packagingType : ["包装","包装2"]
-         * cargoCn : 梅花
-         */
-        private Object itemId;
-        private String waybillId;
-        private String cargoId;
-        private int number;
-        private double weight;
-        private double volume;
-        private String cargoCn;
-        private List<String> packagingType;
-    }
+
 }

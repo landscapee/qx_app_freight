@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -34,7 +35,7 @@ public class AddReturnActivity extends BaseActivity {
     @BindView(R.id.btn_commit)
     Button btnCommit;
 
-    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<TransportListBean.DeclareItemBean> declareItemBean) {
+    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<DeclareItem> declareItemBean) {
         Intent starter = new Intent(context, AddReturnActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);

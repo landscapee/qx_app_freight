@@ -23,9 +23,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InstallEquipAdapter;
 import qx.app.freight.qxappfreight.adapter.InstallEquipStepAdapter;
@@ -106,12 +110,18 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     });
                     if (!mDialog.isAdded()) {
                         Log.e("tagPuth", "显示推送任务=========");
-                        mDialog.showDialog(getFragmentManager());
+                        mDialog.show(getFragmentManager(),"11");
                         mShouldNewDialog = false;
                     }
                 } else {
-                    Log.e("tagPuth", "添加过了=========");
-                    mDialog.refreshData();
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .subscribe(aLong -> {
+                                Log.e("tagPuth", "添加过了=========");
+                                mDialog.refreshData();
+                            });
+
                 }
             }
         }

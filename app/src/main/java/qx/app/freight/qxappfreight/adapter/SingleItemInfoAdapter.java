@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 
@@ -16,7 +17,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
  *
  * @param <T>
  */
-public class SingleItemInfoAdapter<T extends TransportListBean.DeclareItemBean> extends BaseQuickAdapter<T, BaseViewHolder> {
+public class SingleItemInfoAdapter<T extends DeclareItem> extends BaseQuickAdapter<T, BaseViewHolder> {
 
     SingleItemInfoAdapter(List<T> mDatas) {
         super(R.layout.item_single_info, mDatas);

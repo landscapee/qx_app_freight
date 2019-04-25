@@ -42,7 +42,11 @@
         android:persistent="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.CollectorDeclareActivity"></activity>
+        <activity android:name=".activity.AddCollectorDeclareActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.CollectorDeclareActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NoticeActivity"
             android:screenOrientation="portrait" />
@@ -58,22 +62,30 @@
         <activity
             android:name=".activity.ExceptionFilingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ModifyInportInfoActivity"
+        <activity
+            android:name=".activity.ModifyInportInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.UnloadPlaneActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.LaserScanActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.BaggageListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ErrorReportActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.PullGoodsReportActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ChooseWeighScanActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.InportDeliveryDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.UnloadPlaneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LaserScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BaggageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ErrorReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PullGoodsReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChooseWeighScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InportDeliveryDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />

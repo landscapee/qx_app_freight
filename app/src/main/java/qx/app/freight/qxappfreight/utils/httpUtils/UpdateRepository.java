@@ -706,20 +706,31 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * 获取换单审核的数据
+     *
      * @param declareWaybillEntity
-     * @return  （带新订单id的） 换单审核数据
+     * @return （带新订单id的） 换单审核数据
      */
-    public Observable<DeclareWaybillBean> getChangeWaybill(DeclareWaybillEntity declareWaybillEntity){
+    public Observable<DeclareWaybillBean> getChangeWaybill(DeclareWaybillEntity declareWaybillEntity) {
         return transform(getService().getChangeWaybill(declareWaybillEntity));
     }
 
     /**
      * 换单审核提交（接受或者拒绝）
+     *
      * @param changeWaybillEntity
      * @return 提交结果
      */
-    public Observable<String> changeSubmit(ChangeWaybillEntity changeWaybillEntity){
+    public Observable<String> changeSubmit(ChangeWaybillEntity changeWaybillEntity) {
         return nothingtransform(getService().changeSubmit(changeWaybillEntity));
+    }
+
+    /**
+     * 收运打印
+     *
+     * @return 提交结果
+     */
+    public Observable<String> sendPrintMessage(String waybillId) {
+        return nothingtransform(getService().sendPrintMessage(waybillId));
     }
 
 

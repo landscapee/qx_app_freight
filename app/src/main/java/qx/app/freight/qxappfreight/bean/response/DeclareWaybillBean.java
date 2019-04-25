@@ -1,11 +1,12 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class DeclareWaybillBean {
+public class DeclareWaybillBean implements Serializable {
 
 
     /**
@@ -232,8 +233,14 @@ public class DeclareWaybillBean {
 
     private List<DeclareItem> declareItem;
 
+    /**
+     * 货代公司名
+     */
     private String freightName;
 
+    /**
+     * 航空公司名
+     */
     private String flightName;
 
     /**

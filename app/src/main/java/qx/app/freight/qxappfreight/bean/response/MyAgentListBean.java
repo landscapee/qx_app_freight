@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 
 /**
  * TODO : xxx
@@ -75,4 +76,5 @@ public class MyAgentListBean implements Serializable {
     private String repPlaceStatus;
     private String reservoirName;
     private List<String> packagingType;
+    private  List<RcInfoOverweight> rcInfoOverweight;
 }

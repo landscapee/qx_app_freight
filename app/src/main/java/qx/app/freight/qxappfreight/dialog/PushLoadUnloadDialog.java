@@ -146,15 +146,15 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         initViews();
         return dialog;
     }
-    public void showDialog(FragmentManager fragmentManager) {
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        Fragment prev = fragmentManager.findFragmentByTag(getTag());
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        show(ft, getTag());
-    }
+//    public void showDialog(FragmentManager fragmentManager) {
+//        FragmentTransaction ft = fragmentManager.beginTransaction();
+//        Fragment prev = fragmentManager.findFragmentByTag(getTag());
+//        if (prev != null) {
+//            ft.remove(prev);
+//        }
+//        ft.addToBackStack(null);
+//        show(ft, getTag());
+//    }
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
