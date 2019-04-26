@@ -24,6 +24,7 @@
         <EditText
             android:id="@+id/edt_id"
             style="@style/public_tv_16sp_3"
+            android:background="@color/transparent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -65,6 +66,7 @@
                 style="@style/public_tv_16sp_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@color/transparent"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="3" />
