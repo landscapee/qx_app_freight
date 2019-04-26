@@ -38,6 +38,18 @@ public class TimeUtils {
     }
 
     /**
+     * 年-月-日 时:分:秒
+     *
+     * @return
+     */
+    public static String getTime2(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.e("time", "time2=" + format.format(date));
+        return format.format(date);
+    }
+
+    /**
      * 年-月-日 T 时:分:秒:毫秒
      *
      * @return

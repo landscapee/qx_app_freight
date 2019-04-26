@@ -1,53 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_8"
+    android:layout_marginRight="@dimen/dp_8"
+    android:layout_marginBottom="@dimen/dp_8"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_rect_gray_888"
+    android:paddingLeft="@dimen/dp_7"
+    android:paddingTop="13dp"
+    android:paddingRight="@dimen/dp_7"
+    android:paddingBottom="13dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_orderid"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_8"
-        android:background="@drawable/shape_rect_gray_888"
-        android:paddingLeft="@dimen/dp_7"
-        android:paddingTop="13dp"
-        android:paddingRight="@dimen/dp_7"
-        android:paddingBottom="13dp">
+        android:layout_weight="8"
+        android:text="999-47372080" />
 
-        <TextView
-            android:id="@+id/tv_orderid"
-            style="@style/public_tv_14sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:text="999-47372080" />
+    <TextView
+        android:id="@+id/tv_goods_number"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="10" />
 
-        <TextView
-            android:id="@+id/tv_goods_number"
-            style="@style/public_tv_14sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="10" />
+    <TextView
+        android:id="@+id/tv_area"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:text="鲜货区" />
 
-        <TextView
-            android:id="@+id/tv_area"
-            style="@style/public_tv_14sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text="鲜货区" />
+    <TextView
+        android:id="@+id/tv_postion"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:text="12" />
 
-        <TextView
-            android:id="@+id/tv_postion"
-            style="@style/public_tv_14sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text="12" />
+    <TextView
+        android:id="@+id/tv_remark"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4.5"
+        android:drawableRight="@mipmap/right"
+        android:text="有货无单"
+        android:textColor="@color/red" />
 
-        <TextView
-            android:id="@+id/tv_remark"
-            style="@style/public_tv_14sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:drawableRight="@mipmap/right"
-            android:text="有货无单"
-            android:textColor="@color/red" />
+    </LinearLayout>
+
+     <!-- 这里是删除的菜单布局 -->
+    <RelativeLayout
+        android:id="@+id/rll_del"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="26dp"
+            android:background="@mipmap/delete"/>
+
+    </RelativeLayout>
 </LinearLayout>

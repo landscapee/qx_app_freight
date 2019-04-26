@@ -6,6 +6,8 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.InWaybill;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -15,6 +17,8 @@ import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -44,6 +48,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
+import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -354,6 +359,36 @@ public interface HttpApi {
     //舱单理货列表提交
     @POST("service-product-cargotallying/inwaybill/submit")
     Observable<BaseEntity<Object>> inPortTallyCommit(@Body InPortTallyCommitEntity model);
+
+    /**
+     * 进港分拣 获取信息信息  -- guohao
+     * @param flightId  航班业务id(UUID超级长的, 非数字id)
+     * @return {
+     *              list : InWaybillRecord 分拣运单实体类集合
+     *              count : 运单总数
+     *              total : 总数量
+     *              closeFlag : 关闭标识(0开启;1关闭;) 如果为关闭状态，则不允许修改和提交和暂存
+     *          }
+     */
+    @POST("/service-product-cargotallying/sorting/getList")
+    Observable<BaseEntity<InWaybillRecordBean>> getInWaybillRecrodList(@Body InWaybillRecordGetEntity entity);
+
+
+    /**
+     * 进港分拣 -- 暂存/提交 接口 - guohao
+     * @param params 整个数据
+     * @return 成功/失败
+     */
+    @POST("/service-product-cargotallying/sorting/submit")
+    Observable<BaseEntity<Object>> submitWillbillRecord(@Body InWaybillRecordSubmitEntity params);
+
+    /**
+     * 删除分拣信息中的某一条信息 - guohao
+     * @param id 分拣运单实体id
+     * @return 成功/失败
+     */
+    @POST("/service-product-cargotallying/sorting/deleteById")
+    Observable<BaseEntity<Object>> deleteInWayBillRecordById(@Body String id);
 
 
     /***********************消息中心*****************************/

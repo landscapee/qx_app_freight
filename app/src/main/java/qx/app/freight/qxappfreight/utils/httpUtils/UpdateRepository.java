@@ -16,6 +16,8 @@ import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -45,6 +47,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
+import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -751,5 +754,32 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<BaseEntity<Object>> checkScooterCode(String scooterCode) {
         return getService().checkScooterCode(scooterCode);
+    }
+
+    /**
+     * 进港分拣 - 获取分拣数据 - guohao
+     * @param id 航班业务id(UUID超级长的, 非数字id)
+     * @return
+     */
+    public Observable<InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity){
+        return transform(getService().getInWaybillRecrodList(entity));
+    }
+
+    /**
+     * 进港分拣 - 提交/暂存
+     * @param entity 所有数据
+     * @return 成功/失败
+     */
+    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitEntity entity){
+        return nothingtransform(getService().submitWillbillRecord(entity));
+    }
+
+    /**
+     * 进港分拣 - 根据id删除分拣信息
+     * @param id 分拣子信息的id
+     * @return 成功/失败
+     */
+    public Observable<String> deleteInWayBillRecordById(String id){
+        return nothingtransform(getService().deleteInWayBillRecordById(id));
     }
 }

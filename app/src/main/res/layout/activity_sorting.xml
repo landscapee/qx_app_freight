@@ -4,215 +4,168 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:background="@color/white"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/shape_rect_gray_bottom"
-                android:layout_marginLeft="@dimen/dp_13"
-                android:layout_marginRight="@dimen/dp_13"
-                android:paddingTop="@dimen/dp_13"
-                android:paddingBottom="@dimen/dp_13">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/public_tv_16sp"
-                    android:text="航班号"/>
-
-                <TextView
-                    android:id="@+id/tv_flight_no"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    style="@style/public_tv_16sp_3"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="HU9849"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/shape_rect_gray_bottom"
-                android:layout_marginLeft="@dimen/dp_13"
-                android:layout_marginRight="@dimen/dp_13"
-                android:paddingTop="@dimen/dp_13"
-                android:paddingBottom="@dimen/dp_13">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/public_tv_16sp"
-                    android:text="实际到达时间"/>
-
-                <TextView
-                    android:id="@+id/tv_arrive_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@style/public_tv_16sp_3"
-                    android:gravity="right"
-                    android:text="2019-12-20 19：00：00"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="13dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/public_tv_16sp"
-                    android:text="已到板车数"/>
-
-                <TextView
-                    android:id="@+id/handcar_num"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:textSize="@dimen/sp_16"
-                    android:textColor="#FF005DC6"
-                    android:text="3"/>
-
-                <TextView
-                    android:id="@+id/handcar_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/public_tv_16sp_3"
-                    android:gravity="right"
-                    android:text="/5"/>
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_13"
+            android:layout_marginRight="@dimen/dp_13"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="分拣信息"
-                android:gravity="bottom"
-                android:textSize="@dimen/sp_11"
-                android:paddingBottom="@dimen/dp_3"
-                android:background="#FFEFF2F3"
-                android:textColor="#FF888888"
-                android:paddingLeft="13dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="13dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3.3"
-                    android:textSize="13sp"
-                    android:textColor="#FF737B8B"
-                    android:text="运单号"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="13sp"
-                    android:textColor="#FF737B8B"
-                    android:text="件数"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:textSize="13sp"
-                    android:textColor="#FF737B8B"
-                    android:text="库区"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:textSize="13sp"
-                    android:textColor="#FF737B8B"
-                    android:text="库位"/>
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recylcer_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v7.widget.RecyclerView>
-            <!-- 这里是item-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@drawable/shape_rect_gray_888"-->
-                <!--android:layout_margin="@dimen/dp_8"-->
-                <!--android:paddingLeft="@dimen/dp_7"-->
-                <!--android:paddingRight="@dimen/dp_7"-->
-                <!--android:paddingTop="13dp"-->
-                <!--android:paddingBottom="13dp">-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="9"-->
-                    <!--style="@style/public_tv_14sp"-->
-                    <!--android:text="999-47372080"-->
-                    <!--/>-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="3"-->
-                    <!--style="@style/public_tv_14sp"-->
-                    <!--android:text="10"-->
-                    <!--/>-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="4"-->
-                    <!--style="@style/public_tv_14sp"-->
-                    <!--android:text="鲜货区"-->
-                    <!--/>-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="4"-->
-                    <!--style="@style/public_tv_14sp"-->
-                    <!--android:text="12"-->
-                    <!--/>-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="4"-->
-                    <!--style="@style/public_tv_14sp"-->
-                    <!--android:text="有货无单"-->
-                    <!--android:textColor="@color/red"-->
-                    <!--android:drawableRight="@mipmap/right"-->
-                    <!--/>-->
-            <!--</LinearLayout>-->
+                android:text="航班号" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_flight_no"
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="@dimen/dp_15"
-                android:textSize="14sp"
-                android:textColor="#FF2E81FD"
-                android:text="总运单数：4 总件数：400"/>
-
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="HU9849" />
         </LinearLayout>
 
-    </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_13"
+            android:layout_marginRight="@dimen/dp_13"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="实际到达时间" />
+
+            <TextView
+                android:id="@+id/tv_arrive_time"
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="2019-12-20 19：00：00" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="13dp">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已到板车数" />
+
+            <TextView
+                android:id="@+id/tv_handcar_num"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="3"
+                android:textColor="#FF005DC6"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/tv_handcar_total"
+                style="@style/public_tv_16sp_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="/5" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="#FFEFF2F3"
+            android:gravity="bottom"
+            android:paddingLeft="13dp"
+            android:paddingBottom="@dimen/dp_3"
+            android:text="分拣信息"
+            android:textColor="#FF888888"
+            android:textSize="@dimen/sp_11" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="13dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.1"
+                android:text="运单号"
+                android:textColor="#FF737B8B"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="件数"
+                android:textColor="#FF737B8B"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="库区"
+                android:textColor="#FF737B8B"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="库位"
+                android:textColor="#FF737B8B"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/dp_8"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:gravity="center"
+            android:text="总运单数：4 总件数：400"
+            android:textColor="#FF2E81FD"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_7"
         android:paddingTop="@dimen/dp_4"
@@ -223,29 +176,28 @@
             android:id="@+id/btn_temp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/dp_5"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_black"
             android:text="暂存"
-            android:layout_gravity="left"
-            android:textColor="@color/black"
-            android:layout_marginRight="@dimen/dp_5"/>
+            android:textColor="@color/black" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.01"/>
+            android:layout_weight="0.01" />
 
         <Button
             android:id="@+id/btn_done"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="right"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_blue"
             android:text="分拣完成"
-            android:layout_gravity="right"
             android:textColor="@color/white" />
     </LinearLayout>
-
 
 
 </LinearLayout>
