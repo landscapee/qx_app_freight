@@ -100,6 +100,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         //暂存，提交请求
         tempBtn.setOnClickListener(listener->{
             submitEntity.setFlag(0);
+            submitEntity.setList(mList);
             ((InWaybillRecordPresenter)mPresenter).submit(submitEntity);
         });
         //提交请求
@@ -137,8 +138,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void resultGetList(InWaybillRecordBean bean) {
         if(bean.getList() == null){
+            Log.e("dime", "没有item数据");
             mList = new ArrayList<>();
         }else{
+            Log.e("dime", "有数据："+bean.getList().size());
             mList = bean.getList();
         }
         //初始化提交实体类

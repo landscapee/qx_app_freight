@@ -230,7 +230,7 @@ public class InWaybillRecord implements Serializable {
      * 入库时间
      *
      */
-    private long putStorageTime;
+    private Long putStorageTime;
 
     /**
      * 入库操作人
@@ -242,7 +242,7 @@ public class InWaybillRecord implements Serializable {
      * 出库时间
      *
      */
-    private long outStorageTime;
+    private Long outStorageTime;
 
     /**
      * 出库人
@@ -290,7 +290,7 @@ public class InWaybillRecord implements Serializable {
      * 运单录入时间
      *
      */
-    private long createDate;
+    private Long createDate;
 
     /**
      * 运单录入人
@@ -298,7 +298,7 @@ public class InWaybillRecord implements Serializable {
      */
     private String createUser;
 
-    private long updateDate;
+    private Long updateDate;
 
     /**
      * 修改人

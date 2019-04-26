@@ -21,8 +21,6 @@ import java.util.Date;
  *          guohao - 2019/4/25
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 public class InWaybill implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -22,8 +22,6 @@ import java.util.List;
  *  guohao - 2-19/4/25
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 public class CounterUbnormalGoods implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +39,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 航班日期  用于查询航班id
      */
-    private long flightDate;
+    private Long flightDate;
 
     /**
      * 运单号
@@ -106,7 +104,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 创建时间
      */
-    private long createTime;
+    private Long createTime;
 
     /**
      * 创建人
@@ -121,7 +119,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 更新时间
      */
-    private long updateTime;
+    private Long updateTime;
 
     /**
      * 运单id
@@ -147,11 +145,11 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 开始时间（查询条件）
      */
-    private long beginTime;
+    private Long beginTime;
     /**
      * 结束时间（查询条件）
      */
-    private long endTime;
+    private Long endTime;
     /**
      * 查询关键字（查询条件）
      */
