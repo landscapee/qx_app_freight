@@ -362,7 +362,7 @@ public interface HttpApi {
 
     /**
      * 进港分拣 获取信息信息  -- guohao
-     * @param flightId  航班业务id(UUID超级长的, 非数字id)
+     * @param entity  航班业务id(UUID超级长的, 非数字id)
      * @return {
      *              list : InWaybillRecord 分拣运单实体类集合
      *              count : 运单总数

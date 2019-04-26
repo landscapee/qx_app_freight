@@ -68,6 +68,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
+import retrofit2.http.Body;
 
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
@@ -758,7 +759,7 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * 进港分拣 - 获取分拣数据 - guohao
-     * @param id 航班业务id(UUID超级长的, 非数字id)
+     * @param entity  航班业务id(UUID超级长的, 非数字id)
      * @return
      */
     public Observable<InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity){

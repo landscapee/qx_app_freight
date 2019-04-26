@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 航班日期  用于查询航班id
      */
-    private Timestamp flightDate;
+    private long flightDate;
 
     /**
      * 运单号
@@ -58,7 +60,7 @@ public class CounterUbnormalGoods implements Serializable {
      *
      * 13:多收邮路单 14:多收货运单 15:多收邮袋 16:有邮袋无邮路单 17：少收货运单 18:有邮路单无邮袋
      */
-    private Integer[] ubnormalType;
+    private List<Integer> ubnormalType = new ArrayList();
 
     /**
      * 其他异常
@@ -68,8 +70,8 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 异常图片
      */
-    private String[] ubnormalPic;
-
+    private List<String> ubnormalPic=new ArrayList<>();
+    private List<String> localPath=new ArrayList<>();
     /**
      * 异常说明
      */
@@ -104,7 +106,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private long createTime;
 
     /**
      * 创建人
@@ -119,7 +121,7 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp updateTime;
+    private long updateTime;
 
     /**
      * 运单id
@@ -145,11 +147,11 @@ public class CounterUbnormalGoods implements Serializable {
     /**
      * 开始时间（查询条件）
      */
-    private Timestamp beginTime;
+    private long beginTime;
     /**
      * 结束时间（查询条件）
      */
-    private Timestamp endTime;
+    private long endTime;
     /**
      * 查询关键字（查询条件）
      */

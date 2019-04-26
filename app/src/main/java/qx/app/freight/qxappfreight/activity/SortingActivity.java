@@ -10,6 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,7 +43,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     TransportListBean transportListBean;
     List<InWaybillRecord> mList;
     InWaybillRecord deleteInWaybillRecord;
-    InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();
+    InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();//最终提交请求的实体
 
     SortingInfoAdapter mAdapter;
 
@@ -88,7 +93,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             //跳转到 ->新增页面
             Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
             intentAdd.putExtra("TYPE", "ADD");
-            startActivityForResult(new Intent(this, SortingAddActivity.class), 1);
+            startActivityForResult(intentAdd, 1);
         });
         //初始化presenter
         mPresenter = new InWaybillRecordPresenter(this);
@@ -100,6 +105,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         //提交请求
         doneBtn.setOnClickListener(listener->{
             submitEntity.setFlag(1);
+            String xx = new Gson().toJson(submitEntity);
+            Log.e("dime - json", xx);
             ((InWaybillRecordPresenter)mPresenter).submit(submitEntity);
         });
         //获取数据
@@ -118,19 +125,22 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.e("dime", "onActivityResult：" + requestCode + "-" + requestCode);
         //来自新增页面的结果返回
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-
-
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {//新增
+            InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
+            mList.add(mInWaybillRecord);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void resultGetList(InWaybillRecordBean bean) {
-        Log.e("dime", "getList（）接口返回");
-        mList = bean.getList();
-        Log.e("dime", bean.toString());
+        if(bean.getList() == null){
+            mList = new ArrayList<>();
+        }else{
+            mList = bean.getList();
+        }
         //初始化提交实体类
         submitEntity.setFlightId(transportListBean.getFlightId());
         submitEntity.setFlightYLId("");
@@ -146,7 +156,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mAdapter.setOnInWaybillRecordDeleteListener(new SortingInfoAdapter.OnInWaybillRecordDeleteListener() {
             @Override
             public void onDeleteListener(InWaybillRecord inWaybillRecord) {
-                //数据呗删除了
+                //数据被删除了
                 deleteInWaybillRecord = inWaybillRecord;
                 ((InWaybillRecordPresenter)mPresenter).deleteById(inWaybillRecord.getId());
             }
@@ -155,6 +165,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @Override
     public void resultSubmit(Object o) {
+        Log.e("dime", "提交/暂存，item长度：" + submitEntity.getList().size());
+        Log.e("dime", "提交/暂存，返回值：" + o.toString());
         ToastUtil.showToast("成功");
     }
 
@@ -169,6 +181,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
+        Log.e("dime", "错误信息："+error);
     }
 
     @Override

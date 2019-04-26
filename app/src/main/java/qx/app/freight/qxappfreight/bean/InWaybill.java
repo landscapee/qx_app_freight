@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * <p>
@@ -209,7 +210,7 @@ public class InWaybill implements Serializable {
     /**
      * 入库时间
      */
-    private Timestamp putStorageTime;
+    private Date putStorageTime;
 
     /**
      * 入库操作人
@@ -219,7 +220,7 @@ public class InWaybill implements Serializable {
     /**
      * 出库时间
      */
-    private Timestamp outStorageTime;
+    private Date outStorageTime;
 
     /**
      * 出库人
@@ -259,14 +260,14 @@ public class InWaybill implements Serializable {
     /**
      * 运单录入时间
      */
-    private Timestamp createDate;
+    private Date createDate;
 
     /**
      * 运单录入人
      */
     private String createUser;
 
-    private Timestamp updateDate;
+    private Date updateDate;
 
     /**
      * 修改人

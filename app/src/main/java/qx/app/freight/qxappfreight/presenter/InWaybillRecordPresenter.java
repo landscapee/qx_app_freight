@@ -22,10 +22,12 @@ public class InWaybillRecordPresenter extends BasePresenter {
     }
 
     public void getList(InWaybillRecordGetEntity entity){
+        mRequestView.showNetDialog();
         ((InWaybillRecordModel)mRequestModel).getList(entity, new IResultLisenter<InWaybillRecordBean>() {
             @Override
             public void onSuccess(InWaybillRecordBean bean) {
                 ((InWaybillRecordContract.inWaybillRecordView)mRequestView).resultGetList(bean);
+                mRequestView.dissMiss();
             }
 
             @Override

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_marginLeft="@dimen/dp_13"
+    android:layout_marginTop="@dimen/dp_8"
+    android:layout_marginRight="@dimen/dp_13"
+    android:background="@drawable/shape_white_stroke_grey"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_sorting_postion"
+        style="@style/public_tv_16sp"
+        android:layout_width="26dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="1" />
+
+    <View
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="match_parent"
+        android:background="#FFBCBCBC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_exception_type_choose"
+                    style="@style/public_tv_16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/drop_select"
+                    android:gravity="center"
+                    android:text="请选择 " />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#FFBCBCBC" />
+
+            <EditText
+                android:id="@+id/edit_exception_num"
+                style="@style/public_tv_16sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:inputType="number"
+                android:hint="输入异常件数" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#FFBCBCBC" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/imgBtn_delete_item"
+                    android:layout_width="21dp"
+                    android:layout_height="24dp"
+                    android:layout_weight="1"
+                    android:background="@mipmap/delete_all" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFBCBCBC" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15">
+
+                <LinearLayout
+                    android:id="@+id/ll_exception_img_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="58dp"-->
+                        <!--android:layout_height="58dp"-->
+                        <!--android:layout_marginRight="@dimen/dp_13">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="53dp"-->
+                            <!--android:layout_height="53dp"-->
+                            <!--android:layout_alignParentBottom="true"-->
+                            <!--android:background="@mipmap/tracking_number" />-->
+
+                        <!--<ImageButton-->
+                            <!--android:layout_width="17dp"-->
+                            <!--android:layout_height="17dp"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:background="@mipmap/delete_3" />-->
+                    <!--</RelativeLayout>-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="58dp"-->
+                        <!--android:layout_height="58dp"-->
+                        <!--android:layout_marginRight="@dimen/dp_13">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="53dp"-->
+                            <!--android:layout_height="53dp"-->
+                            <!--android:layout_alignParentBottom="true"-->
+                            <!--android:background="@mipmap/tracking_number" />-->
+
+                        <!--<ImageButton-->
+                            <!--android:layout_width="17dp"-->
+                            <!--android:layout_height="17dp"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:background="@mipmap/delete_3" />-->
+                    <!--</RelativeLayout>-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_add_img"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="20dp"
+                        android:background="@mipmap/icon_chose_photo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加图片"
+                        android:textSize="@dimen/sp_9" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+</LinearLayout>

@@ -6,8 +6,10 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,8 +26,6 @@ import java.util.List;
  *           guohao - 2019/4/25
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 public class InWaybillRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -230,7 +230,7 @@ public class InWaybillRecord implements Serializable {
      * 入库时间
      *
      */
-    private Timestamp putStorageTime;
+    private long putStorageTime;
 
     /**
      * 入库操作人
@@ -242,7 +242,7 @@ public class InWaybillRecord implements Serializable {
      * 出库时间
      *
      */
-    private Timestamp outStorageTime;
+    private long outStorageTime;
 
     /**
      * 出库人
@@ -290,7 +290,7 @@ public class InWaybillRecord implements Serializable {
      * 运单录入时间
      *
      */
-    private Timestamp createDate;
+    private long createDate;
 
     /**
      * 运单录入人
@@ -298,7 +298,7 @@ public class InWaybillRecord implements Serializable {
      */
     private String createUser;
 
-    private Timestamp updateDate;
+    private long updateDate;
 
     /**
      * 修改人

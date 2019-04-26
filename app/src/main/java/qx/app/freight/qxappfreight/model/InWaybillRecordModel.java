@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
+import android.util.Log;
+
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -24,6 +26,7 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess,throwable->{
+                    Log.e("dime", "网络请求：\n" + throwable.toString());
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);
