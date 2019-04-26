@@ -352,9 +352,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 123 && resultCode == RESULT_OK) {
-            if (data != null && data.getParcelableArrayExtra("not_transport_list").length != 0) {
+            if (data != null && data.getParcelableArrayListExtra("not_transport_list").size()!=0) {
                 mNotTransportList.clear();
                 mNotTransportList.addAll(data.getParcelableArrayListExtra("not_transport_list"));
                 mTvNotTransport.setText(String.valueOf(mNotTransportList.size()));

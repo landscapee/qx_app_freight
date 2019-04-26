@@ -8,32 +8,38 @@
     android:layout_marginEnd="@dimen/dp_7"
     android:paddingStart="@dimen/dp_7"
     android:paddingEnd="@dimen/dp_7"
+    android:layout_marginTop="@dimen/dp_7"
     android:gravity="center_vertical"
     >
-    <TextView
-        android:id="@+id/tv_return_goods_info"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:textColor="#333333"
-        android:textSize="@dimen/sp_14"
-        android:text="@string/format_return_name_number"
-        android:gravity="center_vertical"/>
-    <TextView
-        android:id="@+id/tv_return_goods_reason"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:textColor="#888888"
-        android:textSize="@dimen/sp_14"
-        android:text="@string/format_return_reason"
-        android:gravity="center_vertical"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_return_goods_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="@dimen/sp_14"
+            android:text="@string/format_return_name_number"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/tv_return_goods_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#888888"
+            android:textSize="@dimen/sp_14"
+            android:text="@string/format_return_reason"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_delete"
         android:layout_width="@dimen/dp_60"
         android:layout_height="match_parent"
         android:background="@color/red"
-        android:visibility="gone"
+        android:layout_marginStart="10dp"
         android:gravity="center">
 
         <ImageView

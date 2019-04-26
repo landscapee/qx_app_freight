@@ -39,7 +39,7 @@ public class NotTransportListActivity extends BaseActivity {
     private void setDataAndBack() {
         Intent intent = new Intent();
         intent.putParcelableArrayListExtra("not_transport_list", (ArrayList<? extends Parcelable>) mNotTransportList);
-        setResult(RESULT_OK);
+        setResult(RESULT_OK,intent);
         finish();
     }
 
@@ -51,6 +51,7 @@ public class NotTransportListActivity extends BaseActivity {
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> setDataAndBack());
         toolbar.setMainTitle(Color.WHITE, "未收运记录");
         toolbar.setRightIconView(View.VISIBLE, R.mipmap.icon_add_not_transport_record, v -> {
+            mSrvList.closeMenu();
             String goodsName = getIntent().getStringExtra("goods_name");
             Intent intent = new Intent(NotTransportListActivity.this, AddNotTransportRecordActivity.class);
             intent.putExtra("goods_name", goodsName);
@@ -58,8 +59,8 @@ public class NotTransportListActivity extends BaseActivity {
         });
         mSrvList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NotTransportListAdapter(mNotTransportList);
-        mSrvList.setAdapter(mAdapter);
         setDeleteListener();
+        mSrvList.setAdapter(mAdapter);
     }
 
     @Override
@@ -68,13 +69,13 @@ public class NotTransportListActivity extends BaseActivity {
             if (data != null) {
                 mNotTransportList.add(data.getParcelableExtra("single_item"));
                 mAdapter.notifyDataSetChanged();
-                setDeleteListener();
             }
         }
     }
 
     private void setDeleteListener() {
         mAdapter.setOnDeleteClickListener(position -> {
+                    mSrvList.closeMenu();
                     mNotTransportList.remove(position);
                     mAdapter.notifyDataSetChanged();
                 }
