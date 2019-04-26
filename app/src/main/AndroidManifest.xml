@@ -127,7 +127,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddReceiveGoodActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.ShowMainListActivity"
             android:screenOrientation="portrait" />

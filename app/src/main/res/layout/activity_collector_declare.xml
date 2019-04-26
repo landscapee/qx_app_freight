@@ -378,7 +378,7 @@
                                 android:layout_height="45dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical|end"
-                                android:spinnerMode="dropdown"
+
                                 style="@style/public_tv_16sp" />
                             <ImageView
                                 android:layout_gravity="center_vertical"

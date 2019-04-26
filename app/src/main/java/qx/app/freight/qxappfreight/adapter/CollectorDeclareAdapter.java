@@ -3,12 +3,9 @@ package qx.app.freight.qxappfreight.adapter;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-
 import java.util.List;
-
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 
