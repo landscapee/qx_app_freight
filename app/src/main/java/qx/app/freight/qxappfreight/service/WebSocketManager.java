@@ -94,7 +94,7 @@ public class WebSocketManager {
         if ((System.currentTimeMillis() - nowdate) > 5000 && nowdate != 0) {
             mWebSocketConnection.disconnect();
             mTimer.cancel();
-//            connect();
+            connect();
             Log.e(TAG, "" + System.currentTimeMillis() + "nowdate:" + nowdate + mWebSocketConnection.isConnected());
             return;
         }

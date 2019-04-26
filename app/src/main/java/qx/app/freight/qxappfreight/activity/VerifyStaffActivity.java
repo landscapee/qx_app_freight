@@ -108,11 +108,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查报检员身份");
-//        llBottom.setVisibility(View.GONE);
-//        tvTakePhoto.setVisibility(View.GONE);
         String text = StringUtil.format(this, R.string.format_certificate_date, "2018-12-12", "2019-12-12");
         mTvCertificateInDate.setText(text);
-//        ImageUtils.setImageHeightFoyWidth(mIvStaffNow, ImageUtils.getScreenWidth(this), 3, 4);
         mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
         mTaskId = getIntent().getStringExtra("taskId");
         mSpotFlag = getIntent().getStringExtra("spotFlag");

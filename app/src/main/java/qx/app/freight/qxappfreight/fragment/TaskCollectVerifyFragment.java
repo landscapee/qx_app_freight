@@ -81,8 +81,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         if (TextUtils.isEmpty(seachString)) {
             transportListList.addAll(transportListList1);
         } else {
-            for (TransportListBean team: transportListList1){
-                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())){
+            for (TransportListBean team : transportListList1) {
+                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     transportListList.add(team);
                 }
             }
@@ -92,7 +92,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
     private void initData() {
         transportListList = new ArrayList<>();
-        transportListList1= new ArrayList<>();
+        transportListList1 = new ArrayList<>();
         mPresenter = new TransportListPresenter(this);
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
@@ -118,12 +118,16 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
      * @param bean
      */
     private void turnToDetailActivity(TransportListBean bean) {
-        VerifyStaffActivity.startActivity(getActivity()
-                , bean.getDeclareWaybillAddition()
-                , bean.getTaskId()
-                , bean.getSpotFlag()
-                , bean.getFlightNumber()
-                , bean.getShipperCompanyId());
+        if (null == bean.getDeclareWaybillAddition()) {
+            ToastUtil.showToast("数据为空请重新申报");
+        } else {
+            VerifyStaffActivity.startActivity(getActivity()
+                    , bean.getDeclareWaybillAddition()
+                    , bean.getTaskId()
+                    , bean.getSpotFlag()
+                    , bean.getFlightNumber()
+                    , bean.getShipperCompanyId());
+        }
     }
 
     /**

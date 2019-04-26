@@ -1,10 +1,8 @@
 package qx.app.freight.qxappfreight.service;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -45,16 +43,17 @@ public class WebSocketService extends Service {
     public Context mContext;
     private static StompClient mStompClient;
     private Timer mTimer;
-    private long nowdate;
     public static final String TAG = "websocket";
     private CompositeDisposable compositeDisposable;
     private Gson mGson = new Gson();
+    private int flag = 0;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
 //        EventBus.getDefault().isRegistered(this);
+        mTimer = new Timer();
         if (uri == null) {
             Log.e(TAG, "推送服务url为null");
             return;
@@ -77,12 +76,18 @@ public class WebSocketService extends Service {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             Log.e(TAG, "webSocket 打开");
+                            flag = 0;
+                            createStompClient(flag);
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
+                            flag = 1;
+                            createStompClient(flag);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 关闭");
+                            flag = 1;
+                            createStompClient(flag);
                             resetSubscriptions();
                             break;
                         case FAILED_SERVER_HEARTBEAT:
@@ -92,7 +97,7 @@ public class WebSocketService extends Service {
                 });
         compositeDisposable.add(dispLifecycle);
 
-        //订阅  小猪登录地址
+        //订阅  登录地址
         Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,7 +128,7 @@ public class WebSocketService extends Service {
                 });
 
         compositeDisposable.add(loadingListPush);
-        //订阅   张硕地址待办
+        //订阅   待办
         Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -135,7 +140,7 @@ public class WebSocketService extends Service {
 
         compositeDisposable.add(dispTopic1);
 
-        //周弦  消息中心地址
+        //订阅   消息中心地址
         Disposable dispTopic2 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -223,23 +228,16 @@ public class WebSocketService extends Service {
 
 
     //创建长连接，服务器端没有心跳机制的情况下，启动timer来检查长连接是否断开，如果断开就执行重连
-    private void createStompClient() {
+    private void createStompClient(int flag) {
+        if (1 == flag)
+            onCreate();
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-//                sendMassage("");
+                mStompClient.send("websocket 心跳包");
                 Log.e("websocket 心跳包", "发送中");
             }
-        }, 1000, 1000);
-        //每次发送心跳包，服务器接收到响应就会返回一个值，如果查过5s还没有收到返回值，
-        // 那么就判定是断网
-        if ((System.currentTimeMillis() - nowdate) > 5000 && nowdate != 0) {
-            mStompClient.disconnect();
-            mTimer.cancel();
-            onCreate();
-            Log.e("websocket", "" + System.currentTimeMillis() + "nowdate:" + nowdate);
-            return;
-        }
+        }, 5000, 5000);
     }
 
     @Override
