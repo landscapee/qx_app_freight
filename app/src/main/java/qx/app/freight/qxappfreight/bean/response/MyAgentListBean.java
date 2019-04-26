@@ -52,7 +52,7 @@ public class MyAgentListBean implements Serializable {
     private String id;
     private String waybillId;
     private String waybillCode;
-    private String cargoId;
+    private String []cargoId;
     private String cargoCn;
     private int number;
     private double weight;

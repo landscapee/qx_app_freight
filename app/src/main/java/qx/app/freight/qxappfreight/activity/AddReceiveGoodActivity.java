@@ -159,7 +159,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         waybillCode = getIntent().getStringExtra("waybillCode");
         mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
         tvProductName.setText(mDeclareItemBeans.get(0).getCargoCn());
-        mMyAgentListBean.setCargoId(mDeclareItemBeans.get(0).getCargoId());
+        String [] sb = new String[1];
+        sb[0] = mDeclareItemBeans.get(0).getCargoId();
+        mMyAgentListBean.setCargoId(sb);
         //品名  coldStorage  deptCode
         mSpProductList = new ArrayList<>();
         if (mDeclareItemBeans != null) {
@@ -178,7 +180,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //品名id
-                mMyAgentListBean.setCargoId(mDeclareItemBeans.get(position).getCargoId());
+                mMyAgentListBean.setCargoId(sb);
                 //品名
                 mMyAgentListBean.setCargoCn(mDeclareItemBeans.get(position).getCargoCn());
             }
@@ -212,6 +214,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setWaybillId(waybillId);
 
         mMyAgentListBean.setWaybillCode(waybillCode);
+        //品名
+        mMyAgentListBean.setCargoCn(tvProductName.getText().toString());
         //件数
         mMyAgentListBean.setNumber(Integer.valueOf(mEdtNumber.getText().toString().trim()));
         //体积

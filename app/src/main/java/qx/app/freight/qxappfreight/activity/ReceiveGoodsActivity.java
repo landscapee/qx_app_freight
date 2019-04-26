@@ -203,7 +203,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 rcInfosEntity.setReservoirType(reservoirType);
                 rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
                 rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
-                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
                 rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
                 rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
                 rcInfosEntity.setVolume(mMyAgentListBean.getVolume());

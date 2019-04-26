@@ -144,12 +144,12 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void onRefresh() {
-
+        initData();
     }
 
     @Override
     public void onLoadMore() {
-
+        initData();
     }
 
     @Override
@@ -178,8 +178,10 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void agentTransportationListResult(AgentBean myAgentListBean) {
-        if (null != myAgentListBean) {
-            toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + myAgentListBean.getRcInfo().size() + ")");
+        mMfrvAllocateList.finishRefresh();
+        mMfrvAllocateList.finishLoadMore();
+        toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + myAgentListBean.getRcInfo().size() + ")");
+        if (0 != myAgentListBean.getRcInfo().size()) {
             list = myAgentListBean.getRcInfo();
             adapter = new ReturnGoodAdapter(myAgentListBean.getRcInfo());
             mMfrvAllocateList.setAdapter(adapter);
