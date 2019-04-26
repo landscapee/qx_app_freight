@@ -57,7 +57,6 @@ public class ReturnGoodsDialog extends Dialog {
     }
 
     private void initView() {
-        rcInfoOverweight = new ArrayList<>();
         dataRc =findViewById(R.id.rv_overweight);
         ivClose = findViewById(R.id.iv_close);
         rlAdd = findViewById(R.id.rl_add);
@@ -146,8 +145,7 @@ public class ReturnGoodsDialog extends Dialog {
     }
 
     public ReturnGoodsDialog setData(List<RcInfoOverweight> list){
-        rcInfoOverweight.clear();
-        rcInfoOverweight.addAll(list);
+        rcInfoOverweight = list;
         return this;
     }
 

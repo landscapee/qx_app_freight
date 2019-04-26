@@ -99,17 +99,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
-    List<RcInfoOverweight> rcInfoOverweight;
-    /**
-     * 弹出取重
-     */
-    private CommonPopupWindow window;
-    RecyclerView dataRc;
-    ImageView ivClose;
-    RelativeLayout rlAdd;
-    Button btnSure;
-    EditText etNum,etWeight,etVolume,etOverweight;
-    private OverweightRecordAdapter overweightRecordAdapter;
+    List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
 
     public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<DeclareItem> declareItemBean) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
@@ -145,7 +135,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                     mEdtNumber.setText("");
                 });
         initView();
-//        initPopupWindow();
         //提交
         mBtnCommit.setOnClickListener(v -> {
             if ("".equals(mEdtNumber.getText().toString().trim())) {
@@ -204,6 +193,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mPresenter = new GetWeightPresenter(this);
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
+
+        rcInfoOverweight = new ArrayList <>();
         llOverweight.setOnClickListener(v->{
 
             showPopWindowList();
@@ -363,94 +354,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     }
 
-    /**
-     * 初始化popWindow
-     */
-    private void initPopupWindow() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        int screenHeight = metrics.heightPixels;
-
-        rcInfoOverweight = new ArrayList <>();//超重记录列表初始化
-
-        window = new CommonPopupWindow(this, R.layout.popup_add_overweight, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
-            @Override
-            protected void initView() {
-                View view = getContentView();
-                dataRc = view.findViewById(R.id.rv_overweight);
-                ivClose = view.findViewById(R.id.iv_close);
-                rlAdd = view.findViewById(R.id.rl_add);
-                btnSure = view.findViewById(R.id.btn_sure);
-
-                etNum = view.findViewById(R.id.et_num);
-                etWeight = view.findViewById(R.id.et_weight);
-                etVolume = view.findViewById(R.id.et_volume);
-                etOverweight = view.findViewById(R.id.et_overweight);
-                overweightRecordAdapter = new OverweightRecordAdapter(rcInfoOverweight);
-                dataRc.setLayoutManager(new LinearLayoutManager(AddReceiveGoodActivity.this, LinearLayoutManager.VERTICAL, false));
-                dataRc.setAdapter(overweightRecordAdapter);
-                ivClose.setOnClickListener((v) -> {
-                    dismissPopWindows();
-                });
-                rlAdd.setOnClickListener((v) -> {
-                    RcInfoOverweight mRcInfoOverweight = new RcInfoOverweight();
-                    if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())&&!StringUtil.isEmpty(etVolume.getText().toString())&&!StringUtil.isEmpty(etOverweight.getText().toString())){
-
-                        mRcInfoOverweight.setCount(Integer.valueOf(etNum.getText().toString()));
-                        mRcInfoOverweight.setWeight(Integer.valueOf(etWeight.getText().toString()));
-                        mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
-                        mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
-                        rcInfoOverweight.add(mRcInfoOverweight);
-                        overweightRecordAdapter.notifyDataSetChanged();
-                        etNum.setText("");
-                        etWeight.setText("");
-                        etVolume.setText("");
-                        etOverweight.setText("");
-                        etNum.setFocusable(true);
-
-                    }
-                    else {
-                        ToastUtil.showToast("请填写完整的超重记录");
-                    }
-
-                });
-                btnSure.setOnClickListener((v) -> {
-                    dismissPopWindows();
-                    int overweight = 0;
-                    for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
-                        overweight += mRcInfoOverweight.getOverWeight();
-
-                    }
-                    mEdtOverWeight.setText(overweight+"kg");
-
-                });
-                overweightRecordAdapter.setOnDeleteClickListener((view1, position) -> {
-                    rcInfoOverweight.remove(position);
-                    overweightRecordAdapter.notifyDataSetChanged();
-                });
-            }
-
-            @Override
-            protected void initEvent() {
-
-            }
-
-            @SuppressLint("WrongConstant")
-            @Override
-            protected void initWindow() {
-                super.initWindow();
-                PopupWindow instance = getPopupWindow();
-                instance.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-                instance.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                instance.setOnDismissListener(() -> {
-                    WindowManager.LayoutParams lp = getWindow().getAttributes();
-                    lp.alpha = 1.0f;
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                    getWindow().setAttributes(lp);
-                });
-            }
-        };
-    }
 
     private void showPopWindowList() {
 
@@ -473,12 +376,5 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 .show();
 
     }
-
-    private void dismissPopWindows() {
-
-        window.getPopupWindow().dismiss();
-
-    }
-
 
 }
