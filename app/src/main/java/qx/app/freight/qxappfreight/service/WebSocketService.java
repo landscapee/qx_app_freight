@@ -77,17 +77,17 @@ public class WebSocketService extends Service {
                         case OPENED:
                             Log.e(TAG, "webSocket 打开");
                             flag = 0;
-                            createStompClient(flag);
+//                            createStompClient(flag);
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
                             flag = 1;
-                            createStompClient(flag);
+//                            createStompClient(flag);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 关闭");
                             flag = 1;
-                            createStompClient(flag);
+//                            createStompClient(flag);
                             resetSubscriptions();
                             break;
                         case FAILED_SERVER_HEARTBEAT:

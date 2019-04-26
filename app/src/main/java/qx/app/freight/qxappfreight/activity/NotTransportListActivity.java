@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.NotTransportListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
+import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
@@ -25,7 +27,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 public class NotTransportListActivity extends BaseActivity {
     @BindView(R.id.srv_list)
     SlideRecyclerView mSrvList;
-    private List<ReturnGoodsEntity> mNotTransportList = new ArrayList<>();
+    private List <SecurityCheckResult> mNotTransportList = new ArrayList <>();
     private NotTransportListAdapter mAdapter;
 
     @Override
@@ -38,10 +40,13 @@ public class NotTransportListActivity extends BaseActivity {
      */
     private void setDataAndBack() {
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("not_transport_list", (ArrayList<? extends Parcelable>) mNotTransportList);
-        setResult(RESULT_OK,intent);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("not_transport_list", (Serializable) mNotTransportList);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
         finish();
     }
+
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
@@ -57,17 +62,25 @@ public class NotTransportListActivity extends BaseActivity {
             intent.putExtra("goods_name", goodsName);
             NotTransportListActivity.this.startActivityForResult(intent, 124);
         });
+        mNotTransportList.clear();
+        mNotTransportList.addAll((ArrayList<SecurityCheckResult>)getIntent().getSerializableExtra("start_data"));
         mSrvList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NotTransportListAdapter(mNotTransportList);
         setDeleteListener();
         mSrvList.setAdapter(mAdapter);
+        setIsBack(true, () ->
+                {
+                    setDataAndBack();
+                }
+
+        );
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 124 && resultCode == RESULT_OK) {
             if (data != null) {
-                mNotTransportList.add(data.getParcelableExtra("single_item"));
+                mNotTransportList.add((SecurityCheckResult)data.getSerializableExtra("single_item"));
                 mAdapter.notifyDataSetChanged();
             }
         }

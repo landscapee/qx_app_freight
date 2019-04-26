@@ -50,7 +50,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     private List<TransportListBean> transportListList1;
     private List<TransportListBean> transportListList;
     private String seachString = "";
-
+    TaskFragment fragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
             seachString = text;
             seachWith();
         });
+        fragment = (TaskFragment) getParentFragment();
         initData();
     }
 
@@ -86,6 +87,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
                     transportListList.add(team);
                 }
             }
+        }
+        if (fragment != null) {
+            fragment.setTitleText(transportListList1.size());
         }
         mMfrvData.notifyForAdapter(adapter);
     }
@@ -178,7 +182,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     @Override
     public void transportListContractResult(List<TransportListBean> transportListBeans) {
         if (transportListBeans != null) {
-            TaskFragment fragment = (TaskFragment) getParentFragment();
             //未分页
             transportListList1.clear();
             if (pageCurrent == 1) {
@@ -188,9 +191,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
                 mMfrvData.finishLoadMore();
             }
             transportListList1.addAll(transportListBeans);
-            if (fragment != null) {
-                fragment.setTitleText(transportListList1.size());
-            }
+
             seachWith();
 //            mMfrvData.notifyForAdapter(adapter);
         } else {
@@ -209,7 +210,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
             transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportListBean mTransportListBean : transportListList1) {

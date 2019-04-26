@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.AppIPConfig;
@@ -30,6 +31,9 @@ public class MyApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+
+        CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
+
 //        initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

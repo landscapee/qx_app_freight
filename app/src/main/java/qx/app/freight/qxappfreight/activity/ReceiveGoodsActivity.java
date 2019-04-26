@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
+import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
@@ -95,11 +96,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private int pageCurrent = 1;
 
     private DeclareWaybillBean mDeclare = new DeclareWaybillBean();
-    private List<TransportListCommitEntity.SecurityCheckResult> mSecuriBean = new ArrayList<>();
+    private List<SecurityCheckResult> mSecuriBean = new ArrayList<>();
 
     //库区
     private String reservoirName;
-    private List<ReturnGoodsEntity> mNotTransportList = new ArrayList<>();
+//    private List<SecurityCheckResult> mNotTransportList = new ArrayList<>();
 
     //显示打印预览
     private CommonPopupWindow window;
@@ -139,12 +140,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             //扫一扫
             ScanManagerActivity.startActivity(this);
         });
-        mTvNotTransport.setText(String.valueOf(mNotTransportList.size()));
+        mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
             String goodsName = mDeclare.getDeclareItems().get(0).getCargoCn();
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
-            intent.putParcelableArrayListExtra("start_data", (ArrayList<? extends Parcelable>) mNotTransportList);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("start_data",  (ArrayList<SecurityCheckResult>)mSecuriBean);
+            intent.putExtras(bundle);
             ReceiveGoodsActivity.this.startActivityForResult(intent, 123);
         });
         //提交
@@ -353,10 +356,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 123 && resultCode == RESULT_OK) {
-            if (data != null && data.getParcelableArrayListExtra("not_transport_list").size()!=0) {
-                mNotTransportList.clear();
-                mNotTransportList.addAll(data.getParcelableArrayListExtra("not_transport_list"));
-                mTvNotTransport.setText(String.valueOf(mNotTransportList.size()));
+            if (data != null && ((ArrayList<SecurityCheckResult>)data.getSerializableExtra("not_transport_list")).size()!=0) {
+                mSecuriBean.clear();
+                mSecuriBean.addAll((ArrayList<SecurityCheckResult>)data.getSerializableExtra("not_transport_list"));
+                mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
             }
         }
         if (resultCode == 200) {

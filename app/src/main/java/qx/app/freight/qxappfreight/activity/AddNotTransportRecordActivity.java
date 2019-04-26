@@ -17,6 +17,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
+import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -76,10 +77,10 @@ public class AddNotTransportRecordActivity extends BaseActivity {
                 int returnNumber;
                 try {
                     returnNumber = Integer.valueOf(mEtReturnNumber.getText().toString());
-                    ReturnGoodsEntity entity = new ReturnGoodsEntity();
-                    entity.setGoodsName(mGoodsName);
-                    entity.setReturnNumber(returnNumber);
-                    entity.setReturnReason(mChoseReason);
+                    SecurityCheckResult entity = new SecurityCheckResult();
+                    entity.setCommodity(mGoodsName);
+                    entity.setPiece(returnNumber);
+                    entity.setReason(mChoseReason);
                     Intent intent=new Intent();
                     intent.putExtra("single_item",entity);
                     setResult(RESULT_OK,intent);

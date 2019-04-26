@@ -14,6 +14,10 @@ android {
                 includeCompileClasspath = true
             }
         }
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
@@ -111,4 +115,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:15.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.6.0'
     implementation files('libs/nineoldandroids-2.4.0.jar')
+
+    implementation 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 }
