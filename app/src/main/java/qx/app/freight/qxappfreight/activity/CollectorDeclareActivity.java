@@ -197,11 +197,6 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvBaozhuang.setText(baozhuangList.get(options1));
                 baozhuangOption = options1;
-                if (options1==4){
-                    llBaseTemperature.setVisibility(View.VISIBLE);
-                }else {
-                    llBaseTemperature.setVisibility(View.GONE);
-                }
             }
         }).build();
         pickerView.setPicker(baozhuangList);
@@ -215,7 +210,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvStorageType.setText(storageList.get(options1));
                 storageOption = options1;
-
+                if (options1==4){
+                    llBaseTemperature.setVisibility(View.VISIBLE);
+                }else {
+                    llBaseTemperature.setVisibility(View.GONE);
+                }
             }
         }).build();
         pickerView.setPicker(storageList);
