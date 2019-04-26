@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:text="运单号" />
 
-        <TextView
+        <EditText
+            android:id="@+id/edt_id"
             style="@style/public_tv_16sp_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:text="实际分拣数" />
 
-            <TextView
+            <EditText
+                android:id="@+id/edt_real_sort_num"
                 style="@style/public_tv_16sp_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
