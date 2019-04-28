@@ -130,6 +130,7 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
 
     @Override
     public void flightdynamicResult(FlightBean result) {
+        mList.clear();
         if (null != result) {
             if (TextUtils.isEmpty(type) && TextUtils.isEmpty(movement)) {
                 mList.addAll(result.getFlights());
