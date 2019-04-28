@@ -16,9 +16,8 @@
 
         <TextView
             android:id="@+id/tv_berth"
-            android:layout_width="0dp"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:background="@color/white"
             android:gravity="center"
             android:text="1H"
@@ -32,12 +31,11 @@
 
         <TextView
             android:id="@+id/tv_goods_position"
-            android:layout_width="0dp"
+            android:layout_width="54dp"
             android:layout_height="match_parent"
-            android:layout_weight="2.2"
             android:background="@color/white"
             android:gravity="center"
-            android:text="4929"
+            android:text="55R"
             android:textColor="#666" />
 
         <TextView
@@ -47,9 +45,8 @@
 
         <TextView
             android:id="@+id/tv_board_number"
-            android:layout_width="0dp"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:layout_weight="2.2"
             android:background="@color/white"
             android:gravity="center"
             android:text="4929"
@@ -62,12 +59,11 @@
 
         <TextView
             android:id="@+id/tv_uld_number"
-            android:layout_width="0dp"
+            android:layout_width="96dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
             android:background="@color/white"
             android:gravity="center"
-            android:text="/"
+            android:text="-"
             android:textColor="#666" />
 
         <TextView
@@ -77,9 +73,8 @@
 
         <TextView
             android:id="@+id/tv_target_name"
-            android:layout_width="0dp"
+            android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:layout_weight="2.5"
             android:background="@color/white"
             android:gravity="center"
             android:text="PEK"
@@ -92,9 +87,8 @@
 
         <TextView
             android:id="@+id/tv_type"
-            android:layout_width="0dp"
+            android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:background="@color/white"
             android:gravity="center"
             android:text="C"
@@ -107,12 +101,25 @@
 
         <TextView
             android:id="@+id/tv_weight"
-            android:layout_width="0dp"
+            android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:background="@color/white"
             android:gravity="center"
             android:text="15"
+            android:textColor="#666" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="9999"
             android:textColor="#666" />
 
         <TextView

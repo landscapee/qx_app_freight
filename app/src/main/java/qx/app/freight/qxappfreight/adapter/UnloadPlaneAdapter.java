@@ -27,35 +27,28 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<UnloadPlaneVersionEntit
 
     @Override
     protected void convert(BaseViewHolder helper, UnloadPlaneVersionEntity item) {
-        if (helper.getAdapterPosition()==0){
-            helper.setText(R.id.tv_version_type,"最新版本");
-        }else {
-            helper.setText(R.id.tv_version_type,"历史版本");
+        if (helper.getAdapterPosition() == 0) {
+            helper.setText(R.id.tv_version_type, "最新版本");
+        } else {
+            helper.setText(R.id.tv_version_type, "历史版本");
         }
         helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
         ImageView ivControl = helper.getView(R.id.iv_control);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
         RecyclerView rvVersion = helper.getView(R.id.rv_version);
-        boolean showGoodsPosition=true;//是否显示货位，默认显示
-        for (UnloadPlaneEntity entity:item.getList()){
-            if (TextUtils.isEmpty(entity.getGoodsPosition())){
-                showGoodsPosition=false;
+        boolean showGoodsPosition = true;//是否显示货位，默认显示
+        for (UnloadPlaneEntity entity : item.getList()) {
+            if (TextUtils.isEmpty(entity.getGoodsPosition())) {
+                showGoodsPosition = false;
                 break;
             }
         }
-        if (showGoodsPosition){
-            helper.getView(R.id.tv_goods_pos).setVisibility(View.VISIBLE);
-            helper.getView(R.id.tv_divider).setVisibility(View.VISIBLE);
-        }else {
-            helper.getView(R.id.tv_goods_pos).setVisibility(View.GONE);
-            helper.getView(R.id.tv_divider).setVisibility(View.GONE);
-        }
-        UnloadPlaneDetailAdapter adapter = new UnloadPlaneDetailAdapter(item.getList(),showGoodsPosition);
+        UnloadPlaneDetailAdapter adapter = new UnloadPlaneDetailAdapter(item.getList(), showGoodsPosition);
         rvVersion.setLayoutManager(new LinearLayoutManager(mContext));
         rvVersion.setAdapter(adapter);
         if (item.isShowDetail()) {
             rvVersion.setVisibility(View.VISIBLE);
-            ivControl.setImageResource(R.mipmap.up);
+            ivControl.setImageResource(R.mipmap.right);
             llDetail.expand();
         } else {
             rvVersion.setVisibility(View.GONE);
@@ -66,7 +59,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<UnloadPlaneVersionEntit
             item.setShowDetail(!item.isShowDetail());
             if (item.isShowDetail()) {
                 rvVersion.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.up);
+                ivControl.setImageResource(R.mipmap.right);
                 llDetail.expand();
             } else {
                 rvVersion.setVisibility(View.GONE);

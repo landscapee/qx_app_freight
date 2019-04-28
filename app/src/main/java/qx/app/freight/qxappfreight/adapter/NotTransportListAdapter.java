@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
 
 /**
@@ -16,13 +15,14 @@ import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
  */
 public class NotTransportListAdapter extends BaseQuickAdapter<SecurityCheckResult, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;
+
     public NotTransportListAdapter(List<SecurityCheckResult> list) {
         super(R.layout.item_not_transport_list, list);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, SecurityCheckResult item) {
-        helper.setText(R.id.tv_return_goods_info, mContext.getString(R.string.format_return_name_number, item.getCommodity(), item.getPiece()+""));
+        helper.setText(R.id.tv_return_goods_info, mContext.getString(R.string.format_return_name_number, item.getCommodity(), item.getPiece()));
         helper.setText(R.id.tv_return_goods_reason, mContext.getString(R.string.format_return_reason, item.getReason()));
         View viewDelete = helper.getView(R.id.ll_delete);
         viewDelete.setTag(helper.getAdapterPosition());
@@ -32,6 +32,7 @@ public class NotTransportListAdapter extends BaseQuickAdapter<SecurityCheckResul
             }
         });
     }
+
     public void setOnDeleteClickListener(OnDeleteClickLister listener) {
         this.mDeleteClickListener = listener;
     }
