@@ -90,6 +90,7 @@ public class GetFlightCargoResBean {
         private String uldCode;
         private String goodsLocation;
         private String cargoType;
+        private int total;
         private List<GroupScootersBean> groupScooters;
         @Data
         public static class GroupScootersBean {

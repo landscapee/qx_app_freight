@@ -95,7 +95,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result != null && result.equals(mCurrentFlightId)) {
-
             showCargoResUpdate(mCurrentFlightId);
         }
     }
@@ -105,7 +104,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
         });
         updatePushDialog.show();
-
     }
 
     @Override
@@ -157,11 +155,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTargetPlace = info[4];
         mTvSeat.setText(info[5]);
         mTvStartTime.setText(TimeUtils.getHMDay(Long.valueOf(info[6])));
-        mRvData.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = info[7];
         ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
-//        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes("12001460");
         mTvPullGoodsReport.setOnClickListener(v -> {
             if (mBillList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
@@ -277,6 +277,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     item.setType(model.getCargoType());
                     item.setWeight(model.getWeight());
                     item.setGoodsPosition(model.getGoodsLocation());
+                    item.setNumber(model.getTotal());
                     list.add(item);
                 }
             }
@@ -304,11 +305,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void showNetDialog() {
-
     }
 
     @Override
     public void dissMiss() {
-
     }
 }
