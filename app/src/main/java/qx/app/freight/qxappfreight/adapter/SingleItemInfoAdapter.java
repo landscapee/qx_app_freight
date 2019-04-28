@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.Arrays;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -41,6 +42,6 @@ public class SingleItemInfoAdapter<T extends DeclareItem> extends BaseQuickAdapt
         //体积
         helper.setText(R.id.tv_volume, String.valueOf(item.getVolume()));
         //包装类型
-        helper.setText(R.id.tv_package, String.valueOf(item.getPackagingType()));
+        helper.setText(R.id.tv_package, Arrays.toString(item.getPackagingType()));
     }
 }
