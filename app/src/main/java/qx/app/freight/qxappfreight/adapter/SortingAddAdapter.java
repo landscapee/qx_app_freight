@@ -40,9 +40,8 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
     Context context;
     List<CounterUbnormalGoods> myData;
 
-    public SortingAddAdapter(FragmentManager manager, Context context, @Nullable List<CounterUbnormalGoods> data) {
+    public SortingAddAdapter(Context context, @Nullable List<CounterUbnormalGoods> data) {
         super(R.layout.item_sorting_add, data);
-        this.manager = manager;
         this.context = context;
         this.myData = data;
     }
@@ -56,6 +55,7 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
         //显示异常类型
         if (item.getUbnormalType() != null && item.getUbnormalType().size() > 0) {
             int typeExcetion = item.getUbnormalType().get(0);
+            Log.e("dime", "刷新数据嘛，typeException=" + typeExcetion);
             helper.setText(R.id.tv_exception_type_choose, ExceptionUtils.typeToString(typeExcetion));
             //如果是件数异常，显示个数
             if (typeExcetion == 1) {
@@ -101,7 +101,6 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
         });        //显示异常照片
         ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).removeAllViews();
         if (item.getUbnormalPic() != null) {
-            Log.e("dime", "异常图片长度："+item.getUbnormalPic().size());
             for (String imgUrl : item.getUbnormalPic()) {
                 //创建父容器
                 RelativeLayout relativeLayout = new RelativeLayout(mContext);
@@ -111,11 +110,10 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
                 //创建图片控件
                 ImageView imgViwe = new ImageView(mContext);
                 RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(143, 143);
-                imgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                imgViwe.setLayoutParams(new RelativeLayout.LayoutParams(83, 83));
+                imgParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                imgViwe.setLayoutParams(new RelativeLayout.LayoutParams(130, 130));
                 imgViwe.setBackground(context.getDrawable(R.drawable.shape_dynamic_black));
                 String realUrl = HttpConstant.IMAGEURL + imgUrl;
-                Log.e("dime", "拼接后的图品路径：\n" + realUrl);
                 Glide.with(mContext).load(realUrl).into(imgViwe);
                 //创建按钮控件
                 ImageButton imageButton = new ImageButton(mContext);
@@ -125,7 +123,6 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
                 imageButton.setLayoutParams(ibtn);
                 imageButton.setOnClickListener(listener -> {
                     int index = ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).indexOfChild(relativeLayout);
-                    Log.e("dime", "则个图片的index" + index);
                     //先删除数据
                     item.getLocalPath().remove(index);
                     item.getUbnormalPic().remove(index);

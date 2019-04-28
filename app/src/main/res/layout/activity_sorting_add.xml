@@ -29,8 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:text="00-999999999" />
+            android:gravity="right" />
     </LinearLayout>
 
     <!-- 实际分拣 -->
@@ -166,7 +165,7 @@
             android:layout_weight="1"
             android:drawableRight="@mipmap/drop_select"
             android:gravity="right"
-            android:text="否/是 " />
+            android:text="否" />
     </LinearLayout>
     
     <View

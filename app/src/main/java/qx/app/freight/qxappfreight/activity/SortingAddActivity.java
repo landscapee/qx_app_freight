@@ -57,7 +57,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     SortingAddAdapter mAdapter;//适配器
 
     int CURRENT_PHOTO_INDEX;
-    int CURRENT_EXCEPTION_INDEX;
 
     InWaybillRecord mInWaybillRecord;//本页面的数据,这是最终生成的数据哦， 很关键
     int INDEX;
@@ -112,10 +111,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             //如果是修改，数据从前一个页面来
             customToolbar.setMainTitle(Color.WHITE, "修改");
             mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
-            Log.e("dime", "我进来了：\n" + mInWaybillRecord.toString());
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
             //显示运单号， 实际分拣数，库区，库位，是否转关
-            idEdt.setText(mInWaybillRecord.getId() + "");
+            idEdt.setText(mInWaybillRecord.getWaybillCode() + "");
             sortingNumEdt.setText(mInWaybillRecord.getTotalNumberPackages()== null?"": mInWaybillRecord.getTotalNumberPackages()+"");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
@@ -127,7 +125,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         }
         //初始化recyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(SortingAddActivity.this));
-        mAdapter = new SortingAddAdapter(getSupportFragmentManager(), SortingAddActivity.this, counterUbnormalGoodsList);
+        mAdapter = new SortingAddAdapter(SortingAddActivity.this, counterUbnormalGoodsList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnSlectPicListener(new SortingAddAdapter.OnSlectPicListener() {
             @Override
@@ -153,40 +151,29 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         mAdapter.setOnExceptionTypeListener(new SortingAddAdapter.OnExceptionChooseListener() {
             @Override
             public void onExceptionChoose(int posstion) {
-                CURRENT_EXCEPTION_INDEX = posstion;
+                Log.e("dime", "位置信息：" + posstion);
                 ChooseStoreroomDialog chooseExcetionDialog = new ChooseStoreroomDialog();
                 chooseExcetionDialog.setData(ExceptionUtils.testBeanList, SortingAddActivity.this);
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
                     public void confirm(int position2) {
                         position2++;
-                        if (counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType() == null) {
+                        Log.e("dime", "异常：type=" + position2);
+                        if (counterUbnormalGoodsList.get(posstion).getUbnormalType() == null) {
                             List<Integer> ubnormalType = new ArrayList<>(1);
-                            ubnormalType.set(0, 1);
-                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).setUbnormalType(ubnormalType);
-                        } else if (counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().size() == 0) {
-                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().add(0, position2);
+                            ubnormalType.set(0, position2);
+                            counterUbnormalGoodsList.get(posstion).setUbnormalType(ubnormalType);
+                        } else if (counterUbnormalGoodsList.get(posstion).getUbnormalType().size() == 0) {
+                            counterUbnormalGoodsList.get(posstion).getUbnormalType().add(0, position2);
                         } else {
-                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().set(0, position2);
+                            counterUbnormalGoodsList.get(posstion).getUbnormalType().set(0, position2);
                         }
-                        mAdapter.notifyItemChanged(CURRENT_EXCEPTION_INDEX);
+                        Log.e("dime", "组装好的数据呢：" +counterUbnormalGoodsList.get(posstion).getUbnormalType().toString());
+                        Log.e("dime", "组装好的数据呢：位置信息：" + posstion);
+                        mAdapter.notifyItemChanged(posstion);
                     }
                 });
                 chooseExcetionDialog.show(getSupportFragmentManager(), "exception");
-
-//                ChooseExceptionDialog chooseExceptionDialog = new ChooseExceptionDialog();
-//                chooseExceptionDialog.setOnExceptionChooseListener(new ChooseExceptionDialog.OnExceptionChooseListener() {
-//                    @Override
-//                    public void onExceptionChoose(Integer[] exceptionTypes) {
-//                        for (int typeItem : exceptionTypes) {
-//                            if(!counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().contains(typeItem)){
-//                                counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().add(typeItem);
-//                            }
-//                        }
-//                        Log.e("dime", "异常类型：" + counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).toString());
-//                    }
-//                });
-//                chooseExceptionDialog.show(getSupportFragmentManager(), "dime");
             }
         });
 
@@ -223,9 +210,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         submitBtn.setOnClickListener(listen -> {
             //将组装好的数据返回给前一个页面
             if (TextUtils.isEmpty(idEdt.getText().toString().trim())) {
-                mInWaybillRecord.setId("");
+                mInWaybillRecord.setWaybillCode("");
             } else {
-                mInWaybillRecord.setId(idEdt.getText().toString().trim());
+                mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim());
             }
             if (TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入实际分拣数！");
@@ -237,7 +224,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 return;
             }
             mInWaybillRecord.setCounterUbnormalGoodsList(counterUbnormalGoodsList);
-            Log.e("dime", "我要提交了：\n" + mInWaybillRecord.toString());
             Intent intent = new Intent(SortingAddActivity.this, SortingActivity.class);
             intent.putExtra("DATA", mInWaybillRecord);
             intent.putExtra("INDEX", INDEX);
@@ -320,7 +306,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1002) {//异常上报相机事件
                 List<String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);//选择好的图片
-                Log.e("dime", "相机选择Result" + photoList.toString());
                 counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).setLocalPath(photoList);
                 //开始上传图片
                 mPresenter = new UploadsPresenter(this);
@@ -356,13 +341,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     @Override
     public void uploadsResult(Object result) {
-        Log.e("dime", "添加前：当前的UbnormalPics\n" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic());
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic().add(entry.getKey());
         }
-        Log.e("dime", "添加后：当前的UbnormalPics\n" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic().toString());
         mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
 

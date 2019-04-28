@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -130,8 +131,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         //提交请求
         doneBtn.setOnClickListener(listener -> {
             submitEntity.setFlag(1);
-            String xx = new Gson().toJson(submitEntity);
-            Log.e("dime - json", xx);
+            submitEntity.setList(mList);
             ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
         });
         //获取数据
@@ -161,6 +161,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             int index = data.getIntExtra("INDEX", -1);
             if(index != -1){
                 mList.set(index, inWaybillRecord);
+                mAdapter.notifyItemChanged(index);
             }
         }
     }
@@ -177,6 +178,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             resultBean.setList(mList);
         } else {
             mList = resultBean.getList();
+            Log.e("dime", "服务器的数据，分拣信息长度 = " + mList.size());
         }
         //初始化提交实体类
         submitEntity.setFlightId(transportListBean.getFlightId());
@@ -221,13 +223,17 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
             //数据被删除了
             CURRENT_DELETE_POSITION = position;
-            ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
+            if(mList.get(CURRENT_DELETE_POSITION).getId() == null || mList.get(CURRENT_DELETE_POSITION).getId() == "" || mList.get(CURRENT_DELETE_POSITION).getId().equals("")){
+                mList.remove(CURRENT_DELETE_POSITION);
+                mAdapter.notifyDataSetChanged();
+            }else {
+                ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
+            }
         });
     }
 
     @Override
     public void resultSubmit(Object o) {
-        Log.e("dime", "提交/暂存，item长度：" + submitEntity.getList().size());
         Log.e("dime", "提交/暂存，返回值：" + o.toString());
         ToastUtil.showToast("成功");
     }
