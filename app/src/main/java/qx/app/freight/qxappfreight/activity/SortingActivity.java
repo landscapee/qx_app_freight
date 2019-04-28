@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +34,14 @@ import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 进港分拣 - 显示列表界面
- *
+ * <p>
  * create by guohao - 2019/4/26
- *
  */
 public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView {
 
@@ -69,8 +73,6 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     TextView handCarNumTv;
     @BindView(R.id.tv_handcar_total)
     TextView handCarTotalTv;
-    @BindView(R.id.tv_total_goods)
-    TextView totalGoodsTv;
 
     @BindView(R.id.btn_temp)
     Button tempBtn;
@@ -154,12 +156,17 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             mList.add(mInWaybillRecord);
             mAdapter.notifyDataSetChanged();
+        }else if(requestCode == 2 && resultCode == Activity.RESULT_OK){//修改
+            InWaybillRecord inWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
+            int index = data.getIntExtra("INDEX", -1);
+            if(index != -1){
+                mList.set(index, inWaybillRecord);
+            }
         }
     }
 
     @Override
     public void resultGetList(InWaybillRecordBean bean) {
-        bean = resultBean;
         if (bean == null) {
             resultBean = new InWaybillRecordBean();
         } else {
@@ -169,7 +176,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             mList = new ArrayList<>();
             resultBean.setList(mList);
         } else {
-            mList = bean.getList();
+            mList = resultBean.getList();
         }
         //初始化提交实体类
         submitEntity.setFlightId(transportListBean.getFlightId());
@@ -179,8 +186,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         submitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
         submitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
         submitEntity.setList(mList);
-        //显示总运单数和总件数
-        totalGoodsTv.setText("总运单数：" + bean.getCount() + " 总件数：" + bean.getTotal());
+
         //列表 -- 初始化
         mAdapter = new SortingInfoAdapter(mList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -191,10 +197,25 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             Intent intent = new Intent(SortingActivity.this, SortingAddActivity.class);
             intent.putExtra("TYPE", "UPDATE");
-            intent.putExtra("DATA", mList.get(position));
+            InWaybillRecord updateInWaybillRecord = null;
+            try {
+                updateInWaybillRecord = Tools.IOclone(mList.get(position));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("dime", "updateInWaybillRecord clone error：" + e.getMessage());
+            }
+            intent.putExtra("DATA", updateInWaybillRecord);
             intent.putExtra("INDEX", position);
-            SortingActivity.this.startActivity(intent);
+            SortingActivity.this.startActivityForResult(intent, 2);//去修改
         });
+        //添加页脚
+        TextView textView = new TextView(SortingActivity.this);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(Color.parseColor("#FF2E81FD"));
+        textView.setTextSize(14);
+        textView.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
+
+        mAdapter.setFooterView(textView);
         recyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {

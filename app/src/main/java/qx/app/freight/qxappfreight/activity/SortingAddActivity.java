@@ -53,7 +53,6 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 public class SortingAddActivity extends BaseActivity implements ReservoirContract.reservoirView, UploadsContract.uploadsView {
 
     CustomToolbar customToolbar;
-    String TYPE = "";
 
     SortingAddAdapter mAdapter;//适配器
 
@@ -62,6 +61,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     InWaybillRecord mInWaybillRecord;//本页面的数据,这是最终生成的数据哦， 很关键
     int INDEX;
+    String TYPE = "";
     List<CounterUbnormalGoods> counterUbnormalGoodsList;//异常数组
     //是否转关 0 否 1 是
     int isTransit;//是否转关
@@ -112,10 +112,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             //如果是修改，数据从前一个页面来
             customToolbar.setMainTitle(Color.WHITE, "修改");
             mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
+            Log.e("dime", "我进来了：\n" + mInWaybillRecord.toString());
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
             //显示运单号， 实际分拣数，库区，库位，是否转关
             idEdt.setText(mInWaybillRecord.getId() + "");
-            sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() + "");
+            sortingNumEdt.setText(mInWaybillRecord.getTotalNumberPackages()== null?"": mInWaybillRecord.getTotalNumberPackages()+"");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
             if(mInWaybillRecord.getTransit() != null){
@@ -236,10 +237,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 return;
             }
             mInWaybillRecord.setCounterUbnormalGoodsList(counterUbnormalGoodsList);
+            Log.e("dime", "我要提交了：\n" + mInWaybillRecord.toString());
             Intent intent = new Intent(SortingAddActivity.this, SortingActivity.class);
             intent.putExtra("DATA", mInWaybillRecord);
             intent.putExtra("INDEX", INDEX);
-            SortingAddActivity.this.setResult(RESULT_OK, intent);
+            setResult(RESULT_OK, intent);
             finish();
         });
 
@@ -317,10 +319,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1002) {//异常上报相机事件
-                List<String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                List<String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);//选择好的图片
                 Log.e("dime", "相机选择Result" + photoList.toString());
                 counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).setLocalPath(photoList);
-                mAdapter.notifyDataSetChanged();
                 //开始上传图片
                 mPresenter = new UploadsPresenter(this);
                 List<File> files = new ArrayList<>();
@@ -355,12 +356,14 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     @Override
     public void uploadsResult(Object result) {
-        Log.e("dime", "图片上传的返回值：\n" + result.toString());
+        Log.e("dime", "添加前：当前的UbnormalPics\n" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic());
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic().add(entry.getKey());
         }
+        Log.e("dime", "添加后：当前的UbnormalPics\n" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic().toString());
+        mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
 
     }

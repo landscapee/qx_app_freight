@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 
 /**
@@ -99,17 +101,22 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
         });        //显示异常照片
         ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).removeAllViews();
         if (item.getUbnormalPic() != null) {
-            for (String imgUrl : item.getLocalPath()) {
+            Log.e("dime", "异常图片长度："+item.getUbnormalPic().size());
+            for (String imgUrl : item.getUbnormalPic()) {
                 //创建父容器
                 RelativeLayout relativeLayout = new RelativeLayout(mContext);
                 RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(150, 150);
+                rParams.rightMargin = 15;
                 relativeLayout.setLayoutParams(rParams);
-                //创建图片空间
+                //创建图片控件
                 ImageView imgViwe = new ImageView(mContext);
                 RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(143, 143);
                 imgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 imgViwe.setLayoutParams(new RelativeLayout.LayoutParams(83, 83));
-                Glide.with(mContext).load(imgUrl).into(imgViwe);
+                imgViwe.setBackground(context.getDrawable(R.drawable.shape_dynamic_black));
+                String realUrl = HttpConstant.IMAGEURL + imgUrl;
+                Log.e("dime", "拼接后的图品路径：\n" + realUrl);
+                Glide.with(mContext).load(realUrl).into(imgViwe);
                 //创建按钮控件
                 ImageButton imageButton = new ImageButton(mContext);
                 RelativeLayout.LayoutParams ibtn = new RelativeLayout.LayoutParams(37, 37);
@@ -129,6 +136,8 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
                 relativeLayout.addView(imageButton);
                 ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).addView(relativeLayout);
             }
+        }else{
+            Log.e("dime", "异常图片长度：为空");
         }
 
     }

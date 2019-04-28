@@ -5,10 +5,23 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.model.TestBean;
 
+/**
+ * 异常信息帮助类
+ *
+ * create by guohao - 2019/4/28
+ */
 public class ExceptionUtils {
 
+    /**
+     * 异常类型信息选择框基本数据
+     */
     public static final List<TestBean> testBeanList = Arrays.asList( new TestBean("件数异常", false), new TestBean("有单无货", false), new TestBean("破损", false), new TestBean("腐烂", false), new TestBean("有货无单", false), new TestBean("有货无单", false), new TestBean("泄露", false), new TestBean("错运", false), new TestBean("扣货", false), new TestBean("无标签", false), new TestBean("对方未发报文", false), new TestBean("其他", false), new TestBean("死亡", false), new TestBean("多收邮路单", false), new TestBean("多收货运单", false), new TestBean("多收邮袋", false), new TestBean("有邮袋无邮路单", false), new TestBean("少收货运单", false), new TestBean("有邮路单无邮袋", false));
 
+    /**
+     * 异常信息选择框 index 转为 异常实际名称
+     * @param type
+     * @return
+     */
     public static String typeToString(int type) {
         String result = "未知类型";
         switch (type) {

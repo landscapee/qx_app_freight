@@ -13,6 +13,12 @@ import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 
+/**
+ * 进港分拣 - 信息列表适配器
+ *
+ * create by guohao - 2019/4/25
+ *
+ */
 public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseViewHolder> {
 
     OnInWaybillRecordDeleteListener onInWaybillRecordDeleteListener;

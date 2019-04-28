@@ -23,7 +23,12 @@ public class HttpConstant {
 //    public static final String WEBSOCKETURL = "ws://173.101.2.8:7004/socketServer?";//测试环境
     public static final String IMAGEURLVERIFY = "http://173.100.1.74/";
     public static final String IMAGEURL_Verify = "http://173.100.1.74/";
-    public static final String IMAGEURL = "http://173.101.2.26/";//测试环境
+
+    /**
+     * 显示图片的地址
+     */
+//    public static final String IMAGEURL = "http://173.101.2.26/";//测试环境
+    public static final String IMAGEURL = "http://173.100.1.74/";//开发环境
 
 //    public static final String TEST = "http://173.101.2.8:80";
 //    public static final String TEST = "http://192.168.1.17:9008";
