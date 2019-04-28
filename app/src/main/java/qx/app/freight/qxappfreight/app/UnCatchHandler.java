@@ -1,22 +1,17 @@
 package qx.app.freight.qxappfreight.app;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
-import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 全局捕获异常类，实现Thread.UncaughtExceptionHandler
@@ -54,39 +49,79 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
      * 保存我们抛出的异常至SD卡
      */
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        Toast.makeText(context,"系统正在重启，请稍候...",Toast.LENGTH_SHORT).show();
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(context);
-//        Activity activity = ActManager.getAppManager().currentActivity();
-//        //获取activity对象，可以通过基类Activity的静态方法获取
-//        if (activity != null && !(activity instanceof LoginActivity)) {
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e1) {
-//                e1.printStackTrace();
-//            }
-//            restartApp(activity);
-//        }
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent);
-        android.os.Process.killProcess(android.os.Process.myPid());
+    public void uncaughtException(Thread t, Throwable ex) {
+        doSomething(t,ex);
     }
-    private  void restartApp(Activity activity) {
-        if (activity == null) {
-            return;
+
+    private void doSomething(Thread thread, Throwable ex){
+        boolean isHandle = handleException(ex);
+        if (!isHandle && mUnCatchHandler != null) {
+            // 如果我们没有处理则让系统默认的异常处理器来处理
+            mUnCatchHandler.uncaughtException(thread, ex);
+        } else {
+            try {
+                //给Toast留出时间
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Log.e("22222", "uncaughtException() InterruptedException:" + e);
+            }
+
+            UserInfoSingle.setUserNil();
+            ActManager.getAppManager().finishAllActivity();
+            WebSocketService.stopServer(context);
+            Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+            PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent);
+            android.os.Process.killProcess(android.os.Process.myPid());
+
         }
-        Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
-//        @SuppressLint("WrongConstant") PendingIntent restartIntent = PendingIntent.getActivity( activity.getApplicationContext(), 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK);
-//        AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent);
-        PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent);
-        //杀死老线程
-        android.os.Process.killProcess(android.os.Process.myPid());
+
     }
+
+
+    /**
+     * 自定义错误处理,收集错误信息 发送错误报告等操作均在此完成.
+     *
+     * @param ex
+     * @return true:如果处理了该异常信息;否则返回false.
+     */
+    private boolean handleException(Throwable ex) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Looper.prepare();
+                    Toast toast;
+
+                    toast = Toast.makeText(context, "程序出现异常，即将退出", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+
+                    toast.show();
+                    Looper.loop();
+//                    hasToast = true;
+                } catch (Exception e) {
+                    Log.e("22222", "handleException Toast error" + e);
+                }
+
+            }
+        }).start();
+
+
+        if (ex == null) {
+            return false;
+        }
+//
+//        if (mIsDebug) {
+//            // 收集设备参数信息
+//            collectDeviceInfo();
+//            // 保存日志文件
+//            saveCatchInfo2File(ex);
+//        }
+
+        return true;
+    }
+
+
 }
