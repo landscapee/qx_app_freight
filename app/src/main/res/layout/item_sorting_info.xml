@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/dp_8"
-    android:layout_marginRight="@dimen/dp_8"
+    android:layout_marginLeft="@dimen/dp_6"
+    android:layout_marginRight="@dimen/dp_6"
     android:layout_marginBottom="@dimen/dp_4"
     android:orientation="horizontal"
-    android:background="@drawable/shape_rect_gray_888"
+    android:background="@drawable/shape_rect_gray_3b0061ab"
     android:paddingLeft="@dimen/dp_7"
-    android:paddingTop="10dp"
+    android:paddingTop="13dp"
     android:paddingRight="@dimen/dp_7"
-    android:paddingBottom="10dp">
+    android:paddingBottom="13dp"
+    android:gravity="center_vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,8 +65,9 @@
      <!-- 这里是删除的菜单布局 -->
     <RelativeLayout
         android:id="@+id/rll_del"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
         <ImageView
             android:layout_width="@dimen/dp_20"

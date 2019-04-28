@@ -387,8 +387,8 @@ public interface HttpApi {
      * @param id 分拣运单实体id
      * @return 成功/失败
      */
-    @POST("/service-product-cargotallying/sorting/deleteById")
-    Observable<BaseEntity<Object>> deleteInWayBillRecordById(@Body String id);
+    @DELETE("service-product-cargotallying/sorting/deleteByIdForAndroid{id}")
+    Observable<BaseEntity<Object>> deleteInWayBillRecordById(@Path("id") String id);
 
 
     /***********************消息中心*****************************/

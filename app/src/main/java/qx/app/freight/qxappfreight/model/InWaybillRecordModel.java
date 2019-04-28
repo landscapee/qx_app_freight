@@ -8,6 +8,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
@@ -26,7 +27,6 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess,throwable->{
-                    Log.e("dime", "网络请求：\n" + throwable.toString());
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);

@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,8 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,12 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
+/**
+ * 进港分拣 - 显示列表界面
+ *
+ * create by guohao - 2019/4/26
+ *
+ */
 public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView {
 
     String flightNo = "";
@@ -42,8 +47,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     String getHandCarNumTotal = "";
     TransportListBean transportListBean;
     List<InWaybillRecord> mList;
-    InWaybillRecord deleteInWaybillRecord;
     InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();//最终提交请求的实体
+
+    InWaybillRecordBean resultBean;//网络请求返回的bean
+
+    int CURRENT_DELETE_POSITION = -1;
+
+    static final String TYPE_ADD = "ADD";
+    static final String TYPE_UPDATE = "UPDATE";
 
     SortingInfoAdapter mAdapter;
 
@@ -58,6 +69,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     TextView handCarNumTv;
     @BindView(R.id.tv_handcar_total)
     TextView handCarTotalTv;
+    @BindView(R.id.tv_total_goods)
+    TextView totalGoodsTv;
 
     @BindView(R.id.btn_temp)
     Button tempBtn;
@@ -84,38 +97,47 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         handCarNumTv.setText(handCarNum);
         handCarTotalTv.setText("/" + getHandCarNumTotal);
         //toolbar
-        CustomToolbar customToolbar = getToolbar();
+        CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        customToolbar.setMainTitle(R.color.white, "进港理货");
-        customToolbar.setLeftTextView(View.VISIBLE, R.color.white, "上一步", null);
+        toolbar.setMainTitle(Color.WHITE, "进港理货");
+        toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "上一步", listener -> {
+            finish();
+        });
         //右侧添加按钮
-        customToolbar.setRightIconView(View.VISIBLE, R.mipmap.add_bg, listener -> {
+        toolbar.setRightIconView(View.VISIBLE, R.mipmap.add_bg, listener -> {
             //跳转到 ->新增页面
+            if (resultBean == null) {
+                return;
+            }
+            if (resultBean.getCloseFlag() == 1) {
+                ToastUtil.showToast("运单已经关闭，无法编辑！");
+                return;
+            }
             Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
-            intentAdd.putExtra("TYPE", "ADD");
+            intentAdd.putExtra("TYPE", TYPE_ADD);
             startActivityForResult(intentAdd, 1);
         });
         //初始化presenter
         mPresenter = new InWaybillRecordPresenter(this);
         //暂存，提交请求
-        tempBtn.setOnClickListener(listener->{
+        tempBtn.setOnClickListener(listener -> {
             submitEntity.setFlag(0);
             submitEntity.setList(mList);
-            ((InWaybillRecordPresenter)mPresenter).submit(submitEntity);
+            ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
         });
         //提交请求
-        doneBtn.setOnClickListener(listener->{
+        doneBtn.setOnClickListener(listener -> {
             submitEntity.setFlag(1);
             String xx = new Gson().toJson(submitEntity);
             Log.e("dime - json", xx);
-            ((InWaybillRecordPresenter)mPresenter).submit(submitEntity);
+            ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
         });
         //获取数据
         getData();
 
     }
 
-    private void getData(){
+    private void getData() {
         //初始化数据
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setFlightId(transportListBean.getFlightId());
@@ -137,11 +159,16 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @Override
     public void resultGetList(InWaybillRecordBean bean) {
-        if(bean.getList() == null){
-            Log.e("dime", "没有item数据");
+        bean = resultBean;
+        if (bean == null) {
+            resultBean = new InWaybillRecordBean();
+        } else {
+            resultBean = bean;
+        }
+        if (resultBean.getList() == null) {
             mList = new ArrayList<>();
-        }else{
-            Log.e("dime", "有数据："+bean.getList().size());
+            resultBean.setList(mList);
+        } else {
             mList = bean.getList();
         }
         //初始化提交实体类
@@ -152,17 +179,28 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         submitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
         submitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
         submitEntity.setList(mList);
+        //显示总运单数和总件数
+        totalGoodsTv.setText("总运单数：" + bean.getCount() + " 总件数：" + bean.getTotal());
         //列表 -- 初始化
         mAdapter = new SortingInfoAdapter(mList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnInWaybillRecordDeleteListener(new SortingInfoAdapter.OnInWaybillRecordDeleteListener() {
-            @Override
-            public void onDeleteListener(InWaybillRecord inWaybillRecord) {
-                //数据被删除了
-                deleteInWaybillRecord = inWaybillRecord;
-                ((InWaybillRecordPresenter)mPresenter).deleteById(inWaybillRecord.getId());
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {//item点击事件，进入修改
+            if (resultBean.getCloseFlag() == 1) {
+                ToastUtil.showToast("运单已经关闭，无法编辑！");
+                return;
             }
+            Intent intent = new Intent(SortingActivity.this, SortingAddActivity.class);
+            intent.putExtra("TYPE", "UPDATE");
+            intent.putExtra("DATA", mList.get(position));
+            intent.putExtra("INDEX", position);
+            SortingActivity.this.startActivity(intent);
+        });
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnInWaybillRecordDeleteListener(position -> {
+            //数据被删除了
+            CURRENT_DELETE_POSITION = position;
+            ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
         });
     }
 
@@ -176,15 +214,16 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void resultDeleteById(Object o) {
         //删除成功，刷新数据
-        mList.remove(deleteInWaybillRecord);
+        Log.e("dime", "删除成功：" + o.toString());
+        mList.remove(CURRENT_DELETE_POSITION);
         mAdapter.notifyDataSetChanged();
-        deleteInWaybillRecord = null;
+        CURRENT_DELETE_POSITION = -1;
     }
 
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
-        Log.e("dime", "错误信息："+error);
+        Log.e("dime", "错误信息：" + error);
     }
 
     @Override

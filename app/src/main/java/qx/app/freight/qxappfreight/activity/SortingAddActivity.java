@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,15 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.csource.fastdfs.UploadStream;
-
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,11 +32,9 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
-import qx.app.freight.qxappfreight.dialog.ChooseExceptionDialog;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
@@ -50,10 +42,11 @@ import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
- * 分拣 新增
+ * 进港分拣 新增
  * <p>
  * create by guohap - 2019/4/26
  */
@@ -63,6 +56,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     String TYPE = "";
 
     SortingAddAdapter mAdapter;//适配器
+
     int CURRENT_PHOTO_INDEX;
     int CURRENT_EXCEPTION_INDEX;
 
@@ -100,25 +94,36 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     public void businessLogic(Bundle savedInstanceState) {
         customToolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        customToolbar.setMainTitle(R.color.white, "新增");
-        customToolbar.setLeftTextView(View.VISIBLE, R.color.white, "返回", null);
+        customToolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", listener->{
+            finish();
+        });
         //新增页面的逻辑， 是修改还是新增？ TYPE == ADD / UPDATE
         TYPE = getIntent().getStringExtra("TYPE");
         INDEX = getIntent().getIntExtra("INDEX", 0);
-        Log.e("dime", "本页要处理" + TYPE);
-//        if (TYPE == "ADD") {
-//            Log.e("dime", "进入了addd");
-//            //如果是新增数据， 直接初始化
-//            mInWaybillRecord = new InWaybillRecord();
-//            counterUbnormalGoodsList = new ArrayList<>();
-//        } else if(TYPE == "UPDATE") {
-//            Log.e("dime", "进入了UPDATE");
-//            //如果是修改，数据从前一个页面来
-//            mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
-//            counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
-//        }
-        mInWaybillRecord = new InWaybillRecord();
-        counterUbnormalGoodsList = new ArrayList<>();
+
+        if (TYPE.equals(SortingActivity.TYPE_ADD)) {
+            Log.e("dime", "进入了addd");
+            //如果是新增数据， 直接初始化
+            customToolbar.setMainTitle(Color.WHITE, "新增");
+            mInWaybillRecord = new InWaybillRecord();
+            counterUbnormalGoodsList = new ArrayList<>();
+        } else if (TYPE.equals(SortingActivity.TYPE_UPDATE)) {
+            Log.e("dime", "进入了UPDATE");
+            //如果是修改，数据从前一个页面来
+            customToolbar.setMainTitle(Color.WHITE, "修改");
+            mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
+            counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
+            //显示运单号， 实际分拣数，库区，库位，是否转关
+            idEdt.setText(mInWaybillRecord.getId() + "");
+            sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() + "");
+            reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
+            locationTv.setText(mInWaybillRecord.getWarehouseLocation());
+            if(mInWaybillRecord.getTransit() != null){
+                locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
+            }
+        } else {
+            Log.e("dime", "不知道进入了哪里");
+        }
         //初始化recyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(SortingAddActivity.this));
         mAdapter = new SortingAddAdapter(getSupportFragmentManager(), SortingAddActivity.this, counterUbnormalGoodsList);
@@ -148,19 +153,39 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             @Override
             public void onExceptionChoose(int posstion) {
                 CURRENT_EXCEPTION_INDEX = posstion;
-                ChooseExceptionDialog chooseExceptionDialog = new ChooseExceptionDialog();
-                chooseExceptionDialog.setOnExceptionChooseListener(new ChooseExceptionDialog.OnExceptionChooseListener() {
+                ChooseStoreroomDialog chooseExcetionDialog = new ChooseStoreroomDialog();
+                chooseExcetionDialog.setData(ExceptionUtils.testBeanList, SortingAddActivity.this);
+                chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
-                    public void onExceptionChoose(Integer[] exceptionTypes) {
-                        for (int typeItem : exceptionTypes) {
-                            if(!counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().contains(typeItem)){
-                                counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().add(typeItem);
-                            }
+                    public void confirm(int position2) {
+                        position2++;
+                        if (counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType() == null) {
+                            List<Integer> ubnormalType = new ArrayList<>(1);
+                            ubnormalType.set(0, 1);
+                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).setUbnormalType(ubnormalType);
+                        } else if (counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().size() == 0) {
+                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().add(0, position2);
+                        } else {
+                            counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().set(0, position2);
                         }
-                        Log.e("dime", "异常类型：" + counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).toString());
+                        mAdapter.notifyItemChanged(CURRENT_EXCEPTION_INDEX);
                     }
                 });
-                chooseExceptionDialog.show(getSupportFragmentManager(), "dime");
+                chooseExcetionDialog.show(getSupportFragmentManager(), "exception");
+
+//                ChooseExceptionDialog chooseExceptionDialog = new ChooseExceptionDialog();
+//                chooseExceptionDialog.setOnExceptionChooseListener(new ChooseExceptionDialog.OnExceptionChooseListener() {
+//                    @Override
+//                    public void onExceptionChoose(Integer[] exceptionTypes) {
+//                        for (int typeItem : exceptionTypes) {
+//                            if(!counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().contains(typeItem)){
+//                                counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).getUbnormalType().add(typeItem);
+//                            }
+//                        }
+//                        Log.e("dime", "异常类型：" + counterUbnormalGoodsList.get(CURRENT_EXCEPTION_INDEX).toString());
+//                    }
+//                });
+//                chooseExceptionDialog.show(getSupportFragmentManager(), "dime");
             }
         });
 
@@ -196,17 +221,17 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         //提交按钮 点击事件
         submitBtn.setOnClickListener(listen -> {
             //将组装好的数据返回给前一个页面
-            if(TextUtils.isEmpty(idEdt.getText().toString().trim())){
+            if (TextUtils.isEmpty(idEdt.getText().toString().trim())) {
                 mInWaybillRecord.setId("");
-            }else{
+            } else {
                 mInWaybillRecord.setId(idEdt.getText().toString().trim());
             }
-            if(TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())){
+            if (TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入实际分拣数！");
                 return;
             }
             mInWaybillRecord.setTotalNumberPackages(Integer.valueOf(sortingNumEdt.getText().toString().trim()));
-            if(mInWaybillRecord.getWarehouseArea() == null || mInWaybillRecord.getWarehouseArea() == ""){
+            if (mInWaybillRecord.getWarehouseArea() == null || mInWaybillRecord.getWarehouseArea() == "") {
                 ToastUtil.showToast("请选择库区");
                 return;
             }
@@ -333,7 +358,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         Log.e("dime", "图片上传的返回值：\n" + result.toString());
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
-        for(Map.Entry<String, String> entry : entries){
+        for (Map.Entry<String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUbnormalPic().add(entry.getKey());
         }
         dismissProgessDialog();

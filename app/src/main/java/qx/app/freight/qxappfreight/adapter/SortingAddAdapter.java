@@ -7,8 +7,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,7 +22,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
-import qx.app.freight.qxappfreight.dialog.ChooseExceptionDialog;
+import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 
 /**
  * 分拣 新增
@@ -51,8 +49,17 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
     protected void convert(BaseViewHolder helper, CounterUbnormalGoods item) {
         List<Integer> tempTypeList = new ArrayList<>(item.getUbnormalType());
         item.setUbnormalType(tempTypeList);
+        //显示序号
         helper.setText(R.id.tv_sorting_postion, helper.getAdapterPosition() + 1 + "");
-        ((EditText) helper.getView(R.id.edit_exception_num)).setText((item.getUbnormalNum() == null ? "" : item.getUbnormalNum()) + "");
+        //显示异常类型
+        if (item.getUbnormalType() != null && item.getUbnormalType().size() > 0) {
+            int typeExcetion = item.getUbnormalType().get(0);
+            helper.setText(R.id.tv_exception_type_choose, ExceptionUtils.typeToString(typeExcetion));
+            //如果是件数异常，显示个数
+            if (typeExcetion == 1) {
+                ((EditText) helper.getView(R.id.edit_exception_num)).setText((item.getUbnormalNum() == null ? "0" : item.getUbnormalNum()) + "");
+            }
+        }
         //选择异常类型
         helper.getView(R.id.tv_exception_type_choose).setOnClickListener(listener -> {
             onExceptionChooseListener.onExceptionChoose(helper.getAdapterPosition());
@@ -140,32 +147,6 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
 
     public void setOnExceptionTypeListener(OnExceptionChooseListener listener) {
         this.onExceptionChooseListener = listener;
-    }
-
-    private View createExceptionLayout(String url) {
-        //创建父容器
-        RelativeLayout relativeLayout = new RelativeLayout(mContext);
-        RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(150, 150);
-        relativeLayout.setLayoutParams(rParams);
-        //创建图片空间
-        ImageView imgViwe = new ImageView(mContext);
-        RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(143, 143);
-        imgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        imgViwe.setLayoutParams(new RelativeLayout.LayoutParams(83, 83));
-        Glide.with(mContext).load(url).into(imgViwe);
-        //创建按钮控件
-        ImageButton imageButton = new ImageButton(mContext);
-        RelativeLayout.LayoutParams ibtn = new RelativeLayout.LayoutParams(37, 37);
-        ibtn.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        imageButton.setBackgroundResource(R.mipmap.delete_3);
-        imageButton.setLayoutParams(ibtn);
-        imageButton.setOnClickListener(listener -> {
-
-        });
-        relativeLayout.addView(imgViwe);
-        relativeLayout.addView(imageButton);
-
-        return relativeLayout;
     }
 
 }

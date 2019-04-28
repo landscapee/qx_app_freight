@@ -25,6 +25,7 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="航班号" />
 
             <TextView
@@ -51,6 +52,7 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="实际到达时间" />
 
             <TextView
@@ -73,6 +75,7 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="已到板车数" />
 
             <TextView
@@ -146,16 +149,17 @@
         <qx.app.freight.qxappfreight.widget.SlideRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingTop="@dimen/dp_8"/>
 
         <TextView
+            android:id="@+id/tv_total_goods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="@dimen/dp_15"
             android:gravity="center"
-            android:text="总运单数：4 总件数：400"
+            android:text="总运单数：? 总件数：?"
             android:textColor="#FF2E81FD"
             android:textSize="14sp" />
 
