@@ -80,6 +80,7 @@ public class AddNotTransportRecordActivity extends BaseActivity {
                     SecurityCheckResult entity = new SecurityCheckResult();
                     entity.setCommodity(mGoodsName);
                     entity.setPiece(returnNumber);
+                    entity.setProcessMode(0);
                     entity.setReason(mChoseReason);
                     Intent intent=new Intent();
                     intent.putExtra("single_item",entity);

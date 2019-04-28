@@ -30,7 +30,7 @@ public class SecurityCheckResult implements Serializable {
     /**
      * 0退运 1扣货 2移交公安
      */
-    private Integer processMode;
+    private int processMode;
 
     /**
      * 原因
