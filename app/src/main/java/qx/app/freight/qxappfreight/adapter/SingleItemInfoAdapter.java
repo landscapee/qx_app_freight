@@ -43,5 +43,6 @@ public class SingleItemInfoAdapter<T extends DeclareItem> extends BaseQuickAdapt
         helper.setText(R.id.tv_volume, String.valueOf(item.getVolume()));
         //包装类型
         helper.setText(R.id.tv_package, Arrays.toString(item.getPackagingType()));
+
     }
 }
