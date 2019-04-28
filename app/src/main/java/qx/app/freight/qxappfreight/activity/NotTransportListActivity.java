@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -50,6 +51,8 @@ public class NotTransportListActivity extends BaseActivity {
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        String test=null;
+        Log.e("test","test============="+test.length());
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> setDataAndBack());
