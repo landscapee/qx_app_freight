@@ -91,6 +91,7 @@ public class GetFlightCargoResBean {
         private String goodsLocation;
         private String cargoType;
         private int total;
+        private int cargoStatus;//默认为 《0》正常  1 表示 拉货
         private List<GroupScootersBean> groupScooters;
         @Data
         public static class GroupScootersBean {

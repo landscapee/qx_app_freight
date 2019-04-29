@@ -18,6 +18,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -49,6 +50,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
@@ -485,7 +487,7 @@ public class UpdateRepository extends BaseRepository {
      * @param flightId
      * @return
      */
-    public Observable<List<GetFlightCargoResBean>> getFlightCargoRes(String flightId) {
+    public Observable<List<LoadingListBean>> getFlightCargoRes(String flightId) {
         return transform(getService().getFlightCargoRes(flightId));
     }
 
@@ -496,6 +498,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> flightDoneInstall(GetFlightCargoResBean model) {
         return nothingtransform(getService().flightDoneInstall(model));
+    }
+    /*****
+     * 结束装机
+     * @param model
+     * @return
+     */
+    public Observable<String> overLoad(LoadingListOverBean model) {
+        return nothingtransform(getService().overLoad(model));
     }
 
 

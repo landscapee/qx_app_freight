@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -50,6 +51,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
@@ -300,7 +302,7 @@ public interface HttpApi {
 
     //装机 - 装机单
     @GET("service-product-transport/tp-main-info/getFlightCargoRes/{flightId}")
-    Observable<BaseEntity<List<GetFlightCargoResBean>>> getFlightCargoRes(@Path("flightId") String flightId);
+    Observable<BaseEntity<List<LoadingListBean>>> getFlightCargoRes(@Path("flightId") String flightId);
 
     //判断板车是否被扫描上传过
     @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}")
@@ -309,6 +311,9 @@ public interface HttpApi {
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")
     Observable<BaseEntity<Object>> flightDoneInstall(@Body GetFlightCargoResBean model);
+    //结束装机
+    @POST("service-product-stowage/ft-report/sendLoadResult")
+    Observable<BaseEntity<Object>> overLoad(@Body LoadingListOverBean model);
 
     //装卸机代办   1是装机  2是卸机  3装卸机
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")

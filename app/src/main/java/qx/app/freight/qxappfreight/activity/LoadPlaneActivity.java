@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,13 +31,16 @@ import qx.app.freight.qxappfreight.bean.LocalBillBean;
 import qx.app.freight.qxappfreight.bean.UnloadPlaneEntity;
 import qx.app.freight.qxappfreight.bean.UnloadPlaneVersionEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CustomRecylerView;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -46,7 +48,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView {
     @BindView(R.id.rv_data)
-    RecyclerView mRvData;
+    CustomRecylerView mRvData;
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;
     @BindView(R.id.tv_flight_craft)
@@ -236,13 +238,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Override
-    public void getFlightCargoResResult(List<GetFlightCargoResBean> getFlightCargoResBeanList) {
+    public void getFlightCargoResResult(List<LoadingListBean> getFlightCargoResBeanList) {
         if (getFlightCargoResBeanList == null || getFlightCargoResBeanList.size() == 0) return;
         List<LocalBillBean> list3 = new ArrayList<>();
-        for (GetFlightCargoResBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
+        for (LoadingListBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
             mFregihtSpace = bean.getSuggestRepository();
             if (bean.getGroupScooters() != null) {
-                for (GetFlightCargoResBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
+                for (LoadingListBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
                     LocalBillBean billBean = new LocalBillBean();
                     billBean.setWayBillCode(groupCode.getWaybillCode());
                     billBean.setWaybillId(groupCode.getWaybillId());
@@ -256,13 +258,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         }
         mBillList = removeDuplicate(list3);
         mList.clear();
-        for (GetFlightCargoResBean bean : getFlightCargoResBeanList) {
+        for (LoadingListBean bean : getFlightCargoResBeanList) {
             UnloadPlaneVersionEntity entity = new UnloadPlaneVersionEntity();
             entity.setVersion(Integer.valueOf(bean.getVersion()));
             List<UnloadPlaneEntity> list = new ArrayList<>();
             if (bean.getContentObject() != null) {
                 for (int i = 0; i < bean.getContentObject().size(); i++) {
-                    GetFlightCargoResBean.ContentObjectBean model = bean.getContentObject().get(i);
+                    LoadingListBean.ContentObjectBean model = bean.getContentObject().get(i);
                     UnloadPlaneEntity item = new UnloadPlaneEntity();
                     item.setBerth(model.getSuggestRepository());
                     String boardNumber;
@@ -271,12 +273,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     } else {
                         boardNumber = (model.getGroupScooters() == null) ? "-" : model.getGroupScooters().get(0).getScooterCode();
                     }
+                    item.setShowPullDown(model.getCargoStatus()==1);
                     item.setBoardNumber(boardNumber);
                     item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
                     item.setTarget(mTargetPlace);
                     item.setType(model.getCargoType());
                     item.setWeight(model.getWeight());
-                    item.setGoodsPosition(model.getGoodsLocation());
+                    item.setGoodsPosition("");
                     item.setNumber(model.getTotal());
                     list.add(item);
                 }
@@ -288,6 +291,31 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         Collections.reverse(mList);
         UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mList);
         mRvData.setAdapter(adapter);
+        adapter.setOnOverLoadListener(entity -> {
+            LoadingListOverBean bean=new LoadingListOverBean();
+            bean.setVersion("1");
+            bean.setFlightId(getFlightCargoResBeanList.get(0).getFlightId());
+            bean.setOperationUser(UserInfoSingle.getInstance().getLoginName());
+            List<LoadingListOverBean.DataBean> data=new ArrayList<>();
+            for (int i=0;i<entity.getList().size();i++){
+                LoadingListOverBean.DataBean dataBean=new LoadingListOverBean.DataBean();
+                dataBean.setId(getFlightCargoResBeanList.get(i).getId());
+                dataBean.setScooterId(getFlightCargoResBeanList.get(i).getContentObject().get(0).getScooterId());
+                data.add(dataBean);
+            }
+            bean.setData(data);
+            /**
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             * 数据不齐全
+             */
+            ((GetFlightCargoResPresenter) mPresenter).overLoad(bean);
+        });
     }
 
     @Override
@@ -296,6 +324,12 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         Log.e("tagNet", "result=====" + result);
         EventBus.getDefault().post("InstallEquipFragment_refresh");
         finish();
+    }
+
+    @Override
+    public void overLoadResult(String result) {
+        ToastUtil.showToast("发送结载成功");
+        Log.e("tagNet", "result=====" + result);
     }
 
     @Override
