@@ -231,7 +231,7 @@
                             android:layout_height="140dp"
                             android:layout_gravity="center"
                             android:background="@drawable/shape_dynamic_black"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@mipmap/nophoto" />
 
                         <TextView
                             android:layout_width="wrap_content"
