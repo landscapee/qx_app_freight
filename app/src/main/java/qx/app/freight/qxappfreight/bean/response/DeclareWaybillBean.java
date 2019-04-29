@@ -32,7 +32,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 航班日期
      */
-    private long flightDate;
+    private Long flightDate;
 
     /**
      * 始发站
@@ -117,7 +117,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 内转表日期
      */
-    private long internalTransferDate;
+    private Long internalTransferDate;
 
     /**
      * 内转表进港航班
@@ -147,9 +147,9 @@ public class DeclareWaybillBean implements Serializable {
 
     private String createUser;
 
-    private long createTime;
+    private Long createTime;
 
-    private long lastUpdateTime;
+    private Long lastUpdateTime;
 
     private String lastUpdateOperator;
 
@@ -173,7 +173,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 申请时间
      */
-    private long applyTime;
+    private Long applyTime;
 
     /**
      * 预计交货道口
@@ -183,7 +183,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 预计交货时间
      */
-    private long expectedDeliveryTime;
+    private Long expectedDeliveryTime;
 
     /**
      * 收运总件数
@@ -203,7 +203,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 入库时间
      */
-    private int storageTime;
+    private Long storageTime;
 
     /**
      * 是否大件 0：否 1： 是
@@ -285,6 +285,6 @@ public class DeclareWaybillBean implements Serializable {
      */
     private Integer updateType;
 
-    private long startUpdateTime;
-    private long endUpdateTime;
+    private Long startUpdateTime;
+    private Long endUpdateTime;
 }

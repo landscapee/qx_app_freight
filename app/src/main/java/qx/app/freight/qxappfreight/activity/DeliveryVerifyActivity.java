@@ -138,7 +138,11 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         newWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_new), declareWaybillBean.getNewDeclareWaybillCode()));
         oldWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_origin), declareWaybillBean.getWaybillCode()));
         flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNumber());
-        flightDataTv.setText("航班日期:\n"+ TimeUtils.getTime2_1(declareWaybillBean.getFlightDate()));
+        if(declareWaybillBean.getFlightDate() == null){
+            flightDataTv.setText("航班日期: -");
+        }else{
+            flightDataTv.setText("航班日期:\n"+ TimeUtils.getTime2_1(declareWaybillBean.getFlightDate()));
+        }
         targetTv.setText("目的地:\n"+declareWaybillBean.getDestinationStation());
         startStationTv.setText("始发站:" + declareWaybillBean.getOriginatingStation());
         midStationTv.setText("中转站:" + declareWaybillBean.getTransferStation());
