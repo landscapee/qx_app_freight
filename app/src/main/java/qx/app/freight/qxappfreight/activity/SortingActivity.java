@@ -9,15 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 
-import java.io.IOException;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,12 +121,20 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mPresenter = new InWaybillRecordPresenter(this);
         //暂存，提交请求
         tempBtn.setOnClickListener(listener -> {
+            if (mList == null || mList.size() == 0) {
+                ToastUtil.showToast("请添加分拣信息");
+                return;
+            }
             submitEntity.setFlag(0);
             submitEntity.setList(mList);
             ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
         });
         //提交请求
         doneBtn.setOnClickListener(listener -> {
+            if (mList == null || mList.size() == 0) {
+                ToastUtil.showToast("请添加分拣信息");
+                return;
+            }
             submitEntity.setFlag(1);
             submitEntity.setList(mList);
             ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
@@ -156,10 +161,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             mList.add(mInWaybillRecord);
             mAdapter.notifyDataSetChanged();
-        }else if(requestCode == 2 && resultCode == Activity.RESULT_OK){//修改
+        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {//修改
             InWaybillRecord inWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             int index = data.getIntExtra("INDEX", -1);
-            if(index != -1){
+            if (index != -1) {
                 mList.set(index, inWaybillRecord);
                 mAdapter.notifyItemChanged(index);
             }
@@ -182,7 +187,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         }
         //初始化提交实体类
         submitEntity.setFlightId(transportListBean.getFlightId());
-        submitEntity.setFlightYLId("");
+        submitEntity.setFlightYLId(transportListBean.getFlightYLId());
         submitEntity.setFlightNum(transportListBean.getFlightNumber());
         submitEntity.setTaskId(transportListBean.getTaskId());
         submitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -223,10 +228,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
             //数据被删除了
             CURRENT_DELETE_POSITION = position;
-            if(mList.get(CURRENT_DELETE_POSITION).getId() == null || mList.get(CURRENT_DELETE_POSITION).getId() == "" || mList.get(CURRENT_DELETE_POSITION).getId().equals("")){
+            if (mList.get(CURRENT_DELETE_POSITION).getId() == null || mList.get(CURRENT_DELETE_POSITION).getId() == "" || mList.get(CURRENT_DELETE_POSITION).getId().equals("")) {
                 mList.remove(CURRENT_DELETE_POSITION);
                 mAdapter.notifyDataSetChanged();
-            }else {
+            } else {
                 ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
             }
         });
@@ -236,6 +241,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     public void resultSubmit(Object o) {
         Log.e("dime", "提交/暂存，返回值：" + o.toString());
         ToastUtil.showToast("成功");
+        EventBus.getDefault().post("InPortTallyFragment_refresh");//发送消息让前一个页面刷新
+        finish();
     }
 
     @Override
