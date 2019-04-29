@@ -51,8 +51,8 @@ public class NotTransportListActivity extends BaseActivity {
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        String test=null;
-        Log.e("test","test============="+test.length());
+//        String test=null;
+//        Log.e("test","test============="+test.length());
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> setDataAndBack());

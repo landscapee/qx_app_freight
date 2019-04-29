@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
@@ -67,8 +68,26 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
+//        int a = 3;
+//        ToastUtil.showToast(testSwitch(a)+"=====ssssss");
 //        getDeviceInfo();
     }
+
+//    private String testSwitch(int a) {
+//
+//        switch (a){
+//            case 0:
+//                return "0";
+//            case 1:
+//                return "1";
+//            case 2:
+//                return "2";
+//            case 3:
+//                return "3";
+//           default:
+//               return "4";
+//        }
+//    }
 
 //    private void getDeviceInfo(){
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
