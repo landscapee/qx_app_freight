@@ -297,7 +297,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             //危险结束时间
             tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
             //报检员备案照片
-            GlideUtil.load(HttpConstant.IMAGEURLVERIFY + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
+            GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
         } else
             ToastUtil.showToast("数据为空");
