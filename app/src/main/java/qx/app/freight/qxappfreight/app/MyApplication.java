@@ -10,6 +10,7 @@ import android.util.Log;
 import com.beidouapp.imlibapi.IMLIBContext;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.AppIPConfig;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -31,6 +32,8 @@ public class MyApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+
+        Log.e("Application：运行模式>>>", BuildConfig.Model);
 
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
 
@@ -79,7 +82,7 @@ public class MyApplication extends Application {
 //            IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl(AppIPConfig.getSchduleApiHost() + HttpConstant.IM_NOTICE_URL);
             IMLIBContext.getInstance().setSchedualNoticeDetailInterfaceUrl("http://" + HttpConstant.CMCC + ":86/api/schedule/" + HttpConstant.IM_NOTICE_URL);
         } catch (Exception e) {
-            Log.d("tagMsg","im初始化失败");
+            Log.d("tagMsg", "im初始化失败");
         }
     }
 

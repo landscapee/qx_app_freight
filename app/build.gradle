@@ -8,9 +8,9 @@ def RELEASE_PROPERTIES_EXIST = false;
 File f = new File(signFilePath)
 RELEASE_PROPERTIES_EXIST = f.exists()
 if (!RELEASE_PROPERTIES_EXIST == true) {
-    println "青霄科技：没有找到签名配置文件！"
-}else{
-    println "青霄科技：签名配置文件sign.properties！"
+    println "青霄科技：没有找到签名配置文件！\n--------------debug模式运行"
+} else {
+    println "青霄科技：签名配置文件sign.properties！\n--------------release模式运行"
 }
 
 android {
@@ -32,6 +32,20 @@ android {
             abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
+
+    if (RELEASE_PROPERTIES_EXIST) {
+        signProperties.load(new FileInputStream(signFilePath))
+        signingConfigs {
+            release {
+                signProperties.load(new FileInputStream(signFilePath))
+                storeFile file(signProperties.get("file"))
+                storePassword signProperties.get("password")
+                keyAlias signProperties.get("alias")
+                keyPassword signProperties.get("key_password")
+            }
+        }
+    }
+
     buildTypes {
 
         debug {
@@ -56,12 +70,7 @@ android {
             }
             //配置打包签名的信息
             if (RELEASE_PROPERTIES_EXIST) {
-                signProperties.load(new FileInputStream(signFilePath))
-                storeFile file(signProperties.get("file"))
-                storePassword signProperties.get("password")
-                keyAlias signProperties.get("alias")
-                keyPassword keyPassword.get(key_password)
-
+                signingConfig signingConfigs.release
             }
 
         }
