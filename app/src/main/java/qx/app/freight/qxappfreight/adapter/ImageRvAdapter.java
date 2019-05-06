@@ -24,35 +24,41 @@ public class ImageRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public ImageRvAdapter(@Nullable List<String> data) {
         super(R.layout.item_image_rv, data);
-        mList.clear();
-        mList.addAll(data);
+        mList = data;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         ImageView ivImage = helper.getView(R.id.iv_image);
         ImageView ivDelete = helper.getView(R.id.iv_delete);
-        Glide.with(mContext).load(item).into(ivImage);
-        helper.itemView.setOnLongClickListener(v -> {
-            ivDelete.setVisibility(View.VISIBLE);
-            return true;
-        });
-        helper.itemView.setOnClickListener(v -> {
-            if (ivDelete.getVisibility() == View.VISIBLE) {
-                ivDelete.setVisibility(View.GONE);
-            } else {
-                ImgPreviewAct.startPreview((Activity) mContext, mList, helper.getAdapterPosition());
-            }
-        });
-        ivDelete.setOnClickListener(v -> {
-            mList.remove(helper.getAdapterPosition());
-            ImageRvAdapter.this.setNewData(mList);
+        helper.addOnClickListener(R.id.iv_delete);
+//        helper.itemView.setOnLongClickListener(v -> {
+//            ivDelete.setVisibility(View.VISIBLE);
+//            return true;
+//        });
+        if (item =="111"){
+            ivImage.setImageResource(R.mipmap.icon_chose_photo_2);
             ivDelete.setVisibility(View.GONE);
-            notifyDataSetChanged();
-        });
+        }else {
+            Glide.with(mContext).load(item).into(ivImage);
+            ivDelete.setVisibility(View.VISIBLE);
+        }
+
+//        helper.itemView.setOnClickListener(v -> {
+//            if (ivDelete.getVisibility() == View.VISIBLE) {
+//                ivDelete.setVisibility(View.GONE);
+//            } else {
+//                ImgPreviewAct.startPreview((Activity) mContext, mList, helper.getAdapterPosition());
+//            }
+//        });
+//        ivDelete.setOnClickListener(v -> {
+//            mList.remove(helper.getAdapterPosition());
+//            ImageRvAdapter.this.setNewData(mList);
+//            ivDelete.setVisibility(View.GONE);
+//            notifyDataSetChanged();
+//        });
     }
 
-    public List<String> getFinalPhotoList() {
-        return mList;
-    }
+
+
 }

@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,8 +68,6 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     TextView mTvDate;
     @BindView(R.id.rv_photo)
     RecyclerView mRvPhoto;
-    @BindView(R.id.iv_chose_photo)
-    ImageView mIvChosePhoto;
     @BindView(R.id.et_detail_info)
     EditText mEtDetailInfo;
     @BindView(R.id.btn_commit)
@@ -121,14 +122,34 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        ;
         initNavi();//权限方法
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
+        mPhotoPath.add("111");
         mAdapter = new ImageRvAdapter(mPhotoPath);
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mPhotoPath.get(position)=="111"){
+                    choosePictrue();
+                }else {
+                    previewPictrue(position);
+                }
+
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.iv_delete){
+                    mPhotoPath.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
         mRvPhoto.setAdapter(mAdapter);
         //根据过来的参数判断
@@ -162,25 +183,11 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
-        mIvChosePhoto.setOnClickListener(v -> {
-            List<String> originList = new ArrayList<>();
-            if (mAdapter == null) {
-                originList.addAll(mPhotoPath);
-            } else {
-                originList.addAll(mAdapter.getFinalPhotoList());
-            }
-            MultiImageSelector.create(ErrorReportActivity.this)
-                    .showCamera(true) // 是否显示相机. 默认为显示
-                    .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
-                    .multi() // 多选模式, 默认模式;
-                    .origin((ArrayList<String>) originList) // 默认已选择图片. 只有在选择模式为多选时有效
-                    .start(ErrorReportActivity.this, REQUEST_IMAGE);
-        });
         mBtnCommit.setOnClickListener(v -> {
-            if (mAdapter.getFinalPhotoList().size()==0&&TextUtils.isEmpty(mEtDetailInfo.getText().toString())){
+            if (getNoAddPictureList().size()==0&&TextUtils.isEmpty(mEtDetailInfo.getText().toString())){
                 ToastUtil.showToast("请添加文字或图片说明（至少一种）");
             }else {
-                if (mAdapter.getFinalPhotoList().size() == 0) {
+                if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
                     model.setFlightNum(mFlightNumber);
@@ -190,11 +197,46 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setFiles(null);
                     ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {
-                    pressImage(mAdapter.getFinalPhotoList());
+                    pressImage(getNoAddPictureList());
                 }
             }
         });
     }
+
+    /**
+     * 选择相册照片
+     */
+    private void choosePictrue(){
+        List<String> originList = new ArrayList<>();
+        if (mAdapter == null) {
+            originList.addAll(mPhotoPath);
+        } else {
+            originList.addAll(mPhotoPath);
+            originList.remove(originList.size()-1);
+        }
+        MultiImageSelector.create(ErrorReportActivity.this)
+                .showCamera(true) // 是否显示相机. 默认为显示
+                .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
+                .multi() // 多选模式, 默认模式;
+                .origin((ArrayList<String>) originList) // 默认已选择图片. 只有在选择模式为多选时有效
+                .start(ErrorReportActivity.this, REQUEST_IMAGE);
+    }
+
+    /**
+     *预览照片
+     * 忽略最后一个
+     */
+    private void previewPictrue(int position){
+        ImgPreviewAct.startPreview(ErrorReportActivity.this,getNoAddPictureList(),position);
+    }
+
+    private List<String> getNoAddPictureList(){
+        List<String> list = new ArrayList<>();
+        list.addAll(mPhotoPath);
+        list.remove(list.size()-1);
+        return list;
+    }
+
 
     private boolean hasBasePhoneAuth() {
         PackageManager pm = getPackageManager();
@@ -222,10 +264,24 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 5:
-                    mPhotoPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                    mAdapter = new ImageRvAdapter(mPhotoPath);
-                    mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
-                    mRvPhoto.setAdapter(mAdapter);
+                    mPhotoPath.clear();
+                    mPhotoPath.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
+                    mPhotoPath.add("111");
+//                    mAdapter = new ImageRvAdapter(mPhotoPath);
+//                    mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                            if (mPhotoPath.get(position)=="111"){
+//                                choosePictrue();
+//                            }else {
+//                                ImgPreviewAct.startPreview(ErrorReportActivity.this, mPhotoPath,position);
+//                            }
+//
+//                        }
+//                    });
+//                    mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
+//                    mRvPhoto.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -294,7 +350,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void showNetDialog() {
-        if (mAdapter.getFinalPhotoList().size()!=0){
+        if (mPhotoPath.size()!=0){
             showProgessDialog("图片上传中");
         }else {
             showProgessDialog("");

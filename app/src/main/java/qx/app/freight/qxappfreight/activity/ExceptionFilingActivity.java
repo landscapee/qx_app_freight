@@ -134,7 +134,7 @@ public class ExceptionFilingActivity extends BaseActivity implements UploadsCont
             if (mAdapter == null) {
                 originList.addAll(mPhotoPath);
             } else {
-                originList.addAll(mAdapter.getFinalPhotoList());
+                originList.addAll(mPhotoPath);
             }
             MultiImageSelector.create(ExceptionFilingActivity.this)
                     .showCamera(true) // 是否显示相机. 默认为显示
@@ -144,10 +144,10 @@ public class ExceptionFilingActivity extends BaseActivity implements UploadsCont
                     .start(ExceptionFilingActivity.this, REQUEST_IMAGE);
         });
         mTvCommitErrorFiling.setOnClickListener(v -> {
-            if (mAdapter.getFinalPhotoList().size() == 0) {
+            if (mPhotoPath.size() == 0) {
                 commitErrorFiling();
             } else {
-                pressImage(mAdapter.getFinalPhotoList());
+                pressImage(mPhotoPath);
             }
         });
         mAdapter = new ImageRvAdapter(mPhotoPath);
