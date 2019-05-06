@@ -172,3 +172,57 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 }
+
+build.doLast {
+
+    println "===========================执行doLast============================="
+    if(RELEASE_PROPERTIES_EXIST) {
+        def SEPARATOR = File.separator
+        def signApk_dir = getRootProject().getProjectDir().absolutePath + SEPARATOR + "app" + SEPARATOR + "build" + SEPARATOR + "outputs" + SEPARATOR + "apk" + SEPARATOR + "release" + SEPARATOR + "app-release.apk"
+        def jar_dir = signProperties.get("jar")
+        def pem_dir = signProperties.get("pem")
+        def pk8_dir = signProperties.get("pk8")
+        def destination_dir = signProperties.get("destination") + new Date().format("yyyy-MM-dd-HH-mm-ss") + ".apk"
+
+        if (new File(signApk_dir).exists()) {
+            println "找到待签名文件 >>" + signApk_dir
+        } else {
+            println "待签名文件NOT FOUND >>" + signApk_dir
+            println "………………………………………………加密异常退出………………………………………………"
+            return
+        }
+        if (new File(jar_dir).exists()) {
+            println "找到加密jar文件 >>" + jar_dir
+        } else {
+            println "加密jar文件 NOT FOUND >>" + jar_dir
+            println "………………………………………………加密异常退出………………………………………………"
+            return
+        }
+        if (new File(pem_dir).exists()) {
+            println "找到加密pem文件 >>" + signApk_dir
+        } else {
+            println "加密pem文件NOT FOUND >>" + signApk_dir
+            println "………………………………………………加密异常退出………………………………………………"
+            return
+        }
+        if (new File(pk8_dir).exists()) {
+            println "找到加密pk8文件 >> \n" + pk8_dir
+        } else {
+            println "加密pk8文件NOT FOUND >> \n" + pk8_dir
+            println "………………………………………………加密异常退出………………………………………………"
+            return
+        }
+        def executeStr = "java -jar " + jar_dir + " -w " + pem_dir + " " + pk8_dir + " " + signApk_dir + " " + destination_dir
+        println "执行：" + executeStr
+        println executeStr.execute().text.trim()
+
+        if (new File(destination_dir).exists()) {
+            println "加密成功！"
+        } else {
+            println "加密失败！！！！"
+        }
+    }else{
+        println "没有签名文件，不进行apk加密操作！！！！"
+    }
+    println "===========================执行doLast 结束============================="
+}
