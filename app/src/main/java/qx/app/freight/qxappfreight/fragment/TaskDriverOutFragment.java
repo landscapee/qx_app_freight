@@ -175,6 +175,10 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         }
     }
 
+    /**
+     * 接收推送取消或者增加任务
+     * @param result
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
 
@@ -211,19 +215,19 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     }
 
-    //全屏dialog
+    /**
+     * 弹出领受任务dialog
+     */
     private void showTpNewTaskDialog() {
 
         if (listCache.size() > 0){
-
-
-
             TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.custom_dialog, listCache.get(0), OutFieldTaskBeans -> {
 
                 max = OutFieldTaskBeans.size();
                 for (int i = 0;i<OutFieldTaskBeans.size();i++){
                     submitStep(OutFieldTaskBeans.get(i),2);
                 }
+                //检测 listCache 是否还有任务未领受
                 showTpNewTaskDialog();
             });
             tpPushDialog.show();
@@ -231,43 +235,39 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         }
     }
 
-
+    /**
+     *  拉取运输任务返回列表
+     * @param acceptTerminalTodoBeanList
+     */
     @Override
     public void acceptTerminalTodoResult(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
         if (acceptTerminalTodoBeanList != null) {
 
            if (currentPage == 1){
-               mMfrvData.finishRefresh();
                list.clear();
            }
            else {
                currentPage++;
-               mMfrvData.finishLoadMore();
            }
+            mMfrvData.finishRefresh();
+            mMfrvData.finishLoadMore();
             //把运输的板车类型 赋值大 子任务
             for (AcceptTerminalTodoBean mAcceptTerminalTodoBean:acceptTerminalTodoBeanList){
                for (OutFieldTaskBean mOutFieldTaskBean:mAcceptTerminalTodoBean.getTasks()){
                    mOutFieldTaskBean.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
                }
             }
-
             //根据BeginAreaId分类 21 以下 用 else
             if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
-
                 acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
                     acceptTerminalTodoBean.setUseTasks(new ArrayList <List <OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
                 });
             }
             else {
-
                 for (AcceptTerminalTodoBean mAcceptTerminalTodoBean:acceptTerminalTodoBeanList){
-
                     mAcceptTerminalTodoBean.setUseTasks(getUseTasks(mAcceptTerminalTodoBean));
-
                 }
-
             }
-
             list.addAll(acceptTerminalTodoBeanList);
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
@@ -280,7 +280,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     }
 
     /**
-     * 根据 开始位置和运输类型
+     * 根据 开始位置和运输类型 组合列表
      * @param mAcceptTerminalTodoBean
      * @return
      */
@@ -339,8 +339,6 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         }
 //        StepBean stepBean = JSON.parseObject(result,StepBean.class);
 //        upDateStepStatus(stepBean);
-
-
     }
 
     /**
