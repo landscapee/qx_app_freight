@@ -57,8 +57,9 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         TextView tvEnd = helper.getView(R.id.tv_step_time_end);
 
 
-
-        //领受是否可以滑动
+        /**
+         *  领受是否可以滑动 （任务有了领受时间 就不能再次滑动领受了）
+         */
         if(item.get(0).getAcceptTime() > 0){
             rlAccept.setBackgroundResource(R.drawable.shape_rect_green_light);
             tvAccept.setText(TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
@@ -70,7 +71,9 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
             mSlideLeftExecuteViewA.setVisibility(View.VISIBLE);
             tvAccept.setVisibility(View.GONE);
         }
-        //开始是否可以滑动
+        /**
+         *  开始是否可以滑动 （任务有了领受时间 并且 没有 开始时间 才能滑动开始）
+         */
         if(item.get(0).getTaskBeginTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_green_light);
             tvStart.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
@@ -86,7 +89,9 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
             mSlideLeftExecuteViewS.setVisibility(View.GONE);
             tvStart.setVisibility(View.GONE);
         }
-        //结束是否可以滑动
+        /**
+         *  结束是否可以滑动 （任务有了开始时间 并且 没有 结束时间 才能滑动结束）
+         */
         if(item.get(0).getTaskEndTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_green_light);
             tvEnd.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));

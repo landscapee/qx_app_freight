@@ -85,6 +85,10 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             imageExpand.setImageResource(R.mipmap.down);
 
         }
+        /**
+         *   滑动监听  device 设备保障
+         *   step  0 开始（进入执行运输界面、进入宽体机卸机保障界面） 1 结束 2 领受
+         */
         mTaskStepAdapter.setOnSlideExecuteListener(new TaskStepAdapter.onSlideExecuteListener() {
             @Override
             public void onSlideExecuteListener(int step, int position) {
@@ -111,15 +115,15 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 
                 switch (step){
                     case 0:
-                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
-                        else
+                        if (!"device".equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+//                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+//                        else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
                     case 1:
-                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
-                        else
+                        if (!"device".equals(item.getUseTasks().get(position).get(0).getCargoType()))
+//                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+//                        else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
                     case 2:
