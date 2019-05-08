@@ -32,7 +32,6 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -43,7 +42,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.AddNotTransportRecordActivity"></activity>
+        <activity android:name=".activity.AddClearStorageActivity"></activity>
+        <activity android:name=".activity.AddNotTransportRecordActivity" />
         <activity android:name=".activity.NotTransportListActivity" />
         <activity
             android:name=".activity.AddCollectorDeclareActivity"
@@ -128,8 +128,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddReceiveGoodActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ShowMainListActivity"
             android:screenOrientation="portrait" />
@@ -194,12 +193,10 @@
             android:name=".activity.DeliveryVerifyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.SortingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.SortingAddActivity"
             android:screenOrientation="portrait"

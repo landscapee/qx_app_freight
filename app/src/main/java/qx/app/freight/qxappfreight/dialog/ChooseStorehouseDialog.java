@@ -24,7 +24,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 /**
  * 选择库位diolog
  */
-public class PopTestDialog extends DialogFragment {
+public class ChooseStorehouseDialog extends DialogFragment {
     private GridView mGridView;
     private TestGridAdapter adapter;
     private List<TestBean> mList;

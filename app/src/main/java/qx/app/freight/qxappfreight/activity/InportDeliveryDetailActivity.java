@@ -19,9 +19,6 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
-import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
-import qx.app.freight.qxappfreight.dialog.PopTestDialog;
-import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 

@@ -18,7 +18,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.InPortTallyListEntity;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
-import qx.app.freight.qxappfreight.dialog.PopTestDialog;
+import qx.app.freight.qxappfreight.dialog.ChooseStorehouseDialog;
 import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -152,7 +152,7 @@ public class ModifyInportInfoActivity extends BaseActivity {
                     list22.add(new TestBean(0, i));
                 }
             }
-            PopTestDialog dialog = new PopTestDialog();
+            ChooseStorehouseDialog dialog = new ChooseStorehouseDialog();
             dialog.setChooseDialogInterface(position -> mTvStoreNumber.setText(list22.get(position).getNumber() + "号库位"));
             dialog.setData(list22, ModifyInportInfoActivity.this);
             dialog.show(getSupportFragmentManager(), "123");

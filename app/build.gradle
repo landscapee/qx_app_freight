@@ -176,7 +176,7 @@ dependencies {
 build.doLast {
 
     println "===========================执行doLast============================="
-    if(RELEASE_PROPERTIES_EXIST) {
+    if (RELEASE_PROPERTIES_EXIST) {
         def SEPARATOR = File.separator
         def signApk_dir = getRootProject().getProjectDir().absolutePath + SEPARATOR + "app" + SEPARATOR + "build" + SEPARATOR + "outputs" + SEPARATOR + "apk" + SEPARATOR + "release" + SEPARATOR + "app-release.apk"
         def jar_dir = signProperties.get("jar")
@@ -221,7 +221,7 @@ build.doLast {
         } else {
             println "加密失败！！！！"
         }
-    }else{
+    } else {
         println "没有签名文件，不进行apk加密操作！！！！"
     }
     println "===========================执行doLast 结束============================="
