@@ -49,7 +49,6 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         bundle.putString("movement", movement);
         bundle.putString("day", day);
         fragment.setArguments(bundle);
-
         return fragment;
     }
 
@@ -171,19 +170,15 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         }
     }
 
-
     @Override
     public void toastView(String error) {
-
     }
 
     @Override
     public void showNetDialog() {
-
     }
 
     @Override
     public void dissMiss() {
-
     }
 }

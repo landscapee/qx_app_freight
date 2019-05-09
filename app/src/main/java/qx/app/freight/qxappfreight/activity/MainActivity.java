@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -23,6 +24,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
@@ -63,11 +65,10 @@ public class MainActivity extends BaseActivity {
 
     private TaskFragment mTaskFragment;
     private DynamicFragment mDynamicFragment;
-//    private ImLibSpecialHomeFragment mIMFragment;
+    private ClearStorageFragment mCSFragment;
     private TaskPutCargoFragment mTaskPutCargoFragment;
     private MineFragment mMineFragment;
     private Fragment nowFragment;
-
     private TestFragment testFragment;
 
     private int taskAssignType = 0;
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity {
         GPSService.gpsStart(this);
         //根据登录返回的
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
-        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size()>0){
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
             if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
                 taskAssignType = 1;
             } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
@@ -140,7 +141,7 @@ public class MainActivity extends BaseActivity {
 
         mTaskFragment = new TaskFragment();
         mDynamicFragment = new DynamicFragment();
-//        mIMFragment = new ImLibSpecialHomeFragment();
+        mCSFragment = new ClearStorageFragment();
         testFragment = new TestFragment();
         mTaskPutCargoFragment = new TaskPutCargoFragment();
         mMineFragment = new MineFragment();
@@ -149,6 +150,7 @@ public class MainActivity extends BaseActivity {
                 .beginTransaction()
                 .add(R.id.content, mTaskFragment)
                 .add(R.id.content, mDynamicFragment)
+                .add(R.id.content, mCSFragment)
                 .add(R.id.content, testFragment)
                 .add(R.id.content, mTaskPutCargoFragment)
                 .add(R.id.content, mMineFragment)
@@ -173,6 +175,7 @@ public class MainActivity extends BaseActivity {
                 .beginTransaction()
                 .hide(mTaskFragment)
                 .hide(mDynamicFragment)
+                .hide(mCSFragment)
                 .hide(testFragment)
                 .hide(mTaskPutCargoFragment)
                 .hide(mMineFragment);
@@ -225,7 +228,7 @@ public class MainActivity extends BaseActivity {
                 switchFragment(1, mDynamicFragment);
                 break;
             case R.id.ll_search:
-                switchFragment(2, mTaskPutCargoFragment);
+                switchFragment(2, mCSFragment);
                 break;
             case R.id.ll_message:
                 switchFragment(3, testFragment);
