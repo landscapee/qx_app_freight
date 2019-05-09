@@ -76,20 +76,30 @@ public class CargoHandlingAdapter extends BaseQuickAdapter <FtRuntimeFlightScoot
         helper.setText(R.id.tv_cabin,""+item.getSuggestRepository());
         helper.setTag(R.id.tv_repName, ""+item.getRepName());//库区
 
-        if (item.getInFlight() == 0){
-            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.text_color));
-        }
-        else
-        {
+        if (item.getInFlight() == 1){
             helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.red));
+            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.red));
+        }
+        else if(item.getInFlightCourse() == 0){
+            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.yellow));
+        }
+        else
+        {
+            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.text_color));
         }
     }
 

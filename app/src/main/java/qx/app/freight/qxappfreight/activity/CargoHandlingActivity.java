@@ -105,13 +105,13 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private List<FtRuntimeFlightScooter> listHandcar = new ArrayList<>();
     private List<FtRuntimeFlightScooter> listHandcar_ORIGIN = new ArrayList<>();//总数据
 
-
+    //板车适配器
     private CargoHandlingAdapter mCargoHandlingAdapter;
 
     //无板 运单收运记录列表 -- 数据源
     private List<FtGroupScooter> listWaybill = new ArrayList<>();
     private List<FtGroupScooter> listWaybill_ORIGIN = new ArrayList<>();//总数据
-    //板车信息
+    //无板运单  适配器
     private CargoHandlingWaybillAdapter mCargoHandlingWaybillAdapter;
 
     //删除不是本航班收运记录列表
