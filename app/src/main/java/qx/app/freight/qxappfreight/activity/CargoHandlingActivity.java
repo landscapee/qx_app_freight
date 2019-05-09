@@ -70,11 +70,11 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 理货页面
- * <p>
+ *
  * create by zy - unknow
- * <p>
+ *
  * & update by guohao - 2019/5/7
- * 新增航段信息，航段切换显示不同列表数据
+ *      新增航段信息，航段切换显示不同列表数据
  */
 public class CargoHandlingActivity extends BaseActivity implements GetScooterListInfoContract.getScooterListInfoView, ScooterInfoListContract.scooterInfoListView, ScooterOperateContract.scooterOperateView {
 
@@ -96,9 +96,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     TabLayout tabLayout;
 
     //可选货物舱位列表
-    private List<FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList<>();
+    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList <>();
     //显示可选货物舱位列表
-    private List<FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfoShow = new ArrayList<>();
+    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfoShow = new ArrayList <>();
     private CargoCabinAdapter mCargoCabinAdapter;
 
     //带货板车列表 -- 数据源
@@ -222,11 +222,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         });
         mCargoHandlingAdapter.setOnSpinnerClickLister((view, position) ->
-        {
-            if (!isPopWindow)
-                showPopWindowListCabin(position);
+                {
+                    if (!isPopWindow)
+                        showPopWindowListCabin(position);
 
-        });
+                });
         mCargoHandlingAdapter.setOnLockClickListener((view, position) -> {
             if (listHandcar.get(position).isLock()) {
 
@@ -472,7 +472,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 if (isOK)
                     submitData();
                 else
-                    ToastUtil.showToast("板车上还有其他航班数据，请拉下后再提交！");
+                    ToastUtil.showToast( "板车上还有其他航班数据，请拉下后再提交！");
                 break;
             case R.id.btn_sure_cargo_return:
                 //回退操作
@@ -508,7 +508,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     /**
      * 新增板车
-     *
      * @param handcarId
      */
     private void addHandcar(String handcarId) {
@@ -678,9 +677,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
      * 并且把 原有收运记录（状态为新增的除外） 放入本航班删除列表。
      * 不相同 则 作为新的收运记录 加入 无板运单收运记录 并将该收运记录的状态 改为修改（如果该状态为新建则不做修改）
      */
-    private void comparePullDownListOfWaybillList(List<FtGroupScooter> listPullDown) {
+    private void comparePullDownListOfWaybillList(List <FtGroupScooter> listPullDown) {
 
-        Map<String, FtGroupScooter> mapTemp = new HashMap<>();
+        Map <String, FtGroupScooter> mapTemp = new HashMap <>();
         //合并list 方便遍历
         listWaybill.addAll(listPullDown);
         for (FtGroupScooter info1 : listWaybill) {
@@ -707,7 +706,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             }
         }
         listWaybill.clear();
-        listWaybill.addAll(new ArrayList<FtGroupScooter>(mapTemp.values()));
+        listWaybill.addAll(new ArrayList <FtGroupScooter>(mapTemp.values()));
         mCargoHandlingWaybillAdapter.notifyDataSetChanged();
     }
 
@@ -770,7 +769,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
             //新增板车  初始化数据
             ScooterInfoListBean mScooterInfoListBean = scooterInfoListBeans.get(0);
-            if (null != mScooterInfoListBean) {
+            if (null != mScooterInfoListBean){
                 FtRuntimeFlightScooter mFtRuntimeFlightScooter = new FtRuntimeFlightScooter();
                 mFtRuntimeFlightScooter.setScooterId(mScooterInfoListBean.getId());
                 mFtRuntimeFlightScooter.setScooterCode(mScooterInfoListBean.getScooterCode());
@@ -787,11 +786,12 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 //                mFtRuntimeFlightScooter.setCreateUser(mScooterInfoListBean.getCreateUser());
 //                mFtRuntimeFlightScooter.setUpdateDate(mScooterInfoListBean.getUpdateDate());
 //                mFtRuntimeFlightScooter.setUpdateUser(mScooterInfoListBean.getUpdateUser());
-                mFtRuntimeFlightScooter.setGroupScooters(new ArrayList<FtGroupScooter>());
-                mFtRuntimeFlightScooter.setWeight((double) 0);
-                mFtRuntimeFlightScooter.setVolume((double) 0);
-                mFtRuntimeFlightScooter.setInFlight((short) 0);
-                mFtRuntimeFlightScooter.setUpdateStatus((short) 2);
+                mFtRuntimeFlightScooter.setGroupScooters(new ArrayList <FtGroupScooter>());
+                mFtRuntimeFlightScooter.setWeight((double)0);
+                mFtRuntimeFlightScooter.setVolume((double)0);
+                mFtRuntimeFlightScooter.setTotal(0);
+                mFtRuntimeFlightScooter.setInFlight((short)0);
+                mFtRuntimeFlightScooter.setUpdateStatus((short)2);
 
                 listHandcar.add(mFtRuntimeFlightScooter);
                 mCargoHandlingAdapter.notifyDataSetChanged();

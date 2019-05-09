@@ -50,6 +50,7 @@ import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
+import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
@@ -443,5 +444,10 @@ public interface HttpApi {
     @POST("app/milepost/getMilepostDataForCargo")
     Observable<BaseEntity<FlightServiceBean>> getMilepostData(@Body BaseFilterEntity model);
 
+    /*********************清库***********************************/
+
+    //清库列表
+    @GET("service-product-inwaybill/in-waybill/inventoryQuery")
+    Observable<BaseEntity<List<InventoryQueryBean>>> inventoryQuery();
 
 }

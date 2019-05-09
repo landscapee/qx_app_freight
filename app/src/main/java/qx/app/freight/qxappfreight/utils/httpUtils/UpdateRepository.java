@@ -49,6 +49,7 @@ import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
+import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
@@ -498,6 +499,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> flightDoneInstall(GetFlightCargoResBean model) {
         return nothingtransform(getService().flightDoneInstall(model));
     }
+
     /*****
      * 结束装机
      * @param model
@@ -768,37 +770,40 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * 进港分拣 - 获取分拣数据 - guohao
-     * @param entity  航班业务id(UUID超级长的, 非数字id)
+     *
+     * @param entity 航班业务id(UUID超级长的, 非数字id)
      * @return
      */
-    public Observable<InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity){
+    public Observable<InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity) {
         return transform(getService().getInWaybillRecrodList(entity));
     }
 
     /**
      * 进港分拣 - 提交/暂存
+     *
      * @param entity 所有数据
      * @return 成功/失败
      */
-    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitEntity entity){
+    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitEntity entity) {
         return nothingtransform(getService().submitWillbillRecord(entity));
     }
 
     /**
      * 进港分拣 - 根据id删除分拣信息
+     *
      * @param id 分拣子信息的id
      * @return 成功/失败
      */
-    public Observable<String> deleteInWayBillRecordById(String id){
+    public Observable<String> deleteInWayBillRecordById(String id) {
         return nothingtransform(getService().deleteInWayBillRecordById(id));
     }
 
     /**
-     * 回退到预配 -- guohao
-     * @param entity
+     * 清库列表
+     *
      * @return 成功/失败
      */
-    public Observable<String> returnPrematching(BaseFilterEntity entity){
-        return nothingtransform(getService().returnPrematching(entity));
+    public Observable<List<InventoryQueryBean>> inventoryQuery() {
+        return transform(getService().inventoryQuery());
     }
 }
