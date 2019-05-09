@@ -244,6 +244,26 @@
                             android:text="库区"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="锁定"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+                        <TextView
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="1px"
+                        android:background="@color/gray_576"
+                        android:gravity="center"
+                        android:padding="9dp"
+                        android:text="删除"
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
                     </LinearLayout>
 
                     <RelativeLayout
