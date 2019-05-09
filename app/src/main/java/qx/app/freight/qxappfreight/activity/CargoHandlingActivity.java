@@ -729,14 +729,12 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
             //初始化航段UI
             String flightPartStr = flightInfo.getFlightInfo().getFlightCourseCn().get(0);
-            for (String courseCn : scooterListInfoBean.getFlight().getFlightInfo().getFlightCourseCn()) {
 
                 for (int i = 1; i < flightInfo.getFlightInfo().getFlightCourseCn().size(); i++) {
-
+                    flightPartStr +=  "-" + flightInfo.getFlightInfo().getFlightCourseCn().get(i);
+                    TabLayout.Tab tab = tabLayout.newTab().setText(flightPartStr).setTag(flightInfo.getFlightInfo().getFlightCourseCn().get(i));
+                    tabLayout.addTab(tab);
                 }
-                TabLayout.Tab tab = tabLayout.newTab().setText(flightInfo.getFlightInfo().getFlightNo() + "-" + courseCn).setTag(courseCn);
-                tabLayout.addTab(tab);
-            }
             //根据航段信息，筛选数据，渲染两个RecyclerView（默认为第一个航段）
             screenDataByCourseCn(CURRENT_FLIGHT_COURSE_CN);
 

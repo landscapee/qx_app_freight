@@ -799,6 +799,15 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /**
+     * 回退到预配 -- guohao
+     * @param entity
+     * @return 成功/失败
+     */
+    public Observable<String> returnPrematching(BaseFilterEntity entity){
+        return nothingtransform(getService().returnPrematching(entity));
+    }
+
+    /**
      * 清库列表
      *
      * @return 成功/失败
