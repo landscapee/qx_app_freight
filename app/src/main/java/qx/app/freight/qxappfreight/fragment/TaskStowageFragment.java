@@ -156,7 +156,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
             mCacheList.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportListBean mTransportListBean : list) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId()))
                     mCacheList.remove(mTransportListBean);
             }
         }
