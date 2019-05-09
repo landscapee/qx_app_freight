@@ -736,6 +736,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 mFtRuntimeFlightScooter.setGroupScooters(new ArrayList <FtGroupScooter>());
                 mFtRuntimeFlightScooter.setWeight((double)0);
                 mFtRuntimeFlightScooter.setVolume((double)0);
+                mFtRuntimeFlightScooter.setTotal(0);
                 mFtRuntimeFlightScooter.setInFlight((short)0);
                 mFtRuntimeFlightScooter.setUpdateStatus((short)2);
 
