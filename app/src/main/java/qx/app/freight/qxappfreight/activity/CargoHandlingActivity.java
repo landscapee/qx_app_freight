@@ -66,6 +66,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -86,7 +87,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     TextView tvPlaneInfo;
 
     @BindView(R.id.srv_cargo_handling_facility)
-    SlideRecyclerView slideRecyclerView;
+    MultiFunctionRecylerView slideRecyclerView;
     @BindView(R.id.srv_cargo_handling_waybill)
     SlideRecyclerView waybillSlideRecyclerView;
     @BindView(R.id.rv_cargo_cabin)
@@ -207,7 +208,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_inset));
-        slideRecyclerView.addItemDecoration(itemDecoration);
+//        slideRecyclerView.addItemDecoration(itemDecoration);
         //理货设备
         slideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mCargoHandlingAdapter = new CargoHandlingAdapter(listHandcar);
@@ -252,7 +253,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                         else
                             listRcInfo.add(mFtGroupScooter);
                     }
-                    slideRecyclerView.closeMenu();
+//                    slideRecyclerView.closeMenu();
                     listHandcar.remove(position);
                     mCargoHandlingAdapter.notifyDataSetChanged();
                     comparePullDownListOfWaybillList(listRcInfo);
@@ -871,6 +872,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         //刷新列表
         waybillSlideRecyclerView.getAdapter().notifyDataSetChanged();
-        slideRecyclerView.getAdapter().notifyDataSetChanged();
+        mCargoHandlingAdapter.notifyDataSetChanged();
     }
 }

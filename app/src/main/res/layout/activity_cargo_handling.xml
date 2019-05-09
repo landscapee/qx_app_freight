@@ -275,10 +275,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+                            <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
                                 android:id="@+id/srv_cargo_handling_facility"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"></qx.app.freight.qxappfreight.widget.SlideRecyclerView>
+                                android:layout_height="wrap_content"></qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView>
                         </HorizontalScrollView>
                     </RelativeLayout>
                 </LinearLayout>
