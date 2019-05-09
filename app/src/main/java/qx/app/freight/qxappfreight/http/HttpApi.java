@@ -216,6 +216,10 @@ public interface HttpApi {
     @POST("service-product-cargotallying/fightScooter/submit")
     Observable<BaseEntity<Object>> fightScooterSubmit(@Body FightScooterSubmitEntity model);
 
+    //理货退回到预配 -- guohao
+    @POST("/service-product-cargotallying/fightScooter/returnPrematching")
+    Observable<BaseEntity<Object>> returnPrematching(@Body BaseFilterEntity entity);
+
     //新增板
     @GET("service-product-cargotallying/fightScooter/addScooter")
     Observable<BaseEntity<AddScooterBean>> addScooter();

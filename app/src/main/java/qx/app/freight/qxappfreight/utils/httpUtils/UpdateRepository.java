@@ -70,7 +70,6 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
-import retrofit2.http.Body;
 
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
@@ -792,5 +791,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> deleteInWayBillRecordById(String id){
         return nothingtransform(getService().deleteInWayBillRecordById(id));
+    }
+
+    /**
+     * 回退到预配 -- guohao
+     * @param entity
+     * @return 成功/失败
+     */
+    public Observable<String> returnPrematching(BaseFilterEntity entity){
+        return nothingtransform(getService().returnPrematching(entity));
     }
 }

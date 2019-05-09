@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -67,26 +68,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dp_10"
                                 android:layout_marginEnd="5dp"
-                                android:src="@mipmap/ji"
-                                />
+                                android:src="@mipmap/ji" />
 
                             <TextView
                                 android:id="@+id/tv_arrive_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
+                                android:text=""
                                 android:textColor="@color/black_3"
-                                android:textSize="16sp"
-                                android:text="" />
+                                android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="5dp"
-                        >
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_plane_info"
@@ -95,9 +94,8 @@
                             android:gravity="center_vertical"
                             android:padding="5dp"
                             android:text=""
-                            android:textSize="14sp"
                             android:textColor="#FF68789A"
-                            />
+                            android:textSize="14sp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -111,11 +109,25 @@
                         android:id="@+id/rv_cargo_cabin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_gray_gap"
-                        ></android.support.v7.widget.RecyclerView>
+                        android:background="@drawable/shape_rect_gray_gap"></android.support.v7.widget.RecyclerView>
 
                 </LinearLayout>
             </LinearLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/my_tablayout"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="#FFEFF2F3"
+                app:tabIndicatorColor="#FF2E81FD"
+                app:tabIndicatorHeight="1dp"
+                app:tabMode="scrollable"
+                app:tabPaddingBottom="-15dp"
+                app:tabSelectedTextColor="#FF2E81FD"
+                app:tabTextAppearance="@style/tablayout"
+                app:tabTextColor="#FF666666">
+
+            </android.support.design.widget.TabLayout>
 
 
             <LinearLayout
@@ -133,8 +145,7 @@
                     android:drawablePadding="7dp"
                     android:text="板车设备"
                     android:textColor="#FF7C8BA3"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_add"
@@ -148,8 +159,8 @@
                     android:paddingRight="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_2"
                     android:text="新增"
-                    android:textSize="11sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -163,11 +174,10 @@
                     android:layout_weight="2"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="板车"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"
-                    />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -176,10 +186,10 @@
                     android:layout_weight="2.5"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="ULD"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -188,11 +198,10 @@
                     android:layout_weight="1.2"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="重量(kg)"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"
-                    />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -201,10 +210,10 @@
                     android:layout_weight="1.2"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="体积(m³)"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -213,10 +222,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="舱位"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -259,11 +268,10 @@
                     android:layout_weight="2.2"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="运单号"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"
-                    />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -272,10 +280,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="件数"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -284,10 +292,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="重量"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
 
                 <TextView
@@ -297,10 +305,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="体积"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -309,10 +317,10 @@
                     android:layout_weight="1.5"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="目的站"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -321,10 +329,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="库区"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -333,10 +341,10 @@
                     android:layout_weight="1"
                     android:background="@color/gray_576"
                     android:gravity="center"
+                    android:padding="9dp"
                     android:text="类型"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:padding="9dp"/>
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -353,17 +361,34 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white"
-        android:orientation="vertical">
-    <Button
-        android:id="@+id/btn_sure_cargo_handing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="提交"
-        style="@style/btn_submit"
-        />
-    </RelativeLayout>
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4">
+
+        <Button
+            android:id="@+id/btn_sure_cargo_handing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_blue"
+            android:text="接受申请"
+            android:layout_gravity="right"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_sure_cargo_return"
+            style="@style/public_tv_18sp_2"
+            android:background="@drawable/shape_dynamic_black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="回退到预配"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

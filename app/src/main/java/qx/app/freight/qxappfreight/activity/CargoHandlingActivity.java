@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +57,10 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AddScooterContract;
 import qx.app.freight.qxappfreight.contract.GetScooterListInfoContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
+import qx.app.freight.qxappfreight.contract.ScooterOperateContract;
 import qx.app.freight.qxappfreight.presenter.GetScooterListInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
+import qx.app.freight.qxappfreight.presenter.ScooterOperatePresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -66,8 +70,13 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 理货页面
+ *
+ * create by zy - unknow
+ *
+ * & update by guohao - 2019/5/7
+ *          新增航段信息，航段切换显示不同列表数据
  */
-public class CargoHandlingActivity extends BaseActivity implements GetScooterListInfoContract.getScooterListInfoView, ScooterInfoListContract.scooterInfoListView {
+public class CargoHandlingActivity extends BaseActivity implements GetScooterListInfoContract.getScooterListInfoView, ScooterInfoListContract.scooterInfoListView, ScooterOperateContract.scooterOperateView {
 
     @BindView(R.id.tv_flight_number)
     TextView tvFlightNumber;
@@ -82,6 +91,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     SlideRecyclerView waybillSlideRecyclerView;
     @BindView(R.id.rv_cargo_cabin)
     RecyclerView recyclerView;
+
+    @BindView(R.id.my_tablayout)
+    TabLayout tabLayout;
 
     //可选货物舱位列表
     private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList <>();
@@ -159,6 +171,10 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "理货");
+
+        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2"));
+        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2-地点3"));
+        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2-地点3-地点4"));
 
         setIsBack(true, () -> showBackDialog());
 
@@ -413,7 +429,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
 
 
-    @OnClick({R.id.tv_add, R.id.btn_sure_cargo_handing})
+    @OnClick({R.id.tv_add, R.id.btn_sure_cargo_handing, R.id.btn_sure_cargo_return})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_add:
@@ -431,6 +447,15 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                     submitData();
                 else
                     ToastUtil.showToast( "板车上还有其他航班数据，请拉下后再提交！");
+                break;
+            case R.id.btn_sure_cargo_return:
+                //回退操作
+                BaseFilterEntity returnEntiry = new BaseFilterEntity();
+                returnEntiry.setFlightId(flightId);
+                returnEntiry.setTaskId(taskId);
+                returnEntiry.setUserId(UserInfoSingle.getInstance().getUserId());
+                mPresenter = new ScooterOperatePresenter(this);
+                ((ScooterOperatePresenter)mPresenter).returnToPrematching(returnEntiry);
                 break;
 
         }
@@ -469,7 +494,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         scooterInfoListBean.setScooterCode(handcarId);
         entity.setFilter(scooterInfoListBean);
         ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(entity);
-
     }
 
     @Override
@@ -756,5 +780,17 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         finish();
 
+    }
+
+    /**
+     * 回退到预配 回掉
+     * @param result
+     */
+    @Override
+    public void returnToPrematching(Object result) {
+        ToastUtil.showToast(result.toString());
+        EventBus.getDefault().post("CargoHandlingActivity_refresh");
+        Log.e("dime", "returnToPrematching:" + result);
+        finish();
     }
 }
