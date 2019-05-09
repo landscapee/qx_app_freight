@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.bean.response;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class TransportTodoListBean implements MultiItemEntity {
+public class TransportTodoListBean implements MultiItemEntity , Serializable {
     /**
      * id : aec574f5254c20c7fa9c04685293e581
      * tpScooterId : 123
@@ -33,6 +34,7 @@ public class TransportTodoListBean implements MultiItemEntity {
      * tpOperator : null
      * dtoType : 0
      * newId : null
+     * flightIndicator : 国内D 或者 国际I
      */
     private String id;
     private String tpScooterId;
@@ -54,6 +56,7 @@ public class TransportTodoListBean implements MultiItemEntity {
     private String tpOperator;
     private int dtoType;
     private Object newId;
+    private String flightIndicator;
     /**
      * 是否到机位
      */

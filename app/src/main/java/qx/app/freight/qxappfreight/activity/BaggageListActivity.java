@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
+import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.presenter.BaggageAreaSubPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -127,9 +129,19 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             bean.setTpFlightBusId(flightBean.getId());
             bean.setTpAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
-            mList.add(bean);
-            mAdapter.notifyDataSetChanged();
-            bindingUser();
+
+            BaggerInputDialog dialog = new BaggerInputDialog();
+            dialog.setData(this,bean,flightBean.getFlightIndicator());
+            dialog.setBaggerInoutListener(new BaggerInputDialog.OnBaggerInoutListener() {
+                @Override
+                public void onConfirm(TransportTodoListBean data) {
+                    mList.add(data);
+                    mAdapter.notifyDataSetChanged();
+                    bindingUser();
+                }
+            });
+            dialog.show(getSupportFragmentManager(),"321");
+
         } else {
             ToastUtil.showToast("无该板信息");
         }
@@ -240,9 +252,13 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
 //        BaseFilterEntity entity = new BaseFilterEntity();
 //        entity.setFilter(mList);
 //        List<TransportTodoListBean> mList2 = new ArrayList<>();
-        String json = JSON.toJSONString(mList);
+        Intent intent = new Intent(this, BaggageListConfirmActivity.class)
+                .putExtra("listBean", (Serializable) mList)
+                .putExtra("flightNo", flightBean.getFlightNo())
+                .putExtra("turntableId", turntableId);
+        startActivity(intent);
 
-
-        ((BaggageAreaSubPresenter)mPresenter).baggageAreaSub(json);
+//        String json = JSON.toJSONString(mList);
+//        ((BaggageAreaSubPresenter)mPresenter).baggageAreaSub(json);
     }
 }

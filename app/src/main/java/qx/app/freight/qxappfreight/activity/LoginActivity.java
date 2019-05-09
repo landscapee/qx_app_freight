@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
+import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -51,10 +52,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         toolbar.setMainTitle(Color.WHITE, "登录");
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("yupei4");
+        mEtUserName.setText("xingliyuan");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();
+//            test();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -95,6 +97,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneModel());
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
 //    }
+
+    //用于测试的方法
+    private void test(){
+//        BaggerInputDialog dialog = new BaggerInputDialog();
+//        dialog.setData(this,null);
+//        dialog.show(getSupportFragmentManager(), "123");
+    }
 
     /**
      * 登录方法

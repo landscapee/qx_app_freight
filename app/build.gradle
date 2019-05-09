@@ -166,6 +166,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:15.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.6.0'
     implementation files('libs/nineoldandroids-2.4.0.jar')
+    implementation 'com.github.donkingliang:LabelsView:1.4.1'
 
     implementation 'com.tencent.bugly:crashreport:latest.release'
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9

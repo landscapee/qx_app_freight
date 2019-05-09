@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_turntable_num"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+
+            android:textColor="@color/black_3"
+            android:textStyle="bold"
+            android:textSize="@dimen/dp_18"
+            android:text="行李转盘01"
+            android:gravity="center"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/shape_gray_gap_line"
+            android:layerType="software"/>
+
+        <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+            android:id="@+id/mfrv_receive_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

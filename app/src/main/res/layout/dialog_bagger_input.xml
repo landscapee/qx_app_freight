@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/dp_10"
+    android:layout_marginEnd="@dimen/dp_10"
+    android:background="@drawable/shape_rectangle_menu_gray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_47"
+        android:background="#2e81fd"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp_10"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="运单下拉"
+            android:textColor="@color/color_fff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="33dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_board_number"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:text="板车：大滚筒1234"
+            android:textColor="@color/color_000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="行李件数：" />
+
+            <EditText
+                android:id="@+id/et_number"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="number"
+                android:gravity="center_vertical|end"
+                android:hint="请输入行李件数" />
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:text="件" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider_line_grey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="行李重量：" />
+
+            <EditText
+                android:id="@+id/et_weight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:inputType="numberDecimal"
+                android:gravity="center_vertical|end"
+                android:hint="请输入行李重量"
+                android:singleLine="true"
+                android:spinnerMode="dropdown" />
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:text="kg" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider_line_grey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="行李体积：" />
+
+            <EditText
+                android:id="@+id/et_volume"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:inputType="numberDecimal"
+                android:gravity="center_vertical|end"
+                android:hint="请输入行李体积"
+                android:singleLine="true"
+                android:spinnerMode="dropdown" />
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:text="m³" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider_line_grey" />
+
+        <com.donkingliang.labels.LabelsView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@drawable/label_text_color"
+            app:labelTextSize="15sp"
+            app:labelTextPaddingBottom="5dp"
+            app:labelTextPaddingLeft="20dp"
+            app:labelTextPaddingRight="20dp"
+            app:labelTextPaddingTop="5dp"
+            app:lineMargin="10dp"
+            app:wordMargin="10dp"
+            android:id="@+id/labels_flight"
+            app:selectType="SINGLE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shape_rect_gray_888"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/gray_888"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_1"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shape_rect_blue"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/color_fff" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -34,6 +34,16 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         //板车类型~板车号
         helper.setText(R.id.allocate_address, String.format(mContext.getString(R.string.format_allocate_ddress_info), scooterName, item.getTpScooterCode()));
 
+        //件数~重量~体积
+        helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTpCargoNumber()+"", item.getTpCargoWeight()+"", item.getTpCargoVolume()+""));
+
+        //是否隐藏国际图标
+        if (item.getFlightIndicator().equals("I")){
+            helper.setVisible(R.id.iv_international,true);
+        }else {
+            helper.setVisible(R.id.iv_international,false);
+        }
+
         helper.setText(R.id.allocate_flightnumber,item.getTpFlightNumber())
                 .setText(R.id.allocate_machinenumber,item.getTpFlightLocate())
                 .setText(R.id.tv_plan_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getTpFlightTime()) , TimeUtils.getDay((item.getTpFlightTime()))));
