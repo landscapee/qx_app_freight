@@ -255,6 +255,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                     }
 //                    slideRecyclerView.closeMenu();
                     listHandcar.remove(position);
+                    listHandcar_ORIGIN.remove(position);
                     mCargoHandlingAdapter.notifyDataSetChanged();
                     comparePullDownListOfWaybillList(listRcInfo);
 
@@ -501,8 +502,8 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mFightScooterSubmitEntity.setTaskId(taskId);//外层待办传入
         mFightScooterSubmitEntity.setDeleteRedRcInfos(listDeleteNo);
         mFightScooterSubmitEntity.setDeleteRcInfos(listDeleteYes);
-        mFightScooterSubmitEntity.setScooters(listHandcar);
-        mFightScooterSubmitEntity.setWithoutScootereRcInfos(listWaybill);
+        mFightScooterSubmitEntity.setScooters(listHandcar_ORIGIN);
+        mFightScooterSubmitEntity.setWithoutScootereRcInfos(listWaybill_ORIGIN);
         ((GetScooterListInfoPresenter) mPresenter).freightInfo(mFightScooterSubmitEntity);
 
     }
@@ -639,6 +640,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                         listDeleteYes.add(mRcInfo);
                     }
                     listWaybill.remove(mRcInfo);
+                    listWaybill_ORIGIN.remove(mRcInfo);
                     mCargoHandlingWaybillAdapter.notifyDataSetChanged();
                 }
                 // 如果合并的原有列表 不是新增状态 则改为 修改状态
@@ -791,8 +793,10 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 mFtRuntimeFlightScooter.setTotal(0);
                 mFtRuntimeFlightScooter.setInFlight((short)0);
                 mFtRuntimeFlightScooter.setUpdateStatus((short)2);
+                mFtRuntimeFlightScooter.setToCityEn(CURRENT_FLIGHT_COURSE_EN);//新增的板车设置航段三字码
 
                 listHandcar.add(mFtRuntimeFlightScooter);
+                listHandcar_ORIGIN.add(mFtRuntimeFlightScooter);
                 mCargoHandlingAdapter.notifyDataSetChanged();
             }
         }
