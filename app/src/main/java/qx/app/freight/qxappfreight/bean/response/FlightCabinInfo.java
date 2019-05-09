@@ -4,6 +4,15 @@ import java.util.List;
 
 import lombok.Data;
 
+
+/**
+ * create by unknow on unknow
+ * @tital: 出港预配 理货->航班信息 航段
+ *
+ * &update by guohao on 2019/5/9 11:54
+ * @description:  新增字段
+ */
+
 @Data
 public class FlightCabinInfo {
     /**
@@ -155,6 +164,10 @@ public class FlightCabinInfo {
         private Object scooters;
         private Object luggageScanningUser;
         private List <String> flightCourseByAndroid;
+        private List<String> flightCourseCn;//所有的航段信息， 新增字段 by guohao
+        private String associateAirportCn;
+        private String flightBody;
+        private String inWaybillRecords;
 
     }
     @Data

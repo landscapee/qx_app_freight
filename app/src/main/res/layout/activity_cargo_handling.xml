@@ -163,81 +163,109 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="@color/gray_576"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="板车"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1px"
-                    android:layout_weight="2.5"
-                    android:background="@color/gray_576"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="ULD"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1px"
-                    android:layout_weight="1.2"
-                    android:background="@color/gray_576"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="重量(kg)"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1px"
-                    android:layout_weight="1.2"
-                    android:background="@color/gray_576"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="体积(m³)"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1px"
-                    android:layout_weight="1"
-                    android:background="@color/gray_576"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="舱位"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <RelativeLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants">
+                android:fillViewport="true"
+                android:scrollbars="none">
 
-                <qx.app.freight.qxappfreight.widget.SlideRecyclerView
-                    android:id="@+id/srv_cargo_handling_facility"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></qx.app.freight.qxappfreight.widget.SlideRecyclerView>
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="板车"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="103dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="ULD"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="58dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="重量"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="58dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:layout_weight="1.2"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="体积"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="仓位"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="库区"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+                                android:id="@+id/srv_cargo_handling_facility"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"></qx.app.freight.qxappfreight.widget.SlideRecyclerView>
+                        </HorizontalScrollView>
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+            </HorizontalScrollView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -376,19 +404,19 @@
             android:id="@+id/btn_sure_cargo_handing"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="right"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_blue"
             android:text="接受申请"
-            android:layout_gravity="right"
             android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_sure_cargo_return"
             style="@style/public_tv_18sp_2"
-            android:background="@drawable/shape_dynamic_black"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="回退到预配"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="回退到预配" />
     </LinearLayout>
 </LinearLayout>

@@ -70,11 +70,11 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 理货页面
- *
+ * <p>
  * create by zy - unknow
- *
+ * <p>
  * & update by guohao - 2019/5/7
- *          新增航段信息，航段切换显示不同列表数据
+ * 新增航段信息，航段切换显示不同列表数据
  */
 public class CargoHandlingActivity extends BaseActivity implements GetScooterListInfoContract.getScooterListInfoView, ScooterInfoListContract.scooterInfoListView, ScooterOperateContract.scooterOperateView {
 
@@ -96,21 +96,28 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     TabLayout tabLayout;
 
     //可选货物舱位列表
-    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList <>();
+    private List<FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfo = new ArrayList<>();
     //显示可选货物舱位列表
-    private List <FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfoShow = new ArrayList <>();
+    private List<FlightCabinInfo.AircraftNoRSBean.CargosBean> listCargoCabinInfoShow = new ArrayList<>();
     private CargoCabinAdapter mCargoCabinAdapter;
-    //带货板车列表
-    private List <FtRuntimeFlightScooter> listHandcar = new ArrayList <>();
+
+    //带货板车列表 -- 数据源
+    private List<FtRuntimeFlightScooter> listHandcar = new ArrayList<>();
+    private List<FtRuntimeFlightScooter> listHandcar_ORIGIN = new ArrayList<>();//总数据
+
+
     private CargoHandlingAdapter mCargoHandlingAdapter;
-    //无板运单收运记录列表
-    private List <FtGroupScooter> listWaybill = new ArrayList <>();
+
+    //无板 运单收运记录列表 -- 数据源
+    private List<FtGroupScooter> listWaybill = new ArrayList<>();
+    private List<FtGroupScooter> listWaybill_ORIGIN = new ArrayList<>();//总数据
+    //板车信息
     private CargoHandlingWaybillAdapter mCargoHandlingWaybillAdapter;
 
     //删除不是本航班收运记录列表
-    private List <FtGroupScooter> listDeleteNo = new ArrayList <>();
+    private List<FtGroupScooter> listDeleteNo = new ArrayList<>();
     //删除是本航班收运记录列表
-    private List <FtGroupScooter> listDeleteYes = new ArrayList <>();
+    private List<FtGroupScooter> listDeleteYes = new ArrayList<>();
 
     private int nowHandcarPosition;//当前点击进入的 板车
 
@@ -118,7 +125,10 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private int nowWaybillPosition;//当前点击进入的 无板收运记录
 
+    //数据源
     private FlightCabinInfo flightInfo;//航班信息
+
+    private String CURRENT_FLIGHT_COURSE_CN = "";//当前航段信息
 
     private String taskId = null;//待办任务ID
     private String flightId = null;//待办航班id
@@ -172,9 +182,26 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "理货");
 
-        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2"));
-        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2-地点3"));
-        tabLayout.addTab(tabLayout.newTab().setText("地点1-地点2-地点3-地点4"));
+        //航段切换事件
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                //筛选数据
+                screenDataByCourseCn(tab.getTag().toString());
+                //更新当前选中的航段信息
+                CURRENT_FLIGHT_COURSE_CN = tab.getTag().toString();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         setIsBack(true, () -> showBackDialog());
 
@@ -195,11 +222,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         });
         mCargoHandlingAdapter.setOnSpinnerClickLister((view, position) ->
-                {
-                    if (!isPopWindow)
-                        showPopWindowListCabin(position);
+        {
+            if (!isPopWindow)
+                showPopWindowListCabin(position);
 
-                });
+        });
         mCargoHandlingAdapter.setOnLockClickListener((view, position) -> {
             if (listHandcar.get(position).isLock()) {
 
@@ -218,7 +245,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                         ToastUtil.showToast("被锁住的板车不能删除");
                         return;
                     }
-                    List <FtGroupScooter> listRcInfo = new ArrayList <>();
+                    List<FtGroupScooter> listRcInfo = new ArrayList<>();
                     for (FtGroupScooter mFtGroupScooter : listHandcar.get(position).getGroupScooters()) {
                         if (mFtGroupScooter.getInFlight() == 1)
                             listDeleteNo.add(mFtGroupScooter);
@@ -428,7 +455,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     }
 
 
-
     @OnClick({R.id.tv_add, R.id.btn_sure_cargo_handing, R.id.btn_sure_cargo_return})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -446,7 +472,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 if (isOK)
                     submitData();
                 else
-                    ToastUtil.showToast( "板车上还有其他航班数据，请拉下后再提交！");
+                    ToastUtil.showToast("板车上还有其他航班数据，请拉下后再提交！");
                 break;
             case R.id.btn_sure_cargo_return:
                 //回退操作
@@ -455,7 +481,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 returnEntiry.setTaskId(taskId);
                 returnEntiry.setUserId(UserInfoSingle.getInstance().getUserId());
                 mPresenter = new ScooterOperatePresenter(this);
-                ((ScooterOperatePresenter)mPresenter).returnToPrematching(returnEntiry);
+                ((ScooterOperatePresenter) mPresenter).returnToPrematching(returnEntiry);
                 break;
 
         }
@@ -482,6 +508,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     /**
      * 新增板车
+     *
      * @param handcarId
      */
     private void addHandcar(String handcarId) {
@@ -501,12 +528,12 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         if (Constants.FINISH_HANDCAR_DETAILS == resultCode) {//板车详情界面
             //删除非本航班的收运记录
-            List <FtGroupScooter> listDeleteNoTemp = (List <FtGroupScooter>) data.getSerializableExtra("listDelete");
+            List<FtGroupScooter> listDeleteNoTemp = (List<FtGroupScooter>) data.getSerializableExtra("listDelete");
             if (listDeleteNoTemp != null) {
                 listDeleteNo.addAll(listDeleteNoTemp);
             }
             //合并/处理 拉下的收运记录
-            List <FtGroupScooter> listPullDown = (List <FtGroupScooter>) data.getSerializableExtra("listPullDown");
+            List<FtGroupScooter> listPullDown = (List<FtGroupScooter>) data.getSerializableExtra("listPullDown");
             if (listPullDown != null) {
                 comparePullDownListOfWaybillList(listPullDown);
             }
@@ -538,18 +565,18 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
      */
     private void setFlightInfo(FlightCabinInfo flightInfo) {
         tvFlightNumber.setText(flightInfo.getFlightInfo().getFlightNo());
-        tvArriveTime.setText(TimeUtils.date2Tasktime3(flightInfo.getFlightInfo().getEtd())+"("+TimeUtils.getDay(flightInfo.getFlightInfo().getEtd())+")");
+        tvArriveTime.setText(TimeUtils.date2Tasktime3(flightInfo.getFlightInfo().getEtd()) + "(" + TimeUtils.getDay(flightInfo.getFlightInfo().getEtd()) + ")");
 
-       //组装飞机货仓基本信息
+        //组装飞机货仓基本信息
         String flightCabinInfo = flightInfo.getAircraftTypes().get(0).getTypeName()
-                +" | "+flightInfo.getFlightInfo().getAircraftNo()+" | 0-"+flightInfo.getAircraftNoRS().getFlightMaxWgt()+"KG";
+                + " | " + flightInfo.getFlightInfo().getAircraftNo() + " | 0-" + flightInfo.getAircraftNoRS().getFlightMaxWgt() + "KG";
         tvPlaneInfo.setText(flightCabinInfo);
         listCargoCabinInfo.clear();
         listCargoCabinInfo.addAll(flightInfo.getAircraftNoRS().getCargos());
         listCargoCabinInfoShow.clear();
-        for (int i = 0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             FlightCabinInfo.AircraftNoRSBean.CargosBean mCargosBean = new FlightCabinInfo.AircraftNoRSBean.CargosBean();
-            switch (i){
+            switch (i) {
                 case 0:
                     mCargosBean.setPos("1H");
                     mCargosBean.setHldVol(flightInfo.getAircraftNoRS().getHld1vol());
@@ -651,9 +678,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
      * 并且把 原有收运记录（状态为新增的除外） 放入本航班删除列表。
      * 不相同 则 作为新的收运记录 加入 无板运单收运记录 并将该收运记录的状态 改为修改（如果该状态为新建则不做修改）
      */
-    private void comparePullDownListOfWaybillList(List <FtGroupScooter> listPullDown) {
+    private void comparePullDownListOfWaybillList(List<FtGroupScooter> listPullDown) {
 
-        Map <String, FtGroupScooter> mapTemp = new HashMap <>();
+        Map<String, FtGroupScooter> mapTemp = new HashMap<>();
         //合并list 方便遍历
         listWaybill.addAll(listPullDown);
         for (FtGroupScooter info1 : listWaybill) {
@@ -680,18 +707,45 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             }
         }
         listWaybill.clear();
-        listWaybill.addAll(new ArrayList <FtGroupScooter>(mapTemp.values()));
+        listWaybill.addAll(new ArrayList<FtGroupScooter>(mapTemp.values()));
         mCargoHandlingWaybillAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 页面数据请求的返回值，很关键
+     *
+     * @param scooterListInfoBean
+     */
     @Override
     public void getScooterListInfoResult(GetScooterListInfoBean scooterListInfoBean) {
         if (scooterListInfoBean != null) {
+            //总数据源 赋值
+            listHandcar_ORIGIN = scooterListInfoBean.getScooters();
+            listWaybill_ORIGIN = scooterListInfoBean.getWithoutScootereRcInfos();
+            //航班信息 赋值
             flightInfo = scooterListInfoBean.getFlight();
-            listHandcar.addAll(scooterListInfoBean.getScooters());
-            listWaybill.addAll(scooterListInfoBean.getWithoutScootereRcInfos());
-            mCargoHandlingWaybillAdapter.notifyDataSetChanged();
-            mCargoHandlingAdapter.notifyDataSetChanged();
+
+            //当前航段 赋值
+            CURRENT_FLIGHT_COURSE_CN = flightInfo.getFlightInfo().getFlightCourseCn().get(0);
+
+            //初始化航段UI
+            String flightPartStr = flightInfo.getFlightInfo().getFlightCourseCn().get(0);
+            for (String courseCn : scooterListInfoBean.getFlight().getFlightInfo().getFlightCourseCn()) {
+
+                for (int i = 1; i < flightInfo.getFlightInfo().getFlightCourseCn().size(); i++) {
+
+                }
+                TabLayout.Tab tab = tabLayout.newTab().setText(flightInfo.getFlightInfo().getFlightNo() + "-" + courseCn).setTag(courseCn);
+                tabLayout.addTab(tab);
+            }
+            //根据航段信息，筛选数据，渲染两个RecyclerView（默认为第一个航段）
+            screenDataByCourseCn(CURRENT_FLIGHT_COURSE_CN);
+
+//            listHandcar.addAll(scooterListInfoBean.getScooters());//板车信息
+//            listWaybill.addAll(scooterListInfoBean.getWithoutScootereRcInfos());//无板信息
+//            mCargoHandlingWaybillAdapter.notifyDataSetChanged();
+//            mCargoHandlingAdapter.notifyDataSetChanged();
+            //仓位信息
             mCargoCabinAdapter.notifyDataSetChanged();
             if (flightInfo != null)
                 setFlightInfo(flightInfo);
@@ -716,7 +770,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
             //新增板车  初始化数据
             ScooterInfoListBean mScooterInfoListBean = scooterInfoListBeans.get(0);
-            if (null != mScooterInfoListBean){
+            if (null != mScooterInfoListBean) {
                 FtRuntimeFlightScooter mFtRuntimeFlightScooter = new FtRuntimeFlightScooter();
                 mFtRuntimeFlightScooter.setScooterId(mScooterInfoListBean.getId());
                 mFtRuntimeFlightScooter.setScooterCode(mScooterInfoListBean.getScooterCode());
@@ -733,11 +787,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 //                mFtRuntimeFlightScooter.setCreateUser(mScooterInfoListBean.getCreateUser());
 //                mFtRuntimeFlightScooter.setUpdateDate(mScooterInfoListBean.getUpdateDate());
 //                mFtRuntimeFlightScooter.setUpdateUser(mScooterInfoListBean.getUpdateUser());
-                mFtRuntimeFlightScooter.setGroupScooters(new ArrayList <FtGroupScooter>());
-                mFtRuntimeFlightScooter.setWeight((double)0);
-                mFtRuntimeFlightScooter.setVolume((double)0);
-                mFtRuntimeFlightScooter.setInFlight((short)0);
-                mFtRuntimeFlightScooter.setUpdateStatus((short)2);
+                mFtRuntimeFlightScooter.setGroupScooters(new ArrayList<FtGroupScooter>());
+                mFtRuntimeFlightScooter.setWeight((double) 0);
+                mFtRuntimeFlightScooter.setVolume((double) 0);
+                mFtRuntimeFlightScooter.setInFlight((short) 0);
+                mFtRuntimeFlightScooter.setUpdateStatus((short) 2);
 
                 listHandcar.add(mFtRuntimeFlightScooter);
                 mCargoHandlingAdapter.notifyDataSetChanged();
@@ -784,6 +838,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     /**
      * 回退到预配 回掉
+     *
      * @param result
      */
     @Override
@@ -792,5 +847,32 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         EventBus.getDefault().post("CargoHandlingActivity_refresh");
         Log.e("dime", "returnToPrematching:" + result);
         finish();
+    }
+
+    /**
+     * 根据航段信息筛选数据
+     *
+     * @param courseCn 航段
+     */
+    private void screenDataByCourseCn(String courseCn) {
+        //筛选：无板运单 listWaybill
+        listWaybill.clear();
+        for (FtGroupScooter data : listWaybill_ORIGIN) {
+            if (data.getToCityCn() == courseCn) {
+                listWaybill.add(data);
+            }
+        }
+
+        //筛选： 板车信息 listHandcar
+        listHandcar.clear();
+        for (FtRuntimeFlightScooter data : listHandcar_ORIGIN) {
+            if (data.getToCityCn() == courseCn) {
+                listHandcar.add(data);
+            }
+        }
+
+        //刷新列表
+        waybillSlideRecyclerView.getAdapter().notifyDataSetChanged();
+        slideRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }

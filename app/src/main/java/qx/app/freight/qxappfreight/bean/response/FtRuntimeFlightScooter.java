@@ -14,6 +14,9 @@ import lombok.Data;
  *
  * @author nacol
  * @since 2019-01-22
+ *
+ * &update by guohao on 2019/5/9 11:52
+ * @description: 新增字段，航段相关功能
  */
 @Data
 public class FtRuntimeFlightScooter implements Serializable {
@@ -177,4 +180,19 @@ public class FtRuntimeFlightScooter implements Serializable {
      * 是否被锁定
      */
     private boolean isLock;
+
+    /**
+     * 目的站 add by guohao
+     */
+    private String toCityCn;
+
+    /**
+     * 0: 不属于该航段 1：属于该航段
+     */
+    private Integer inFlightCourse;
+
+    /**
+     * 库区
+     */
+    private String repName;
 }

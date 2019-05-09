@@ -111,5 +111,16 @@ public class FtGroupScooter implements Serializable {
      */
     private Integer groupScooterStatus;
 
+    /**
+     * 目的站 新增字段 -- guohao
+     */
+    private String toCityCn;
+
+    /**
+     * 0:不属于该航段 1：属于该航段
+     * 新增字段 -- guohao
+     */
+    private Integer inFlightCourse;
+
 
 }
