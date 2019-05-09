@@ -195,4 +195,9 @@ public class FtRuntimeFlightScooter implements Serializable {
      * 库区
      */
     private String repName;
+
+    /**
+     * 航段 三字码
+     */
+    private String toCityEn;
 }

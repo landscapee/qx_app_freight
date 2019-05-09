@@ -122,5 +122,8 @@ public class FtGroupScooter implements Serializable {
      */
     private Integer inFlightCourse;
 
-
+    /**
+     * 航段 三字码
+     */
+    private String toCityEn;
 }

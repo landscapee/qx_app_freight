@@ -129,7 +129,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     //数据源
     private FlightCabinInfo flightInfo;//航班信息
 
-    private String CURRENT_FLIGHT_COURSE_CN = "";//当前航段信息
+    private String CURRENT_FLIGHT_COURSE_EN = "";//当前航段信息三字码
 
     private String taskId = null;//待办任务ID
     private String flightId = null;//待办航班id
@@ -190,7 +190,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 //筛选数据
                 screenDataByCourseCn(tab.getTag().toString());
                 //更新当前选中的航段信息
-                CURRENT_FLIGHT_COURSE_CN = tab.getTag().toString();
+                CURRENT_FLIGHT_COURSE_EN = tab.getTag().toString();
             }
 
             @Override
@@ -726,18 +726,18 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             flightInfo = scooterListInfoBean.getFlight();
 
             //当前航段 赋值
-            CURRENT_FLIGHT_COURSE_CN = flightInfo.getFlightInfo().getFlightCourseCn().get(0);
+            CURRENT_FLIGHT_COURSE_EN = flightInfo.getFlightInfo().getFlightCourseByAndroid().get(0);
 
             //初始化航段UI
             String flightPartStr = flightInfo.getFlightInfo().getFlightCourseCn().get(0);
 
                 for (int i = 1; i < flightInfo.getFlightInfo().getFlightCourseCn().size(); i++) {
                     flightPartStr +=  "-" + flightInfo.getFlightInfo().getFlightCourseCn().get(i);
-                    TabLayout.Tab tab = tabLayout.newTab().setText(flightPartStr).setTag(flightInfo.getFlightInfo().getFlightCourseCn().get(i));
+                    TabLayout.Tab tab = tabLayout.newTab().setText(flightPartStr).setTag(flightInfo.getFlightInfo().getFlightCourseByAndroid().get(i));
                     tabLayout.addTab(tab);
                 }
             //根据航段信息，筛选数据，渲染两个RecyclerView（默认为第一个航段）
-            screenDataByCourseCn(CURRENT_FLIGHT_COURSE_CN);
+            screenDataByCourseCn(CURRENT_FLIGHT_COURSE_EN);
 
 //            listHandcar.addAll(scooterListInfoBean.getScooters());//板车信息
 //            listWaybill.addAll(scooterListInfoBean.getWithoutScootereRcInfos());//无板信息
@@ -851,13 +851,14 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     /**
      * 根据航段信息筛选数据
      *
-     * @param courseCn 航段
+     * @param courseEn 航段三字码 toCityEn
      */
-    private void screenDataByCourseCn(String courseCn) {
+    private void screenDataByCourseCn(String courseEn) {
         //筛选：无板运单 listWaybill
         listWaybill.clear();
         for (FtGroupScooter data : listWaybill_ORIGIN) {
-            if (data.getToCityCn() == courseCn) {
+
+            if (data.getToCityEn() == null || data.getToCityEn().equals(courseEn)) {
                 listWaybill.add(data);
             }
         }
@@ -865,7 +866,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         //筛选： 板车信息 listHandcar
         listHandcar.clear();
         for (FtRuntimeFlightScooter data : listHandcar_ORIGIN) {
-            if (data.getToCityCn() == courseCn) {
+            if (data.getToCityEn() == null || data.getToCityEn().equals(courseEn)) {
                 listHandcar.add(data);
             }
         }
