@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.LaserAndZxingBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.ScanLaserData;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -137,16 +138,21 @@ public class LaserScanActivity extends BaseActivity {
      * @param result
      */
     private void getBackMessage(String result){
-        if (flag == null) {
-            Intent intent = new Intent();
-            intent.putExtra(Constants.SACN_DATA, result);
-            setResult(Constants.SCAN_RESULT, intent);
-        } else {
-            ScanDataBean dataBean = new ScanDataBean();
-            dataBean.setFunctionFlag(flag);
-            dataBean.setData(result);
-            EventBus.getDefault().post(dataBean);
+        if (laserAndZxing){
+            EventBus.getDefault().post(new LaserAndZxingBean(result,"scan"));
+        }else {
+            if (flag == null) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.SACN_DATA, result);
+                setResult(Constants.SCAN_RESULT, intent);
+            } else {
+                ScanDataBean dataBean = new ScanDataBean();
+                dataBean.setFunctionFlag(flag);
+                dataBean.setData(result);
+                EventBus.getDefault().post(dataBean);
+            }
         }
+
         finish();
     }
 
@@ -163,11 +169,11 @@ public class LaserScanActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData())) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getTypeName().equals("laser")) {
             //板车号
             mScooterCode = result.getData();
             getBackMessage(mScooterCode);
         }
-        ToastUtil.showToast("扫码数据为空请重新扫码");
+//        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
 }

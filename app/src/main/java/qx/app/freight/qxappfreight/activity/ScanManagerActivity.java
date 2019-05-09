@@ -216,16 +216,22 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
      * @param result
      */
     private void getBackMessage(String result){
-        if (flag == null) {
-            Intent intent = new Intent();
-            intent.putExtra(Constants.SACN_DATA, result);
-            setResult(Constants.SCAN_RESULT, intent);
-        } else {
-            ScanDataBean dataBean = new ScanDataBean();
-            dataBean.setFunctionFlag(flag);
-            dataBean.setData(result);
-            EventBus.getDefault().post(dataBean);
+        if (laserAndZxing){
+            EventBus.getDefault().post(new LaserAndZxingBean(result,"laser"));
+
+        }else {
+            if (flag == null) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.SACN_DATA, result);
+                setResult(Constants.SCAN_RESULT, intent);
+            } else {
+                ScanDataBean dataBean = new ScanDataBean();
+                dataBean.setFunctionFlag(flag);
+                dataBean.setData(result);
+                EventBus.getDefault().post(dataBean);
+            }
         }
+
         finish();
     }
 
@@ -237,10 +243,10 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData())) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getTypeName().equals("scan")) {
             getBackMessage(result.getData());
         }
-        ToastUtil.showToast("扫码数据为空请重新扫码");
+//        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
 
 }
