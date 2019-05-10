@@ -43,6 +43,9 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
+/**
+ * 国际货物提交界面
+ */
 public class InternationalCargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView {
 
     @BindView(R.id.flight_id)

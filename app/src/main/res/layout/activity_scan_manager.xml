@@ -37,6 +37,15 @@
         app:qrcv_toolbarHeight="40dp"
         app:qrcv_topOffset="80dp">
 
+        <TextView
+            android:id="@+id/tv_special"
+            android:layout_marginTop="@dimen/dp_50"
+            android:gravity="center"
+            android:textSize="@dimen/sp_16"
+            android:textColor="#80ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
         <LinearLayout
             android:visibility="gone"
             android:layout_width="match_parent"

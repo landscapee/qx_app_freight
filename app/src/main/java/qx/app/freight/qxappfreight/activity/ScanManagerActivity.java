@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,10 +53,14 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     LinearLayout llInput;
     @BindView(R.id.flashlight_close)
     ImageView flashlightClose;
+    @BindView(R.id.tv_special)
+    TextView tvSpecial;
 
     private Boolean isOpen = false;
 
     private String flag = null;
+    //特殊字符，显示在上面
+    private String special = null;
 
     private boolean laserAndZxing;//是否是从激光扫描界面过来的
 
@@ -64,6 +69,15 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
      */
     public static void startActivity(Context mContext) {
         Intent starter = new Intent(mContext, ScanManagerActivity.class);
+        ((Activity) mContext).startActivityForResult(starter, 0);
+    }
+
+    /**
+     * 带特殊字符启动
+     */
+    public static void startActivity(Context mContext,boolean special1,String special) {
+        Intent starter = new Intent(mContext, ScanManagerActivity.class);
+        starter.putExtra("special",special);
         ((Activity) mContext).startActivityForResult(starter, 0);
     }
 
@@ -104,7 +118,12 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         toolbar.setMainTitle(Color.WHITE, "普通扫码");
 
         flag = getIntent().getStringExtra("flag");
+        special = getIntent().getStringExtra("special");
         laserAndZxing = getIntent().getBooleanExtra("laserAndZxing",false);
+
+        if (!TextUtils.isEmpty(special)){
+            tvSpecial.setText(special);
+        }
 
         mZXingView.setDelegate(this);
         btnAgain.setOnClickListener(v -> {

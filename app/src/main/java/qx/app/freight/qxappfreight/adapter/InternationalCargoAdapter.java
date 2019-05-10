@@ -12,6 +12,9 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
+/**
+ * 国际货物adapter
+ */
 public class InternationalCargoAdapter extends BaseQuickAdapter<TransportTodoListBean, BaseViewHolder> {
 
     private OnDeleteClickLister mDeleteClickListener;
