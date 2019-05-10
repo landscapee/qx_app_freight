@@ -12,16 +12,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdDataContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdDataPresenter;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -32,7 +38,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetWayBillInfoByIdDataContract.getWayBillInfoByIdDataView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -70,6 +76,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
+        mPresenter = new GetWayBillInfoByIdDataPresenter(this);
+        ((GetWayBillInfoByIdDataPresenter) mPresenter).getWayBillInfoByIdData("02804101436");
 //        int a = 3;
 //        ToastUtil.showToast(testSwitch(a)+"=====ssssss");
 //        getDeviceInfo();
@@ -229,5 +237,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void onBackPressed() {
         quitApp();
+    }
+
+    @Override
+    public void getWayBillInfoByIdDataResult(List<GetWaybillInfoByIdDataBean> addScooterBean) {
+
     }
 }

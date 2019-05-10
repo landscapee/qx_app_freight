@@ -6,6 +6,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -300,6 +301,14 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/saveLoadPullIn")
     Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
 
+    //获取运单信息
+    @GET("service-product-waybill/declare-waybill/getWayBillInfoByCode/{waybillCode}")
+
+    Observable<BaseEntity<List<GetWaybillInfoByIdDataBean>>> getWayBillInfoByIdData(@Path("waybillCode") String waybillCode);
+    //获取运单信息
+    @GET("service-product-waybill/declare-waybill/getWaybillInfo/{id}")
+    Observable<BaseEntity<List<GetWaybillInfoByIdDataBean>>> getWaybillInfo(@Path("id") String id);
+
     //装卸机 货物扫描
     @POST("service-product-transport/tp-main-info/loadAndUnloadCarSubmit")
     Observable<BaseEntity<List<TransportTodoListBean>>> loadAndUnloadCarSubmit();
@@ -456,5 +465,11 @@ public interface HttpApi {
     //清库列表
     @GET("service-product-inwaybill/in-waybill/inventoryQuery")
     Observable<BaseEntity<List<InventoryQueryBean>>> inventoryQuery();
+
+
+    /*********************国际货物***************************/
+
+    @POST(" service-product-transport/tp-main-info/internationalCargoReport")
+    Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
 
 }

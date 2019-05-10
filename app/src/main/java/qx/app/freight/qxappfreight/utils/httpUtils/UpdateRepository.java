@@ -7,6 +7,7 @@ import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -483,6 +484,22 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().pullGoodsReport(transportEndEntity));
     }
 
+    /****
+     * 拉货上报
+     * @return
+     */
+    public Observable<List<GetWaybillInfoByIdDataBean>> getWayBillInfoByIdData(String waybillCode) {
+        return transform(getService().getWayBillInfoByIdData(waybillCode));
+    }
+
+    /****
+     * 拉货上报
+     * @return
+     */
+    public Observable<List<GetWaybillInfoByIdDataBean>> getWaybillInfo(String id) {
+        return transform(getService().getWaybillInfo(id));
+    }
+
     /**
      * 获取装机单数据
      *
@@ -824,5 +841,16 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<InventoryQueryBean>> inventoryQuery() {
         return transform(getService().inventoryQuery());
+    }
+
+    /**
+     * 清库列表
+     *
+     * @return 成功/失败
+     */
+    public Observable<String> internationalCargoReport(String str) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                str);
+        return nothingtransform(getService().internationalCargoReport(requestBody));
     }
 }
