@@ -550,6 +550,14 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().getDepartureFlightByAndroid(model));
     }
 
+    /****
+     * 锁定行李扫描航班
+     * @return
+     */
+    public Observable<List<FlightLuggageBean>> getAllInternationalAndMixedFlight(BaseFilterEntity model) {
+        return transform(getService().getAllInternationalAndMixedFlight(model));
+    }
+
     /*****
      * 复重数据获取
      * @param model

@@ -183,6 +183,9 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");
+            } else if(Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
+                fragmentList.add(new JunctionLoadFragment());
+                list_Title.add("结载");
             }
 
         }

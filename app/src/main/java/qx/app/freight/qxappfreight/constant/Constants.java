@@ -59,6 +59,12 @@ public class Constants {
     public static String INSTALL_UNLOAD_EQUIP = "supervision";
 
     /**
+     * 结载
+     *
+     */
+    public static String JUNCTION_LOAD = "junction";
+
+    /**
      * 配载
      */
     public static String STOWAGE = "stowage";

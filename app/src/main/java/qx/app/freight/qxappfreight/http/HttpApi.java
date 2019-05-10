@@ -338,6 +338,10 @@ public interface HttpApi {
     @POST("service-base-flight/f-flight/getDepartureFlightByAndroid")
     Observable<BaseEntity<List<FlightLuggageBean>>> getDepartureFlightByAndroid(@Body BaseFilterEntity model);
 
+    //行李转盘扫描处获取对应航班计划信息
+    @POST("service-base-flight/f-flight/getAllInternationalAndMixedFlight")
+    Observable<BaseEntity<List<FlightLuggageBean>>> getAllInternationalAndMixedFlight(@Body BaseFilterEntity model);
+
 
     /***********************交货、提货*****************************/
     /****
