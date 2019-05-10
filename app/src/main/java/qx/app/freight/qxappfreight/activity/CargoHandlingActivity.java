@@ -284,12 +284,20 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         waybillSlideRecyclerView.setAdapter(mCargoHandlingWaybillAdapter);
         //分装
         mCargoHandlingWaybillAdapter.setOnSubpackageClickListener((view, position) -> {
+            if (!CURRENT_FLIGHT_COURSE_EN.equals(listWaybill.get(position).getToCityEn())){
+                ToastUtil.showToast("不是本航段的运单！");
+                return;
+            }
             flag = 0;
             showPopWindowList(position);
 
         });
         //全装
         mCargoHandlingWaybillAdapter.setOnAllClickListener((view, position) -> {
+            if (!CURRENT_FLIGHT_COURSE_EN.equals(listWaybill.get(position).getToCityEn())){
+                ToastUtil.showToast("不是本航段的运单！");
+                return;
+            }
             flag = 1;
             showPopWindowList(position);
         });
@@ -347,7 +355,6 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private void showPopWindowList(int position) {
 
         dataRc.setAdapter(mCargoHandlingAdapter);
-
         nowWaybillPosition = position;
         isPopWindow = true;
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -402,7 +409,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                     getWindow().setAttributes(lp);
 //                    nowHandcarPositionSelect = -1;
-//                    isPopWindow = false;
+                    isPopWindow = false;
                 });
             }
         };
@@ -410,7 +417,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private void showPopWindowListCabin(int position) {
 
-//        isPopWindow = true;
+        isPopWindow = true;
         dataRc.setAdapter(mSpProductAdapter);
         nowHandcarPositionSelect = position;
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -466,7 +473,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             case R.id.btn_sure_cargo_handing:
                 boolean isOK = true;
                 for (FtRuntimeFlightScooter ftRuntimeFlightScooter : listHandcar) {
-                    if (ftRuntimeFlightScooter.getInFlight() == 1) {
+                    if (ftRuntimeFlightScooter.getInFlight() == 1 || ftRuntimeFlightScooter.getInFlightCourse() == 0) {
                         isOK = false;
                         break;
                     }
@@ -474,7 +481,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 if (isOK)
                     submitData();
                 else
-                    ToastUtil.showToast( "板车上还有其他航班数据，请拉下后再提交！");
+                    ToastUtil.showToast( "板车上还有不属于该航段的数据，请拉下后再提交！");
                 break;
             case R.id.btn_sure_cargo_return:
                 //回退操作
@@ -792,6 +799,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 mFtRuntimeFlightScooter.setVolume((double)0);
                 mFtRuntimeFlightScooter.setTotal(0);
                 mFtRuntimeFlightScooter.setInFlight((short)0);
+                mFtRuntimeFlightScooter.setInFlightCourse(1);
                 mFtRuntimeFlightScooter.setUpdateStatus((short)2);
                 mFtRuntimeFlightScooter.setToCityEn(CURRENT_FLIGHT_COURSE_EN);//新增的板车设置航段三字码
 

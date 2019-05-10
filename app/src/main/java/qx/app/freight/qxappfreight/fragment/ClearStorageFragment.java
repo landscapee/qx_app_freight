@@ -78,7 +78,7 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         adapter = new ClearStorageAdapter(list);
         mMfrvData.setAdapter(adapter);
         mPresenter = new InventoryQueryPresenter(this);
-        ((InventoryQueryPresenter) mPresenter).InventoryQuery();
+//        ((InventoryQueryPresenter) mPresenter).InventoryQuery();
 
     }
 

@@ -7,3 +7,5 @@
 /captures
 .externalNativeBuild
 sign.properties
+app/release/
+

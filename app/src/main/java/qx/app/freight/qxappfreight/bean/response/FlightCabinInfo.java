@@ -167,7 +167,7 @@ public class FlightCabinInfo {
         private List<String> flightCourseCn;//所有的航段信息， 新增字段 by guohao
         private String associateAirportCn;
         private String flightBody;
-        private String inWaybillRecords;
+        private List<Object> inWaybillRecords; //5.10 不知道 列表类型
 
     }
     @Data

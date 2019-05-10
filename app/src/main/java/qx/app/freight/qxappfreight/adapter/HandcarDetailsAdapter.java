@@ -37,20 +37,28 @@ public class HandcarDetailsAdapter extends BaseQuickAdapter<FtGroupScooter, Base
         helper.setText(R.id.tv_weight,item.getWeight()+"");
         ImageView imgDelete = helper.getView(R.id.iv_delete);
 
-        if (item.getInFlight() == 0){
-            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
-            imgDelete.setImageResource(R.mipmap.drop_down);
-        }
-        else
-        {
+        if (item.getInFlight()!=null && item.getInFlight() == 1){
             helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.red));
             imgDelete.setImageResource(R.mipmap.delete);
+
+        }
+        else if(item.getInFlightCourse()!=null && item.getInFlightCourse() == 0){
+            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.yellow));
+            imgDelete.setImageResource(R.mipmap.drop_down);
+        }
+        else
+        {
+            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
+            imgDelete.setImageResource(R.mipmap.drop_down);
         }
 
     }

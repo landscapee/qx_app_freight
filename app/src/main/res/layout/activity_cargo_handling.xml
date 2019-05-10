@@ -436,6 +436,7 @@
 
         <Button
             android:id="@+id/btn_sure_cargo_handing"
+            style="@style/public_tv_18sp_2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
@@ -451,6 +452,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_black"
-            android:text="回退到预配" />
+            android:text="回退到预配"
+            android:layout_marginLeft="2dp"
+            />
     </LinearLayout>
 </LinearLayout>

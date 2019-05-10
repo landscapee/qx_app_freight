@@ -76,6 +76,9 @@
             android:name=".activity.UnloadPlaneActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.TPUnloadPlaneActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.LaserScanActivity"
             android:screenOrientation="portrait" />
         <activity

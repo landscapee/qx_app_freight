@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -15,11 +16,15 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DriverOutDoingActivity;
+import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
+import qx.app.freight.qxappfreight.activity.TPUnloadPlaneActivity;
+import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoMyBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -94,8 +99,12 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             public void onSlideExecuteListener(int step, int position) {
                 switch (step){
                     case 0:
-                        if ("device".equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                        {
+                            toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
+                        }
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
                         break;
@@ -110,6 +119,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         break;
                 }
             }
+
             @Override
             public void onClickListener(int step, int position) {
 
@@ -132,6 +142,16 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                 }
             }
         });
+    }
+
+    /**
+     * 为跳转到装机界面 组装数据
+     * @param mOutFieldTaskBean
+     */
+    private void toLoadPlaneActivity(OutFieldTaskBean mOutFieldTaskBean) {
+            Intent intent = new Intent(mContext, TPUnloadPlaneActivity.class);
+            intent.putExtra("plane_info", mOutFieldTaskBean);
+             mContext.startActivity(intent);
     }
 
     public interface OnStepListener{
