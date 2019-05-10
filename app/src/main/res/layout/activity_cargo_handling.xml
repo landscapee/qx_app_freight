@@ -244,6 +244,7 @@
                             android:text="库区"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
+
                         <TextView
                             android:layout_width="56dp"
                             android:layout_height="match_parent"
@@ -254,16 +255,29 @@
                             android:text="锁定"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
+
                         <TextView
-                        android:layout_width="56dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="1px"
-                        android:background="@color/gray_576"
-                        android:gravity="center"
-                        android:padding="9dp"
-                        android:text="删除"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="删除"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="1px"
+                            android:background="@color/gray_576"
+                            android:gravity="center"
+                            android:padding="9dp"
+                            android:text="选择"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <RelativeLayout
@@ -275,10 +289,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/srv_cargo_handling_facility"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"></qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView>
+                                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
                         </HorizontalScrollView>
                     </RelativeLayout>
                 </LinearLayout>

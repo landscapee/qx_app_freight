@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <RelativeLayout
@@ -42,8 +42,8 @@
                 android:layout_marginLeft="1px"
                 android:background="@color/white"
                 android:gravity="center"
-                tools:text="99999"
-                android:textColor="@color/text_color" />
+                android:textColor="@color/text_color"
+                tools:text="99999" />
 
             <TextView
                 android:id="@+id/tv_volume"
@@ -52,8 +52,8 @@
                 android:layout_marginLeft="1px"
                 android:background="@color/white"
                 android:gravity="center"
-                tools:text="99"
-                android:textColor="@color/text_color" />
+                android:textColor="@color/text_color"
+                tools:text="99" />
 
             <LinearLayout
                 android:id="@+id/ll_product"
@@ -71,8 +71,8 @@
                     android:background="@null"
                     android:gravity="center"
                     android:spinnerMode="dropdown"
-                    tools:text="1H"
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/text_color"
+                    tools:text="1H" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -83,8 +83,11 @@
             <TextView
                 android:id="@+id/tv_repName"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="库区"
+                android:textColor="@color/text_color" />
         </LinearLayout>
 
         <ImageView
@@ -94,53 +97,52 @@
             android:src="@mipmap/complete" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="120dp"
+    <!--<LinearLayout-->
+    <!--android:layout_width="120dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="horizontal">-->
+
+    <RelativeLayout
+        android:id="@+id/rl_lock"
+        android:layout_width="56dp"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:background="@drawable/btn_gray_press"
+        android:gravity="center">
 
-        <RelativeLayout
-            android:id="@+id/rl_lock"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_gray_press"
-            android:gravity="center">
+        <ImageView
+            android:id="@+id/iv_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/lock" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_lock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/lock" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_delete"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_gray_press"
+        android:gravity="center">
 
-        <RelativeLayout
-            android:id="@+id/rl_delete"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_gray_press"
-            android:gravity="center">
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/delete" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/delete" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_select"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_gray_press"
+        android:gravity="center"
+        android:visibility="gone">
 
-        <RelativeLayout
-            android:id="@+id/rl_select"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/btn_gray_press"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/iv_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/selected" />
-        </RelativeLayout>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/selected" />
+    </RelativeLayout>
+    <!--</LinearLayout>-->
 </LinearLayout>

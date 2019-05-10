@@ -87,7 +87,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     TextView tvPlaneInfo;
 
     @BindView(R.id.srv_cargo_handling_facility)
-    MultiFunctionRecylerView slideRecyclerView;
+    RecyclerView slideRecyclerView;
     @BindView(R.id.srv_cargo_handling_waybill)
     SlideRecyclerView waybillSlideRecyclerView;
     @BindView(R.id.rv_cargo_cabin)
