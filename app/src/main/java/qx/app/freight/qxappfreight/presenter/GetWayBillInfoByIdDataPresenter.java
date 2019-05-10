@@ -16,9 +16,9 @@ public class GetWayBillInfoByIdDataPresenter extends BasePresenter {
 
     public void getWayBillInfoByIdData(String waybillCode) {
         mRequestView.showNetDialog();
-        ((GetWayBillInfoByIdDataModel) mRequestModel).getWayBillInfoByIdData(waybillCode, new IResultLisenter<List<GetWaybillInfoByIdDataBean>>() {
+        ((GetWayBillInfoByIdDataModel) mRequestModel).getWayBillInfoByIdData(waybillCode, new IResultLisenter<GetWaybillInfoByIdDataBean>() {
             @Override
-            public void onSuccess(List<GetWaybillInfoByIdDataBean> result) {
+            public void onSuccess(GetWaybillInfoByIdDataBean result) {
                 ((GetWayBillInfoByIdDataContract.getWayBillInfoByIdDataView) mRequestView).getWayBillInfoByIdDataResult(result);
                 mRequestView.dissMiss();
             }

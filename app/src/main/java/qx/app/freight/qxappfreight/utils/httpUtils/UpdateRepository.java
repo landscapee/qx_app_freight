@@ -488,7 +488,7 @@ public class UpdateRepository extends BaseRepository {
      * 拉货上报
      * @return
      */
-    public Observable<List<GetWaybillInfoByIdDataBean>> getWayBillInfoByIdData(String waybillCode) {
+    public Observable<GetWaybillInfoByIdDataBean> getWayBillInfoByIdData(String waybillCode) {
         return transform(getService().getWayBillInfoByIdData(waybillCode));
     }
 

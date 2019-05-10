@@ -236,5 +236,4 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void onBackPressed() {
         quitApp();
     }
-
 }

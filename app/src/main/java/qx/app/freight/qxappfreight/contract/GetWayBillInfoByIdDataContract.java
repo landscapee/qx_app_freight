@@ -14,7 +14,7 @@ public class GetWayBillInfoByIdDataContract {
     }
 
     public interface getWayBillInfoByIdDataView extends IBaseView {
-        void getWayBillInfoByIdDataResult(List<GetWaybillInfoByIdDataBean> addScooterBean);
+        void getWayBillInfoByIdDataResult(GetWaybillInfoByIdDataBean addScooterBean);
         void getWaybillInfoResult(List<GetWaybillInfoByIdDataBean> addScooterBean);
     }
 }
