@@ -74,7 +74,7 @@ public class CargoHandlingAdapter extends BaseQuickAdapter <FtRuntimeFlightScoot
         helper.setText(R.id.tv_weight,""+item.getWeight());
         helper.setText(R.id.tv_volume,""+item.getVolume());
         helper.setText(R.id.tv_cabin,""+item.getSuggestRepository());
-        helper.setTag(R.id.tv_repName, ""+item.getRepName());//库区
+        helper.setText(R.id.tv_repName, ""+item.getRepName());//库区
 
         if (item.getInFlight() == 1){
             helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.red));
