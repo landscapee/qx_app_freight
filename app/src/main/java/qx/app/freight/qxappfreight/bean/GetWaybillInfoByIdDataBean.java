@@ -6,6 +6,92 @@ import lombok.Data;
 
 @Data
 public class GetWaybillInfoByIdDataBean {
+    private String status;
+    private String message;
+    private String rowCount;
+    private DataMainBean data;
+
+    @Data
+    public static class DataMainBean {
+
+        /**
+         * id : faf8fa5f5d5b4b8dab8e956af89ba7a5
+         * waybillCode : 029-77777770
+         * mailType : C
+         * flightNumber : CZ6184
+         * flightDate : 1557391800000
+         * originatingStation : CTU
+         * destinationStation : 北京
+         * consignee : zzq
+         * consigneePhone : 13199998888
+         * consigneePostcode : 622222
+         * consigneeAddress : null
+         * specialCargoCode : AVI
+         * coldStorage : 0
+         * totalNumberPackages : 6.0
+         * billingWeight : null
+         * totalWeight : 6.0
+         * totalVolume : 6
+         * refrigeratedTemperature : 0*0
+         * shipperCompanyId : dep6061008ccaa1403ca95e93f87f2e4e91
+         * flightId : 529079d8693445dcaf79a5ffc102bae5
+         * activitiId : 72795858
+         * internalTransferDate : null
+         * internalTransferFlight : null
+         * internalTransferWaybill : null
+         * exchangeFlag : 0
+         * exchangeBeforeCode : null
+         * status : 11
+         * createUser : u90eab98bad7d407ca9ff7537f5e4367a
+         * createTime : 1557387928473
+         * lastUpdateTime : 1557389629178
+         * lastUpdateOperator : null
+         * delFlag : 0
+         * chargeFlag : 1
+         * virtualFlag : 0
+         * otherFlag : 0
+         * applyTime : 1557387548719
+         * expectedDeliveryGate : D口
+         * expectedDeliveryTime : 1557387928473
+         * receivecargoNumber : 6.0
+         * receivecargoWeight : 6.0
+         * receivecargoVolumn : 6.0
+         * storageTime : 1557387957956
+         * bigFlag : 1
+         * exchangeNumber : 0
+         * transferStation : --
+         * returnOutTransportFlag : 0
+         * exceptionFlag : 0
+         * declareItems : [{"itemId":"12c3841d80ecf1348fe332981bc38838","waybillId":"faf8fa5f5d5b4b8dab8e956af89ba7a5","cargoId":"432dbb9469b54e23a759c99f47c6763f","number":null,"weight":null,"volume":null,"packagingType":null,"cargoCn":"狗","type":0}]
+         * declareItem : null
+         * freightName : 国内出港项目
+         * flightName : CZ
+         * newDeclareWaybillCode : null
+         * declareWaybillAddition : null
+         * scooterId : null
+         * spotFlag : 0
+         * transferStationTs : null
+         * transferStationCn : null
+         * destinationStationCn : null
+         * remark : null
+         * updateType : 0
+         * waybillType : 0
+         * paWaybillId : null
+         * startUpdateTime : null
+         * endUpdateTime : null
+         * waybillDestinationStation : 北京
+         * cargoCn : 狗
+         * packagingType : 木盒
+         * cargoType : null
+         * waybillDestinationStationCn : null
+         * originatingStationCn : null
+         * updateWeights : null
+         * waybillAirportDestinationStationName : null
+         */
+        private int billItemNumber;//可分装的运单件数
+        private double billItemWeight;//可分装的运单重量
+        private String cargoType;//M,邮件,C，货物
+        private String flightSystemId;//航班数字id
 
         private String id;
         private String waybillCode;
@@ -73,7 +159,6 @@ public class GetWaybillInfoByIdDataBean {
         private String waybillDestinationStation;
         private String cargoCn;
         private String packagingType;
-        private Object cargoType;
         private Object waybillDestinationStationCn;
         private Object originatingStationCn;
         private Object updateWeights;
@@ -82,6 +167,17 @@ public class GetWaybillInfoByIdDataBean {
 
         @Data
         public static class DeclareItemsBean {
+            /**
+             * itemId : 12c3841d80ecf1348fe332981bc38838
+             * waybillId : faf8fa5f5d5b4b8dab8e956af89ba7a5
+             * cargoId : 432dbb9469b54e23a759c99f47c6763f
+             * number : null
+             * weight : null
+             * volume : null
+             * packagingType : null
+             * cargoCn : 狗
+             * type : 0
+             */
 
             private String itemId;
             private String waybillId;
@@ -92,208 +188,6 @@ public class GetWaybillInfoByIdDataBean {
             private Object packagingType;
             private String cargoCn;
             private int type;
+        }
     }
-
-//    /**
-//     * 系统运单ID 系统编号 */
-//    /**
-//     * 运单号 航空公司提供 */
-//    private String waybillCode;
-//    /**
-//     * 货邮类型 C代表货物,M代表邮件 */
-//    private String mailType;
-//    /**
-//     * 航班号 */
-//    private String flightNumber;
-//    /**
-//     * 航班⽇日期 */
-//    private long flightDate;
-//    /**
-//     * 始发站 */
-//    private String originatingStation; /**
-//     * ⽬目的站 */
-//    private String destinationStation;
-//    /**
-//     * 收货⼈人 */
-//    private String consignee;
-//    /**
-//     * 电话 */
-//    private String consigneePhone;
-//    /**
-//     * 邮编 */
-//    private String consigneePostcode;
-//    /**
-//     * 地址 */
-//    private String consigneeAddress;
-//    /**
-//     * 特货代码 */
-//    private String specialCargoCode;
-//    /**
-//     * 货物类别 1:贵重 2:危险 3:活体 4:冷藏 0:普货 */
-//    private Integer coldStorage;
-//    /**
-//     * 总件数 */
-//    private int totalNumberPackages;
-//    /**
-//     * 重量量 */
-//    private int billingWeight;
-//    /**
-//     * 总重量量 */
-//    private int totalWeight;
-//    /**
-//     * 总体积 */
-//    private int totalVolume;
-//    /**
-//     * 冷藏温度 */
-//    private String refrigeratedTemperature;
-//    /**
-//     * 货代公司ID */
-//    private String shipperCompanyId;
-//    /**
-//     * 航班ID */
-//    private String flightId;
-//    /**
-//     * 流程ID */
-//    private String activitiId;
-//    /**
-//     * 内转表⽇日期 */
-//    private long internalTransferDate;
-//    /**
-//     * 内转表进港航班 */
-//    private String internalTransferFlight;
-//    /**
-//     * 内转表进港运单号 */
-//    private String internalTransferWaybill;
-//    /**
-//     * 换单标记 1:换单运单,0:未换单运单 */
-//    private Integer exchangeFlag;
-//    /**
-//     * 换单之前的运单号 */
-//    private String exchangeBeforeCode;
-//
-//    /**
-//     * (-1新换单运单 1:暂存 2 提交中 3 已提交 4 提交失败 5 申请换单 6 换单拒绝 7换单成功 8 退货中 9 退货完成,订单关闭 10 借货中 11 借货拒绝)
-//     运单状态:0:待退货,-1:已退货,-2:系统数据异常,-3收验失败,1:未申报,2:已申报,3:已收验,4:已安检,5:已收货,6:待收费,7:已收费,8,已预配,9:已组板,10:已报载,11:已复重,12:已串串板,13:已起⻜飞,14:已拉
-//     货
-//     补重运单状态:50:待收费, 51:已收费 */
-//    private int status;
-//
-//    private String createUser;
-//
-//    private String lastUpdateOperator;
-//
-//    private int delFlag;
-//    /**
-//     * 收费标记: 0:未收费,1:已收费 */
-//    private int chargeFlag;
-//    /**
-//     * 是否为虚拟运单,1代表是,默认为0 */
-//    private int virtualFlag;
-//    /**
-//     * 是否为其他运单,1代表是,默认是0 */
-//    private int otherFlag;
-//    /**
-//     * 申请时间 */
-//    private long applyTime;
-//    /**
-//     * 预计交货道⼝口 */
-//    private String expectedDeliveryGate;
-//    /**
-//     * 预计交货时间 */
-//    private long expectedDeliveryTime;
-//    /**
-//     * 收运总件数 */
-//    private int receivecargoNumber;
-//    /**
-//     * 收运总重量量 */
-//    private int receivecargoWeight;
-//    /**
-//     * 收运总体积 */
-//    private int receivecargoVolumn;
-//    /**
-//     * ⼊入库时间 */
-//    private int storageTime;
-//    /**
-//     * 是否⼤大件 0:否 1: 是 */
-//    private int bigFlag;
-//    /**
-//     * 更更换次数 */
-//    private int exchangeNumber;
-//    /**
-//     * 中转站 */
-//    private String transferStation; /**
-//     * 转运类型: 0未转运, 1国内转国内(defuatl: 0) */
-//    private int returnOutTransportFlag;
-//    /**
-//     * 0:正常1:部分拉货,2:全部拉货 */
-//    private int exceptionFlag;
-//
-////    private List<DeclareItem> declareItems;
-////
-////    private List<DeclareItem> declareItem;
-//
-//    private String freightName;
-//
-//    private String flightName;
-//    /**
-//     * 新运单号 * */
-//    private String newDeclareWaybillCode;
-//
-////    private DeclareWaybillAddition declareWaybillAddition;
-//    /**
-//     * 板⻋车号 */
-//     private String scooterId;
-//    /**
-//     * 抽检标志 */
-//    private Integer spotFlag;
-//    /**
-//     * 中转站中⽂文 */
-//    private String transferStationTs;
-//    /**
-//     * 中转站中⽂文 */
-//    private String transferStationCn;
-//    /**
-//     * ⽬目的站中⽂文 */
-//    private String destinationStationCn;
-//    /**
-//     * 备注 */
-//    private String remark;
-//    /**
-//     * 0申报 1收运 */
-//    private Integer updateType;
-//    /**
-//     * 运单类型(default : 0) * 0申报, 1补重
-//     */
-//    private Integer waybillType;
-//    /**
-//     * ⽗父运单id */
-//    private String paWaybillId;
-//
-//    private long startUpdateTime;
-//
-//    private long endUpdateTime;
-//    /**
-//     * 运单⽬目的站 */
-//    private String waybillDestinationStation;
-//    /**
-//     * 品名 */
-//    private String cargoCn;
-//    /**
-//     * 包装类型 * */
-//    private String packagingType;
-//    /**
-//     * 品类 */
-//    private String cargoType;
-//    /**
-//     * 运单⽬目的站中⽂文 */
-//    private String waybillDestinationStationCn;
-//    /** *始发站中⽂文 * */
-//    private String originatingStationCn;
-//    /**
-//     * 报载修改收费重量量差值 */
-//
-////    private BigDecimal[] updateWeights;
-
-
-
 }

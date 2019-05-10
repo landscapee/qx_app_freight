@@ -18,5 +18,7 @@ public class LoadingListSendEntity {
     private String flightId;
     private long createDate;
     private String createUser;
+    private String loadingUser;
+    private String flightNo;
     private List<LoadingListBean.DataBean.ContentObjectBean> content;
 }

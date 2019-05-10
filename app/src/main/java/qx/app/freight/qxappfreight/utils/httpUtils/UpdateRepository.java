@@ -488,8 +488,8 @@ public class UpdateRepository extends BaseRepository {
      * 拉货上报
      * @return
      */
-    public Observable<GetWaybillInfoByIdDataBean> getWayBillInfoByIdData(String waybillCode) {
-        return transform(getService().getWayBillInfoByIdData(waybillCode));
+    public Observable<GetWaybillInfoByIdDataBean> getWayBillInfoByCode(String waybillCode) {
+        return transform(getService().getWayBillInfoByCode(waybillCode));
     }
 
     /****
@@ -827,10 +827,11 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * 回退到预配 -- guohao
+     *
      * @param entity
      * @return 成功/失败
      */
-    public Observable<String> returnPrematching(BaseFilterEntity entity){
+    public Observable<String> returnPrematching(BaseFilterEntity entity) {
         return nothingtransform(getService().returnPrematching(entity));
     }
 

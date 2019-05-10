@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.PullGoodsInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.LocalBillBean;
+import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -44,11 +44,12 @@ import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdDataContract;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
-import qx.app.freight.qxappfreight.dialog.ChooseGoodsBillDialog;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdDataPresenter;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
@@ -61,7 +62,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 拉货上报页面
  */
-public class PullGoodsReportActivity extends BaseActivity implements ScanScooterContract.scanScooterView, ScooterInfoListContract.scooterInfoListView, PullGoodsReportContract.pullGoodsView, ScanScooterCheckUsedContract.ScanScooterCheckView {
+public class PullGoodsReportActivity extends BaseActivity implements ScanScooterContract.scanScooterView, ScooterInfoListContract.scooterInfoListView, PullGoodsReportContract.pullGoodsView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetWayBillInfoByIdDataContract.getWayBillInfoByIdDataView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
     @BindView(R.id.tv_date)
@@ -81,11 +82,12 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
     private int mDeletePos = -1;        //左滑删除时的下标标记值
     private boolean mIsScanBill = false;//是否是扫描运单拉下，默认是扫板
-    private List<LocalBillBean> mBillList = new ArrayList<>();
-    private Map<String, LocalBillBean> mCodeMap = new HashMap<>();//以运单code为键，对应的对象为值的map
     private String mCurrentTaskId;
     private List<String> mTpScooterCodeList = new ArrayList<>();
+    private TransportTodoListBean mNewBillBean;
     private LoadingListBean.DataBean mModel;
+    private String mWaybillCode;
+    private Map<String, GetWaybillInfoByIdDataBean.DataMainBean> mCodeMap = new HashMap<>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -120,10 +122,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        mBillList = getIntent().getParcelableArrayListExtra("bill_list");
-        for (LocalBillBean bean : mBillList) {
-            mCodeMap.put(bean.getWayBillCode(), bean);
-        }
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
         CustomToolbar toolbar = getToolbar();
@@ -138,22 +136,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
         mLlAddScan.setOnClickListener(v -> {
-            if (mIsScanBill) {
-                boolean canScan = false;
-                for (LocalBillBean billBean : mBillList) {
-                    if (billBean.getBillItemNumber() > 0 && billBean.getBillItemWeight() > 0) {//遍历封装的装机运单列表数据，如果某一个运单的可分装件数或质量都大于0，则可以继续去扫描二维码
-                        canScan = true;
-                        break;
-                    }
-                }
-                if (canScan) {//可以扫描
-                    ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
-                } else {
-                    ToastUtil.showToast("当前已无可以分装的运单");
-                }
-            } else {
-                ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
-            }
+            ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
         });
         mBtnCommit.setClickable(false);
         mSrvGoods.setLayoutManager(new LinearLayoutManager(this));
@@ -257,11 +240,16 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             } else {
                 ToastUtil.showToast("操作不合法，不能重复扫描");
             }
+        } else if ("PullGoodsReportActivity_scan_waybill".equals(result.getFunctionFlag())) {
+            mPresenter = new GetWayBillInfoByIdDataPresenter(this);
+            mWaybillCode = result.getData();
+            ((GetWayBillInfoByIdDataPresenter) mPresenter).getWayBillInfoByCode(result.getData());
         }
     }
 
     private void setBillDataList(String billCode, TransportTodoListBean bean) {
         bean.setBillCode(billCode);
+        bean.setBillNumber(billCode);
         bean.setInfoType(Constants.TYPE_PULL_BILL);
         mPullBillList.add(bean);
         mGoodsAdapter = new PullGoodsInfoAdapter(mPullBillList);
@@ -273,8 +261,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                     if (!TextUtils.isEmpty(etNumber.getText().toString())) {
                         int number = Integer.parseInt(etNumber.getText().toString());
                         String billCode = mPullBillList.get(index).getBillCode();//获取当前输入框对应的item的运单code
-                        LocalBillBean billBean = mCodeMap.get(billCode);
-                        int leftNumber = billBean.getBillItemNumber();//根据运单code获取该运单允许分装的剩余最大件数
+                        GetWaybillInfoByIdDataBean.DataMainBean billBean = mCodeMap.get(billCode);
+                        int leftNumber = (int) billBean.getTotalNumberPackages();//根据运单code获取该运单允许分装的剩余最大件数
                         if (number > leftNumber) {
                             ToastUtil.showToast("数量输入不合法，已设置为允许的件数最大值");
                             etNumber.setText("" + leftNumber);
@@ -288,7 +276,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                                 usedNumber += bean1.getPullInNumber();
                             }
                         }
-                        billBean.setBillItemNumber(billBean.getMaxNumber() - usedNumber);
+                        billBean.setBillItemNumber((int) (billBean.getTotalNumberPackages() - usedNumber));
                     }
                 } else {
                     if (!TextUtils.isEmpty(etNumber.getText().toString())) {
@@ -308,8 +296,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                     if (!TextUtils.isEmpty(etWeight.getText().toString())) {
                         double weight = Double.parseDouble(etWeight.getText().toString());
                         String billCode = mPullBillList.get(index).getBillCode();//获取当前输入框对应的item的运单code
-                        LocalBillBean billBean = mCodeMap.get(billCode);
-                        double leftWeight = billBean.getBillItemWeight();//根据运单code获取该运单允许分装的剩余最大质量
+                        GetWaybillInfoByIdDataBean.DataMainBean billBean = mCodeMap.get(billCode);
+                        double leftWeight = billBean.getTotalWeight();//根据运单code获取该运单允许分装的剩余最大质量
                         if (weight > leftWeight) {
                             ToastUtil.showToast("质量输入不合法，已设置为允许的质量最大值");
                             etWeight.setText("" + leftWeight);
@@ -323,7 +311,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                                 usedWeight += bean1.getPullInWeight();
                             }
                         }
-                        billBean.setBillItemWeight(billBean.getMaxWeight() - usedWeight);
+                        billBean.setBillItemWeight(billBean.getTotalWeight() - usedWeight);
                     }
                 } else {
                     if (!TextUtils.isEmpty(etWeight.getText().toString())) {
@@ -422,50 +410,24 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() != 0) {
             ScooterInfoListBean entity = scooterInfoListBeans.get(0);
-            TransportTodoListBean bean = new TransportTodoListBean();
-            bean.setTpScooterId(entity.getId());
-            bean.setTpScooterCode(entity.getScooterCode());
+            mNewBillBean = new TransportTodoListBean();
+            mNewBillBean.setTpScooterId(entity.getId());
+            mNewBillBean.setTpScooterCode(entity.getScooterCode());
             mTpScooterCodeList.add(entity.getScooterCode());
-            bean.setTpScooterType(entity.getScooterType() + "");
-            bean.setTpFlightNumber(mInfoList[0]);
-            bean.setTpFlightLocate(mInfoList[5]);
-            bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
-            String berth="";
-            mModel= (LoadingListBean.DataBean) getIntent().getSerializableExtra("loading_list_data");
-            for (LoadingListBean.DataBean.ContentObjectBean data:mModel.getContentObject()){
-                if (data.getTailer().equals(entity.getScooterCode())){
-                    berth=data.getPos();
+            mNewBillBean.setTpScooterType(entity.getScooterType() + "");
+            mNewBillBean.setTpFlightNumber(mInfoList[0]);
+            mNewBillBean.setTpFlightLocate(mInfoList[5]);
+            mNewBillBean.setTpFlightTime(Long.valueOf(mInfoList[6]));
+            String berth = "";
+            mModel = (LoadingListBean.DataBean) getIntent().getSerializableExtra("loading_list_data");
+            for (LoadingListBean.DataBean.ContentObjectBean data : mModel.getContentObject()) {
+                if (data.getTailer().equals(entity.getScooterCode())) {
+                    berth = data.getPos();
                 }
             }
-            bean.setTpFregihtSpace(berth);
-            bean.setMaxBillWeight(entity.getScooterWeight());
-            if (mBillList.size() != 0) {
-                ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();
-                List<LocalBillBean> list = new ArrayList<>();
-                //筛选没有拉完的运单
-                for (LocalBillBean mLocalBillBean : mBillList) {
-                    if (mLocalBillBean.getBillItemNumber() > 0 && mLocalBillBean.getBillItemWeight() > 0)
-                        list.add(mLocalBillBean);
-                }
-                if (list.size() == 0) {
-                    ToastUtil.showToast("当前航班已无运单任务可分配");
-                } else {
-                    dialog.setData(PullGoodsReportActivity.this, entity.getScooterCode(), list);
-                    dialog.show(getSupportFragmentManager(), "123");
-                    dialog.setOnBillSelectListener(pos -> {
-                        String bill = list.get(pos).getWayBillCode();
-                        bean.setCarType(list.get(pos).getCargoType());
-                        bean.setWaybillId(list.get(pos).getWaybillId());
-                        bean.setBillNumber(bill);
-                        bean.setTpCargoNumber(list.get(pos).getMaxNumber());
-                        bean.setTpCargoWeight(list.get(pos).getMaxWeight());
-                        bean.setTpCargoVolume(list.get(pos).getMaxVolume());
-                        setBillDataList(bill, bean);
-                    });
-                }
-            } else {
-                ToastUtil.showToast("当前航班已无运单任务可分配");
-            }
+            mNewBillBean.setTpFregihtSpace(berth);
+            mNewBillBean.setMaxBillWeight(entity.getScooterWeight());
+            ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity_scan_waybill", "当前航班：" + mInfoList[0]);
         } else {
             ToastUtil.showToast("板车扫描错误，请检查");
         }
@@ -487,6 +449,28 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             addScooterInfo(mNowScooterCode);
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
+        }
+    }
+
+    @Override
+    public void getWayBillInfoByCodeResult(GetWaybillInfoByIdDataBean addScooterBean) {
+        //异常处理有问题，不能走这里的判断
+        if (addScooterBean.getStatus().equals("500")) {
+            ToastUtil.showToast("运单号输入错误，请检查！");
+        } else {
+            mCodeMap.put(mWaybillCode, addScooterBean.getData());
+            if (!mInfoList[7].equals(addScooterBean.getData().getFlightId())) {
+                ToastUtil.showToast("扫描的运单数据非当前航班，请重试");
+            } else {
+                if (addScooterBean.getData().getTotalNumberPackages() <= 0 || addScooterBean.getData().getTotalWeight() <= 0) {
+                    ToastUtil.showToast("当前运单已全部被拉下");
+                } else {
+                    mNewBillBean.setTpCargoNumber((int) addScooterBean.getData().getTotalNumberPackages());
+                    mNewBillBean.setTpCargoWeight(addScooterBean.getData().getTotalWeight());
+                    mNewBillBean.setTpCargoVolume(addScooterBean.getData().getTotalVolume());
+                    setBillDataList(mWaybillCode, mNewBillBean);
+                }
+            }
         }
     }
 }

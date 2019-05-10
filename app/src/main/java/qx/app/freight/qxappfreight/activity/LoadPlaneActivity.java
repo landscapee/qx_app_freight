@@ -104,6 +104,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             entity.setFlightId(mCurrentFlightId);
             ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         });
+        if (mWaitCallBackDialog != null) {
+            mWaitCallBackDialog.dismiss();
+        }
         updatePushDialog.show();
     }
 
@@ -220,8 +223,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
             mRvData.setAdapter(adapter);
             adapter.setOnOverLoadListener(entity -> {
-                LoadingListSendEntity requestModel=new LoadingListSendEntity();
+                LoadingListSendEntity requestModel = new LoadingListSendEntity();
                 requestModel.setCreateDate(entity.getCreateDate());
+                requestModel.setFlightNo(entity.getFlightNo());
+                requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
                 requestModel.setCreateUser(entity.getCreateUser());
                 requestModel.setFlightId(entity.getFlightId());
                 requestModel.setContent(entity.getContentObject());

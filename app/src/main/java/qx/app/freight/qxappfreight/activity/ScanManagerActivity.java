@@ -75,9 +75,10 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     /**
      * 带特殊字符启动
      */
-    public static void startActivity(Context mContext,boolean special1,String special) {
+    public static void startActivity(Context mContext, String flag, String special) {
         Intent starter = new Intent(mContext, ScanManagerActivity.class);
-        starter.putExtra("special",special);
+        starter.putExtra("special", special);
+        starter.putExtra("flag", flag);
         ((Activity) mContext).startActivityForResult(starter, 0);
     }
 
@@ -91,12 +92,12 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     }
 
     /**
-     *从激光扫码界面跳转过来
+     * 从激光扫码界面跳转过来
      */
-    public static void startActivityFromLaser(Context mContext, String flag){
+    public static void startActivityFromLaser(Context mContext, String flag) {
         Intent starter = new Intent(mContext, ScanManagerActivity.class);
         starter.putExtra("flag", flag)
-                .putExtra("laserAndZxing",true);
+                .putExtra("laserAndZxing", true);
         ((Activity) mContext).startActivityForResult(starter, 0);
     }
 
@@ -119,9 +120,9 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
         flag = getIntent().getStringExtra("flag");
         special = getIntent().getStringExtra("special");
-        laserAndZxing = getIntent().getBooleanExtra("laserAndZxing",false);
+        laserAndZxing = getIntent().getBooleanExtra("laserAndZxing", false);
 
-        if (!TextUtils.isEmpty(special)){
+        if (!TextUtils.isEmpty(special)) {
             tvSpecial.setText(special);
         }
 
@@ -156,10 +157,10 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
             @Override
             public void onClick(View v) {
                 //如果laserAndZxing 是true 就是从激光扫码跳转过来的，就直接关闭 回到激光扫码界面
-                if (laserAndZxing){
+                if (laserAndZxing) {
                     finish();
-                }else {
-                    LaserScanActivity.startActivityFromZxing(ScanManagerActivity.this,flag);
+                } else {
+                    LaserScanActivity.startActivityFromZxing(ScanManagerActivity.this, flag);
                 }
 
             }
@@ -189,9 +190,9 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
                         if (confirm) {
 
                         } else {
-                            if (TextUtils.isEmpty(dialog1.getMessage())){
+                            if (TextUtils.isEmpty(dialog1.getMessage())) {
                                 ToastUtil.showToast("输入为空");
-                            }else {
+                            } else {
                                 getBackMessage(dialog1.getMessage());
                             }
 
@@ -232,13 +233,14 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
     /**
      * 获取回调的扫码信息
+     *
      * @param result
      */
-    private void getBackMessage(String result){
-        if (laserAndZxing){
-            EventBus.getDefault().post(new LaserAndZxingBean(result,"laser"));
+    private void getBackMessage(String result) {
+        if (laserAndZxing) {
+            EventBus.getDefault().post(new LaserAndZxingBean(result, "laser"));
 
-        }else {
+        } else {
             if (flag == null) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.SACN_DATA, result);
@@ -257,12 +259,11 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     @Override
     public void onScanQRCodeOpenCameraError() {
         ToastUtil.showToast("扫描失败，请重试。");
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData())&&result.getTypeName().equals("scan")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("scan")) {
             getBackMessage(result.getData());
         }
 //        ToastUtil.showToast("扫码数据为空请重新扫码");

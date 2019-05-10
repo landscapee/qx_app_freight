@@ -25,18 +25,20 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.LocalBillBean;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
+/**
+ * 选择运单弹窗
+ */
 public class ChooseGoodsBillDialog extends DialogFragment {
     private Context context;
     private List<LocalBillBean> billList;
     private String boardText;
     private OnBillSelectListener onBillSelectListener;
 
-    public void setData(Context context,String boardText, List<LocalBillBean> billList) {
+    public void setData(Context context, String boardText, List<LocalBillBean> billList) {
         this.context = context;
-        this.boardText=boardText;
-        this.billList=billList;
+        this.boardText = boardText;
+        this.billList = billList;
 //        this.billTexts.add(0,"请选择需要下拉的运单号");
     }
 
@@ -54,26 +56,26 @@ public class ChooseGoodsBillDialog extends DialogFragment {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
-        ImageView icClose=dialog.findViewById(R.id.iv_close_dialog);
+        ImageView icClose = dialog.findViewById(R.id.iv_close_dialog);
         icClose.setOnClickListener(v -> {
             dismiss();
         });
-        TextView tvBoard=dialog.findViewById(R.id.tv_board_number);
-        tvBoard.setText("板车:"+boardText);
-        Spinner spinner=dialog.findViewById(R.id.sp_chose_bill);
-        List<String> billTexts=new ArrayList<>();
-        for (LocalBillBean billBean:billList){
+        TextView tvBoard = dialog.findViewById(R.id.tv_board_number);
+        tvBoard.setText("板车:" + boardText);
+        Spinner spinner = dialog.findViewById(R.id.sp_chose_bill);
+        List<String> billTexts = new ArrayList<>();
+        for (LocalBillBean billBean : billList) {
             billTexts.add(billBean.getWayBillCode());
         }
         String[] array = billTexts.toArray(new String[billList.size()]);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_dropdown_item, array);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, array);
         spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_general);
         spinner.setAdapter(spinnerAdapter);
         final int[] pos = {0};
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                pos[0] =position;
+                pos[0] = position;
             }
 
             @Override
@@ -81,35 +83,37 @@ public class ChooseGoodsBillDialog extends DialogFragment {
 
             }
         });
-        TextView tvConfirm=dialog.findViewById(R.id.tv_confirm);
-        tvConfirm.setOnClickListener(v->{
-                if (onBillSelectListener != null) {
-                    onBillSelectListener.onBillSelected(pos[0]);
-                }
-                dismiss();
+        TextView tvConfirm = dialog.findViewById(R.id.tv_confirm);
+        tvConfirm.setOnClickListener(v -> {
+            if (onBillSelectListener != null) {
+                onBillSelectListener.onBillSelected(pos[0]);
+            }
+            dismiss();
         });
         return dialog;
     }
-    public interface OnBillSelectListener{
+
+    public interface OnBillSelectListener {
         void onBillSelected(int pos);
     }
 
     public void setOnBillSelectListener(OnBillSelectListener onBillSelectListener) {
         this.onBillSelectListener = onBillSelectListener;
     }
+
     @Override
     public void show(FragmentManager manager, String tag) {
 //        super.show(manager, tag);
         try {
-            Class c=Class.forName("android.support.v4.app.DialogFragment");
+            Class c = Class.forName("android.support.v4.app.DialogFragment");
             Constructor con = c.getConstructor();
             Object obj = con.newInstance();
             Field dismissed = c.getDeclaredField(" mDismissed");
             dismissed.setAccessible(true);
-            dismissed.set(obj,false);
+            dismissed.set(obj, false);
             Field shownByMe = c.getDeclaredField("mShownByMe");
             shownByMe.setAccessible(true);
-            shownByMe.set(obj,false);
+            shownByMe.set(obj, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

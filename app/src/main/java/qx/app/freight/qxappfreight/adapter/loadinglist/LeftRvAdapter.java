@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -103,7 +102,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 }
             });
             if (TextUtils.isEmpty(item.getGoodsPosition())) {//有货位数据
-                spGoodsPos.setVisibility(View.INVISIBLE);
+                spGoodsPos.setVisibility(View.GONE);
             } else {
                 spGoodsPos.setVisibility(View.VISIBLE);
                 ArrayAdapter<String> spGoodsAdapter;

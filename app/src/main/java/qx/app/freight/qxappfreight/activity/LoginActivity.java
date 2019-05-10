@@ -10,24 +10,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdDataContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
-import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
-import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdDataPresenter;
-import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -58,7 +50,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         toolbar.setMainTitle(Color.WHITE, "登录");
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("xingliyuan");
+        mEtUserName.setText("zhangbing");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();
@@ -105,7 +97,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //    }
 
     //用于测试的方法
-    private void test(){
+    private void test() {
 //        BaggerInputDialog dialog = new BaggerInputDialog();
 //        dialog.setData(this,null);
 //        dialog.show(getSupportFragmentManager(), "123");

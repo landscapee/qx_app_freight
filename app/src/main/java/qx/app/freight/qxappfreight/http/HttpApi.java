@@ -303,8 +303,8 @@ public interface HttpApi {
 
     //获取运单信息
     @GET("service-product-waybill/declare-waybill/getWayBillInfoByCode/{waybillCode}")
+    Observable<BaseEntity<GetWaybillInfoByIdDataBean>> getWayBillInfoByCode(@Path("waybillCode") String waybillCode);
 
-    Observable<BaseEntity<GetWaybillInfoByIdDataBean>> getWayBillInfoByIdData(@Path("waybillCode") String waybillCode);
     //获取运单信息
     @GET("service-product-waybill/declare-waybill/getWaybillInfo/{id}")
     Observable<BaseEntity<List<GetWaybillInfoByIdDataBean>>> getWaybillInfo(@Path("id") String id);
