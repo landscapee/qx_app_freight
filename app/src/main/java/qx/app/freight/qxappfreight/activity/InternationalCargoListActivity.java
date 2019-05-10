@@ -230,7 +230,6 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
             bean.setTpAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
             bean.setFlightIndicator("I");
-            bean.setWarehouseId("123");
 
             mList.add(bean);
             mAdapter.notifyDataSetChanged();
