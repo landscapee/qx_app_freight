@@ -65,6 +65,12 @@ public class Constants {
     public static String JUNCTION_LOAD = "junction";
 
     /**
+     * 结载
+     *
+     */
+    public static String INTERNATIONAL_GOODS = "international_goods";
+
+    /**
      * 配载
      */
     public static String STOWAGE = "stowage";

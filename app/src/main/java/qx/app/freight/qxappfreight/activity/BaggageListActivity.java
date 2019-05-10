@@ -91,6 +91,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         mAdapter.setOnDeleteClickListener(new BaggerListAdapter.OnDeleteClickLister() {
             @Override
             public void onDeleteClick(View view, int position) {
+                mSlideRV.closeMenu();
                 mList.remove(position);
                 mAdapter.notifyDataSetChanged();
             }
@@ -105,10 +106,12 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_add:
+                mSlideRV.closeMenu();
                 flag =0;
                 ScanManagerActivity.startActivity(this);
                 break;
             case R.id.btn_next:
+                mSlideRV.closeMenu();
                 flag =1;
                 ScanManagerActivity.startActivity(this);
                 break;
@@ -137,7 +140,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
                 public void onConfirm(TransportTodoListBean data) {
                     mList.add(data);
                     mAdapter.notifyDataSetChanged();
-                    bindingUser();
+//                    bindingUser();
                 }
             });
             dialog.show(getSupportFragmentManager(),"321");
@@ -206,6 +209,11 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         }
     }
 
+    /**
+     * 操作者绑定航班
+     *
+     * 暂时取消该功能
+     */
     private void bindingUser(){
         if (mList.size()==1){
             if (TextUtils.isEmpty(flightBean.getLuggageScanningUser())){
@@ -226,7 +234,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         if (mList.size() > 0) {
             for (TransportTodoListBean item : mList) {
                 if (item.getTpScooterCode().equals(mScooterCode)) {
-                    ToastUtil.showToast("改板已扫！");
+                    ToastUtil.showToast("该板已扫！");
                     return;
                 }
             }
@@ -240,6 +248,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         ((BaggageAreaSubPresenter)mPresenter).ScooterInfoList(entity);
     }
 
+    //提交数据，现在改成下一步
     private void submitScooter(String turntableId){
 
         for (TransportTodoListBean item:mList) {

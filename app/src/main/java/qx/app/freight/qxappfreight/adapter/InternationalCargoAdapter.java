@@ -12,12 +12,12 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
-public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, BaseViewHolder> {
+public class InternationalCargoAdapter extends BaseQuickAdapter<TransportTodoListBean, BaseViewHolder> {
 
     private OnDeleteClickLister mDeleteClickListener;
 
-    public BaggerListAdapter(List<TransportTodoListBean> data) {
-        super(R.layout.item_bagger_list, data);
+    public InternationalCargoAdapter(List<TransportTodoListBean> data) {
+        super(R.layout.item_international_list, data);
     }
 
     public void setOnDeleteClickListener(OnDeleteClickLister listener) {
@@ -29,9 +29,6 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         //板车类型~板车号
         helper.setText(R.id.allocate_address, String.format(mContext.getString(R.string.format_allocate_ddress_info), MapValue.getCarTypeValue(item.getTpScooterType()), item.getTpScooterCode()));
 
-        //件数~重量~体积
-        helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTpCargoNumber()+"", item.getTpCargoWeight()+"", item.getTpCargoVolume()+""));
-
         //是否隐藏国际图标
         if (item.getFlightIndicator().equals("I")){
             helper.setVisible(R.id.iv_international,true);
@@ -42,8 +39,6 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         helper.setText(R.id.allocate_flightnumber,item.getTpFlightNumber())
                 .setText(R.id.allocate_machinenumber,item.getTpFlightLocate())
                 .setText(R.id.tv_plan_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getTpFlightTime()) , TimeUtils.getDay((item.getTpFlightTime()))));
-
-
 
         View viewDelete = helper.getView(R.id.ll_delete);
         viewDelete.setTag(helper.getAdapterPosition());

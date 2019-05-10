@@ -35,6 +35,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
      * dtoType : 0
      * newId : null
      * flightIndicator : 国内D 或者 国际I
+     * warehouseId :  库区id（新加）
      */
     private String id;
     private String tpScooterId;
@@ -57,6 +58,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private int dtoType;
     private Object newId;
     private String flightIndicator;
+    private String warehouseId;
     /**
      * 是否到机位
      */

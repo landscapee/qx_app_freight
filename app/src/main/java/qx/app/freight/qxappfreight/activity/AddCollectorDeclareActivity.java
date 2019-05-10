@@ -23,6 +23,8 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
  * 新增品名
  *
  * ！！！！！未使用！！！！
+ *
+ * create by swd
  */
 public class AddCollectorDeclareActivity extends BaseActivity {
 

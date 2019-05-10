@@ -9,6 +9,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightIdBean, BaseViewHolder> {
@@ -19,12 +20,6 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightId
     @SuppressLint("StringFormatMatches")
     @Override
     protected void convert(BaseViewHolder helper, GetInfosByFlightIdBean item) {
-        String scooterName;
-        if (item.getScooterType()==1){
-            scooterName = "大板";
-        }else {
-            scooterName = "小板";
-        }
         String scooterType;
         switch (item.getReWeightFinish()) {
             case 0:
@@ -42,7 +37,7 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightId
         //板车类型~板车号
         helper.setText(R.id.tv_scooter_type, scooterType);
         //板车类型~板车号
-        helper.setText(R.id.allocate_address, scooterName+item.getScooterCode());
+        helper.setText(R.id.allocate_address,  MapValue.getCarTypeValue(item.getScooterType()+"")+item.getScooterCode());
         //件数~重量~体积
         helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTotal(), item.getWeight(), item.getVolume()));
         //航班号

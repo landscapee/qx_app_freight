@@ -186,6 +186,9 @@ public class TaskFragment extends BaseFragment {
             } else if(Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
                 fragmentList.add(new JunctionLoadFragment());
                 list_Title.add("结载");
+            }else if(Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
+                fragmentList.add(new InternationalCargoFragment());
+                list_Title.add("国际货物");
             }
 
         }

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ouyben.empty.EmptyLayout;
 
 import java.util.ArrayList;
@@ -23,28 +22,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.BaggageListActivity;
+import qx.app.freight.qxappfreight.activity.InternationalCargoListActivity;
 import qx.app.freight.qxappfreight.adapter.FlightListAdapter;
-import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
-import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.LookLUggageScannigFlightContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
-import qx.app.freight.qxappfreight.presenter.LookLUggageScannigFlightPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
+import qx.app.freight.qxappfreight.contract.GetAllInternationalAndMixedFlightContract;
+import qx.app.freight.qxappfreight.presenter.GetAllInternationalAndMixedFlightPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
-
 /**
- * 行李上报
+ * 国际货物上报上报
  *
  * create by swd
  */
-public class FlightListBaggerFragment extends BaseFragment implements LookLUggageScannigFlightContract.lookLUggageScannigFlightView, EmptyLayout.OnRetryLisenter {
+public class InternationalCargoFragment extends BaseFragment implements GetAllInternationalAndMixedFlightContract.getAllInternationalAndMixedFlightView , EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     RecyclerView mMfrvData;
 
@@ -52,33 +44,34 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     List<FlightLuggageBean> mList;  //筛选过后的数据
     List<FlightLuggageBean> mListTemp; //原始数据
 
-    private int pageCurrent = 1;
-    private String searchString = "";
+    private String searchString = ""; //搜索框里面的搜索关键字
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_flight_bagger, container, false);
+        View view = inflater.inflate(R.layout.fragment_international_cargo, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e("dime", "Fragment: 行李上报");
         initView();
-//        loadData();
     }
 
+    /**
+     * 初始化控件
+     */
     private void initView() {
-        mPresenter = new LookLUggageScannigFlightPresenter(this);
+        mPresenter = new GetAllInternationalAndMixedFlightPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
         mAdapter = new FlightListAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            startActivity(new Intent(getContext(), BaggageListActivity.class).putExtra("flightBean",mList.get(position)));
+            startActivity(new Intent(getContext(), InternationalCargoListActivity.class).putExtra("flightBean",mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
         //行李上报-搜索逻辑
@@ -90,6 +83,12 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
                 seachWithNum();
             }
         });
+    }
+
+    private void loadData() {
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setMinutes("120");
+        ((GetAllInternationalAndMixedFlightPresenter) mPresenter).addScooter(entity);
     }
 
     /**
@@ -115,16 +114,17 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         loadData();
     }
 
-    private void loadData() {
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setMinutes("120");
-        ((LookLUggageScannigFlightPresenter) mPresenter).getDepartureFlightByAndroid(entity);
+    @Override
+    public void getAllInternationalAndMixedFlightResult(List<FlightLuggageBean> flightLuggageBeans) {
+        mListTemp.clear();
+        mListTemp.addAll(flightLuggageBeans);
+        seachWithNum();
     }
 
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
-        Log.e("22222", "toastView: "+error);
+        Log.e("22222", "toastView: " + error);
     }
 
     @Override
@@ -144,12 +144,5 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             loadData();
             dismissProgessDialog();
         }, 2000);
-    }
-
-    @Override
-    public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-        mListTemp.clear();
-        mListTemp.addAll(flightLuggageBeans);
-        seachWithNum();
     }
 }

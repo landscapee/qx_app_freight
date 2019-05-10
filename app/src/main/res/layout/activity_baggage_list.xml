@@ -3,53 +3,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <android.support.v4.widget.NestedScrollView
         android:layout_weight="1"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_tp_status"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:background="#FFE1C1"
-            android:textColor="#CD5400"
-            android:text="正在执行"
-            android:gravity="center"
-            android:visibility="gone"
-            />
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <qx.app.freight.qxappfreight.widget.SlideRecyclerView
-            android:id="@+id/mfrv_receive_good"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
         <LinearLayout
-            android:id="@+id/ll_add"
             android:layout_width="match_parent"
-            android:layout_height="73dp"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/shape_rect_gray_eff2"
-            android:layout_marginTop="7dp"
-            >
-            <ImageView
-                android:id="@+id/image_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/new_5"
-                />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="请扫码添加板车"
-                style="@style/public_tv_12sp_6"
-                android:layout_marginTop="@dimen/dp_5"
+                android:id="@+id/tv_tp_status"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:background="#FFE1C1"
+                android:textColor="#CD5400"
+                android:text="正在执行"
+                android:gravity="center"
+                android:visibility="gone"
                 />
 
+            <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+                android:id="@+id/mfrv_receive_good"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <LinearLayout
+                android:id="@+id/ll_add"
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/shape_rect_gray_eff2"
+                android:layout_marginTop="7dp"
+                >
+                <ImageView
+                    android:id="@+id/image_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/new_5"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请扫码添加板车"
+                    style="@style/public_tv_12sp_6"
+                    android:layout_marginTop="@dimen/dp_5"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"

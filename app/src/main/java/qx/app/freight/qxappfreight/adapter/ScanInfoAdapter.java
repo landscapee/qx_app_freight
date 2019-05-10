@@ -10,6 +10,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
@@ -29,18 +30,12 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
     @Override
     protected void convert(BaseViewHolder helper, ScooterInfoListBean item) {
         View viewDelete = helper.getView(R.id.ll_delete);
-        String type;
-        if(item.getScooterType()==1){
-            type="大板";
-        }else {
-            type="小板";
-        }
         if (item.getFlightType().equals("I")){
             helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
         }else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
         }
-        helper.setText(R.id.tv_board_number,type+item.getScooterCode());
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType()+"")+item.getScooterCode());
         String []infos=mInfo.split("\\*");
         helper.setText(R.id.tv_flight_type,infos[0]);
         helper.setText(R.id.tv_seat,infos[5]);

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFF2F3"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="93dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray"
+            android:orientation="vertical"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@drawable/shape_rect_blue_b3d1fb"
+                    android:id="@+id/flight_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:gravity="center_vertical"
+                    android:textColor="#136bef"
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@mipmap/flight"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_flight_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text=""
+                    android:textColor="@color/black_3" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_flight_2"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_flight2_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="CTU"
+                        android:textColor="@color/black_3" />
+
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight2_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MXP"
+                        android:textColor="@color/black_3" />
+                </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_flight_3"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_flight3_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="CTU"
+                        android:textColor="@color/black_3" />
+
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight3_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CTU"
+                        android:textColor="@color/black_3" />
+
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight3_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MXP"
+                        android:textColor="@color/black_3" />
+                </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_flight_4"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_flight4_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="CTU"
+                        android:textSize="@dimen/sp_9"
+                        android:textColor="@color/black_3" />
+
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="21dp"
+                        android:layout_height="10dp"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight4_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CTU"
+                        android:textSize="@dimen/sp_9"
+                        android:textColor="@color/black_3" />
+
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="21dp"
+                        android:layout_height="10dp"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight4_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MXP"
+                        android:textSize="@dimen/sp_9"
+                        android:textColor="@color/black_3" />
+                    <ImageView
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="21dp"
+                        android:layout_height="10dp"
+                        android:src="@mipmap/airlane" />
+
+                    <TextView
+                        android:id="@+id/tv_flight4_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MXP"
+                        android:textSize="@dimen/sp_9"
+                        android:textColor="@color/black_3" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_flight_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:drawableLeft="@mipmap/placement"
+
+                    android:textColor="@color/black_3"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/tv_arrive_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@mipmap/take_off"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:visibility="invisible"
+                    android:id="@+id/tv_end_time"
+                    android:drawableLeft="@mipmap/landfall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_888"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:layout_height="41dp">
+            <ImageView
+                android:background="#3689EE"
+                android:layout_width="3dp"
+                android:layout_height="13dp" />
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="货物板车信息"
+                android:textColor="@color/black_3"
+                android:textSize="14sp"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <View
+            style="@style/line_horizontal"/>
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:scrollbars="none"
+            android:layout_height="0dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+                    android:id="@+id/mfrv_receive_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="73dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/shape_rect_gray_eff2"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
+                    <ImageView
+                        android:id="@+id/image_scan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/new_5"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="请扫码添加货物板车"
+                        style="@style/public_tv_12sp_6"
+                        android:layout_marginTop="@dimen/dp_5"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            style="@style/btn_submit"
+            />
+    </RelativeLayout>
+
+</LinearLayout>
