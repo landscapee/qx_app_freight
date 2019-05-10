@@ -13,7 +13,25 @@
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="#e5e5e5" />
-
+        <TextView
+            android:id="@+id/tv_lock"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="锁定"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#666"/>
+        <ImageView
+            android:id="@+id/iv_lock_status"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/icon_lock_data"
+            android:scaleType="center"/>
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
         <TextView
             android:id="@+id/tv_berth"
             android:layout_width="55dp"

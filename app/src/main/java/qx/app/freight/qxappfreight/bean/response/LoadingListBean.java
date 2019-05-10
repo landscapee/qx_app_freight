@@ -1,163 +1,109 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
+/**
+ * 单个装机单数据
+ */
 @Data
-public class LoadingListBean {
-
+public class LoadingListBean implements Serializable{
     /**
-     * id : 0aed275e60c9e4d96e5faefa28460a4d
-     * flightId : faa5ab6ffdd24a75b4e7b20235cc4897
-     * version : 1
-     * content :
-     * reviewStatus : 0
-     * createDate : 1556428802628
-     * createUser : u55e8f00267b145b4be3a010b6091c2c7
-     * updateDate : null
-     * updateUser : null
-     * documentType : 2
-     * loadingAdvice : 0
-     * loadingUser : null
-     * contentObject : [{"cargoType":"C","groupScooters":[{"groupScooterStatus":0,"runTimeScooterId":"d59a52236a0847f999f85755afa15bb2","scooterType":0,"repName":"理货区","weight":8,"inFlight":0,"scooterWeight":825,"delFlag":0,"scooterId":"45c325c5071d4ddfb4777e7e330429c5","volume":8,"number":8,"route":"成都-临沂","repPlaceNum":"dep6061008ccaa1403ca95e93f87f2e4e91","updateStatus":0,"waybillId":"6403103ef206408d9302710d5c59af26","waybillCode":"028-00000022","scooterCode":"01340","createUser":"u80fec77daa6a4c01b57c12adebad0565","id":"253f9741bb9bde89853f0cc4a914eda2","destinationStation":"临沂","createDate":1556428668279}],"scooterType":0,"flightId":"faa5ab6ffdd24a75b4e7b20235cc4897","delFlag":0,"reWeightFinish":0,"scooterId":"45c325c5071d4ddfb4777e7e330429c5","number":8,"total":0,"cargoStatus":0,"deleteStatus":0,"reWeight":0,"id":"d59a52236a0847f999f85755afa15bb2","suggestRepository":"1H","cargo":"货物","scooter":"大滚筒 01340","personUpdateValue":0,"createDate":1556428668276,"uldCode":"","reDifferenceRate":0,"scooterStatus":0,"edit":false,"weight":8,"inFlight":0,"scooterWeight":825,"volume":8,"updateStatus":0,"createUser":"u80fec77daa6a4c01b57c12adebad0565","scooterCode":"01340","reDifference":0}]
-     * returnReason : null
-     * preContent : null
-     * cgoContent : null
-     * autoLoadInstalledSingle : 0
+     * status : 200
+     * message : 正确
+     * rowCount : null
+     * data : [{"id":"e02e0e3f54c8e8875c22bbad0160f837","flightId":"529079d8693445dcaf79a5ffc102bae5","version":"1","content":"","reviewStatus":0,"createDate":1557390815343,"createUser":"liuyuhuan","updateDate":1557393717477,"updateUser":null,"documentType":2,"loadingAdvice":0,"loadingUser":"大张伟","contentObject":[{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"22L","serialInd":"AKE78253CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"22R","serialInd":"AKE74385CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"23L","serialInd":"AKE77772CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"23R","serialInd":"AKE76098CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"24L","serialInd":"AKE76350CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"24R","serialInd":"AKE77396CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"25L","serialInd":"AKE76469CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"25R","serialInd":"AKE78249CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"26L","serialInd":"AKE74294CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"26R","serialInd":"AKE73733CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"3","estWgt":"1868","location":"32P","serialInd":"PMC42767CZ","cont":"PMC","actWgt":"1868","restrictedCargo":""},{"dst":"","pri":"A21","tailer":"","dest":"PEK","type":"C","cargoStatus":0,"pos":"3","estWgt":"440","location":"34L","serialInd":"AKE76622CZ","cont":"LD3","actWgt":"440","restrictedCargo":""},{"dst":"","pri":"A31","tailer":"","dest":"PEK","type":"M","cargoStatus":0,"pos":"3","estWgt":"158","location":"34R","serialInd":"AKE78504CZ","cont":"LD3","actWgt":"158","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"4","estWgt":"90","location":"41L","serialInd":"AKE75866CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"4","estWgt":"90","location":"41R","serialInd":"AKE74977CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"A01","tailer":"","dest":"PEK","type":"BY","cargoStatus":0,"pos":"4","estWgt":"790","location":"43L","serialInd":"AKE73428CZ","cont":"LD3","actWgt":"790","restrictedCargo":""},{"dst":"","pri":"A31","tailer":"","dest":"PEK","type":"BY","cargoStatus":0,"pos":"4","estWgt":"103","location":"43R","serialInd":"AKE77538CZ","cont":"LD3","actWgt":"103","restrictedCargo":""},{"cargoStatus":0,"dst":"","pos":"5","pri":"A01","tailer":"","estWgt":"59","serialInd":"","cont":"BULK","dest":"PEK","type":"T","actWgt":"59","restrictedCargo":""},{"cargoStatus":0,"dst":"","pos":"5","pri":"A01","tailer":"","estWgt":"144","serialInd":"","cont":"BULK","dest":"PEK","type":"BY","actWgt":"144","restrictedCargo":""}],"returnReason":null,"preContent":"","cgoContent":"","autoLoadInstalledSingle":0,"flightNo":"CZ6184"}]
      */
 
-    private String id;
-    private String flightId;
-    private String version;
-    private String content;
-    private int reviewStatus;
-    private long createDate;
-    private String createUser;
-    private Object updateDate;
-    private Object updateUser;
-    private int documentType;
-    private int loadingAdvice;
-    private Object loadingUser;
-    private Object returnReason;
-    private Object preContent;
-    private Object cgoContent;
-    private int autoLoadInstalledSingle;
-    private List<ContentObjectBean> contentObject;
+    private String status;
+    private String message;
+    private Object rowCount;
+    private List<DataBean> data;
 
     @Data
-    public static class ContentObjectBean {
+    public static class DataBean implements Serializable {
         /**
-         * cargoType : C
-         * groupScooters : [{"groupScooterStatus":0,"runTimeScooterId":"d59a52236a0847f999f85755afa15bb2","scooterType":0,"repName":"理货区","weight":8,"inFlight":0,"scooterWeight":825,"delFlag":0,"scooterId":"45c325c5071d4ddfb4777e7e330429c5","volume":8,"number":8,"route":"成都-临沂","repPlaceNum":"dep6061008ccaa1403ca95e93f87f2e4e91","updateStatus":0,"waybillId":"6403103ef206408d9302710d5c59af26","waybillCode":"028-00000022","scooterCode":"01340","createUser":"u80fec77daa6a4c01b57c12adebad0565","id":"253f9741bb9bde89853f0cc4a914eda2","destinationStation":"临沂","createDate":1556428668279}]
-         * scooterType : 0
-         * flightId : faa5ab6ffdd24a75b4e7b20235cc4897
-         * delFlag : 0
-         * reWeightFinish : 0
-         * scooterId : 45c325c5071d4ddfb4777e7e330429c5
-         * number : 8
-         * total : 0
-         * cargoStatus : 0
-         * deleteStatus : 0
-         * reWeight : 0
-         * id : d59a52236a0847f999f85755afa15bb2
-         * suggestRepository : 1H
-         * cargo : 货物
-         * scooter : 大滚筒 01340
-         * personUpdateValue : 0
-         * createDate : 1556428668276
-         * uldCode :
-         * reDifferenceRate : 0
-         * scooterStatus : 0
-         * edit : false
-         * weight : 8
-         * inFlight : 0
-         * scooterWeight : 825
-         * volume : 8
-         * updateStatus : 0
-         * createUser : u80fec77daa6a4c01b57c12adebad0565
-         * scooterCode : 01340
-         * reDifference : 0
+         * id : e02e0e3f54c8e8875c22bbad0160f837
+         * flightId : 529079d8693445dcaf79a5ffc102bae5
+         * version : 1
+         * content :
+         * reviewStatus : 0
+         * createDate : 1557390815343
+         * createUser : liuyuhuan
+         * updateDate : 1557393717477
+         * updateUser : null
+         * documentType : 2
+         * loadingAdvice : 0
+         * loadingUser : 大张伟
+         * contentObject : [{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"22L","serialInd":"AKE78253CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"22R","serialInd":"AKE74385CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"23L","serialInd":"AKE77772CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"23R","serialInd":"AKE76098CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"24L","serialInd":"AKE76350CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"24R","serialInd":"AKE77396CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"25L","serialInd":"AKE76469CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"25R","serialInd":"AKE78249CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"26L","serialInd":"AKE74294CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"2","estWgt":"90","location":"26R","serialInd":"AKE73733CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"3","estWgt":"1868","location":"32P","serialInd":"PMC42767CZ","cont":"PMC","actWgt":"1868","restrictedCargo":""},{"dst":"","pri":"A21","tailer":"","dest":"PEK","type":"C","cargoStatus":0,"pos":"3","estWgt":"440","location":"34L","serialInd":"AKE76622CZ","cont":"LD3","actWgt":"440","restrictedCargo":""},{"dst":"","pri":"A31","tailer":"","dest":"PEK","type":"M","cargoStatus":0,"pos":"3","estWgt":"158","location":"34R","serialInd":"AKE78504CZ","cont":"LD3","actWgt":"158","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"4","estWgt":"90","location":"41L","serialInd":"AKE75866CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"1","tailer":"","dest":"PEK","type":"X","cargoStatus":0,"pos":"4","estWgt":"90","location":"41R","serialInd":"AKE74977CZ","cont":"LD3","actWgt":"90","restrictedCargo":""},{"dst":"","pri":"A01","tailer":"","dest":"PEK","type":"BY","cargoStatus":0,"pos":"4","estWgt":"790","location":"43L","serialInd":"AKE73428CZ","cont":"LD3","actWgt":"790","restrictedCargo":""},{"dst":"","pri":"A31","tailer":"","dest":"PEK","type":"BY","cargoStatus":0,"pos":"4","estWgt":"103","location":"43R","serialInd":"AKE77538CZ","cont":"LD3","actWgt":"103","restrictedCargo":""},{"cargoStatus":0,"dst":"","pos":"5","pri":"A01","tailer":"","estWgt":"59","serialInd":"","cont":"BULK","dest":"PEK","type":"T","actWgt":"59","restrictedCargo":""},{"cargoStatus":0,"dst":"","pos":"5","pri":"A01","tailer":"","estWgt":"144","serialInd":"","cont":"BULK","dest":"PEK","type":"BY","actWgt":"144","restrictedCargo":""}]
+         * returnReason : null
+         * preContent :
+         * cgoContent :
+         * autoLoadInstalledSingle : 0
+         * flightNo : CZ6184
          */
-
-        private String cargoType;
-        private int scooterType;
-        private String flightId;
-        private int delFlag;
-        private int reWeightFinish;
-        private String scooterId;
-        private int number;
-        private int total;
-        private int cargoStatus;
-        private int deleteStatus;
-        private int reWeight;
+        private boolean showDetail;
         private String id;
-        private String suggestRepository;
-        private String cargo;
-        private String scooter;
-        private int personUpdateValue;
+        private String flightId;
+        private String version;
+        private String content;
+        private int reviewStatus;
         private long createDate;
-        private String uldCode;
-        private int reDifferenceRate;
-        private int scooterStatus;
-        private boolean edit;
-        private int weight;
-        private int inFlight;
-        private int scooterWeight;
-        private int volume;
-        private int updateStatus;
         private String createUser;
-        private String scooterCode;
-        private int reDifference;
-        private List<GroupScootersBean> groupScooters;
+        private long updateDate;
+        private Object updateUser;
+        private int documentType;
+        private int loadingAdvice;
+        private String loadingUser;
+        private Object returnReason;
+        private String preContent;
+        private String cgoContent;
+        private int autoLoadInstalledSingle;
+        private String flightNo;
+        private List<ContentObjectBean> contentObject;
 
         @Data
-        public static class GroupScootersBean {
+        public static class ContentObjectBean implements Serializable{
             /**
-             * groupScooterStatus : 0
-             * runTimeScooterId : d59a52236a0847f999f85755afa15bb2
-             * scooterType : 0
-             * repName : 理货区
-             * weight : 8
-             * inFlight : 0
-             * scooterWeight : 825
-             * delFlag : 0
-             * scooterId : 45c325c5071d4ddfb4777e7e330429c5
-             * volume : 8
-             * number : 8
-             * route : 成都-临沂
-             * repPlaceNum : dep6061008ccaa1403ca95e93f87f2e4e91
-             * updateStatus : 0
-             * waybillId : 6403103ef206408d9302710d5c59af26
-             * waybillCode : 028-00000022
-             * scooterCode : 01340
-             * createUser : u80fec77daa6a4c01b57c12adebad0565
-             * id : 253f9741bb9bde89853f0cc4a914eda2
-             * destinationStation : 临沂
-             * createDate : 1556428668279
+             * dst :
+             * pri : 1
+             * tailer :
+             * dest : PEK
+             * type : X
+             * cargoStatus : 0
+             * pos : 2
+             * estWgt : 90
+             * location : 22L
+             * serialInd : AKE78253CZ
+             * cont : LD3
+             * actWgt : 90
+             * restrictedCargo :
              */
 
-            private int groupScooterStatus;
-            private String runTimeScooterId;
-            private int scooterType;
-            private String repName;
-            private int weight;
-            private int inFlight;
-            private int scooterWeight;
-            private int delFlag;
-            private String scooterId;
-            private int volume;
-            private int number;
-            private String route;
-            private String repPlaceNum;
-            private int updateStatus;
-            private String waybillId;
-            private String waybillCode;
-            private String scooterCode;
-            private String createUser;
-            private String id;
-            private String destinationStation;
-            private long createDate;
+            private String dst;
+            private String pri;
+            private String tailer;
+            private String dest;
+            private String type;
+            private int cargoStatus;
+            private String pos;
+            private String startBerth;
+            private String estWgt;
+            private String location;
+            private String serialInd;
+            private String cont;
+            private String actWgt;
+            private String restrictedCargo;
+            /**
+             * 缺少的数据
+             */
+            private boolean showPullDown = false;
+            private String uldNumber = "-";
+            private String goodsPosition = "";
+            private int number = 0;
+            private boolean locked;
         }
     }
 }

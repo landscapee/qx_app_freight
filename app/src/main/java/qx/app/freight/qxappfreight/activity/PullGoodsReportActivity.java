@@ -39,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
@@ -84,6 +85,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private Map<String, LocalBillBean> mCodeMap = new HashMap<>();//以运单code为键，对应的对象为值的map
     private String mCurrentTaskId;
     private List<String> mTpScooterCodeList = new ArrayList<>();
+    private LoadingListBean.DataBean mModel;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -206,6 +208,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 if (infoFull) {
                     mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
                     ExceptionReportEntity entity = new ExceptionReportEntity();
+                    entity.setLoadingListId(mModel.getId());
                     entity.setFlightId(Long.valueOf(mInfoList[7]));
                     entity.setFlightNum(mInfoList[0]);
                     entity.setReType(3);
@@ -427,7 +430,14 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             bean.setTpFlightNumber(mInfoList[0]);
             bean.setTpFlightLocate(mInfoList[5]);
             bean.setTpFlightTime(Long.valueOf(mInfoList[6]));
-            bean.setTpFregihtSpace(getIntent().getStringExtra("fregiht_space"));
+            String berth="";
+            mModel= (LoadingListBean.DataBean) getIntent().getSerializableExtra("loading_list_data");
+            for (LoadingListBean.DataBean.ContentObjectBean data:mModel.getContentObject()){
+                if (data.getTailer().equals(entity.getScooterCode())){
+                    berth=data.getPos();
+                }
+            }
+            bean.setTpFregihtSpace(berth);
             bean.setMaxBillWeight(entity.getScooterWeight());
             if (mBillList.size() != 0) {
                 ChooseGoodsBillDialog dialog = new ChooseGoodsBillDialog();

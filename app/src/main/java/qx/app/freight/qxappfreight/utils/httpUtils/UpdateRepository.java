@@ -18,7 +18,8 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -482,13 +483,14 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().pullGoodsReport(transportEndEntity));
     }
 
-    /***
-     *  装机单
-     * @param flightId
+    /**
+     * 获取装机单数据
+     *
+     * @param entity 请求参数
      * @return
      */
-    public Observable<List<LoadingListBean>> getFlightCargoRes(String flightId) {
-        return transform(getService().getFlightCargoRes(flightId));
+    public Observable<LoadingListBean> getLoadingList(LoadingListRequestEntity entity) {
+        return getService().getLoadingList(entity);
     }
 
     /*****
@@ -505,7 +507,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> overLoad(LoadingListOverBean model) {
+    public Observable<String> overLoad(LoadingListSendEntity model) {
         return nothingtransform(getService().overLoad(model));
     }
 

@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,15 +26,14 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.LocalBillBean;
-import qx.app.freight.qxappfreight.bean.UnloadPlaneEntity;
-import qx.app.freight.qxappfreight.bean.UnloadPlaneVersionEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
+import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -71,12 +69,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvErrorReport;
     @BindView(R.id.tv_end_install_equip)
     TextView mTvEndInstall;
-    private List<UnloadPlaneVersionEntity> mList = new ArrayList<>();
-    private List<LocalBillBean> mBillList = new ArrayList<>();
-    private String mFregihtSpace;//舱位名称
-    private String mTargetPlace;
+    private List<LoadingListBean.DataBean> mLoadingList = new ArrayList<>();
     private String mCurrentTaskId;
     private String mCurrentFlightId;
+    private WaitCallBackDialog mWaitCallBackDialog;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -103,7 +99,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     private void showCargoResUpdate(String flightId) {
         UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, flightId, s -> {
-            ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
+            LoadingListRequestEntity entity = new LoadingListRequestEntity();
+            entity.setDocumentType(2);
+            entity.setFlightId(mCurrentFlightId);
+            ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         });
         updatePushDialog.show();
     }
@@ -118,6 +117,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
@@ -154,7 +154,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvTargetPlace.setText(end);
             }
         }
-        mTargetPlace = info[4];
         mTvSeat.setText(info[5]);
         mTvStartTime.setText(TimeUtils.getHMDay(Long.valueOf(info[6])));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -163,15 +162,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = info[7];
-        ((GetFlightCargoResPresenter) mPresenter).getFlightCargoRes(mCurrentFlightId);
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(mCurrentFlightId);
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         mTvPullGoodsReport.setOnClickListener(v -> {
-            if (mBillList.size() == 0) {
+            if (mLoadingList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
             } else {
                 Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
                 intent.putExtra("plane_info", flightInfo);
-                intent.putExtra("fregiht_space", mFregihtSpace);
-                intent.putParcelableArrayListExtra("bill_list", (ArrayList<? extends Parcelable>) mBillList);
+                intent.putExtra("loading_list_data", mLoadingList.get(0));
                 LoadPlaneActivity.this.startActivity(intent);
             }
         });
@@ -182,140 +183,51 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvEndInstall.setOnClickListener(v -> {
-            if (mBillList.size() == 0) {
+            if (mLoadingList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
             } else {
-                GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                bean.setTpFlightId(info[7]);
-                bean.setTaskId(info[11]);
-                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-            }
-        });
-    }
-
-    /**
-     * 数据去重
-     *
-     * @param list 要去重的列表
-     * @return 去重后的列表
-     */
-    private List<LocalBillBean> removeDuplicate(List<LocalBillBean> list) {
-        List<LocalBillBean> result = new ArrayList<>();
-        List<String> codes = new ArrayList<>();
-        for (LocalBillBean bean : list) {
-            if (!codes.contains(bean.getWayBillCode())) {
-                codes.add(bean.getWayBillCode());
-            }
-        }
-        for (String code : codes) {
-            LocalBillBean billBean = new LocalBillBean();
-            billBean.setWayBillCode(code);
-            String id = "";
-            int number = 0;
-            double weight = 0d;
-            double volume = 0d;
-            String type = "";
-            for (LocalBillBean bean : list) {
-                if (code.equals(bean.getWayBillCode())) {
-                    id = bean.getWaybillId();
-                    type = bean.getCargoType();
-                    number += bean.getMaxNumber();
-                    weight += bean.getMaxWeight();
-                    volume += bean.getMaxVolume();
+                boolean doRight = true;
+                for (LoadingListBean.DataBean entity1 : mLoadingList) {
+                    for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
+                        if (!entity2.isLocked()) {
+                            doRight = false;
+                            break;
+                        }
+                    }
+                }
+                if (doRight) {
+                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                    bean.setTpFlightId(info[7]);
+                    bean.setTaskId(info[11]);
+                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+                } else {
+                    ToastUtil.showToast("有未锁定修改的数据，请检查！");
                 }
             }
-            billBean.setCargoType(type);
-            billBean.setWaybillId(id);
-            billBean.setMaxNumber(number);
-            billBean.setMaxWeight(weight);
-            billBean.setMaxVolume(volume);
-            billBean.setBillItemNumber(number);
-            billBean.setBillItemWeight(weight);
-            result.add(billBean);
-        }
-        return result;
+        });
     }
 
     @Override
-    public void getFlightCargoResResult(List<LoadingListBean> getFlightCargoResBeanList) {
-        if (getFlightCargoResBeanList == null || getFlightCargoResBeanList.size() == 0) return;
-        List<LocalBillBean> list3 = new ArrayList<>();
-        for (LoadingListBean.ContentObjectBean bean : getFlightCargoResBeanList.get(0).getContentObject()) {
-            mFregihtSpace = bean.getSuggestRepository();
-            if (bean.getGroupScooters() != null) {
-                for (LoadingListBean.ContentObjectBean.GroupScootersBean groupCode : bean.getGroupScooters()) {
-                    LocalBillBean billBean = new LocalBillBean();
-                    billBean.setWayBillCode(groupCode.getWaybillCode());
-                    billBean.setWaybillId(groupCode.getWaybillId());
-                    billBean.setMaxNumber(groupCode.getNumber());
-                    billBean.setMaxWeight(groupCode.getWeight());
-                    billBean.setCargoType("C".equals(bean.getCargoType()) ? "cargo" : "mail");
-                    billBean.setMaxVolume(groupCode.getVolume());
-                    list3.add(billBean);
-                }
-            }
+    public void getLoadingListResult(LoadingListBean result) {
+        if ("318".equals(result.getStatus())) {
+            mWaitCallBackDialog.show();
+        } else {
+            mLoadingList.clear();
+            if (result.getData() == null || result.getData().size() == 0) return;
+            mLoadingList.addAll(result.getData());
+            Collections.reverse(mLoadingList);
+            UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
+            mRvData.setAdapter(adapter);
+            adapter.setOnOverLoadListener(entity -> {
+                LoadingListSendEntity requestModel=new LoadingListSendEntity();
+                requestModel.setCreateDate(entity.getCreateDate());
+                requestModel.setCreateUser(entity.getCreateUser());
+                requestModel.setFlightId(entity.getFlightId());
+                requestModel.setContent(entity.getContentObject());
+                ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+            });
         }
-        mBillList = removeDuplicate(list3);
-        mList.clear();
-        for (LoadingListBean bean : getFlightCargoResBeanList) {
-            UnloadPlaneVersionEntity entity = new UnloadPlaneVersionEntity();
-            entity.setVersion(Integer.valueOf(bean.getVersion()));
-            List<UnloadPlaneEntity> list = new ArrayList<>();
-            if (bean.getContentObject() != null) {
-                for (int i = 0; i < bean.getContentObject().size(); i++) {
-                    LoadingListBean.ContentObjectBean model = bean.getContentObject().get(i);
-                    UnloadPlaneEntity item = new UnloadPlaneEntity();
-                    item.setBerth(model.getSuggestRepository());
-                    String boardNumber;
-                    if (!TextUtils.isEmpty(model.getScooterCode())) {
-                        boardNumber = model.getScooterCode();
-                    } else {
-                        boardNumber = (model.getGroupScooters() == null) ? "-" : model.getGroupScooters().get(0).getScooterCode();
-                    }
-                    item.setShowPullDown(model.getCargoStatus()==1);
-                    item.setBoardNumber(boardNumber);
-                    item.setUldNumber(TextUtils.isEmpty(model.getUldCode()) ? "-" : model.getUldCode());
-                    item.setTarget(mTargetPlace);
-                    item.setType(model.getCargoType());
-                    item.setWeight(model.getWeight());
-                    item.setGoodsPosition("");
-                    item.setNumber(model.getTotal());
-                    list.add(item);
-                }
-            }
-            entity.setList(list);
-            entity.setShowDetail(false);
-            mList.add(entity);
-        }
-        Collections.reverse(mList);
-        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mList);
-        mRvData.setAdapter(adapter);
-        adapter.setOnOverLoadListener(entity -> {
-            LoadingListOverBean bean=new LoadingListOverBean();
-            bean.setVersion("1");
-            bean.setFlightId(getFlightCargoResBeanList.get(0).getFlightId());
-            bean.setOperationUser(UserInfoSingle.getInstance().getLoginName());
-            List<LoadingListOverBean.DataBean> data=new ArrayList<>();
-            for (int i=0;i<entity.getList().size();i++){
-                LoadingListOverBean.DataBean dataBean=new LoadingListOverBean.DataBean();
-                dataBean.setId(getFlightCargoResBeanList.get(i).getId());
-                dataBean.setScooterId(getFlightCargoResBeanList.get(i).getContentObject().get(0).getScooterId());
-                data.add(dataBean);
-            }
-            bean.setData(data);
-            /**
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             * 数据不齐全
-             */
-            ((GetFlightCargoResPresenter) mPresenter).overLoad(bean);
-        });
     }
 
     @Override
@@ -329,7 +241,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void overLoadResult(String result) {
         ToastUtil.showToast("发送结载成功");
-        Log.e("tagNet", "result=====" + result);
+        mWaitCallBackDialog.show();
     }
 
     @Override

@@ -1,10 +1,9 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
@@ -17,12 +16,12 @@ public class GetFlightCargoResPresenter extends BasePresenter {
         mRequestModel = new GetFlightCargoResModel();
     }
 
-    public void getFlightCargoRes(String id) {
+    public void getLoadingList(LoadingListRequestEntity entity) {
         mRequestView.showNetDialog();
-        ((GetFlightCargoResModel) mRequestModel).getFlightCargoRes(id, new IResultLisenter<List<LoadingListBean>>() {
+        ((GetFlightCargoResModel) mRequestModel).getLoadingList(entity, new IResultLisenter<LoadingListBean>() {
             @Override
-            public void onSuccess(List<LoadingListBean> getFlightCargoResBeans) {
-                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).getFlightCargoResResult(getFlightCargoResBeans);
+            public void onSuccess(LoadingListBean result) {
+                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).getLoadingListResult(result);
                 mRequestView.dissMiss();
             }
 
@@ -50,12 +49,13 @@ public class GetFlightCargoResPresenter extends BasePresenter {
             }
         });
     }
-    public void overLoad(LoadingListOverBean entity) {
+
+    public void overLoad(LoadingListSendEntity entity) {
         mRequestView.showNetDialog();
         ((GetFlightCargoResModel) mRequestModel).overLoad(entity, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String string) {
-                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).flightDoneInstallResult(string);
+                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).overLoadResult(string);
                 mRequestView.dissMiss();
             }
 

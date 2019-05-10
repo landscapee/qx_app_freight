@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 
 @Data
 public class ExceptionReportEntity {
+    private String loadingListId;
     private String id;
 
     private long flightId;//

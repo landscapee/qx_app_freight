@@ -6,8 +6,6 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import qx.app.freight.qxappfreight.bean.InWaybill;
-import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -19,7 +17,8 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -306,8 +305,8 @@ public interface HttpApi {
     Observable<BaseEntity<List<TransportTodoListBean>>> loadAndUnloadCarSubmit();
 
     //装机 - 装机单
-    @GET("service-product-transport/tp-main-info/getFlightCargoRes/{flightId}")
-    Observable<BaseEntity<List<LoadingListBean>>> getFlightCargoRes(@Path("flightId") String flightId);
+    @POST("service-product-stowage/ft-report/getFlightCargotallyingResultByAndroid")
+    Observable<LoadingListBean> getLoadingList(@Body LoadingListRequestEntity entity);
 
     //判断板车是否被扫描上传过
     @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}")
@@ -316,9 +315,10 @@ public interface HttpApi {
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")
     Observable<BaseEntity<Object>> flightDoneInstall(@Body GetFlightCargoResBean model);
-    //结束装机
-    @POST("service-product-stowage/ft-report/sendLoadResult")
-    Observable<BaseEntity<Object>> overLoad(@Body LoadingListOverBean model);
+
+    //发送至结载
+    @POST("service-product-stowage/ft-report/installedAdviceForAndroid")
+    Observable<BaseEntity<Object>> overLoad(@Body LoadingListSendEntity model);
 
     //装卸机代办   1是装机  2是卸机  3装卸机
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
@@ -372,13 +372,14 @@ public interface HttpApi {
 
     /**
      * 进港分拣 获取信息信息  -- guohao
-     * @param entity  航班业务id(UUID超级长的, 非数字id)
+     *
+     * @param entity 航班业务id(UUID超级长的, 非数字id)
      * @return {
-     *              list : InWaybillRecord 分拣运单实体类集合
-     *              count : 运单总数
-     *              total : 总数量
-     *              closeFlag : 关闭标识(0开启;1关闭;) 如果为关闭状态，则不允许修改和提交和暂存
-     *          }
+     * list : InWaybillRecord 分拣运单实体类集合
+     * count : 运单总数
+     * total : 总数量
+     * closeFlag : 关闭标识(0开启;1关闭;) 如果为关闭状态，则不允许修改和提交和暂存
+     * }
      */
     @POST("/service-product-cargotallying/sorting/getList")
     Observable<BaseEntity<InWaybillRecordBean>> getInWaybillRecrodList(@Body InWaybillRecordGetEntity entity);
@@ -386,6 +387,7 @@ public interface HttpApi {
 
     /**
      * 进港分拣 -- 暂存/提交 接口 - guohao
+     *
      * @param params 整个数据
      * @return 成功/失败
      */
@@ -394,6 +396,7 @@ public interface HttpApi {
 
     /**
      * 删除分拣信息中的某一条信息 - guohao
+     *
      * @param id 分拣运单实体id
      * @return 成功/失败
      */

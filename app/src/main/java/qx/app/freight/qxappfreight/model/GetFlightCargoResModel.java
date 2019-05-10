@@ -5,15 +5,17 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.LoadingListOverBean;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class GetFlightCargoResModel extends BaseModel implements GetFlightCargoResContract.getFlightCargoResModel {
+
     @Override
-    public void getFlightCargoRes(String flightid, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().getFlightCargoRes(flightid)
+    public void getLoadingList(LoadingListRequestEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getLoadingList(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
@@ -34,7 +36,7 @@ public class GetFlightCargoResModel extends BaseModel implements GetFlightCargoR
     }
 
     @Override
-    public void overLoad(LoadingListOverBean entity, IResultLisenter lisenter) {
+    public void overLoad(LoadingListSendEntity entity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().overLoad(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

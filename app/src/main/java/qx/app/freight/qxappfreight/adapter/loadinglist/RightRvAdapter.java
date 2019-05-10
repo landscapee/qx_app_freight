@@ -35,6 +35,7 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
         ImageView ivPullDown=helper.getView(R.id.iv_pull_down);
         helper.setText(R.id.tv_board_number, String.valueOf(item.getBoardNumber())).setText(R.id.tv_uld_number, item.getUldNumber())
                 .setText(R.id.tv_target_name, item.getTarget()).setText(R.id.tv_weight, String.valueOf(item.getWeight())).setText(R.id.tv_type, item.getType()).setText(R.id.tv_number, String.valueOf(item.getNumber()));
+        tvNumber.setVisibility(View.GONE);
         if (helper.getAdapterPosition() == 0) {
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#e5e5e5"));
