@@ -38,7 +38,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetWayBillInfoByIdDataContract.getWayBillInfoByIdDataView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -76,8 +76,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
-        mPresenter = new GetWayBillInfoByIdDataPresenter(this);
-        ((GetWayBillInfoByIdDataPresenter) mPresenter).getWayBillInfoByIdData("02804101436");
 //        int a = 3;
 //        ToastUtil.showToast(testSwitch(a)+"=====ssssss");
 //        getDeviceInfo();
@@ -239,8 +237,4 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         quitApp();
     }
 
-    @Override
-    public void getWayBillInfoByIdDataResult(List<GetWaybillInfoByIdDataBean> addScooterBean) {
-
-    }
 }
