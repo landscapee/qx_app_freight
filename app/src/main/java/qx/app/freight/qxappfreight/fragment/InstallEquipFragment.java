@@ -263,9 +263,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             times.add(bean.getBeginLoadUnloadTime() + ":" + bean.getLoadUnloadTime());
             times.add(String.valueOf(bean.getCloseDoorTime()));
             //FlightNumber   0               AirCraftNo   1               StartPlace   2           MiddlePlace     3            EndPlace    4
-            String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
-                    //机位     5              6， scheduleTime                         7，FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10      Id   11
-                    + "*" + entity.getSeat() + "*" + bean.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
+//            String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()
+//                    //机位     5              6， scheduleTime                         7，FlightId                ActualTakeoffTime  8                   ActualArriveTime 9                 Movement  10      Id   11
+//                    + "*" + entity.getSeat() + "*" + bean.getScheduleTime() + "*" + bean.getFlightId() + "*" + bean.getActualTakeoffTime() + "*" + bean.getActualArriveTime() + "*" + bean.getMovement() + "*" + bean.getId() + "*" + bean.getTaskId();
             int posNow = 0;
             boolean hasChecked = false;
             for (int i = 0; i < times.size(); i++) {
@@ -298,7 +298,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     type = 2;
                 }
                 entity1.setItemType(type);
-                entity1.setPlaneInfo(planeInfo);
+//                entity1.setPlaneInfo(planeInfo);
+                entity1.setData(bean);
                 if (i == 3) {
                     String[] timeArray = times.get(i).split(":");
                     String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));

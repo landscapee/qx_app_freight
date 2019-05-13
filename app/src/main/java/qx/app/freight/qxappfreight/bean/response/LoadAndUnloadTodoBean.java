@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class LoadAndUnloadTodoBean {
+public class LoadAndUnloadTodoBean implements Serializable {
 
     /**
      * id : 57c08733d2345b608ece4c51b5f8d355

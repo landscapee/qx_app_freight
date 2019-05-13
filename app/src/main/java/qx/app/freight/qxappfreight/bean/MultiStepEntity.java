@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.bean;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 
 @Data
 public class MultiStepEntity implements MultiItemEntity {
@@ -15,4 +16,5 @@ public class MultiStepEntity implements MultiItemEntity {
     private String stepDoneDate;
     private String planeInfo;
     private String flightType;
+    private LoadAndUnloadTodoBean data;
 }
