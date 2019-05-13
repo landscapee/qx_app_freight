@@ -49,6 +49,7 @@ import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
@@ -84,9 +85,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private static final int mAuthBaseRequestCode = 1;
     private ImageRvAdapter mAdapter;
     private String mFlightNumber;
-    private String[] mInfoList;
     private ArrayList<String> mFlightNumberList; //传过来的航班号列表
     private String mCurrentTaskId;
+    private LoadAndUnloadTodoBean mData;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -106,8 +107,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result != null && result.equals(mInfoList[7])) {
-
+        if (result != null && result.equals(mData.getFlightId())) {
             finish();
         }
     }
@@ -133,7 +133,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mPhotoPath.get(position)=="111"){
+                if (mPhotoPath.get(position).equals("111")){
                     choosePictrue();
                 }else {
                     previewPictrue(position);
@@ -154,9 +154,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mRvPhoto.setAdapter(mAdapter);
         //根据过来的参数判断
         //传过来的航班信息 用*号隔开
-        String info = getIntent().getStringExtra("plane_info");
+        mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
-        if (TextUtils.isEmpty(info) && mFlightNumberList != null) {
+        if (mData==null && mFlightNumberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
             mFlightNumber = mFlightNumberList.get(0);
             mTvFlightInfo.setText(mFlightNumber);
@@ -175,9 +175,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             });
         } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
-            mInfoList = info.split("\\*");
-            mFlightNumber = mInfoList[0];
-            mCurrentTaskId = mInfoList[12];
+            mFlightNumber = mData.getFlightNo();
+            mCurrentTaskId = mData.getTaskId();
             mTvFlightInfo.setText(mFlightNumber);
         }
 
@@ -337,7 +336,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setFlightNum(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
-        model.setFlightId(Long.valueOf(mInfoList[7]));
+        model.setFlightId(Long.valueOf(mData.getFlightId()));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);

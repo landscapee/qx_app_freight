@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
@@ -125,15 +126,26 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        String flightInfo = getIntent().getStringExtra("plane_info");
-        String[] info = flightInfo.split("\\*");
-        mCurrentTaskId = info[12];
-        toolbar.setMainTitle(Color.WHITE, info[0] + "  装机");
-        mTvPlaneInfo.setText(info[0]);
-        mTvFlightType.setText(info[1]);
-        String start = info[2];
-        String middle = info[3];
-        String end = info[4];
+        LoadAndUnloadTodoBean data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        mCurrentTaskId = data.getTaskId();
+        toolbar.setMainTitle(Color.WHITE, data.getFlightNo() + "  装机");
+        mTvPlaneInfo.setText(data.getFlightNo());
+        mTvFlightType.setText(data.getAircraftno());
+        String route = data.getRoute();
+        String start = "", middle = "", end = "";
+        if (route != null) {
+            String[] placeArray = route.split(",");
+            List<String> resultList = new ArrayList<>();
+            for (String str : placeArray) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                resultList.add(temp);
+            }
+            if (resultList.size() == 3) {
+                middle = resultList.get(1);
+            }
+            start = resultList.get(0);
+            end = resultList.get(resultList.size() - 1);
+        }
         if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
             mTvStartPlace.setVisibility(View.GONE);
             mIvTwoPlace.setVisibility(View.GONE);
@@ -157,14 +169,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvTargetPlace.setText(end);
             }
         }
-        mTvSeat.setText(info[5]);
-        mTvStartTime.setText(TimeUtils.getHMDay(Long.valueOf(info[6])));
+        mTvSeat.setText(data.getSeat());
+        mTvStartTime.setText(TimeUtils.getHMDay(data.getScheduleTime()));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
-        mCurrentFlightId = info[7];
+        mCurrentFlightId = data.getFlightId();
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
         entity.setFlightId(mCurrentFlightId);
@@ -174,14 +186,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
             } else {
                 Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
-                intent.putExtra("plane_info", flightInfo);
+                intent.putExtra("plane_info", data);
                 intent.putExtra("loading_list_data", mLoadingList.get(0));
                 LoadPlaneActivity.this.startActivity(intent);
             }
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
-            intent.putExtra("plane_info", flightInfo);
+            intent.putExtra("plane_info", data);
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
         });
@@ -200,8 +212,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 }
                 if (doRight) {
                     GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                    bean.setTpFlightId(info[7]);
-                    bean.setTaskId(info[11]);
+                    bean.setTpFlightId(data.getFlightId());
+                    bean.setTaskId(data.getTaskId());
                     bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
                     ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
                 } else {
