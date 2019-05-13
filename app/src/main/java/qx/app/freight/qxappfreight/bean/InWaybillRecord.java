@@ -337,5 +337,10 @@ public class InWaybillRecord implements Serializable {
      */
     private String paWaybillId;
 
+    /**
+     * 备注
+     */
+    private String remark;
+
 
 }

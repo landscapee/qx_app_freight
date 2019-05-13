@@ -79,6 +79,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     Button submitBtn;//提交
     @BindView(R.id.btn_add_item)
     Button addItemBtn;//新增异常
+    @BindView(R.id.tv_remark)
+    EditText remarkEdt;//备注
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -112,7 +114,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             customToolbar.setMainTitle(Color.WHITE, "修改");
             mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
-            //显示运单号， 实际分拣数，库区，库位，是否转关
+            //显示运单号， 实际分拣数，库区，库位，是否转关，备注
             idEdt.setText(mInWaybillRecord.getWaybillCode() + "");
             sortingNumEdt.setText(mInWaybillRecord.getTotalNumberPackages()== null?"": mInWaybillRecord.getTotalNumberPackages()+"");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
@@ -120,6 +122,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             if(mInWaybillRecord.getTransit() != null){
                 locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
             }
+            remarkEdt.setText("" + mInWaybillRecord.getRemark());
         } else {
             Log.e("dime", "不知道进入了哪里");
         }
@@ -217,6 +220,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             if (TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入实际分拣数！");
                 return;
+            }
+            if (TextUtils.isEmpty(remarkEdt.getText().toString().trim())){
+                mInWaybillRecord.setRemark("");
+            }else{
+                mInWaybillRecord.setRemark(remarkEdt.getText().toString().trim());
             }
             mInWaybillRecord.setTotalNumberPackages(Integer.valueOf(sortingNumEdt.getText().toString().trim()));
             if (mInWaybillRecord.getWarehouseArea() == null || mInWaybillRecord.getWarehouseArea() == "") {

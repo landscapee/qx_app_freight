@@ -150,7 +150,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_13">
+        android:layout_marginLeft="13dp"
+        android:background="@drawable/shape_rect_gray_bottom"
+        android:paddingBottom="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_13"
+        android:paddingTop="@dimen/dp_13">
 
         <TextView
             style="@style/public_tv_16sp"
@@ -166,6 +170,26 @@
             android:drawableRight="@mipmap/drop_select"
             android:gravity="right"
             android:text="否" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_13">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备注" />
+        <EditText
+            android:id="@+id/tv_remark"
+            style="@style/public_tv_16sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:gravity="right" />
     </LinearLayout>
     
     <View
