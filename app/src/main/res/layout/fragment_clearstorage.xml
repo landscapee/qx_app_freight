@@ -9,48 +9,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/tv_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="3dp"
+        android:text="新的任务"
+        android:textColor="#1A71F3"
+        android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/tv_kc_nub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#999999"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_qk_nub"
-            android:layout_marginLeft="7dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#999999"
-            android:textSize="12sp" />
-    </LinearLayout>
 
     <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="7dp"
         android:layout_weight="1" />
 
 
-    <Button
-        android:id="@+id/clear_commit"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_history"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="3dp"
+        android:text="新的任务"
+        android:textColor="#999999"
+        android:textSize="12sp" />
+
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+        android:id="@+id/mfrv_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="7dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="4dp"
-        android:background="#2E81FD"
-        android:text="提交"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:layout_weight="1" />
+
 </LinearLayout>

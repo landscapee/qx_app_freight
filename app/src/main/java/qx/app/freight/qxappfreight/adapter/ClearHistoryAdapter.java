@@ -11,11 +11,11 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
-public class ClearStorageAdapter extends BaseQuickAdapter<InventoryQueryBean, BaseViewHolder> {
+public class ClearHistoryAdapter extends BaseQuickAdapter<InventoryQueryBean, BaseViewHolder> {
     private List<InventoryQueryBean> mList;
 
-    public ClearStorageAdapter(@Nullable List<InventoryQueryBean> list) {
-        super(R.layout.item_clearstorage_list, list);
+    public ClearHistoryAdapter(@Nullable List<InventoryQueryBean> list) {
+        super(R.layout.item_clearstorage_list1, list);
         mList = list;
     }
 
@@ -30,8 +30,8 @@ public class ClearStorageAdapter extends BaseQuickAdapter<InventoryQueryBean, Ba
             helper.setText(R.id.clear_storage_type, "全仓清库");
 
         //发起人
-        helper.setText(R.id.tv_originator, "发起人:"+item.getCreateUser());
+        helper.setText(R.id.tv_originator, "发起人:" + item.getCreateUser());
         //发起时间
-        helper.setText(R.id.tv_time,"发起时间:"+ TimeUtils.getTime2(item.getEndTime()));
+        helper.setText(R.id.tv_time, "发起时间:" + TimeUtils.getTime2(item.getEndTime()));
     }
 }

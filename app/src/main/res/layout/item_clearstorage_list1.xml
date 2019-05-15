@@ -11,10 +11,9 @@
         android:layout_height="37dp"
         android:layout_gravity="center"
         android:layout_marginLeft="7dp"
-        android:background="#A6EAF2"
+        android:background="#DCDCDC"
         android:gravity="center"
-        android:textColor="@color/black"
-        android:text="1"
+        android:textColor="#999999"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -45,8 +44,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="7dp"
                 android:gravity="end"
-                android:text="进行中..."
-                android:textColor="#2082ED"
+                android:text="已完成"
+                android:textColor="#DCDCDC"
                 android:textSize="14sp" />
 
         </LinearLayout>

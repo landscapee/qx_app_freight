@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +15,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.ClearHistoryAdapter;
 import qx.app.freight.qxappfreight.adapter.ClearStorageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.contract.InventoryQueryContract;
 import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
@@ -31,54 +30,52 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     CustomToolbar mToolBar;
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    @BindView(R.id.tv_kc_nub)
-    TextView tvKcNub;
-    @BindView(R.id.tv_qk_nub)
-    TextView tvQkNub;
-    @BindView(R.id.clear_commit)
-    Button clearCommit;
-    private ClearStorageAdapter adapter;
-    private List<InventoryQueryBean> list;
+    @BindView(R.id.mfrv_history)
+    MultiFunctionRecylerView mMfrvDataHistory;
+
+    //新的任务
+    private ClearStorageAdapter mCSadapter;
+    private List<InventoryQueryBean> mCSlist;
+
+    //历史任务
+    private ClearHistoryAdapter mCHadapter;
+    private List<InventoryQueryBean> mCHlist;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clearstorage, container, false);
         unbinder = ButterKnife.bind(this, view);
-        //历史记录
-        mToolBar.setLeftTextView(View.VISIBLE, Color.WHITE, "历史记录", v -> searchRecord());
-        //新增
-        mToolBar.setRightTextViewImage(getActivity(), View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
-            adddata();
-        });
         //标题
         mToolBar.setMainTitle(Color.WHITE, "清库");
         return view;
     }
 
-    private void adddata() {
-    }
-
-    private void searchRecord() {
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        clearCommit.setOnClickListener(v -> {
-            ToastUtil.showToast("123");
-        });
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
+        mMfrvDataHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMfrvDataHistory.setRefreshListener(this);
         initView();
     }
 
     private void initView() {
-        list = new ArrayList<>();
-        adapter = new ClearStorageAdapter(list);
-        mMfrvData.setAdapter(adapter);
+        mCSlist = new ArrayList<>();
+        mCHlist = new ArrayList<>();
+
+        mCSadapter = new ClearStorageAdapter(mCSlist);
+        mCHadapter = new ClearHistoryAdapter(mCHlist);
+
+        mMfrvData.setAdapter(mCSadapter);
+        mMfrvDataHistory.setAdapter(mCHadapter);
+
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setCurrent(1);
+        entity.setSize(10);
         mPresenter = new InventoryQueryPresenter(this);
-//        ((InventoryQueryPresenter) mPresenter).InventoryQuery();
+        ((InventoryQueryPresenter) mPresenter).InventoryQuery();
 
     }
 
@@ -90,15 +87,19 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     @Override
     public void inventoryQueryResult(List<InventoryQueryBean> inventoryQueryBean) {
         if (inventoryQueryBean != null) {
-            mMfrvData.finishRefresh();
-            mMfrvData.finishLoadMore();
-            list.clear();
-            //清库件数
-            tvQkNub.setText("清库件数： " + inventoryQueryBean.size());
-            //库存件数
-            tvKcNub.setText("库存件数： " + inventoryQueryBean.size());
-            list.addAll(inventoryQueryBean);
-            adapter.notifyDataSetChanged();
+//            mMfrvData.finishRefresh();
+//            mMfrvData.finishLoadMore();
+            mCSlist.clear();
+            mCHlist.clear();
+            for (InventoryQueryBean mList : inventoryQueryBean) {
+                if (1 == mList.getStatus()) {
+                    mCSlist.add(mList);
+                    mCSadapter.notifyDataSetChanged();
+                } else if (0 == mList.getStatus()) {
+                    mCHlist.add(mList);
+                    mCHadapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 
