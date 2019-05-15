@@ -40,7 +40,7 @@ public class InventoryUbnormalGoods {
      */
     private long createTime;
 
-    private List<String> uploadPath;
+    private List<String> uploadFilePath;
 
 
 }

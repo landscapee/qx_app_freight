@@ -12,9 +12,6 @@ public class InventoryDetailEntity {
      */
     private String waybillId;
 
-
-
-
     /**
      * 清库任务Id
      */
@@ -29,6 +26,9 @@ public class InventoryDetailEntity {
      * 分拣件数
      */
     private int tallyingTotal;
+
+    //异常件数
+    private int ubnormalNumber;
 
     /**
      * 发货件数

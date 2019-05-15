@@ -9,7 +9,7 @@ public class HttpConstant {
     //张硕ip  http://myyx.nat123.cc:24010/
 //    public static final String TEST = "http://myyx.nat123.cc:24010";
 //    public static final String TEST = "http://192.168.1.17:9008";
-    public static final String IP = BuildConfig.IP;//测试环境-----最新
+//    public static final String IP = BuildConfig.IP;//测试环境-----最新
 //    public static final String TEST = "http://" + IP + ":80";//测试环境-----最新
         public static final String TEST = BuildConfig.TEST;//"http://173.100.1.75:9008";//开发环境-----最新
 //    public static final String TEST = "http://192.168. 1.16:7001";//刘磊环境

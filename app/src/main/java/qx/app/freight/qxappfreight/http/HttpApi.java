@@ -464,11 +464,11 @@ public interface HttpApi {
     /*********************清库***********************************/
 
     //清库列表
-    @GET("service-product-inwaybill/inventory/listInventoryTaskByPage")
+    @POST("service-product-inwaybill/inventory/listInventoryTaskByPage")
     Observable<BaseEntity<List<InventoryQueryBean>>> inventoryQuery();
 
     //清库提交
-    @GET("service-product-inwaybill/inventory/addInventoryDetail")
+    @POST("service-product-inwaybill/inventory/addInventoryDetail")
     Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
 
