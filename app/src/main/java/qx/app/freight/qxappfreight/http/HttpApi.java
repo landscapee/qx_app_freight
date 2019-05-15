@@ -18,6 +18,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
@@ -465,6 +466,10 @@ public interface HttpApi {
     //清库列表
     @GET("service-product-inwaybill/inventory/listInventoryTaskByPage")
     Observable<BaseEntity<List<InventoryQueryBean>>> inventoryQuery();
+
+    //清库提交
+    @GET("service-product-inwaybill/inventory/addInventoryDetail")
+    Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
 
     /*********************国际货物***************************/

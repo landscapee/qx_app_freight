@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
@@ -842,6 +843,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<InventoryQueryBean>> inventoryQuery() {
         return transform(getService().inventoryQuery());
+    }
+
+    /**
+     * 清库提交
+     *
+     * @return 成功/失败
+     */
+    public Observable<String> addInventoryDetail(List<InventoryDetailEntity> entity) {
+        return nothingtransform(getService().addInventoryDetail(entity));
     }
 
     /**

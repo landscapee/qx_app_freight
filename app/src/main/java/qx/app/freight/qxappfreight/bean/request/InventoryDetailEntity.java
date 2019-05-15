@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 public class InventoryDetailEntity {
-
     private String id;
-
     /**
      * 运单Id
      */
     private String waybillId;
+
+
 
 
     /**
