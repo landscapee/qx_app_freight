@@ -193,7 +193,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
-            intent.putExtra("plane_info", data);
+            intent.putExtra("flight_number", data.getFlightNo());//航班号
+            intent.putExtra("task_id", data.getTaskId());//任务id
+            intent.putExtra("flight_id", data.getFlightId());//Flight id
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
         });

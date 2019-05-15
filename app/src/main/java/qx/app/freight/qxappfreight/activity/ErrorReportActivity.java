@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -87,7 +89,6 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private String mFlightNumber;
     private ArrayList<String> mFlightNumberList; //传过来的航班号列表
     private String mCurrentTaskId;
-    private LoadAndUnloadTodoBean mData;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -107,7 +108,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result != null && result.equals(mData.getFlightId())) {
+        if (result != null && result.equals(getIntent().getStringExtra("flight_id"))) {
             finish();
         }
     }
@@ -152,11 +153,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         });
         mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
         mRvPhoto.setAdapter(mAdapter);
-        //根据过来的参数判断
-        //传过来的航班信息 用*号隔开
-        mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
-        if (mData==null && mFlightNumberList != null) {
+        if (mFlightNumberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
             mFlightNumber = mFlightNumberList.get(0);
             mTvFlightInfo.setText(mFlightNumber);
@@ -175,8 +173,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             });
         } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
-            mFlightNumber = mData.getFlightNo();
-            mCurrentTaskId = mData.getTaskId();
+            mFlightNumber = getIntent().getStringExtra("flight_number");
+            mCurrentTaskId =getIntent().getStringExtra("task_id");
             mTvFlightInfo.setText(mFlightNumber);
         }
 
@@ -247,6 +245,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initNavi() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -336,7 +335,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setFlightNum(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
-        model.setFlightId(Long.valueOf(mData.getFlightId()));
+        model.setFlightId(Long.valueOf(getIntent().getStringExtra("flight_id")));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
