@@ -40,7 +40,12 @@ public class InventoryUbnormalGoods {
      */
     private long createTime;
 
-    private List<String> uploadFilePath;
+    /**
+     * 异常件数
+     */
+    private int ubnormalNumber;
+
+    private List<String> uploadPath;
 
 
 }
