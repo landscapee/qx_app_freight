@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.contract.InventoryQueryContract;
 import qx.app.freight.qxappfreight.model.InventoryQueryModel;
@@ -14,12 +15,29 @@ public class InventoryQueryPresenter extends BasePresenter {
         mRequestModel = new InventoryQueryModel();
     }
 
-    public void InventoryQuery() {
+    public void InventoryQuery(BaseFilterEntity entity) {
         mRequestView.showNetDialog();
-        ((InventoryQueryModel) mRequestModel).inventoryQuery(new IResultLisenter<List<InventoryQueryBean>>() {
+        ((InventoryQueryModel) mRequestModel).inventoryQuery(entity,new IResultLisenter<InventoryQueryBean>() {
             @Override
-            public void onSuccess(List<InventoryQueryBean> result) {
+            public void onSuccess(InventoryQueryBean result) {
                 ((InventoryQueryContract.inventoryQueryView) mRequestView).inventoryQueryResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+
+        });
+    }
+    public void InventoryQueryHistory(BaseFilterEntity entity) {
+        mRequestView.showNetDialog();
+        ((InventoryQueryModel) mRequestModel).inventoryHistoryQuery(entity,new IResultLisenter<InventoryQueryBean>() {
+            @Override
+            public void onSuccess(InventoryQueryBean result) {
+                ((InventoryQueryContract.inventoryQueryView) mRequestView).inventoryQueryHistoryResult(result);
                 mRequestView.dissMiss();
             }
 

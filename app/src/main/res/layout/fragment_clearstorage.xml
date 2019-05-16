@@ -37,7 +37,7 @@
         android:layout_marginLeft="13dp"
         android:layout_marginTop="13dp"
         android:layout_marginBottom="3dp"
-        android:text="新的任务"
+        android:text="历史记录"
         android:textColor="#999999"
         android:textSize="12sp" />
 

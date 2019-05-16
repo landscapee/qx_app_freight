@@ -52,6 +52,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
@@ -465,11 +466,19 @@ public interface HttpApi {
 
     //清库列表
     @POST("service-product-inwaybill/inventory/listInventoryTaskByPage")
-    Observable<BaseEntity<List<InventoryQueryBean>>> inventoryQuery();
+    Observable<BaseEntity<InventoryQueryBean>> inventoryQuery(@Body BaseFilterEntity entity);
 
     //清库提交
     @POST("service-product-inwaybill/inventory/addInventoryDetail")
     Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
+
+    //清库详情
+    @POST("service-product-inwaybill/inventory/listInventoryDetail")
+    Observable<BaseEntity<List<InventoryDetailEntity>>> listInventoryDetail(@Body BaseFilterEntity entity);
+
+    //清库运单模糊查询
+    @GET("service-product-inwaybill/inventory/listWaybillCode/{code}")
+    Observable<BaseEntity<ListWaybillCodeBean>> listWaybillCode(@Path("code") String code);
 
 
     /*********************国际货物***************************/
