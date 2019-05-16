@@ -25,7 +25,7 @@ public class InventoryDetailEntity {
     /**
      * 分拣件数
      */
-    private int tallyingTotal;
+    private String tallyingTotal;
 
     //异常件数
 
@@ -39,7 +39,7 @@ public class InventoryDetailEntity {
     /**
      * 清库件数
      */
-    private int inventoryNumber;
+    private String inventoryNumber;
 
     /**
      * 处置时间

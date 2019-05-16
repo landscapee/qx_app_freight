@@ -129,7 +129,7 @@ public class ExceptionDetailDialog extends DialogFragment {
             helper.setText(R.id.tv_exception_content, helper.getAdapterPosition() + 1 + "丶" + ExceptionUtils.typeToString(item.getUbnormalType()) + ":" + "xx件");
             LinearLayout llParent = helper.getView(R.id.ll_exception);
             //渲染照片
-            for(String url: item.getUploadFilePath()){
+            for(String url: item.getUploadPath()){
                 ImageView imageView = new ImageView(context);
                 LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imgParams.rightMargin = 10;
