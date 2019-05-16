@@ -53,6 +53,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
@@ -841,8 +842,8 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<List<InventoryQueryBean>> inventoryQuery() {
-        return transform(getService().inventoryQuery());
+    public Observable<InventoryQueryBean> inventoryQuery(BaseFilterEntity entity) {
+        return transform(getService().inventoryQuery(entity));
     }
 
     /**
@@ -852,6 +853,23 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> addInventoryDetail(List<InventoryDetailEntity> entity) {
         return nothingtransform(getService().addInventoryDetail(entity));
+    }
+    /**
+     * 清库提交
+     *
+     * @return 成功/失败
+     */
+    public Observable<List<InventoryDetailEntity>> listInventoryDetail(BaseFilterEntity entity) {
+        return transform(getService().listInventoryDetail(entity));
+    }
+
+    /**
+     * 运单查询
+     *
+     * @return 成功/失败
+     */
+    public Observable<ListWaybillCodeBean> listWaybillCode(String code) {
+        return transform(getService().listWaybillCode(code));
     }
 
     /**

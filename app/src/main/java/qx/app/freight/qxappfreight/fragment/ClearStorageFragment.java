@@ -20,12 +20,14 @@ import qx.app.freight.qxappfreight.adapter.ClearStorageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InventoryQueryContract;
 import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
-public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView, MultiFunctionRecylerView.OnRefreshListener {
+public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView {
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
     @BindView(R.id.mfrv_data)
@@ -35,11 +37,14 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     //新的任务
     private ClearStorageAdapter mCSadapter;
-    private List<InventoryQueryBean> mCSlist;
+    private List<InventoryQueryBean.RecordsBean> mCSlist;
 
     //历史任务
     private ClearHistoryAdapter mCHadapter;
-    private List<InventoryQueryBean> mCHlist;
+    private List<InventoryQueryBean.RecordsBean> mCHlist;
+
+    private int mCurrentPage1 = 1;
+    private int mCurrentPage2 = 1;
 
     @Nullable
     @Override
@@ -55,11 +60,54 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
-        mMfrvData.setRefreshListener(this);
+        //最新
+        mMfrvData.setRefreshListener(new MultiFunctionRecylerView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCurrentPage1 = 1;
+                initData1();
+            }
+
+            @Override
+            public void onLoadMore() {
+                mCurrentPage1++;
+                initData1();
+            }
+        });
+        //历史
         mMfrvDataHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        mMfrvDataHistory.setRefreshListener(this);
+        mMfrvDataHistory.setRefreshListener(new MultiFunctionRecylerView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCurrentPage2 = 1;
+                initData2();
+            }
+
+            @Override
+            public void onLoadMore() {
+                mCurrentPage2++;
+                initData2();
+            }
+        });
         initView();
+        //新的任务
+        mCSadapter.setOnItemChildClickListener((adapter, view1, position) -> {
+            interNewAct();
+        });
+        //历史任务
+        mCHadapter.setOnItemChildClickListener((adapter, view12, position) -> {
+            interHistoryAct();
+        });
     }
+
+    private void interHistoryAct() {
+
+    }
+
+    private void interNewAct() {
+
+    }
+
 
     private void initView() {
         mCSlist = new ArrayList<>();
@@ -70,14 +118,29 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
         mMfrvData.setAdapter(mCSadapter);
         mMfrvDataHistory.setAdapter(mCHadapter);
-
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setCurrent(1);
-        entity.setSize(10);
         mPresenter = new InventoryQueryPresenter(this);
-        ((InventoryQueryPresenter) mPresenter).InventoryQuery();
-
+        initData1();
+        initData2();
     }
+
+    private void initData1() {
+        BaseFilterEntity entity = new BaseFilterEntity();
+        NoticeViewBean bean = new NoticeViewBean();
+        bean.setStatus(0);
+        entity.setCurrent(mCurrentPage1);
+        entity.setSize(Constants.PAGE_SIZE);
+        ((InventoryQueryPresenter) mPresenter).InventoryQuery(entity);
+    }
+
+    private void initData2() {
+        BaseFilterEntity entity = new BaseFilterEntity();
+        NoticeViewBean bean = new NoticeViewBean();
+        bean.setStatus(1);
+        entity.setCurrent(mCurrentPage2);
+        entity.setSize(Constants.PAGE_SIZE);
+        ((InventoryQueryPresenter) mPresenter).InventoryQueryHistory(entity);
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -85,27 +148,35 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     }
 
     @Override
-    public void inventoryQueryResult(List<InventoryQueryBean> inventoryQueryBean) {
-        if (inventoryQueryBean != null) {
-//            mMfrvData.finishRefresh();
-//            mMfrvData.finishLoadMore();
-            mCSlist.clear();
-            mCHlist.clear();
-            for (InventoryQueryBean mList : inventoryQueryBean) {
-                if (1 == mList.getStatus()) {
-                    mCSlist.add(mList);
-                    mCSadapter.notifyDataSetChanged();
-                } else if (0 == mList.getStatus()) {
-                    mCHlist.add(mList);
-                    mCHadapter.notifyDataSetChanged();
-                }
+    public void inventoryQueryResult(InventoryQueryBean inventoryQueryBean) {
+        if (null != inventoryQueryBean) {
+            if (mCurrentPage1 == 1) {
+                mCSlist.clear();
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
             }
+            mCSlist.addAll(inventoryQueryBean.getRecords());
+            mCSadapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void inventoryQueryHistoryResult(InventoryQueryBean inventoryQueryBean) {
+        if (null != inventoryQueryBean) {
+            if (mCurrentPage2 == 1) {
+                mCHlist.clear();
+                mMfrvDataHistory.finishRefresh();
+            } else {
+                mMfrvDataHistory.finishLoadMore();
+            }
+            mCHlist.addAll(inventoryQueryBean.getRecords());
+            mCHadapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void toastView(String error) {
-
     }
 
     @Override
@@ -118,13 +189,4 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     }
 
-    @Override
-    public void onRefresh() {
-        initView();
-    }
-
-    @Override
-    public void onLoadMore() {
-        initView();
-    }
 }

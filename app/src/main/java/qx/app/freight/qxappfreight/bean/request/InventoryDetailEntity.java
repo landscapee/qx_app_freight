@@ -28,6 +28,7 @@ public class InventoryDetailEntity {
     private int tallyingTotal;
 
     //异常件数
+
     private int ubnormalNumber;
 
     /**
