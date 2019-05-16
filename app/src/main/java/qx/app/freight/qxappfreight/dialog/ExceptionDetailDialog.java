@@ -75,11 +75,17 @@ public class ExceptionDetailDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        Dialog dialog = new Dialog(context, R.style.dialog2);
+        Dialog dialog = new Dialog(context, R.style.CommomDialog);
         dialog.setContentView(R.layout.dialog_exception_detail);
         //控件初始化
         closeIv = dialog.findViewById(R.id.iv_cancel);
         recyclerView = dialog.findViewById(R.id.recycler_view);
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         //dialog外观
         dialog.setCanceledOnTouchOutside(false);
         Window window = dialog.getWindow();
