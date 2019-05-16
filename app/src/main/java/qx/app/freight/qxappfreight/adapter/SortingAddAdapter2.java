@@ -55,7 +55,8 @@ public class SortingAddAdapter2 extends BaseQuickAdapter<InventoryUbnormalGoods,
 
         //显示异常类型
         if (item.getUbnormalType()== 0) {
-            //什么都不干
+            helper.setText(R.id.tv_exception_type_choose, "请选择");
+            ((EditText) helper.getView(R.id.edit_exception_num)).setText("");
         }else {
             helper.setText(R.id.tv_exception_type_choose, ExceptionUtils.typeToString(item.getUbnormalType()));
 

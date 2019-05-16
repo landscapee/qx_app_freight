@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,8 +54,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtUserName.setText("");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
-            login();
-//            test();
+//            login();
+            test();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -98,6 +99,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     //用于测试的方法
     private void test() {
+        startActivity(new Intent(this,AddClearStorageActivity.class));
 //        BaggerInputDialog dialog = new BaggerInputDialog();
 //        dialog.setData(this,null);
 //        dialog.show(getSupportFragmentManager(), "123");

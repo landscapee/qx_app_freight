@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
+import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
@@ -131,7 +132,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                     public void confirm(int position2) {
                         position2++;
                         counterUbnormalGoodsList.get(posstion).setUbnormalType(position2);
-                        mAdapter.notifyItemChanged(posstion);
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
                 chooseExcetionDialog.show(getSupportFragmentManager(), "exception");
@@ -165,6 +166,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             case R.id.btn_add_item:
 
                 InventoryUbnormalGoods inventoryUbnormalGoods = new InventoryUbnormalGoods();
+//                inventoryUbnormalGoods.setUbnormalType(4);
+//                inventoryUbnormalGoods.setUbnormalNumber(20);
                 counterUbnormalGoodsList.add(inventoryUbnormalGoods);
                 mAdapter.notifyDataSetChanged();
 
@@ -268,6 +271,11 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         }
         mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
+    }
+
+    @Override
+    public void listWaybillCodeResult(ListWaybillCodeBean listWaybillCodeBean) {
+
     }
 
     @Override
