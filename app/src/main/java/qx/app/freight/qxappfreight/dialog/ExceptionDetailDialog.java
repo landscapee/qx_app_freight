@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,20 +63,11 @@ public class ExceptionDetailDialog extends DialogFragment {
         this.context = builder.context;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_exception_detail, container, false);
-        closeIv = view.findViewById(R.id.iv_cancel);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        return view;
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        Dialog dialog = new Dialog(context, R.style.CommomDialog);
+        Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_exception_detail);
         //控件初始化
         closeIv = dialog.findViewById(R.id.iv_cancel);
@@ -83,6 +75,7 @@ public class ExceptionDetailDialog extends DialogFragment {
         closeIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("dime", "关闭按钮被点击了");
                 dismiss();
             }
         });
@@ -91,9 +84,12 @@ public class ExceptionDetailDialog extends DialogFragment {
         Window window = dialog.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = 900;
+        window.setAttributes(lp);
 
         MyAdapter adapter = new MyAdapter(inventoryDetailEntity.getInventoryUbnormalGoods(), context);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
         return dialog;
@@ -122,7 +118,7 @@ public class ExceptionDetailDialog extends DialogFragment {
     /**
      * 适配器
      */
-    public static class MyAdapter extends BaseQuickAdapter<InventoryUbnormalGoods, BaseViewHolder> {
+    public class MyAdapter extends BaseQuickAdapter<InventoryUbnormalGoods, BaseViewHolder> {
 
         Context context;
         public MyAdapter(List<InventoryUbnormalGoods> list, Context context){
@@ -132,22 +128,24 @@ public class ExceptionDetailDialog extends DialogFragment {
 
         @Override
         protected void convert(BaseViewHolder helper, InventoryUbnormalGoods item) {
-            helper.setText(R.id.tv_exception_content, helper.getAdapterPosition() + 1 + "丶" + ExceptionUtils.typeToString(item.getUbnormalType()) + ":" + "xx件");
+            helper.setText(R.id.tv_exception_content, helper.getAdapterPosition() + 1 + "丶" + ExceptionUtils.typeToString(item.getUbnormalType()) + ":" + item.getUbnormalNumber() + "件");
             LinearLayout llParent = helper.getView(R.id.ll_exception);
             //渲染照片
-            for(String url: item.getUploadPath()){
-                ImageView imageView = new ImageView(context);
-                LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                imgParams.rightMargin = 10;
-                imageView.setLayoutParams(imgParams);
-                Glide.with(context).load(url).into(imageView);
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO:图片点击事件
-                    }
-                });
-                llParent.addView(imageView);
+            if(item.getUploadPath() != null) {
+                for (String url : item.getUploadPath()) {
+                    ImageView imageView = new ImageView(context);
+                    LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    imgParams.rightMargin = 10;
+                    imageView.setLayoutParams(imgParams);
+                    Glide.with(context).load(url).into(imageView);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO:图片点击事件
+                        }
+                    });
+                    llParent.addView(imageView);
+                }
             }
         }
     }
