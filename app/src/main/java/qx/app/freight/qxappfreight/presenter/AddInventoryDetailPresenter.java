@@ -6,6 +6,7 @@ import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
+import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.model.AddInventoryDetailModel;
 
@@ -39,6 +40,23 @@ public class AddInventoryDetailPresenter extends BasePresenter {
             @Override
             public void onSuccess(Object result) {
                 ((AddInventoryDetailContract.addInventoryDetailView) mRequestView).uploadsResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+
+    public void listWaybillCode(String code) {
+        mRequestView.showNetDialog();
+        ((AddInventoryDetailModel) mRequestModel).listWaybillCode(code, new IResultLisenter<ListWaybillCodeBean>() {
+            @Override
+            public void onSuccess(ListWaybillCodeBean result) {
+                ((AddInventoryDetailContract.addInventoryDetailView) mRequestView).listWaybillCodeResult(result);
                 mRequestView.dissMiss();
             }
 
