@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * TODO : xxx
@@ -19,6 +20,7 @@ public class TransportListBean implements Serializable {
     private Integer pages;
 
     @Data
+    @EqualsAndHashCode
     public static class TransportDataBean extends TransportDataBase {
 
     }
