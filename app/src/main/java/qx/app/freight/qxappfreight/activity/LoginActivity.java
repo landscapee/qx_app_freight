@@ -65,8 +65,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtUserName.setText("");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
-            login();
+//            login();
 //            test();
+            startActivity(new Intent(this,AddClearStorageActivity.class));
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

@@ -71,7 +71,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     SortingAddAdapter2 mAdapter;//异常情况选择列表适配器
     InventoryInfoAdapter infoAdapter; //异常列表数据适配器
-    List<InventoryUbnormalGoods> counterUbnormalGoodsList;//异常数组
+    ArrayList<InventoryUbnormalGoods> counterUbnormalGoodsList;//异常数组
     List<InventoryDetailEntity> inventoryDetailEntityList;//提交的异常数组
 
     int CURRENT_PHOTO_INDEX;
@@ -210,8 +210,15 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         InventoryDetailEntity detailEntity = new InventoryDetailEntity();
         detailEntity.setWaybillCode(edtId.getText().toString().trim());
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
-        List<InventoryUbnormalGoods> goodsList = new ArrayList<>(counterUbnormalGoodsList);
-        detailEntity.setInventoryUbnormalGoods(goodsList);
+        try {
+            List<InventoryUbnormalGoods> goodsList =  Tools.deepCopy(counterUbnormalGoodsList);
+            detailEntity.setInventoryUbnormalGoods(goodsList);
+        }
+        catch (Exception e){
+
+        }
+
+
         //刷新异常上报列表
         inventoryDetailEntityList.add(detailEntity);
         infoAdapter.notifyDataSetChanged();

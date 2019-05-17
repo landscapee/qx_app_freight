@@ -1,12 +1,13 @@
 package qx.app.freight.qxappfreight.bean.request;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class InventoryUbnormalGoods {
+public class InventoryUbnormalGoods implements Serializable {
 
     private String id;
 

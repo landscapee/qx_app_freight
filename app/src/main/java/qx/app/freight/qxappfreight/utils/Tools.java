@@ -161,6 +161,26 @@ public class Tools {
         return (T)ojs.readObject();
     }
 
+    /**
+     * 列表深拷贝
+     * @param src
+     * @param <T>
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(src);
+
+        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(byteIn);
+        @SuppressWarnings("unchecked")
+        ArrayList<T> dest = (ArrayList<T>) in.readObject();
+        return dest;
+    }
+
 
     /**
      * TODO: 保存 位置信息
