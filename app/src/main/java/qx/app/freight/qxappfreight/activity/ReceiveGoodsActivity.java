@@ -88,7 +88,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     private ReceiveGoodsAdapter mAdapter;
     private List<MyAgentListBean> list;
-    private String waybillId, taskId, reservoirType, waybillCode;
+    private String waybillId, taskId, reservoirType, waybillCode, taskTypeCode;
     private CustomToolbar toolbar;
     private List<DeclareItem> mDeclareItemBeans;
     private TransportListCommitEntity transportListCommitEntity;
@@ -113,10 +113,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     int vpPage = 0;
     boolean isPrint = false;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean) {
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
+        starter.putExtra("taskTypeCode", taskTypeCode);
         context.startActivityForResult(starter, 0);
     }
 
@@ -131,6 +132,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         EventBus.getDefault().register(this);
         mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
         taskId = getIntent().getStringExtra("taskId");
+        taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
         reservoirType = mDeclare.getColdStorage() + "";
@@ -218,6 +220,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 mListRcInfosEntity.add(rcInfosEntity);
             }
             transportListCommitEntity.setRcInfos(mListRcInfosEntity);
+            transportListCommitEntity.setTaskTypeCode(taskTypeCode);
             ((TransportListCommitPresenter) mPresenter).transportListCommit(transportListCommitEntity);
         } else {
             ToastUtil.showToast(this, "请先添加数据");
