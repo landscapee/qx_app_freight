@@ -127,10 +127,22 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCurrent(pageCurrent);
+
+        TransportListBean tempBean = new TransportListBean();
+        tempBean.setWaybillCode("");
+        tempBean.setTaskStartTime("");
+        tempBean.setTaskEndTime("");
+        tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        entity.setFilter(tempBean);
+
+        entity.setCurrentStep("");
+
         entity.setSize(Constants.PAGE_SIZE);
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+
+        entity.setCurrent(1);
+
+        Log.e("dime", entity.toString());
+
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 

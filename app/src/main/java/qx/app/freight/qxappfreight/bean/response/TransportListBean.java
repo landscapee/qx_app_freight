@@ -72,8 +72,8 @@ public class TransportListBean implements Serializable {
     private String taskType;
     private String deptCode;
     private String taskTypeCode;//collection 收货  ；RR_collectReturn收运退货 changeApply 换单审核
-    private Object taskStartTime;
-    private Object taskEndTime;
+    private String taskStartTime;
+    private String taskEndTime;
     private Object taskResult;
     private int stepOrder;
     private String id;
@@ -138,6 +138,8 @@ public class TransportListBean implements Serializable {
     private int arriveWarehouseNum;//已到板车数
 
     private String flightYLId;// 航班尤里id
+
+    private String role;//角色
 
     @Data
     public static class DeclareWaybillAdditionBean implements Serializable{

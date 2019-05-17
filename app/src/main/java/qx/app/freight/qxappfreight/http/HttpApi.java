@@ -133,7 +133,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> sendPrintMessage(@Path("waybillId") String waybillId);
 
     //代办
-    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
+//    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
+    @POST("service-product-receivecargo/todoTask/searchTodoTask")
     Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);
 
     //编辑修改页面
