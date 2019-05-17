@@ -225,7 +225,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1002) {//异常上报相机事件
                 List<String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);//选择好的图片
-                counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).setUploadPath(photoList);
+//                counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).setUploadPath(photoList);
                 //开始上传图片
                 List<File> files = new ArrayList<>();
                 for (String str : photoList) {
@@ -264,11 +264,14 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     @Override
     public void uploadsResult(Object result) {
+        Log.e("dime", "添加前长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().add(entry.getKey());
         }
+
+        Log.e("dime", "添加后长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
         mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
     }
