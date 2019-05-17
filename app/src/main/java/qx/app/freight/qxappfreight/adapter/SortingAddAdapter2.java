@@ -101,8 +101,8 @@ public class SortingAddAdapter2 extends BaseQuickAdapter<InventoryUbnormalGoods,
             }
         });        //显示异常照片
         ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).removeAllViews();
-        if (item.getUploadPath() != null) {
-            for (String imgUrl : item.getUploadPath()) {
+        if (item.getUploadFilePath() != null) {
+            for (String imgUrl : item.getUploadFilePath()) {
                 //创建父容器
                 RelativeLayout relativeLayout = new RelativeLayout(mContext);
                 RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(150, 150);
@@ -125,7 +125,7 @@ public class SortingAddAdapter2 extends BaseQuickAdapter<InventoryUbnormalGoods,
                 imageButton.setOnClickListener(listener -> {
                     int index = ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).indexOfChild(relativeLayout);
                     //先删除数据
-                    item.getUploadPath().remove(index);
+                    item.getUploadFilePath().remove(index);
                     //其次删除界面
                     ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).removeViewAt(index);
                 });

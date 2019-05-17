@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AddClearStorageActivity;
 import qx.app.freight.qxappfreight.adapter.ClearHistoryAdapter;
 import qx.app.freight.qxappfreight.adapter.ClearStorageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -92,6 +94,7 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         initView();
         //新的任务
         mCSadapter.setOnItemChildClickListener((adapter, view1, position) -> {
+            startActivity(new Intent(getContext(), AddClearStorageActivity.class).putExtra("taskId",mCSlist.get(position).getId()));
             interNewAct();
         });
         //历史任务
@@ -105,7 +108,7 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     }
 
     private void interNewAct() {
-
+        startActivity(new Intent(getContext(), AddClearStorageActivity.class));
     }
 
 

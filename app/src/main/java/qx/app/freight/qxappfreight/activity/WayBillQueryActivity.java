@@ -10,12 +10,16 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WaybillQueryResultAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
@@ -31,6 +35,8 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     @BindView(R.id.rv_search_result)
     RecyclerView mRvSearchResult;
 
+    private List<String> resultData = new ArrayList<>();
+    private WaybillQueryResultAdapter adapter;
 
     @Override
     public int getLayoutId() {
@@ -44,6 +50,17 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "运单查询");
+
+        adapter = new WaybillQueryResultAdapter(resultData);
+        mRvSearchResult.setLayoutManager(new LinearLayoutManager(this));
+        mRvSearchResult.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+
+            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position)));
+            finish();
+
+        });
+
         mEtInputKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,20 +93,14 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     @Override
     public void listWaybillCodeResult(ListWaybillCodeBean listWaybillCodeBean) {
         if ("200".equals(listWaybillCodeBean.getStatus())) {
+            resultData.clear();
             List<String> result = listWaybillCodeBean.getData();
             if (result == null || result.size() == 0) {
                 ToastUtil.showToast("未查询到对应的运单数据");
             } else {
-                WaybillQueryResultAdapter adapter = new WaybillQueryResultAdapter(result);
-                mRvSearchResult.setLayoutManager(new LinearLayoutManager(this));
-                mRvSearchResult.setAdapter(adapter);
-                adapter.setOnItemClickListener((adapter1, view, position) -> {
-                    Intent intent = new Intent();
-                    intent.putExtra("query_result", result.get(position));
-                    setResult(RESULT_OK, intent);
-                    finish();
-                });
+                resultData.addAll(result);
             }
+            adapter.notifyDataSetChanged();
         }
     }
 

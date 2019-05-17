@@ -31,15 +31,14 @@
                     android:layout_height="wrap_content"
                     android:text="运单号" />
 
-                <EditText
-                    android:id="@+id/edt_id"
+                <TextView
+                    android:id="@+id/tv_id"
                     style="@style/public_tv_16sp_3"
-                    android:background="@color/transparent"
                     android:layout_width="0dp"
-                    android:hint="请输入运单号"
+                    android:hint="请选择运单号"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right" />
+                    android:gravity="end" />
             </LinearLayout>
 
             <!-- 实际分拣 -->

@@ -46,7 +46,7 @@ public class InventoryUbnormalGoods implements Serializable {
      */
     private int ubnormalNumber;
 
-    private List<String> uploadPath;
+    private List<String> uploadFilePath;
 
 
 }
