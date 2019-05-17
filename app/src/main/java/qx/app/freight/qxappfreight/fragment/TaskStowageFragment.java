@@ -45,8 +45,8 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
-    private List<TransportListBean> list = new ArrayList<>();
-    private List<TransportListBean> mCacheList = new ArrayList<>();
+    private List<TransportListBean.TransportDataBean> list = new ArrayList<>();
+    private List<TransportListBean.TransportDataBean> mCacheList = new ArrayList<>();
     private TaskStowageAdapter adapter;
 
     private int pageCurrent = 1;//页数
@@ -81,7 +81,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         if (TextUtils.isEmpty(mSearchText)) {
             list.addAll(mCacheList);
         } else {
-            for (TransportListBean item : mCacheList) {
+            for (TransportListBean.TransportDataBean item : mCacheList) {
                 if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
                     list.add(item);
                 }
@@ -133,7 +133,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean bean) {
+    private void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
         CargoHandlingActivity.startActivity(mContext, bean.getTaskId()
                 , bean.getFlightId());
     }
@@ -155,7 +155,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             mCacheList.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportListBean mTransportListBean : list) {
+            for (TransportListBean.TransportDataBean mTransportListBean : list) {
                 if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId()))
                     mCacheList.remove(mTransportListBean);
             }
@@ -169,7 +169,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean item : mCacheList) {
+        for (TransportListBean.TransportDataBean item : mCacheList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -196,7 +196,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
     }
 
     @Override
-    public void transportListContractResult(List<TransportListBean> transportListBeans) {
+    public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
             //未分页
             mCacheList.clear();
@@ -206,7 +206,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
             } else {
                 mMfrvData.finishLoadMore();
             }
-            for (TransportListBean mTransportListBean : transportListBeans) {
+            for (TransportListBean.TransportDataBean mTransportListBean : transportListBeans.getRecords()) {
                 if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode()))
                     mCacheList.add(mTransportListBean);
             }

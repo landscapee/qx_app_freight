@@ -256,7 +256,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportListBean>> transportList(BaseFilterEntity model) {
+    public Observable<TransportListBean> transportList(BaseFilterEntity model) {
         return transform(getService().transportList(model));
     }
 

@@ -47,8 +47,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
     private int pageCurrent = 1;
 
-    private List<TransportListBean> transportListList1;
-    private List<TransportListBean> transportListList;
+    private List<TransportListBean.TransportDataBean> transportListList1;
+    private List<TransportListBean.TransportDataBean> transportListList;
     private String seachString = "";
     TaskFragment fragment;
     @Nullable
@@ -82,7 +82,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         if (TextUtils.isEmpty(seachString)) {
             transportListList.addAll(transportListList1);
         } else {
-            for (TransportListBean team : transportListList1) {
+            for (TransportListBean.TransportDataBean team : transportListList1) {
                 if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     transportListList.add(team);
                 }
@@ -121,7 +121,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean bean) {
+    private void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
         if (null == bean.getDeclareWaybillAddition()) {
             ToastUtil.showToast("数据为空请重新申报");
         } else {
@@ -152,7 +152,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean item : transportListList) {
+        for (TransportListBean.TransportDataBean item : transportListList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -180,7 +180,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
 
 
     @Override
-    public void transportListContractResult(List<TransportListBean> transportListBeans) {
+    public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
             //未分页
             transportListList1.clear();
@@ -190,7 +190,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
             } else {
                 mMfrvData.finishLoadMore();
             }
-            transportListList1.addAll(transportListBeans);
+            transportListList1.addAll(transportListBeans.getRecords());
 
             seachWith();
 //            mMfrvData.notifyForAdapter(adapter);
@@ -212,7 +212,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportListBean mTransportListBean : transportListList1) {
+            for (TransportListBean.TransportDataBean mTransportListBean : transportListList1) {
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
                     transportListList1.remove(mTransportListBean);
             }

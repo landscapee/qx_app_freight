@@ -49,8 +49,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List<TransportListBean> mList = new ArrayList<>();  //筛选过后的数据
-    private List<TransportListBean> mListTemp = new ArrayList<>(); // 原始数据
+    private List<TransportListBean.TransportDataBean> mList = new ArrayList<>();  //筛选过后的数据
+    private List<TransportListBean.TransportDataBean> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
     private String searchString = "";
@@ -75,12 +75,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter = new InportTallyAdapter(mList);
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
-            public void toDetail(TransportListBean item) {
+            public void toDetail(TransportListBean.TransportDataBean item) {
                 turnToDetailActivity(item);
             }
 
             @Override
-            public void toFFM(TransportListBean item) {
+            public void toFFM(TransportListBean.TransportDataBean item) {
                 startActivity(new Intent(mContext, FFMActivity.class));
             }
         });
@@ -103,7 +103,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         if(TextUtils.isEmpty(searchString)){
             mList.addAll(mListTemp);
         }else{
-            for(TransportListBean itemData: mListTemp){
+            for(TransportListBean.TransportDataBean itemData: mListTemp){
                 if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
@@ -127,7 +127,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean bean) {
+    private void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
         Intent intent = new Intent(mContext, SortingActivity.class);
         intent.putExtra("TASK_INFO", bean);
         mContext.startActivity(intent);
@@ -151,7 +151,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean item : mList) {
+        for (TransportListBean.TransportDataBean item : mList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -189,7 +189,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             mListTemp.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportListBean mTransportListBean : mList) {
+            for (TransportListBean.TransportDataBean mTransportListBean : mList) {
                 if (mWebSocketResultBean.getChgData().get(0).getId() != null) {
                     if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
                         mListTemp.remove(mTransportListBean);
@@ -219,7 +219,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void transportListContractResult(List<TransportListBean> transportListBeans) {
+    public void transportListContractResult(TransportListBean transportListBeans) {
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
@@ -228,7 +228,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         }
 
         mListTemp.clear();
-        mListTemp.addAll(transportListBeans);
+        mListTemp.addAll(transportListBeans.getRecords());
         seachWithNum();
     }
 }

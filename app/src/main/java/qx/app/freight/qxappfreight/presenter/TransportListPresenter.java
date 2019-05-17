@@ -23,9 +23,9 @@ public class TransportListPresenter extends BasePresenter {
 
     public void transportListPresenter(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((TransportListModel) mRequestModel).transportListContract(model, new IResultLisenter<List<TransportListBean>>() {
+        ((TransportListModel) mRequestModel).transportListContract(model, new IResultLisenter<TransportListBean>() {
             @Override
-            public void onSuccess(List<TransportListBean> transportListBeans) {
+            public void onSuccess(TransportListBean transportListBeans) {
                 ((TransportListContract.transportListContractView) mRequestView).transportListContractResult(transportListBeans);
                 mRequestView.dissMiss();
             }

@@ -29,7 +29,7 @@ import static qx.app.freight.qxappfreight.app.MyApplication.getContext;
  *
  * @param <T> 泛型传参
  */
-public class MainListRvAdapter<T extends TransportListBean> extends BaseQuickAdapter<T, BaseViewHolder> {
+public class MainListRvAdapter<T extends TransportListBean.TransportDataBean> extends BaseQuickAdapter<T, BaseViewHolder> {
     public MainListRvAdapter(List<T> mDatas) {
         super(R.layout.item_main_list, mDatas);
     }

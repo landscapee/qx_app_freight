@@ -18,6 +18,6 @@ public class TransportListContract {
     }
 
     public interface transportListContractView extends IBaseView {
-        void transportListContractResult(List<TransportListBean> transportListBeans);
+        void transportListContractResult(TransportListBean transportListBeans);
     }
 }
