@@ -480,13 +480,14 @@ public interface HttpApi {
 
     //清库运单模糊查询
     @GET("service-product-inwaybill/inventory/listWaybillCode/{code}")
-    Observable<BaseEntity<ListWaybillCodeBean>> listWaybillCode(@Path("code") String code);
+    Observable<ListWaybillCodeBean> listWaybillCode(@Path("code") String code);
 
 
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
     Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
+
     //版本更新
     @POST("app/scheduling/findVersionUpdate")
     @FormUrlEncoded

@@ -855,6 +855,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> addInventoryDetail(List<InventoryDetailEntity> entity) {
         return nothingtransform(getService().addInventoryDetail(entity));
     }
+
     /**
      * 清库提交
      *
@@ -870,7 +871,7 @@ public class UpdateRepository extends BaseRepository {
      * @return 成功/失败
      */
     public Observable<ListWaybillCodeBean> listWaybillCode(String code) {
-        return transform(getService().listWaybillCode(code));
+        return getService().listWaybillCode(code);
     }
 
     /**
@@ -883,6 +884,7 @@ public class UpdateRepository extends BaseRepository {
                 str);
         return nothingtransform(getService().internationalCargoReport(requestBody));
     }
+
     //版本更新
     public Observable<UpdateVersionBean> updateVersion(Map<String, String> map) {
         return transform(getService().updateVersion(map));

@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
@@ -177,10 +178,19 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
             finish();
+//            Intent intent = new Intent(this, WayBillQueryActivity.class);
+//            startActivityForResult(intent, 444);
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (requestCode == 444 && resultCode == RESULT_OK) {
+//            ToastUtil.showToast(data.getStringExtra("query_result"));
+//        }
+//    }
 
     @Override
     public void loginQxAiResult(LoginBean loginBean) {
