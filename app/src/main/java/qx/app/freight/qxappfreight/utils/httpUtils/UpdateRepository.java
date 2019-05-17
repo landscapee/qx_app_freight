@@ -72,6 +72,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -881,5 +882,9 @@ public class UpdateRepository extends BaseRepository {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 str);
         return nothingtransform(getService().internationalCargoReport(requestBody));
+    }
+    //版本更新
+    public Observable<UpdateVersionBean> updateVersion(Map<String, String> map) {
+        return transform(getService().updateVersion(map));
     }
 }

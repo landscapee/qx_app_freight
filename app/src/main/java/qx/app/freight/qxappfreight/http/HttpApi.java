@@ -71,6 +71,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -485,5 +486,8 @@ public interface HttpApi {
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
     Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
-
+    //版本更新
+    @POST("app/scheduling/findVersionUpdate")
+    @FormUrlEncoded
+    Observable<BaseEntity<UpdateVersionBean>> updateVersion(@FieldMap Map<String, String> map);
 }
