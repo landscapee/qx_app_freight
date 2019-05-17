@@ -27,11 +27,6 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -206,9 +201,10 @@
             android:name=".activity.SortingAddActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <!-- 注册服务 -->
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />
+        <service android:name=".service.DownloadFileService"/>
 
         <receiver
             android:name=".reciver.ScanReceiver"
@@ -219,5 +215,10 @@
             </intent-filter>
         </receiver>
     </application>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
 </manifest>
