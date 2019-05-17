@@ -75,10 +75,12 @@ public class SortingAddAdapter2 extends BaseQuickAdapter<InventoryUbnormalGoods,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (!TextUtils.isEmpty(s.toString().trim())) {
                     item.setUbnormalNumber(Integer.valueOf(s.toString().trim()));
                 } else {
