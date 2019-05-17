@@ -137,6 +137,14 @@ public interface HttpApi {
     @POST("service-product-receivecargo/todoTask/searchTodoTask")
     Observable<BaseEntity<TransportListBean>> transportList(@Body BaseFilterEntity model);
 
+    /**
+     * 收验，代办 -- pr & guohao
+     * @param model
+     * @return
+     */
+    @POST("service-product-transportcheck/todoTask/searchTodoTask")
+    Observable<BaseEntity<TransportListBean>> searchTodoTask(@Body BaseFilterEntity model);
+
     //编辑修改页面
     @GET("service-product-waybill/declare-waybill/getWayBillInfoById/{id}")
     Observable<BaseEntity<DeclareWaybillBean>> getWayBillInfoById(@Path("id") String id);

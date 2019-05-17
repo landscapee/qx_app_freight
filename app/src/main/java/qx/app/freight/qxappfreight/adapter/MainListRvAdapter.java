@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -27,16 +28,15 @@ import static qx.app.freight.qxappfreight.app.MyApplication.getContext;
 /**
  * 货品列表页adapter
  *
- * @param <T> 泛型传参
  */
-public class MainListRvAdapter<T extends TransportListBean.TransportDataBean> extends BaseQuickAdapter<T, BaseViewHolder> {
-    public MainListRvAdapter(List<T> mDatas) {
+public class MainListRvAdapter extends BaseQuickAdapter<TransportListBean.TransportDataBean, BaseViewHolder> {
+    public MainListRvAdapter(List<TransportListBean.TransportDataBean> mDatas) {
         super(R.layout.item_main_list, mDatas);
     }
 
     @SuppressLint("StringFormatMatches")
     @Override
-    protected void convert(BaseViewHolder helper, T item) {
+    protected void convert(BaseViewHolder helper, TransportListBean.TransportDataBean item) {
         //运单号
         helper.setText(R.id.tv_order, item.getWaybillCode());
         //预交道口-预交时段
@@ -113,7 +113,9 @@ public class MainListRvAdapter<T extends TransportListBean.TransportDataBean> ex
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         RecyclerView rvDetail = helper.getView(R.id.rv_detail_list);
         rvDetail.setLayoutManager(manager);
-        SingleItemInfoAdapter adapter = new SingleItemInfoAdapter(item.getDeclareItem());
+        List<TransportListBean.TransportDataBean> itemOneList = new ArrayList<>();
+        itemOneList.add(item);
+        SingleItemInfoAdapter adapter = new SingleItemInfoAdapter(itemOneList);
         rvDetail.setAdapter(adapter);
 
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);

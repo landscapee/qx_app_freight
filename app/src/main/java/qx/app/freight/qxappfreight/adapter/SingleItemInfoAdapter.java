@@ -16,16 +16,15 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 /**
  * 货物详情adapter
  *
- * @param <T>
  */
-public class SingleItemInfoAdapter<T extends DeclareItem> extends BaseQuickAdapter<T, BaseViewHolder> {
+public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportListBean.TransportDataBean,BaseViewHolder> {
 
-    SingleItemInfoAdapter(List<T> mDatas) {
+    SingleItemInfoAdapter(List<TransportListBean.TransportDataBean> mDatas) {
         super(R.layout.item_single_info, mDatas);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, T item) {
+    protected void convert(BaseViewHolder helper, TransportListBean.TransportDataBean item) {
         if (helper.getAdapterPosition() % 2 == 0) {
             helper.itemView.setBackgroundColor(Color.WHITE);
         } else {
@@ -33,16 +32,17 @@ public class SingleItemInfoAdapter<T extends DeclareItem> extends BaseQuickAdapt
         }
         //序号
         helper.setText(R.id.tv_num, helper.getAdapterPosition()+1+"");
+
         //品名
         helper.setText(R.id.tv_goods_name, item.getCargoCn());
         //件数
-        helper.setText(R.id.tv_goods_number, String.valueOf(item.getNumber()));
+        helper.setText(R.id.tv_goods_number, String.valueOf(item.getTotalNumberPackages()));
         //重量
-        helper.setText(R.id.tv_weight, String.valueOf(item.getWeight()));
+        helper.setText(R.id.tv_weight, String.valueOf(item.getTotalWeight()));
         //体积
-        helper.setText(R.id.tv_volume, String.valueOf(item.getVolume()));
+        helper.setText(R.id.tv_volume, String.valueOf(item.getTotalVolume()));
         //包装类型
-        helper.setText(R.id.tv_package, Arrays.toString(item.getPackagingType()));
+        helper.setText(R.id.tv_package, item.getPackagingType());
 
     }
 }

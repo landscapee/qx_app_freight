@@ -31,7 +31,9 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.SearchTodoTaskContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -40,7 +42,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 出港-收验
  */
-public class TaskCollectVerifyFragment extends BaseFragment implements TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
@@ -97,7 +99,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     private void initData() {
         transportListList = new ArrayList<>();
         transportListList1 = new ArrayList<>();
-        mPresenter = new TransportListPresenter(this);
+        mPresenter = new SearchTodoTaskPresenter(this);
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -107,12 +109,17 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     }
 
     private void getData() {
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCurrent(pageCurrent);
+        BaseFilterEntity<TransportListBean.TransportDataBean> entity = new BaseFilterEntity();
+        TransportListBean.TransportDataBean tempBean = new TransportListBean.TransportDataBean();
+        tempBean.setWaybillCode("");
+        tempBean.setTaskStartTime("");
+        tempBean.setTaskEndTime("");
+        tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        entity.setFilter(tempBean);
+        entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+        entity.setCurrent(1);
+        ((SearchTodoTaskPresenter) mPresenter).searchTodoTask(entity);
 
     }
 
@@ -179,25 +186,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     }
 
 
-    @Override
-    public void transportListContractResult(TransportListBean transportListBeans) {
-        if (transportListBeans != null) {
-            //未分页
-            transportListList1.clear();
-            if (pageCurrent == 1) {
-//                transportListList.clear();
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            transportListList1.addAll(transportListBeans.getRecords());
 
-            seachWith();
-//            mMfrvData.notifyForAdapter(adapter);
-        } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
-        }
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String refresh) {
@@ -239,5 +228,25 @@ public class TaskCollectVerifyFragment extends BaseFragment implements Transport
     @Override
     public void dissMiss() {
 
+    }
+
+    @Override
+    public void searchTodoTaskResult(TransportListBean transportListBean) {
+        if (transportListBean != null) {
+            //未分页
+            transportListList1.clear();
+            if (pageCurrent == 1) {
+//                transportListList.clear();
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
+            }
+            transportListList1.addAll(transportListBean.getRecords());
+
+            seachWith();
+//            mMfrvData.notifyForAdapter(adapter);
+        } else {
+            ToastUtil.showToast(getActivity(), "数据为空");
+        }
     }
 }

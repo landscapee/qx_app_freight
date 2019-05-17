@@ -260,6 +260,18 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().transportList(model));
     }
 
+
+    /********
+     * 代验收运列表
+     * @param model
+     * @return
+     */
+    public Observable<TransportListBean> searchTodoTask(BaseFilterEntity model) {
+        return transform(getService().searchTodoTask(model));
+    }
+
+
+
     /**
      * 收运编辑提交页面
      *

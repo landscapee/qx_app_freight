@@ -142,4 +142,7 @@ public class TransportDataBase implements Serializable {
     private String flightYLId;// 航班尤里id
 
     private String role;//角色
+    private String cargoCn;//品名
+    private String packagingType;
+
 }
