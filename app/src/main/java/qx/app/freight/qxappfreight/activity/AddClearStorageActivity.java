@@ -164,13 +164,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_add_item:
-
-                InventoryUbnormalGoods inventoryUbnormalGoods = new InventoryUbnormalGoods();
-//                inventoryUbnormalGoods.setUbnormalType(4);
-//                inventoryUbnormalGoods.setUbnormalNumber(20);
-                counterUbnormalGoodsList.add(inventoryUbnormalGoods);
-                mAdapter.notifyDataSetChanged();
-
+                addItem();
                 break;
             case R.id.btn_info_commit:
                 commitInfo();
@@ -183,9 +177,35 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     }
 
     /**
+     * 新增异常类型
+     */
+    private void addItem() {
+
+        InventoryUbnormalGoods inventoryUbnormalGoods = new InventoryUbnormalGoods();
+        inventoryUbnormalGoods.setUploadPath(new ArrayList<>());
+        //填运单号
+        if(TextUtils.isEmpty(edtId.getText().toString().trim())){
+            inventoryUbnormalGoods.setWaybillCode(null);
+        }else{
+            inventoryUbnormalGoods.setWaybillCode(edtId.getText().toString().trim());
+        }
+        counterUbnormalGoodsList.add(inventoryUbnormalGoods);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
      *  提交填好的异常情况
      */
     private void commitInfo() {
+        if (counterUbnormalGoodsList.size() ==0){
+            ToastUtil.showToast("请先新增异常");
+            return;
+        }
+        if (TextUtils.isEmpty(edtRealSortNum.getText().toString().trim())) {
+            ToastUtil.showToast("请输入实际分拣数！");
+            return;
+        }
         //封装数据
         InventoryDetailEntity detailEntity = new InventoryDetailEntity();
         detailEntity.setWaybillCode(edtId.getText().toString().trim());
@@ -204,17 +224,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
      * 总提交
      */
     private void submit() {
-        //将组装好的数据返回给前一个页面
-        if (TextUtils.isEmpty(edtId.getText().toString().trim())) {
-//            mInWaybillRecord.setWaybillCode("");
-        } else {
-//            mInWaybillRecord.setWaybillCode(edtId.getText().toString().trim());
+        if (inventoryDetailEntityList.size() ==0){
+            ToastUtil.showToast("提交数据不能为空");
         }
-        if (TextUtils.isEmpty(edtRealSortNum.getText().toString().trim())) {
-            ToastUtil.showToast("请输入实际分拣数！");
-            return;
-        }
-
         ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
 
     }
@@ -238,13 +250,14 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                         .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener() {
                     @Override
                     public void onStart() {
-                        showProgessDialog("正在上传，请稍候...");
+
                     }
 
                     @Override
                     public void onSuccess(List<File> fileList) {
                         List<MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
                         ((AddInventoryDetailPresenter) mPresenter).uploads(upFiles);
+                        showProgessDialog("正在上传，请稍候...");
                     }
 
                     @Override
@@ -264,14 +277,14 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     @Override
     public void uploadsResult(Object result) {
-        Log.e("dime", "添加前长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
+//        Log.e("dime", "添加前长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
         Map<String, String> map = (Map<String, String>) result;
         Set<Map.Entry<String, String>> entries = map.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().add(entry.getKey());
         }
 
-        Log.e("dime", "添加后长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
+//        Log.e("dime", "添加后长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
         mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
     }
