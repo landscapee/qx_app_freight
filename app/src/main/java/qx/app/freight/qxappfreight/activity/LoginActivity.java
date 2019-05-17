@@ -38,7 +38,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView , UpdateVersionContract.updateView{
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -255,6 +255,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         if (versionCode < mVersionBean.getVersionCodeRS())
             showAppUpdateDialog();
     }
+
     /**
      * 弹出下载提示框
      */
@@ -280,11 +281,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 });
         appUpdateDailog.show();
     }
+
     /**
      * 下载apk
      */
     public void downLoadFile(UpdateVersionBean version) {
-        ToastUtil.showToast( "程序更新中...");
-        DownloadFileService.startService(this, version.getDownloadUrl(), Constants.APP_NAME, Tools.getFilePath());
+        ToastUtil.showToast("程序更新中...");
+        DownloadFileService.startService(this, version.getDownloadUrl(), Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
     }
 }

@@ -6,7 +6,7 @@ import android.os.Environment;
 import java.io.File;
 
 public class Constants {
-    public static final String APP_NAME = "智慧货运.apk";
+    public static final String APP_NAME = "智慧货运_";
     //====================================================角色分类======================================================
     /**
      * 安检
