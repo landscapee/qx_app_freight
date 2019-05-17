@@ -14,11 +14,11 @@ public class HttpConstant {
     public static final String QXAITEST = BuildConfig.QXAITEST;//"http://10.16.23.156:805/mas-main/";//一期智能 生产环境
     //websocket 地址
     public static final String WEBSOCKET = BuildConfig.WEBSOCKET;//"173.100.1.78:7004";
-    public static final String WEBSOCKETURL = BuildConfig.WEBSOCKETURL;// "ws://"+WEBSOCKET+"/socketServer?";//开发环境-----最新
+    public static final String WEBSOCKETURL = BuildConfig.WEBSOCKETURL;//推送地址
     /**
      * 显示图片的地址
      */
-    public static final String IMAGEURL = BuildConfig.IMAGEURL;//"http://173.100.1.74/";//开发环境
+    public static final String IMAGEURL = BuildConfig.IMAGEURL;
 
 
     //==============================================================================================================================================================
