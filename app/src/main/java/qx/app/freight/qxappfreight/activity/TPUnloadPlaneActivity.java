@@ -245,8 +245,10 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mTvErrorReport.setOnClickListener(
                 v -> {
                     Intent intent = new Intent(TPUnloadPlaneActivity.this, ErrorReportActivity.class);
-//                    intent.putExtra("plane_info", getIntent().getStringExtra("plane_info"));
-//                    intent.putExtra("error_type", 2);
+                    intent.putExtra("flight_number", mOutFieldTaskBean.getFlights().getFlightNo());//航班号
+                    intent.putExtra("task_id", mOutFieldTaskBean.getTaskId());//任务id
+                    intent.putExtra("flight_id", mOutFieldTaskBean.getFlights().getFlightId());//Flight id
+                    intent.putExtra("error_type", 2);
                     TPUnloadPlaneActivity.this.startActivity(intent);
                 });
         mTvEndUnload.setOnClickListener(v -> {

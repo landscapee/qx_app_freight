@@ -89,7 +89,7 @@
                 android:id="@+id/iv_search"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
-                android:src="@mipmap/statistics_normal" />
+                android:src="@mipmap/clear_normal" />
 
             <TextView
                 android:id="@+id/tv_search"
