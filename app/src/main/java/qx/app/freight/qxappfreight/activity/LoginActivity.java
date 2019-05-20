@@ -1,11 +1,9 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -298,6 +296,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     public void downLoadFile(UpdateVersionBean version) {
         ToastUtil.showToast("程序更新中...");
-        DownloadFileService.startService(this, version.getDownloadUrl(), Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
+        String wholeUrl = version.getDownloadUrl();
+        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
+        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
+        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
     }
 }

@@ -9,45 +9,45 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import org.xutils.common.Callback;
-import org.xutils.common.task.PriorityExecutor;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.util.concurrent.Executor;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.Executors;
 
+import okhttp3.ResponseBody;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class DownloadFileService extends Service {
     private static final String KEY_DOWNURL = "DOWNURL";
+    private static final String KEY_BASE = "BASE";
     private static final String KEY_PATH = "PATH";
     private static final String KEY_FILENAME = "FILENAME";
-    private String TAG = "tagDownload";
+    private String baseUrl;
     private String downUrl;
     private String savePath;
     private String fileName;
     private Context mContext;
-    private final Executor executor = new PriorityExecutor(2, true);
     // 显示下载进度
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
     private int noticeId = 1012;
 
-    public static void startService(Context context, String downUrl, String fileName, String savePath) {
+    public static void startService(Context context, String baseUrl, String downUrl, String fileName, String savePath) {
         Intent intent = new Intent(context, DownloadFileService.class);
+        intent.putExtra(KEY_BASE, baseUrl);
         intent.putExtra(KEY_DOWNURL, downUrl);
         intent.putExtra(KEY_FILENAME, fileName);
         intent.putExtra(KEY_PATH, savePath);
         context.startService(intent);
-    }
-
-    public static void stopService(Context context) {
-        Intent intent = new Intent(context, DownloadFileService.class);
-        context.stopService(intent);
     }
 
     public DownloadFileService() {
@@ -60,6 +60,7 @@ public class DownloadFileService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        baseUrl = intent.getStringExtra(KEY_BASE);
         downUrl = intent.getStringExtra(KEY_DOWNURL);
         savePath = intent.getStringExtra(KEY_PATH);
         fileName = intent.getStringExtra(KEY_FILENAME);
@@ -81,58 +82,60 @@ public class DownloadFileService extends Service {
     }
 
     private void startDownload() {
-        Callback.ProgressCallback<File> callback = new Callback.ProgressCallback<File>() {
+        Callback<ResponseBody> callback = new Callback<ResponseBody>() {
             @Override
-            public void onSuccess(File result) {
-                Log.e(TAG, "onSuccess: 下载完成");
-                mNotificationManager.cancel(noticeId);
-                InstallApp(result);
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    InputStream is = response.body().byteStream();
+                    //获取文件总长度
+                    long totalLength = response.body().contentLength();
+                    File file = new File(savePath + fileName);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    long currentLength = 0;
+                    while ((len = bis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, len);
+                        //此处进行更新操作
+                        //len即可理解为已下载的字节数
+                        currentLength += len;
+                        onLoading(currentLength, totalLength);
+                    }
+                    fos.flush();
+                    fos.close();
+                    bis.close();
+                    is.close();
+                    //此处就代表更新结束
+                    mNotificationManager.cancel(noticeId);
+                    InstallApp(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: " + ex.getMessage());
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                Log.e(TAG, "onCancelled: ");
-            }
-
-            @Override
-            public void onFinished() {
-            }
-
-            @Override
-            public void onWaiting() {
-                Log.e(TAG, "onWaiting: ");
-            }
-
-            @Override
-            public void onStarted() {
-            }
-
-            @Override
-            public void onLoading(long total, long current, boolean isDownloading) {
-                Log.e(TAG, "total: " + total + "---current: " + current);
-                double currentPro = ((double) current / (double) total) * 100;
-                mBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_logo));
-                mBuilder.setSmallIcon(R.mipmap.ic_download);
-                mBuilder.setContentTitle(fileName.substring(0, fileName.lastIndexOf(".")));
-                mBuilder.setContentText((int) currentPro + "%");
-                mBuilder.setProgress(100, (int) currentPro, false);
-                mNotificationManager.notify(noticeId, mBuilder.build());
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ToastUtil.showToast("下载安装文件出错");
             }
         };
-        RequestParams params = new RequestParams(downUrl);
-        params.setAutoRename(true);
-        params.setExecutor(executor);
-        params.setSaveFilePath(savePath + fileName);
-        x.http().post(params, callback);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).callbackExecutor(Executors.newSingleThreadExecutor()).build();
+        DownloadService service = retrofit.create(DownloadService.class);
+        Call<ResponseBody> call = service.download(downUrl);
+        call.enqueue(callback);
+    }
+
+    private void onLoading(long len, long totalLength) {
+        double currentPro = ((double) len / (double) totalLength) * 100;
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_logo));
+        mBuilder.setSmallIcon(R.mipmap.ic_download);
+        mBuilder.setContentTitle(fileName.substring(0, fileName.lastIndexOf(".")));
+        mBuilder.setContentText((int) currentPro + "%");
+        mBuilder.setProgress(100, (int) currentPro, false);
+        mNotificationManager.notify(noticeId, mBuilder.build());
     }
 
     /**
-     *
      * @param file 安装文件
      */
     private void InstallApp(File file) {
