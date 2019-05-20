@@ -869,7 +869,7 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /**
-     * 清库提交
+     * 清库详情
      *
      * @return 成功/失败
      */

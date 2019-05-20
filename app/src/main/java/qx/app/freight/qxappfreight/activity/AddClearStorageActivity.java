@@ -83,7 +83,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     int CURRENT_PHOTO_INDEX;
 
-    private String tastId;
+    private String taskId;  //任务id
+    private String taskTitle; //标题
 
 
     @Override
@@ -94,7 +95,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
-        tastId = getIntent().getStringExtra("taskId");
+        taskId = getIntent().getStringExtra("taskId");
+        taskTitle = getIntent().getStringExtra("taskTitle");
         initTitle();
         initData();
     }
@@ -102,7 +104,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private void initTitle() {
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        toolbar.setMainTitle(Color.WHITE, "鲜活清库");
+        toolbar.setMainTitle(Color.WHITE, taskTitle);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -160,7 +162,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         });
         //第二个列表的初始化
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList);
+        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList,1);
         infoAdapter.setInventoryInfoListener(new InventoryInfoAdapter.InventoryInfoListener() {
             @Override
             public void onLook(int position) {
@@ -228,7 +230,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         //封装数据
         InventoryDetailEntity detailEntity = new InventoryDetailEntity();
         detailEntity.setWaybillCode(tvId.getText().toString().trim());
-        detailEntity.setInventoryTaskId(tastId);
+        detailEntity.setInventoryTaskId(taskId);
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
         try {
             List<InventoryUbnormalGoods> goodsList =  Tools.deepCopy(counterUbnormalGoodsList);

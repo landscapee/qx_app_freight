@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.AddClearStorageActivity;
+import qx.app.freight.qxappfreight.activity.ClearStorageDetailActivity;
 import qx.app.freight.qxappfreight.adapter.ClearHistoryAdapter;
 import qx.app.freight.qxappfreight.adapter.ClearStorageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -93,22 +96,37 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         });
         initView();
         //新的任务
-        mCSadapter.setOnItemChildClickListener((adapter, view1, position) -> {
-            startActivity(new Intent(getContext(), AddClearStorageActivity.class).putExtra("taskId",mCSlist.get(position).getId()));
-            interNewAct();
+        mCSadapter.setOnItemClickListener((adapter, view13, position) -> {
+            interNewAct(position);
         });
         //历史任务
-        mCHadapter.setOnItemChildClickListener((adapter, view12, position) -> {
-            interHistoryAct();
+        mCHadapter.setOnItemClickListener((adapter, view12, position) -> {
+            interHistoryAct(position);
         });
     }
 
-    private void interHistoryAct() {
-
+    private void interHistoryAct(int position) {
+        String titleName;
+        if (mCSlist.get(position).getTaskType()==1){
+            titleName = "全仓清库";
+        }else {
+            titleName = "鲜活清库";
+        }
+        startActivity(new Intent(getContext(), ClearStorageDetailActivity.class)
+                .putExtra("taskTitle",titleName)
+                .putExtra("taskId",mCSlist.get(position).getId()));
     }
 
-    private void interNewAct() {
-        startActivity(new Intent(getContext(), AddClearStorageActivity.class));
+    private void interNewAct(int position) {
+        String titleName;
+        if (mCSlist.get(position).getTaskType()==1){
+            titleName = "全仓清库";
+        }else {
+            titleName = "鲜活清库";
+        }
+        startActivity(new Intent(getContext(), AddClearStorageActivity.class)
+                .putExtra("taskTitle",titleName)
+                .putExtra("taskId",mCSlist.get(position).getId()));
     }
 
 
@@ -129,7 +147,8 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     private void initData1() {
         BaseFilterEntity entity = new BaseFilterEntity();
         NoticeViewBean bean = new NoticeViewBean();
-        bean.setStatus(0);
+        bean.setStatus(1);
+        entity.setFilter(bean);
         entity.setCurrent(mCurrentPage1);
         entity.setSize(Constants.PAGE_SIZE);
         ((InventoryQueryPresenter) mPresenter).InventoryQuery(entity);
@@ -138,7 +157,8 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     private void initData2() {
         BaseFilterEntity entity = new BaseFilterEntity();
         NoticeViewBean bean = new NoticeViewBean();
-        bean.setStatus(1);
+        bean.setStatus(0);
+        entity.setFilter(bean);
         entity.setCurrent(mCurrentPage2);
         entity.setSize(Constants.PAGE_SIZE);
         ((InventoryQueryPresenter) mPresenter).InventoryQueryHistory(entity);
