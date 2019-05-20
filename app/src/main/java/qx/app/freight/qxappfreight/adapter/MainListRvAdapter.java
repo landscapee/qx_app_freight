@@ -104,6 +104,7 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportListBean.Transp
         //计费重量
         String weight = "计费重量:  <font color='#FF0000'>" + item.getBillingWeight() + "kg</font>";
         helper.setText(R.id.tv_weight_judge, Html.fromHtml(weight));
+        helper.getView(R.id.tv_weight_judge).setVisibility(View.GONE);
         //航班号
         helper.setText(R.id.tv_flight_number, item.getFlightNumber());
         //航班预计起飞时间
