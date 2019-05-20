@@ -2,8 +2,10 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,9 +21,15 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoginContract;
+import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
+import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
+import qx.app.freight.qxappfreight.presenter.UpdateVersionPresenter;
+import qx.app.freight.qxappfreight.service.DownloadFileService;
+import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -31,13 +39,14 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
     EditText mEtPassWord;
     @BindView(R.id.et_username)
     EditText mEtUserName;
+    private UpdateVersionBean mVersionBean;
 
     @Override
     public int getLayoutId() {
@@ -49,13 +58,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
+        UpdateVersionPresenter versionPresenter = new UpdateVersionPresenter(this);
+        versionPresenter.updateVersion();
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
         mEtUserName.setText("");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
 //            login();
-            test();
+//            test();
+            startActivity(new Intent(this,AddClearStorageActivity.class));
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -99,7 +111,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     //用于测试的方法
     private void test() {
-        startActivity(new Intent(this,AddClearStorageActivity.class));
 //        BaggerInputDialog dialog = new BaggerInputDialog();
 //        dialog.setData(this,null);
 //        dialog.show(getSupportFragmentManager(), "123");
@@ -168,10 +179,19 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             UserInfoSingle.setUser(loginBean);
             MainActivity.startActivity(this);
             finish();
+//            Intent intent = new Intent(this, WayBillQueryActivity.class);
+//            startActivityForResult(intent, 444);
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (requestCode == 444 && resultCode == RESULT_OK) {
+//            ToastUtil.showToast(data.getStringExtra("query_result"));
+//        }
+//    }
 
     @Override
     public void loginQxAiResult(LoginBean loginBean) {
@@ -229,5 +249,55 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void onBackPressed() {
         quitApp();
+    }
+
+    @Override
+    public void updateVersionResult(UpdateVersionBean updataBean) {
+        if (updataBean == null) {
+            ToastUtil.showToast("获取应用更新信息失败");
+            return;
+        }
+        mVersionBean = updataBean;
+        PackageInfo appInfo = AppUtil.getPackageInfo(this);
+        int versionCode = 0;
+        if (appInfo != null) {
+            versionCode = appInfo.versionCode;
+        }
+        if (versionCode < mVersionBean.getVersionCodeRS())
+            showAppUpdateDialog();
+    }
+
+    /**
+     * 弹出下载提示框
+     */
+    private void showAppUpdateDialog() {
+        final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
+        appUpdateDailog.setAppUpdateDialogData(mVersionBean,
+                new AppUpdateDailog.AppUpdateLinstener() {
+                    @Override
+                    public void sure() {
+                        // 下载app
+                        if (mVersionBean.getDownloadUrl() == null || mVersionBean.getDownloadUrl().length() == 0) {
+                            ToastUtil.showToast("下载地址获取有误");
+                        } else {
+                            downLoadFile(mVersionBean);
+                        }
+                        appUpdateDailog.dismiss();
+                    }
+
+                    @Override
+                    public void cancel() {
+                        appUpdateDailog.dismiss();
+                    }
+                });
+        appUpdateDailog.show();
+    }
+
+    /**
+     * 下载apk
+     */
+    public void downLoadFile(UpdateVersionBean version) {
+        ToastUtil.showToast("程序更新中...");
+        DownloadFileService.startService(this, version.getDownloadUrl(), Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
     }
 }
