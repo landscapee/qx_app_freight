@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.MediaType;
@@ -37,7 +38,9 @@ import static android.content.Context.ACTIVITY_SERVICE;
  * on 2016-09-08.
  */
 public class Tools {
-
+    public static String getFilePath() {
+        return Objects.requireNonNull(Objects.requireNonNull(MyApplication.getContext()).getExternalCacheDir()).getAbsolutePath() + "/";
+    }
     /**
      * 获取当前登录用户得角色名称
      *
@@ -156,6 +159,26 @@ public class Tools {
             }
         }
         return (T)ojs.readObject();
+    }
+
+    /**
+     * 列表深拷贝
+     * @param src
+     * @param <T>
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(src);
+
+        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(byteIn);
+        @SuppressWarnings("unchecked")
+        ArrayList<T> dest = (ArrayList<T>) in.readObject();
+        return dest;
     }
 
 

@@ -72,6 +72,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -255,9 +256,21 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportListBean>> transportList(BaseFilterEntity model) {
+    public Observable<TransportListBean> transportList(BaseFilterEntity model) {
         return transform(getService().transportList(model));
     }
+
+
+    /********
+     * 代验收运列表
+     * @param model
+     * @return
+     */
+    public Observable<TransportListBean> searchTodoTask(BaseFilterEntity model) {
+        return transform(getService().searchTodoTask(model));
+    }
+
+
 
     /**
      * 收运编辑提交页面
@@ -854,6 +867,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> addInventoryDetail(List<InventoryDetailEntity> entity) {
         return nothingtransform(getService().addInventoryDetail(entity));
     }
+
     /**
      * 清库提交
      *
@@ -869,7 +883,7 @@ public class UpdateRepository extends BaseRepository {
      * @return 成功/失败
      */
     public Observable<ListWaybillCodeBean> listWaybillCode(String code) {
-        return transform(getService().listWaybillCode(code));
+        return getService().listWaybillCode(code);
     }
 
     /**
@@ -881,5 +895,10 @@ public class UpdateRepository extends BaseRepository {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 str);
         return nothingtransform(getService().internationalCargoReport(requestBody));
+    }
+
+    //版本更新
+    public Observable<UpdateVersionBean> updateVersion(Map<String, String> map) {
+        return transform(getService().updateVersion(map));
     }
 }

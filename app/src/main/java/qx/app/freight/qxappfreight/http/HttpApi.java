@@ -71,6 +71,7 @@ import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -132,8 +133,17 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> sendPrintMessage(@Path("waybillId") String waybillId);
 
     //代办
-    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
-    Observable<BaseEntity<List<TransportListBean>>> transportList(@Body BaseFilterEntity model);
+//    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
+    @POST("service-product-receivecargo/todoTask/searchTodoTask")
+    Observable<BaseEntity<TransportListBean>> transportList(@Body BaseFilterEntity model);
+
+    /**
+     * 收验，代办 -- pr & guohao
+     * @param model
+     * @return
+     */
+    @POST("service-product-transportcheck/todoTask/searchTodoTask")
+    Observable<BaseEntity<TransportListBean>> searchTodoTask(@Body BaseFilterEntity model);
 
     //编辑修改页面
     @GET("service-product-waybill/declare-waybill/getWayBillInfoById/{id}")
@@ -478,7 +488,7 @@ public interface HttpApi {
 
     //清库运单模糊查询
     @GET("service-product-inwaybill/inventory/listWaybillCode/{code}")
-    Observable<BaseEntity<ListWaybillCodeBean>> listWaybillCode(@Path("code") String code);
+    Observable<ListWaybillCodeBean> listWaybillCode(@Path("code") String code);
 
 
     /*********************国际货物***************************/
@@ -486,4 +496,8 @@ public interface HttpApi {
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
     Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
 
+    //版本更新
+    @POST("app/scheduling/findVersionUpdate")
+    @FormUrlEncoded
+    Observable<BaseEntity<UpdateVersionBean>> updateVersion(@FieldMap Map<String, String> map);
 }

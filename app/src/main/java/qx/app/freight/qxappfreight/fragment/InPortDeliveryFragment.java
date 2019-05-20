@@ -47,8 +47,8 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     MultiFunctionRecylerView mMfrvData;
 
     InPortDeliveryAdapter mAdapter;
-    List<TransportListBean> mList; //adapter 绑定的条件list
-    List<TransportListBean> list1; //原始list
+    List<TransportListBean.TransportDataBean> mList; //adapter 绑定的条件list
+    List<TransportListBean.TransportDataBean> list1; //原始list
 
     private int pageCurrent = 1;
 
@@ -78,7 +78,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         if (TextUtils.isEmpty(searchString)){
             mList.addAll(list1);
         }else {
-            for (TransportListBean item:list1) {
+            for (TransportListBean.TransportDataBean item:list1) {
                 if (item.getSerialNumber().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(item);
                 }
@@ -123,7 +123,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
      * 跳转到代办详情
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean bean){
+    private void turnToDetailActivity(TransportListBean.TransportDataBean bean){
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
                 .putExtra("num1" ,bean.getOutboundNumber())
@@ -151,7 +151,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         }
         else if ("D".equals(mWebSocketResultBean.getFlag())){
 
-            for (TransportListBean mTransportListBean:mList){
+            for (TransportListBean.TransportDataBean mTransportListBean:mList){
                 if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
                     list1.remove(mTransportListBean);
             }
@@ -167,7 +167,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
      * @param daibanCode  代办号
      */
     private void chooseCode(String daibanCode){
-        for (TransportListBean item:list1) {
+        for (TransportListBean.TransportDataBean item:list1) {
             if (daibanCode.equals(item.getId())){
                 turnToDetailActivity(item);
                 return;
@@ -197,7 +197,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     }
 
     @Override
-    public void transportListContractResult(List<TransportListBean> transportListBeans) {
+    public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
 
@@ -208,10 +208,10 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
             else{
                 mMfrvData.finishLoadMore();
             }
-            list1.addAll(transportListBeans);
+            list1.addAll(transportListBeans.getRecords());
             seachWithNum();
             if (fragment != null) {
-                fragment.setTitleText(transportListBeans.size());
+                fragment.setTitleText(transportListBeans.getRecords().size());
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");

@@ -17,6 +17,7 @@ public class TransportListCommitEntity {
     private String taskId;
     private String userId;
     private String waybillId;
+    private String taskTypeCode;
     private DeclareWaybillBean waybillInfo;
     private List<RcInfosEntity> rcInfos;
     private List<SecurityCheckResult> securityResultList;

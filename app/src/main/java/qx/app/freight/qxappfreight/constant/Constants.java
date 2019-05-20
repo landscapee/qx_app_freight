@@ -6,7 +6,7 @@ import android.os.Environment;
 import java.io.File;
 
 public class Constants {
-
+    public static final String APP_NAME = "智慧货运_";
     //====================================================角色分类======================================================
     /**
      * 安检
@@ -150,9 +150,9 @@ public class Constants {
      */
     public static final String TP_TYPE_DEVICE = "device";//设备保障
 
-    public static final String TP_TYPE_LOAD_K = "KFreightLoad";//宽体机 装机保障
+    public static final String TP_TYPE_LOAD_K = "load";//宽体机 装机保障
 
-    public static final String TP_TYPE_UNLOAD_K = "KFreightUnload";//宽体机 卸机保障
+    public static final String TP_TYPE_UNLOAD_K = "unload";//宽体机 卸机保障
 
-    public static final String TP_TYPE_SINGLE = "FirstBaggage";//单板行李任务
+    public static final String TP_TYPE_SINGLE = "first_baggage";//单板行李任务
 }

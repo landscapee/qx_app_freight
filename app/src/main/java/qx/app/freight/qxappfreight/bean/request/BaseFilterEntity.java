@@ -10,6 +10,8 @@ import lombok.Data;
  */
 @Data
 public class BaseFilterEntity<T> {
+    private String currentStep;
+    private boolean androidFlag;
     private int current; // FIXME check this code
     private int size;
     private T filter;

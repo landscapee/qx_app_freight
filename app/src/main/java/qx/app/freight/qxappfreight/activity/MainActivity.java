@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity {
         mTvTask.setTextColor(getResources().getColor(R.color.main_tv_normal));
         mIvTest.setImageResource(R.mipmap.dynamics_normal);
         mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
-        mIvSearch.setImageResource(R.mipmap.statistics_normal);
+        mIvSearch.setImageResource(R.mipmap.clear_normal);
         mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
         mIvMessgae.setImageResource(R.mipmap.news_normal);
         mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
@@ -202,7 +202,7 @@ public class MainActivity extends BaseActivity {
                 mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
                 break;
             case 2:
-                mIvSearch.setImageResource(R.mipmap.statistics_selected);
+                mIvSearch.setImageResource(R.mipmap.clear_selected);
                 mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
                 break;
             case 3:

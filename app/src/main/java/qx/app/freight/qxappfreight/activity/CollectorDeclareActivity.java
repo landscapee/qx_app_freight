@@ -75,6 +75,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     private String wayBillId;
     private String taskId;
+    private String taskTypeCode;
     private CollectorDeclareAdapter mAdapter;
     private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
@@ -97,6 +98,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         initTitle();
         wayBillId = getIntent().getStringExtra("wayBillId");
         taskId = getIntent().getStringExtra("taskId");
+        taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
@@ -349,7 +351,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
      * @param
      */
     private void turnToReceiveGoodsActivity(){
-        ReceiveGoodsActivity.startActivity(this,taskId,mData);
+        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode);
     }
 
 }

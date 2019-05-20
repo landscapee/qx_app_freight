@@ -11,6 +11,6 @@ public class WebSocketResultBean {
      * flag : N
      */
     private String flag; //N是新增, D是删除
-    private List <TransportListBean> chgData;
+    private List <TransportListBean.TransportDataBean> chgData;
 
 }

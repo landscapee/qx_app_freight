@@ -1,12 +1,13 @@
 package qx.app.freight.qxappfreight.bean.request;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class InventoryUbnormalGoods {
+public class InventoryUbnormalGoods implements Serializable {
 
     private String id;
 
@@ -45,7 +46,7 @@ public class InventoryUbnormalGoods {
      */
     private int ubnormalNumber;
 
-    private List<String> uploadPath;
+    private List<String> uploadFilePath;
 
 
 }

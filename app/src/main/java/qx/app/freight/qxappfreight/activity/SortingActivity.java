@@ -47,7 +47,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     String arriveTime = "";
     String handCarNum = "";
     String getHandCarNumTotal = "";
-    TransportListBean transportListBean;
+    TransportListBean.TransportDataBean transportListBean;
     List<InWaybillRecord> mList;
     InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();//最终提交请求的实体
 
@@ -85,7 +85,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        transportListBean = (TransportListBean) intent.getSerializableExtra("TASK_INFO");
+        transportListBean = (TransportListBean.TransportDataBean) intent.getSerializableExtra("TASK_INFO");
         //从前一个页面传递过来的数据
         flightNo = transportListBean.getFlightNo();
         arriveTime = TimeUtils.getTime2(transportListBean.getEtd());

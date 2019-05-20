@@ -29,6 +29,8 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
+import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 
 /**
@@ -131,13 +133,13 @@ public class ExceptionDetailDialog extends DialogFragment {
             helper.setText(R.id.tv_exception_content, helper.getAdapterPosition() + 1 + "丶" + ExceptionUtils.typeToString(item.getUbnormalType()) + ":" + item.getUbnormalNumber() + "件");
             LinearLayout llParent = helper.getView(R.id.ll_exception);
             //渲染照片
-            if(item.getUploadPath() != null) {
-                for (String url : item.getUploadPath()) {
+            if(item.getUploadFilePath() != null) {
+                for (String url : item.getUploadFilePath()) {
                     ImageView imageView = new ImageView(context);
                     LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     imgParams.rightMargin = 10;
                     imageView.setLayoutParams(imgParams);
-                    Glide.with(context).load(url).into(imageView);
+                    Glide.with(context).load(HttpConstant.IMAGEURL+url).into(imageView);
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
