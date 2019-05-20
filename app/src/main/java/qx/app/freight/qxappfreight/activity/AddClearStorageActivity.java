@@ -75,6 +75,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     RecyclerView recyclerView1;
     @BindView(R.id.btn_commit)
     Button btnCommit;
+    @BindView(R.id.btn_clear)
+    Button btnClear;
 
     SortingAddAdapter2 mAdapter;//异常情况选择列表适配器
     InventoryInfoAdapter infoAdapter; //异常列表数据适配器
@@ -181,7 +183,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         recyclerView1.setAdapter(infoAdapter);
     }
 
-    @OnClick({R.id.btn_add_item, R.id.btn_info_commit, R.id.btn_commit})
+    @OnClick({R.id.btn_add_item, R.id.btn_info_commit, R.id.btn_commit, R.id.btn_clear})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_add_item:
@@ -193,6 +195,10 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             case R.id.btn_commit:
                 //提交异常列表
                 submit();
+                break;
+            case R.id.btn_clear:
+                //清空运单号
+                tvId.setText("");
                 break;
         }
     }
@@ -219,10 +225,19 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
      *  提交填好的异常情况
      */
     private void commitInfo() {
-        if (counterUbnormalGoodsList.size() ==0){
-            ToastUtil.showToast("请先新增异常");
-            return;
+        if (!TextUtils.isEmpty(tvId.getText())){
+            for (InventoryDetailEntity item:inventoryDetailEntityList) {
+                if (item.getWaybillCode().equals(tvId.getText())){
+                    ToastUtil.showToast("当前运单号已录入");
+                    return;
+                }
+            }
         }
+
+//        if (counterUbnormalGoodsList.size() ==0){
+//            ToastUtil.showToast("请先新增异常");
+//            return;
+//        }
         if (TextUtils.isEmpty(edtRealSortNum.getText().toString().trim())) {
             ToastUtil.showToast("请输入实际分拣数！");
             return;

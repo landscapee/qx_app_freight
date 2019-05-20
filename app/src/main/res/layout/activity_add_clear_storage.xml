@@ -39,6 +39,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end" />
+
+                <Button
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:id="@+id/btn_clear"
+                    android:text="清空运单号"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_27"
+                    android:background="@drawable/background_press_blue"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <!-- 实际分拣 -->
