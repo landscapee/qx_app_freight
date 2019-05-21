@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.PrematchingEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -109,14 +110,22 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
 
     private void getData() {
         mPresenter = new TransportListPresenter(this);
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+        BaseFilterEntity entity = new BaseFilterEntity();
+        PrematchingEntity mBean = new PrematchingEntity();
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
-        if (UserInfoSingle.getInstance() != null && UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
-            entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-            entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        }
-        entity.setUndoType("2");
+        mBean.setTaskType("prematching");
+        mBean.setFlightNo("");
+        mBean.setTaskStartTime("");
+        mBean.setTaskEndTime("");
+        mBean.setTaskHandler(UserInfoSingle.getInstance().getUserId());
+        entity.setFilter(mBean);
+//        if (UserInfoSingle.getInstance() != null && UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
+//            entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//            entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+//        }
+//        entity.setUndoType("2");
+
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 
