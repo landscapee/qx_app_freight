@@ -51,8 +51,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
-    private List<TransportListBean.TransportDataBean> list1;
-    private List<TransportListBean.TransportDataBean> list;
+    private List<TransportDataBase> list1;
+    private List<TransportDataBase> list;
     private int pageCurrent = 1;
     private String seachString = "";
 
@@ -84,7 +84,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (TextUtils.isEmpty(seachString)) {
             list.addAll(list1);
         } else {
-            for (TransportListBean.TransportDataBean team: list1){
+            for (TransportDataBase team: list1){
                 if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())){
                     list.add(team);
                 }
@@ -106,7 +106,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         });
     }
 
-    private void trunToCollectorActivity(TransportListBean.TransportDataBean bean){
+    private void trunToCollectorActivity(TransportDataBase bean){
         switch (bean.getTaskTypeCode()){
             case "changeApply": //换单审核
                 DeliveryVerifyActivity.startActivity(getContext(),bean.getId(), bean.getTaskId());
@@ -195,9 +195,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         }
         else if ("D".equals(mWebSocketResultBean.getFlag())){
 
-            for (TransportListBean.TransportDataBean mTransportListBean:list1){
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+            for (TransportDataBase mTransportListBean:list1){
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
                     list1.remove(mTransportListBean);
+                }
             }
         }
         seachWith();
@@ -208,7 +209,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
      * @param daibanCode  代办号
      */
     private void chooseCode(String daibanCode){
-        for (TransportListBean.TransportDataBean item:list) {
+        for (TransportDataBase item:list) {
             if (daibanCode.equals(item.getId())){
                 trunToCollectorActivity(item);
                 return;
@@ -248,8 +249,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (pageCurrent == 1) {
             mMfrvData.finishRefresh();
         }
-        else
+        else {
             mMfrvData.finishLoadMore();
+        }
     }
 
     @Override

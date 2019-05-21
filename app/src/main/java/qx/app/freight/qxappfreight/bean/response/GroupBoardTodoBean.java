@@ -19,9 +19,5 @@ public class GroupBoardTodoBean {
     private String message;
     private Object rowCount;
     private List<TransportDataBase> data;
-    @Data
-    @EqualsAndHashCode
-    public static class TransportDataBean extends TransportDataBase {
 
-    }
 }

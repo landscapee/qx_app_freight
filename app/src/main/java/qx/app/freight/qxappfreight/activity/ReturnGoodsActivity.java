@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
 import qx.app.freight.qxappfreight.contract.ReturnCargoCommitContract;
@@ -51,7 +52,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     private CustomToolbar toolbar;
 
 
-    public static void startActivity(Activity context, TransportListBean.TransportDataBean mBean) {
+    public static void startActivity(Activity context, TransportDataBase mBean) {
         Intent intent = new Intent(context, ReturnGoodsActivity.class);
         intent.putExtra("TransportListBean", mBean);
         intent.putExtras(intent);
@@ -93,8 +94,9 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     private void click() {
         mBtSure.setOnClickListener(v -> {
-            if (list.size() <= 0)
+            if (list.size() <= 0) {
                 return;
+            }
             mPresenter = new ReturnCargoCommitPresenter(this);
             TransportListCommitEntity entity = new TransportListCommitEntity();
             DeclareWaybillBean mDeclareBean = new DeclareWaybillBean();
@@ -186,8 +188,9 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
             adapter = new ReturnGoodAdapter(myAgentListBean.getRcInfo());
             mMfrvAllocateList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-        } else
+        } else {
             ToastUtil.showToast("数据为空");
+        }
     }
 
     @Override
