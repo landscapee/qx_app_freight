@@ -38,7 +38,7 @@ public class GetInfosByFlightIdBean {
          * dayOfMonth : 当月的几号
          * taskId : 任务id
          * logUserId :  登录人id
-         *
+         * seat  :   机位号
          */
 
 
@@ -79,6 +79,7 @@ public class GetInfosByFlightIdBean {
         private String taskId;
         private String logUserId;
         private String remark;
+        private String seat;
 
 
 }

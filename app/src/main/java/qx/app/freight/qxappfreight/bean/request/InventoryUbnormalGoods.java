@@ -32,9 +32,14 @@ public class InventoryUbnormalGoods implements Serializable {
     private int ubnormalType;
 
     /**
-     * 上报人
+     * 上报人 id
      */
     private String createUser;
+
+    /**
+     * 上报人
+     */
+    private String createUserName;
 
     /**
      * 上报时间

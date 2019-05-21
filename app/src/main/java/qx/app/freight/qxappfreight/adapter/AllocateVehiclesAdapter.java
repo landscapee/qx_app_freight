@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -43,10 +44,16 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<GetInfosByFlightId
         //航班号
         helper.setText(R.id.allocate_flightnumber,item.getFlightNo());
         //机位号
-        helper.setText(R.id.allocate_machinenumber, item.getAircraftNo());
+        helper.setText(R.id.allocate_machinenumber, item.getSeat());
         //预计起飞时间~仓位
         //航班预计起飞时间
-        helper.setText(R.id.allocate_time_info, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getStd()) ,  TimeUtils.getDay((item.getStd())))+" "+item.getSuggestRepository()+"舱位");
+        String mString;
+        if (TextUtils.isEmpty(item.getSuggestRepository())){
+            mString ="-";
+        }else {
+            mString = item.getSuggestRepository();
+        }
+        helper.setText(R.id.allocate_time_info, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getStd()) ,  TimeUtils.getDay((item.getStd())))+" "+mString+"舱位");
 //        helper.setText(R.id.allocate_time_info, item.getStd()+"   "+item.getSuggestRepository());
 //        helper.itemView.setOnClickListener(v -> {
 //            Intent intent = new Intent(mContext, AllocaaateScanActivity.class);

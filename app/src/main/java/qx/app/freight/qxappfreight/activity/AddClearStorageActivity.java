@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.DeadObjectException;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -213,6 +214,10 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private void addItem() {
 
         InventoryUbnormalGoods inventoryUbnormalGoods = new InventoryUbnormalGoods();
+        inventoryUbnormalGoods.setUbnormalSource("理货上报");
+        inventoryUbnormalGoods.setCreateTime(System.currentTimeMillis());
+        inventoryUbnormalGoods.setCreateUser(UserInfoSingle.getInstance().getUserId());
+        inventoryUbnormalGoods.setCreateUserName(UserInfoSingle.getInstance().getUsername());
         inventoryUbnormalGoods.setUploadFilePath(new ArrayList<>());
         //填运单号
         if(TextUtils.isEmpty(tvId.getText().toString().trim())){
@@ -248,7 +253,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         }
         //封装数据
         InventoryDetailEntity detailEntity = new InventoryDetailEntity();
+        detailEntity.setDealTime(System.currentTimeMillis());
         detailEntity.setWaybillCode(tvId.getText().toString().trim());
+        detailEntity.setWaybillId(waybillId);
         detailEntity.setInventoryTaskId(taskId);
         detailEntity.setHandler(UserInfoSingle.getInstance().getUserId());
         detailEntity.setHandlerName(UserInfoSingle.getInstance().getUsername());
@@ -276,6 +283,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private void submit() {
         if (inventoryDetailEntityList.size() ==0){
             ToastUtil.showToast("提交数据不能为空");
+            return;
         }
         ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
 
