@@ -1,7 +1,10 @@
 package qx.app.freight.qxappfreight.presenter;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
@@ -24,9 +27,9 @@ public class ListReservoirInfoPresenter extends BasePresenter {
     public void listReservoirInfoByCode(String deptCode){
 
         mRequestView.showNetDialog();
-        ((ListReservoirInfoModel)mRequestModel).listReservoirInfo(deptCode, new IResultLisenter<ReservoirAreaBean>() {
+        ((ListReservoirInfoModel)mRequestModel).listReservoirInfo(deptCode, new IResultLisenter<List<ReservoirArea>>() {
             @Override
-            public void onSuccess(ReservoirAreaBean bean) {
+            public void onSuccess(List<ReservoirArea> bean) {
                 ((ListReservoirInfoContract.listReservoirInfoView)mRequestView).listReservoirInfoResult(bean);
                 mRequestView.dissMiss();
             }

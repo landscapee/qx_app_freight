@@ -31,14 +31,20 @@ import qx.app.freight.qxappfreight.adapter.SortingAddAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
+import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog2;
 import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
+import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -51,7 +57,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  * <p>
  * create by guohap - 2019/4/26
  */
-public class SortingAddActivity extends BaseActivity implements ReservoirContract.reservoirView, UploadsContract.uploadsView {
+public class SortingAddActivity extends BaseActivity implements ReservoirContract.reservoirView, UploadsContract.uploadsView, ListReservoirInfoContract.listReservoirInfoView {
 
     CustomToolbar customToolbar;
 
@@ -254,12 +260,15 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
      * 选择库区方法
      */
     private void getReservoirAll() {
-        mPresenter = new ReservoirPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-//        entity.setFilter("12");
-        entity.setCurrent(1);
-        entity.setSize(10);
-        ((ReservoirPresenter) mPresenter).reservoir(entity);
+//        mPresenter = new ReservoirPresenter(this);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+////        entity.setFilter("12");
+//        entity.setCurrent(1);
+//        entity.setSize(10);
+//        ((ReservoirPresenter) mPresenter).reservoir(entity);
+
+        mPresenter = new ListReservoirInfoPresenter(this);
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
     }
 
     /**
@@ -273,13 +282,13 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     public void reservoirResult(ReservoirBean acceptTerminalTodoBeanList) {
         Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
         //显示库区选择面板
-        List<TestBean> mTestBeanList = new ArrayList<>();
+        List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
         for (ReservoirBean.RecordsBean item : acceptTerminalTodoBeanList.getRecords()) {
-            TestBean testBean = new TestBean(item.getReservoirType(), 0);
+            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
             testBean.setName(item.getReservoirName());
             mTestBeanList.add(testBean);
         }
-        ChooseStoreroomDialog chooseStoreroomDialog = new ChooseStoreroomDialog();
+        ChooseStoreroomDialog2 chooseStoreroomDialog = new ChooseStoreroomDialog2();
         chooseStoreroomDialog.setData(mTestBeanList, SortingAddActivity.this);
         chooseStoreroomDialog.show(getSupportFragmentManager(), "guohao");
         chooseStoreroomDialog.setChooseDialogInterface(new ChooseDialogInterface() {
@@ -358,5 +367,30 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         mAdapter.notifyItemChanged(CURRENT_PHOTO_INDEX);
         dismissProgessDialog();
 
+    }
+
+    @Override
+    public void listReservoirInfoResult(List<ReservoirArea> acceptTerminalTodoBeanList) {
+        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
+        //显示库区选择面板
+        List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
+        for (ReservoirArea item : acceptTerminalTodoBeanList) {
+            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
+            testBean.setName(item.getReservoirName());
+            mTestBeanList.add(testBean);
+        }
+        ChooseStoreroomDialog2 chooseStoreroomDialog = new ChooseStoreroomDialog2();
+        chooseStoreroomDialog.setData(mTestBeanList, SortingAddActivity.this);
+        chooseStoreroomDialog.show(getSupportFragmentManager(), "guohao");
+        chooseStoreroomDialog.setChooseDialogInterface(new ChooseDialogInterface() {
+            @Override
+            public void confirm(int position) {
+                Log.e("dime", "选择了库区：" + position);
+                String reservoir = acceptTerminalTodoBeanList.get(position).getReservoirName();//库区已经选择
+                reservoirTv.setText(acceptTerminalTodoBeanList.get(position).getReservoirName());
+                mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
+                mInWaybillRecord.setWarehouseLocation("库位未知");
+            }
+        });
     }
 }

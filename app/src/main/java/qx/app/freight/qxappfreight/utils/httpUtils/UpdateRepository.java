@@ -8,6 +8,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -68,6 +69,7 @@ import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -912,7 +914,7 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().updateVersion(map));
     }
 
-    public Observable<ReservoirBean> listReservoirInfoByCode(String deptCode){
+    public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode){
         return transform(getService().listReservoirInfoByCode(deptCode));
     }
 }

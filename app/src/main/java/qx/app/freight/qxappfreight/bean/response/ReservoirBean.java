@@ -37,6 +37,6 @@ public class ReservoirBean {
         private Object depId;
         private String code;
         private String reservoirName;
-        private int reservoirType;
+        private String reservoirType;
     }
 }

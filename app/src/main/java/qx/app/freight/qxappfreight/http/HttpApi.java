@@ -7,6 +7,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -67,6 +68,7 @@ import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -513,5 +515,5 @@ public interface HttpApi {
      * @return
      */
     @GET("service-bussiness-reservoir/reservoir/listReservoirInfoByCode/{deptCode}")
-    Observable<BaseEntity<ReservoirBean>> listReservoirInfoByCode(@Path("deptCode") String deptCode);
+    Observable<BaseEntity<List<ReservoirArea>>> listReservoirInfoByCode(@Path("deptCode") String deptCode);
 }
