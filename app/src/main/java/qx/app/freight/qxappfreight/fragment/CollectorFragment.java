@@ -128,9 +128,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
-        BaseFilterEntity<TransportListBean.TransportDataBean> entity = new BaseFilterEntity();
+        BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
 
-        TransportListBean.TransportDataBean tempBean = new TransportListBean.TransportDataBean();
+        TransportDataBase tempBean = new TransportDataBase();
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");

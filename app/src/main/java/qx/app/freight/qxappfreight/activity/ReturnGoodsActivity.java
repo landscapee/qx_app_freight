@@ -47,7 +47,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     @BindView(R.id.bt_sure)
     Button mBtSure;
     private ReturnGoodAdapter adapter;
-    private TransportListBean.TransportDataBean mBean;
+    private TransportDataBase mBean;
     private List<MyAgentListBean> list;
     private CustomToolbar toolbar;
 
@@ -77,7 +77,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(this));
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setOnRetryLisenter(this);
-        mBean = (TransportListBean.TransportDataBean) getIntent().getSerializableExtra("TransportListBean");
+        mBean = (TransportDataBase) getIntent().getSerializableExtra("TransportListBean");
     }
 
     private void initData() {

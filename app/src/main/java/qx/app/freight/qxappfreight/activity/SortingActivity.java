@@ -27,7 +27,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -47,7 +47,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     String arriveTime = "";
     String handCarNum = "";
     String getHandCarNumTotal = "";
-    TransportListBean.TransportDataBean transportListBean;
+    TransportDataBase transportListBean;
     List<InWaybillRecord> mList;
     InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();//最终提交请求的实体
 
@@ -85,7 +85,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        transportListBean = (TransportListBean.TransportDataBean) intent.getSerializableExtra("TASK_INFO");
+        transportListBean = (TransportDataBase) intent.getSerializableExtra("TASK_INFO");
         //从前一个页面传递过来的数据
         flightNo = transportListBean.getFlightNo();
         arriveTime = TimeUtils.getTime2(transportListBean.getEtd());

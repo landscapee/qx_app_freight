@@ -115,8 +115,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     }
 
     private void getData() {
-        BaseFilterEntity<TransportListBean.TransportDataBean> entity = new BaseFilterEntity();
-        TransportListBean.TransportDataBean tempBean = new TransportListBean.TransportDataBean();
+        BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
+        TransportDataBase tempBean = new TransportDataBase();
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");

@@ -120,9 +120,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private void loadData() {
         /**
          *
-         BaseFilterEntity<TransportListBean.TransportDataBean> entity = new BaseFilterEntity();
+         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
 
-         TransportListBean.TransportDataBean tempBean = new TransportListBean.TransportDataBean();
+         TransportDataBase tempBean = new TransportDataBase();
          tempBean.setWaybillCode("");
          tempBean.setTaskStartTime("");
          tempBean.setTaskEndTime("");

@@ -13,17 +13,11 @@ import lombok.EqualsAndHashCode;
 @Data
 public class TransportListBean implements Serializable {
 
-    private List<TransportDataBean> records;
+    private List<TransportDataBase> records;
     private Integer total;
     private Integer size;
     private Integer current;
     private Integer pages;
-
-    @Data
-    @EqualsAndHashCode
-    public static class TransportDataBean extends TransportDataBase {
-
-    }
 
     @Data
     public static class DeclareWaybillAdditionBean implements Serializable{
