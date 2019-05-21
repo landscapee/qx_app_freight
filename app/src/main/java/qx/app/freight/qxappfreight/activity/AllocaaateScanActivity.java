@@ -153,6 +153,9 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             @Override
             public void afterTextChanged(Editable s) {
                 String ss = s.toString();
+                if (TextUtils.isEmpty(ss)){
+                    ss ="0";
+                }
                 if (StringUtil.isDouble(ss)){
                     calculateWeight();
                 }
