@@ -21,6 +21,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="选择库区"
+            android:id="@+id/tv_title"
             android:textColor="#ff69778f"
             android:textSize="18sp" />
 

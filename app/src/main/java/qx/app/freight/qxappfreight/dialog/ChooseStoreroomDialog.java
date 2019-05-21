@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class ChooseStoreroomDialog extends DialogFragment {
     private List<TestBean> mList;
     private Context context;
     private int selectorPosition = 10000;
+    private String mTitle="选择库区";
 
     private ChooseDialogInterface listener;
 
@@ -42,6 +44,9 @@ public class ChooseStoreroomDialog extends DialogFragment {
         this.mList = mList;
 //        this.selectorPosition = selectorPosition;
         this.context = context;
+    }
+    public void setTitle(String title){
+        mTitle=title;
     }
 
     public void setChooseDialogInterface(ChooseDialogInterface listener) {
@@ -62,6 +67,8 @@ public class ChooseStoreroomDialog extends DialogFragment {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
+        TextView tvTitle = dialog.findViewById(R.id.tv_title);
+        tvTitle.setText(mTitle);
         mRecyclerView = dialog.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ChooseStoreroomAdapter(mList);
