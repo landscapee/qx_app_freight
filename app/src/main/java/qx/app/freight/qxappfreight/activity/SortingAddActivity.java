@@ -233,7 +233,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             }else{
                 mInWaybillRecord.setRemark(remarkEdt.getText().toString().trim());
             }
-            mInWaybillRecord.setTotalNumberPackages(Integer.valueOf(sortingNumEdt.getText().toString().trim()));
+            mInWaybillRecord.setTallyingTotal(Integer.valueOf(sortingNumEdt.getText().toString().trim()));
             if (mInWaybillRecord.getWarehouseArea() == null || mInWaybillRecord.getWarehouseArea() == "") {
                 ToastUtil.showToast("请选择库区");
                 return;
