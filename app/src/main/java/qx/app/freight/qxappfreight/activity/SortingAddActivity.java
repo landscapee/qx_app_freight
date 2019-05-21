@@ -268,7 +268,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 //        ((ReservoirPresenter) mPresenter).reservoir(entity);
 
         mPresenter = new ListReservoirInfoPresenter(this);
-        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
+//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
     }
 
     /**
