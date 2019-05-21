@@ -18,6 +18,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -29,14 +30,14 @@ import static qx.app.freight.qxappfreight.app.MyApplication.getContext;
  * 货品列表页adapter
  *
  */
-public class MainListRvAdapter extends BaseQuickAdapter<TransportListBean.TransportDataBean, BaseViewHolder> {
-    public MainListRvAdapter(List<TransportListBean.TransportDataBean> mDatas) {
+public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseViewHolder> {
+    public MainListRvAdapter(List<TransportDataBase> mDatas) {
         super(R.layout.item_main_list, mDatas);
     }
 
     @SuppressLint("StringFormatMatches")
     @Override
-    protected void convert(BaseViewHolder helper, TransportListBean.TransportDataBean item) {
+    protected void convert(BaseViewHolder helper, TransportDataBase item) {
         //运单号
         helper.setText(R.id.tv_order, item.getWaybillCode());
         //预交道口-预交时段
@@ -114,7 +115,7 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportListBean.Transp
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         RecyclerView rvDetail = helper.getView(R.id.rv_detail_list);
         rvDetail.setLayoutManager(manager);
-        List<TransportListBean.TransportDataBean> itemOneList = new ArrayList<>();
+        List<TransportDataBase> itemOneList = new ArrayList<>();
         itemOneList.add(item);
         SingleItemInfoAdapter adapter = new SingleItemInfoAdapter(itemOneList);
         rvDetail.setAdapter(adapter);

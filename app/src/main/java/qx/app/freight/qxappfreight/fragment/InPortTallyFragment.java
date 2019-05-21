@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -49,8 +50,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List<TransportListBean.TransportDataBean> mList = new ArrayList<>();  //筛选过后的数据
-    private List<TransportListBean.TransportDataBean> mListTemp = new ArrayList<>(); // 原始数据
+    private List<TransportDataBase> mList = new ArrayList<>();  //筛选过后的数据
+    private List<TransportDataBase> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
     private String searchString = "";
@@ -75,12 +76,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter = new InportTallyAdapter(mList);
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
-            public void toDetail(TransportListBean.TransportDataBean item) {
+            public void toDetail(TransportDataBase item) {
                 turnToDetailActivity(item);
             }
 
             @Override
-            public void toFFM(TransportListBean.TransportDataBean item) {
+            public void toFFM(TransportDataBase item) {
                 startActivity(new Intent(mContext, FFMActivity.class));
             }
         });
@@ -103,7 +104,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         if(TextUtils.isEmpty(searchString)){
             mList.addAll(mListTemp);
         }else{
-            for(TransportListBean.TransportDataBean itemData: mListTemp){
+            for(TransportDataBase itemData: mListTemp){
                 if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
@@ -127,7 +128,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
+    private void turnToDetailActivity(TransportDataBase bean) {
         Intent intent = new Intent(mContext, SortingActivity.class);
         intent.putExtra("TASK_INFO", bean);
         mContext.startActivity(intent);
@@ -151,7 +152,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean.TransportDataBean item : mList) {
+        for (TransportDataBase item : mList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -189,10 +190,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             mListTemp.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportListBean.TransportDataBean mTransportListBean : mList) {
+            for (TransportDataBase mTransportListBean : mList) {
                 if (mWebSocketResultBean.getChgData().get(0).getId() != null) {
-                    if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+                    if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
                         mListTemp.remove(mTransportListBean);
+                    }
                 }
             }
         }

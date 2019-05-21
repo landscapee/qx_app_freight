@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -50,12 +51,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     private int pageCurrent = 1;
 
-    private List<TransportListBean.TransportDataBean> transportListList1;
-    private List<TransportListBean.TransportDataBean> transportListList;
+    private List<TransportDataBase> transportListList1;
+    private List<TransportDataBase> transportListList;
     private String seachString = "";
     TaskFragment fragment;
 
-    private TransportListBean.TransportDataBean mBean;
+    private TransportDataBase mBean;
 
     @Nullable
     @Override
@@ -71,8 +72,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
 
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入运单号", text -> {
@@ -88,7 +90,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if (TextUtils.isEmpty(seachString)) {
             transportListList.addAll(transportListList1);
         } else {
-            for (TransportListBean.TransportDataBean team : transportListList1) {
+            for (TransportDataBase team : transportListList1) {
                 if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     transportListList.add(team);
                 }
@@ -132,13 +134,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      *
      * @param bean
      */
-    public void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
+    public void turnToDetailActivity(TransportDataBase bean) {
 
     }
 
 
     //根据id获取运单信息
-    public void getTaskInfo(TransportListBean.TransportDataBean bean) {
+    public void getTaskInfo(TransportDataBase bean) {
         mBean = bean;
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getId());
@@ -162,7 +164,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportListBean.TransportDataBean item : transportListList) {
+        for (TransportDataBase item : transportListList) {
             if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
@@ -202,9 +204,10 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportListBean.TransportDataBean mTransportListBean : transportListList1) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+            for (TransportDataBase mTransportListBean : transportListList1) {
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
                     transportListList1.remove(mTransportListBean);
+                }
             }
         }
         seachWith();
@@ -214,9 +217,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), "数据为空");
-        if (pageCurrent == 1)
+        if (pageCurrent == 1) {
             mMfrvData.finishRefresh();
-        else {
+        } else {
             mMfrvData.finishLoadMore();
         }
     }

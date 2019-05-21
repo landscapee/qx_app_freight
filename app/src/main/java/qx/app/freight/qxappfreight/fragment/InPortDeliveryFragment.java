@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -18,6 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
@@ -28,11 +30,16 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -42,13 +49,14 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 进港-交货页面
  * Created by swd
  */
-public class InPortDeliveryFragment extends BaseFragment implements TransportListContract.transportListContractView , MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter{
+//TransportListContract.transportListContractView ,
+public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
     InPortDeliveryAdapter mAdapter;
-    List<TransportListBean.TransportDataBean> mList; //adapter 绑定的条件list
-    List<TransportListBean.TransportDataBean> list1; //原始list
+    List<TransportDataBase> mList; //adapter 绑定的条件list
+    List<TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
 
@@ -65,7 +73,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SearchToolbar searchToolbar=((TaskFragment)getParentFragment()).getSearchView();
+        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入流水号", text -> {
             searchString = text;
             seachWithNum();
@@ -75,11 +83,11 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
 
     private void seachWithNum() {
         mList.clear();
-        if (TextUtils.isEmpty(searchString)){
+        if (TextUtils.isEmpty(searchString)) {
             mList.addAll(list1);
-        }else {
-            for (TransportListBean.TransportDataBean item:list1) {
-                if (item.getSerialNumber().toLowerCase().contains(searchString.toLowerCase())){
+        } else {
+            for (TransportDataBase item : list1) {
+                if (item.getSerialNumber().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -95,7 +103,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     }
 
     private void initView() {
-        mPresenter = new TransportListPresenter(this);
+//        mPresenter = new TransportListPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -110,24 +118,59 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     }
 
     private void loadData() {
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCurrent(pageCurrent);
-        entity.setSize(Constants.PAGE_SIZE);
-        entity.setUndoType("3");
+        /**
+         *
+         BaseFilterEntity<TransportListBean.TransportDataBean> entity = new BaseFilterEntity();
+
+         TransportListBean.TransportDataBean tempBean = new TransportListBean.TransportDataBean();
+         tempBean.setWaybillCode("");
+         tempBean.setTaskStartTime("");
+         tempBean.setTaskEndTime("");
+         tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+         entity.setFilter(tempBean);
+
+         entity.setCurrent(pageCurrent);
+
+         entity.setSize(Constants.PAGE_SIZE);
+
+         entity.setUndoType("3");
+
+         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+
+         entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+
+         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+         */
+        mPresenter = new GroupBoardToDoPresenter(this);
+        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
+
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+
+        entity.setRoleCode("beforehand_in");
+
+        entity.setUndoType(2);
+
+        List<String> ascs = new ArrayList<>();
+        ascs.add("ATA");
+        ascs.add("STA");
+
+        entity.setAscs(ascs);
+
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+
+
     }
 
     /**
      * 跳转到代办详情
+     *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean.TransportDataBean bean){
+    private void turnToDetailActivity(TransportDataBase bean) {
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
-                .putExtra("num1" ,bean.getOutboundNumber())
-                .putExtra("num2" ,bean.getWaybillCount())
+                .putExtra("num1", bean.getOutboundNumber())
+                .putExtra("num2", bean.getWaybillCount())
                 .putExtra("taskId", bean.getTaskId())
                 .putExtra("billId", bean.getSerialNumber()));
     }
@@ -138,37 +181,37 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222","daibanCode"+daibanCode);
+        Log.e("22222", "daibanCode" + daibanCode);
         if (!TextUtils.isEmpty(daibanCode)) {
             chooseCode(daibanCode);
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
 
             list1.addAll(mWebSocketResultBean.getChgData());
-        }
-        else if ("D".equals(mWebSocketResultBean.getFlag())){
+        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
 
-            for (TransportListBean.TransportDataBean mTransportListBean:mList){
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+            for (TransportDataBase mTransportListBean : mList) {
+                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
                     list1.remove(mTransportListBean);
+                }
             }
         }
         seachWithNum();
     }
 
 
-
-
     /**
      * 通过获取的code，筛选代办，直接进入处理代办
-     * @param daibanCode  代办号
+     *
+     * @param daibanCode 代办号
      */
-    private void chooseCode(String daibanCode){
-        for (TransportListBean.TransportDataBean item:list1) {
-            if (daibanCode.equals(item.getId())){
+    private void chooseCode(String daibanCode) {
+        for (TransportDataBase item : list1) {
+            if (daibanCode.equals(item.getId())) {
                 turnToDetailActivity(item);
                 return;
             }
@@ -196,6 +239,7 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
         loadData();
     }
 
+    /** -- guohao
     @Override
     public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
@@ -217,15 +261,16 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
             ToastUtil.showToast(getActivity(), "数据为空");
         }
     }
+     */
 
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
         if (pageCurrent == 1) {
             mMfrvData.finishRefresh();
-        }
-        else
+        } else {
             mMfrvData.finishLoadMore();
+        }
     }
 
     @Override
@@ -239,5 +284,24 @@ public class InPortDeliveryFragment extends BaseFragment implements TransportLis
     }
 
 
+    @Override
+    public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
+        if (transportListBeans != null) {
+            TaskFragment fragment = (TaskFragment) getParentFragment();
 
+            if (pageCurrent == 1) {
+                list1.clear();
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
+            }
+            list1.addAll(transportListBeans.getData());
+            seachWithNum();
+            if (fragment != null) {
+                fragment.setTitleText(transportListBeans.getData().size());
+            }
+        } else {
+            ToastUtil.showToast(getActivity(), "数据为空");
+        }
+    }
 }

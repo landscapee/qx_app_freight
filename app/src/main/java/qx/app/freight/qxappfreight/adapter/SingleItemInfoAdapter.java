@@ -11,20 +11,21 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 
 /**
  * 货物详情adapter
  *
  */
-public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportListBean.TransportDataBean,BaseViewHolder> {
+public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportDataBase, BaseViewHolder> {
 
-    SingleItemInfoAdapter(List<TransportListBean.TransportDataBean> mDatas) {
+    SingleItemInfoAdapter(List<TransportDataBase> mDatas) {
         super(R.layout.item_single_info, mDatas);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TransportListBean.TransportDataBean item) {
+    protected void convert(BaseViewHolder helper, TransportDataBase item) {
         if (helper.getAdapterPosition() % 2 == 0) {
             helper.itemView.setBackgroundColor(Color.WHITE);
         } else {

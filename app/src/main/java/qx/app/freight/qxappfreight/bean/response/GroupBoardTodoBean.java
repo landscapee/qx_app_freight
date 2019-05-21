@@ -18,7 +18,7 @@ public class GroupBoardTodoBean {
     private String status;
     private String message;
     private Object rowCount;
-    private List<TransportDataBean> data;
+    private List<TransportDataBase> data;
     @Data
     @EqualsAndHashCode
     public static class TransportDataBean extends TransportDataBase {
