@@ -32,13 +32,17 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
+import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -46,7 +50,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 进港理货fragment
  */
-public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, TransportListContract.transportListContractView, EmptyLayout.OnRetryLisenter {
+public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
@@ -86,7 +90,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         });
         mMfrvData.setAdapter(mAdapter);
-        mPresenter = new TransportListPresenter(this);
+        mPresenter = new GroupBoardToDoPresenter(this);
         SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
             @Override
@@ -114,13 +118,22 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     private void initData() {
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+        /*BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setCurrent(mCurrentPage);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setUndoType("2");
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        ((TransportListPresenter) mPresenter).transportListPresenter(entity);
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());*/
+        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
+        entity.setRoleCode("beforehand_in");
+        entity.setUndoType(2);
+        List<String> ascs=new ArrayList<>();
+        ascs.add("ATA");
+        ascs.add("STA");
+        entity.setAscs(ascs);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
     /**
@@ -221,7 +234,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void transportListContractResult(TransportListBean transportListBeans) {
+    public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
@@ -230,7 +243,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         }
 
         mListTemp.clear();
-        mListTemp.addAll(transportListBeans.getRecords());
+        mListTemp.addAll(transportListBeans.getData());
         seachWithNum();
     }
 }

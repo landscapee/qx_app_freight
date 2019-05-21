@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
+import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
@@ -155,7 +156,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             @Override
             public void onExceptionChoose(int posstion) {
                 Log.e("dime", "位置信息：" + posstion);
-                ChooseStoreroomDialog chooseExcetionDialog = new ChooseStoreroomDialog();
+                ErrorTypeChooseDialog chooseExcetionDialog = new ErrorTypeChooseDialog();
                 chooseExcetionDialog.setData(ExceptionUtils.testBeanList, SortingAddActivity.this);
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override

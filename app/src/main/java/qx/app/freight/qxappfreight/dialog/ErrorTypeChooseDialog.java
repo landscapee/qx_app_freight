@@ -24,9 +24,9 @@ import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
- * 选择库区dialog
+ * 选择异常类型dialog
  */
-public class ChooseStoreroomDialog extends DialogFragment {
+public class ErrorTypeChooseDialog extends DialogFragment {
     private RecyclerView mRecyclerView;
     private Button btnConfirm;
     private ImageView ivCancel;
@@ -54,7 +54,7 @@ public class ChooseStoreroomDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Dialog dialog = new Dialog(context, R.style.dialog2);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_choose_storeroom);
+        dialog.setContentView(R.layout.dialog_choose_error_type);
         dialog.setCanceledOnTouchOutside(true); // 外部点击取消
         // 设置宽度为屏宽, 靠近屏幕底部。
         Window window = dialog.getWindow();
@@ -72,7 +72,7 @@ public class ChooseStoreroomDialog extends DialogFragment {
         ivCancel = dialog.findViewById(R.id.iv_cancel);
         btnConfirm.setOnClickListener(v -> {
             if (selectorPosition == 10000) {
-                ToastUtil.showToast("请选择库区");
+                ToastUtil.showToast("请选择异常类型");
             } else {
                 listener.confirm(selectorPosition);
                 dismiss();

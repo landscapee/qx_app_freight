@@ -48,6 +48,7 @@ import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
+import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
@@ -153,8 +154,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         mAdapter.setOnExceptionTypeListener(new SortingAddAdapter2.OnExceptionChooseListener() {
             @Override
             public void onExceptionChoose(int posstion) {
-                ChooseStoreroomDialog chooseExcetionDialog = new ChooseStoreroomDialog();
-                chooseExcetionDialog.setTitle("异常类型");
+                ErrorTypeChooseDialog chooseExcetionDialog = new ErrorTypeChooseDialog();
                 chooseExcetionDialog.setData(ExceptionUtils.testBeanList, AddClearStorageActivity.this);
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
