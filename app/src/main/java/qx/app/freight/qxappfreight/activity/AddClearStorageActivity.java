@@ -154,6 +154,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             @Override
             public void onExceptionChoose(int posstion) {
                 ChooseStoreroomDialog chooseExcetionDialog = new ChooseStoreroomDialog();
+                chooseExcetionDialog.setTitle("异常类型");
                 chooseExcetionDialog.setData(ExceptionUtils.testBeanList, AddClearStorageActivity.this);
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
