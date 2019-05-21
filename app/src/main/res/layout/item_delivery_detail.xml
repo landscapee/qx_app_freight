@@ -134,11 +134,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="end"
-
         android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_put_num"
+            android:layout_width="119dp"
+            android:layout_height="20dp"
+            android:textColor="@color/black_3"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            android:text="已提货: 4件 / 待提货: 4件"
+            />
         <TextView
             android:id="@+id/tv_complete_time"
             android:layout_width="119dp"

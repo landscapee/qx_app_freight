@@ -17,9 +17,13 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
+import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
+import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView {
@@ -68,7 +72,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mAdapter.setDeliveryDetailInterface(new DeliveryDetailAdapter.DeliveryDetailInterface() {
             @Override
             public void outStorage(int position, String id, String outStorageUser) {
-                deliveryInWaybill(position,id,outStorageUser);
+                deliveryInWaybill(position,id,outStorageUser,mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber());
             }
 
         });
@@ -87,13 +91,27 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
     }
     //出库
-    private void deliveryInWaybill(int position,String id, String outStorageUser){
+    private void deliveryInWaybill(int position,String id, String outStorageUser,int waitPutCargo){
+
+        PutCargoInputDialog dialog = new PutCargoInputDialog();
+        dialog.setData(this,waitPutCargo);
+        dialog.setPutCargoInputListener(new PutCargoInputDialog.PutCargoInputListener() {
+            @Override
+            public void onConfirm(int data) {
+                nowPosition = position;
+                BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+                entity.setCreateUser(outStorageUser);
+                entity.setWaybillId(id);
+                entity.setOutboundNumber(data);
+//                entity.setOutStorageUser(outStorageUser);
+                ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
+            }
+        });
+        dialog.show(getSupportFragmentManager(),"321");
+
         Log.e("22222","1111---->"+position);
-        nowPosition = position;
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setId(id);
-        entity.setOutStorageUser(outStorageUser);
-        ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
+
+
     }
     //完成
     private void deliveryComplet(){
@@ -109,15 +127,35 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mList.clear();
         mList.addAll(result.getWaybills());
         mAdapter.notifyDataSetChanged();
+        int already = 0;
+        for (WaybillsBean mWaybillsBean:mList){
+            if (mWaybillsBean.getWaybillStatus() == 6)
+                already++;
+        }
+        toolbar.setMainTitle(Color.WHITE,"提货("+already+"/"+mList.size()+")");
+
     }
 
     @Override
-    public void deliveryInWaybillResult(WaybillsBean result) {
-        mList.get(nowPosition).setOutStorageTime(result.getOutStorageTime());
-        mList.get(nowPosition).setWaybillStatus(6);
-        mAdapter.notifyDataSetChanged();
-        num1 = num1+1;
-        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
+    public void deliveryInWaybillResult(String result) {
+//        if (result.getTotalNumberPackages()-result.getOutboundNumber() == 0){
+//            mList.get(nowPosition).setOutStorageTime(result.getOutStorageTime());
+//            mList.get(nowPosition).setWaybillStatus(result.getWaybillStatus());
+//
+//            num1 = num1+1;
+//            toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
+//        }
+//        else{
+//            int j = 0;
+//            for (int i = 0;i<mList.size();i++){
+//                if (mList.get(i).getId().equals(result.getId())){
+//                    j=i;
+//                }
+//            }
+//            mList.set(j,result);
+//        }
+//        mAdapter.notifyDataSetChanged();
+        getData();
     }
 
     @Override
@@ -128,6 +166,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     @Override
     public void toastView(String error) {
 
+        ToastUtil.showToast(error);
     }
 
     @Override

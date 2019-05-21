@@ -385,7 +385,7 @@ public interface HttpApi {
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")
-    Observable<BaseEntity<WaybillsBean>> deliveryInWaybill(@Body BaseFilterEntity model);
+    Observable<BaseEntity<Object>> deliveryInWaybill(@Body BaseFilterEntity model);
 
     //运单出库完成
     @POST("service-product-delivery/delivery/completDelivery")

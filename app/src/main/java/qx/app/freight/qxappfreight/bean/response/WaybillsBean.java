@@ -61,7 +61,7 @@ public class WaybillsBean {
     private int flightId;
     private String mailType;
     private int documentDelivery;
-    private String totalNumberPackages;
+    private int totalNumberPackages;
     private String totalWeight;
     private String specialCargoCode;
     private String commodityName;
@@ -88,7 +88,7 @@ public class WaybillsBean {
     private Object putStorageUser;
     private long outStorageTime;
     private String outStorageUser;
-    private String tallyingTotal;
+    private Integer tallyingTotal;
     private String tallyingWeight;
     private int waybillStatus;
     private String waybillCodeScanUrl;
@@ -99,4 +99,8 @@ public class WaybillsBean {
     private long updateDate;
     private String updateUser;
     private Object errors;
+    /**
+     * 已提货件数
+     */
+    private Integer outboundNumber;
 }

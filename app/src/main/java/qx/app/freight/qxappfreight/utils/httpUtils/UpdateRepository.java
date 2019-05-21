@@ -662,8 +662,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<WaybillsBean> deliveryInWaybill(BaseFilterEntity model) {
-        return transform(getService().deliveryInWaybill(model));
+    public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
+        return nothingtransform(getService().deliveryInWaybill(model));
     }
 
     /***

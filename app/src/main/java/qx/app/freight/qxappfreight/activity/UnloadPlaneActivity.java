@@ -189,7 +189,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";
         mTvScanPac.setText(Html.fromHtml(scanPac));
         mSlideRvGoods.setLayoutManager(new LinearLayoutManager(this));
-        mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, flightInfo);
+        mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, mData);
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
             mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
@@ -201,7 +201,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRvPac.setLayoutManager(new LinearLayoutManager(this));
-        mScanPacAdapter = new ScanInfoAdapter(mListPac, flightInfo);
+        mScanPacAdapter = new ScanInfoAdapter(mListPac, mData);
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
             mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
@@ -255,6 +255,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             for (ScooterInfoListBean bean : mListGoods) {
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+                entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("cargo");
                 entity.setTpFlightId(mData.getFlightId());
@@ -269,6 +270,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             for (ScooterInfoListBean bean : mListPac) {
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+                entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("baggage");
                 entity.setTpFlightId(mData.getFlightId());
