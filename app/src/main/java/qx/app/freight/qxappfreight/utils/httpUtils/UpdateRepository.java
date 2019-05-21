@@ -911,4 +911,8 @@ public class UpdateRepository extends BaseRepository {
     public Observable<UpdateVersionBean> updateVersion(Map<String, String> map) {
         return transform(getService().updateVersion(map));
     }
+
+    public Observable<ReservoirBean> listReservoirInfoByCode(String deptCode){
+        return transform(getService().listReservoirInfoByCode(deptCode));
+    }
 }

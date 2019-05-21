@@ -506,4 +506,12 @@ public interface HttpApi {
     @POST("app/scheduling/findVersionUpdate")
     @FormUrlEncoded
     Observable<BaseEntity<UpdateVersionBean>> updateVersion(@FieldMap Map<String, String> map);
+
+    /**
+     * 获取库区接口
+     * @param deptCode 从用户信息里面获取
+     * @return
+     */
+    @GET("service-bussiness-reservoir/reservoir/listReservoirInfoByCode/{deptCode}")
+    Observable<BaseEntity<ReservoirBean>> listReservoirInfoByCode(@Path("deptCode") String deptCode);
 }
