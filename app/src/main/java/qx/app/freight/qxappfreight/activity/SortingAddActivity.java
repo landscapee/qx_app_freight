@@ -123,7 +123,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
             //显示运单号， 实际分拣数，库区，库位，是否转关，备注
             idEdt.setText(mInWaybillRecord.getWaybillCode() + "");
-            sortingNumEdt.setText(mInWaybillRecord.getTotalNumberPackages()== null?"": mInWaybillRecord.getTotalNumberPackages()+"");
+            sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal()== null?"": mInWaybillRecord.getTallyingTotal()+"");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
             if(mInWaybillRecord.getTransit() != null){
