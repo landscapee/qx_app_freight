@@ -142,8 +142,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
         entity.setCurrent(1);
 
-        Log.e("dime", entity.toString());
-
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 

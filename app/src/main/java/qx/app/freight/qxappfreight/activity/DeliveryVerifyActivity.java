@@ -135,18 +135,21 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
     public void deliveryVerifyResult(DeclareWaybillBean declareWaybillBean) {
 
         //航班信息
-        newWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_new), declareWaybillBean.getNewDeclareWaybillCode()));
+        //新订单好
+        newWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_new), declareWaybillBean.getNewWaybillCode()));
+        //旧订单号
         oldWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_origin), declareWaybillBean.getWaybillCode()));
+        //航班号
         flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNumber());
         if(declareWaybillBean.getFlightDate() == null){
             flightDataTv.setText("航班日期: -");
         }else{
             flightDataTv.setText("航班日期:\n"+ TimeUtils.getTime2_1(declareWaybillBean.getFlightDate()));
         }
-        targetTv.setText("目的地:\n"+declareWaybillBean.getDestinationStation());
+        targetTv.setText("目的地:\n" + declareWaybillBean.getDestinationStationCn());
         startStationTv.setText("始发站:" + declareWaybillBean.getOriginatingStation());
         midStationTv.setText("中转站:" + declareWaybillBean.getTransferStation());
-        finalStationTv.setText("终点站:\n" + declareWaybillBean.getDestinationStationCn());
+        finalStationTv.setText("终点站:\n" + declareWaybillBean.getDestinationStation());
         //收货人信息
         nameTv.setText(declareWaybillBean.getConsignee());
         telTv.setText(declareWaybillBean.getConsigneePhone());
@@ -155,9 +158,9 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         //货物信息
         goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCargoCode());
         String bigSize = "";
-        if(declareWaybillBean.getBigFlag() == 0)
+        if(declareWaybillBean.getBigFlag() == 1)
             bigSize = "小件";
-        else if(declareWaybillBean.getBigFlag() == 1)
+        else if(declareWaybillBean.getBigFlag() == 2)
             bigSize = "大件";
         else
             bigSize = "超大件";
@@ -174,7 +177,8 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         refuseBtn.setOnClickListener(listener->{
             ChangeWaybillEntity changeWaybillEntity = new ChangeWaybillEntity();
             changeWaybillEntity.setFlag(0);//拒绝
-            changeWaybillEntity.setDeclareWaybill(declareWaybillBean);
+            changeWaybillEntity.setChangeBill(declareWaybillBean);
+            changeWaybillEntity.setId(id);
             changeWaybillEntity.setTaskId(taskId);
             changeWaybillEntity.setUserid(UserInfoSingle.getInstance().getUserId());
             //拒绝申请
@@ -183,8 +187,9 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         acceptBtn.setOnClickListener(listener->{
             ChangeWaybillEntity changeWaybillEntity = new ChangeWaybillEntity();
             changeWaybillEntity.setFlag(1);//接受
-            changeWaybillEntity.setDeclareWaybill(declareWaybillBean);
+            changeWaybillEntity.setChangeBill(declareWaybillBean);
             changeWaybillEntity.setTaskId(taskId);
+            changeWaybillEntity.setId(id);
             changeWaybillEntity.setUserid(UserInfoSingle.getInstance().getUserId());
             //接受申请
             ((DeliveryVerifyPresenter)mPresenter).changeSubmit(changeWaybillEntity);

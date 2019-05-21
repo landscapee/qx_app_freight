@@ -268,7 +268,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         }
         try {
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
-            int weight = Integer.parseInt(tvTotalWeight.getText().toString().trim());
+            String weight = tvTotalWeight.getText().toString().trim();
             int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
             int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
@@ -314,9 +314,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
         tvGoodsCode.setText(mData.getSpecialCargoCode());
         if (mData.getBigFlag() == 1) {
-            tvBaozhuang.setText("大件");
-        } else {
             tvBaozhuang.setText("小件");
+        } else if(mData.getBigFlag() == 2) {
+            tvBaozhuang.setText("大件");
+        } else{
+            tvBaozhuang.setText("超大件");
         }
         String coldStorage;
         //货物类别  1：贵重  2：危险 3：活体 4：冷藏 0：普货

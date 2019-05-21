@@ -12,7 +12,8 @@ import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 public class ChangeWaybillEntity implements Serializable {
 
     private int flag;//  1:同意，0：拒绝
-    private DeclareWaybillBean declareWaybill;
+    private DeclareWaybillBean changeBill;
     private String taskId;
     private String userid;
+    private String id;
 }
