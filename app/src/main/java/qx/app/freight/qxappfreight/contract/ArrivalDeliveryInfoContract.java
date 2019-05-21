@@ -19,7 +19,7 @@ public class ArrivalDeliveryInfoContract {
     public interface arrivalDeliveryInfoView extends IBaseView {
         void arrivalDeliveryInfoResult(ArrivalDeliveryInfoBean result);
 
-        void deliveryInWaybillResult(WaybillsBean result);
+        void deliveryInWaybillResult(String result);
 
         void completDeliveryResult(String result);
     }

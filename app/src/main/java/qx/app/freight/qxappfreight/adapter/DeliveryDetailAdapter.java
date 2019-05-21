@@ -27,15 +27,17 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
                 //件数 - 重量
         holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
-                ,bean.getTotalNumberPackages()
+                ,bean.getTotalNumberPackages()+""
                 ,bean.getTotalWeight()));
                 //件数 - 重量
         holder.setText(R.id.tallying_info, String.format(mContext.getString(R.string.format_goods_inport)
-                        , bean.getTallyingTotal()
+                        , bean.getTallyingTotal()+""
                         ,bean.getTallyingWeight()))
                 .setText(R.id.consignee,bean.getConsignee())
                 .setText(R.id.consignee_phone,bean.getConsigneePhone())
                 .setText(R.id.consignee_card,bean.getConsigneeCarid());
+        int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
+        holder.setText(R.id.tv_put_num,"已提货: "+bean.getOutboundNumber()+"件 / 待提货:"+waitPutCargoNum+"件");
         if (bean.getOutStorageTime()>0){
             holder.setVisible(R.id.tv_complete_time,true);
             holder.setText(R.id.tv_complete_time, TimeUtils.date2Tasktime6(bean.getOutStorageTime()));
@@ -44,7 +46,10 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         if (bean.getWaybillStatus()==5){
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
+            holder.setVisible(R.id.tv_put_num,true);
+
         }else if (bean.getWaybillStatus() ==6){
+            holder.setVisible(R.id.tv_put_num,false);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
         }

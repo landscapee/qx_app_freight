@@ -50,5 +50,7 @@ public class BaseFilterEntity<T> {
     //航班动态
     private String day;
 
-
+    private String createUser;
+    private int outboundNumber;
+    private String  waybillId;
 }

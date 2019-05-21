@@ -33,9 +33,9 @@ public class ArrivalDeliveryInfoPresenter extends BasePresenter {
 
     public void deliveryInWaybill(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((ArrivalDeliveryInfoModel) mRequestModel).deliveryInWaybill(model, new IResultLisenter<WaybillsBean>() {
+        ((ArrivalDeliveryInfoModel) mRequestModel).deliveryInWaybill(model, new IResultLisenter<String>() {
             @Override
-            public void onSuccess(WaybillsBean result) {
+            public void onSuccess(String result) {
                 ((ArrivalDeliveryInfoContract.arrivalDeliveryInfoView) mRequestView).deliveryInWaybillResult(result);
                 mRequestView.dissMiss();
             }

@@ -17,9 +17,8 @@ public class MapValue {
             value = "机下";
         else if ("baggage_area".equals(code))
             value = "行李区";
-        else if ("warehouse".equals(code))
+        else if ("warehouse_area".equals(code))
             value = "库区";
-
         return value;
     }
     /**
