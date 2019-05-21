@@ -87,7 +87,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 总重量
      */
-    private int totalWeight;
+    private String totalWeight;
 
     /**
      * 总体积
@@ -206,7 +206,7 @@ public class DeclareWaybillBean implements Serializable {
     private Long storageTime;
 
     /**
-     * 是否大件 0：否 1： 是
+     * 是否大件  1:小件，2：大件，3：超大件
      */
     private int bigFlag;
 
@@ -244,9 +244,15 @@ public class DeclareWaybillBean implements Serializable {
     private String flightName;
 
     /**
-     * 新运单号
+     * 新运单号【废弃，启用新字段newWaybillCode】
      */
     private String newDeclareWaybillCode;
+
+
+    /**
+     * 新订单号
+     */
+    private String newWaybillCode;
 
 //    private DeclareWaybillAddition declareWaybillAddition;
 
