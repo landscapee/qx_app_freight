@@ -146,13 +146,13 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 
-        entity.setRoleCode("beforehand_in");
+        entity.setRoleCode("delivery_in");
 
-        entity.setUndoType(2);
+        entity.setUndoType(3);
 
         List<String> ascs = new ArrayList<>();
-        ascs.add("ATA");
-        ascs.add("STA");
+        ascs.add("flight_number");
+        ascs.add("lastUpdate_time");
 
         entity.setAscs(ascs);
 
