@@ -344,7 +344,25 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 tvFlightid.setText(mData.getFlightNo());
                 tvNameFront.setText(mData.getScooterCode());
                 tvDeadweightFront.setText(mData.getScooterWeight()+"kg");
-                tvUld.setText(mData.getUldType()+" "+mData.getUldCode()+" "+mData.getIata());
+                String mType,mCode,mIata;
+
+                if (TextUtils.isEmpty(mData.getUldType())){
+                    mType = "-";
+                }else {
+                    mType = mData.getUldType();
+                }
+                if (TextUtils.isEmpty(mData.getUldCode())){
+                    mCode = "-";
+                }else {
+                    mCode = mData.getUldCode();
+                }
+                if (TextUtils.isEmpty(mData.getIata())){
+                    mIata = "-";
+                }else {
+                    mIata = mData.getIata();
+                }
+
+                tvUld.setText(mType+" "+mCode+" "+mIata);
                 tvUldSelf.setText(mData.getUldWeight()+"kg");
                 //收运净重
                 tvNetweightFront.setText(mData.getWeight()+"kg");
