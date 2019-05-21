@@ -114,7 +114,7 @@ public class TaskStowageFragment extends BaseFragment implements TransportListCo
         PrematchingEntity mBean = new PrematchingEntity();
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
-        mBean.setTaskType("prematching");
+        mBean.setTaskType("installScooter");//组板
         mBean.setFlightNo("");
         mBean.setTaskStartTime("");
         mBean.setTaskEndTime("");

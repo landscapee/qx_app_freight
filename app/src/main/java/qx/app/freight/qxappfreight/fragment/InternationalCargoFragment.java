@@ -114,11 +114,17 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
         super.onResume();
         loadData();
     }
-
+    private void setTitleNum(int size) {
+        TaskFragment fragment = (TaskFragment) getParentFragment();
+        if (fragment != null) {
+            fragment.setTitleText(size);
+        }
+    }
     @Override
     public void getAllInternationalAndMixedFlightResult(List<FlightLuggageBean> flightLuggageBeans) {
         mListTemp.clear();
         mListTemp.addAll(flightLuggageBeans);
+        setTitleNum(mListTemp.size());
         seachWithNum();
     }
 
