@@ -158,7 +158,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
-        tvProductName.setText(mDeclareItemBeans.get(0).getCargoCn());
+
+        tvProductName.setText(setCargoCn(mDeclareItemBeans));
         String [] sb = new String[1];
         sb[0] = mDeclareItemBeans.get(0).getCargoId();
         mMyAgentListBean.setCargoId(sb);
@@ -204,6 +205,15 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         });
         //板车号
         getNumberInfo();
+    }
+
+    //品名叠加
+    private String setCargoCn(List<DeclareItem> data){
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i <data.size() ; i++) {
+            str.append(data.get(i).getCargoCn()+",");
+        }
+        return str.substring(0,str.length()-1);
     }
 
 

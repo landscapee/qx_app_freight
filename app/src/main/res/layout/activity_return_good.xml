@@ -82,7 +82,7 @@
             android:layout_marginLeft="50dp"
             android:layout_toRightOf="@+id/tv_info1"
             android:paddingTop="15dp"
-            android:text="货代以确定"
+            android:text="货代已确认"
             android:textSize="13sp" />
 
     </RelativeLayout>

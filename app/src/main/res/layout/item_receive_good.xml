@@ -94,16 +94,16 @@
                 tools:text="ULD:" />
 
 
-            <TextView
-                android:id="@+id/tv_receive_sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:gravity="end"
-                android:padding="13dp"
-                android:textColor="#FF333333"
-                tools:text="超重102kg" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_receive_sw"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textStyle="bold"-->
+                <!--android:gravity="end"-->
+                <!--android:padding="13dp"-->
+                <!--android:textColor="#FF333333"-->
+                <!--tools:text="超重102kg" />-->
         </LinearLayout>
 
         <TextView

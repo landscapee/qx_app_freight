@@ -139,9 +139,21 @@ public class MainActivity extends BaseActivity {
 //        mViewPager.setCurrentItem(0);
 //        switchFragment(mViewPager.getCurrentItem());
 
+
         mTaskFragment = new TaskFragment();
         mDynamicFragment = new DynamicFragment();
-        mCSFragment = new ClearStorageFragment();
+//        int rw = 0;
+//        for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+//            if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+//                rw = 1;
+//                break;
+//            }
+//        }
+//        if (rw == 1) {
+//            mCSFragment = new ClearStorageFragment();
+//        } else
+            mCSFragment = new ClearStorageFragment();
+
         testFragment = new TestFragment();
         mTaskPutCargoFragment = new TaskPutCargoFragment();
         mMineFragment = new MineFragment();

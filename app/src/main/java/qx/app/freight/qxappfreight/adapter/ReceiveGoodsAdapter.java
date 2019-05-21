@@ -37,7 +37,7 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
                 , item.getUldCode()
                 , item.getUldWeight()));
         //超重重量
-        helper.setText(R.id.tv_receive_sw, "超重" + item.getOverWeight() + "kg");
+//        helper.setText(R.id.tv_receive_sw, "超重" + item.getOverWeight() + "kg");
         //库区
         helper.setText(R.id.tv_receice_repplace, item.getReservoirName());
         //删除按钮

@@ -36,7 +36,10 @@ public class ReturnGoodAdapter extends BaseQuickAdapter<MyAgentListBean, BaseVie
                 item.getVolume(),
                 //重量
                 item.getWeight()));
-        helper.setText(R.id.tv_return_good_nu, item.getRepName());
+        //库区|库位
+        helper.setText(R.id.tv_return_good_nu, String.format(mContext.getString(R.string.format_company_info),item.getRepName()
+        ,item.getRepPlaceNum()));
+        //运单名
         helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType()+"")+ item.getScooterCode());
     }
 
