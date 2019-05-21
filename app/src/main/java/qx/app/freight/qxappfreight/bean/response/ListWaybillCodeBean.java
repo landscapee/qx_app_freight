@@ -11,11 +11,24 @@ public class ListWaybillCodeBean {
      * status : 200
      * message : 正确
      * rowCount : null
-     * data : ["859-10235514","02813131313","784-10235481","111-02846464","pengpeng02","023-05326053","023-05326064","023-05326053","023-05326064","023-05326053","023-05326064","023-05326053","023-05326064","023-05326053","023-05326064","025-10315481","025-12321231","341-10235455","880-10002123"]
+     * data : [{"id":"2c9b20176d559c5dd861f600775fe001","waybillCode":"abc-fgiwerfn"}]
+     * flag : null
      */
 
     private String status;
     private String message;
     private Object rowCount;
-    private List<String> data;
+    private Object flag;
+    private List<DataBean> data;
+
+    @Data
+    public static class DataBean {
+        /**
+         * id : 2c9b20176d559c5dd861f600775fe001
+         * waybillCode : abc-fgiwerfn
+         */
+
+        private String id;
+        private String waybillCode;
+    }
 }

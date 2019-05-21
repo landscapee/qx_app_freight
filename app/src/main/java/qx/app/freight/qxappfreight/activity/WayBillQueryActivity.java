@@ -1,11 +1,11 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -35,7 +35,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     @BindView(R.id.rv_search_result)
     RecyclerView mRvSearchResult;
 
-    private List<String> resultData = new ArrayList<>();
+    private List<ListWaybillCodeBean.DataBean> resultData = new ArrayList<>();
     private WaybillQueryResultAdapter adapter;
 
     @Override
@@ -56,7 +56,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
         mRvSearchResult.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
 
-            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position)));
+            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode()));
             finish();
 
         });
@@ -74,8 +74,13 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
             @Override
             public void afterTextChanged(Editable s) {
-                mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
-                ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString());
+                if (!TextUtils.isEmpty(s.toString())){
+                    mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
+                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString());
+                }else {
+                    resultData.clear();
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -94,7 +99,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     public void listWaybillCodeResult(ListWaybillCodeBean listWaybillCodeBean) {
         if ("200".equals(listWaybillCodeBean.getStatus())) {
             resultData.clear();
-            List<String> result = listWaybillCodeBean.getData();
+            List<ListWaybillCodeBean.DataBean> result = listWaybillCodeBean.getData();
             if (result == null || result.size() == 0) {
                 ToastUtil.showToast("未查询到对应的运单数据");
             } else {
