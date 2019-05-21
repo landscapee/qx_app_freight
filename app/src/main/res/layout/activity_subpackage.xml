@@ -249,7 +249,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@color/transparent"
                 android:inputType="numberDecimal"
-                android:hint="请填写分装件数"
+                android:hint="请填写分装体积"
                 />
         </RelativeLayout>
     </LinearLayout>
