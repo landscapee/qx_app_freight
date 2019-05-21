@@ -16,6 +16,7 @@ import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
@@ -50,6 +51,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -258,6 +260,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<TransportListBean> transportList(BaseFilterEntity model) {
         return transform(getService().transportList(model));
+    }
+    /********
+     * 代办收运列表
+     * @param model
+     * @return
+     */
+    public Observable<GroupBoardTodoBean> getGroupBoardToDo(GroupBoardRequestEntity model) {
+        return getService().getGroupBoardToDo(model);
     }
 
 

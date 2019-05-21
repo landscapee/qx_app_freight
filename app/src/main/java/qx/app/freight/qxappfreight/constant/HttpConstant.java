@@ -7,7 +7,7 @@ import qx.app.freight.qxappfreight.BuildConfig;
  */
 public class HttpConstant {
     //张硕ip  http://myyx.nat123.cc:24010/
-    public static final String TEST = BuildConfig.TEST;//"http://173.100.1.75:9008";//接口地址
+    public static final String TEST = BuildConfig.TEST;//"http://173.100.1.75:9008";//开发环境
 
     public static final String HUOYUN = BuildConfig.HUOYUN;//"http://173.100.1.51:80";//航班环境
 

@@ -23,7 +23,7 @@ public class FlightCabinInfo {
 
     private FlightInfoBean flightInfo;
     private AircraftNoRSBean aircraftNoRS;
-    private List <AircraftTypesBean> aircraftTypes;
+    private AircraftTypesBean aircraftTypes;
 
     @Data
     public static class FlightInfoBean {

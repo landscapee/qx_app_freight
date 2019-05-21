@@ -119,7 +119,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
                     rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
                     rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
                     rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                    rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
+                    rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
                     rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
                     rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
                     rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());

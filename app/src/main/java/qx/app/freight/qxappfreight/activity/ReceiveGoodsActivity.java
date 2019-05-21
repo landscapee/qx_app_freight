@@ -112,12 +112,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     Button btnPrint;
     int vpPage = 0;
     boolean isPrint = false;
+    private String id;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode) {
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode,String id) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
         starter.putExtra("taskTypeCode", taskTypeCode);
+        starter.putExtra("id", id);
         context.startActivityForResult(starter, 0);
     }
 
@@ -133,6 +135,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
+        id=getIntent().getStringExtra("id");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
         reservoirType = mDeclare.getColdStorage() + "";
@@ -201,6 +204,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
                 TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
+                rcInfosEntity.setAddOrderId(id);
+                rcInfosEntity.setTaskTypeCode(taskTypeCode);
                 rcInfosEntity.setId(mMyAgentListBean.getId());
                 rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
                 rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
@@ -209,7 +214,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
                 rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
                 rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
+                rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
                 rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
                 rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
                 rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
@@ -221,6 +226,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             }
             transportListCommitEntity.setRcInfos(mListRcInfosEntity);
             transportListCommitEntity.setTaskTypeCode(taskTypeCode);
+            transportListCommitEntity.setAddOrderId(id);
             ((TransportListCommitPresenter) mPresenter).transportListCommit(transportListCommitEntity);
         } else {
             ToastUtil.showToast(this, "请先添加数据");

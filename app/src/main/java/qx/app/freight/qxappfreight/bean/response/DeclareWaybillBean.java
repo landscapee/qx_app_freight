@@ -87,7 +87,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 总重量
      */
-    private String totalWeight;
+    private int totalWeight;
 
     /**
      * 总体积

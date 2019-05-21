@@ -15,6 +15,7 @@ import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
@@ -49,6 +50,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -133,12 +135,16 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> sendPrintMessage(@Path("waybillId") String waybillId);
 
     //代办
-//    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     @POST("service-product-receivecargo/todoTask/searchTodoTask")
     Observable<BaseEntity<TransportListBean>> transportList(@Body BaseFilterEntity model);
 
+    //预配组板获取代办数据
+    @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
+    Observable<GroupBoardTodoBean> getGroupBoardToDo(@Body GroupBoardRequestEntity model);
+
     /**
      * 收验，代办 -- pr & guohao
+     *
      * @param model
      * @return
      */

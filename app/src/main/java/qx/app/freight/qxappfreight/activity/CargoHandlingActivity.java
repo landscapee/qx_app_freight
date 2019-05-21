@@ -578,7 +578,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         tvArriveTime.setText(TimeUtils.date2Tasktime3(flightInfo.getFlightInfo().getEtd()) + "(" + TimeUtils.getDay(flightInfo.getFlightInfo().getEtd()) + ")");
 
         //组装飞机货仓基本信息
-        String flightCabinInfo = flightInfo.getAircraftTypes().get(0).getTypeName()
+        String flightCabinInfo = flightInfo.getAircraftTypes().getTypeName()
                 + " | " + flightInfo.getFlightInfo().getAircraftNo() + " | 0-" + flightInfo.getAircraftNoRS().getFlightMaxWgt() + "KG";
         tvPlaneInfo.setText(flightCabinInfo);
         listCargoCabinInfo.clear();

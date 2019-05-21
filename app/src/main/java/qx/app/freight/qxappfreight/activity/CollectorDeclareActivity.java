@@ -274,7 +274,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
             mData.setTotalNumberPackages(number);
-            mData.setTotalWeight(weight);
+            mData.setTotalWeight(Integer.valueOf(weight));
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
             mData.setColdStorage(storageOption);
@@ -354,7 +354,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
      * @param
      */
     private void turnToReceiveGoodsActivity(){
-        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode);
+        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode,getIntent().getStringExtra("id"));
     }
 
 }

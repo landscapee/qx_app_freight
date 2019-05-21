@@ -18,6 +18,7 @@ public class TransportListCommitEntity {
     private String userId;
     private String waybillId;
     private String taskTypeCode;
+    private String addOrderId;
     private DeclareWaybillBean waybillInfo;
     private List<RcInfosEntity> rcInfos;
     private List<SecurityCheckResult> securityResultList;
@@ -25,12 +26,14 @@ public class TransportListCommitEntity {
     @Data
     public static class RcInfosEntity {
         private String id;
+        private String taskTypeCode;
+        private String addOrderId;
         private String waybillId;
         private String waybillCode;
         private String[] cargoId;
         private String cargoCn;
         private int number;
-        private double weight;
+        private int weight;
         private double volume;
         private List<String> packagingType;
         private String scooterId;

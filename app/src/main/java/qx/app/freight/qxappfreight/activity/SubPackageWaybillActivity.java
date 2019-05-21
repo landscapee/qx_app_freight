@@ -100,52 +100,44 @@ public class SubPackageWaybillActivity extends BaseActivity {
                     mRcInfo = Tools.IOclone(mRcInfoEd);
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.e("Tools.IOclone",e.getMessage());
                 }
                 if (!"".equals(tvSubpackageWeight.getText().toString()))
                     subpackageWeight = Double.valueOf(tvSubpackageWeight.getText().toString());
-                else
-                {
+                else{
                     ToastUtil.showToast(this,"请填写分装重量");
                     return;
                 }
                 if (!"".equals(tvSubpackageCount.getText().toString()))
                     subpackageCount = Integer.valueOf(tvSubpackageCount.getText().toString());
-                else
-                {
+                else{
                     ToastUtil.showToast(this,"请填写分装件数");
                     return;
                 }
                 if (!"".equals(tvSubpackageVolume.getText().toString()))
                     subpackageVolume = Double.valueOf(tvSubpackageVolume.getText().toString());
-                else
-                {
+                else{
                     ToastUtil.showToast(this,"请填写分装体积");
                     return;
                 }
-                if (mRcInfoEd.getWeight() > subpackageWeight){
-                    mRcInfoEd.setWeight(mRcInfoEd.getWeight() - subpackageWeight);
-                    mRcInfo.setWeight(subpackageWeight);
-                }
-                else {
+                if (mRcInfoEd.getWeight() <= subpackageWeight){
                     ToastUtil.showToast(this,"分装重量必须小于可分装重量");
                     return;
-                }
-                if (mRcInfoEd.getNumber() > subpackageCount){
-                    mRcInfoEd.setNumber(mRcInfoEd.getNumber() - subpackageCount);
-                    mRcInfo.setNumber(subpackageCount);
-                }
-                else {
+                }else if (mRcInfoEd.getNumber() <= subpackageCount){
                     ToastUtil.showToast(this,"分装件数必须小于可分装件数");
                     return;
-                }
-                if (mRcInfoEd.getVolume() > subpackageVolume){
-                    mRcInfoEd.setVolume(mRcInfoEd.getVolume()- subpackageVolume);
-                    mRcInfo.setVolume(subpackageVolume);
-                }
-                else {
+                }else if (mRcInfoEd.getVolume() <= subpackageVolume){
                     ToastUtil.showToast(this,"分装体积必须小于可分装体积");
                     return;
+                }else {
+                    //设置重量
+                    mRcInfoEd.setWeight(mRcInfoEd.getWeight() - subpackageWeight);
+                    mRcInfo.setWeight(subpackageWeight);
+                    //设置件数
+                    mRcInfoEd.setNumber(mRcInfoEd.getNumber() - subpackageCount);
+                    mRcInfo.setNumber(subpackageCount);
+                    //设置体积
+                    mRcInfoEd.setVolume(mRcInfoEd.getVolume()- subpackageVolume);
+                    mRcInfo.setVolume(subpackageVolume);
                 }
                 Intent intent = new Intent();
                 intent.putExtra("mRcInfoEd",mRcInfoEd);
