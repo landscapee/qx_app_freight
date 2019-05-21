@@ -56,7 +56,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
         mRvSearchResult.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
 
-            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode()));
+            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode(),resultData.get(position).getId()));
             finish();
 
         });

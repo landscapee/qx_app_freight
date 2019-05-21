@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.adapter.SortingAddAdapter2;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
@@ -87,6 +88,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     private String taskId;  //任务id
     private String taskTitle; //标题
+    private String waybillId;//运单号id
 
 
     @Override
@@ -112,6 +114,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WayBillQueryBean data) {
         tvId.setText(data.getWayBillCode());
+        waybillId = data.getId();
     }
 
     private void initData() {
@@ -199,6 +202,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             case R.id.btn_clear:
                 //清空运单号
                 tvId.setText("");
+                waybillId = null;
                 break;
         }
     }
@@ -246,6 +250,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         InventoryDetailEntity detailEntity = new InventoryDetailEntity();
         detailEntity.setWaybillCode(tvId.getText().toString().trim());
         detailEntity.setInventoryTaskId(taskId);
+        detailEntity.setHandler(UserInfoSingle.getInstance().getUserId());
+        detailEntity.setHandlerName(UserInfoSingle.getInstance().getUsername());
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
         try {
             List<InventoryUbnormalGoods> goodsList =  Tools.deepCopy(counterUbnormalGoodsList);

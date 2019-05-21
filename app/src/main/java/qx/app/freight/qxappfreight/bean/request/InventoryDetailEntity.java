@@ -54,7 +54,7 @@ public class InventoryDetailEntity {
     /**
      * 创建人
      */
-    private String createUser;
+    private String handlerName;
 
     /**
      * 异常详情
