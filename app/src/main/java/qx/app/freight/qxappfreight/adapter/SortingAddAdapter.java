@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -87,6 +88,8 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
                 }
             }
         });
+
+
         //删除按钮点击事件
         helper.getView(R.id.imgBtn_delete_item).setOnClickListener(listener -> {
             int mypostion = helper.getAdapterPosition();
