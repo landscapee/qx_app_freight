@@ -50,8 +50,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     EditText tvTotalWeight;
     @BindView(R.id.tv_total_volume)
     EditText tvTotalVolume;
-    @BindView(R.id.tv_weight)
-    EditText tvWeight;
+//    @BindView(R.id.tv_weight) //计费重量录入删除
+////    EditText tvWeight;
     @BindView(R.id.tv_goods_code)
     EditText tvGoodsCode;
     @BindView(R.id.tv_baozhuang)
@@ -80,7 +80,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
 
-    private List<String> baozhuangList;
+    private List<String> baozhuangList;//1小件 2大件 3 超大件
     private List<String> storageList; //1：贵重  2：危险 3：活体 4：冷藏 0：普货
     private List<String> temperatureList; //温度
     private int baozhuangOption; //选中得包装大小
@@ -113,6 +113,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         baozhuangList = new ArrayList<>();
         baozhuangList.add("小件");
         baozhuangList.add("大件");
+        baozhuangList.add("超大件");
         storageList = new ArrayList<>();
         storageList.add("普货");
         storageList.add("贵重");
@@ -198,7 +199,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvBaozhuang.setText(baozhuangList.get(options1));
-                baozhuangOption = options1;
+                baozhuangOption = options1+1;
             }
         }).build();
         pickerView.setPicker(baozhuangList);
@@ -259,10 +260,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             ToastUtil.showToast("总体积不能为空");
             return;
         }
-        if (TextUtils.isEmpty(tvWeight.getText().toString().trim())){
-            ToastUtil.showToast("计费重量不能为空");
-            return;
-        }
+//        if (TextUtils.isEmpty(tvWeight.getText().toString().trim())){
+//            ToastUtil.showToast("计费重量不能为空");
+//            return;
+//        }
         if (!TextUtils.isEmpty(tvGoodsCode.getText().toString().trim())){
             mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
         }
@@ -270,12 +271,12 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
             String weight = tvTotalWeight.getText().toString().trim();
             int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
-            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
+//            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
             mData.setTotalNumberPackages(number);
             mData.setTotalWeight(weight);
             mData.setTotalVolume(volume);
-            mData.setBillingWeight(jifeiWeight);
+//            mData.setBillingWeight(jifeiWeight);
             mData.setColdStorage(storageOption);
             mData.setBigFlag(baozhuangOption);
             if (storageOption==4){
@@ -310,14 +311,14 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvTotalNum.setText(String.valueOf(mData.getTotalNumberPackages()));
         tvTotalWeight.setText(String.valueOf(mData.getTotalWeight()));
         tvTotalVolume.setText(String.valueOf(mData.getTotalVolume()));
-        tvWeight.setText(String.valueOf(mData.getBillingWeight()));
+//        tvWeight.setText(String.valueOf(mData.getBillingWeight()));
 
         tvGoodsCode.setText(mData.getSpecialCargoCode());
         if (mData.getBigFlag() == 1) {
             tvBaozhuang.setText("小件");
         } else if(mData.getBigFlag() == 2) {
             tvBaozhuang.setText("大件");
-        } else{
+        } else if (mData.getBigFlag()==3){
             tvBaozhuang.setText("超大件");
         }
         String coldStorage;
