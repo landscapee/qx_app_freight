@@ -30,15 +30,16 @@ import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.contract.GetAllInternationalAndMixedFlightContract;
 import qx.app.freight.qxappfreight.presenter.GetAllInternationalAndMixedFlightPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 国际货物上报上报
  *
  * create by swd
  */
-public class InternationalCargoFragment extends BaseFragment implements GetAllInternationalAndMixedFlightContract.getAllInternationalAndMixedFlightView , EmptyLayout.OnRetryLisenter {
+public class InternationalCargoFragment extends BaseFragment implements GetAllInternationalAndMixedFlightContract.getAllInternationalAndMixedFlightView, MultiFunctionRecylerView.OnRefreshListener , EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
-    RecyclerView mMfrvData;
+    MultiFunctionRecylerView mMfrvData;
 
     FlightListAdapter mAdapter;
     List<FlightLuggageBean> mList;  //筛选过后的数据
@@ -144,5 +145,15 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
             loadData();
             dismissProgessDialog();
         }, 2000);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }

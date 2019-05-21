@@ -312,7 +312,7 @@
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="下一步"
+            android:text="提交"
             style="@style/btn_submit"
             />
     </RelativeLayout>

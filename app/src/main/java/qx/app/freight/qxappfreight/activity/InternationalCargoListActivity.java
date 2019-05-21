@@ -246,12 +246,12 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("板车数据提交中……");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

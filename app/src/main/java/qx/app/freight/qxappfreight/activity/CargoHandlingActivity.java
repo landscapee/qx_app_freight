@@ -324,6 +324,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             protected void initView() {
                 View view = getContentView();
                 dataRc = view.findViewById(R.id.rc_handcar);
+                tvTitle = view.findViewById(R.id.tv_title);
                 ivClose = view.findViewById(R.id.iv_close);
                 dataRc.setLayoutManager(new LinearLayoutManager(CargoHandlingActivity.this, LinearLayoutManager.VERTICAL, false));
 
@@ -354,6 +355,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private void showPopWindowList(int position) {
 
+        tvTitle.setText("请选择一个板车");
         dataRc.setAdapter(mCargoHandlingAdapter);
         nowWaybillPosition = position;
         isPopWindow = true;
@@ -388,7 +390,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                 ivClose = view.findViewById(R.id.iv_close);
                 dataRc.setLayoutManager(new LinearLayoutManager(CargoHandlingActivity.this, LinearLayoutManager.VERTICAL, false));
                 dataRc.setAdapter(mSpProductAdapter);
-                tvTitle.setText("请选择一个仓位");
+
                 ivClose.setOnClickListener((v) -> {
                     dismissPopWindows();
                 });
@@ -416,7 +418,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     }
 
     private void showPopWindowListCabin(int position) {
-
+        tvTitle.setText("请选择一个仓位");
         isPopWindow = true;
         dataRc.setAdapter(mSpProductAdapter);
         nowHandcarPositionSelect = position;
