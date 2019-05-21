@@ -118,35 +118,22 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     private void initData() {
-        /**
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+        /*BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setCurrent(mCurrentPage);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setUndoType("2");
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        ((TransportListPresenter) mPresenter).transportListPresenter(entity);
-
-         */
-
-        GroupBoardRequestEntity groupBoardRequestEntity = new GroupBoardRequestEntity();
-
-        List<String> ascs = new ArrayList<>();
+        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());*/
+        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
+        entity.setRoleCode("beforehand_in");
+        entity.setUndoType(2);
+        List<String> ascs=new ArrayList<>();
         ascs.add("ATA");
         ascs.add("STA");
-        groupBoardRequestEntity.setAscs(ascs);
-
-        groupBoardRequestEntity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-
-        groupBoardRequestEntity.setUndoType(2);
-
-//        groupBoardRequestEntity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-
-        groupBoardRequestEntity.setRoleCode("beforehand_in");
-
-        ((GroupBoardToDoPresenter)mPresenter).getGroupBoardToDo(groupBoardRequestEntity);
-
-
+        entity.setAscs(ascs);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
     /**
@@ -245,22 +232,6 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void dissMiss() {
 
     }
-
-    /*
-    @Override
-    public void transportListContractResult(TransportListBean transportListBeans) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
-            mCurrentPage++;
-            mMfrvData.finishLoadMore();
-        }
-
-        mListTemp.clear();
-        mListTemp.addAll(transportListBeans.getRecords());
-        seachWithNum();
-    }
-    */
 
     @Override
     public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
