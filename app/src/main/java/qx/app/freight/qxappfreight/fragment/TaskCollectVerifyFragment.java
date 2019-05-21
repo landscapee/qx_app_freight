@@ -28,13 +28,14 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.SearchTodoTaskContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -42,7 +43,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 出港-收验
  */
-public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
@@ -53,6 +54,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private List<TransportListBean.TransportDataBean> transportListList;
     private String seachString = "";
     TaskFragment fragment;
+
+    private TransportListBean.TransportDataBean mBean;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,7 +107,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            turnToDetailActivity(transportListList.get(position));
+            getTaskInfo(transportListList.get(position));
         });
         getData();
     }
@@ -128,17 +132,16 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
-        if (null == bean.getDeclareWaybillAddition()) {
-            ToastUtil.showToast("数据为空请重新申报");
-        } else {
-            VerifyStaffActivity.startActivity(getActivity()
-                    , bean.getDeclareWaybillAddition()
-                    , bean.getTaskId()
-                    , bean.getSpotFlag()
-                    , bean.getFlightNumber()
-                    , bean.getShipperCompanyId());
-        }
+    public void turnToDetailActivity(TransportListBean.TransportDataBean bean) {
+
+    }
+
+
+    //根据id获取运单信息
+    public void getTaskInfo(TransportListBean.TransportDataBean bean) {
+        mBean = bean;
+        mPresenter = new GetWayBillInfoByIdPresenter(this);
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getId());
     }
 
     /**
@@ -184,8 +187,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         pageCurrent++;
         getData();
     }
-
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -248,5 +249,26 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
+    }
+
+    @Override
+    public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
+        if (null != result) {
+            if (null != mBean) {
+                VerifyStaffActivity.startActivity(getActivity()
+                        , result.getDeclareWaybillAddition().getId()
+                        , result.getAdditionTypeArr()
+                        , result.getDeclareWaybillAddition().getWaybillId()
+                        , mBean.getTaskId()
+                        , result.getSpotFlag()
+                        , result.getFlightNumber()
+                        , result.getShipperCompanyId());
+            }
+        }
+    }
+
+    @Override
+    public void sendPrintMessageResult(String result) {
+
     }
 }

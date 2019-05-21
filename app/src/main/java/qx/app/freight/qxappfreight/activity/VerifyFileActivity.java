@@ -13,13 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.zxing.common.StringUtils;
 import com.ouyben.empty.EmptyLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,7 +28,6 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.presenter.AirlineRequirePresenter;
@@ -48,21 +44,27 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
 
-    private TransportListBean.DeclareWaybillAdditionBean mDeclareData;
+//    private TransportListBean.DeclareWaybillAdditionBean mDeclareData;
 
     private VerifyFileAdapter mAdapter;
-    private List<AddtionInvoicesBean.AddtionInvoices> mList;
+    private List<AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList<>();
     private String mTaskId;
     private String mFilePath;
     private String mSpotFlag;
     private String mFlightNumber;
     private int insCheck; //报检是否合格1合格 0不合格
     private String mShipperCompanyId;
+    private String mAdditionTypeArr;
+    private String mId;
+    private String mWaybillId;
 
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String filePath, String spotFlag, int insCheck, String flightNumber, String shipperCompanyId) {
+    public static void startActivity(Activity context, String waybillId, String id, String additionTypeArr, String taskId, String filePath, String spotFlag, int insCheck, String flightNumber, String shipperCompanyId) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
-        intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
+//        intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
+        intent.putExtra("waybillId", waybillId);
+        intent.putExtra("id", id);
+        intent.putExtra("additionTypeArr", additionTypeArr);
         intent.putExtra("taskId", taskId);
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotFlag", spotFlag);
@@ -88,29 +90,34 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     }
 
     private void initData() {
-        mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
+//        mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
+        mWaybillId = getIntent().getStringExtra("aybillId");
         mTaskId = getIntent().getStringExtra("taskId");
+        mId = getIntent().getStringExtra("id");
+        mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         mFlightNumber = getIntent().getStringExtra("flightNumber");
         mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
         insCheck = getIntent().getIntExtra("insCheck", 0);
         AddtionInvoicesBean addtionInvoicesBean = new AddtionInvoicesBean();
-        if (mDeclareData != null) {
-            String str = mDeclareData.getAddtionInvoices();
-            mList = JSON.parseArray(str, AddtionInvoicesBean.AddtionInvoices.class);
+        if (mAdditionTypeArr != null) {
+            mList = JSON.parseArray(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices.class);
             mMfrvData.setLayoutManager(new LinearLayoutManager(this));
             mAdapter = new VerifyFileAdapter(mList);
             mMfrvData.setAdapter(mAdapter);
-        } else
-            ToastUtil.showToast(this, addtionInvoicesBean.getId());
 
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
-                    List<String> array = new ArrayList<>();
-                    array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
-                    ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
-                }
-        );
+            mAdapter.setOnItemClickListener((adapter, view, position) -> {
+                        List<String> array = new ArrayList<>();
+                        array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
+                        ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
+                    }
+            );
+        } else {
+            ToastUtil.showToast(this, addtionInvoicesBean.getId());
+        }
+
+
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
@@ -119,8 +126,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             case R.id.agree_tv:
                 ToastUtil.showToast(this, "合格");
                 VerifyCargoActivity.startActivity(this,
-                        mDeclareData.getWaybillId(),
-                        mDeclareData.getId(),
+                        mWaybillId,
+                        mId,
                         mFilePath,//图片路径
                         insCheck,//报检是否合格0合格 1不合格
                         0,//资质是否合格0合格 1不合格
@@ -133,8 +140,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             case R.id.refuse_tv:
                 ToastUtil.showToast(this, "不合格");
                 VerifyCargoActivity.startActivity(this,
-                        mDeclareData.getWaybillId(),
-                        mDeclareData.getId(),
+                        mWaybillId,
+                        mId,
                         mFilePath,//图片路径
                         insCheck,//报检是否合格0合格 1不合格
                         1,//资质是否合格0合格 1不合格
@@ -199,7 +206,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     @Override
     public void toastView(String error) {
-        Log.e(error, error);
+        mTvCollectRequire.setText(error);
     }
 
     @Override

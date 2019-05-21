@@ -254,7 +254,7 @@ public class DeclareWaybillBean implements Serializable {
      */
     private String newWaybillCode;
 
-//    private DeclareWaybillAddition declareWaybillAddition;
+    private DeclareWaybillAddition declareWaybillAddition;
 
     /**
      * 板车号
@@ -264,7 +264,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 抽检标志
      */
-    private Integer spotFlag;
+    private String spotFlag;
 
     /**
      * 中转站中文
@@ -293,4 +293,17 @@ public class DeclareWaybillBean implements Serializable {
 
     private Long startUpdateTime;
     private Long endUpdateTime;
+    private String additionTypeArr;
+
+    @Data
+    public static class DeclareWaybillAddition implements Serializable{
+        /**
+         * id : f777b4e451ea3f633f2187c5407102de
+         * waybillId : b77f73826693dc6a3e6245404b7f103f
+         * addtionInvoices : []
+         */
+        private String id;
+        private String waybillId;
+        private String addtionInvoices;
+    }
 }

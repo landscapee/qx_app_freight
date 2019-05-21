@@ -79,19 +79,23 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String mStaffId;
     private String mStaffName;
     private String mImageHead;//头像路径
-    private TransportListBean.DeclareWaybillAdditionBean mDeclareData;
+    private String mAdditionTypeArr;
     private String mTaskId;
     private String fileName;
     private String filePath;
+    private String mWaybillId;
     private String mSpotFlag;
     private String insCheck; //报检是否合格1合格 0不合格
     private String mFlightNumber;//航班号
     private String mShipperCompanyId;
+    private String mId;
     private TestInfoListBean mAcTestInfoListBean = new TestInfoListBean();
 
-    public static void startActivity(Activity context, TransportListBean.DeclareWaybillAdditionBean declareWaybillAdditionBean, String taskId, String spotFlag, String flightNumber, String shipperCompanyId) {
+    public static void startActivity(Activity context,String id,String additionTypeArr, String taskId, String waybillId,String spotFlag, String flightNumber, String shipperCompanyId) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
-        intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
+        intent.putExtra("id", id);
+        intent.putExtra("additionTypeArr", additionTypeArr);
+        intent.putExtra("waybillId", waybillId);
         intent.putExtra("taskId", taskId);
         intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("flightNumber", flightNumber);
@@ -111,7 +115,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         toolbar.setMainTitle(Color.WHITE, "核查报检员身份");
         String text = StringUtil.format(this, R.string.format_certificate_date, "2018-12-12", "2019-12-12");
         mTvCertificateInDate.setText(text);
-        mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
+        mAdditionTypeArr = getIntent().getStringExtra("mAdditionTypeArr");
+        mId = getIntent().getStringExtra("id");
+        mWaybillId = getIntent().getStringExtra("waybillId");
         mTaskId = getIntent().getStringExtra("taskId");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         mFlightNumber = getIntent().getStringExtra("flightNumber");
@@ -121,7 +127,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
-        ((TestInfoPresenter) mPresenter).testInfo(mDeclareData.getWaybillId(), mShipperCompanyId);
+        ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId);
         List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
@@ -157,7 +163,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath, mSpotFlag, 0, mFlightNumber, mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this, mWaybillId,mId,mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 0, mFlightNumber, mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -165,7 +171,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mDeclareData, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this,mWaybillId,mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
