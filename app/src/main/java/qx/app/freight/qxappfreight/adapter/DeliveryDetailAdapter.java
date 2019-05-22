@@ -42,11 +42,15 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             holder.setVisible(R.id.tv_complete_time,true);
             holder.setText(R.id.tv_complete_time, TimeUtils.date2Tasktime6(bean.getOutStorageTime()));
         }
+        else
+            holder.setGone(R.id.tv_complete_time,false);
 
         if (bean.getWaybillStatus()==5){
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
             holder.setVisible(R.id.tv_put_num,true);
+
+
 
         }else if (bean.getWaybillStatus() ==6){
             holder.setVisible(R.id.tv_put_num,false);

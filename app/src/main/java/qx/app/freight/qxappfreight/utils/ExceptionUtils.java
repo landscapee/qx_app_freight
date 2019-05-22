@@ -56,104 +56,22 @@ public class ExceptionUtils {
     public static String typeToString(int type) {
         String result = "未知类型";
         switch (type) {
-            case 1:
+            case 2:
                 result = "死亡";
                 break;
-            case 2:
+            case 4:
                 result = "破损";
                 break;
-            case 3:
-                result = "腐烂";
-                break;
-            case 4:
-                result = "泄露";
-                break;
-            case 5:
-                result = "无标签";
-                break;
-
-        }
-        return result;
-    }
-
-    public static String typeToString2(int type) {
-        String result = "未知类型";
-        switch (type) {
-            case 1:
-                result = "更名类不正常";
-                break;
-            case 2:
-                result = "死亡";
-                break;
-            case 3:
-                result = "确已装机";
-                break;
-            case 4:
-                result = "货物破损";
-                break;
-            case 5:
-                result = "多收邮路单";
-                break;
-            case 6:
-                result = "多收货运单";
-                break;
-            case 7:
-                result = "多收货物";
-                break;
-            case 8:
-                result = "多收邮袋";
-                break;
-            case 9:
-                result = "货物破损";
-                break;
             case 10:
-                result = "腐烂丢弃";
-                break;
-            case 11:
-                result = "扣货";
-                break;
-            case 12:
-                result = "有邮袋无邮路单";
-                break;
-            case 13:
-                result = "少收货运单";
-                break;
-            case 14:
-                result = "少收货物";
-                break;
-            case 15:
-                result = "有邮路单无邮袋";
+                result = "腐烂";
                 break;
             case 16:
                 result = "无标签";
                 break;
-            case 17:
-                result = "临时拉下货物";
-                break;
-            case 18:
-                result = "其他不正常";
-                break;
             case 19:
-                result = "漏卸货物/运输文件";
-                break;
-            case 20:
-                result = "分批不正常";
-                break;
-            case 21:
-                result = "货物不齐";
-                break;
-            case 22:
-                result = "漏装货物/文件";
-                break;
-            case 23:
-                result = "退单退货";
-                break;
-            case 24:
-                result = "无人提取";
+                result = "漏卸";
                 break;
         }
         return result;
     }
-
-
 }

@@ -121,7 +121,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     private void initData() {
         tvId.setOnClickListener(v -> {
-            startActivity(new Intent(this,WayBillQueryActivity.class));
+            startActivity(new Intent(this, WayBillQueryActivity.class));
         });
         counterUbnormalGoodsList = new ArrayList<>();
         inventoryDetailEntityList = new ArrayList<>();
@@ -159,8 +159,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
                     public void confirm(int position2) {
-                        position2++;
-                        counterUbnormalGoodsList.get(posstion).setUbnormalType(position2);
+                        int[] intTypes = {2, 4, 10, 19, 16};
+                        counterUbnormalGoodsList.get(posstion).setUbnormalType(intTypes[position2]);
                         mAdapter.notifyDataSetChanged();
                     }
                 });
@@ -169,14 +169,14 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         });
         //第二个列表的初始化
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList,1);
+        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList, 1);
         infoAdapter.setInventoryInfoListener(new InventoryInfoAdapter.InventoryInfoListener() {
             @Override
             public void onLook(int position) {
                 ExceptionDetailDialog detailDialog = new ExceptionDetailDialog.Builder()
                         .inventoryDetailEntity(inventoryDetailEntityList
                                 .get(position)).context(AddClearStorageActivity.this).build();
-                detailDialog.show(getSupportFragmentManager(),"222");
+                detailDialog.show(getSupportFragmentManager(), "222");
             }
 
             @Override
@@ -221,9 +221,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         inventoryUbnormalGoods.setCreateUserName(UserInfoSingle.getInstance().getUsername());
         inventoryUbnormalGoods.setUploadFilePath(new ArrayList<>());
         //填运单号
-        if(TextUtils.isEmpty(tvId.getText().toString().trim())){
+        if (TextUtils.isEmpty(tvId.getText().toString().trim())) {
             inventoryUbnormalGoods.setWaybillCode(null);
-        }else{
+        } else {
             inventoryUbnormalGoods.setWaybillCode(tvId.getText().toString().trim());
         }
         counterUbnormalGoodsList.add(inventoryUbnormalGoods);
@@ -232,12 +232,12 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
 
     /**
-     *  提交填好的异常情况
+     * 提交填好的异常情况
      */
     private void commitInfo() {
-        if (!TextUtils.isEmpty(tvId.getText())){
-            for (InventoryDetailEntity item:inventoryDetailEntityList) {
-                if (item.getWaybillCode().equals(tvId.getText())){
+        if (!TextUtils.isEmpty(tvId.getText())) {
+            for (InventoryDetailEntity item : inventoryDetailEntityList) {
+                if (item.getWaybillCode().equals(tvId.getText())) {
                     ToastUtil.showToast("当前运单号已录入");
                     return;
                 }
@@ -262,10 +262,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         detailEntity.setHandlerName(UserInfoSingle.getInstance().getUsername());
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
         try {
-            List<InventoryUbnormalGoods> goodsList =  Tools.deepCopy(counterUbnormalGoodsList);
+            List<InventoryUbnormalGoods> goodsList = Tools.deepCopy(counterUbnormalGoodsList);
             detailEntity.setInventoryUbnormalGoods(goodsList);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -282,7 +281,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
      * 总提交
      */
     private void submit() {
-        if (inventoryDetailEntityList.size() ==0){
+        if (inventoryDetailEntityList.size() == 0) {
             ToastUtil.showToast("提交数据不能为空");
             return;
         }
