@@ -34,6 +34,16 @@
             android:focusableInTouchMode="true"
             android:layout_weight="1"
             android:gravity="right" />
+        <EditText
+            android:id="@+id/edt_id_1"
+            style="@style/public_tv_16sp_3"
+            android:background="@color/transparent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_weight="1"
+            android:gravity="right" />
     </LinearLayout>
 
     <!-- 实际分拣 -->

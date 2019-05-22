@@ -75,6 +75,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     @BindView(R.id.edt_id)
     EditText idEdt;//运单号
+    @BindView(R.id.edt_id_1)
+    EditText idEdt2;//运单号
     @BindView(R.id.edt_real_sort_num)
     EditText sortingNumEdt;//实际分拣数
     @BindView(R.id.tv_reservoir)
