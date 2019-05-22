@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.model.ReservoirModel;
@@ -19,6 +20,24 @@ public class ReservoirPresenter extends BasePresenter {
             @Override
             public void onSuccess(ReservoirBean result) {
                 ((ReservoirContract.reservoirView) mRequestView).reservoirResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+
+        });
+    }
+
+    public void getAirWaybillPrefix(String str) {
+        mRequestView.showNetDialog();
+        ((ReservoirModel) mRequestModel).getAirWaybillPrefix(str, new IResultLisenter<GetAirWaybillPrefixBean>() {
+            @Override
+            public void onSuccess(GetAirWaybillPrefixBean result) {
+                ((ReservoirContract.reservoirView) mRequestView).getAirWaybillPrefixResult(result);
                 mRequestView.dissMiss();
             }
 

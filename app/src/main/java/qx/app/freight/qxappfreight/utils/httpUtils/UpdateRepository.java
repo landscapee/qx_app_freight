@@ -48,6 +48,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
@@ -401,6 +402,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> getWeight(String pbName) {
         return nothingDatatransform(getService().getWeight(pbName));
+    }
+
+    /****
+     * 取重
+     * @param iata
+     * @return
+     */
+    public Observable<GetAirWaybillPrefixBean> getAirWaybillPrefix(String iata) {
+        return transform(getService().getAirWaybillPrefix(iata));
     }
 
     /****

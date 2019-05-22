@@ -21,4 +21,16 @@ public class ReservoirModel extends BaseModel implements ReservoirContract.reser
 
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void getAirWaybillPrefix(String iata, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getAirWaybillPrefix(iata)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+
+        mDisposableList.add(subscription);
+    }
 }

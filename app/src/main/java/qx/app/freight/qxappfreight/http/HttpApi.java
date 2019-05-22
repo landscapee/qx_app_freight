@@ -47,6 +47,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
@@ -232,6 +233,11 @@ public interface HttpApi {
     //取重
     @GET("service-product-receivecargo/rc/getWeight/{pbName}")
     Observable<BaseEntity<Object>> getWeight(@Path("pbName") String pbName);
+
+
+    //获取航司对应的运单前缀信息
+    @GET("service-base-flight/f-flight/getAirWaybillPrefix/{iata}")
+    Observable<BaseEntity<GetAirWaybillPrefixBean>> getAirWaybillPrefix(@Path("iata") String iata);
 
     //组板提交
     @POST("service-product-cargotallying/fightScooter/submit")
