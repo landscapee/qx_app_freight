@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -16,6 +18,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -32,15 +35,24 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     RecyclerView rView;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
+    @BindView(R.id.consignee)
+    TextView tvPickUpName;
+    @BindView(R.id.consignee_phone)
+    TextView tvPickUpPhone;
+    @BindView(R.id.consignee_card)
+    TextView tvPickUpCard;
+
 
     private DeliveryDetailAdapter mAdapter;
     private CustomToolbar toolbar;
-    private String billId; //流水号
-    private String taskId;
+//    private String billId; //流水号
+//    private String taskId;
     private int nowPosition;
 
-    private int num1;
-    private int num2;
+//    private int num1;
+//    private int num2;
+
+    TransportDataBase bean = null;
 
     private List<WaybillsBean> mList ;
 
@@ -60,11 +72,23 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     private void initView() {
-        billId = getIntent().getStringExtra("billId");
-        taskId = getIntent().getStringExtra("taskId");
-        num1 = getIntent().getIntExtra("num1",0);
-        num2 = getIntent().getIntExtra("num2",0);
-        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
+//        billId = getIntent().getStringExtra("billId");
+//        taskId = getIntent().getStringExtra("taskId");
+//        num1 = getIntent().getIntExtra("num1",0);
+//        num2 = getIntent().getIntExtra("num2",0);
+
+        bean = (TransportDataBase) getIntent().getSerializableExtra("DATA");
+
+        if (bean == null){
+
+            finish();
+        }
+        tvPickUpName.setText(bean.getConsignee());
+        tvPickUpPhone.setText(bean.getConsigneePhone());
+        tvPickUpCard.setText(bean.getConsigneeIdentityCard());
+
+//        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
+        toolbar.setMainTitle(Color.WHITE,"提货");
         mPresenter = new ArrivalDeliveryInfoPresenter(this);
         rView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
@@ -87,7 +111,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private void getData() {
 
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setBillId(billId);
+        entity.setBillId(bean.getSerialNumber());
         ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
     }
     //出库
@@ -116,8 +140,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     //完成
     private void deliveryComplet(){
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCounterbillId(billId);
-        entity.setTaskId(taskId);
+        entity.setCounterbillId(bean.getSerialNumber());
+        entity.setTaskId(bean.getTaskId());
         entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
         ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);
     }

@@ -27,11 +27,16 @@ public class FlightListAdapter extends BaseMultiItemQuickAdapter<FlightLuggageBe
                 .setText(R.id.tv_flight_place,item.getSeat())
                 .setText(R.id.tv_arrive_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getScheduleTime()) , TimeUtils.getDay((item.getScheduleTime()))));
 
-        if (TextUtils.isEmpty(item.getLuggageScanningUser())){
-            helper.setGone(R.id.iv_lock,false);
-        }else {
-            helper.setGone(R.id.iv_lock,true);
-        }
+//        if (TextUtils.isEmpty(item.getLuggageScanningUser())){
+//            helper.setGone(R.id.iv_lock,false);
+//        }else {
+//            helper.setGone(R.id.iv_lock,true);
+//        }
+//        if (item.getFlightIndicator().equals("D")){
+//            helper.setGone(R.id.iv_lock,false);
+//        }else {
+//            helper.setGone(R.id.iv_lock,true);
+//        }
 
         switch (helper.getItemViewType()){
             case 2:

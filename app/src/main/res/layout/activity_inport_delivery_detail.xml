@@ -3,27 +3,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#EFF2F3"
+    android:orientation="vertical"
     tools:context=".activity.InportDeliveryDetailActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/shape_rect_white"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/ti1" />
+
+            <TextView
+                android:id="@+id/consignee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                tools:text="四川省成都机场大厅" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/consignee_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:drawableStart="@mipmap/ic_person_mobil"
+                android:drawablePadding="5dp"
+                android:textColor="@color/color_676c8e"
+                android:textSize="14sp"
+                tools:text="13888888888" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/consignee_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@mipmap/ic_person_card"
+                android:drawablePadding="5dp"
+                android:textColor="@color/color_676c8e"
+                android:textSize="14sp"
+                tools:text="511289199899121234" />
+        </LinearLayout>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/r_view"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        />
+        android:layout_weight="1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/btn_confirm"
+            style="@style/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="确定"
-            style="@style/btn_submit"
-            />
+            android:text="确定" />
     </RelativeLayout>
 </LinearLayout>
