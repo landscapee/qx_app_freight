@@ -103,7 +103,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     public void businessLogic(Bundle savedInstanceState) {
         customToolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        customToolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", listener->{
+        customToolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", listener -> {
             finish();
         });
         //新增页面的逻辑， 是修改还是新增？ TYPE == ADD / UPDATE
@@ -124,10 +124,10 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
             //显示运单号， 实际分拣数，库区，库位，是否转关，备注
             idEdt.setText(mInWaybillRecord.getWaybillCode() + "");
-            sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal()== null?"": mInWaybillRecord.getTallyingTotal()+"");
+            sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() == null ? "" : mInWaybillRecord.getTallyingTotal() + "");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
-            if(mInWaybillRecord.getTransit() != null){
+            if (mInWaybillRecord.getTransit() != null) {
                 locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
             }
             remarkEdt.setText("" + mInWaybillRecord.getRemark());
@@ -168,18 +168,18 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
                     public void confirm(int position2) {
-                        position2++;
+                        int[] intTypes = {2, 4, 10, 19, 16};
                         Log.e("dime", "异常：type=" + position2);
                         if (counterUbnormalGoodsList.get(posstion).getUbnormalType() == null) {
                             List<Integer> ubnormalType = new ArrayList<>(1);
-                            ubnormalType.set(0, position2);
+                            ubnormalType.set(0, intTypes[position2]);
                             counterUbnormalGoodsList.get(posstion).setUbnormalType(ubnormalType);
                         } else if (counterUbnormalGoodsList.get(posstion).getUbnormalType().size() == 0) {
-                            counterUbnormalGoodsList.get(posstion).getUbnormalType().add(0, position2);
+                            counterUbnormalGoodsList.get(posstion).getUbnormalType().add(0, intTypes[position2]);
                         } else {
-                            counterUbnormalGoodsList.get(posstion).getUbnormalType().set(0, position2);
+                            counterUbnormalGoodsList.get(posstion).getUbnormalType().set(0, intTypes[position2]);
                         }
-                        Log.e("dime", "组装好的数据呢：" +counterUbnormalGoodsList.get(posstion).getUbnormalType().toString());
+                        Log.e("dime", "组装好的数据呢：" + counterUbnormalGoodsList.get(posstion).getUbnormalType().toString());
                         Log.e("dime", "组装好的数据呢：位置信息：" + posstion);
                         mAdapter.notifyItemChanged(posstion);
                     }
@@ -229,9 +229,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 ToastUtil.showToast("请输入实际分拣数！");
                 return;
             }
-            if (TextUtils.isEmpty(remarkEdt.getText().toString().trim())){
+            if (TextUtils.isEmpty(remarkEdt.getText().toString().trim())) {
                 mInWaybillRecord.setRemark("");
-            }else{
+            } else {
                 mInWaybillRecord.setRemark(remarkEdt.getText().toString().trim());
             }
             mInWaybillRecord.setTallyingTotal(Integer.valueOf(sortingNumEdt.getText().toString().trim()));
