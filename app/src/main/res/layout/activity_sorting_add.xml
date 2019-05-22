@@ -23,27 +23,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运单号" />
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"/>
 
         <EditText
             android:id="@+id/edt_id"
             style="@style/public_tv_16sp_3"
-            android:background="@color/transparent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:background="@drawable/shape_dynamic_black"
+            android:layout_width="60dp"
+            android:layout_height="@dimen/dp_30"
+            android:inputType="number"
+            android:maxLength="3"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_weight="1"
-            android:gravity="right" />
+            android:gravity="center" />
+        <TextView
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="-"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/edt_id_1"
             style="@style/public_tv_16sp_3"
-            android:background="@color/transparent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:background="@drawable/shape_dynamic_black"
+            android:layout_width="120dp"
+            android:inputType="number"
+            android:maxLength="8"
+            android:hint="输入8位数字"
+            android:layout_height="@dimen/dp_30"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_weight="1"
-            android:gravity="right" />
+            android:gravity="center" />
     </LinearLayout>
 
     <!-- 实际分拣 -->

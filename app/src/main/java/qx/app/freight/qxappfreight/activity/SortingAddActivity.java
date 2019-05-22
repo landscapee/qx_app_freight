@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.beidouapp.et.client.callback.IFileReceiveListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,6 +73,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     InWaybillRecord mInWaybillRecord;//本页面的数据,这是最终生成的数据哦， 很关键
     int INDEX;
     String TYPE = "";
+    String flightNo = "";
     List<CounterUbnormalGoods> counterUbnormalGoodsList;//异常数组
     //是否转关 0 否 1 是
     int isTransit;//是否转关
@@ -110,11 +115,17 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         });
         //新增页面的逻辑， 是修改还是新增？ TYPE == ADD / UPDATE
         TYPE = getIntent().getStringExtra("TYPE");
+
         INDEX = getIntent().getIntExtra("INDEX", 0);
 
         if (TYPE.equals(SortingActivity.TYPE_ADD)) {
             Log.e("dime", "进入了addd");
             //如果是新增数据， 直接初始化
+            flightNo = getIntent().getStringExtra("FLIGHTNo");
+            if (!TextUtils.isEmpty(flightNo)) {
+                mPresenter = new ReservoirPresenter(this);
+                ((ReservoirPresenter)mPresenter).getAirWaybillPrefix(flightNo.substring(0,2));
+            }
             customToolbar.setMainTitle(Color.WHITE, "新增");
             mInWaybillRecord = new InWaybillRecord();
             counterUbnormalGoodsList = new ArrayList<>();
@@ -222,10 +233,16 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         //提交按钮 点击事件
         submitBtn.setOnClickListener(listen -> {
             //将组装好的数据返回给前一个页面
-            if (TextUtils.isEmpty(idEdt.getText().toString().trim())) {
+            if (TextUtils.isEmpty(idEdt.getText().toString().trim())&&TextUtils.isEmpty(idEdt2.getText().toString().trim())) {
                 mInWaybillRecord.setWaybillCode("");
             } else {
-                mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim());
+                if (!TextUtils.isEmpty(idEdt.getText().toString().trim())&&isEditChange){
+                    mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim()+"-"+idEdt2.getText().toString().trim());
+                }else {
+                    ToastUtil.showToast("请输入正确的运单号");
+                    return;
+                }
+
             }
             if (TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入实际分拣数！");
@@ -248,6 +265,40 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             setResult(RESULT_OK, intent);
             finish();
         });
+
+        idEdt2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                editChange(s.toString().trim());
+            }
+
+        });
+    }
+
+    private boolean isEditChange=false;
+    private void editChange(String ss) {
+        if (!TextUtils.isEmpty(ss)&&ss.length() ==8){
+            String s1 = ss.substring(0,7);
+            String s2 = ss.substring(7,8);
+            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
+        }else {
+            isEditChange =false;
+        }
+        if (isEditChange){
+            idEdt2.setTextColor(Color.parseColor("#888888"));
+        }else {
+            idEdt2.setTextColor(Color.parseColor("#ff0000"));
+        }
     }
 
     /**
@@ -308,7 +359,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     @Override
     public void getAirWaybillPrefixResult(GetAirWaybillPrefixBean getAirWaybillPrefixBean) {
-
+        idEdt.setText(getAirWaybillPrefixBean.getAwbPrefix());
     }
 
     @Override
