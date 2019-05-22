@@ -241,9 +241,13 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
-
         mListTemp.clear();
-        mListTemp.addAll(transportListBeans.getData());
+
+        for (TransportDataBase item:transportListBeans.getData()){
+            if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")){
+                mListTemp.add(item);
+            }
+        }
         seachWithNum();
     }
 }

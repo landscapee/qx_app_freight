@@ -59,9 +59,7 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
             Log.e("dime", "刷新数据嘛，typeException=" + typeExcetion);
             helper.setText(R.id.tv_exception_type_choose, ExceptionUtils.typeToString(typeExcetion));
             //如果是件数异常，显示个数
-            if (typeExcetion == 1) {
-                ((EditText) helper.getView(R.id.edit_exception_num)).setText((item.getUbnormalNum() == null ? "0" : item.getUbnormalNum()) + "");
-            }
+            ((EditText) helper.getView(R.id.edit_exception_num)).setText((item.getUbnormalNum() == null ? "0" : item.getUbnormalNum()) + "");
         }
         //选择异常类型
         helper.getView(R.id.tv_exception_type_choose).setOnClickListener(listener -> {
@@ -136,7 +134,7 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
                 relativeLayout.addView(imageButton);
                 ((LinearLayout) helper.getView(R.id.ll_exception_img_parent)).addView(relativeLayout);
             }
-        }else{
+        } else {
             Log.e("dime", "异常图片长度：为空");
         }
 

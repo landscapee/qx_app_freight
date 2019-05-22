@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
@@ -245,7 +246,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             setResult(RESULT_OK, intent);
             finish();
         });
-
     }
 
     /**
@@ -302,6 +302,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 mInWaybillRecord.setWarehouseLocation("库位未知");
             }
         });
+    }
+
+    @Override
+    public void getAirWaybillPrefixResult(GetAirWaybillPrefixBean getAirWaybillPrefixBean) {
+
     }
 
     @Override

@@ -57,6 +57,29 @@ public class ExceptionUtils {
         String result = "未知类型";
         switch (type) {
             case 1:
+                result = "死亡";
+                break;
+            case 2:
+                result = "破损";
+                break;
+            case 3:
+                result = "腐烂";
+                break;
+            case 4:
+                result = "泄露";
+                break;
+            case 5:
+                result = "无标签";
+                break;
+
+        }
+        return result;
+    }
+
+    public static String typeToString2(int type) {
+        String result = "未知类型";
+        switch (type) {
+            case 1:
                 result = "更名类不正常";
                 break;
             case 2:
@@ -131,4 +154,6 @@ public class ExceptionUtils {
         }
         return result;
     }
+
+
 }
