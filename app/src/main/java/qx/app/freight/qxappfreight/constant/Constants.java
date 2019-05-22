@@ -5,6 +5,8 @@ import android.os.Environment;
 
 import java.io.File;
 
+import qx.app.freight.qxappfreight.R;
+
 public class Constants {
     public static final String APP_NAME = "智慧货运_";
     //====================================================角色分类======================================================
@@ -155,4 +157,27 @@ public class Constants {
     public static final String TP_TYPE_UNLOAD_K = "unload";//宽体机 卸机保障
 
     public static final String TP_TYPE_SINGLE = "first_baggage";//单板行李任务
+
+    /**
+     *  装卸机 运输 结载 步骤操作code
+     */
+    public static final String LOAD_ACCEPT = "PassengerLoadReceived";	//结载领受	R	1
+    public static final String LOAD_END = "PassengerLoadSend";	//结载 结束 （舱单送达）
+    public static final String TP_ACCEPT = "CargoOutTransportReceived";	//运输接受
+    public static final String TP_ARRIVED = "CargoOutTransportArrived";	//运输到位
+    public static final String TP_START = "CargoOutTransportStart";	//运输开始
+    public static final String TP_END = "CargoOutTransportEnd";	//运输 结束
+    public static final String PLANE_LOAD_ACCEPT = "FreightLoadReceived";	//装机接受
+    public static final String PLANE_LOAD_ARRIVED = "FreightLoadArrived";	//装机到位
+    public static final String PLANE_LOAD_OPEN = "FreightLoadStart";	//装机 开启舱门
+    public static final String PLANE_LOAD_START = "FreightLoadBegin";	//开始装机
+    public static final String PLANE_LOAD_END = "FreightLoadFinish";	//装机结束
+    public static final String PLANE_LOAD_CLOSE = "FreightLoadEnd";	//装机 关闭舱门
+    public static final String PLANE_UNLOAD_ACCEPT = "FreightUnloadReceived";	//卸机接受
+    public static final String PLANE_UNLOAD_ARRIVED = "FreightUnloadArrived";	//卸机到位
+    public static final String PLANE_UNLOAD_OPEN = "FreightUnloadStart";	//卸机开启舱门
+    public static final String PLANE_UNLOAD_START = "FreightUnloadBegin";	//开始卸机
+    public static final String PLANE_UNLOAD_END = "FreightUnloadFinish";	//卸机结束
+    public static final String PLANE_UNLOAD_CLOSE = "FreightUnloadEnd";	//卸机关闭舱门
+
 }

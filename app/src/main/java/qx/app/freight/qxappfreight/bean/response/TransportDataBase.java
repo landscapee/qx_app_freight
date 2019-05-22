@@ -85,8 +85,7 @@ public class TransportDataBase implements Serializable {
     private long flightDate;
     private Object originatingStation;
     private Object destinationStation;
-    private String consignee;
-    private String consigneePhone;
+
     private String consigneePostcode;
     private String consigneeAddress;
     private String specialCargoCode;
@@ -144,5 +143,23 @@ public class TransportDataBase implements Serializable {
     private String role;//角色
     private String cargoCn;//品名
     private String packagingType;
+
+    private String consignee;
+    private String consigneePhone;
+    private String consigneeIdentityCard;
+    /**
+     * 提货人名
+     * */
+    private String receiverName;
+
+    /**
+     * 提货人电话
+     * */
+    private String receiverPhone;
+
+    /**
+     * 提货人身份证
+     * */
+    private String receiverIdentityCard;
 
 }

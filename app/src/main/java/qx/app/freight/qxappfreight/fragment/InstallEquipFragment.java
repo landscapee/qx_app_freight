@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
@@ -63,8 +64,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private int mCurrentSize = 10;
     private static final String[] mStepNamesInstall = {"领受", "到位", "开启舱门", "装机", "关闭舱门"};
     private static final String[] mStepNamesUninstall = {"领受", "到位", "开启舱门", "卸机", "关闭舱门"};
-    private static final String[] mStepCodeInstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_load_begin", "FreightPass_close"};
-    private static final String[] mStepCodeUninstall = {"FreightPass_receive", "FreightPass_ready", "FreightPass_open", "FreightPass_unload_begin", "FreightPass_close"};
+    private static final String[] mStepCodeInstall = {Constants.PLANE_LOAD_ACCEPT, Constants.PLANE_LOAD_ARRIVED, Constants.PLANE_LOAD_OPEN, Constants.PLANE_LOAD_START, Constants.PLANE_LOAD_CLOSE};
+    private static final String[] mStepCodeUninstall = {Constants.PLANE_UNLOAD_ACCEPT,  Constants.PLANE_UNLOAD_ARRIVED, Constants.PLANE_UNLOAD_OPEN, Constants.PLANE_UNLOAD_START, Constants.PLANE_UNLOAD_CLOSE};
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;

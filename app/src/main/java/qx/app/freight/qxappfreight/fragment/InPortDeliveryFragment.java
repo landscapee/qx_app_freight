@@ -169,10 +169,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private void turnToDetailActivity(TransportDataBase bean) {
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
-                .putExtra("num1", bean.getOutboundNumber())
-                .putExtra("num2", bean.getWaybillCount())
-                .putExtra("taskId", bean.getTaskId())
-                .putExtra("billId", bean.getSerialNumber()));
+//                .putExtra("num1", bean.getOutboundNumber())
+//                .putExtra("num2", bean.getWaybillCount())
+//                .putExtra("taskId", bean.getTaskId())
+//                .putExtra("billId", bean.getSerialNumber())
+                .putExtra("DATA",bean));
     }
 
     /**

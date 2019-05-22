@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightOfScooterBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.TransportBeginContract;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
@@ -348,7 +349,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
             step.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
             step.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
-            step.setOperationCode("CargoOutTransportStart");
+            step.setOperationCode(Constants.TP_START);
             step.setUserName(UserInfoSingle.getInstance().getUsername());
             step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
             step.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -394,7 +395,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
             step.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
             step.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
-            step.setOperationCode("CargoOutTransportEnd");
+            step.setOperationCode(Constants.TP_END);
             step.setUserName(UserInfoSingle.getInstance().getUsername());
             step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
             step.setUserId(UserInfoSingle.getInstance().getUserId());
