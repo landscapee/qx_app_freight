@@ -181,7 +181,9 @@
         android:background="@drawable/shape_rect_gray_bottom"
         android:paddingBottom="@dimen/dp_13"
         android:paddingRight="@dimen/dp_13"
-        android:paddingTop="@dimen/dp_13">
+        android:paddingTop="@dimen/dp_13"
+        android:visibility="gone"
+        >
 
         <TextView
             style="@style/public_tv_16sp"
