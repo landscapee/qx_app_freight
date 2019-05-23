@@ -18,7 +18,7 @@ public abstract class BaseRepository {
                         if (baseEntity.getData() != null) {
                             return Observable.just(baseEntity.getData());
                         } else
-                            throw new DefaultException("朱宇航傻逼");
+                            throw new DefaultException("服务器data返回为null");
                     } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
                         ToastUtil.showToast(baseEntity.getMessage());
                         throw new DefaultException("318");
