@@ -127,6 +127,9 @@ public class LaserScanActivity extends BaseActivity {
                 .show();
     }
 
+    /**
+     * 设置页面标题
+     */
     private void initTitle() {
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
@@ -164,6 +167,18 @@ public class LaserScanActivity extends BaseActivity {
             getBackMessage(mScooterCode);
         } else {
             Log.e("resultCode", "收货页面不是200");
+        }
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (!TextUtils.isEmpty(result.getData())) {
+            //板车号
+            mScooterCode = result.getData();
+            getBackMessage(mScooterCode);
         }
     }
 

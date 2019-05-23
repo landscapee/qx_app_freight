@@ -1,11 +1,13 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +27,18 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.SortingInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
+import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
+import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -93,6 +102,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         transportListBean = (TransportDataBase) intent.getSerializableExtra("TASK_INFO");
         //从前一个页面传递过来的数据
@@ -114,18 +124,19 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         });
         //右侧添加按钮
         toolbar.setRightIconView(View.VISIBLE, R.mipmap.add_bg, listener -> {
-            //跳转到 ->新增页面
-            if (resultBean == null) {
-                return;
-            }
-            if (resultBean.getCloseFlag() == 1) {
-                ToastUtil.showToast("运单已经关闭，无法编辑！");
-                return;
-            }
-            Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
-            intentAdd.putExtra("TYPE", TYPE_ADD);
-            intentAdd.putExtra("FLIGHTNo", flightNo);
-            startActivityForResult(intentAdd, 1);
+//            //跳转到 ->新增页面
+//            if (resultBean == null) {
+//                return;
+//            }
+//            if (resultBean.getCloseFlag() == 1) {
+//                ToastUtil.showToast("运单已经关闭，无法编辑！");
+//                return;
+//            }
+//            Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
+//            intentAdd.putExtra("TYPE", TYPE_ADD);
+//            intentAdd.putExtra("FLIGHTNo", flightNo);
+//            startActivityForResult(intentAdd, 1);
+            showDialog();
         });
         //初始化presenter
         mPresenter = new InWaybillRecordPresenter(this);
@@ -168,6 +179,33 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
 
+    /**
+     * 新增dialog
+     */
+    private void showDialog() {
+        InputCodeDialog dialog1 = new InputCodeDialog(this);
+        dialog1.setTitle("手动输入")
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new InputCodeDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+
+                        } else {
+                            if (TextUtils.isEmpty(dialog1.getMessage())){
+                                ToastUtil.showToast("输入为空");
+                            }else {
+                                turnToAddActivity(dialog1.getMessage());
+                            }
+
+                        }
+                    }
+                })
+                .show();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -305,5 +343,74 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    private String newCode;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        newCode = "";
+        String code = result.getData();
+        Log.e("22222", "运单号" + code);
+        if (!TextUtils.isEmpty(code)) {
+            if (code.startsWith("DN")){
+                newCode = "DN-"+code.substring(2,10);
+            }else {
+                if (newCode.length()>11){
+                    newCode =editChange(code);
+                }else {
+                    ToastUtil.showToast("无效的运单号");
+                    return;
+                }
+            }
+        }else {
+            ToastUtil.showToast("无效的运单号");
+        }
+        turnToAddActivity(newCode);
+    }
+
+    /**
+     * 跳转到新增界面
+     */
+    private void turnToAddActivity(String code){
+        boolean isEditChange;
+        String[] parts = code.split("-");
+        String ss = parts[1];
+        String s1=""; //后8位的前7位
+        String s2=""; //后8位的最后1位
+        s1 = ss.substring(0,7);
+        s2 = ss.substring(7,8);
+        if (StringUtil.isDouble(s1)&&StringUtil.isDouble(s2)){
+            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
+        }else {
+            isEditChange=false;
+        }
+
+        if (!isEditChange){
+            ToastUtil.showToast("无效的运单号");
+            return;
+        }
+        //跳转到 ->新增页面
+        if (resultBean == null) {
+            ToastUtil.showToast("运单信息出错，请重新请求");
+            return;
+        }
+        if (resultBean.getCloseFlag() == 1) {
+            ToastUtil.showToast("运单已经关闭，无法编辑！");
+            return;
+        }
+        Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
+        intentAdd.putExtra("TYPE", TYPE_ADD);
+        intentAdd.putExtra("newCode", code);
+        startActivityForResult(intentAdd, 1);
+    }
+
+    //判断运单号后缀是否符合规则
+    private String  editChange(String ss) {
+        String s0=ss.substring(0, 3); //前3位
+        String s00=ss.substring(3, 11); //后8位
+        return s0+"-"+s00;
     }
 }
