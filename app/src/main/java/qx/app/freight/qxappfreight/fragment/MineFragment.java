@@ -145,9 +145,11 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 loginOut();
                 break;
             case R.id.rl_message:
+                //跳转到消息提醒
                 startActivity(new Intent(getContext(), MessageActivity.class));
                 break;
             case R.id.rl_notice:
+                //跳转到通知公告
                 startActivity(new Intent(getContext(), NoticeActivity.class));
                 break;
         }

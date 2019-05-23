@@ -237,7 +237,7 @@ public interface HttpApi {
 
     //获取航司对应的运单前缀信息
     @GET("service-base-flight/f-flight/getAirWaybillPrefix")
-    Observable<BaseEntity<GetAirWaybillPrefixBean>> getAirWaybillPrefix(@Query("iata") String iata);
+    Observable<BaseEntity<Object>> getAirWaybillPrefix(@Query("iata") String iata);
 
     //组板提交
     @POST("service-product-cargotallying/fightScooter/submit")

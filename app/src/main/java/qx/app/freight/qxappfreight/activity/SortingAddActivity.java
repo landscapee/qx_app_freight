@@ -35,20 +35,17 @@ import qx.app.freight.qxappfreight.adapter.SortingAddAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
-import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
-import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog2;
 import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
+import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
-import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
@@ -78,6 +75,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     //是否转关 0 否 1 是
     int isTransit;//是否转关
 
+    List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
+
     @BindView(R.id.edt_id)
     EditText idEdt;//运单号
     @BindView(R.id.edt_id_1)
@@ -96,6 +95,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     Button addItemBtn;//新增异常
     @BindView(R.id.tv_remark)
     EditText remarkEdt;//备注
+    @BindView(R.id.tv_overweight)
+    TextView tvOverweight;//备注
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -122,12 +123,14 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             Log.e("dime", "进入了addd");
             //如果是新增数据， 直接初始化
             flightNo = getIntent().getStringExtra("FLIGHTNo");
+            //根据航班号查运单前缀
             if (!TextUtils.isEmpty(flightNo)) {
                 mPresenter = new ReservoirPresenter(this);
                 ((ReservoirPresenter)mPresenter).getAirWaybillPrefix(flightNo.substring(0,2));
             }
             customToolbar.setMainTitle(Color.WHITE, "新增");
             mInWaybillRecord = new InWaybillRecord();
+            rcInfoOverweight = new ArrayList <>();
             counterUbnormalGoodsList = new ArrayList<>();
         } else if (TYPE.equals(SortingActivity.TYPE_UPDATE)) {
             Log.e("dime", "进入了UPDATE");
@@ -135,8 +138,25 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             customToolbar.setMainTitle(Color.WHITE, "修改");
             mInWaybillRecord = (InWaybillRecord) getIntent().getSerializableExtra("DATA");
             counterUbnormalGoodsList = mInWaybillRecord.getCounterUbnormalGoodsList();
+
+            //初始化超重重量
+            rcInfoOverweight = mInWaybillRecord.getOverWeightList();
+            int overweight = 0;
+            for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
+                overweight += mRcInfoOverweight.getOverWeight();
+            }
+            tvOverweight.setText(overweight+"kg");
+
             //显示运单号， 实际分拣数，库区，库位，是否转关，备注
-            idEdt.setText(mInWaybillRecord.getWaybillCode() + "");
+            if (TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())){
+
+            }else {
+                isEditChange =true;
+                String[] parts = mInWaybillRecord.getWaybillCode().split("-");
+                idEdt.setText(parts[0]);
+                idEdt2.setText(parts[1]);
+            }
+
             sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() == null ? "" : mInWaybillRecord.getTallyingTotal() + "");
             reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
@@ -259,13 +279,14 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 return;
             }
             mInWaybillRecord.setCounterUbnormalGoodsList(counterUbnormalGoodsList);
+            mInWaybillRecord.setOverWeightList(rcInfoOverweight);
             Intent intent = new Intent(SortingAddActivity.this, SortingActivity.class);
             intent.putExtra("DATA", mInWaybillRecord);
             intent.putExtra("INDEX", INDEX);
             setResult(RESULT_OK, intent);
             finish();
         });
-
+        //运单号后缀事件
         idEdt2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -283,8 +304,27 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             }
 
         });
+        //超重情况
+        tvOverweight.setOnClickListener(v -> {
+            showPopWindowList();
+        });
     }
 
+    //超重情况的弹窗
+    private void showPopWindowList() {
+        SortingReturnGoodsDialog dialog = new SortingReturnGoodsDialog(this);
+        dialog.setData(rcInfoOverweight)
+                .setOnClickListener(new SortingReturnGoodsDialog.OnClickListener() {
+                    @Override
+                    public void onClick(String text) {
+                        tvOverweight.setText(text);
+                    }
+                })
+                .show();
+
+    }
+
+    //判断运单号后缀是否符合规则
     private boolean isEditChange=false;
     private void editChange(String ss) {
         if (!TextUtils.isEmpty(ss)&&ss.length() ==8){
@@ -358,8 +398,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     }
 
     @Override
-    public void getAirWaybillPrefixResult(GetAirWaybillPrefixBean getAirWaybillPrefixBean) {
-        idEdt.setText(getAirWaybillPrefixBean.getAwbPrefix());
+    public void getAirWaybillPrefixResult(String getAirWaybillPrefixBean) {
+        idEdt.setText(getAirWaybillPrefixBean);
     }
 
     @Override

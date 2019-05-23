@@ -409,8 +409,8 @@ public class UpdateRepository extends BaseRepository {
      * @param iata
      * @return
      */
-    public Observable<GetAirWaybillPrefixBean> getAirWaybillPrefix(String iata) {
-        return transform(getService().getAirWaybillPrefix(iata));
+    public Observable<String> getAirWaybillPrefix(String iata) {
+        return nothingDatatransform(getService().getAirWaybillPrefix(iata));
     }
 
     /****

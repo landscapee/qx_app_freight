@@ -342,5 +342,10 @@ public class InWaybillRecord implements Serializable {
      */
     private String remark;
 
+    /**
+     *
+     */
+    private  List<RcInfoOverweight> overWeightList;
+
 
 }

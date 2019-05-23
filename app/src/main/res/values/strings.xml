@@ -48,4 +48,5 @@
     <string name="format_delivery_verify_no_new">新运单号: %1$s</string>
     <string name="format_return_name_number">%1$s|%2$d件</string>
     <string name="format_return_reason">原因： %1$s</string>
+    <string name="alphabet_and_number">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
 </resources>

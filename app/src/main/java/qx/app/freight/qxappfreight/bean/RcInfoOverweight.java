@@ -1,11 +1,13 @@
 package qx.app.freight.qxappfreight.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 
 import lombok.Data;
 
 @Data
-public class RcInfoOverweight implements Serializable {
+public class RcInfoOverweight implements MultiItemEntity, Serializable  {
 
     /**
      * 超重记录
@@ -45,6 +47,14 @@ public class RcInfoOverweight implements Serializable {
     /**
      * 1删除
      */
-    private Integer delFlag;
+    private int delFlag;
 
+    @Override
+    public int getItemType() {
+        if (delFlag==1){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 }

@@ -14,6 +14,6 @@ public class ReservoirContract {
 
     public interface reservoirView extends IBaseView {
         void reservoirResult(ReservoirBean acceptTerminalTodoBeanList);
-        void getAirWaybillPrefixResult(GetAirWaybillPrefixBean getAirWaybillPrefixBean);
+        void getAirWaybillPrefixResult(String getAirWaybillPrefixBean);
     }
 }

@@ -34,9 +34,9 @@ public class ReservoirPresenter extends BasePresenter {
 
     public void getAirWaybillPrefix(String str) {
         mRequestView.showNetDialog();
-        ((ReservoirModel) mRequestModel).getAirWaybillPrefix(str, new IResultLisenter<GetAirWaybillPrefixBean>() {
+        ((ReservoirModel) mRequestModel).getAirWaybillPrefix(str, new IResultLisenter<String>() {
             @Override
-            public void onSuccess(GetAirWaybillPrefixBean result) {
+            public void onSuccess(String result) {
                 ((ReservoirContract.reservoirView) mRequestView).getAirWaybillPrefixResult(result);
                 mRequestView.dissMiss();
             }
