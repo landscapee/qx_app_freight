@@ -22,7 +22,8 @@ public class AddtionInvoicesBean {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AddtionInvoices {
-        private String fileName;
+        private String name;
+        private String id;
         private String filePath;
         private String fileType;
         private String fileTypeName;

@@ -143,6 +143,7 @@ public class TransportDataBase implements Serializable {
     private String role;//角色
     private String cargoCn;//品名
     private String packagingType;
+    private String waybillId;
 
     private String consignee;
     private String consigneePhone;

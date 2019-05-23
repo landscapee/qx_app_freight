@@ -23,13 +23,14 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
+import com.beidouapp.et.client.domain.UserInfo;
 
-import java.sql.Timestamp;
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
@@ -80,11 +81,12 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
-    private String mSpotFlag, mFlightNumber;
+    private String mSpotFlag, mFlightNumber,mTaskTypeCode,mWaybillCode,Tid;
 
 
-    public static void startActivity(Activity context, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, String userId, String flightNumber) {
+    public static void startActivity(Activity context, String taskTypeCode,String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, String userId, String flightNumber,String waybillCode,String tid) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
+        intent.putExtra("taskTypeCode", taskTypeCode);
         intent.putExtra("waybillId", waybillId);
         intent.putExtra("id", id);
         intent.putExtra("insFile", insFile);
@@ -94,6 +96,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         intent.putExtra("userId", userId);
         intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("flightNumber", flightNumber);
+        intent.putExtra("waybillCode", waybillCode);
+        intent.putExtra("tid", tid);
         context.startActivityForResult(intent, 0);
     }
 
@@ -107,8 +111,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查货物");
-
         waybillId = getIntent().getStringExtra("waybillId");
+        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
         id = getIntent().getStringExtra("id");
         insFile = getIntent().getStringExtra("insFile");
         insCheck = getIntent().getIntExtra("insCheck", 0);
@@ -116,6 +120,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         taskId = getIntent().getStringExtra("taskId");
         userId = getIntent().getStringExtra("userId");
         mFlightNumber = getIntent().getStringExtra("flightNumber");
+        mWaybillCode = getIntent().getStringExtra("waybillCode");
+        Tid = getIntent().getStringExtra("tid");
         //0是通过 1是不通过
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         //货代信息
@@ -169,13 +175,16 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             } else {
                 isRequire = 1;
             }
-            mStorageCommitEntity.setWaybillId(waybillId);
+            mStorageCommitEntity.setWaybillId(Tid);
+            mStorageCommitEntity.setWaybillCode(mWaybillCode);
+            mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
             mStorageCommitEntity.setInsFile(insFile);
             mStorageCommitEntity.setInsCheck(insCheck);
             mStorageCommitEntity.setFileCheck(fileCheck);
             mStorageCommitEntity.setFileCheck(isPack);
             mStorageCommitEntity.setRequire(isRequire);
             mStorageCommitEntity.setSpotResult(isSpSpot);
+            mStorageCommitEntity.setTaskTypeCode(mTaskTypeCode);
             mStorageCommitEntity.setUnspotReson(etReason.getText().toString().trim());
             mStorageCommitEntity.setType(1);
             mStorageCommitEntity.setTaskId(taskId);

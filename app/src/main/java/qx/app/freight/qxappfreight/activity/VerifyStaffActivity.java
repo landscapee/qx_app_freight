@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
@@ -89,17 +90,36 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String mFlightNumber;//航班号
     private String mShipperCompanyId;
     private String mId;
+    private String mTaskTypeCode;
+    private String mWaybillCode;
+    private String Tid;
+
     private TestInfoListBean mAcTestInfoListBean = new TestInfoListBean();
 
-    public static void startActivity(Activity context,String id,String additionTypeArr, String taskId, String waybillId,String spotFlag, String flightNumber, String shipperCompanyId) {
+    public static void startActivity(Activity context,
+                                     String taskTypeCode,
+                                     String id,
+                                     String additionTypeArr,
+                                     String taskId,
+                                     String waybillId,
+                                     String spotFlag,
+                                     String flightNumber,
+                                     String shipperCompanyId,
+                                     String waybillCode,
+                                     String tid
+
+        ) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
+        intent.putExtra("taskTypeCode", taskTypeCode);
         intent.putExtra("id", id);
         intent.putExtra("additionTypeArr", additionTypeArr);
-        intent.putExtra("waybillId", waybillId);
         intent.putExtra("taskId", taskId);
+        intent.putExtra("waybillId", waybillId);
         intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("flightNumber", flightNumber);
         intent.putExtra("shipperCompanyId", shipperCompanyId);
+        intent.putExtra("waybillCode", waybillCode);
+        intent.putExtra("tid", tid);
         context.startActivityForResult(intent, 0);
     }
 
@@ -115,13 +135,16 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         toolbar.setMainTitle(Color.WHITE, "核查报检员身份");
         String text = StringUtil.format(this, R.string.format_certificate_date, "2018-12-12", "2019-12-12");
         mTvCertificateInDate.setText(text);
-        mAdditionTypeArr = getIntent().getStringExtra("mAdditionTypeArr");
+        mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
+        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
         mId = getIntent().getStringExtra("id");
         mWaybillId = getIntent().getStringExtra("waybillId");
+        mWaybillCode = getIntent().getStringExtra("waybillCode");
         mTaskId = getIntent().getStringExtra("taskId");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         mFlightNumber = getIntent().getStringExtra("flightNumber");
         mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
+        Tid = getIntent().getStringExtra("tid");
         initData();
     }
 
@@ -163,7 +186,20 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "合格");
-                    VerifyFileActivity.startActivity(this, mWaybillId,mId,mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 0, mFlightNumber, mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this,
+                            mTaskTypeCode,
+                            mWaybillId,
+                            mId,
+                            mAdditionTypeArr,
+                            mTaskId,
+                            filePath,
+                            mSpotFlag,
+                            0,
+                            mFlightNumber,
+                            mShipperCompanyId,
+                            mWaybillCode,
+                            Tid
+                            );
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -171,7 +207,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this,mWaybillId,mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId);
+                    VerifyFileActivity.startActivity(this,mTaskTypeCode,mWaybillId,mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId,mWaybillCode,Tid);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;

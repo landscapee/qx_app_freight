@@ -113,13 +113,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     int vpPage = 0;
     boolean isPrint = false;
     private String id;
+    private String wayBillId;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode,String id) {
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode,String id,String wayBillId) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
         starter.putExtra("taskTypeCode", taskTypeCode);
         starter.putExtra("id", id);
+        starter.putExtra("wayBillId", wayBillId);
         context.startActivityForResult(starter, 0);
     }
 
@@ -135,6 +137,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
+        wayBillId = getIntent().getStringExtra("wayBillId");
         id=getIntent().getStringExtra("id");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
@@ -198,7 +201,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setType("1");//1提交
             transportListCommitEntity.setTaskId(taskId);//当前任务id
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
-            transportListCommitEntity.setWaybillId(waybillId);
+            transportListCommitEntity.setWaybillId(wayBillId);
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
             List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
@@ -212,6 +215,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
                 rcInfosEntity.setReservoirType(reservoirType);
                 rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
+                rcInfosEntity.setRepName(reservoirName);
                 rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
                 rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
                 rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
@@ -320,6 +324,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     public void autoReservoirvResult(AutoReservoirBean myAgentListBean) {
         if (null != myAgentListBean) {
             reservoirName = myAgentListBean.getReservoirName();
+
         } else
             ToastUtil.showToast("数据为空");
     }

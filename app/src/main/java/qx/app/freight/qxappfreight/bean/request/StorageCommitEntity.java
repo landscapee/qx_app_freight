@@ -27,6 +27,9 @@ public class StorageCommitEntity {
      * }
      */
     private String waybillId;
+    private String insUserId;
+    private String waybillCode;
+    private String taskTypeCode;
     private String insFile;
     private int insCheck;
     private int fileCheck;

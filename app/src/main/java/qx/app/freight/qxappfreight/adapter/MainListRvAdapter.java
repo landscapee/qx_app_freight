@@ -66,6 +66,10 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
                 tvStatusName.setText("出港收货");
                 break;
+            case "reCollection":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+                tvStatusName.setText("补单收运");
+                break;
             case "RR_collectReturn":
                 ivFlag.setVisibility(View.VISIBLE);
                 ivFlag.setImageResource(R.mipmap.collect_wait);

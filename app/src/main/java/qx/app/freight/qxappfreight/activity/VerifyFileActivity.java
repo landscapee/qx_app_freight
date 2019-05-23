@@ -13,8 +13,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.ouyben.empty.EmptyLayout;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +31,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
@@ -44,7 +49,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
 
-//    private TransportListBean.DeclareWaybillAdditionBean mDeclareData;
 
     private VerifyFileAdapter mAdapter;
     private List<AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList<>();
@@ -57,11 +61,28 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private String mAdditionTypeArr;
     private String mId;
     private String mWaybillId;
+    private String mTaskTypeCode;
+    private String mWaybillCode;
+    private String Tid;
 
 
-    public static void startActivity(Activity context, String waybillId, String id, String additionTypeArr, String taskId, String filePath, String spotFlag, int insCheck, String flightNumber, String shipperCompanyId) {
+
+    public static void startActivity(Activity context,
+                                     String taskTypeCode,
+                                     String waybillId,
+                                     String id,
+                                     String additionTypeArr,
+                                     String taskId,
+                                     String filePath,
+                                     String spotFlag,
+                                     int insCheck,
+                                     String flightNumber,
+                                     String shipperCompanyId,
+                                     String waybillCode,
+                                     String tid) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
 //        intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
+        intent.putExtra("taskTypeCode", taskTypeCode);
         intent.putExtra("waybillId", waybillId);
         intent.putExtra("id", id);
         intent.putExtra("additionTypeArr", additionTypeArr);
@@ -71,6 +92,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         intent.putExtra("insCheck", insCheck);
         intent.putExtra("flightNumber", flightNumber);
         intent.putExtra("shipperCompanyId", shipperCompanyId);
+        intent.putExtra("waybillCode", waybillCode);
+        intent.putExtra("tid", tid);
         context.startActivityForResult(intent, 0);
     }
 
@@ -91,7 +114,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     private void initData() {
 //        mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
-        mWaybillId = getIntent().getStringExtra("aybillId");
+        mWaybillId = getIntent().getStringExtra("waybillId");
+        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
         mTaskId = getIntent().getStringExtra("taskId");
         mId = getIntent().getStringExtra("id");
         mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
@@ -99,10 +123,16 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mSpotFlag = getIntent().getStringExtra("spotFlag");
         mFlightNumber = getIntent().getStringExtra("flightNumber");
         mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
+        mWaybillCode = getIntent().getStringExtra("waybillCode");
+        Tid = getIntent().getStringExtra("tid");
         insCheck = getIntent().getIntExtra("insCheck", 0);
         AddtionInvoicesBean addtionInvoicesBean = new AddtionInvoicesBean();
         if (mAdditionTypeArr != null) {
-            mList = JSON.parseArray(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices.class);
+            Gson mGson = new Gson();
+            AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices[].class);
+            List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
+            mList.clear();
+            mList.addAll(addtionInvoices1);
             mMfrvData.setLayoutManager(new LinearLayoutManager(this));
             mAdapter = new VerifyFileAdapter(mList);
             mMfrvData.setAdapter(mAdapter);
@@ -126,6 +156,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             case R.id.agree_tv:
                 ToastUtil.showToast(this, "合格");
                 VerifyCargoActivity.startActivity(this,
+                        mTaskTypeCode,
                         mWaybillId,
                         mId,
                         mFilePath,//图片路径
@@ -134,12 +165,15 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         mTaskId, //当前任务id
                         mSpotFlag,
                         UserInfoSingle.getInstance().getUserId(), //当前提交人id
-                        mFlightNumber
+                        mFlightNumber,
+                        mWaybillCode,
+                        Tid
                 );
                 break;
             case R.id.refuse_tv:
                 ToastUtil.showToast(this, "不合格");
                 VerifyCargoActivity.startActivity(this,
+                        mTaskTypeCode,
                         mWaybillId,
                         mId,
                         mFilePath,//图片路径
@@ -148,7 +182,9 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         mTaskId, //当前任务id
                         mSpotFlag,
                         UserInfoSingle.getInstance().getUserId(), //当前提交人id
-                        mFlightNumber
+                        mFlightNumber,
+                        mWaybillCode,
+                        Tid
                 );
                 break;
         }

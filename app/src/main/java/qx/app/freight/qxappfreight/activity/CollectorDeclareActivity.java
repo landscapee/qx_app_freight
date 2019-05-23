@@ -354,7 +354,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
      * @param
      */
     private void turnToReceiveGoodsActivity(){
-        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode,getIntent().getStringExtra("id"));
+        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode,getIntent().getStringExtra("id"),wayBillId);
     }
 
 }

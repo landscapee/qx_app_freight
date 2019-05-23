@@ -43,6 +43,8 @@ public class TransportListCommitEntity {
         private String repPlaceId;
         private String reservoirName;
         private String reservoirType;
+        private String repName;
+        private String repPlaceNum;
         private  List<RcInfoOverweight> rcInfoOverweight;
 
     }

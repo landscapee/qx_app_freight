@@ -123,26 +123,16 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         entity.setFilter(tempBean);
         entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);
-        entity.setCurrent(1);
+        entity.setCurrent(pageCurrent);
         ((SearchTodoTaskPresenter) mPresenter).searchTodoTask(entity);
 
     }
-
-    /**
-     * 跳转到代办详情
-     *
-     * @param bean
-     */
-    public void turnToDetailActivity(TransportDataBase bean) {
-
-    }
-
 
     //根据id获取运单信息
     public void getTaskInfo(TransportDataBase bean) {
         mBean = bean;
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getId());
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getWaybillId());
     }
 
     /**
@@ -165,7 +155,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : transportListList) {
             if (daibanCode.equals(item.getId())) {
-                turnToDetailActivity(item);
+                getTaskInfo(item);
                 return;
             }
         }
@@ -235,18 +225,14 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void searchTodoTaskResult(TransportListBean transportListBean) {
         if (transportListBean != null) {
-            //未分页
-            transportListList1.clear();
             if (pageCurrent == 1) {
-//                transportListList.clear();
+                transportListList.clear();
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();
             }
             transportListList1.addAll(transportListBean.getRecords());
-
             seachWith();
-//            mMfrvData.notifyForAdapter(adapter);
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
@@ -257,15 +243,19 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if (null != result) {
             if (null != mBean) {
                 VerifyStaffActivity.startActivity(getActivity()
+                        , mBean.getTaskTypeCode()
                         , result.getDeclareWaybillAddition().getId()
-                        , result.getAdditionTypeArr()
-                        , result.getDeclareWaybillAddition().getWaybillId()
+                        , result.getDeclareWaybillAddition().getAddtionInvoices()
                         , mBean.getTaskId()
-                        , result.getSpotFlag()
+                        , result.getDeclareWaybillAddition().getWaybillId()
+                        , result.getSpotFlag()+""
                         , result.getFlightNumber()
-                        , result.getShipperCompanyId());
+                        , result.getShipperCompanyId()
+                        , mBean.getWaybillCode()
+                        ,mBean.getId()
+                );
             }
-        }else{
+        } else {
             ToastUtil.showToast("收验点击事件为空");
         }
     }

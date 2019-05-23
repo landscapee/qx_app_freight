@@ -114,7 +114,15 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             case "collection"://出港收货
                 Log.e("tagTest","id===="+bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
-                        .putExtra("wayBillId",bean.getId())
+                        .putExtra("wayBillId",bean.getWaybillId())
+                        .putExtra("taskId",bean.getTaskId())
+                        .putExtra("id",bean.getId())
+                        .putExtra("taskTypeCode",bean.getTaskTypeCode()));
+                break;
+            case "reCollection"://补单收运
+                Log.e("tagTest","id===="+bean.getId());
+                startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
+                        .putExtra("wayBillId",bean.getWaybillId())
                         .putExtra("taskId",bean.getTaskId())
                         .putExtra("id",bean.getId())
                         .putExtra("taskTypeCode",bean.getTaskTypeCode()));
