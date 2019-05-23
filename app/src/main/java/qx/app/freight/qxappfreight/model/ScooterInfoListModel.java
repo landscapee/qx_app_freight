@@ -10,6 +10,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
+import qx.app.freight.qxappfreight.exception.DefaultException;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**
@@ -34,7 +35,7 @@ public class ScooterInfoListModel extends BaseModel implements ScooterInfoListCo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
-                    if ("朱宇航傻逼".equals(throwable.getMessage())){
+                    if (DefaultException.DATA_NULL_EXCEPTION.equals(throwable.getMessage())){
                         MyAgentListBean mExistBean = new MyAgentListBean();
                         mExistBean.setUldWeight(0);
                         lisenter.onSuccess(mExistBean);
