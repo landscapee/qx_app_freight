@@ -47,11 +47,20 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     String arriveTime = "";
     String handCarNum = "";
     String getHandCarNumTotal = "";
-    TransportDataBase transportListBean;
-    List<InWaybillRecord> mList;
-    InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();//最终提交请求的实体
 
-    InWaybillRecordBean resultBean;//网络请求返回的bean
+    //从上一个页面传递过来的数据
+    TransportDataBase transportListBean;
+
+    //需要显示的数据delFlag == 0
+    List<InWaybillRecord> mList = new ArrayList<>();
+    //删除的数据delFlag == 1
+    List<InWaybillRecord> mListDel = new ArrayList<>();
+
+    //最终提交请求的实体
+    InWaybillRecordSubmitEntity submitEntity = new InWaybillRecordSubmitEntity();
+
+    //网络请求返回的bean
+    InWaybillRecordBean resultBean;
 
     int CURRENT_DELETE_POSITION = -1;
 
@@ -126,6 +135,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
                 ToastUtil.showToast("请添加分拣信息");
                 return;
             }
+            List<InWaybillRecord> submitList = new ArrayList<>();
+            submitList.addAll(mList);
+            submitList.addAll(mListDel);
             submitEntity.setFlag(0);
             submitEntity.setList(mList);
             ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
@@ -136,6 +148,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
                 ToastUtil.showToast("请添加分拣信息");
                 return;
             }
+            List<InWaybillRecord> submitList = new ArrayList<>();
+            submitList.addAll(mList);
+            submitList.addAll(mListDel);
             submitEntity.setFlag(1);
             submitEntity.setList(mList);
             ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
@@ -148,6 +163,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     private void getData() {
         //初始化数据
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
+        entity.setTaskFlag(0);
         entity.setFlightId(transportListBean.getFlightId());
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
@@ -158,11 +174,13 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("dime", "onActivityResult：" + requestCode + "-" + requestCode);
         //来自新增页面的结果返回
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {//新增
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            //新增
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             mList.add(mInWaybillRecord);
             mAdapter.notifyDataSetChanged();
-        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {//修改
+        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            //修改
             InWaybillRecord inWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             int index = data.getIntExtra("INDEX", -1);
             if (index != -1) {
@@ -180,9 +198,15 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             resultBean = bean;
         }
         if (resultBean.getList() == null) {
-            mList = new ArrayList<>();
             resultBean.setList(mList);
         } else {
+            for (InWaybillRecord item : resultBean.getList()) {
+                if(item.getDelFlag() == 0){
+                    mList.add(item);
+                }else if(item.getDelFlag() == 1){
+                    mListDel.add(item);
+                }
+            }
             mList = resultBean.getList();
             Log.e("dime", "服务器的数据，分拣信息长度 = " + mList.size());
         }
@@ -198,7 +222,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         //列表 -- 初始化
         mAdapter = new SortingInfoAdapter(mList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {//item点击事件，进入修改
+
+        //item点击事件，进入修改
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (resultBean.getCloseFlag() == 1) {
                 ToastUtil.showToast("运单已经关闭，无法编辑！");
                 return;
@@ -214,7 +240,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             intent.putExtra("DATA", updateInWaybillRecord);
             intent.putExtra("INDEX", position);
-            SortingActivity.this.startActivityForResult(intent, 2);//去修改
+            //去修改
+            SortingActivity.this.startActivityForResult(intent, 2);
         });
         //添加页脚
         TextView textView = new TextView(SortingActivity.this);
@@ -233,7 +260,16 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
                 mList.remove(CURRENT_DELETE_POSITION);
                 mAdapter.notifyDataSetChanged();
             } else {
+                //将数据放到删除列表里，delFlag = 1
+                mList.get(position).setDelFlag(1);
+                mListDel.add(mList.get(position));
+                mList.remove(position);
+                mAdapter.notifyDataSetChanged();
+
+                /*
+                不再调用删除接口
                 ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
+                */
             }
         });
     }

@@ -130,6 +130,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             }
             customToolbar.setMainTitle(Color.WHITE, "新增");
             mInWaybillRecord = new InWaybillRecord();
+            mInWaybillRecord.setDelFlag(0);
             rcInfoOverweight = new ArrayList <>();
             counterUbnormalGoodsList = new ArrayList<>();
         } else if (TYPE.equals(SortingActivity.TYPE_UPDATE)) {
@@ -389,9 +390,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             @Override
             public void confirm(int position) {
                 Log.e("dime", "选择了库区：" + position);
-                String reservoir = acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName();//库区已经选择
                 reservoirTv.setText(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
-                mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
+                //设置库区的id
+                mInWaybillRecord.setWarehouseArea(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
+                //设置库区type
+                mInWaybillRecord.setWarehouseAreaType(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirType());
                 mInWaybillRecord.setWarehouseLocation("库位未知");
             }
         });

@@ -222,6 +222,11 @@ public class InWaybillRecord implements Serializable {
     private String warehouseArea;
 
     /**
+     * 库区类型
+     */
+    private String warehouseAreaType;
+
+    /**
      * 库位
      */
     private String warehouseLocation;
