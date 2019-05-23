@@ -18,7 +18,7 @@ public abstract class BaseRepository {
                         if (baseEntity.getData() != null) {
                             return Observable.just(baseEntity.getData());
                         } else {
-                            throw new DefaultException("Response [data] null Exception");
+                            throw new DefaultException(DefaultException.DATA_NULL_EXCEPTION);
                         }
                     } else if (null != baseEntity && "318".equals(baseEntity.getStatus())) {
                         ToastUtil.showToast(baseEntity.getMessage());
