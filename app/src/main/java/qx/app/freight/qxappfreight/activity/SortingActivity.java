@@ -201,7 +201,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             resultBean.setList(mList);
         } else {
             for (InWaybillRecord item : resultBean.getList()) {
-                if(item.getDelFlag() == 0){
+                if(item.getDelFlag() == null || item.getDelFlag() == 0){
                     mList.add(item);
                 }else if(item.getDelFlag() == 1){
                     mListDel.add(item);
