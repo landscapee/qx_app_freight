@@ -358,7 +358,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             if (code.startsWith("DN")){
                 newCode = "DN-"+code.substring(2,10);
             }else {
-                if (newCode.length()>11){
+                if (code.length()>=11){
                     newCode =editChange(code);
                 }else {
                     ToastUtil.showToast("无效的运单号");
