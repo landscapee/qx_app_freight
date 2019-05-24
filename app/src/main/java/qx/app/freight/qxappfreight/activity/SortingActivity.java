@@ -22,6 +22,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.SortingInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.InWaybill;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
@@ -85,6 +86,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     Button tempBtn;
     @BindView(R.id.btn_done)
     Button doneBtn;
+
+    //recycler 页脚
+    TextView tvFoot;
 
     @Override
     public int getLayoutId() {
@@ -179,11 +183,18 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             mList.add(mInWaybillRecord);
             mAdapter.notifyDataSetChanged();
+            //更新总运单数，总件数
+            resultBean.setCount(resultBean.getCount() + 1);
+            resultBean.setTotal(resultBean.getTotal() + mInWaybillRecord.getTallyingTotal());
+            tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
         } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             //修改
             InWaybillRecord inWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
             int index = data.getIntExtra("INDEX", -1);
             if (index != -1) {
+                //更新总运单数，总件数
+                resultBean.setTotal(resultBean.getTotal() - mList.get(index).getTallyingTotal() + inWaybillRecord.getTallyingTotal());
+                tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
                 mList.set(index, inWaybillRecord);
                 mAdapter.notifyItemChanged(index);
             }
@@ -244,34 +255,41 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             SortingActivity.this.startActivityForResult(intent, 2);
         });
         //添加页脚
-        TextView textView = new TextView(SortingActivity.this);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.parseColor("#FF2E81FD"));
-        textView.setTextSize(14);
-        textView.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
+        tvFoot = new TextView(SortingActivity.this);
+        tvFoot.setGravity(Gravity.CENTER);
+        tvFoot.setTextColor(Color.parseColor("#FF2E81FD"));
+        tvFoot.setTextSize(14);
+        tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
 
-        mAdapter.setFooterView(textView);
+        mAdapter.setFooterView(tvFoot);
         recyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
             //数据被删除了
             CURRENT_DELETE_POSITION = position;
+            //更新总运单数，总件数
+            resultBean.setCount(resultBean.getCount()-1);
+            resultBean.setTotal(resultBean.getTotal() - mList.get(CURRENT_DELETE_POSITION).getTallyingTotal());
+            tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
+            //操作数据源
             if (mList.get(CURRENT_DELETE_POSITION).getId() == null || mList.get(CURRENT_DELETE_POSITION).getId() == "" || mList.get(CURRENT_DELETE_POSITION).getId().equals("")) {
                 mList.remove(CURRENT_DELETE_POSITION);
-                mAdapter.notifyDataSetChanged();
+
             } else {
                 //将数据放到删除列表里，delFlag = 1
                 mList.get(position).setDelFlag(1);
                 mListDel.add(mList.get(position));
                 mList.remove(position);
-                mAdapter.notifyDataSetChanged();
 
                 /*
                 不再调用删除接口
                 ((InWaybillRecordPresenter) mPresenter).deleteById(mList.get(CURRENT_DELETE_POSITION).getId());
                 */
             }
+            //刷新列表
+            mAdapter.notifyDataSetChanged();
         });
+        recyclerView.closeMenu();
     }
 
     @Override
