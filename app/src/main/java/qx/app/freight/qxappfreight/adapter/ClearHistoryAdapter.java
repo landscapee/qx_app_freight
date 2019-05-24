@@ -30,6 +30,6 @@ public class ClearHistoryAdapter extends BaseQuickAdapter<InventoryQueryBean.Rec
         //发起人
         helper.setText(R.id.tv_originator, "发起人:" + item.getCreateUserName());
         //发起时间
-        helper.setText(R.id.tv_time, "发起时间:" + TimeUtils.getTime2(item.getEndTime()));
+        helper.setText(R.id.tv_time, "发起时间:" + TimeUtils.getTime2(item.getCreateTime()));
     }
 }
