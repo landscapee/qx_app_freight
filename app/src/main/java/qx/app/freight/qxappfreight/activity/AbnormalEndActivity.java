@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,7 +50,6 @@ import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
@@ -62,9 +60,9 @@ import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
- * 异常上报页面
+ * 异常结束
  */
-public class ErrorReportActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView {
+public class AbnormalEndActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
     @BindView(R.id.tv_date)
@@ -77,6 +75,8 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     Button mBtnCommit;
     @BindView(R.id.sp_filight_num)
     Spinner mSpinner;
+    @BindView(R.id.sp_abnormal_num)
+    Spinner mAbnormalSpinner;
 
     private static final int REQUEST_IMAGE = 5;
     private List<String> mPhotoPath = new ArrayList<>();
@@ -89,9 +89,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private String mFlightNumber;
     private ArrayList<String> mFlightNumberList; //传过来的航班号列表
     private String mCurrentTaskId;
-
-
-
+    private String id;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -118,7 +116,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_error_report;
+        return R.layout.activity_end_report;
     }
 
     @Override
@@ -132,14 +130,16 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
+        //新加id
+        id = getIntent().getStringExtra("id");
         mPhotoPath.add("111");
         mAdapter = new ImageRvAdapter(mPhotoPath);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mPhotoPath.get(position).equals("111")){
+                if (mPhotoPath.get(position).equals("111")) {
                     choosePictrue();
-                }else {
+                } else {
                     previewPictrue(position);
                 }
 
@@ -148,7 +148,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId() == R.id.iv_delete){
+                if (view.getId() == R.id.iv_delete) {
                     mPhotoPath.remove(position);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -177,18 +177,18 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
             mFlightNumber = getIntent().getStringExtra("flight_number");
-            mCurrentTaskId =getIntent().getStringExtra("task_id");
+            mCurrentTaskId = getIntent().getStringExtra("task_id");
             mTvFlightInfo.setText(mFlightNumber);
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
         mBtnCommit.setOnClickListener(v -> {
-            if (getNoAddPictureList().size()==0&&TextUtils.isEmpty(mEtDetailInfo.getText().toString())){
+            if (getNoAddPictureList().size() == 0 && TextUtils.isEmpty(mEtDetailInfo.getText().toString())) {
                 ToastUtil.showToast("请添加文字或图片说明（至少一种）");
-            }else {
+            } else {
                 if (getNoAddPictureList().size() == 0) {
-                    mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
+                    mPresenter = new ExceptionReportPresenter(AbnormalEndActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
                     model.setFlightNum(mFlightNumber);
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
@@ -206,34 +206,34 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     /**
      * 选择相册照片
      */
-    private void choosePictrue(){
+    private void choosePictrue() {
         List<String> originList = new ArrayList<>();
         if (mAdapter == null) {
             originList.addAll(mPhotoPath);
         } else {
             originList.addAll(mPhotoPath);
-            originList.remove(originList.size()-1);
+            originList.remove(originList.size() - 1);
         }
-        MultiImageSelector.create(ErrorReportActivity.this)
+        MultiImageSelector.create(AbnormalEndActivity.this)
                 .showCamera(true) // 是否显示相机. 默认为显示
                 .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                 .multi() // 多选模式, 默认模式;
                 .origin((ArrayList<String>) originList) // 默认已选择图片. 只有在选择模式为多选时有效
-                .start(ErrorReportActivity.this, REQUEST_IMAGE);
+                .start(AbnormalEndActivity.this, REQUEST_IMAGE);
     }
 
     /**
-     *预览照片
+     * 预览照片
      * 忽略最后一个
      */
-    private void previewPictrue(int position){
-        ImgPreviewAct.startPreview(ErrorReportActivity.this,getNoAddPictureList(),position);
+    private void previewPictrue(int position) {
+        ImgPreviewAct.startPreview(AbnormalEndActivity.this, getNoAddPictureList(), position);
     }
 
-    private List<String> getNoAddPictureList(){
+    private List<String> getNoAddPictureList() {
         List<String> list = new ArrayList<>();
         list.addAll(mPhotoPath);
-        list.remove(list.size()-1);
+        list.remove(list.size() - 1);
         return list;
     }
 
@@ -268,20 +268,6 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     mPhotoPath.clear();
                     mPhotoPath.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
                     mPhotoPath.add("111");
-//                    mAdapter = new ImageRvAdapter(mPhotoPath);
-//                    mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                            if (mPhotoPath.get(position)=="111"){
-//                                choosePictrue();
-//                            }else {
-//                                ImgPreviewAct.startPreview(ErrorReportActivity.this, mPhotoPath,position);
-//                            }
-//
-//                        }
-//                    });
-//                    mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
-//                    mRvPhoto.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     break;
             }
@@ -314,7 +300,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             @Override
             public void onSuccess(List<File> fileList) {
                 List<MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
-                mPresenter = new UploadsPresenter(ErrorReportActivity.this);
+                mPresenter = new UploadsPresenter(AbnormalEndActivity.this);
                 ((UploadsPresenter) mPresenter).uploads(upFiles);
             }
 
@@ -351,9 +337,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void showNetDialog() {
-        if (mPhotoPath.size()!=0){
+        if (mPhotoPath.size() != 0) {
             showProgessDialog("图片上传中");
-        }else {
+        } else {
             showProgessDialog("");
         }
     }

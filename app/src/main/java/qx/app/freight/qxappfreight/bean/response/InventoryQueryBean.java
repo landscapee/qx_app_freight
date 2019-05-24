@@ -68,6 +68,12 @@ public class InventoryQueryBean {
          * 任务创建人
          */
         private String createUser;
+        //任务创建人名字
+        private String createUserName;
+
+        //审核处置人名字
+        private String handlerName;
+
 
     }
 

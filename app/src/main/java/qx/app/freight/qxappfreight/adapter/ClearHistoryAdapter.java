@@ -28,7 +28,7 @@ public class ClearHistoryAdapter extends BaseQuickAdapter<InventoryQueryBean.Rec
             helper.setText(R.id.clear_storage_type, "全仓清库");
 
         //发起人
-        helper.setText(R.id.tv_originator, "发起人:" + item.getCreateUser());
+        helper.setText(R.id.tv_originator, "发起人:" + item.getCreateUserName());
         //发起时间
         helper.setText(R.id.tv_time, "发起时间:" + TimeUtils.getTime2(item.getEndTime()));
     }

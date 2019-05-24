@@ -48,6 +48,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
+import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
@@ -522,4 +523,8 @@ public interface HttpApi {
      */
     @GET("service-bussiness-reservoir/reservoir/listReservoirInfoByCode/{deptCode}")
     Observable<BaseEntity<List<ReservoirArea>>> listReservoirInfoByCode(@Path("deptCode") String deptCode);
+
+    //xxx
+    @GET("service-product-transport/tp-api/getAllRemoteArea")
+    Observable<BaseEntity<List<GetAllRemoteAreaBean>>> getAllRemoteArea();
 }

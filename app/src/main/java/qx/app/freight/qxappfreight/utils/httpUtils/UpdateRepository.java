@@ -49,6 +49,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
+import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
@@ -926,5 +927,9 @@ public class UpdateRepository extends BaseRepository {
 
     public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode){
         return transform(getService().listReservoirInfoByCode(deptCode));
+    }
+
+    public Observable<List<GetAllRemoteAreaBean>> getAllRemoteArea(){
+        return transform(getService().getAllRemoteArea());
     }
 }

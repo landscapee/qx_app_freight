@@ -32,6 +32,9 @@ import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
+/*****
+ * 清库功能
+ */
 public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView {
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
