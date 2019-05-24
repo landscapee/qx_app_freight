@@ -30,17 +30,22 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
+import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
+import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
+import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -52,7 +57,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView {
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView , GetFlightCargoResContract.getFlightCargoResView{
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -71,6 +76,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     TextView mTvArriveTime;//航班到达时间
     @BindView(R.id.tv_board_goods_number)
     TextView mTvGoodsNumber;//航班货物数量
+    @BindView(R.id.tv_look_unload_bill_info)
+    TextView mTvUnloadBillInfo;//显示卸机单数据
     @BindView(R.id.iv_cotro_1)
     ImageView mIvControl1;//控制显示隐藏货物列表
     @BindView(R.id.srv_goods_info)
@@ -132,7 +139,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        String flightInfo = getIntent().getStringExtra("plane_info");
         mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         mCurrentTaskId = mData.getTaskId();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo() + "  卸机");
@@ -216,6 +222,13 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     private void setListeners() {
+        mTvUnloadBillInfo.setOnClickListener(v -> {
+            mPresenter=new GetFlightCargoResPresenter(this);
+            LoadingListRequestEntity entity = new LoadingListRequestEntity();
+            entity.setDocumentType(2);
+            entity.setFlightId(mData.getFlightId());
+            ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+        });
         mIvControl1.setOnClickListener(v -> {
             if (mSlideRvGoods.getVisibility() == View.GONE) {
                 mSlideRvGoods.setVisibility(View.VISIBLE);
@@ -419,5 +432,25 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
+    }
+
+    @Override
+    public void getLoadingListResult(LoadingListBean result) {
+        if (result!=null){
+            List<LoadingListBean.DataBean.ContentObjectBean> list = result.getData().get(0).getContentObject();
+            UnloadBillInfoDialog unloadBillInfoDialog=new UnloadBillInfoDialog();
+            unloadBillInfoDialog.setData(list,this);
+            unloadBillInfoDialog.show(getSupportFragmentManager(),"unload_bill");
+        }
+    }
+
+    @Override
+    public void flightDoneInstallResult(String result) {
+
+    }
+
+    @Override
+    public void overLoadResult(String result) {
+
     }
 }

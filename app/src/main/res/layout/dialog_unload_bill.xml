@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="244dp"
+    android:background="@drawable/shape_rect_white_3dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="14dp"
+        android:gravity="center_horizontal"
+        android:text="卸机单信息"
+        android:textColor="#333333"
+        android:textSize="@dimen/sp_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+
+        <TextView
+            android:layout_width="49dp"
+            android:layout_height="match_parent"
+            android:background="#7B8A9B"
+            android:gravity="center"
+            android:text="舱位"
+            android:textColor="#fff"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+
+        <TextView
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:background="#7B8A9B"
+            android:gravity="center"
+            android:text="ULD号"
+            android:textColor="#fff"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+
+        <TextView
+            android:layout_width="@dimen/dp_47"
+            android:layout_height="match_parent"
+            android:background="#7B8A9B"
+            android:gravity="center"
+            android:text="目的地"
+            android:textColor="#fff"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+
+        <TextView
+            android:layout_width="39dp"
+            android:layout_height="match_parent"
+            android:background="#7B8A9B"
+            android:gravity="center"
+            android:text="类型"
+            android:textColor="#fff"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+
+        <TextView
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:background="#7B8A9B"
+            android:gravity="center"
+            android:text="重量"
+            android:textColor="#fff"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_unload_bill"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@color/divider_line_grey" />
+
+    <TextView
+        android:id="@+id/tv_close_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:text="确定"
+        android:textColor="#2E81FD"
+        android:textSize="@dimen/sp_14" />
+</LinearLayout>

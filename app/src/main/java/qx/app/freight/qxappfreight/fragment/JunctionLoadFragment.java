@@ -261,7 +261,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add(String.valueOf(bean.getArrivalTime()));
             times.add(String.valueOf(bean.getOpenDoorTime()));
-            times.add(bean.getBeginLoadUnloadTime() + ":" + bean.getLoadUnloadTime());
+//            times.add(bean.getBeginLoadUnloadTime() + ":" + bean.getLoadUnloadTime());
             times.add(String.valueOf(bean.getCloseDoorTime()));
             //FlightNumber   0               AirCraftNo   1               StartPlace   2           MiddlePlace     3            EndPlace    4
             String planeInfo = entity.getFlightInfo() + "*" + entity.getAirCraftNo() + "*" + entity.getStartPlace() + "*" + entity.getMiddlePlace() + "*" + entity.getEndPlace()

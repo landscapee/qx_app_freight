@@ -167,17 +167,5 @@ public class Constants {
     public static final String TP_ARRIVED = "CargoOutTransportArrived";	//运输到位
     public static final String TP_START = "CargoOutTransportStart";	//运输开始
     public static final String TP_END = "CargoOutTransportEnd";	//运输 结束
-    public static final String PLANE_LOAD_ACCEPT = "FreightLoadReceived";	//装机接受
-    public static final String PLANE_LOAD_ARRIVED = "FreightLoadArrived";	//装机到位
-    public static final String PLANE_LOAD_OPEN = "FreightLoadStart";	//装机 开启舱门
-    public static final String PLANE_LOAD_START = "FreightLoadBegin";	//开始装机
-    public static final String PLANE_LOAD_END = "FreightLoadFinish";	//装机结束
-    public static final String PLANE_LOAD_CLOSE = "FreightLoadEnd";	//装机 关闭舱门
-    public static final String PLANE_UNLOAD_ACCEPT = "FreightUnloadReceived";	//卸机接受
-    public static final String PLANE_UNLOAD_ARRIVED = "FreightUnloadArrived";	//卸机到位
-    public static final String PLANE_UNLOAD_OPEN = "FreightUnloadStart";	//卸机开启舱门
-    public static final String PLANE_UNLOAD_START = "FreightUnloadBegin";	//开始卸机
-    public static final String PLANE_UNLOAD_END = "FreightUnloadFinish";	//卸机结束
-    public static final String PLANE_UNLOAD_CLOSE = "FreightUnloadEnd";	//卸机关闭舱门
 
 }

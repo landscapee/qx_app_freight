@@ -45,28 +45,46 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                 slideView.setLockListener(() -> {
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
                     int pos = helper.getAdapterPosition();
-                    if (pos != 3) {
-                        item.setItemType(MultiStepEntity.TYPE_STEP_OVER);
-                    }
-                    if (pos != 4 && pos != 3) {
-                        mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
-                    }
                     if (onSlideListener != null) {
                         onSlideListener.onSlide(pos);
                     }
-                    if (pos == 3) {
+                    if (mList.get(pos).getData().getTaskType()==5){//装卸机2合1代办单独处理
                         mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
-                        Intent intent;
-                        if (item.getLoadUnloadType() == 1) {
-                            intent = new Intent(mContext, LoadPlaneActivity.class);
-                        } else {
-                            intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type",mList.get(pos).getFlightType());
+                        if (pos==3){
+                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+                            intent.putExtra("flight_type", mList.get(pos).getFlightType());
+                            intent.putExtra("plane_info", mList.get(pos).getData());
+                            mContext.startActivity(intent);
+                        }else if (pos==4){
+                            Intent intent = new Intent(mContext, LoadPlaneActivity.class);
+                            intent.putExtra("plane_info", mList.get(pos).getData());
+                            mContext.startActivity(intent);
+                        }else {
+                            item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                            mList.get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
+                            if (pos != 5) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
+                                mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            }
                         }
-                        intent.putExtra("plane_info", mList.get(pos).getData());
-                        mContext.startActivity(intent);
-                    } else {
-                        mList.get(pos).setStepDoneDate(sdf.format(new Date()));
+                    }else {
+                        if (pos == 3) {
+                            mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
+                            Intent intent;
+                            if (item.getLoadUnloadType() == 1) {
+                                intent = new Intent(mContext, LoadPlaneActivity.class);
+                            } else {
+                                intent = new Intent(mContext, UnloadPlaneActivity.class);
+                                intent.putExtra("flight_type", mList.get(pos).getFlightType());
+                            }
+                            intent.putExtra("plane_info", mList.get(pos).getData());
+                            mContext.startActivity(intent);
+                        } else {
+                            item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                            mList.get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
+                            if (pos != 4) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
+                                mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            }
+                        }
                     }
                 });
                 break;

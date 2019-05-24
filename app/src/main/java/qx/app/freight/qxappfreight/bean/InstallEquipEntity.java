@@ -27,4 +27,5 @@ public class InstallEquipEntity {
     private String taskId;
     private int taskType;
     private String workerName;
+    private List<String> stepCodeList;
 }

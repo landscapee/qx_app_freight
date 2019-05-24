@@ -9,10 +9,13 @@ import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
 
 
 public class StringUtil {
@@ -190,5 +193,35 @@ public class StringUtil {
         if (isEmpty(str1))
             return false;
         else return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
+    }
+    /**
+     * 设置航线数据
+     *
+     * @param route  航线数据
+     * @param entity 需要设置航线数据的实体
+     */
+    public static void setFlightRoute(String route, InstallEquipEntity entity) {
+        if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
+            entity.setStartPlace("");
+            entity.setMiddlePlace("");
+            entity.setEndPlace("");
+        } else {
+            String[] placeArray = route.split(",");
+            List<String> resultList = new ArrayList<>();
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str : placeList) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                resultList.add(temp);
+            }
+            if (placeArray.length == 2) {
+                entity.setStartPlace(resultList.get(0));
+                entity.setMiddlePlace("");
+                entity.setEndPlace(resultList.get(resultList.size() - 1));
+            } else {
+                entity.setStartPlace(resultList.get(0));
+                entity.setMiddlePlace(resultList.get(1));
+                entity.setEndPlace(resultList.get(2));
+            }
+        }
     }
 }
