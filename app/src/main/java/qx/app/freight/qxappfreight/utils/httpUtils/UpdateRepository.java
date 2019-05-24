@@ -904,8 +904,8 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<ListWaybillCodeBean> listWaybillCode(String code) {
-        return getService().listWaybillCode(code);
+    public Observable<ListWaybillCodeBean> listWaybillCode(String code,String taskId) {
+        return getService().listWaybillCode(code,taskId);
     }
 
     /**

@@ -36,8 +36,8 @@ public class AddInventoryDetailModel extends BaseModel implements AddInventoryDe
     }
 
     @Override
-    public void listWaybillCode(String code, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().listWaybillCode(code)
+    public void listWaybillCode(String code,String taskId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().listWaybillCode(code,taskId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

@@ -489,20 +489,20 @@ public interface HttpApi {
     /*********************清库***********************************/
 
     //清库列表
-    @POST("service-product-inwaybill/inventory/listInventoryTaskByPage")
+    @POST("service-bussiness-reservoir/inventory/listInventoryTaskByPage")
     Observable<BaseEntity<InventoryQueryBean>> inventoryQuery(@Body BaseFilterEntity entity);
 
     //清库提交
-    @POST("service-product-inwaybill/inventory/addInventoryDetail")
+    @POST("service-bussiness-reservoir/inventory/addInventoryDetail")
     Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
     //清库详情
-    @POST("service-product-inwaybill/inventory/listInventoryDetail")
+    @POST("service-bussiness-reservoir/inventory/listInventoryDetail")
     Observable<BaseEntity<List<InventoryDetailEntity>>> listInventoryDetail(@Body BaseFilterEntity entity);
 
     //清库运单模糊查询
-    @GET("service-product-inwaybill/inventory/listWaybillCode/{code}")
-    Observable<ListWaybillCodeBean> listWaybillCode(@Path("code") String code);
+    @GET("service-bussiness-reservoir/inventory/listWaybillCode")
+    Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code,@Query("inventoryTaskId") String inventoryTaskId);
 
 
     /*********************国际货物***************************/

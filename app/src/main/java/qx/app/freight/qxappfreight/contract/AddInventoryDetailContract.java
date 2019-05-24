@@ -12,7 +12,7 @@ public class AddInventoryDetailContract {
     public interface addInventoryDetailModel {
         void addInventoryDetail(List<InventoryDetailEntity> list, IResultLisenter lisenter);
         void uploads(List<MultipartBody.Part> files, IResultLisenter lisenter);
-        void listWaybillCode(String code, IResultLisenter lisenter);
+        void listWaybillCode(String code,String taskId, IResultLisenter lisenter);
     }
 
     public interface addInventoryDetailView extends IBaseView {

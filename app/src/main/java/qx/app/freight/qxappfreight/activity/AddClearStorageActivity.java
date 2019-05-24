@@ -121,7 +121,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     private void initData() {
         tvId.setOnClickListener(v -> {
-            startActivity(new Intent(this, WayBillQueryActivity.class));
+            startActivity(new Intent(this, WayBillQueryActivity.class).putExtra("taskId",taskId));
         });
         counterUbnormalGoodsList = new ArrayList<>();
         inventoryDetailEntityList = new ArrayList<>();

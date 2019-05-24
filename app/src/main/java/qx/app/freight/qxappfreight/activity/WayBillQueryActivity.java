@@ -38,6 +38,8 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     private List<ListWaybillCodeBean.DataBean> resultData = new ArrayList<>();
     private WaybillQueryResultAdapter adapter;
 
+    private String taskId;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_waybill_query;
@@ -45,6 +47,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        taskId = getIntent().getStringExtra("taskId");
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
@@ -76,7 +79,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())){
                     mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
-                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString());
+                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(),taskId);
                 }else {
                     resultData.clear();
                     adapter.notifyDataSetChanged();

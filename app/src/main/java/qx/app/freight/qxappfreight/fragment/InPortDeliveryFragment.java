@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -73,6 +74,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入流水号", text -> {
             searchString = text;

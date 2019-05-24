@@ -51,9 +51,9 @@ public class AddInventoryDetailPresenter extends BasePresenter {
         });
     }
 
-    public void listWaybillCode(String code) {
+    public void listWaybillCode(String code,String taskId) {
         mRequestView.showNetDialog();
-        ((AddInventoryDetailModel) mRequestModel).listWaybillCode(code, new IResultLisenter<ListWaybillCodeBean>() {
+        ((AddInventoryDetailModel) mRequestModel).listWaybillCode(code,taskId, new IResultLisenter<ListWaybillCodeBean>() {
             @Override
             public void onSuccess(ListWaybillCodeBean result) {
                 ((AddInventoryDetailContract.addInventoryDetailView) mRequestView).listWaybillCodeResult(result);
