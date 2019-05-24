@@ -226,6 +226,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 return;
             }
         }
+        ToastUtil.showToast("该流水号无效");
     }
 
     @Override
