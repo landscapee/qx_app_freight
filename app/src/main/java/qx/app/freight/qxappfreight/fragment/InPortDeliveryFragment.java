@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -184,9 +185,15 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222", "daibanCode" + daibanCode);
+        Log.e("22222", "提货代办流水号： " + daibanCode);
+        //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
         if (!TextUtils.isEmpty(daibanCode)) {
-            chooseCode(daibanCode);
+            String[] parts = daibanCode.split("\\/");
+            List<String> strsToList= Arrays.asList(parts);
+            if (strsToList.size()>=4){
+                chooseCode(strsToList.get(3));
+            }
+
         }
     }
 
@@ -214,7 +221,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      */
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list1) {
-            if (daibanCode.equals(item.getId())) {
+            if (daibanCode.equals(item.getSerialNumber())) {
                 turnToDetailActivity(item);
                 return;
             }
