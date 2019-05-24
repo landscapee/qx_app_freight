@@ -367,6 +367,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
         }else {
             ToastUtil.showToast("无效的运单号");
+            return;
         }
         turnToAddActivity(newCode);
     }
