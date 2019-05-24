@@ -15,8 +15,8 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 public class TestInfoModel extends BaseModel implements TestInfoContract.testInfoModel {
 
     @Override
-    public void testInfo(String waybillId, String freightId,IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().testInfo(waybillId,freightId)
+    public void testInfo(String waybillId, String freightId,String mTaskTypeCode,IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().testInfo(waybillId,freightId,mTaskTypeCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

@@ -120,8 +120,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> modifyTest(@Body ModifyTextEntity model);
 
     //收验详情
-    @GET("service-product-transportcheck/ins/get/{waybillId}/{freightId}")
-    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId);
+    @GET("service-product-transportcheck/ins/get/{waybillId}/{freightId}/{taskTypeCode}")
+    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId,@Path("taskTypeCode") String taskTypeCode);
 
     /***********收运****************************/
 

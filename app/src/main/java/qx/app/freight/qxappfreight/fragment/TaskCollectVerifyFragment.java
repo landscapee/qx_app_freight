@@ -226,7 +226,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void searchTodoTaskResult(TransportListBean transportListBean) {
         if (transportListBean != null) {
             if (pageCurrent == 1) {
-                transportListList.clear();
+                transportListList1.clear();
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();

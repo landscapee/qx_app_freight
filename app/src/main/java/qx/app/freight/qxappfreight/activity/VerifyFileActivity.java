@@ -235,6 +235,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     public void forwardInfoResult(ForwardInfoBean forwardInfoBean) {
         if (null != forwardInfoBean) {
             String str = Arrays.toString(forwardInfoBean.getFreightAptitudeName());
+             str = str.replaceAll(",","\n");
             mTvCollectRequire.setText(str);
         } else
             Log.e("核查证明文件空", "");

@@ -188,8 +188,8 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<TestInfoListBean> testInfo(String waybillId, String freightId) {
-        return transform(getService().testInfo(waybillId, freightId));
+    public Observable<TestInfoListBean> testInfo(String waybillId, String freightId,String mTaskTypeCode) {
+        return transform(getService().testInfo(waybillId, freightId,mTaskTypeCode));
     }
 
     /****

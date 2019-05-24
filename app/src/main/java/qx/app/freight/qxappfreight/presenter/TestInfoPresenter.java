@@ -17,9 +17,9 @@ public class TestInfoPresenter extends BasePresenter {
         mRequestModel = new TestInfoModel();
     }
 
-    public void testInfo(String waybillId,String freightId) {
+    public void testInfo(String waybillId,String freightId,String mTaskTypeCode) {
         mRequestView.showNetDialog();
-        ((TestInfoModel) mRequestModel).testInfo(waybillId,freightId, new IResultLisenter<TestInfoListBean>() {
+        ((TestInfoModel) mRequestModel).testInfo(waybillId,freightId,mTaskTypeCode, new IResultLisenter<TestInfoListBean>() {
             @Override
             public void onSuccess(TestInfoListBean testInfoListBeans) {
                 ((TestInfoContract.testInfoView) mRequestView).testInfoResult(testInfoListBeans);

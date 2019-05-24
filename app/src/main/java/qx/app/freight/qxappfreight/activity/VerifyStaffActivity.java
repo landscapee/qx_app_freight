@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.jar.JarEntry;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -31,9 +30,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
-import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.TestInfoContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
@@ -108,7 +105,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                                      String waybillCode,
                                      String tid
 
-        ) {
+    ) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
         intent.putExtra("taskTypeCode", taskTypeCode);
         intent.putExtra("id", id);
@@ -150,7 +147,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
-        ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId);
+        ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId, mTaskTypeCode);
         List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
@@ -199,7 +196,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                             mShipperCompanyId,
                             mWaybillCode,
                             Tid
-                            );
+                    );
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -207,7 +204,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this,mTaskTypeCode,mWaybillId,mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId,mWaybillCode,Tid);
+                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -328,20 +325,23 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     @Override
     public void testInfoResult(TestInfoListBean testInfoListBeanList) {
         if (testInfoListBeanList != null) {
-            mAcTestInfoListBean = testInfoListBeanList;
-            //报检员姓名
-            tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
-            //报检开始时间
-            tvBjStart.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart()) + "至");
-            //报检结束时间
-            tvBjEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd()));
-            //危险开始时间
-            tvWxStart.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart()) + "至");
-            //危险结束时间
-            tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
-            //报检员备案照片
-            GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
+            if (testInfoListBeanList.getFreightInfo().size() > 0) {
+                mAcTestInfoListBean = testInfoListBeanList;
+                //报检员姓名
+                tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
+                //报检开始时间
+                tvBjStart.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart()) + "至");
+                //报检结束时间
+                tvBjEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd()));
+                //危险开始时间
+                tvWxStart.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart()) + "至");
+                //危险结束时间
+                tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
+                //报检员备案照片
+                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
+            }else
+                ToastUtil.showToast("数据为空");
         } else
             ToastUtil.showToast("数据为空");
     }
