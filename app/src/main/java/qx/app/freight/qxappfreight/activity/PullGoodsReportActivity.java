@@ -361,6 +361,11 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     }
 
     @Override
+    public void scanLockScooterResult(String result) {
+
+    }
+
+    @Override
     public void scooterWithUserResult(List<TransportTodoListBean> result) {
         if (result != null) {
             for (TransportTodoListBean bean : result) {
@@ -426,7 +431,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
             }
             mNewBillBean.setTpFregihtSpace(berth);
-            mNewBillBean.setMaxBillWeight(entity.getScooterWeight());
+            mNewBillBean.setMaxBillWeight(Double.valueOf(entity.getScooterWeight()));
             ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity_scan_waybill", "当前航班：" + mData.getFlightNo());
         } else {
             ToastUtil.showToast("板车扫描错误，请检查");
@@ -467,7 +472,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 } else {
                     mNewBillBean.setTpCargoNumber((int) addScooterBean.getData().getTotalNumberPackages());
                     mNewBillBean.setTpCargoWeight(addScooterBean.getData().getTotalWeight());
-                    mNewBillBean.setTpCargoVolume(addScooterBean.getData().getTotalVolume());
+                    mNewBillBean.setTpCargoVolume(Double.valueOf(addScooterBean.getData().getTotalVolume()));
                     setBillDataList(mWaybillCode, mNewBillBean);
                 }
             }

@@ -11,8 +11,8 @@ public class ScooterInfoListBean {
 
     private String id;
     private String scooterCode;
-    private int scooterWeight;
-    private int scooterType;
+    private Integer scooterWeight;
+    private String scooterType;
     private int delFlag;
     private long createDate;
     private String createUser;

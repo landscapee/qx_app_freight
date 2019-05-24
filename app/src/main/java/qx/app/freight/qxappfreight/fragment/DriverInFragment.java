@@ -219,6 +219,11 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     }
 
     @Override
+    public void scanLockScooterResult(String result) {
+
+    }
+
+    @Override
     public void scooterWithUserResult(List <TransportTodoListBean> result) {
         if (result != null) {
             list.clear();

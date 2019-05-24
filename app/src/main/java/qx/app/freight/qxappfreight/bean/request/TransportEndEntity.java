@@ -17,6 +17,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 public class TransportEndEntity {
     private String id;//用于 删除拉货记录
     private String taskId;//用于 识别代办类型
+    private String taskType;//代办类型
     private List<TransportTodoListBean> mainInfos;
     private List<TransportTodoListBean> scooters;
     private List<TpFlightStep> steps;

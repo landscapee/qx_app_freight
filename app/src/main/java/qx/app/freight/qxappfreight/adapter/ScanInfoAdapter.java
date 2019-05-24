@@ -36,7 +36,7 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         }else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
         }
-        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType()+"")+item.getScooterCode());
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType())+item.getScooterCode());
         helper.setText(R.id.tv_flight_type,mInfo.getFlightNo());
         helper.setText(R.id.tv_seat,mInfo.getSeat());
         helper.setText(R.id.tv_flight_arrive_time, TimeUtils.getHMDay(Long.valueOf(mInfo.getArrivalTime())));

@@ -449,6 +449,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> scanScooter(TransportTodoListBean model) {
         return nothingtransform(getService().scanScooter(model));
     }
+    /*****
+     * 扫描板车并锁定 (添加)
+     * @param model
+     * @return
+     */
+    public Observable<String> scanLockScooter(List<TransportTodoListBean> model) {
+        return nothingtransform(getService().scanLockScooter(model));
+    }
 
     /****
      * 扫描板车查询

@@ -278,6 +278,11 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> returnWeighing(@Body ReturnWeighingEntity model);
 
     /***********************运输*****************************/
+
+//    //扫描板车并锁定 (添加)
+    @POST("service-product-transport/tp-main-info/postScooterDataManual")
+    Observable<BaseEntity<Object>> scanLockScooter(@Body List<TransportTodoListBean> model);
+
     //结束运输接口
     @POST("service-product-transport/tp-main-info/transportEnd")
     Observable<BaseEntity<Object>> transportEnd(@Body TransportEndEntity model);

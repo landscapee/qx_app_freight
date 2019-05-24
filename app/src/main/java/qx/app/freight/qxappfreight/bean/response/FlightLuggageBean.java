@@ -47,7 +47,10 @@ public class FlightLuggageBean implements MultiItemEntity, Serializable {
     }
     @Override
     public int getItemType() {
-        return flightCourseByAndroid.size();
+        if (flightCourseByAndroid !=null)
+            return flightCourseByAndroid.size();
+        else
+            return 0;
     }
 
 }

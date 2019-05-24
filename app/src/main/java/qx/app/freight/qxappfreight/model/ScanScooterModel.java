@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -18,6 +20,17 @@ public class ScanScooterModel extends BaseModel implements ScanScooterContract.s
     @Override
     public void scanScooter(TransportTodoListBean transportEndEntity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().scanScooter(transportEndEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
+
+    @Override
+    public void scanLockScooter(List<TransportTodoListBean> transportEndEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scanLockScooter(transportEndEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

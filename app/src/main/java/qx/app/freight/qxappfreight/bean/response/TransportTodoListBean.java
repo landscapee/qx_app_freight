@@ -42,20 +42,20 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String tpScooterType;
     private String tpScooterCode;
     private String tpCargoType;
-    private int tpCargoNumber;
-    private double tpCargoWeight;
-    private double tpCargoVolume;
+    private Integer tpCargoNumber;
+    private Double tpCargoWeight;
+    private Double tpCargoVolume;
     private String tpFlightId;
     private String tpFlightNumber;
     private String tpFlightLocate;
-    private long tpFlightTime;
+    private Long tpFlightTime;
     private String tpFregihtSpace;
     private String tpStartLocate;
     private String tpDestinationLocate;
     private String tpType;
-    private int tpState;
+    private Integer tpState;//1 锁定（被扫描了）
     private String tpOperator;
-    private int dtoType;
+    private Integer dtoType;
     private Object newId;
     private String flightIndicator;
     private String warehouseId;
@@ -82,7 +82,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     /**
      * 上报时间
      */
-    private long reportTime;
+    private Long reportTime;
     private String taskId;
     private List<String> waybillIds;
 
@@ -94,9 +94,9 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String flightNo;
     private String planePlace;
     private String planeType;
-    private long etd;
+    private Long etd;
     private List<String> flightRoute;
-    private int num;//板车数量
+    private Integer num;//板车数量
     private String carType;//板车类型
 
 
@@ -120,13 +120,13 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     //运单号码
     private String billNumber;
     //是板车下拉还是运单下拉type值
-    private int infoType;
-    private int maxBillNumber;
-    private double maxBillWeight;
+    private Integer infoType;
+    private Integer maxBillNumber;
+    private Double maxBillWeight;
     private String billCode;
     private String waybillId;
-    private int pullInNumber;//拉货上报输入的板车拉的件数
-    private double pullInWeight;//拉货上报输入的板车拉的重量
+    private Integer pullInNumber;//拉货上报输入的板车拉的件数
+    private Double pullInWeight;//拉货上报输入的板车拉的重量
 
     @Override
     public int getItemType() {

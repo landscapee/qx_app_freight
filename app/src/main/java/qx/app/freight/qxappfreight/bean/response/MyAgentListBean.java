@@ -66,7 +66,7 @@ public class MyAgentListBean implements Serializable {
     private int isPrint;
     private String scooterCode;
     private String scooterWeight;
-    private int scooterType;
+    private String scooterType;
     private String uldCode;
     private String uldType;
     private int uldWeight;

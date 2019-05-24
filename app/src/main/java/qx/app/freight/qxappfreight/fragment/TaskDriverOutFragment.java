@@ -335,6 +335,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         if (index == max){
             ToastUtil.showToast("任务执行成功");
             getData();
+            currentPage = 1; //刷新数据
             index = 0;
         }
 //        StepBean stepBean = JSON.parseObject(result,StepBean.class);

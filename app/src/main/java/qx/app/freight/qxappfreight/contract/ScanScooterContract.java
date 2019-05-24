@@ -14,12 +14,15 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 public class ScanScooterContract {
     public interface scanScooterModel {
         void scanScooter(TransportTodoListBean transportEndEntity, IResultLisenter lisenter);
+        void scanLockScooter(List<TransportTodoListBean> transportEndEntity, IResultLisenter lisenter);
         void scooterWithUser(String user,IResultLisenter lisenter);
 
     }
 
     public interface scanScooterView extends IBaseView {
         void scanScooterResult(String result);
+        void scanLockScooterResult(String result);
         void scooterWithUserResult(List<TransportTodoListBean> result);
+
     }
 }

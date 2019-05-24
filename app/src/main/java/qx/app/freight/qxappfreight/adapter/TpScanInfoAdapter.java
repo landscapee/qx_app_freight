@@ -11,6 +11,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
@@ -30,18 +31,12 @@ public class TpScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, Bas
     @Override
     protected void convert(BaseViewHolder helper, ScooterInfoListBean item) {
         View viewDelete = helper.getView(R.id.ll_delete);
-        String type;
-        if(item.getScooterType()==1){
-            type="大板";
-        }else {
-            type="小板";
-        }
         if (item.getFlightType().equals("I")){
             helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
         }else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
         }
-        helper.setText(R.id.tv_board_number,type+item.getScooterCode());
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType()) +item.getScooterCode());
         helper.setText(R.id.tv_flight_type,mInfo.getFlightNo());
         helper.setText(R.id.tv_seat,mInfo.getSeat());
         helper.setText(R.id.tv_flight_arrive_time, TimeUtils.getHMDay(Long.valueOf(mInfo.getScheduleTime())));

@@ -68,6 +68,8 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
     private void initView() {
         mPresenter = new GetAllInternationalAndMixedFlightPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMfrvData.setRefreshListener(this);
+        mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
         mAdapter = new FlightListAdapter(mList);
@@ -122,6 +124,8 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
     }
     @Override
     public void getAllInternationalAndMixedFlightResult(List<FlightLuggageBean> flightLuggageBeans) {
+        mMfrvData.finishRefresh();
+        mMfrvData.finishLoadMore();
         mListTemp.clear();
         mListTemp.addAll(flightLuggageBeans);
         setTitleNum(mListTemp.size());
@@ -130,8 +134,9 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
 
     @Override
     public void toastView(String error) {
+        mMfrvData.finishRefresh();
+        mMfrvData.finishLoadMore();
         ToastUtil.showToast(error);
-        Log.e("22222", "toastView: " + error);
     }
 
     @Override
