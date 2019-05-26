@@ -8,14 +8,29 @@
     tools:context=".activity.InportDeliveryDetailActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:background="@drawable/shape_rect_white"
         android:orientation="vertical"
         android:padding="15dp">
 
+        <TextView
+            android:id="@+id/serial_number"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/shape_rect_blue_b3d1fb"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:gravity="center_vertical"
+            android:textColor="#136bef"
+            android:drawablePadding="5dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:text="流水号：000-999999999" />
+
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -82,7 +82,7 @@ public class WaybillsBean {
     private String destinationStationCn;
     private int manifestTotal;
     private double manifestWeight;
-    private Object warehouseArea;
+    private String warehouseArea;
     private Object warehouseLocation;
     private Object putStorageTime;
     private Object putStorageUser;
@@ -103,4 +103,17 @@ public class WaybillsBean {
      * 已提货件数
      */
     private Integer outboundNumber;
+    /**
+     * 逾期费用
+     */
+    private int amountOfMoney;
+    /**
+     * 超重数量
+     */
+    private int overWieghtCount;
+
+    /**
+     * 超重重量
+     */
+    private String overWieght;
 }

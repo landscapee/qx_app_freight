@@ -41,6 +41,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     TextView tvPickUpPhone;
     @BindView(R.id.consignee_card)
     TextView tvPickUpCard;
+    @BindView(R.id.serial_number)
+    TextView serialNumber;
 
 
     private DeliveryDetailAdapter mAdapter;
@@ -83,6 +85,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
             finish();
         }
+        serialNumber.setText(bean.getSerialNumber());
         tvPickUpName.setText(bean.getConsignee());
         tvPickUpPhone.setText(bean.getConsigneePhone());
         tvPickUpCard.setText(bean.getConsigneeIdentityCard());

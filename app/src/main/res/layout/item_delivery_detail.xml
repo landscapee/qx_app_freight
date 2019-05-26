@@ -40,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/black_3"
-                android:layout_marginLeft="@dimen/dp_4"
                 tools:text="3件/200kg" />
 
             <LinearLayout
@@ -65,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/black_3"
-                    tools:text="3件/200kg" />
+                    tools:text="3件" />
 
 
             </LinearLayout>
@@ -80,56 +79,101 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black_3"
+            android:text="库区：" />
+        <TextView
+            android:id="@+id/tv_kuqu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black_3"
+            tools:text="0" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@mipmap/shou" />
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/consignee"
+                android:singleLine="true"
+                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#676C8B"
-                android:layout_marginLeft="@dimen/dp_4"
-                tools:text="四川省成都机场大厅" />
+                android:textColor="@color/black_3"
+                android:text="超重：" />
+            <TextView
+                android:id="@+id/tv_overweight"
+                android:singleLine="true"
+                android:drawablePadding="@dimen/dp_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black_3"
+                tools:text="3件/200kg" />
+
+
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black_3"
+            android:text="状态：" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black_3"
+            android:layout_marginLeft="@dimen/dp_4"
+            tools:text="已通知" />
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/consignee_phone"
-                android:layout_marginLeft="22dp"
+                android:singleLine="true"
+                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/color_676c8e"
-                android:drawablePadding="5dp"
-                android:drawableStart="@mipmap/ic_person_mobil"
-                tools:text="13888888888" />
-            <View
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="1dp"/>
+                android:textColor="@color/black_3"
+                android:text="逾期费用：" />
             <TextView
-                android:id="@+id/consignee_card"
+                android:id="@+id/tv_cost"
+                android:singleLine="true"
+                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/color_676c8e"
-                android:drawablePadding="5dp"
-                android:drawableStart="@mipmap/ic_person_card"
-                tools:text="511289199899121234" />
+                android:textColor="@color/black_3"
+                tools:text="0元" />
+
+
         </LinearLayout>
     </LinearLayout>
 
