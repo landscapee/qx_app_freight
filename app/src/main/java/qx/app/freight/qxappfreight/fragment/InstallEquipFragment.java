@@ -202,7 +202,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        if (loadAndUnloadTodoBean.size() == 0) return;
+        if (loadAndUnloadTodoBean.size() == 0) {
+            if (mCurrentPage == 1) {
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
+            }
+            mCacheList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
+        ;
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -325,21 +334,33 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             } else {
                 mOperatePos = smallPos;
                 mSlideadapter = adapter;
-                PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-                entity.setType(1);
-                entity.setLoadUnloadDataId(mList.get(bigPos).getId());
-                entity.setFlightId(mList.get(bigPos).getFlightId());
-                entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-                entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                entity.setOperationCode(mList.get(bigPos).getStepCodeList().get(smallPos));
-                entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-                entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                entity.setUserName(mList.get(bigPos).getWorkerName());
-                entity.setCreateTime(System.currentTimeMillis());
-                ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+                if (smallPos == 3 && mList.get(bigPos).getList().get(smallPos).getData().getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
+                    String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
+                    for (String code : codes) {
+                        go2SlideStep(bigPos, code);
+                    }
+                } else {
+                    go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
+                }
             }
         });
+    }
+
+
+    private void go2SlideStep(int bigPos, String code) {
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
+        entity.setFlightId(mList.get(bigPos).getFlightId());
+        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode(code);
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(mList.get(bigPos).getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override

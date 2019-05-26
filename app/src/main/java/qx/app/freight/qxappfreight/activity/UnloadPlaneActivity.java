@@ -41,12 +41,14 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
+import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
+import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
@@ -58,7 +60,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView , GetFlightCargoResContract.getFlightCargoResView{
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView , GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView{
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -101,6 +103,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     TextView mTvErrorReport;//偏离上报
     @BindView(R.id.tv_end_unload)
     TextView mTvEndUnload;//结束卸机
+    @BindView(R.id.iv_notice_tp)
+    ImageView ivNoticeTp;
     private boolean mIsScanGoods = true;
     private List<ScooterInfoListBean> mListGoods = new ArrayList<>();
     private List<ScooterInfoListBean> mListPac = new ArrayList<>();
@@ -294,6 +298,62 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
             }
         });
+        ivNoticeTp.setOnClickListener(v ->{
+            noticeTp();
+        });
+    }
+    /**
+     * 通知开始运输
+     */
+    private void noticeTp() {
+        TransportEndEntity model = new TransportEndEntity();
+        model.setTaskId(mData.getTaskId());
+        Log.e("tag", "卸机id======" + mData.getId());
+        List<TransportTodoListBean> infos = new ArrayList<>();
+        for (ScooterInfoListBean bean : mListGoods) {
+            TransportTodoListBean entity = new TransportTodoListBean();
+            entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setTpScooterCode(bean.getScooterCode());
+            entity.setFlightIndicator(bean.getFlightType());
+            entity.setTpCargoType("cargo");
+            entity.setTpFlightId(mData.getFlightId()+"");
+            entity.setTpFlightNumber(mData.getFlightNo());
+            entity.setTpFlightLocate(mData.getSeat());
+            entity.setTpStartLocate("seat");
+            entity.setBeginAreaId(mData.getSeat());
+//            entity.setTpOperator(UserInfoSingle.getInstance().getUserId()); //不需要锁定板车 所以不传userId
+            entity.setDtoType(9);
+            entity.setTpType("进");
+            entity.setTpState(0);
+            entity.setTaskId(mData.getTaskId());//代办数据中的id
+            infos.add(entity);
+        }
+        for (ScooterInfoListBean bean : mListPac) {
+            TransportTodoListBean entity = new TransportTodoListBean();
+            entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setTpScooterCode(bean.getScooterCode());
+            entity.setFlightIndicator(bean.getFlightType());
+            entity.setTpCargoType("baggage");
+            entity.setTpFlightId(mData.getFlightId()+"");
+            entity.setTpFlightNumber(mData.getFlightNo());
+            entity.setTpFlightLocate(mData.getSeat());
+            entity.setTpStartLocate("seat");
+            entity.setBeginAreaId(mData.getSeat());
+//            entity.setTpOperator(UserInfoSingle.getInstance().getUserId()); //不需要锁定板车 所以不传userId
+            entity.setDtoType(9);
+            entity.setTpType("进");
+            entity.setTpState(0);
+            entity.setTaskId(mData.getTaskId());//代办数据中的id
+            infos.add(entity);
+        }
+        model.setScooters(infos);
+        model.setTaskType("2");
+        if (model.getScooters().size() == 0) {
+            ToastUtil.showToast("请选择上传板车信息再提交");
+        } else {
+            mPresenter = new ScanScooterPresenter(this);
+            ((ScanScooterPresenter) mPresenter).scanLockScooter(model);
+        }
     }
 
     private String mNowScooterCode;
@@ -441,6 +501,21 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void overLoadResult(String result) {
+
+    }
+
+    @Override
+    public void scanScooterResult(String result) {
+
+    }
+
+    @Override
+    public void scanLockScooterResult(String result) {
+        ToastUtil.showToast("已通知运输");
+    }
+
+    @Override
+    public void scooterWithUserResult(List<TransportTodoListBean> result) {
 
     }
 }

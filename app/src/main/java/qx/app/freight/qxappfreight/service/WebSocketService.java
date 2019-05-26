@@ -114,7 +114,6 @@ public class WebSocketService extends Service {
 
         compositeDisposable.add(dispTopic);
         //订阅  装机单变更推送
-        Log.e("tagPush", "userid=====" + UserInfoSingle.getInstance().getUserId());
         Disposable loadingListPush = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -151,7 +150,6 @@ public class WebSocketService extends Service {
                 }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
 
         compositeDisposable.add(dispTopic2);
-
         //订阅   运输 装卸机
         Disposable dispTopic3 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
                 .subscribeOn(Schedulers.io())
@@ -176,6 +174,10 @@ public class WebSocketService extends Service {
                         } else if (topicMessage.getPayload().contains("\"taskType\":0")) {//运输
                             CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
+                            sendLoadUnLoadGroupBoard(data);
+                        }else {
+                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
                         }
                     }

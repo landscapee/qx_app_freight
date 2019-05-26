@@ -69,6 +69,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private Object beginLoadUnloadTime;
     private RelateInfoObjBean relateInfoObj;
     private List<OperationStepObjBean> operationStepObj;
+    private int widthAirFlag;//0是宽体机，1是窄体机
 
     @Data
     public static class RelateInfoObjBean implements Serializable{
