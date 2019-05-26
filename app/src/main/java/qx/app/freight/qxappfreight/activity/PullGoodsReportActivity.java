@@ -56,6 +56,7 @@ import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -92,18 +93,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            if (result.isCancelFlag()) {
-                String taskId = result.getTaskId();
-                if (taskId.equals(mCurrentTaskId)) {
-                    ToastUtil.showToast("当前卸机任务已取消");
-                    Observable.timer(2, TimeUnit.SECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
-                            .subscribe(aLong -> finish());
-                }
-            }
-        }
+        PushDataUtil.handlePushInfo(result,mCurrentTaskId,this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

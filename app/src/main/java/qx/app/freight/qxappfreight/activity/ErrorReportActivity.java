@@ -58,6 +58,7 @@ import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -98,18 +99,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            if (result.isCancelFlag()) {
-                String taskId = result.getTaskId();
-                if (taskId.equals(mCurrentTaskId)) {
-                    ToastUtil.showToast("当前卸机任务已取消");
-                    Observable.timer(2, TimeUnit.SECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
-                            .subscribe(aLong -> finish());
-                }
-            }
-        }
+        PushDataUtil.handlePushInfo(result,mCurrentTaskId,this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

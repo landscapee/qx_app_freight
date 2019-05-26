@@ -86,7 +86,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {
-            if (result.isCancelFlag()) {
+            if (result.isCancelFlag() || result.isChangeWorkerUser() || result.isSplitTask()) {
                 loadData();
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
@@ -293,10 +293,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
                 data.add(entity1);
             }
-            List<String> codeList=new ArrayList<>();
-            for (int i=0;i<bean.getOperationStepObj().size();i++){
-                String code=bean.getOperationStepObj().get(i).getOperationCode();
-                if (!code.equals("FreightUnloadFinish")&&!code.equals("FreightLoadFinish")){
+            List<String> codeList = new ArrayList<>();
+            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
+                String code = bean.getOperationStepObj().get(i).getOperationCode();
+                if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {
                     codeList.add(bean.getOperationStepObj().get(i).getOperationCode());
                 }
             }

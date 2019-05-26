@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -14,6 +15,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
 import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.bean.MultiStepEntity;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.SlideLeftExecuteView;
 
 /**
@@ -51,10 +53,14 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                     if (mList.get(pos).getData().getTaskType()==5){//装卸机2合1代办单独处理
                         mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
                         if (pos==3){
-                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type", mList.get(pos).getFlightType());
-                            intent.putExtra("plane_info", mList.get(pos).getData());
-                            mContext.startActivity(intent);
+                            if (TextUtils.isEmpty(mList.get(pos).getData().getSeat())){
+                                ToastUtil.showToast("当前航班未分配机位，不能进行卸机操作");
+                            }else {
+                                Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+                                intent.putExtra("flight_type", mList.get(pos).getFlightType());
+                                intent.putExtra("plane_info", mList.get(pos).getData());
+                                mContext.startActivity(intent);
+                            }
                         }else if (pos==4){
                             Intent intent = new Intent(mContext, LoadPlaneActivity.class);
                             intent.putExtra("plane_info", mList.get(pos).getData());
