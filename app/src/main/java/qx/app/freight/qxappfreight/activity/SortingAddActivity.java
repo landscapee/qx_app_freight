@@ -167,7 +167,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             if (mInWaybillRecord.getTransit() != null) {
                 locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
             }
-            remarkEdt.setText("" + mInWaybillRecord.getRemark());
+            remarkEdt.setText("" + mInWaybillRecord.getRemark() == null?"":mInWaybillRecord.getRemark());
         } else {
             Log.e("dime", "不知道进入了哪里");
         }
