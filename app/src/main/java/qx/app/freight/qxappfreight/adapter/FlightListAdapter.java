@@ -37,24 +37,26 @@ public class FlightListAdapter extends BaseMultiItemQuickAdapter<FlightLuggageBe
 //        }else {
 //            helper.setGone(R.id.iv_lock,true);
 //        }
-
-        switch (helper.getItemViewType()){
-            case 2:
-                helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                        .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1));
-                break;
-            case 3:
-                helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                        .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
-                        .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2));
-                break;
-            case 4:
-                helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                        .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
-                        .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2))
-                        .setText(R.id.tv_flight_4,item.getFlightCourseByAndroid().get(3));
-                break;
+        if (item.getFlightCourseByAndroid().size() >1 ){
+            switch (helper.getItemViewType()){
+                case 2:
+                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1));
+                    break;
+                case 3:
+                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
+                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2));
+                    break;
+                case 4:
+                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
+                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2))
+                            .setText(R.id.tv_flight_4,item.getFlightCourseByAndroid().get(3));
+                    break;
+            }
         }
+
     }
 
 }

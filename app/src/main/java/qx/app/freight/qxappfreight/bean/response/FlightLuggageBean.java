@@ -50,7 +50,7 @@ public class FlightLuggageBean implements MultiItemEntity, Serializable {
         if (flightCourseByAndroid !=null)
             return flightCourseByAndroid.size();
         else
-            return 0;
+            return 2;
     }
 
 }
