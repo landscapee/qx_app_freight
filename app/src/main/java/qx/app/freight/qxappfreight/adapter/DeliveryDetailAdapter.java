@@ -12,6 +12,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseViewHolder> {
@@ -41,11 +42,8 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         //逾期费用
         holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
-        if (TextUtils.isEmpty(bean.getWarehouseArea())){
-            holder.setText(R.id.tv_kuqu,"-");
-        }else {
-            holder.setText(R.id.tv_kuqu,bean.getWarehouseArea());
-        }
+        holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getWarehouseArea(),"-"));
+
 //                .setText(R.id.consignee,bean.getConsignee())
 //                .setText(R.id.consignee_phone,bean.getConsigneePhone())
 //                .setText(R.id.consignee_card,bean.getConsigneeCarid());
