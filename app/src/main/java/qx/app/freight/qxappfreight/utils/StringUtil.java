@@ -46,6 +46,20 @@ public class StringUtil {
     }
 
     /**
+     * 对字符串做非null 判断 返回想要的 默认值
+     * @param response
+     * @param defaultStr 默认值
+     * @return
+     */
+    public static String toText(String response,String defaultStr) {
+        String result = defaultStr;
+        if (!TextUtils.isEmpty(response)) {
+            result = response;
+        }
+        return result;
+    }
+
+    /**
      * 改变文字的颜色 通过html标签
      * @param content 文字内容
      * @param color 文字颜色 16进制值

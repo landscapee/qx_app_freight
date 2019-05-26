@@ -501,7 +501,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<AcceptTerminalTodoBean>> acceptTerminalTodo(BaseFilterEntity model) {
         return transform(getService().acceptTerminalTodo(model));
     }
-
+    /***
+     * 运输 异常结束
+     * @param exceptionReportEntity
+     * @return
+     */
+    public Observable<String> exceptionTpEnd(ExceptionReportEntity exceptionReportEntity) {
+        return nothingtransform(getService().exceptionTpEnd(exceptionReportEntity));
+    }
 
     /***
      * 异常上报

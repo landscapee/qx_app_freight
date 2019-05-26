@@ -52,6 +52,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
@@ -87,8 +88,10 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private static final int mAuthBaseRequestCode = 1;
     private ImageRvAdapter mAdapter;
     private String mFlightNumber;
-    private ArrayList<String> mFlightNumberList; //传过来的航班号列表
-    private String mCurrentTaskId;
+    private ArrayList<OutFieldTaskBean> mFlightberList = null; //传过来的航班列表
+    private ArrayList<String> mFlightNumberList = null; //传过来的航班号列表
+    private String mCurrentTaskId;//当前任务ID
+    private String mFlightId;//被选中的 板车号
 
 
 
@@ -156,10 +159,16 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         });
         mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
         mRvPhoto.setAdapter(mAdapter);
-        mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
-        if (mFlightNumberList != null) {
+        mFlightberList = (ArrayList <OutFieldTaskBean>) getIntent().getSerializableExtra("plane_info_list");
+        mFlightId = getIntent().getStringExtra("flight_id");
+        if (mFlightberList != null) {
             mSpinner.setVisibility(View.VISIBLE);
+            for (OutFieldTaskBean mOutFieldTaskBean: mFlightberList){
+                mFlightNumberList.add(mOutFieldTaskBean.getFlightNo());
+            }
             mFlightNumber = mFlightNumberList.get(0);
+            mFlightId = mFlightberList.get(0).getFlightId();
+
             mTvFlightInfo.setText(mFlightNumber);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
             mSpinner.setAdapter(spinnerAdapter);
@@ -167,6 +176,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mFlightNumber = mFlightNumberList.get(position);
+                    mFlightId = mFlightberList.get(position).getFlightId();
                 }
 
                 @Override
@@ -191,6 +201,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
                     model.setFlightNum(mFlightNumber);
+                    model.setFlightId(Long.valueOf(mFlightId));
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
@@ -338,7 +349,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setFlightNum(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
-        model.setFlightId(Long.valueOf(getIntent().getStringExtra("flight_id")));
+        model.setFlightId(Long.valueOf(mFlightId));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
@@ -367,5 +378,10 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     public void exceptionReportResult(String result) {
         ToastUtil.showToast("异常上报成功");
         finish();
+    }
+
+    @Override
+    public void exceptionTpEndResult(String result) {
+
     }
 }

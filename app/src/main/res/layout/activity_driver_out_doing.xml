@@ -103,4 +103,22 @@
             android:gravity="center"
             android:text="开始" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <Button
+            android:layout_marginTop="5dp"
+            android:id="@+id/btn_error"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:text="异常结束"
+            android:textColor="@color/red"
+            android:background="@drawable/shape_white_stroke_grey"
+
+            />
+    </LinearLayout>
 </LinearLayout>

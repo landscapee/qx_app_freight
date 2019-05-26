@@ -279,7 +279,7 @@ public interface HttpApi {
 
     /***********************运输*****************************/
 
-//    //扫描板车并锁定 (添加)
+     //扫描板车并锁定 (首件行李  通知运输使用)
     @POST("service-product-transport/tp-main-info/postScooterDataManual")
     Observable<BaseEntity<Object>> scanLockScooter(@Body List<TransportTodoListBean> model);
 
@@ -320,6 +320,10 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/outFieldTodo")
     Observable<BaseEntity<List<AcceptTerminalTodoBean>>> acceptTerminalTodo(@Body BaseFilterEntity model);
 
+
+    //运输 -异常结束
+    @POST("service-product-transport/tp-main-info/transportEndException")
+    Observable<BaseEntity<Object>> exceptionTpEnd(@Body ExceptionReportEntity exceptionReportEntity);
     /***********************装卸机*****************************/
     //出港装机 -异常上报
     @POST("service-product-transport/tp-exception-report/exceptionReport")

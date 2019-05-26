@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.bean.request;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -14,9 +15,9 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
  * Created by pr
  */
 @Data
-public class TransportEndEntity {
+public class TransportEndEntity implements Serializable {
     private String id;//用于 删除拉货记录
-    private String taskId;//用于 识别代办类型
+    private String taskId;//运输任务id
     private String taskType;//代办类型
     private List<TransportTodoListBean> mainInfos;
     private List<TransportTodoListBean> scooters;

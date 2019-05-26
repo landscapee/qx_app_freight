@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.bean.request;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class TpFlightStep {
+public class TpFlightStep implements Serializable {
 
     private String id;
 

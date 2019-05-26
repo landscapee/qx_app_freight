@@ -19,8 +19,11 @@ public class ExceptionReportEntity {
     private String exceptionDesc;
 
     private List<String> files;
-
-    private int reType;//3拉货上报
+    /**
+     * 1装机异常上报,2卸机异常上报,3装机拉货上报
+     * 4 偏离上报
+     */
+    private int reType;
 
     private String reOperator;//
 
@@ -36,6 +39,12 @@ public class ExceptionReportEntity {
 
     private String seat;
 
+    private String area;//结束区域id
+
+    private String exceptionCode;//异常 操作code
+
     private List<TransportTodoListBean> scooters;//板车数据
     private List<TransportTodoListBean> waybillScooters;//运单数据
+
+    private TransportEndEntity transportAppDto; //结束运输的  任务板车信息
 }

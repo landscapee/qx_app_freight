@@ -39,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
+import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.BaggageAreaSubPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -132,18 +133,39 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             bean.setTpFlightBusId(flightBean.getId());
             bean.setTpAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
-
-            BaggerInputDialog dialog = new BaggerInputDialog();
-            dialog.setData(this,bean,flightBean.getFlightIndicator());
-            dialog.setBaggerInoutListener(new BaggerInputDialog.OnBaggerInoutListener() {
-                @Override
-                public void onConfirm(TransportTodoListBean data) {
-                    mList.add(data);
+/**
+ *屏蔽行李 信息补充
+ */
+//            BaggerInputDialog dialog = new BaggerInputDialog();
+//            dialog.setData(this,bean,flightBean.getFlightIndicator());
+//            dialog.setBaggerInoutListener(new BaggerInputDialog.OnBaggerInoutListener() {
+//                @Override
+//                public void onConfirm(TransportTodoListBean data) {
+//                    mList.add(data);
+//                    mAdapter.notifyDataSetChanged();
+////                    bindingUser();
+//                }
+//            });
+//            dialog.show(getSupportFragmentManager(),"321");
+            if ("D".equals(flightBean.getFlightIndicator()) || "I".equals(flightBean.getFlightIndicator())) {
+                bean.setFlightIndicator(flightBean.getFlightIndicator());
+                mList.add(bean);
+                mAdapter.notifyDataSetChanged();
+            } else {
+                ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+                dialog.setData(this, isLocal -> {
+                    if (isLocal) {
+                        bean.setFlightIndicator("D");
+                    } else {
+                        bean.setFlightIndicator("I");
+                    }
+                    mList.add(bean);
                     mAdapter.notifyDataSetChanged();
-//                    bindingUser();
-                }
-            });
-            dialog.show(getSupportFragmentManager(),"321");
+                });
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "111");
+
+            }
 
         } else {
             ToastUtil.showToast("无该板信息");

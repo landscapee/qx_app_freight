@@ -21,4 +21,14 @@ public class ExceptionReportModel extends BaseModel implements ExceptionReportCo
                 });
         mDisposableList.add(subscription);
     }
+    @Override
+    public void exceptionTpEnd(ExceptionReportEntity exceptionReportEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().exceptionTpEnd(exceptionReportEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
@@ -74,15 +75,8 @@ public class BaggerInputDialog extends DialogFragment {
         etWeight = dialog.findViewById(R.id.et_weight);
         etVolume = dialog.findViewById(R.id.et_volume);
         labelsView = dialog.findViewById(R.id.labels_flight);
-        String scooterName;
-
-        if (bean.getDtoType()==1){
-            scooterName = "大板";
-        }else {
-            scooterName = "小板";
-        }
         //板车类型~板车号
-        tvBoardNumber.setText("板车："+String.format(context.getString(R.string.format_allocate_ddress_info), scooterName, bean.getTpScooterCode()));
+        tvBoardNumber.setText("板车："+String.format(context.getString(R.string.format_allocate_ddress_info), MapValue.getCarTypeValue(bean.getTpScooterType()), bean.getTpScooterCode()));
 
         if (flightIndicator.equals("M")){
                 //初始化标签栏

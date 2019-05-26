@@ -10,6 +10,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, BaseViewHolder> {
@@ -30,7 +31,7 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         helper.setText(R.id.allocate_address, String.format(mContext.getString(R.string.format_allocate_ddress_info), MapValue.getCarTypeValue(item.getTpScooterType()), item.getTpScooterCode()));
 
         //件数~重量~体积
-        helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTpCargoNumber()+"", item.getTpCargoWeight()+"", item.getTpCargoVolume()+""));
+        helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), StringUtil.toText(item.getTpCargoNumber()+"","0") ,StringUtil.toText(item.getTpCargoWeight()+"","0"), StringUtil.toText(item.getTpCargoVolume()+"","0")));
 
         //是否隐藏国际图标
         if (item.getFlightIndicator().equals("I")){

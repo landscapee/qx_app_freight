@@ -50,7 +50,10 @@ import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
+import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.GetAllRemoteAreaContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
@@ -90,10 +93,11 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     private static final int mAuthBaseRequestCode = 1;
     private ImageRvAdapter mAdapter;
     private String mFlightNumber;
-    private ArrayList<String> mFlightNumberList; //传过来的航班号列表
     private List<String> mAbnormalList; //异常类型列表
     private String mCurrentTaskId;
-    private String id;
+    private String areaId;
+
+    private TransportEndEntity mTransportEndEntity;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -133,12 +137,10 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        toolbar.setMainTitle(Color.WHITE, "异常上报");
+        toolbar.setMainTitle(Color.WHITE, "异常结束");
         mAbnormalList = new ArrayList<>();
         mPresenter = new GetAllRemoteAreaPresenter(this);
         ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
-        //新加id
-        id = getIntent().getStringExtra("id");
         mPhotoPath.add("111");
         mAdapter = new ImageRvAdapter(mPhotoPath);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -163,34 +165,18 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         });
         mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
         mRvPhoto.setAdapter(mAdapter);
-        mFlightNumberList = getIntent().getStringArrayListExtra("plane_info_list");
-        if (mFlightNumberList != null) {
-            mSpinner.setVisibility(View.VISIBLE);
-            mFlightNumber = mFlightNumberList.get(0);
-            mTvFlightInfo.setText(mFlightNumber);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
-            mSpinner.setAdapter(spinnerAdapter);
-            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    mFlightNumber = mFlightNumberList.get(position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        } else {
-            mTvFlightInfo.setVisibility(View.VISIBLE);
-            mFlightNumber = getIntent().getStringExtra("flight_number");
-            mCurrentTaskId = getIntent().getStringExtra("task_id");
-            mTvFlightInfo.setText(mFlightNumber);
+        mTransportEndEntity = (TransportEndEntity) getIntent().getSerializableExtra("TransportEndEntity");
+        if (mTransportEndEntity == null){
+            ToastUtil.showToast("数据错误");
+            finish();
+            return;
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+        mTvDate.setText(sdf.format(new Date()));
         mAbnormalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                areaId = mAbnormalList.get(position);
             }
 
             @Override
@@ -198,9 +184,6 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
 
             }
         });
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
-        mTvDate.setText(sdf.format(new Date()));
         mBtnCommit.setOnClickListener(v -> {
             if (getNoAddPictureList().size() == 0 && TextUtils.isEmpty(mEtDetailInfo.getText().toString())) {
                 ToastUtil.showToast("请添加文字或图片说明（至少一种）");
@@ -208,12 +191,14 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(AbnormalEndActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
-                    model.setFlightNum(mFlightNumber);
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
-                    model.setReType(getIntent().getIntExtra("error_type", 1));
+                    model.setReType(4);//运输偏离上报
                     model.setFiles(null);
-                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+                    model.setArea(areaId);
+                    model.setExceptionCode(Constants.TP_END);
+                    model.setTransportAppDto(mTransportEndEntity);
+                    ((ExceptionReportPresenter) mPresenter).exceptionTpEnd(model);
                 } else {
                     pressImage(getNoAddPictureList());
                 }
@@ -339,13 +324,14 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
             filePaths.add(entry.getKey());
         }
         ExceptionReportEntity model = new ExceptionReportEntity();
-        model.setFlightNum(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
-        model.setFlightId(Long.valueOf(getIntent().getStringExtra("flight_id")));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
-        model.setReType(getIntent().getIntExtra("error_type", 1));
-        ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+        model.setReType(4);
+        model.setArea(areaId);
+        model.setExceptionCode(Constants.TP_END);
+        model.setTransportAppDto(mTransportEndEntity);
+        ((ExceptionReportPresenter) mPresenter).exceptionTpEnd(model);
     }
 
     @Override
@@ -369,6 +355,12 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void exceptionReportResult(String result) {
+        ToastUtil.showToast("异常上报成功");
+        finish();
+    }
+
+    @Override
+    public void exceptionTpEndResult(String result) {
         ToastUtil.showToast("异常上报成功");
         finish();
     }

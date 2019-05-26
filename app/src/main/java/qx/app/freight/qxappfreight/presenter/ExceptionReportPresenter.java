@@ -28,4 +28,20 @@ public class ExceptionReportPresenter extends BasePresenter {
             }
         });
     }
+    public void exceptionTpEnd(ExceptionReportEntity model) {
+        mRequestView.showNetDialog();
+        ((ExceptionReportModel) mRequestModel).exceptionTpEnd(model, new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((ExceptionReportContract.exceptionReportView) mRequestView).exceptionTpEndResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
 }
