@@ -31,29 +31,36 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 理货卸机页面
  */
-public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView {
+public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -260,6 +267,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
+                entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("cargo");
                 entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
                 entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
@@ -274,6 +282,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
+                entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("baggage");
                 entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
                 entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
@@ -289,6 +298,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             } else {
                 model.setSeat(mOutFieldTaskBean.getFlights().getSeat());
                 model.setScooters(infos);
+                model.setEndUnloadTask(false);
                 mPresenter = new ArrivalDataSavePresenter(this);
                 ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
             }
@@ -382,6 +392,38 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         }
     }
 
+
+    /**
+     *x循环执行 步骤任务。最后一条 再去拉去 列表
+     * @param mOutFieldTaskBean
+     * @param step
+     */
+    private void submitStep(OutFieldTaskBean mOutFieldTaskBean,int step){
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        PerformTaskStepsEntity entity=new PerformTaskStepsEntity();
+        entity.setType(0);
+        entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
+        entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
+        entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
+        entity.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
+
+        if (step == 0)
+            entity.setOperationCode(Constants.TP_START);//任务开始
+        else if(step == 1)
+            entity.setOperationCode(Constants.TP_END);//任务结束
+        else
+            entity.setOperationCode(Constants.TP_ACCEPT);//任务领受
+
+        entity.setUserName(UserInfoSingle.getInstance().getUsername());
+
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setCreateTime(System.currentTimeMillis());
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+
+    }
+
     @Override
     public void existResult(MyAgentListBean result) {
 
@@ -409,9 +451,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Override
     public void arrivalDataSaveResult(String result) {
-        ToastUtil.showToast("结束卸机成功");
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
-        finish();
+      submitStep(mOutFieldTaskBean,1);
     }
 
     @Override
@@ -421,5 +461,17 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
+    }
+
+    @Override
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+        ToastUtil.showToast("卸机成功");
+        EventBus.getDefault().post("TaskDriverOutFragment_refresh");
+        finish();
     }
 }

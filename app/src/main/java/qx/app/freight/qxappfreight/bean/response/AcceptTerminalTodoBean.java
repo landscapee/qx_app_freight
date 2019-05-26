@@ -18,7 +18,7 @@ public class AcceptTerminalTodoBean implements Serializable {
 
     private List<OutFieldTaskBean> tasks;
 
-    private boolean isExpand = true;
+    private boolean isExpand = false;
 
     private List<List<OutFieldTaskBean>> useTasks;
 

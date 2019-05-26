@@ -170,7 +170,6 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
      @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("TaskDriverOutFragment_refresh")) {
-
             getData();
         }
     }

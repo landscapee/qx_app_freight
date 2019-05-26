@@ -451,7 +451,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             //给所有开始运输的板车绑定任务基本信息
             for (TransportTodoListBean tr : mListBeanBegin) {
                 if (mOutFieldTaskBean.getFlightNo().equals(mOutFieldTaskBean.getFlightNo())) {
-                    tr.setTaskId(mOutFieldTaskBean.getId());
+                    tr.setTaskId(mOutFieldTaskBean.getTaskId());
                     tr.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
                     tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                     tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
@@ -516,7 +516,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                         tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
-                        tr.setTaskId(mOutFieldTaskBean.getId());
+                        tr.setTaskId(mOutFieldTaskBean.getTaskId());
                         tr.setAcdmDtoId(mOutFieldTaskBean.getAcdmDtoId());
                     }
                 }
@@ -578,7 +578,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                         tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
-                        tr.setTaskId(mOutFieldTaskBean.getId());
+                        tr.setTaskId(mOutFieldTaskBean.getTaskId());
                         tr.setAcdmDtoId(mOutFieldTaskBean.getAcdmDtoId());
                     }
                 }
