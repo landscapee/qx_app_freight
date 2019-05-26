@@ -37,7 +37,7 @@ public class FlightListAdapter extends BaseMultiItemQuickAdapter<FlightLuggageBe
 //        }else {
 //            helper.setGone(R.id.iv_lock,true);
 //        }
-        if (item.getFlightCourseByAndroid().size() >1 ){
+        if (item.getFlightCourseByAndroid() != null && item.getFlightCourseByAndroid().size() >1 ){
             switch (helper.getItemViewType()){
                 case 2:
                     helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
