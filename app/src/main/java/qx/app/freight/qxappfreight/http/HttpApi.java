@@ -281,7 +281,7 @@ public interface HttpApi {
 
      //扫描板车并锁定 (首件行李  通知运输使用)
     @POST("service-product-transport/tp-main-info/postScooterDataManual")
-    Observable<BaseEntity<Object>> scanLockScooter(@Body List<TransportTodoListBean> model);
+    Observable<BaseEntity<Object>> scanLockScooter(@Body TransportEndEntity model);
 
     //结束运输接口
     @POST("service-product-transport/tp-main-info/transportEnd")

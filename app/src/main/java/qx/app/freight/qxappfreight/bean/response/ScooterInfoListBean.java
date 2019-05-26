@@ -20,9 +20,4 @@ public class ScooterInfoListBean {
     private String updateUser;
     private String flightType;
 
-
-
-
-
-
 }

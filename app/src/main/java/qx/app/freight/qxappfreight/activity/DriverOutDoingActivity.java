@@ -38,15 +38,18 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.TpFlightStep;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightOfScooterBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.TransportBeginContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
+import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -59,7 +62,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 外场押运界面
  */
-public class DriverOutDoingActivity extends BaseActivity implements TransportBeginContract.transportBeginView, ScanScooterContract.scanScooterView {
+public class DriverOutDoingActivity extends BaseActivity implements TransportBeginContract.transportBeginView, ScanScooterContract.scanScooterView, ScanScooterCheckUsedContract.ScanScooterCheckView {
     @BindView(R.id.ll_add)
     LinearLayout llAdd;
 
@@ -94,6 +97,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private int isSure = 0;//0 扫版 1 扫行李转盘
 
+    private String nowScooterCode = "";
 
     public static void startActivity(Context context, List <OutFieldTaskBean> mTasksBean, String transfortType) {
         Intent starter = new Intent(context, DriverOutDoingActivity.class);
@@ -282,33 +286,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      * @param scooterCode
      */
     private void addScooterInfo(String scooterCode) {
-
-
         if (!"".equals(scooterCode)) {
             /**
              * 首件行李运输 单独处理， 先进行卸机行李上报，然后扫码添加。服务器并且锁定该板（防止调度再次分配该板）
              */
             if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
-                //TODO
-                List <TransportTodoListBean> transportTodoListBeans = new ArrayList <>();
-                TransportTodoListBean mainIfos = new TransportTodoListBean();
-                if ("D".equals(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator()) || "I".equals(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator())) {
-                    mainIfos.setFlightIndicator(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator());
-                    updataScooter(transportTodoListBeans, mainIfos, scooterCode);
-                } else {
-                    ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                    dialog.setData(this, isLocal -> {
-                        if (isLocal) {
-                            mainIfos.setFlightIndicator("D");
-                        } else {
-                            mainIfos.setFlightIndicator("I");
-                        }
-                        updataScooter(transportTodoListBeans, mainIfos, scooterCode);
-                    });
-                    dialog.setCancelable(false);
-                    dialog.show(getSupportFragmentManager(), "111");
 
-                }
+                checkScooterCode(scooterCode);
+
             } else {
                 mPresenter = new ScanScooterPresenter(this);
                 TransportTodoListBean mainIfos = new TransportTodoListBean();
@@ -324,7 +309,19 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             ToastUtil.showToast("扫描结果为空请重新扫描");
     }
 
+    /**
+     * 检查是否是已经存在的板车
+     * @param scooterCode
+     */
+    private void checkScooterCode(String scooterCode) {
+        mPresenter = new ScanScooterCheckUsedPresenter(this);
+        nowScooterCode = scooterCode;
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+    }
+
     private void updataScooter(List <TransportTodoListBean> transportTodoListBeans, TransportTodoListBean mainIfos, String scooterCode) {
+
+        TransportEndEntity transportEndEntity = new TransportEndEntity();
         mPresenter = new ScanScooterPresenter(this);
         mainIfos.setTpFlightId(mAcceptTerminalTodoBean.get(0).getFlightId());
         mainIfos.setTpFlightNumber(mAcceptTerminalTodoBean.get(0).getFlightNo());
@@ -337,7 +334,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         mainIfos.setBeginAreaId(mAcceptTerminalTodoBean.get(0).getBeginAreaId());
         mainIfos.setTpState(1);
         transportTodoListBeans.add(mainIfos);
-        ((ScanScooterPresenter) mPresenter).scanLockScooter(transportTodoListBeans);
+        transportEndEntity.setTaskType("1");
+        transportEndEntity.setScooters(transportTodoListBeans);
+        ((ScanScooterPresenter) mPresenter).scanLockScooter(transportEndEntity);
     }
 
 
@@ -382,6 +381,15 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         switch (view.getId()) {
 
             case R.id.ll_add://添加板车
+                if (tpStatus == 0) {
+                    ToastUtil.showToast("运输已经开始，无法再次扫版");
+                    return;
+                }
+                if (listScooter.size() >= tpNum) {
+
+                    ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
+                    return;
+                }
                 ScanManagerActivity.startActivity(this);
                 break;
             case R.id.tv_error_report://偏离上报
@@ -452,6 +460,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             for (TransportTodoListBean tr : mListBeanBegin) {
                 if (mOutFieldTaskBean.getFlightNo().equals(mOutFieldTaskBean.getFlightNo())) {
                     tr.setTaskId(mOutFieldTaskBean.getTaskId());
+                    tr.setTaskPk(mOutFieldTaskBean.getId());
                     tr.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
                     tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                     tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
@@ -517,6 +526,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                         tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
                         tr.setTaskId(mOutFieldTaskBean.getTaskId());
+                        tr.setTaskPk(mOutFieldTaskBean.getId());
                         tr.setAcdmDtoId(mOutFieldTaskBean.getAcdmDtoId());
                     }
                 }
@@ -579,6 +589,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                         tr.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
                         tr.setTaskId(mOutFieldTaskBean.getTaskId());
+                        tr.setTaskPk(mOutFieldTaskBean.getId());
                         tr.setAcdmDtoId(mOutFieldTaskBean.getAcdmDtoId());
                     }
                 }
@@ -767,4 +778,33 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         dismissProgessDialog();
     }
 
+    @Override
+    public void checkScooterCodeResult(BaseEntity<Object> result) {
+        if ("200".equals(result.getStatus())) {
+            //TODO
+            List <TransportTodoListBean> transportTodoListBeans = new ArrayList <>();
+            TransportTodoListBean mainIfos = new TransportTodoListBean();
+            if ("D".equals(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator()) || "I".equals(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator())) {
+                mainIfos.setFlightIndicator(mAcceptTerminalTodoBean.get(0).getFlights().getFlightIndicator());
+                updataScooter(transportTodoListBeans, mainIfos, nowScooterCode);
+            } else {
+                ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+                dialog.setData(this, isLocal -> {
+                    if (isLocal) {
+                        mainIfos.setFlightIndicator("D");
+                    } else {
+                        mainIfos.setFlightIndicator("I");
+                    }
+                    updataScooter(transportTodoListBeans, mainIfos, nowScooterCode);
+                });
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "111");
+
+            }
+        } else {
+            ToastUtil.showToast("操作不合法，不能重复扫描");
+        }
+        //
+        nowScooterCode = "";
+    }
 }

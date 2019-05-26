@@ -454,7 +454,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> scanLockScooter(List<TransportTodoListBean> model) {
+    public Observable<String> scanLockScooter(TransportEndEntity model) {
         return nothingtransform(getService().scanLockScooter(model));
     }
 

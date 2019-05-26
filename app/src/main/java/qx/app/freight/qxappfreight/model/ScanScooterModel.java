@@ -29,7 +29,7 @@ public class ScanScooterModel extends BaseModel implements ScanScooterContract.s
     }
 
     @Override
-    public void scanLockScooter(List<TransportTodoListBean> transportEndEntity, IResultLisenter lisenter) {
+    public void scanLockScooter(TransportEndEntity transportEndEntity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().scanLockScooter(transportEndEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

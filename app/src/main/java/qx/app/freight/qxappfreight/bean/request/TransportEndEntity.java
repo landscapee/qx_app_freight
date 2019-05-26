@@ -18,8 +18,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 public class TransportEndEntity implements Serializable {
     private String id;//用于 删除拉货记录
     private String taskId;//运输任务id
-    private String taskType;//代办类型
-    private List<TransportTodoListBean> mainInfos;
+    private String taskType;//代办类型 （首件行李接口注释 1 代表 锁定 2 通知运输）
     private List<TransportTodoListBean> scooters;
     private List<TpFlightStep> steps;
     private String seat;

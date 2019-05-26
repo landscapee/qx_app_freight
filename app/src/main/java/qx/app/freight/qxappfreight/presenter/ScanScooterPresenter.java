@@ -35,7 +35,7 @@ public class ScanScooterPresenter extends BasePresenter {
             }
         });
     }
-    public void scanLockScooter(List<TransportTodoListBean> transportEndEntity) {
+    public void scanLockScooter(TransportEndEntity transportEndEntity) {
         mRequestView.showNetDialog();
         ((ScanScooterModel) mRequestModel).scanLockScooter(transportEndEntity, new IResultLisenter<String>() {
             @Override

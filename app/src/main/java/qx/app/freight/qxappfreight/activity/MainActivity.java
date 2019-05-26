@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -110,6 +111,12 @@ public class MainActivity extends BaseActivity {
             } else
                 taskAssignType = 2;
             WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
+                    + "userId=" + UserInfoSingle.getInstance().getUserId()
+                    + "&taskAssignType=" + taskAssignType
+                    + "&type=MT"
+                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+
+            Log.e("webSocketUrl=====",HttpConstant.WEBSOCKETURL
                     + "userId=" + UserInfoSingle.getInstance().getUserId()
                     + "&taskAssignType=" + taskAssignType
                     + "&type=MT"
