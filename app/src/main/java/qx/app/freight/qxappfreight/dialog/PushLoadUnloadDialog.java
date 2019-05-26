@@ -97,9 +97,9 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
                         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
                         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
                         if (bean.getTaskType() == 1) {
-                            entity.setOperationCode("FreightPass_receive");
+                            entity.setOperationCode("FreightLoadReceived");
                         } else {
-                            entity.setOperationCode("FreightPass_receive");
+                            entity.setOperationCode("FreightUnloadReceived");
                         }
                         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                         entity.setUserId(UserInfoSingle.getInstance().getUserId());

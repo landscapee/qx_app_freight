@@ -169,7 +169,7 @@ public class WebSocketService extends Service {
                             sendLoadUnLoadGroupBoard(data);
                         }
                     } else {
-                        if (topicMessage.getPayload().contains("\"taskType\":1") || topicMessage.getPayload().contains("\"taskType\":2")) {//装卸机
+                        if (topicMessage.getPayload().contains("\"taskType\":1") || topicMessage.getPayload().contains("\"taskType\":2")|| topicMessage.getPayload().contains("\"taskType\":5")) {//装卸机
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
