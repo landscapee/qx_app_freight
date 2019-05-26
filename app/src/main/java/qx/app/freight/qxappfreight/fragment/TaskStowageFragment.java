@@ -89,7 +89,8 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
                 }
             }
         }
-        adapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(adapter);
+//        adapter.notifyDataSetChanged();
     }
 
     private void initData() {
@@ -222,12 +223,12 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 
     @Override
     public void showNetDialog() {
-//        showProgessDialog("加载中……");
+        showProgessDialog("加载中……");
     }
 
     @Override
     public void dissMiss() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
     }
 
     @Override

@@ -132,11 +132,12 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         tvFlightPlace.setText(flightBean.getSeat());
         tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getScheduleTime()), TimeUtils.getDay((flightBean.getScheduleTime()))));
         //显示航线，2条 3条 4条
+        if (flightBean.getFlightCourseByAndroid() !=null && flightBean.getFlightCourseByAndroid().size()>1)
         switch (flightBean.getItemType()) {
             case 2:
                 llFlight2.setVisibility(View.VISIBLE);
                 tvFlight21.setText(flightBean.getFlightCourseByAndroid().get(0));
-                tvFlight22.setText(flightBean.getFlightCourseByAndroid().get(0));
+                tvFlight22.setText(flightBean.getFlightCourseByAndroid().get(1));
 
                 break;
             case 3:
