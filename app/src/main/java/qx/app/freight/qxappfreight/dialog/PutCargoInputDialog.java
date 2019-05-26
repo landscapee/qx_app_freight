@@ -37,13 +37,20 @@ public class PutCargoInputDialog extends DialogFragment {
     private PutCargoInputListener mListener;
 
     private TextView tvConfirm;
+    private TextView tvOverweight;
+    private TextView tvOverweightCount;
     private EditText etNumber;
+    private EditText etCar;
 
     private int num = 0;
+    private int overWeightCount ;
+    private double overWeight;
 
-    public void setData(Context context, int num) {
+    public void setData(Context context, int num,double overWeight,int overWeightCount) {
         this.context = context;
         this.num =num;
+        this.overWeight =overWeight;
+        this.overWeightCount =overWeightCount;
     }
     public void setPutCargoInputListener(PutCargoInputListener listener){
         this.mListener = listener;
@@ -66,8 +73,13 @@ public class PutCargoInputDialog extends DialogFragment {
 
         //初始化控件
         tvConfirm = dialog.findViewById(R.id.tv_confirm);
+        tvOverweight = dialog.findViewById(R.id.tv_overweight);
+        tvOverweightCount = dialog.findViewById(R.id.tv_overweight_count);
         etNumber = dialog.findViewById(R.id.et_number);
+        etCar = dialog.findViewById(R.id.et_car);
         etNumber.setText(num+"");
+        tvOverweight.setText(overWeight+"kg");
+        tvOverweightCount.setText(overWeightCount+"件");
         //初始化点击事件
         tvConfirm.setOnClickListener(v -> {
             toConFirm();
@@ -81,16 +93,26 @@ public class PutCargoInputDialog extends DialogFragment {
      */
     private void toConFirm() {
         String sNumber = etNumber.getText().toString().trim();
-
+        String sCar = etCar.getText().toString().trim();
+        int carNum;
         if (TextUtils.isEmpty(sNumber)){
             ToastUtil.showToast("出库数量不能为空");
+            return;
+        }
+        if (Integer.valueOf(sNumber)==0){
+            ToastUtil.showToast("出库数量不能为0");
             return;
         }
         if (Integer.valueOf(sNumber)>num){
             ToastUtil.showToast("出库数量不能大于待出货数量");
             return;
         }
-        mListener.onConfirm(Integer.valueOf(sNumber));
+        if (TextUtils.isEmpty(sCar)){
+            carNum =0;
+        }else {
+            carNum = Integer.valueOf(sCar);
+        }
+        mListener.onConfirm(Integer.valueOf(sNumber),carNum);
         dismiss();
     }
 
@@ -116,6 +138,6 @@ public class PutCargoInputDialog extends DialogFragment {
 
 
     public interface PutCargoInputListener{
-        void onConfirm(int data);
+        void onConfirm(int data,int carNum);
     }
 }

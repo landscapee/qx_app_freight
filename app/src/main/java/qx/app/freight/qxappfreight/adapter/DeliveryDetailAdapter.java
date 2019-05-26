@@ -34,7 +34,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         //超重
         holder.setText(R.id.tv_overweight, String.format(mContext.getString(R.string.format_goods_inport)
                 ,bean.getOverWieghtCount()+""
-                ,bean.getOverWieght()));
+                ,bean.getOverWieght()+""));
 
         //分拣件数 - 重量
         holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/dp_10"
     android:layout_marginEnd="@dimen/dp_10"
     android:background="@drawable/shape_rectangle_menu_gray"
@@ -12,6 +13,7 @@
         android:layout_height="@dimen/dp_47"
         android:background="#2e81fd"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -26,80 +28,155 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="33dp"
+        android:layout_margin="30dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_board_number"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center"
-            android:text="请输入出库数量"
-            android:textColor="@color/color_000"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:text="出库件数    ："
+                android:textColor="@color/color_000"
+                android:textSize="@dimen/dp_18" />
 
             <EditText
                 android:id="@+id/et_number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:singleLine="true"
-                android:inputType="number"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/shape_rect_gray_line"
                 android:gravity="center"
                 android:hint="请输入提货件数"
-                android:textColor="@color/blue_2e8"
-                android:text=""
-                android:textSize="18sp"
+                android:inputType="number"
+                android:maxLength="8"
                 android:padding="5dp"
-                />
-
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/divider_line_grey" />
-
-
-            <EditText
-                android:id="@+id/et_volume"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:inputType="numberDecimal"
-                android:gravity="center_vertical|end"
-                android:hint="请输入行李体积"
                 android:singleLine="true"
-                android:spinnerMode="dropdown" />
+                android:textColor="@color/blue_2e8"
+                android:textSize="16sp" />
 
         </LinearLayout>
-
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/divider_line_grey" />
-
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="20dp"
-            >
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_confirm"
-                android:layout_width="@dimen/dp_200"
-                android:layout_height="@dimen/dp_40"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/shape_rect_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
                 android:gravity="center"
-                android:text="确定"
-                android:textColor="@color/color_fff" />
+                android:text="使用叉车数："
+                android:textColor="@color/color_000"
+                android:textSize="@dimen/dp_18" />
+
+            <EditText
+                android:id="@+id/et_car"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/shape_rect_gray_line"
+                android:gravity="center"
+                android:hint="请输入叉车数"
+                android:inputType="number"
+                android:maxLength="4"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textColor="@color/blue_2e8"
+                android:textSize="16sp" />
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:singleLine="true"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black_3"
+                    android:text="超重重量：" />
+                <TextView
+                    android:id="@+id/tv_overweight"
+                    android:singleLine="true"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black_3"
+                    tools:text="3kg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:singleLine="true"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black_3"
+                    android:text="超重数量：" />
+                <TextView
+                    android:id="@+id/tv_overweight_count"
+                    android:singleLine="true"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black_3"
+                    tools:text="3件" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="5dp"
+        android:background="@color/divider_line_grey" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/shape_rect_blue"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/color_fff" />
+    </LinearLayout>
 </LinearLayout>

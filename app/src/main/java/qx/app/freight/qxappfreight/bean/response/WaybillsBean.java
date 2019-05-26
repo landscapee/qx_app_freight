@@ -115,5 +115,5 @@ public class WaybillsBean {
     /**
      * 超重重量
      */
-    private String overWieght;
+    private double overWieght;
 }

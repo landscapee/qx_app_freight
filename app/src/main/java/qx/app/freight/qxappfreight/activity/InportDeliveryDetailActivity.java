@@ -99,7 +99,13 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mAdapter.setDeliveryDetailInterface(new DeliveryDetailAdapter.DeliveryDetailInterface() {
             @Override
             public void outStorage(int position, String id, String outStorageUser) {
-                deliveryInWaybill(position,id,outStorageUser,mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber());
+                deliveryInWaybill(
+                        position,
+                        id,
+                        outStorageUser,
+                        mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber(),
+                        mList.get(position).getOverWieght(),
+                        mList.get(position).getOverWieghtCount());
             }
 
         });
@@ -118,18 +124,19 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
     }
     //出库
-    private void deliveryInWaybill(int position,String id, String outStorageUser,int waitPutCargo){
+    private void deliveryInWaybill(int position,String id, String outStorageUser,int waitPutCargo,double overWeight,int overWeightCount){
 
         PutCargoInputDialog dialog = new PutCargoInputDialog();
-        dialog.setData(this,waitPutCargo);
+        dialog.setData(this,waitPutCargo,overWeight,overWeightCount);
         dialog.setPutCargoInputListener(new PutCargoInputDialog.PutCargoInputListener() {
             @Override
-            public void onConfirm(int data) {
+            public void onConfirm(int data,int carNum) {
                 nowPosition = position;
                 BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
                 entity.setCreateUser(outStorageUser);
                 entity.setWaybillId(id);
                 entity.setOutboundNumber(data);
+                entity.setForkliftTruckNumber(carNum);
 //                entity.setOutStorageUser(outStorageUser);
                 ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
             }
