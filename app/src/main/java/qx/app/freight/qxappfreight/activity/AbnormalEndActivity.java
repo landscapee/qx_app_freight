@@ -50,9 +50,12 @@ import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
+import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
+import qx.app.freight.qxappfreight.contract.GetAllRemoteAreaContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
+import qx.app.freight.qxappfreight.presenter.GetAllRemoteAreaPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -62,7 +65,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 异常结束
  */
-public class AbnormalEndActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView {
+public class AbnormalEndActivity extends BaseActivity implements UploadsContract.uploadsView, ExceptionReportContract.exceptionReportView, GetAllRemoteAreaContract.getAllRemoteAreaView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
     @BindView(R.id.tv_date)
@@ -88,6 +91,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     private ImageRvAdapter mAdapter;
     private String mFlightNumber;
     private ArrayList<String> mFlightNumberList; //传过来的航班号列表
+    private List<String> mAbnormalList; //异常类型列表
     private String mCurrentTaskId;
     private String id;
 
@@ -130,6 +134,9 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "异常上报");
+        mAbnormalList = new ArrayList<>();
+        mPresenter = new GetAllRemoteAreaPresenter(this);
+        ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
         //新加id
         id = getIntent().getStringExtra("id");
         mPhotoPath.add("111");
@@ -180,6 +187,17 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
             mCurrentTaskId = getIntent().getStringExtra("task_id");
             mTvFlightInfo.setText(mFlightNumber);
         }
+        mAbnormalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
@@ -353,5 +371,17 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     public void exceptionReportResult(String result) {
         ToastUtil.showToast("异常上报成功");
         finish();
+    }
+
+    @Override
+    public void getAllRemoteAreaResult(List<GetAllRemoteAreaBean> getAllRemoteAreaBean) {
+        if (null !=getAllRemoteAreaBean){
+            for (int i = 0; i < getAllRemoteAreaBean.size(); i++) {
+                mAbnormalList.add(getAllRemoteAreaBean.get(i).getAreaId());
+            }
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,R.layout.item_spinner_general, mAbnormalList);
+            mAbnormalSpinner.setAdapter(spinnerAdapter);
+        }else
+            ToastUtil.showToast("数据为空");
     }
 }
