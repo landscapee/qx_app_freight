@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
@@ -13,17 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.BaggerListAdapter;
 import qx.app.freight.qxappfreight.adapter.InternationalCargoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -34,8 +30,6 @@ import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
-import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
-import qx.app.freight.qxappfreight.presenter.BaggageAreaSubPresenter;
 import qx.app.freight.qxappfreight.presenter.InternationalCargoReportPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -106,8 +100,8 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
     @Override
     public void businessLogic(Bundle savedInstanceState) {
 
-        Intent intent =  getIntent();
-        flightBean =(FlightLuggageBean)intent.getSerializableExtra("flightBean");
+        Intent intent = getIntent();
+        flightBean = (FlightLuggageBean) intent.getSerializableExtra("flightBean");
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "国际货物上报");
@@ -136,9 +130,9 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         flightId.setText(flightBean.getFlightNo());
         tvFlightType.setText(flightBean.getAircraftNo());
         tvFlightPlace.setText(flightBean.getSeat());
-        tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getScheduleTime()) , TimeUtils.getDay((flightBean.getScheduleTime()))));
+        tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getScheduleTime()), TimeUtils.getDay((flightBean.getScheduleTime()))));
         //显示航线，2条 3条 4条
-        switch (flightBean.getItemType()){
+        switch (flightBean.getItemType()) {
             case 2:
                 llFlight2.setVisibility(View.VISIBLE);
                 tvFlight21.setText(flightBean.getFlightCourseByAndroid().get(0));
@@ -175,9 +169,10 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         }
     }
 
-    /**添加板车
+    /**
+     * 添加板车
      *
-     * @param mScooterCode  板车号
+     * @param mScooterCode 板车号
      */
     private void isIncludeScooterCode(String mScooterCode) {
         if (mList.size() > 0) {
@@ -194,19 +189,20 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         entity.setCurrent(1);
         entity.setSize(10);
         entity.setFilter(myAgentListBean);
-        ((InternationalCargoReportPresenter)mPresenter).scooterInfoList(entity);
+        ((InternationalCargoReportPresenter) mPresenter).scooterInfoList(entity);
     }
 
     //提交数据
-    private void submitScooter(){
+    private void submitScooter() {
 
-        for (TransportTodoListBean item:mList) {
+        for (TransportTodoListBean item : mList) {
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
             item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
             item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
         }
-        String json = JSON.toJSONString(mList);
-        ((InternationalCargoReportPresenter)mPresenter).internationalCargoReport(json);
+        Gson gson = new Gson();
+        String json = gson.toJson(mList);
+        ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(json);
     }
 
     @Override
