@@ -215,7 +215,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, mSpotResult, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid);
+                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, mSpotResult, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid, mJianYan);
 //                    ToastUtil.showToast(this, "不合格");
                     mPresenter = new SubmissionPresenter(this);
                     StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
