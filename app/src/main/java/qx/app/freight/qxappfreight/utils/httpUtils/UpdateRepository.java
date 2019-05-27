@@ -63,6 +63,7 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
@@ -347,7 +348,7 @@ public class UpdateRepository extends BaseRepository {
      * @param iata
      * @return
      */
-    public Observable<FreightInfoBean> freightInfo(String iata) {
+    public Observable<List<MarketCollectionRequireBean>> freightInfo(String iata) {
         return transform(getService().freightInfo(iata));
     }
 

@@ -1,8 +1,11 @@
 package qx.app.freight.qxappfreight.presenter;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.model.FreightInfoModel;
 
@@ -19,10 +22,10 @@ public class FreightInfoPresenter extends BasePresenter {
 
     public void freightInfo(String id) {
         mRequestView.showNetDialog();
-        ((FreightInfoModel) mRequestModel).freightInfo(id, new IResultLisenter<FreightInfoBean>() {
+        ((FreightInfoModel) mRequestModel).freightInfo(id, new IResultLisenter<List<MarketCollectionRequireBean>>() {
             @Override
-            public void onSuccess(FreightInfoBean freightInfoBean) {
-                ((FreightInfoContract.freightInfoView) mRequestView).freightInfoResult(freightInfoBean);
+            public void onSuccess(List<MarketCollectionRequireBean> beanList) {
+                ((FreightInfoContract.freightInfoView) mRequestView).freightInfoResult(beanList);
                 mRequestView.dissMiss();
             }
 

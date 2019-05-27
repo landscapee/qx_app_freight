@@ -62,6 +62,7 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
@@ -218,8 +219,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> upLoads(@Part List<MultipartBody.Part> files);
 
     //航空公司资质
-    @GET("service-bussiness-market/marketAirlinesProxy/getByIata/{iata}")
-    Observable<BaseEntity<FreightInfoBean>> freightInfo(@Path("iata") String iata);
+    @GET("service-bussiness-market/collectionRequire/get/{iata}")
+    Observable<BaseEntity<List<MarketCollectionRequireBean>>> freightInfo(@Path("iata") String iata);
 
     //货代资质
     @GET("service-bussiness-shipper/freightInfo/getById/{freightId}")

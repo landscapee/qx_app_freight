@@ -1,8 +1,11 @@
 package qx.app.freight.qxappfreight.contract;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 
 /**
  * TODO : xxx
@@ -14,7 +17,7 @@ public class FreightInfoContract {
     }
 
     public interface freightInfoView extends IBaseView {
-        void freightInfoResult(FreightInfoBean freightInfoBean);
+        void freightInfoResult(List<MarketCollectionRequireBean> beanList);
     }
 
 }

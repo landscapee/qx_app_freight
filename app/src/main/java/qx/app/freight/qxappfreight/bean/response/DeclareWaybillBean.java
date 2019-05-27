@@ -262,9 +262,17 @@ public class DeclareWaybillBean implements Serializable {
     private String scooterId;
 
     /**
+     * 1不抽检， 0抽检
      * 抽检标志
      */
     private String spotFlag;
+
+    /**
+     * 抽检结果 -- guohao
+     * 1不通过，0通过
+
+    private Integer spotResult;
+     */
 
     /**
      * 中转站中文

@@ -27,12 +27,15 @@ import com.beidouapp.et.client.domain.UserInfo;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.presenter.FreightInfoPresenter;
@@ -68,6 +71,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     LinearLayout mLlBaoZhuang;
     @BindView(R.id.ll_yaoqiu)
     LinearLayout mLlYaoQiu;
+    @BindView(R.id.ll_spot)
+    LinearLayout mLlSpot;
 
     private String waybillId; //运单id
     private String insFile;  //报检员资质路径
@@ -81,10 +86,11 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
-    private String mSpotFlag, mFlightNumber,mTaskTypeCode,mWaybillCode,Tid;
+    private String mSpotFlag, mFlightNumber, mTaskTypeCode, mWaybillCode, Tid;
+    private int mSportResult;//抽验结果  0是通过 1是不通过
 
 
-    public static void startActivity(Activity context, String taskTypeCode,String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, String userId, String flightNumber,String waybillCode,String tid) {
+    public static void startActivity(Activity context, String taskTypeCode, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, int spotResult, String userId, String flightNumber, String waybillCode, String tid) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
         intent.putExtra("taskTypeCode", taskTypeCode);
         intent.putExtra("waybillId", waybillId);
@@ -95,6 +101,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         intent.putExtra("taskId", taskId);
         intent.putExtra("userId", userId);
         intent.putExtra("spotFlag", spotFlag);
+        intent.putExtra("spotResult", spotResult);
         intent.putExtra("flightNumber", flightNumber);
         intent.putExtra("waybillCode", waybillCode);
         intent.putExtra("tid", tid);
@@ -122,11 +129,19 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mFlightNumber = getIntent().getStringExtra("flightNumber");
         mWaybillCode = getIntent().getStringExtra("waybillCode");
         Tid = getIntent().getStringExtra("tid");
-        //0是通过 1是不通过
+        //抽查结果 1不抽检， 0抽检
         mSpotFlag = getIntent().getStringExtra("spotFlag");
+        //抽查结果
+        mSportResult = getIntent().getIntExtra("spotResult", -1);
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
         ((FreightInfoPresenter) mPresenter).freightInfo(mFlightNumber.substring(0, 2));
+
+        Log.e("dime", "spotFlat=" + mSpotFlag + ", spotResult=" + mSportResult);
+        if(mSpotFlag.equals("0")){
+            //抽查，显示抽查操作按钮
+            mLlSpot.setVisibility(View.VISIBLE);
+        }
 
 
         //默认选中
@@ -150,11 +165,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mStorageCommitEntity = new StorageCommitEntity();
         llReason.setVisibility(View.GONE);
         mTvCheck.setOnClickListener(v -> {
-            Log.e("SpotFlag", mSpotFlag);
             //0抽检，要弹，1不抽检，不需要弹
-            if ("1".equals(mSpotFlag)) {
+            if (1 == mSportResult) {
                 ToastUtil.showToast("不需要抽检，默认通过");
-            } else if ("0".equals(mSpotFlag)) {
+            } else if (0 == mSportResult) {
                 if ("通过".equals(mTvCheck.getText()))
                     initPop1(true);
                 else
@@ -219,9 +233,13 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     //货代公司资质
     @Override
-    public void freightInfoResult(FreightInfoBean freightInfoBean) {
-        if (freightInfoBean != null) {
-            mTvCollectRequire.setText(freightInfoBean.getRequire());
+    public void freightInfoResult(List<MarketCollectionRequireBean> beanList) {
+        if (beanList != null) {
+            String str = "";
+            for (MarketCollectionRequireBean bean : beanList) {
+                str += bean.getColRequire() + "\n";
+            }
+            mTvCollectRequire.setText(str);
         } else {
             Log.i("freightInfoBean", "freightInfoBean为空");
         }

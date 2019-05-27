@@ -64,6 +64,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private String mTaskTypeCode;
     private String mWaybillCode;
     private String Tid;
+    private int mSpotResult;
 
 
 
@@ -75,6 +76,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                                      String taskId,
                                      String filePath,
                                      String spotFlag,
+                                     int spotResult,
                                      int insCheck,
                                      String flightNumber,
                                      String shipperCompanyId,
@@ -89,6 +91,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         intent.putExtra("taskId", taskId);
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotFlag", spotFlag);
+        intent.putExtra("spotResult", spotResult);
         intent.putExtra("insCheck", insCheck);
         intent.putExtra("flightNumber", flightNumber);
         intent.putExtra("shipperCompanyId", shipperCompanyId);
@@ -121,6 +124,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotFlag = getIntent().getStringExtra("spotFlag");
+        mSpotResult = getIntent().getIntExtra("spotResult", -1);
         mFlightNumber = getIntent().getStringExtra("flightNumber");
         mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
         mWaybillCode = getIntent().getStringExtra("waybillCode");
@@ -164,6 +168,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         0,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
                         mSpotFlag,
+                        mSpotResult,
                         UserInfoSingle.getInstance().getUserId(), //当前提交人id
                         mFlightNumber,
                         mWaybillCode,
@@ -181,6 +186,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         1,//资质是否合格0合格 1不合格
                         mTaskId, //当前任务id
                         mSpotFlag,
+                        mSpotResult,
                         UserInfoSingle.getInstance().getUserId(), //当前提交人id
                         mFlightNumber,
                         mWaybillCode,

@@ -83,6 +83,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private String filePath;
     private String mWaybillId;
     private String mSpotFlag;
+    private int mSpotResult;
     private String insCheck; //报检是否合格1合格 0不合格
     private String mFlightNumber;//航班号
     private String mShipperCompanyId;
@@ -191,6 +192,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                             mTaskId,
                             filePath,
                             mSpotFlag,
+                            mSpotResult,
                             0,
                             mFlightNumber,
                             mShipperCompanyId,
@@ -204,7 +206,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                ToastUtil.showToast(this, "不合格");
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid);
+                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, mSpotResult, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -327,6 +329,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (testInfoListBeanList != null) {
             if (testInfoListBeanList.getFreightInfo().size() > 0) {
                 mAcTestInfoListBean = testInfoListBeanList;
+                //获取抽验结果
+                mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
                 //报检员姓名
                 tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
                 //报检开始时间
