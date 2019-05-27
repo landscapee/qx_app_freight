@@ -253,6 +253,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                         , result.getShipperCompanyId()
                         , mBean.getWaybillCode()
                         ,mBean.getId()
+                        ,result.getAdditionTypeArr()
                 );
             }
         } else {
