@@ -145,6 +145,8 @@ public class StringUtil {
      * @return
      */
     public static String formatString2(Object value){
+        if(null == value)
+            return "0";
         return  String.format("%.1f", value);
     }
     /**

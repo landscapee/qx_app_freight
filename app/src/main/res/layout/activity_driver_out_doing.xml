@@ -4,121 +4,124 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_tp_status"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:background="#FFE1C1"
-            android:gravity="center"
-            android:text="正在执行"
-            android:textColor="#CD5400"
-            android:visibility="gone" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ll_cb_all"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            >
-            <CheckBox
-                android:id="@+id/cb_all"
-                style="@style/GreenCheckboxTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="全选"
-                android:layout_marginLeft="10dp"
-                android:textSize="14sp"
-                />
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_car_doing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-        <LinearLayout
-            android:id="@+id/ll_add"
-            android:layout_width="match_parent"
-            android:layout_height="73dp"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/shape_rect_gray_eff2"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/image_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/new_5" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5"
-                android:text="请扫码添加板车" />
+                <TextView
+                    android:id="@+id/tv_tp_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:background="#FFE1C1"
+                    android:gravity="center"
+                    android:text="正在执行"
+                    android:textColor="#CD5400"
+                    android:visibility="gone" />
 
+                <LinearLayout
+                    android:id="@+id/ll_cb_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cb_all"
+                        style="@style/GreenCheckboxTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="全选"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_car_doing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/ll_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="73dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/shape_rect_gray_eff2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image_scan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/new_5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:text="请扫码添加板车" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#F0F2F5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_error_report"
+                    style="@style/public_tv_18sp_5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="偏离上报" />
+
+                <TextView
+                    android:id="@+id/tv_start"
+                    style="@style/public_tv_18sp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_blue_press"
+                    android:gravity="center"
+                    android:text="开始" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#F0F2F5" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_error_report"
-            style="@style/public_tv_18sp_5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="偏离上报" />
-
-        <TextView
-            android:id="@+id/tv_start"
-            style="@style/public_tv_18sp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/btn_blue_press"
-            android:gravity="center"
-            android:text="开始" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        >
-        <Button
-            android:layout_marginTop="5dp"
-            android:id="@+id/btn_error"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
+        <ImageView
+            android:id="@+id/iv_error_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ex_tp_end_press"
             android:text="异常结束"
-            android:textColor="@color/red"
-            android:background="@drawable/shape_white_stroke_grey"
-
-            />
-    </LinearLayout>
+            android:textColor="@color/red" />
+    </RelativeLayout>
 </LinearLayout>

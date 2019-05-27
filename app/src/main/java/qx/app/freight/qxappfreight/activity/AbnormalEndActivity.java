@@ -362,6 +362,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     @Override
     public void exceptionTpEndResult(String result) {
         ToastUtil.showToast("异常上报成功");
+        EventBus.getDefault().post("DriverOutDoingActivity_finish");
         finish();
     }
 

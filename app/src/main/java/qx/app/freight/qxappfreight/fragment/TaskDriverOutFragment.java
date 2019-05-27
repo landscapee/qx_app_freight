@@ -63,6 +63,8 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     private int max = 0,index = 0; //用于执行多个子任务的领受操作
 
+    private String nowDoTaskId = "";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         adapter = new DriverOutTaskAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
+            nowDoTaskId = list.get(position).getTaskId();
         });
         adapter.setmOnStepListener((step, parentPosition, position) -> {
             /**
@@ -146,6 +148,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setCreateTime(System.currentTimeMillis());
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
 
+        nowDoTaskId = mOutFieldTaskBean.getTaskId();
     }
 
     @Override
@@ -181,7 +184,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
 
-        if (result.isCancelFlag()&&result.getTaskId() !=null){
+        if (result.getTaskId() !=null && (result.isCancelFlag()|| result.isChangeWorkerUser())){
             canCelTask(result.getTaskId());
         }
         else {
@@ -267,6 +270,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                     mAcceptTerminalTodoBean.setUseTasks(getUseTasks(mAcceptTerminalTodoBean));
                 }
             }
+            setListStatus(acceptTerminalTodoBeanList);
             list.addAll(acceptTerminalTodoBeanList);
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
@@ -276,6 +280,21 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         } else {
             Log.e("失败", "外场运输待办");
         }
+    }
+
+    /**
+     * 展开之前执行的任务
+     * @param acceptTerminalTodoBeanList
+     */
+    private void setListStatus(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
+            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean :acceptTerminalTodoBeanList){
+                  if (nowDoTaskId.equals(mAcceptTerminalTodoBean.getTaskId())){
+                      mAcceptTerminalTodoBean.setExpand(true);
+                  }
+                  else
+                      mAcceptTerminalTodoBean.setExpand(false);
+            }
+
     }
 
     /**

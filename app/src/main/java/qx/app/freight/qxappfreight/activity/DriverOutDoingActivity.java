@@ -167,6 +167,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             else
                 list.get(position).setSelect(true);
 
+            //选择item时  设置全选的状态
+            for (FlightOfScooterBean mFlightOfScooterBean:list){
+                if (!mFlightOfScooterBean.isSelect()){
+                    cbAll.setChecked(false);
+                }
+                else
+                    cbAll.setChecked(true);
+            }
             upDataBtnStatusEnd();
         });
 
@@ -235,13 +243,25 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result.isCancelFlag()) {
-            if (result.getTaskId() != null && result.getTaskId().equals(mAcceptTerminalTodoBean.get(0).getTaskId()))
-                ;
-            {
+        if (result.isCancelFlag()|| result.isChangeWorkerUser()) {
+            if (result.getTaskId() != null && result.getTaskId().equals(mAcceptTerminalTodoBean.get(0).getTaskId())){
+
                 ToastUtil.showToast("该任务已被取消！");
                 finish();
             }
+        }
+    }
+    /**
+     * 收到取消任务推送 关闭页面
+     *
+     * @param result
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result.equals("DriverOutDoingActivity_finish")) {
+                ToastUtil.showToast("该任务已异常结束");
+                EventBus.getDefault().post("TaskDriverOutFragment_refresh");
+                finish();
         }
     }
 
@@ -274,7 +294,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void isSureEndLoc(String str) {
 
         if (!str.equals(mAcceptTerminalTodoBean.get(0).getEndAreaId())) {
-            ToastUtil.showToast("请前往正确的运输终点");
+            ToastUtil.showToast("请前往正确的运输终点:"+mAcceptTerminalTodoBean.get(0).getEndAreaId());
             return;
         } else
             doEnd();
@@ -375,7 +395,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     }
 
-    @OnClick({R.id.ll_add, R.id.tv_start, R.id.tv_error_report, R.id.btn_error})
+    @OnClick({R.id.ll_add, R.id.tv_start, R.id.tv_error_report, R.id.iv_error_end})
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -409,22 +429,28 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     startActivity(intent);
                 }
                 break;
-            case R.id.btn_error:
-                flightNumList.clear();
-                for (OutFieldTaskBean item : mAcceptTerminalTodoBean) {
-                    if (!flightNumList.contains(item.getFlightNo())) {
-                        flightNumList.add(item);
+            case R.id.iv_error_end:
+
+                if (tpStatus == 0){
+                    flightNumList.clear();
+                    for (OutFieldTaskBean item : mAcceptTerminalTodoBean) {
+                        if (!flightNumList.contains(item.getFlightNo())) {
+                            flightNumList.add(item);
+                        }
+                    }
+                    if (!flightNumList.isEmpty()) {
+                        Intent intent = new Intent(this, AbnormalEndActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("plane_info_list", (ArrayList <OutFieldTaskBean>) flightNumList);
+                        bundle.putSerializable("TransportEndEntity", getTransportEndEntity());
+                        intent.putExtras(bundle);
+                        intent.putExtra("error_type", 4);
+                        startActivity(intent);
                     }
                 }
-                if (!flightNumList.isEmpty()) {
-                    Intent intent = new Intent(this, AbnormalEndActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("plane_info_list", (ArrayList <OutFieldTaskBean>) flightNumList);
-                    bundle.putSerializable("TransportEndEntity", getTransportEndEntity());
-                    intent.putExtras(bundle);
-                    intent.putExtra("error_type", 4);
-                    startActivity(intent);
-                }
+                else
+                    ToastUtil.showToast("任务必须先开始运输才能异常结束");
+
                 break;
             case R.id.tv_start://开始或者结束运输
                 if (tpStatus == 1) {
@@ -487,8 +513,6 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         transportEndEntity.setScooters(mListBeanBegin);
         transportEndEntity.setSteps(steps);
         ((TransportBeginPresenter) mPresenter).transportBegin(transportEndEntity);
-
-
     }
 
     /**
@@ -613,6 +637,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
                 steps.add(step);
             }
+            transportEndEntity.setTaskId(mAcceptTerminalTodoBean.get(0).getTaskId() );
             transportEndEntity.setScooters(mListBeanBegin);
             transportEndEntity.setSteps(steps);
         }
