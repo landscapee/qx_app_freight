@@ -95,19 +95,30 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
     private MyAgentListBean mMyAgentListBean;
     private String waybillId, waybillCode;
+    private String cargoCn;
     private List<DeclareItem> mDeclareItemBeans;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
 
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
 
-    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, List<DeclareItem> declareItemBean) {
+    /**
+     *
+     * @param context
+     * @param waybillId
+     * @param mScooterCode
+     * @param waybillCode
+//     * @param declareItemBean  品名列表 已取消
+     * @param cargoCn  品名以逗号隔开
+     */
+    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, String cargoCn) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
         starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
+        starter.putExtra("cargoCn", cargoCn);
         Bundle mBundle = new Bundle();
-        mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
+//        mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
         starter.putExtras(mBundle);
         context.startActivityForResult(starter, 0);
     }
@@ -157,39 +168,41 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         waybillId = getIntent().getStringExtra("waybillId");
         mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
-        mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
+        cargoCn = getIntent().getStringExtra("cargoCn");
+//        mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
 
-        tvProductName.setText(setCargoCn(mDeclareItemBeans));
-        String [] sb = new String[1];
-        sb[0] = mDeclareItemBeans.get(0).getCargoId();
-        mMyAgentListBean.setCargoId(sb);
+//        tvProductName.setText(setCargoCn(mDeclareItemBeans));
+        tvProductName.setText(cargoCn);
+//        String [] sb = new String[1];
+//        sb[0] = mDeclareItemBeans.get(0).getCargoId();
+//        mMyAgentListBean.setCargoId(sb);
         //品名  coldStorage  deptCode
-        mSpProductList = new ArrayList<>();
-        if (mDeclareItemBeans != null) {
-            for (int i = 0; i < mDeclareItemBeans.size(); i++) {
-                GeneralSpinnerBean.SpProductBean mSpProductBean = new GeneralSpinnerBean.SpProductBean();
-                mSpProductBean.setId(i + "");
-                mSpProductBean.setValue(mDeclareItemBeans.get(i).getCargoCn());
-                mSpProductList.add(mSpProductBean);
-            }
-        }
-        mSpProductAdapter = new GeneralSpinnerAdapter(this, mSpProductList);
-        mSpProduct.setAdapter(mSpProductAdapter);
-        mSpProduct.setDropDownVerticalOffset(30);
-        mSpProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //品名id
-                mMyAgentListBean.setCargoId(sb);
-                //品名
-                mMyAgentListBean.setCargoCn(mDeclareItemBeans.get(position).getCargoCn());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+//        mSpProductList = new ArrayList<>();
+//        if (mDeclareItemBeans != null) {
+//            for (int i = 0; i < mDeclareItemBeans.size(); i++) {
+//                GeneralSpinnerBean.SpProductBean mSpProductBean = new GeneralSpinnerBean.SpProductBean();
+//                mSpProductBean.setId(i + "");
+//                mSpProductBean.setValue(mDeclareItemBeans.get(i).getCargoCn());
+//                mSpProductList.add(mSpProductBean);
+//            }
+//        }
+//        mSpProductAdapter = new GeneralSpinnerAdapter(this, mSpProductList);
+//        mSpProduct.setAdapter(mSpProductAdapter);
+//        mSpProduct.setDropDownVerticalOffset(30);
+//        mSpProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                //品名id
+//                mMyAgentListBean.setCargoId(sb);
+//                //品名
+//                mMyAgentListBean.setCargoCn(mDeclareItemBeans.get(position).getCargoCn());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
 
         //取重
         mBtnTakeWeight.setOnClickListener(v -> {
