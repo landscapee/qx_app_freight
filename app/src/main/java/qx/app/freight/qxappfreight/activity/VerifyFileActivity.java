@@ -212,37 +212,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mStorageCommitEntity.setInsEndTime(123);
                 mStorageCommitEntity.setInsUserHead("");
                 ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
-//                ToastUtil.showToast(this, "不合格");
-//                VerifyCargoActivity.startActivity(this,
-//                        mTaskTypeCode,
-//                        mWaybillId,
-//                        mId,
-//                        mFilePath,//图片路径
-//                        insCheck,//报检是否合格0合格 1不合格
-//                        1,//资质是否合格0合格 1不合格
-//                        mTaskId, //当前任务id
-//                        mSpotFlag,
-//                        UserInfoSingle.getInstance().getUserId(), //当前提交人id
-//                        mFlightNumber,
-//                        mWaybillCode,
-//                        Tid
-//                );
-                ToastUtil.showToast(this, "不合格");
-                VerifyCargoActivity.startActivity(this,
-                        mTaskTypeCode,
-                        mWaybillId,
-                        mId,
-                        mFilePath,//图片路径
-                        insCheck,//报检是否合格0合格 1不合格
-                        1,//资质是否合格0合格 1不合格
-                        mTaskId, //当前任务id
-                        mSpotFlag,
-                        mSpotResult,
-                        UserInfoSingle.getInstance().getUserId(), //当前提交人id
-                        mFlightNumber,
-                        mWaybillCode,
-                        Tid
-                );
                 break;
         }
     }
