@@ -9,12 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.CollectorDeclareAdapter;
@@ -50,7 +54,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     EditText tvTotalWeight;
     @BindView(R.id.tv_total_volume)
     EditText tvTotalVolume;
-//    @BindView(R.id.tv_weight) //计费重量录入删除
+    //    @BindView(R.id.tv_weight) //计费重量录入删除
 ////    EditText tvWeight;
     @BindView(R.id.tv_goods_code)
     EditText tvGoodsCode;
@@ -72,12 +76,22 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     LinearLayout llTemperature;
     @BindView(R.id.ll_base_temperature)
     LinearLayout llBaseTemperature;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+    @BindView(R.id.tv_volume)
+    TextView tvVolume;
+    @BindView(R.id.tv_type)
+    TextView tvType;
 
     private String wayBillId;
     private String taskId;
     private String taskTypeCode;
-    private CollectorDeclareAdapter mAdapter;
-    private List<DeclareItem> mList;
+//    private CollectorDeclareAdapter mAdapter;
+//    private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
 
     private List<String> baozhuangList;//1小件 2大件 3 超大件
@@ -103,6 +117,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
     }
+
     private void initTitle() {
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
@@ -121,13 +136,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         storageList.add("活体");
         storageList.add("冷藏");
         temperatureList = new ArrayList<>();
-        for (int i = -30; i <31; i++) {
-            temperatureList.add(i+"");
+        for (int i = -30; i < 31; i++) {
+            temperatureList.add(i + "");
         }
-        mList = new ArrayList<>();
-        mAdapter = new CollectorDeclareAdapter(mList);
-        rvDetailList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvDetailList.setAdapter(mAdapter);
+//        mList = new ArrayList<>();
+//        mAdapter = new CollectorDeclareAdapter(mList);
+//        rvDetailList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+//        rvDetailList.setAdapter(mAdapter);
 
 //        mAdapter.setOnDeleteClickListener(new CollectorDeclareAdapter.OnDeleteClickLister() {
 //            @Override
@@ -147,7 +162,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     }
 
 
-    @OnClick({R.id.btn_commit,R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
+    @OnClick({R.id.btn_commit, R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_commit:
@@ -168,9 +183,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     @Override
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         mData = result;
-        mList.addAll(mData.getDeclareItems());
+//        mList.addAll(mData.getDeclareItems());
         refreshView();
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -199,7 +214,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvBaozhuang.setText(baozhuangList.get(options1));
-                baozhuangOption = options1+1;
+                baozhuangOption = options1 + 1;
             }
         }).build();
         pickerView.setPicker(baozhuangList);
@@ -213,9 +228,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvStorageType.setText(storageList.get(options1));
                 storageOption = options1;
-                if (options1==4){
+                if (options1 == 4) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     llBaseTemperature.setVisibility(View.GONE);
                 }
             }
@@ -229,34 +244,34 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                if (options2<=options1){
+                if (options2 <= options1) {
                     ToastUtil.showToast("请选择正确的温度");
-                }else {
-                    tvTemperature.setText(temperatureList.get(options1)+"*"+temperatureList.get(options2));
+                } else {
+                    tvTemperature.setText(temperatureList.get(options1) + "*" + temperatureList.get(options2));
                 }
 
 
             }
         }).build();
-        pickerView.setNPicker(temperatureList,temperatureList,null);
+        pickerView.setNPicker(temperatureList, temperatureList, null);
         pickerView.setTitleText("温度选择");
-        pickerView.setSelectOptions(30,30);
+        pickerView.setSelectOptions(30, 30);
         pickerView.show();
     }
 
     /**
      * 提交到下一步
      */
-    private void nextSteep(){
-        if (TextUtils.isEmpty(tvTotalNum.getText().toString().trim())){
+    private void nextSteep() {
+        if (TextUtils.isEmpty(tvTotalNum.getText().toString().trim())) {
             ToastUtil.showToast("总件数不能为空");
             return;
         }
-        if (TextUtils.isEmpty(tvTotalWeight.getText().toString().trim())){
+        if (TextUtils.isEmpty(tvTotalWeight.getText().toString().trim())) {
             ToastUtil.showToast("总重量不能为空");
             return;
         }
-        if (TextUtils.isEmpty(tvTotalVolume.getText().toString().trim())){
+        if (TextUtils.isEmpty(tvTotalVolume.getText().toString().trim())) {
             ToastUtil.showToast("总体积不能为空");
             return;
         }
@@ -264,7 +279,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            ToastUtil.showToast("计费重量不能为空");
 //            return;
 //        }
-        if (!TextUtils.isEmpty(tvGoodsCode.getText().toString().trim())){
+        if (!TextUtils.isEmpty(tvGoodsCode.getText().toString().trim())) {
             mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
         }
         try {
@@ -279,12 +294,12 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            mData.setBillingWeight(jifeiWeight);
             mData.setColdStorage(storageOption);
             mData.setBigFlag(baozhuangOption);
-            if (storageOption==4){
+            if (storageOption == 4) {
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
             }
 
             turnToReceiveGoodsActivity();
-        }catch (Exception e){
+        } catch (Exception e) {
             ToastUtil.showToast("输入值格式不对，请重新输入");
         }
 
@@ -297,16 +312,16 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         waybillId.setText(mData.getWaybillCode());
         declareType.setText(mData.getFreightName());
         flightCode.setText(mData.getFlightNumber());
-        if (TextUtils.isEmpty(mData.getOriginatingStation())){
+        if (TextUtils.isEmpty(mData.getOriginatingStation())) {
             flightLineStart.setText("--");
-        }else {
+        } else {
             flightLineStart.setText(mData.getOriginatingStation());
         }
-         if (TextUtils.isEmpty(mData.getDestinationStation())){
-             flightLineEnd.setText("--");
-        }else {
-             flightLineEnd.setText(mData.getDestinationStation());
-         }
+        if (TextUtils.isEmpty(mData.getDestinationStation())) {
+            flightLineEnd.setText("--");
+        } else {
+            flightLineEnd.setText(mData.getDestinationStation());
+        }
         flightCompany.setText(mData.getFlightName());
         tvTotalNum.setText(String.valueOf(mData.getTotalNumberPackages()));
         tvTotalWeight.setText(String.valueOf(mData.getTotalWeight()));
@@ -316,9 +331,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvGoodsCode.setText(mData.getSpecialCargoCode());
         if (mData.getBigFlag() == 1) {
             tvBaozhuang.setText("小件");
-        } else if(mData.getBigFlag() == 2) {
+        } else if (mData.getBigFlag() == 2) {
             tvBaozhuang.setText("大件");
-        } else if (mData.getBigFlag()==3){
+        } else if (mData.getBigFlag() == 3) {
             tvBaozhuang.setText("超大件");
         }
         String coldStorage;
@@ -347,14 +362,20 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvStorageType.setText(coldStorage);
         tvTemperature.setText(mData.getRefrigeratedTemperature());
 
+        tvName.setText(mData.getCargoCn());
+        tvNumber.setText(String.valueOf(mData.getTotalNumberPackages()));
+        tvWeight.setText(String.valueOf(mData.getTotalWeight()));
+        tvVolume.setText(String.valueOf(mData.getTotalVolume()));
+        tvType.setText(mData.getPackagingType());
+
     }
 
     /**
      * 跳转到代办详情
+     *
      * @param
      */
-    private void turnToReceiveGoodsActivity(){
-        ReceiveGoodsActivity.startActivity(this,taskId,mData,taskTypeCode,getIntent().getStringExtra("id"),wayBillId);
+    private void turnToReceiveGoodsActivity() {
+        ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId);
     }
-
 }

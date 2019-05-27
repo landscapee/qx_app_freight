@@ -306,4 +306,34 @@ public class DeclareWaybillBean implements Serializable {
         private String waybillId;
         private String addtionInvoices;
     }
+
+    /**
+     *  品名
+     */
+
+    private String cargoCn;
+    /**
+     *   包装类型
+     */
+    private String packagingType;
+
+    /**
+     *  品类
+     */
+    private String cargoType;
+
+    /**
+     *  * 剩余数量量
+     */
+    private int surplusOfNumber;
+
+    /**
+     *  * 剩余重量量
+     *  */
+    private double surplusOfWeight;
+
+    /**
+     *  * 剩余体积
+     */
+    private double surplusOfVolume;
 }
