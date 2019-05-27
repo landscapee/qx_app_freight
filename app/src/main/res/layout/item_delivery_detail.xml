@@ -13,20 +13,68 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:background="@drawable/shape_rect_blue_b3d1fb"
-            android:id="@+id/waybill_code"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:gravity="center_vertical"
-            android:drawableLeft="@mipmap/tracking_number"
-            android:textColor="#136bef"
-            android:drawablePadding="5dp"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            tools:text="000-999999999" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/shape_rect_blue_b3d1fb"
+                android:id="@+id/waybill_code"
+                android:layout_width="wrap_content"
+                android:layout_height="33dp"
+                android:gravity="center_vertical"
+                android:drawableLeft="@mipmap/tracking_number"
+                android:textColor="#136bef"
+                android:drawablePadding="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                tools:text="000-999999999" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="14sp"
+                android:textColor="@color/black_3"
+                android:layout_marginLeft="@dimen/dp_4"
+                tools:text="已通知" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_put_num"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                android:text="已提货: 4件 / 待提货: 4件"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/total_info"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                android:text="录单: 4件 / 分拣: 4件"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_marginTop="10dp"
@@ -35,129 +83,69 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/total_info"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/black_3"
-                tools:text="3件/200kg" />
+                android:textColor="#676C8B"
+                android:text="库区：" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="end"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:singleLine="true"
-                    android:drawablePadding="@dimen/dp_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_3"
-                    android:text="理货：" />
-                <TextView
-                    android:id="@+id/tallying_info"
-                    android:singleLine="true"
-                    android:drawablePadding="@dimen/dp_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_3"
-                    tools:text="3件" />
-
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_kuqu"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                android:text="普通库区"
+                />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_black_gap_line"
-            android:layerType="software" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:singleLine="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black_3"
-            android:text="库区：" />
-        <TextView
-            android:id="@+id/tv_kuqu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black_3"
-            tools:text="0" />
-
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:singleLine="true"
-                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/black_3"
+                android:textColor="#676C8B"
                 android:text="超重：" />
+
             <TextView
                 android:id="@+id/tv_overweight"
-                android:singleLine="true"
-                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
                 android:textSize="14sp"
-                android:textColor="@color/black_3"
-                tools:text="3件/200kg" />
-
-
+                android:text="200件 / 20kg"
+                />
         </LinearLayout>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/shape_black_gap_line"-->
+            <!--android:layerType="software" />-->
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:singleLine="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black_3"
-            android:text="状态：" />
-
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black_3"
-            android:layout_marginLeft="@dimen/dp_4"
-            tools:text="已通知" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="end"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:singleLine="true"
-                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -166,38 +154,20 @@
             <TextView
                 android:id="@+id/tv_cost"
                 android:singleLine="true"
-                android:drawablePadding="@dimen/dp_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/black_3"
                 tools:text="0元" />
-
-
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tv_put_num"
-            android:layout_width="119dp"
-            android:layout_height="20dp"
-            android:textColor="@color/black_3"
-            android:textSize="14sp"
-            android:layout_weight="1"
-            android:text="已提货: 4件 / 待提货: 4件"
-            />
         <TextView
             android:id="@+id/tv_complete_time"
-            android:layout_width="119dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffaeaeae"
-            android:textSize="14sp"
+            android:textSize="12sp"
             />
-
         <TextView
             android:visibility="gone"
             android:id="@+id/tv_outStorage"

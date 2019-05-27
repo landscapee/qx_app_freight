@@ -28,17 +28,22 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
     @Override
     protected void convert(BaseViewHolder holder, WaybillsBean bean) {
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
-                //录单 件数 - 重量
-        holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
-                ,bean.getTotalNumberPackages()+""
-                ,bean.getTotalWeight()));
+
+        int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
+        holder.setText(R.id.tv_put_num,"待出库: "+waitPutCargoNum+"件 / 已出库:"+bean.getOutboundNumber()+"件");
+
+        holder.setText(R.id.total_info,"录单: "+bean.getTotalNumberPackages()+"件 / 分拣:"+bean.getTallyingTotal()+"件");
+        //录单 件数 - 重量
+//        holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
+//                ,bean.getTotalNumberPackages()+""
+//                ,bean.getTotalWeight()));
         //超重
         holder.setText(R.id.tv_overweight, String.format(mContext.getString(R.string.format_goods_inport)
                 ,bean.getOverWieghtCount()+""
                 ,bean.getOverWieght()+""));
 
         //分拣件数 - 重量
-        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
+//        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
         //逾期费用
         holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
@@ -47,8 +52,8 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
 //                .setText(R.id.consignee,bean.getConsignee())
 //                .setText(R.id.consignee_phone,bean.getConsigneePhone())
 //                .setText(R.id.consignee_card,bean.getConsigneeCarid());
-        int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
-        holder.setText(R.id.tv_put_num,"已提货: "+bean.getOutboundNumber()+"件 / 待提货:"+waitPutCargoNum+"件");
+
+
         if (bean.getOutStorageTime()>0){
             holder.setVisible(R.id.tv_complete_time,true);
             holder.setText(R.id.tv_complete_time, TimeUtils.date2Tasktime6(bean.getOutStorageTime()));
@@ -85,13 +90,13 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         }
         //控制按钮显示
         if (bean.getWaybillStatus() ==6){
-            holder.setVisible(R.id.tv_put_num,false);
+//            holder.setVisible(R.id.tv_put_num,false);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
         }else {
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
-            holder.setVisible(R.id.tv_put_num,true);
+//            holder.setVisible(R.id.tv_put_num,true);
         }
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->
