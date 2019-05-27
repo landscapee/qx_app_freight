@@ -25,7 +25,7 @@
             android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="59dp"
-            android:background="@mipmap/bg_inspect_all"
+            android:background="@mipmap/bg_glay_all"
             android:gravity="center"
             android:text="周云鹏"
             android:textColor="@color/white"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/verify_tv_bj_end"
-            android:text="2018.12.01" />
+            />
 
         <TextView
             android:id="@+id/verify_tv_bj_end"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="13dp"
-            android:text="2019.12.01" />
+            />
     </RelativeLayout>
 
     <TextView
@@ -101,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/verify_tv_wx_end"
-            android:text="2018.12.01" />
+            />
 
         <TextView
             android:id="@+id/verify_tv_wx_end"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="13dp"
-            android:text="2019.12.01" />
+            />
     </RelativeLayout>
 
     <TextView

@@ -13,6 +13,7 @@ import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 货物详情adapter
@@ -37,11 +38,11 @@ public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportDataBase, B
         //品名
         helper.setText(R.id.tv_goods_name, item.getCargoCn());
         //件数
-        helper.setText(R.id.tv_goods_number, item.getTotalNumberPackages());
+        helper.setText(R.id.tv_goods_number, StringUtil.formatStringDeleteDot(item.getTotalNumberPackages()));
         //重量
-        helper.setText(R.id.tv_weight, item.getTotalWeight());
+        helper.setText(R.id.tv_weight, StringUtil.formatStringDeleteDot(item.getTotalWeight()));
         //体积
-        helper.setText(R.id.tv_volume, item.getTotalVolume());
+        helper.setText(R.id.tv_volume, StringUtil.formatStringDeleteDot(item.getTotalVolume()));
         //包装类型
         helper.setText(R.id.tv_package, item.getPackagingType());
 

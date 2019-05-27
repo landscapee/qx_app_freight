@@ -25,25 +25,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FFMActivity;
-import qx.app.freight.qxappfreight.activity.InPortTallyActivity;
 import qx.app.freight.qxappfreight.activity.SortingActivity;
 import qx.app.freight.qxappfreight.adapter.InportTallyAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
-import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -234,7 +226,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
+    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
@@ -243,7 +235,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         }
         mListTemp.clear();
 
-        for (TransportDataBase item:transportListBeans.getData()){
+        for (TransportDataBase item:transportListBeans){
             if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")){
                 mListTemp.add(item);
             }

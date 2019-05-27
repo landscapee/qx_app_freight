@@ -150,7 +150,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
-            String goodsName = mDeclare.getDeclareItems().get(0).getCargoCn();
+            String goodsName = mDeclare.getCargoCn();
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
             Bundle bundle = new Bundle();
@@ -189,7 +189,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void startAct(String mScooterCode) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
+//        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclare.getCargoCn());
     }
 
 
