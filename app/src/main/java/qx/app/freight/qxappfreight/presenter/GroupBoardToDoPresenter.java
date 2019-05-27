@@ -1,10 +1,11 @@
 package qx.app.freight.qxappfreight.presenter;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.model.GroupBoardToDoListModel;
 
@@ -21,9 +22,9 @@ public class GroupBoardToDoPresenter extends BasePresenter {
 
     public void getGroupBoardToDo(GroupBoardRequestEntity model) {
         mRequestView.showNetDialog();
-        ((GroupBoardToDoListModel) mRequestModel).getGroupBoardToDo(model, new IResultLisenter<GroupBoardTodoBean>() {
+        ((GroupBoardToDoListModel) mRequestModel).getGroupBoardToDo(model, new IResultLisenter<List<TransportDataBase>>() {
             @Override
-            public void onSuccess(GroupBoardTodoBean transportListBeans) {
+            public void onSuccess(List<TransportDataBase> transportListBeans) {
                 ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getGroupBoardToDoResult(transportListBeans);
                 mRequestView.dissMiss();
             }

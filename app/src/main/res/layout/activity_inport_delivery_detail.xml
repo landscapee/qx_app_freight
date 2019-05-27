@@ -3,85 +3,129 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#EFF2F3"
     android:orientation="vertical"
     tools:context=".activity.InportDeliveryDetailActivity">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        app:cardBackgroundColor="#09A9E4"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp"
+        app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:background="@drawable/shape_rect_white"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/serial_number"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:background="@drawable/shape_rect_blue_b3d1fb"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:gravity="center_vertical"
-            android:textColor="#136bef"
-            android:drawablePadding="5dp"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:text="流水号：000-999999999" />
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@mipmap/ti1" />
-
-            <TextView
-                android:id="@+id/consignee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_4"
-                android:textColor="#676C8B"
-                android:textSize="14sp"
-                tools:text="四川省成都机场大厅" />
-        </LinearLayout>
-
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="15dp">
 
-            <TextView
-                android:id="@+id/consignee_phone"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/serial_number"
+                    android:drawableLeft="@mipmap/ic_serial_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:drawablePadding="5dp"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    tools:text="000-999999999" />
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:text="提货人：" />
+                <TextView
+                    android:id="@+id/consignee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_4"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:text="四川省成都机场大厅" />
+            </LinearLayout>
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="18dp"-->
+                    <!--android:layout_height="18dp"-->
+                    <!--android:src="@mipmap/ti1" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/consignee"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/dp_4"-->
+                    <!--android:textColor="#676C8B"-->
+                    <!--android:textSize="14sp"-->
+                    <!--tools:text="四川省成都机场大厅" />-->
+            <!--</LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:drawableStart="@mipmap/ic_person_mobil"
-                android:drawablePadding="5dp"
-                android:textColor="@color/color_676c8e"
-                android:textSize="14sp"
-                tools:text="13888888888" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="电话：" />
+                <TextView
+                    android:id="@+id/consignee_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="13888888888" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/consignee_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@mipmap/ic_person_card"
-                android:drawablePadding="5dp"
-                android:textColor="@color/color_676c8e"
-                android:textSize="14sp"
-                tools:text="511289199899121234" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="身份证：" />
+
+                <TextView
+                    android:id="@+id/consignee_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="511289199899121234" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/r_view"

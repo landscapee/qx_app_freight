@@ -28,9 +28,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
@@ -232,7 +230,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     }
 
     @Override
-    public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
+    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         if (transportListBeans != null) {
             //未分页
             mCacheList.clear();
@@ -242,7 +240,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
             } else {
                 mMfrvData.finishLoadMore();
             }
-            for (TransportDataBase mTransportListBean : transportListBeans.getData()) {
+            for (TransportDataBase mTransportListBean : transportListBeans) {
                 if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode()))
                     mCacheList.add(mTransportListBean);
             }

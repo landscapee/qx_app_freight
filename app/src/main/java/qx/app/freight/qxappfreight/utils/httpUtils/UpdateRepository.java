@@ -48,13 +48,11 @@ import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
-import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
-import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -75,6 +73,7 @@ import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
@@ -270,8 +269,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<GroupBoardTodoBean> getGroupBoardToDo(GroupBoardRequestEntity model) {
-        return getService().getGroupBoardToDo(model);
+    public Observable<List<TransportDataBase>> getGroupBoardToDo(GroupBoardRequestEntity model) {
+        return transform(getService().getGroupBoardToDo(model));
     }
 
 

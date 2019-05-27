@@ -26,23 +26,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
-import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.GroupBoardTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -296,8 +288,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
 
     @Override
-    public void getGroupBoardToDoResult(GroupBoardTodoBean transportListBeans) {
-        if (transportListBeans != null) {
+    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
+        if (transportListBeans != null&&transportListBeans.size()>0) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
 
             if (pageCurrent == 1) {
@@ -306,10 +298,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             } else {
                 mMfrvData.finishLoadMore();
             }
-            list1.addAll(transportListBeans.getData());
+            list1.addAll(transportListBeans);
             seachWithNum();
             if (fragment != null) {
-                fragment.setTitleText(transportListBeans.getData().size());
+                fragment.setTitleText(transportListBeans.size());
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
