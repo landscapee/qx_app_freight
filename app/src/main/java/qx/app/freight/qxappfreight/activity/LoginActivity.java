@@ -4,16 +4,23 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
@@ -86,6 +93,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        int a = 3;
 //        ToastUtil.showToast(testSwitch(a)+"=====ssssss");
 //        getDeviceInfo();
+
+
+        try {
+            installSogouInput();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    private String testSwitch(int a) {
@@ -304,5 +318,40 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
         String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
         DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
+    }
+
+    /**
+     * 安装搜狗输入法
+     */
+    public void installSogouInput() throws IOException {
+
+        for(PackageInfo info: getPackageManager().getInstalledPackages(0)){
+            if("com.sohu.inputmethod.sogou".equals(info.packageName)){
+                ToastUtil.showToast("已经安装搜狗输入法");
+                return;
+            }
+        }
+        ToastUtil.showToast("即将安装搜狗输入法！");
+        //apk拷贝后的地址
+        String filePath = getExternalCacheDir().getPath() + File.separator + "SogouInput_sign.apk";
+        //将SogouInput_sign.apk文件拷贝到sk卡中
+        InputStream is = getAssets().open("SogouInput_sign.apk");
+        File file = new File(filePath);
+        file.deleteOnExit();
+        FileOutputStream fos = new FileOutputStream(file);
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = is.read(buffer)) > 0) {
+            fos.write(buffer);
+            fos.flush();
+        }
+        fos.close();
+        is.close();
+
+        //完成拷贝后，开始安装
+        Intent installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        installIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        startActivity(installIntent);
     }
 }
