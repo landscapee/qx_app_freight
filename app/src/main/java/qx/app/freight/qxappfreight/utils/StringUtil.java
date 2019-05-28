@@ -53,7 +53,7 @@ public class StringUtil {
      */
     public static String toText(String response,String defaultStr) {
         String result = defaultStr;
-        if (!TextUtils.isEmpty(response)) {
+        if (!TextUtils.isEmpty(response)&& !"null".equals(response)) {
             result = response;
         }
         return result;
@@ -155,10 +155,10 @@ public class StringUtil {
      * @return
      */
     public static String formatStringDeleteDot(String value){
+        if (value == null || "".equals(value))
+            return "0";
         if(value.indexOf(".") > 0){
-
             //正则表达
-
             value = value.replaceAll("0+?$", "");//去掉后面无用的零
 
             value = value.replaceAll("[.]$", "");//如小数点后面全是零则去掉小数点

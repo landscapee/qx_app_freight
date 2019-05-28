@@ -311,7 +311,10 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 mIvControl2.setImageResource(R.mipmap.down);
             }
         });
-        mLlScanGoods.setOnClickListener(v -> ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity"));
+        mLlScanGoods.setOnClickListener(v ->{
+            mIsScanGoods = true;
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");
+        });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
             ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");

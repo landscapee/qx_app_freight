@@ -63,21 +63,21 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
 
         ImageView imageExpand =  helper.getView(R.id.iv_expand);
-        View view = helper.getConvertView();
-        view.setOnClickListener(v -> {
-
-            if (item.isExpand()) {
-//                mRecyclerView.setVisibility(View.GONE);
-                collView.collapse();
-                item.setExpand(false);
-                imageExpand.setImageResource(R.mipmap.down);
-            } else {
-//                mRecyclerView.setVisibility(View.VISIBLE);
-                collView.expand();
-                item.setExpand(true);
-                imageExpand.setImageResource(R.mipmap.up);
-            }
-        });
+//        View view = helper.getConvertView();
+//        view.setOnClickListener(v -> {
+//
+//            if (item.isExpand()) {
+////                mRecyclerView.setVisibility(View.GONE);
+//                collView.collapse();
+//                item.setExpand(false);
+//                imageExpand.setImageResource(R.mipmap.down);
+//            } else {
+////                mRecyclerView.setVisibility(View.VISIBLE);
+//                collView.expand();
+//                item.setExpand(true);
+//                imageExpand.setImageResource(R.mipmap.up);
+//            }
+//        });
 
         if (item.isExpand()){
 //            mRecyclerView.setVisibility(View.VISIBLE);

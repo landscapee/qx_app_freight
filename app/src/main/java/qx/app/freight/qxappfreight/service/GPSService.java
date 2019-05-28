@@ -183,7 +183,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
     public void onCreate() {
         super.onCreate();
         initSend();
-//        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
+        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
 
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         gpsInfoEntity = new GpsInfoEntity();
@@ -250,7 +250,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
 
     private void startLocation() {
         // 启动基站定位
-//        mBSLoactionUtil.reGetBS();
+        mBSLoactionUtil.reGetBS();
         // 启动GPS定位
         if (ActivityCompat.checkSelfPermission(GPSService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

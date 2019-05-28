@@ -90,7 +90,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         adapter = new DriverOutTaskAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            nowDoTaskId = list.get(position).getTaskId();
+            if (!nowDoTaskId.equals(list.get(position).getTaskId())){
+                nowDoTaskId = list.get(position).getTaskId();
+                setListStatus();
+            }
+
         });
         adapter.setmOnStepListener((step, parentPosition, position) -> {
             /**
@@ -270,30 +274,30 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                     mAcceptTerminalTodoBean.setUseTasks(getUseTasks(mAcceptTerminalTodoBean));
                 }
             }
-            setListStatus(acceptTerminalTodoBeanList);
             list.addAll(acceptTerminalTodoBeanList);
+            setListStatus();
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
                 fragment.setTitleText(list.size());
             }
-            mMfrvData.notifyForAdapter(adapter);
+
         } else {
             Log.e("失败", "外场运输待办");
         }
     }
 
     /**
-     * 展开之前执行的任务
-     * @param acceptTerminalTodoBeanList
+     * 展开之前执行的任务 且只展开一个任务
      */
-    private void setListStatus(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
-            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean :acceptTerminalTodoBeanList){
+    private void setListStatus() {
+            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean :list){
                   if (nowDoTaskId.equals(mAcceptTerminalTodoBean.getTaskId())){
                       mAcceptTerminalTodoBean.setExpand(true);
                   }
                   else
                       mAcceptTerminalTodoBean.setExpand(false);
             }
+        mMfrvData.notifyForAdapter(adapter);
 
     }
 

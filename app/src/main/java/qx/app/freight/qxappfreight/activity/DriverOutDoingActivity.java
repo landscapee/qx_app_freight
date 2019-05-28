@@ -149,16 +149,22 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         //扫码
         imageScan.setOnClickListener(v -> {
-            if (tpStatus == 0) {
-                ToastUtil.showToast("运输已经开始，无法再次扫版");
-                return;
+            if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+                ScanManagerActivity.startActivity(this);
             }
-            if (listScooter.size() >= tpNum) {
+            else {
+                if (tpStatus == 0) {
+                    ToastUtil.showToast("运输已经开始，无法再次扫版");
+                    return;
+                }
+                if (listScooter.size() >= tpNum) {
 
-                ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
-                return;
+                    ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
+                    return;
+                }
+                ScanManagerActivity.startActivity(this);
             }
-            ScanManagerActivity.startActivity(this);
+
         });
         //结束运输时 选择某个或多个航班结束 监听
         mDriverOutTaskDoingAdapter.setCheckBoxListener((view, position) -> {
@@ -221,18 +227,23 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (tpStatus == 0) {
-            ToastUtil.showToast("运输已经开始，无法再次扫版");
-            return;
+        if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+            ScanManagerActivity.startActivity(this);
         }
-        if (listScooter.size() >= tpNum) {
+        else {
+            if (tpStatus == 0) {
+                ToastUtil.showToast("运输已经开始，无法再次扫版");
+                return;
+            }
+            if (listScooter.size() >= tpNum) {
 
-            ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
-            return;
-        }
-        if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            addScooterInfo(result.getData());
+                ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
+                return;
+            }
+            if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
+                //根据扫一扫获取的板车信息查找板车内容
+                addScooterInfo(result.getData());
+            }
         }
     }
 
@@ -401,16 +412,21 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         switch (view.getId()) {
 
             case R.id.ll_add://添加板车
-                if (tpStatus == 0) {
-                    ToastUtil.showToast("运输已经开始，无法再次扫版");
-                    return;
+                if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+                    ScanManagerActivity.startActivity(this);
                 }
-                if (listScooter.size() >= tpNum) {
+                else {
+                    if (tpStatus == 0) {
+                        ToastUtil.showToast("运输已经开始，无法再次扫版");
+                        return;
+                    }
+                    if (listScooter.size() >= tpNum) {
 
-                    ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
-                    return;
+                        ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
+                        return;
+                    }
+                    ScanManagerActivity.startActivity(this);
                 }
-                ScanManagerActivity.startActivity(this);
                 break;
             case R.id.tv_error_report://偏离上报
                 flightNumList.clear();
@@ -459,7 +475,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     /**
                      * 行李运输 需要 验证 结束位置和当前行李转盘是否一致
                      */
-                    if (Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) || Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
+                    if ((Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())&&"baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType())) || Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                         isSure = 1;
                         ScanManagerActivity.startActivity(this);
                         return;
@@ -649,6 +665,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (!"".equals(result)) {
             setTpStatus(0);
             upDataBtnStatusEnd();
+            EventBus.getDefault().post("TaskDriverOutFragment_refresh");
         } else
             Log.e("开始失败", "开始失败");
     }
