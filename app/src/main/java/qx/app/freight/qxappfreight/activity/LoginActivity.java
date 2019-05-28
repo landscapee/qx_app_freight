@@ -96,7 +96,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
 
         try {
-            installSogouInput();
+            installInputMethod();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -323,19 +323,27 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     /**
      * 安装搜狗输入法
      */
-    public void installSogouInput() throws IOException {
+    public void installInputMethod() throws IOException {
 
         for(PackageInfo info: getPackageManager().getInstalledPackages(0)){
-            if("com.sohu.inputmethod.sogou".equals(info.packageName)){
-                ToastUtil.showToast("已经安装搜狗输入法");
+            Log.e("dime info", info.packageName);
+            if("com.hit.wi".equals(info.packageName)){
+                ToastUtil.showToast("已经安装WI输入法！");
                 return;
             }
         }
+        ToastUtil.showToast("即将安装WI输入法！");
+//        for(PackageInfo info: getPackageManager().getInstalledPackages(0)){
+//            if("com.sohu.inputmethod.sogou".equals(info.packageName)){
+//                ToastUtil.showToast("已经安装搜狗输入法");
+//                return;
+//            }
+//        }
         ToastUtil.showToast("即将安装搜狗输入法！");
         //apk拷贝后的地址
-        String filePath = getExternalCacheDir().getPath() + File.separator + "SogouInput_sign.apk";
+        String filePath = getExternalCacheDir().getPath() + File.separator + "WiInput_sign.apk";
         //将SogouInput_sign.apk文件拷贝到sk卡中
-        InputStream is = getAssets().open("SogouInput_sign.apk");
+        InputStream is = getAssets().open("WiInput_sign.apk");
         File file = new File(filePath);
         file.deleteOnExit();
         FileOutputStream fos = new FileOutputStream(file);
