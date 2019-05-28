@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
@@ -146,29 +147,71 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mPresenter = new InWaybillRecordPresenter(this);
         //暂存，提交请求
         tempBtn.setOnClickListener(listener -> {
-            if (mList == null || mList.size() == 0) {
-                ToastUtil.showToast("请添加分拣信息");
-                return;
-            }
-            List<InWaybillRecord> submitList = new ArrayList<>();
-            submitList.addAll(mList);
-            submitList.addAll(mListDel);
-            submitEntity.setFlag(0);
-            submitEntity.setList(mList);
-            ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
+
+            CommonDialog dialog = new CommonDialog(this);
+            dialog.setTitle("提示")
+                    .setMessage("确认暂存吗？")
+                    .setPositiveButton("确定")
+                    .setNegativeButton("取消")
+                    .isCanceledOnTouchOutside(false)
+                    .isCanceled(true)
+                    .setOnClickListener(new CommonDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog, boolean confirm) {
+                            if (confirm) {
+//                                ToastUtil.showToast("点击了左边的按钮");
+                                if (mList == null || mList.size() == 0) {
+                                    ToastUtil.showToast("请添加分拣信息");
+                                    return;
+                                }
+                                List<InWaybillRecord> submitList = new ArrayList<>();
+                                submitList.addAll(mList);
+                                submitList.addAll(mListDel);
+                                submitEntity.setFlag(0);
+                                submitEntity.setList(mList);
+                                ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
+                            } else {
+//                                ToastUtil.showToast("点击了右边的按钮");
+                            }
+                        }
+                    })
+                    .show();
+
+
         });
         //提交请求
         doneBtn.setOnClickListener(listener -> {
-            if (mList == null || mList.size() == 0) {
-                ToastUtil.showToast("请添加分拣信息");
-                return;
-            }
-            List<InWaybillRecord> submitList = new ArrayList<>();
-            submitList.addAll(mList);
-            submitList.addAll(mListDel);
-            submitEntity.setFlag(1);
-            submitEntity.setList(mList);
-            ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
+
+            CommonDialog dialog = new CommonDialog(this);
+            dialog.setTitle("提示")
+                    .setMessage("确认提交？")
+                    .setPositiveButton("确定")
+                    .setNegativeButton("取消")
+                    .isCanceledOnTouchOutside(false)
+                    .isCanceled(true)
+                    .setOnClickListener(new CommonDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog, boolean confirm) {
+                            if (confirm) {
+//                                ToastUtil.showToast("点击了左边的按钮");
+                                if (mList == null || mList.size() == 0) {
+                                    ToastUtil.showToast("请添加分拣信息");
+                                    return;
+                                }
+                                List<InWaybillRecord> submitList = new ArrayList<>();
+                                submitList.addAll(mList);
+                                submitList.addAll(mListDel);
+                                submitEntity.setFlag(1);
+                                submitEntity.setList(mList);
+                                ((InWaybillRecordPresenter) mPresenter).submit(submitEntity);
+                            } else {
+//                                ToastUtil.showToast("点击了右边的按钮");
+                            }
+                        }
+                    })
+                    .show();
+
+
         });
         //获取数据
         getData();

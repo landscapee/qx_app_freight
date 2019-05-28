@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
@@ -331,8 +332,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 //        ((ReservoirPresenter) mPresenter).reservoir(entity);
 
         mPresenter = new ListReservoirInfoPresenter(this);
-//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
-        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
+//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
     }
 
     /**
