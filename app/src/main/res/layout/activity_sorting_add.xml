@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"/>
 
-        <TextView
+        <EditText
             android:id="@+id/edt_id"
             style="@style/public_tv_16sp_3"
             android:background="@drawable/shape_dynamic_black"
@@ -41,7 +41,7 @@
             android:text="-"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <TextView
+        <EditText
             android:id="@+id/edt_id_1"
             style="@style/public_tv_16sp_3"
             android:background="@drawable/shape_dynamic_black"

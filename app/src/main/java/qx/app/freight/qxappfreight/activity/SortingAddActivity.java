@@ -15,8 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.beidouapp.et.client.callback.IFileReceiveListener;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.GetAirWaybillPrefixBean;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
@@ -48,8 +49,8 @@ import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
-import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
@@ -79,9 +80,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
 
     @BindView(R.id.edt_id)
-    TextView idEdt;//运单号
+    EditText idEdt;//运单号
     @BindView(R.id.edt_id_1)
-    TextView idEdt2;//运单号
+    EditText idEdt2;//运单号
     @BindView(R.id.edt_real_sort_num)
     EditText sortingNumEdt;//实际分拣数
     @BindView(R.id.tv_reservoir)
@@ -110,6 +111,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+
+        EventBus.getDefault().register(this);
         customToolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         customToolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", listener -> {
@@ -127,7 +130,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
             //根据航班号查运单前缀
             if (!TextUtils.isEmpty(newCode)) {
-//                isEditChange =true;
+                isEditChange =true;
                 String[] parts = newCode.split("-");
                 idEdt.setText(parts[0]);
                 idEdt2.setText(parts[1]);
@@ -156,7 +159,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
             //显示运单号， 实际分拣数，库区，库位，是否转关，备注
             if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())){
-//                isEditChange =true;
+                isEditChange =true;
                 String[] parts = mInWaybillRecord.getWaybillCode().split("-");
                 idEdt.setText(parts[0]);
                 idEdt2.setText(parts[1]);
@@ -258,17 +261,17 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         //提交按钮 点击事件
         submitBtn.setOnClickListener(listen -> {
             //将组装好的数据返回给前一个页面
-//            if (TextUtils.isEmpty(idEdt.getText().toString().trim())&&TextUtils.isEmpty(idEdt2.getText().toString().trim())) {
-//                mInWaybillRecord.setWaybillCode("");
-//            } else {
-//                if (!TextUtils.isEmpty(idEdt.getText().toString().trim())&&isEditChange){
-//                    mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim()+"-"+idEdt2.getText().toString().trim());
-//                }else {
-//                    ToastUtil.showToast("请输入正确的运单号");
-//                    return;
-//                }
-//
-//            }
+            if (TextUtils.isEmpty(idEdt.getText().toString().trim())&&TextUtils.isEmpty(idEdt2.getText().toString().trim())) {
+                mInWaybillRecord.setWaybillCode("");
+            } else {
+                if (!TextUtils.isEmpty(idEdt.getText().toString().trim())&&isEditChange){
+                    mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim()+"-"+idEdt2.getText().toString().trim());
+                }else {
+                    ToastUtil.showToast("请输入正确的运单号");
+                    return;
+                }
+
+            }
             mInWaybillRecord.setWaybillCode(idEdt.getText().toString().trim()+"-"+idEdt2.getText().toString().trim());
             if (TextUtils.isEmpty(sortingNumEdt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入实际分拣数！");
@@ -292,10 +295,47 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             setResult(RESULT_OK, intent);
             finish();
         });
+
+        //运单号后缀事件
+        idEdt2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e("2222222", "afterTextChanged: "+s.toString().trim());
+                editChange(s.toString().trim());
+            }
+
+        });
         //超重情况
         tvOverweight.setOnClickListener(v -> {
             showPopWindowList();
         });
+    }
+
+    //判断运单号后缀是否符合规则
+    private boolean isEditChange=false;
+    private void editChange(String ss) {
+        if (!TextUtils.isEmpty(ss)&&ss.length() ==8){
+            String s1 = ss.substring(0,7);
+            String s2 = ss.substring(7,8);
+            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
+        }else {
+            isEditChange =false;
+        }
+        if (isEditChange){
+            idEdt2.setTextColor(Color.parseColor("#888888"));
+        }else {
+            idEdt2.setTextColor(Color.parseColor("#ff0000"));
+        }
     }
 
     //超重情况的弹窗
@@ -317,6 +357,69 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
      */
     private void typeUpdate() {
         //将前一个页面传过来的数据渲染的页面上
+
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result){
+        if (result.getFunctionFlag().equals("SortingAddActivity")){
+            String code = result.getData();
+            Log.e("22222", "运单号" + code);
+            if (!TextUtils.isEmpty(code)&&code.length()>=10) {
+                if (code.startsWith("DN")){
+                    newCode = "DN-"+code.substring(2,10);
+                }else {
+                    if (code.length()>=11){
+                        String s0=code.substring(0, 3); //前3位
+                        String s00=code.substring(3, 11); //后8位
+                        newCode = s0+"-"+s00;
+                    }else {
+                        ToastUtil.showToast("无效的运单号");
+                        return;
+                    }
+                }
+            }else {
+                ToastUtil.showToast("无效的运单号");
+                return;
+            }
+
+            checkCode(newCode);
+
+        }
+    }
+
+    /**检查运单号是否符合规则，并填入控件
+     *
+     * @param code
+     */
+    private void checkCode(String code) {
+        boolean isEditChange;
+        String[] parts = code.split("-");
+        String ss = parts[1];
+        String s1=""; //后8位的前7位
+        String s2=""; //后8位的最后1位
+        s1 = ss.substring(0,7);
+        s2 = ss.substring(7,8);
+        if (StringUtil.isDouble(s1)&&StringUtil.isDouble(s2)){
+            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
+        }else {
+            isEditChange=false;
+        }
+
+        if (!isEditChange){
+            ToastUtil.showToast("无效的运单号");
+            return;
+        }
+
+        //向控件里面填入数据
+        if (!TextUtils.isEmpty(code)) {
+            String[] parts2 = code.split("-");
+            idEdt.setText(parts2[0]);
+            idEdt2.setText(parts2[1]);
+        }
 
     }
 

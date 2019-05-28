@@ -129,19 +129,19 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         });
         //右侧添加按钮
         toolbar.setRightIconView(View.VISIBLE, R.mipmap.add_bg, listener -> {
-//            //跳转到 ->新增页面
-//            if (resultBean == null) {
-//                return;
-//            }
-//            if (resultBean.getCloseFlag() == 1) {
-//                ToastUtil.showToast("运单已经关闭，无法编辑！");
-//                return;
-//            }
-//            Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
-//            intentAdd.putExtra("TYPE", TYPE_ADD);
+            //跳转到 ->新增页面
+            if (resultBean == null) {
+                return;
+            }
+            if (resultBean.getCloseFlag() == 1) {
+                ToastUtil.showToast("运单已经关闭，无法编辑！");
+                return;
+            }
+            Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
+            intentAdd.putExtra("TYPE", TYPE_ADD);
 //            intentAdd.putExtra("FLIGHTNo", flightNo);
-//            startActivityForResult(intentAdd, 1);
-            showDialog();
+            startActivityForResult(intentAdd, 1);
+//            showDialog();
         });
         //初始化presenter
         mPresenter = new InWaybillRecordPresenter(this);
@@ -262,6 +262,15 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //新增
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
+            if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())){
+                for (InWaybillRecord item:mList){
+                    if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())){
+                        ToastUtil.showToast("不能添加相同运单号");
+                        return;
+                    }
+                }
+            }
+
             mList.add(mInWaybillRecord);
             mAdapter.notifyDataSetChanged();
             //更新总运单数，总件数
@@ -369,6 +378,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             //刷新列表
             mAdapter.notifyDataSetChanged();
+            recyclerView.closeMenu();
         });
         recyclerView.closeMenu();
     }
@@ -412,31 +422,35 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     private String newCode;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        newCode = "";
-        String code = result.getData();
-        Log.e("22222", "运单号" + code);
-        if (!TextUtils.isEmpty(code)) {
-            if (code.startsWith("DN")){
-                newCode = "DN-"+code.substring(2,10);
-            }else {
-                if (code.length()>=11){
-                    newCode =editChange(code);
+        if (result.getFunctionFlag().equals("SortingActivity")){
+            newCode = "";
+            String code = result.getData();
+            Log.e("22222", "运单号" + code);
+            if (!TextUtils.isEmpty(code)&&code.length()>=10) {
+                if (code.startsWith("DN")){
+                    newCode = "DN-"+code.substring(2,10);
                 }else {
-                    ToastUtil.showToast("无效的运单号");
-                    return;
+                    if (code.length()>=11){
+                        newCode =editChange(code);
+                    }else {
+                        ToastUtil.showToast("无效的运单号");
+                        return;
+                    }
                 }
+            }else {
+                ToastUtil.showToast("无效的运单号");
+                return;
             }
-        }else {
-            ToastUtil.showToast("无效的运单号");
-            return;
+            turnToAddActivity(newCode);
         }
-        turnToAddActivity(newCode);
     }
 
     /**
      * 跳转到新增界面
      */
     private void turnToAddActivity(String code){
+
+        recyclerView.closeMenu();
         boolean isEditChange;
         String[] parts = code.split("-");
         String ss = parts[1];
