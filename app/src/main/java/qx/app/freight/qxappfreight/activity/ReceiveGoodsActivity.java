@@ -106,6 +106,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     boolean isPrint = false;
     private String id;
     private String wayBillId;
+    private int mTag;
+    private int listPostion;
 
     public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
@@ -137,9 +139,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         toolbar = getToolbar();
         mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
-            //扫一扫
-//            ScanManagerActivity.startActivity(this);
-            startAct(list.get(0));
+            mTag = 1;
+            startAct(new MyAgentListBean(), 1);
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
@@ -169,14 +170,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("ReceiveGoodsActivity")) {
-            startAct(list.get(0));
+            mTag = 1;
+            startAct(new MyAgentListBean(), 1);
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
     }
 
-    public void startAct(MyAgentListBean myAgentListBean) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean);
+    public void startAct(MyAgentListBean myAgentListBean, int tag) {
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag);
     }
 
 
@@ -246,7 +248,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mAdapter = new ReceiveGoodsAdapter(list);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            startAct(list.get(position));
+            mTag = 2;
+            listPostion = position;
+            startAct(list.get(position), 2);
         });
         mAdapter.setOnDeleteClickListener((view, position) -> {
             if (list.size() != 0) {
@@ -365,31 +369,35 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         }
         if (resultCode == 200) {
             MyAgentListBean mMyAgentListBean = (MyAgentListBean) data.getSerializableExtra("mMyAgentListBean");
-            //总重量，总体积，总件数 计算
-            if (mMyAgentListBean != null) {
-                int number = 0;
-                int weight = 0;
-                int volume = 0;
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getCargoCn().equals(mMyAgentListBean.getCargoCn()) && list.get(i).getScooterCode().equals(mMyAgentListBean.getScooterCode())) {
-                        ToastUtil.showToast("当前板车号已在列表中请勿重复添加");
+            int number = 0;
+            int weight = 0;
+            int volume = 0;
+            if (mTag == 2) {
+                //总重量，总体积，总件数 计算
+                if (mMyAgentListBean != null) {
+                    list.set(listPostion, mMyAgentListBean);
+                }
+            } else if (mTag == 1) {
+                for (MyAgentListBean item : list) {
+                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
+                        ToastUtil.showToast("请勿添加重复的板车");
                         return;
                     }
                 }
                 list.add(mMyAgentListBean);
-                toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");
-                for (int i = 0; i < list.size(); i++) {
-                    number += list.get(i).getNumber();
-                    weight += list.get(i).getWeight();
-                    volume += list.get(i).getVolume();
-                    if (!"".equals(reservoirName))
-                        mMyAgentListBean.setReservoirName(reservoirName);
-                }
-                mTvTotalNumber.setText("总件数:" + number + "");
-                mTvTotalVolume.setText("总体积:" + volume + "m³");
-                mTvTotalWeight.setText("总重量" + weight + "kg");
-                mMfrvData.notifyForAdapter(mAdapter);
             }
+            toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");
+            for (int i = 0; i < list.size(); i++) {
+                number += list.get(i).getNumber();
+                weight += list.get(i).getWeight();
+                volume += list.get(i).getVolume();
+                if (!"".equals(reservoirName))
+                    mMyAgentListBean.setReservoirName(reservoirName);
+            }
+            mTvTotalNumber.setText("总件数:" + number + "");
+            mTvTotalVolume.setText("总体积:" + volume + "m³");
+            mTvTotalWeight.setText("总重量" + weight + "kg");
+            mMfrvData.notifyForAdapter(mAdapter);
         } else if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
@@ -426,7 +434,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
 //        if (scooterInfoListBeans.size() != 0)
-        startAct(list.get(0));
+        mTag = 1;
+        startAct(new MyAgentListBean(), 1);
 //        else
 //            ToastUtil.showToast("当前板车号不正确请重新输入");
 

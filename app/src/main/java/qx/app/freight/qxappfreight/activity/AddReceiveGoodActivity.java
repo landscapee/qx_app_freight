@@ -87,6 +87,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private ScooterInfoListBean scooterInfo;
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
     private MyAgentListBean mList;
+    private int tag;
 
     /**
      * @param context
@@ -94,12 +95,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
      * @param waybillCode //     * @param declareItemBean  品名列表 已取消
      * @param cargoCn     品名以逗号隔开
      */
-    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem) {
+    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
 //        starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("cargoCn", cargoCn);
+        starter.putExtra("tag", tag);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("MyAgentListBean", (Serializable) declareItem);
         starter.putExtras(mBundle);
@@ -151,15 +153,18 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //        mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         cargoCn = getIntent().getStringExtra("cargoCn");
+        tag = getIntent().getIntExtra("tag", 0);
         mList = (MyAgentListBean) getIntent().getSerializableExtra("MyAgentListBean");
-        if (mList != null) {
-            mEdtVolume.setText(mList.getVolume() + "");
-            mEdtNumber.setText(mList.getNumber() + "");
-            mTvWeight.setText(mList.getWeight() + "");
-            mTvCooterWeight.setText(mList.getScooterWeight());
-            mEtUldNumber.setText(mList.getUldCode());
-            mEdtDeadWeight.setText(mList.getUldWeight() + "");
-            mTvScooter.setText(mList.getScooterCode());
+        if (2 == tag) {
+            if (mList != null) {
+                mEdtVolume.setText(mList.getVolume() + "");
+                mEdtNumber.setText(mList.getNumber() + "");
+                mTvWeight.setText(mList.getWeight() + "");
+                mTvCooterWeight.setText(mList.getScooterWeight());
+                mEtUldNumber.setText(mList.getUldCode());
+                mEdtDeadWeight.setText(mList.getUldWeight() + "");
+                mTvScooter.setText(mList.getScooterCode());
+            }
         }
         tvProductName.setText(cargoCn);
         //取重
@@ -237,7 +242,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mMyAgentListBean.setWeight(Double.valueOf(mTvWeight.getText().toString().trim()));
         }
         //板车号
-        mMyAgentListBean.setScooterCode(mScooterCode);
+        mMyAgentListBean.setScooterCode(mTvScooter.getText().toString().trim());
         //板车自重
         mMyAgentListBean.setScooterWeight(mTvCooterWeight.getText().toString().trim());
         //ULD号
