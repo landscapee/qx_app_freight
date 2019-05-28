@@ -193,6 +193,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
                     ExceptionReportEntity model = new ExceptionReportEntity();
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
+                    model.setDeptId(UserInfoSingle.getInstance().getDepId());
                     model.setReType(4);//运输偏离上报
                     model.setFiles(null);
                     model.setArea(areaId);
@@ -327,6 +328,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
+        model.setDeptId(UserInfoSingle.getInstance().getDepId());
         model.setReType(4);
         model.setArea(areaId);
         model.setExceptionCode(Constants.TP_END);

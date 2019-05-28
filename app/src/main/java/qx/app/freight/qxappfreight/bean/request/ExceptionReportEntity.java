@@ -43,6 +43,8 @@ public class ExceptionReportEntity {
 
     private String exceptionCode;//异常 操作code
 
+    private String deptId;//部门id
+
     private List<TransportTodoListBean> scooters;//板车数据
     private List<TransportTodoListBean> waybillScooters;//运单数据
 
