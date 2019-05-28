@@ -369,6 +369,10 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
 
+    //结载代办
+    @POST("service-product-transport/tp-main-info/passengerLoadTodo")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getEndInstallTodo(@Body BaseFilterEntity model);
+
 
     //行李区行李数据提交
     @POST("service-product-transport/tp-main-info/baggageAreaSub")

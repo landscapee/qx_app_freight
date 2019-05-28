@@ -590,6 +590,13 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<LoadAndUnloadTodoBean>> loadAndUnloadTodo(BaseFilterEntity model) {
         return transform(getService().loadAndUnloadTodo(model));
     }
+    /****
+     * 结载代办
+     * @return
+     */
+    public Observable<List<LoadAndUnloadTodoBean>> getEndInstallTodo(BaseFilterEntity model) {
+        return transform(getService().getEndInstallTodo(model));
+    }
 
     /****
      * 行李区行李数据提交

@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -65,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         versionPresenter.updateVersion();
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("jinganglihuo7");
+        mEtUserName.setText("zhouqing");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();

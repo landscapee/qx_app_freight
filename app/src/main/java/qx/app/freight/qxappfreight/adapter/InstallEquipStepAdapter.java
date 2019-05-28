@@ -62,7 +62,7 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                                     intent.putExtra("plane_info", mList.get(pos).getData());
                                     mContext.startActivity(intent);
                                 } else {
-                                    mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-"+sdf.format(new Date()));
+                                    mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
                                     item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                                     mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
                                 }
@@ -81,7 +81,11 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                     } else {
                         if (pos == 3) {
                             mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
-                            if (mList.get(pos).getData().getWidthAirFlag() != 0) {
+                            if (mList.get(pos).getData().getWidthAirFlag() == 0 && mList.get(pos).getData().getTaskType() == 2) {
+                                mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+                                item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                                mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            } else {
                                 Intent intent;
                                 if (item.getLoadUnloadType() == 1) {
                                     intent = new Intent(mContext, LoadPlaneActivity.class);
@@ -91,16 +95,14 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                                 }
                                 intent.putExtra("plane_info", mList.get(pos).getData());
                                 mContext.startActivity(intent);
-                            } else {
-                                mList.get(pos).setStepDoneDate(sdf.format(new Date()) + "-"+sdf.format(new Date()));
-                                item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                                mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
                             }
                         } else {
                             item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                             mList.get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
-                            if (pos != 4) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
-                                mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            if (mList.size() > 2) {
+                                if (pos != 4) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
+                                    mList.get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                                }
                             }
                         }
                     }

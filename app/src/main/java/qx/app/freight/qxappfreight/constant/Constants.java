@@ -64,7 +64,7 @@ public class Constants {
      * 结载
      *
      */
-    public static String JUNCTION_LOAD = "junction";
+    public static String JUNCTION_LOAD = "clipping";
 
     /**
      * 结载

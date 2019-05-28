@@ -241,7 +241,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 mIvControl2.setImageResource(R.mipmap.down);
             }
         });
-        mLlScanGoods.setOnClickListener(v -> ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity"));
+        mLlScanGoods.setOnClickListener(v ->{
+                mIsScanGoods = true;
+                ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");});
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
             ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
