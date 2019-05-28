@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,8 @@ public class BaggageListConfirmActivity extends BaseActivity implements BaggageA
 
     @OnClick(R.id.btn_next)
     public void onViewClicked() {
-        String json = JSON.toJSONString(mList);
+        Gson mGson = new Gson();
+        String json = mGson.toJson(mList);
         ((BaggageAreaSubPresenter)mPresenter).baggageAreaSub(json);
     }
 
