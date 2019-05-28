@@ -139,7 +139,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
             intentAdd.putExtra("TYPE", TYPE_ADD);
-//            intentAdd.putExtra("FLIGHTNo", flightNo);
+            intentAdd.putExtra("FLIGHTNo", flightNo);
             startActivityForResult(intentAdd, 1);
 //            showDialog();
         });

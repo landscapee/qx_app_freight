@@ -49,6 +49,7 @@ import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.ReservoirPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -73,6 +74,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     int INDEX;
     String TYPE = "";
     String newCode; //传过来的运单号
+    String flightNum; //传过来的航班号
     List<CounterUbnormalGoods> counterUbnormalGoodsList;//异常数组
     //是否转关 0 否 1 是
     int isTransit;//是否转关
@@ -127,6 +129,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             Log.e("dime", "进入了addd");
             //如果是新增数据， 直接初始化
             newCode = getIntent().getStringExtra("newCode");
+            flightNum = getIntent().getStringExtra("FLIGHTNo");
 
             //根据航班号查运单前缀
             if (!TextUtils.isEmpty(newCode)) {
@@ -134,8 +137,11 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 String[] parts = newCode.split("-");
                 idEdt.setText(parts[0]);
                 idEdt2.setText(parts[1]);
-//                mPresenter = new ReservoirPresenter(this);
-//                ((ReservoirPresenter)mPresenter).getAirWaybillPrefix(newCode.substring(0,2));
+            }
+            //根据航班号航司码搜索运单号前三位
+            if (!TextUtils.isEmpty(flightNum)){
+                 mPresenter = new ReservoirPresenter(this);
+                ((ReservoirPresenter)mPresenter).getAirWaybillPrefix(flightNum.substring(0,2));
             }
             customToolbar.setMainTitle(Color.WHITE, "新增");
             mInWaybillRecord = new InWaybillRecord();
