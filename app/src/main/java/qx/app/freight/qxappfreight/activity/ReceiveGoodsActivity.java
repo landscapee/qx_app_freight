@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.PopupPrintAdapter;
 import qx.app.freight.qxappfreight.adapter.ReceiveGoodsAdapter;
@@ -41,7 +38,6 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.ReturnGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -94,14 +90,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private TransportListCommitEntity transportListCommitEntity;
     private String mScooterCode;
     private int pageCurrent = 1;
-
     private DeclareWaybillBean mDeclare = new DeclareWaybillBean();
     private List<SecurityCheckResult> mSecuriBean = new ArrayList<>();
-
     //库区
     private String reservoirName;
-//    private List<SecurityCheckResult> mNotTransportList = new ArrayList<>();
-
     //显示打印预览
     private CommonPopupWindow window;
     ViewPager vp;
@@ -115,7 +107,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private String id;
     private String wayBillId;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode,String id,String wayBillId) {
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
@@ -138,7 +130,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         wayBillId = getIntent().getStringExtra("wayBillId");
-        id=getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
         reservoirType = mDeclare.getColdStorage() + "";
@@ -146,7 +138,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             //扫一扫
-            ScanManagerActivity.startActivity(this);
+//            ScanManagerActivity.startActivity(this);
+            startAct(list.get(0));
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
@@ -154,7 +147,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("start_data",  (ArrayList<SecurityCheckResult>)mSecuriBean);
+            bundle.putSerializable("start_data", (ArrayList<SecurityCheckResult>) mSecuriBean);
             intent.putExtras(bundle);
             ReceiveGoodsActivity.this.startActivityForResult(intent, 123);
         });
@@ -176,21 +169,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("ReceiveGoodsActivity")) {
-            //板车号
-            mScooterCode = result.getData();
-            if (!"".equals(mScooterCode)) {
-                startAct(mScooterCode);
-            } else {
-                ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
-            }
+            startAct(list.get(0));
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
     }
 
-    public void startAct(String mScooterCode) {
-//        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclareItemBeans);
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, mScooterCode, waybillCode, mDeclare.getCargoCn());
+    public void startAct(MyAgentListBean myAgentListBean) {
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean);
     }
 
 
@@ -260,7 +246,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mAdapter = new ReceiveGoodsAdapter(list);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-
+            startAct(list.get(position));
         });
         mAdapter.setOnDeleteClickListener((view, position) -> {
             if (list.size() != 0) {
@@ -333,8 +319,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void transportListCommitResult(String result) {
         if (!"".equals(result)) {
-                EventBus.getDefault().post("collector_refresh");
-                startActivity(new Intent(this,MainActivity.class));
+            EventBus.getDefault().post("collector_refresh");
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -371,9 +357,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 123 && resultCode == RESULT_OK) {
-            if (data != null && ((ArrayList<SecurityCheckResult>)data.getSerializableExtra("not_transport_list")).size()!=0) {
+            if (data != null && ((ArrayList<SecurityCheckResult>) data.getSerializableExtra("not_transport_list")).size() != 0) {
                 mSecuriBean.clear();
-                mSecuriBean.addAll((ArrayList<SecurityCheckResult>)data.getSerializableExtra("not_transport_list"));
+                mSecuriBean.addAll((ArrayList<SecurityCheckResult>) data.getSerializableExtra("not_transport_list"));
                 mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
             }
         }
@@ -439,10 +425,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
-        if (scooterInfoListBeans.size() != 0)
-            startAct(scooterInfoListBeans.get(0).getScooterCode());
-        else
-            ToastUtil.showToast("当前板车号不正确请重新输入");
+//        if (scooterInfoListBeans.size() != 0)
+        startAct(list.get(0));
+//        else
+//            ToastUtil.showToast("当前板车号不正确请重新输入");
 
     }
 

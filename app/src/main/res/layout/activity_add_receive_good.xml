@@ -215,6 +215,14 @@
                 android:singleLine="true"
                 android:textSize="16sp" />
 
+            <ImageView
+                android:id="@+id/iv_scan"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/scan_small"
+                />
+
         </LinearLayout>
 
 

@@ -1,30 +1,23 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,25 +25,20 @@ import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
-import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetWeightContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ReturnGoodsDialog;
 import qx.app.freight.qxappfreight.presenter.GetWeightPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
-import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -69,7 +57,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     TextView mEdtOverWeight;    //超重重量
     @BindView(R.id.tv_product_name)
     TextView tvProductName;    //品名
-
     @BindView(R.id.edt_dead_weight)
     EditText mEdtDeadWeight;   //ULD自重
     @BindView(R.id.et_uldnumber)
@@ -90,35 +77,31 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     Button mBtnCommit;          //提交
     @BindView(R.id.tv_info)
     TextView mTvInfo;
+    @BindView(R.id.iv_scan)
+    ImageView mIvScan;          //扫一扫
 
-    private GeneralSpinnerAdapter mSpProductAdapter;
-    private List<GeneralSpinnerBean.SpProductBean> mSpProductList;//品名
     private MyAgentListBean mMyAgentListBean;
     private String waybillId, waybillCode;
     private String cargoCn;
-    private List<DeclareItem> mDeclareItemBeans;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
-
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
+    private MyAgentListBean mList;
 
     /**
-     *
      * @param context
      * @param waybillId
-     * @param mScooterCode
-     * @param waybillCode
-//     * @param declareItemBean  品名列表 已取消
-     * @param cargoCn  品名以逗号隔开
+     * @param waybillCode //     * @param declareItemBean  品名列表 已取消
+     * @param cargoCn     品名以逗号隔开
      */
-    public static void startActivity(Activity context, String waybillId, String mScooterCode, String waybillCode, String cargoCn) {
+    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
-        starter.putExtra("mScooterCode", mScooterCode);
+//        starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("cargoCn", cargoCn);
         Bundle mBundle = new Bundle();
-//        mBundle.putSerializable("transportListBeans", (Serializable) declareItemBean);
+        mBundle.putSerializable("MyAgentListBean", (Serializable) declareItem);
         starter.putExtras(mBundle);
         context.startActivityForResult(starter, 0);
     }
@@ -163,70 +146,70 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private void initView() {
         String content = "带<font color='#FF0000'>" + "*" + "</font>为必填项";
         mTvInfo.setText(Html.fromHtml(content));
-
         mMyAgentListBean = new MyAgentListBean();
         waybillId = getIntent().getStringExtra("waybillId");
-        mScooterCode = getIntent().getStringExtra("mScooterCode");
+//        mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         cargoCn = getIntent().getStringExtra("cargoCn");
-//        mDeclareItemBeans = (List<DeclareItem>) getIntent().getSerializableExtra("transportListBeans");
-
-//        tvProductName.setText(setCargoCn(mDeclareItemBeans));
+        mList = (MyAgentListBean) getIntent().getSerializableExtra("MyAgentListBean");
+        if (mList != null) {
+            mEdtVolume.setText(mList.getVolume() + "");
+            mEdtNumber.setText(mList.getNumber() + "");
+            mTvWeight.setText(mList.getWeight() + "");
+            mTvCooterWeight.setText(mList.getScooterWeight());
+            mEtUldNumber.setText(mList.getUldCode());
+            mEdtDeadWeight.setText(mList.getUldWeight() + "");
+            mTvScooter.setText(mList.getScooterCode());
+        }
         tvProductName.setText(cargoCn);
-//        String [] sb = new String[1];
-//        sb[0] = mDeclareItemBeans.get(0).getCargoId();
-//        mMyAgentListBean.setCargoId(sb);
-        //品名  coldStorage  deptCode
-//        mSpProductList = new ArrayList<>();
-//        if (mDeclareItemBeans != null) {
-//            for (int i = 0; i < mDeclareItemBeans.size(); i++) {
-//                GeneralSpinnerBean.SpProductBean mSpProductBean = new GeneralSpinnerBean.SpProductBean();
-//                mSpProductBean.setId(i + "");
-//                mSpProductBean.setValue(mDeclareItemBeans.get(i).getCargoCn());
-//                mSpProductList.add(mSpProductBean);
-//            }
-//        }
-//        mSpProductAdapter = new GeneralSpinnerAdapter(this, mSpProductList);
-//        mSpProduct.setAdapter(mSpProductAdapter);
-//        mSpProduct.setDropDownVerticalOffset(30);
-//        mSpProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                //品名id
-//                mMyAgentListBean.setCargoId(sb);
-//                //品名
-//                mMyAgentListBean.setCargoCn(mDeclareItemBeans.get(position).getCargoCn());
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
-
         //取重
         mBtnTakeWeight.setOnClickListener(v -> {
             mPresenter = new GetWeightPresenter(this);
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
-
-        rcInfoOverweight = new ArrayList <>();
-        llOverweight.setOnClickListener(v->{
-
+        rcInfoOverweight = new ArrayList<>();
+        llOverweight.setOnClickListener(v -> {
             showPopWindowList();
-
         });
-        //板车号
-        getNumberInfo();
+        mIvScan.setOnClickListener(v -> ScanManagerActivity.startActivity(AddReceiveGoodActivity.this));
+    }
+
+    //激光扫码获取返回板车信息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (result.getFunctionFlag().equals("AddReceiveGoodActivity")) {
+            //板车号
+            mScooterCode = result.getData();
+            if (!TextUtils.isEmpty(mScooterCode)) {
+                mTvScooter.setText(mScooterCode);
+                //板车号
+                getNumberInfo(mScooterCode);
+            }
+        }
+    }
+
+    //普通扫码
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (Constants.SCAN_RESULT == resultCode) {
+            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+            if (!"".equals(mScooterCode)) {
+                mTvScooter.setText(mScooterCode);
+                //板车号
+                getNumberInfo(mScooterCode);
+            } else {
+                ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+            }
+        }
     }
 
     //品名叠加
-    private String setCargoCn(List<DeclareItem> data){
+    private String setCargoCn(List<DeclareItem> data) {
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i <data.size() ; i++) {
-            str.append(data.get(i).getCargoCn()+",");
+        for (int i = 0; i < data.size(); i++) {
+            str.append(data.get(i).getCargoCn() + ",");
         }
-        return str.substring(0,str.length()-1);
+        return str.substring(0, str.length() - 1);
     }
 
 
@@ -264,28 +247,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
         else
             mMyAgentListBean.setUldWeight(0);
-        //超重重量
-//        if ("".equals(mEdtOverWeight.getText().toString())) {
-//            mMyAgentListBean.setOverWeight(0);
-//        } else {
-//            mMyAgentListBean.setOverWeight(Integer.valueOf(mEdtOverWeight.getText().toString().trim()));
-//        }
         mMyAgentListBean.setRcInfoOverweight(rcInfoOverweight);
-
-
-        if (null == scooterInfo) {
-            ToastUtil.showToast("id为空不能提交");
-            return;
-        } else {
-            mMyAgentListBean.setScooterId(scooterInfo.getId());
-            mMyAgentListBean.setScooterType(scooterInfo.getScooterType());
-        }
         mPresenter = new ScooterInfoListPresenter(this);
         ((ScooterInfoListPresenter) mPresenter).addInfo(mMyAgentListBean);
     }
 
     //获取板车信息
-    public void getNumberInfo() {
+    public void getNumberInfo(String mScooterCode) {
         mPresenter = new ScooterInfoListPresenter(this);
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
@@ -327,11 +295,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 //板车重量
                 mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
             }
-            //如果有板车号和板车重量，就不能让用户输入
-//            mTvScooter.setFocusable(false);
-//            mTvScooter.setEnabled(false);
-//            mTvCooterWeight.setFocusable(false);
-//            mTvCooterWeight.setEnabled(false);
             ((ScooterInfoListPresenter) mPresenter).exist(scooterInfoListBeans.get(0).getId());
         } else {
             finishAndToast();
