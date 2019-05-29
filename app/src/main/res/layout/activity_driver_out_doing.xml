@@ -122,6 +122,8 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ex_tp_end_press"
             android:text="异常结束"
-            android:textColor="@color/red" />
+            android:textColor="@color/red"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 </LinearLayout>

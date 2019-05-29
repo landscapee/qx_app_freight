@@ -71,6 +71,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        super.onDestroyView();
         if (mPresenter != null) {
             mPresenter.detach();
             mPresenter.interruptHttp();

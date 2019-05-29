@@ -152,6 +152,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mFlightberList = (ArrayList <OutFieldTaskBean>) getIntent().getSerializableExtra("plane_info_list");
         mFlightId = getIntent().getStringExtra("flight_id");
         if (mFlightberList != null) {
+            mFlightNumberList = new ArrayList <>();
             mSpinner.setVisibility(View.VISIBLE);
             for (OutFieldTaskBean mOutFieldTaskBean: mFlightberList){
                 mFlightNumberList.add(mOutFieldTaskBean.getFlightNo());

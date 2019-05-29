@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qxkj.positionapp.GPSService;
+import com.qxkj.positionapp.GetIdUtil;
+import com.qxkj.positionapp.LocationEntity;
+import com.qxkj.positionapp.observer.LocationObservable;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -32,13 +37,13 @@ import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
-import qx.app.freight.qxappfreight.service.GPSService;
 import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements LocationObservable{
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -67,7 +72,7 @@ public class MainActivity extends BaseActivity {
     private TaskFragment mTaskFragment;
     private DynamicFragment mDynamicFragment;
     private ClearStorageFragment mCSFragment;
-    private TaskPutCargoFragment mTaskPutCargoFragment;
+//    private TaskPutCargoFragment mTaskPutCargoFragment;
     private MineFragment mMineFragment;
     private Fragment nowFragment;
     private TestFragment testFragment;
@@ -88,8 +93,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
         initServices();
         setToolbarShow(View.GONE);
         mMessageReciver = new MessageReciver(this);
@@ -100,7 +103,8 @@ public class MainActivity extends BaseActivity {
 
 
     private void initServices() {
-        GPSService.gpsStart(this);
+        GPSService.startGPSService(this);
+        GetIdUtil.getSingleInstance().register(this);
         //根据登录返回的
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
         if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
@@ -146,7 +150,6 @@ public class MainActivity extends BaseActivity {
 //        mViewPager.setCurrentItem(0);
 //        switchFragment(mViewPager.getCurrentItem());
 
-
         mTaskFragment = new TaskFragment();
         mDynamicFragment = new DynamicFragment();
 //        int rw = 0;
@@ -162,7 +165,7 @@ public class MainActivity extends BaseActivity {
             mCSFragment = new ClearStorageFragment();
 
         testFragment = new TestFragment();
-        mTaskPutCargoFragment = new TaskPutCargoFragment();
+//        mTaskPutCargoFragment = new TaskPutCargoFragment();
         mMineFragment = new MineFragment();
 
         getSupportFragmentManager()
@@ -171,7 +174,7 @@ public class MainActivity extends BaseActivity {
                 .add(R.id.content, mDynamicFragment)
                 .add(R.id.content, mCSFragment)
                 .add(R.id.content, testFragment)
-                .add(R.id.content, mTaskPutCargoFragment)
+//                .add(R.id.content, mTaskPutCargoFragment)
                 .add(R.id.content, mMineFragment)
                 .commit();
         nowFragment = mTaskFragment;
@@ -196,7 +199,7 @@ public class MainActivity extends BaseActivity {
                 .hide(mDynamicFragment)
                 .hide(mCSFragment)
                 .hide(testFragment)
-                .hide(mTaskPutCargoFragment)
+//                .hide(mTaskPutCargoFragment)
                 .hide(mMineFragment);
 
         nowFragment = fragment; //替换当前fragment
@@ -287,16 +290,6 @@ public class MainActivity extends BaseActivity {
 //        }
 //    }
 
-    /**
-     * 接收激光扫码广播内容， 进行业务处理。
-     *
-     * @param broadString 广播内容
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecBroad(String broadString) {
-//        ToastUtil.showToast(this, broadString);
-    }
-
     @Override
     public void onBackPressed() {
         quitApp();
@@ -305,10 +298,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void receiveLocationUpdate(LocationEntity locationEntity) {
+        if (locationEntity != null)
+            ToastUtil.showToast("经度:"+locationEntity.getLongitude()+"纬度:"+locationEntity.getLatitude());
     }
 }

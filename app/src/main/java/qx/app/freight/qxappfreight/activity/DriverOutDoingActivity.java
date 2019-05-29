@@ -78,6 +78,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     CheckBox cbAll;
     @BindView(R.id.ll_cb_all)
     LinearLayout llcbAll;
+    @BindView(R.id.iv_error_end)
+    ImageView ivErrorEnd;
+
+    private boolean isBaggage = false; //是否是行李运输，行李运输不显示异常结束
 
     @BindView(R.id.tv_tp_status)
     TextView tvTpStatus;
@@ -124,7 +128,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         //从待办传递过来的任务列表类型
         mAcceptTerminalTodoBean = (List <OutFieldTaskBean>) getIntent().getSerializableExtra("acceptTerminalTodoBean");
         transfortType = getIntent().getStringExtra("transfortType");
-
+        if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) ||Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
+            isBaggage = true;
+        }
         //计算本次任务能拉多少板车（所有子任务能拉板车数量的和）
         if (mAcceptTerminalTodoBean != null) {
             tpNum = 0;
@@ -149,10 +155,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         //扫码
         imageScan.setOnClickListener(v -> {
-            if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+            if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                 ScanManagerActivity.startActivity(this);
-            }
-            else {
+            } else {
                 if (tpStatus == 0) {
                     ToastUtil.showToast("运输已经开始，无法再次扫版");
                     return;
@@ -174,11 +179,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 list.get(position).setSelect(true);
 
             //选择item时  设置全选的状态
-            for (FlightOfScooterBean mFlightOfScooterBean:list){
-                if (!mFlightOfScooterBean.isSelect()){
+            for (FlightOfScooterBean mFlightOfScooterBean : list) {
+                if (!mFlightOfScooterBean.isSelect()) {
                     cbAll.setChecked(false);
-                }
-                else
+                } else
                     cbAll.setChecked(true);
             }
             upDataBtnStatusEnd();
@@ -227,10 +231,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+        if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
             ScanManagerActivity.startActivity(this);
-        }
-        else {
+        } else {
             if (tpStatus == 0) {
                 ToastUtil.showToast("运输已经开始，无法再次扫版");
                 return;
@@ -254,14 +257,15 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result.isCancelFlag()|| result.isChangeWorkerUser()) {
-            if (result.getTaskId() != null && result.getTaskId().equals(mAcceptTerminalTodoBean.get(0).getTaskId())){
+        if (result.isCancelFlag() || result.isChangeWorkerUser()) {
+            if (result.getTaskId() != null && result.getTaskId().equals(mAcceptTerminalTodoBean.get(0).getTaskId())) {
 
                 ToastUtil.showToast("该任务已被取消！");
                 finish();
             }
         }
     }
+
     /**
      * 收到取消任务推送 关闭页面
      *
@@ -270,9 +274,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("DriverOutDoingActivity_finish")) {
-                ToastUtil.showToast("该任务已异常结束");
-                EventBus.getDefault().post("TaskDriverOutFragment_refresh");
-                finish();
+            ToastUtil.showToast("该任务已异常结束");
+            EventBus.getDefault().post("TaskDriverOutFragment_refresh");
+            finish();
         }
     }
 
@@ -305,7 +309,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void isSureEndLoc(String str) {
 
         if (!str.equals(mAcceptTerminalTodoBean.get(0).getEndAreaId())) {
-            ToastUtil.showToast("请前往正确的运输终点:"+mAcceptTerminalTodoBean.get(0).getEndAreaId());
+            ToastUtil.showToast("请前往正确的运输终点:" + mAcceptTerminalTodoBean.get(0).getEndAreaId());
             return;
         } else
             doEnd();
@@ -342,6 +346,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     /**
      * 检查是否是已经存在的板车
+     *
      * @param scooterCode
      */
     private void checkScooterCode(String scooterCode) {
@@ -412,10 +417,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         switch (view.getId()) {
 
             case R.id.ll_add://添加板车
-                if(Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+                if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                     ScanManagerActivity.startActivity(this);
-                }
-                else {
+                } else {
                     if (tpStatus == 0) {
                         ToastUtil.showToast("运输已经开始，无法再次扫版");
                         return;
@@ -447,7 +451,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 break;
             case R.id.iv_error_end:
 
-                if (tpStatus == 0){
+                if (tpStatus == 0) {
                     flightNumList.clear();
                     for (OutFieldTaskBean item : mAcceptTerminalTodoBean) {
                         if (!flightNumList.contains(item.getFlightNo())) {
@@ -463,8 +467,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         intent.putExtra("error_type", 4);
                         startActivity(intent);
                     }
-                }
-                else
+                } else
                     ToastUtil.showToast("任务必须先开始运输才能异常结束");
 
                 break;
@@ -475,7 +478,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     /**
                      * 行李运输 需要 验证 结束位置和当前行李转盘是否一致
                      */
-                    if ((Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())&&"baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType())) || Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
+                    if ((Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) && "baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType())) || Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                         isSure = 1;
                         ScanManagerActivity.startActivity(this);
                         return;
@@ -653,7 +656,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
                 steps.add(step);
             }
-            transportEndEntity.setTaskId(mAcceptTerminalTodoBean.get(0).getTaskId() );
+            transportEndEntity.setTaskId(mAcceptTerminalTodoBean.get(0).getTaskId());
             transportEndEntity.setScooters(mListBeanBegin);
             transportEndEntity.setSteps(steps);
         }
@@ -680,6 +683,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (flag == 0) {
             tvStart.setText("结束");
             llAdd.setVisibility(View.GONE);
+            if (!isBaggage)
+                ivErrorEnd.setVisibility(View.VISIBLE);
             mDriverOutTaskDoingAdapter.setCheckBoxEnable(true);
             mDriverOutTaskDoingAdapter.setIsmIsSlide(false);
             tvTpStatus.setVisibility(View.VISIBLE);
@@ -692,6 +697,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 mDriverOutTaskDoingAdapter.setIsmIsSlide(true);
                 tvTpStatus.setVisibility(View.GONE);
                 llcbAll.setVisibility(View.GONE);
+                ivErrorEnd.setVisibility(View.GONE);
             }
             llcbAll.setVisibility(View.GONE);
         }
@@ -821,7 +827,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     }
 
     @Override
-    public void checkScooterCodeResult(BaseEntity<Object> result) {
+    public void checkScooterCodeResult(BaseEntity <Object> result) {
         if ("200".equals(result.getStatus())) {
             //TODO
             List <TransportTodoListBean> transportTodoListBeans = new ArrayList <>();
