@@ -189,9 +189,29 @@ public class GetIdUtil {
         obableList.remove(observerable);
     }
 
+    /**
+     * gps位置更新
+     * @param locationEntity
+     */
     public void notifyLocationUpdate(LocationEntity locationEntity) {
         for (LocationObservable observerable : obableList) {
             observerable.receiveLocationUpdate(locationEntity);
         }
+    }
+
+    /**
+     * 如果注册了，直接解绑
+     */
+    public void unRegisterIfAready(LocationObservable observable){
+        obableList.remove(observable);
+    }
+
+    /**
+     * 是否注册
+     * @param observable
+     * @return
+     */
+    public boolean isRegister(LocationObservable observable){
+        return obableList.contains(observable);
     }
 }
