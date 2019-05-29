@@ -1,5 +1,9 @@
-package com.qxkj.positionapp;
+package com.qxkj.positionapp.http;
 
+/**
+ * Created by zzq on 2019/5/29 22:04
+ * @title 网络请求返回值实体类
+ */
 public class CellLocationResponse {
 
     /**

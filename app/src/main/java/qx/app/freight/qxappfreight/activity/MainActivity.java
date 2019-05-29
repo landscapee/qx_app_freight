@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qxkj.positionapp.GPSService;
+import com.qxkj.positionapp.GPSUtils;
 import com.qxkj.positionapp.GetIdUtil;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
@@ -104,7 +105,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 
     private void initServices() {
         GPSService.startGPSService(this);
-        GetIdUtil.getSingleInstance().register(this);
+//        GetIdUtil.getSingleInstance().register(this);
         //根据登录返回的
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
         if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
@@ -298,7 +299,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
+//        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
         } catch (Exception e) {

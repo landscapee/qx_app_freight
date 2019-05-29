@@ -1,14 +1,19 @@
 package com.qxkj.positionapp;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,6 +22,8 @@ import android.widget.Toast;
  * Created by zzq/guohao on 2019/5/29 11:43
  *
  * @title gps定位功能
+ *
+
  *
  */
 public class GPSService extends Service {
@@ -27,33 +34,41 @@ public class GPSService extends Service {
 
     Handler handler = new Handler();
 
+    LocationManager locationManager;
+
     /**
      * 启动service
      * @param context
      */
-    public static void startGPSService(Context context){
+    public static void startGPSService(Context context) {
         Intent intent = new Intent(context, GPSService.class);
         context.startService(intent);
     }
 
-    public static void startGPSService(Context context, int seconds){
+    public static void startGPSService(Context context, int seconds) {
         GPS_SECONDS = seconds;
         Intent intent = new Intent(context, GPSService.class);
         context.startService(intent);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onCreate() {
         super.onCreate();
 
         Log.e("GPS", "==========================GPS Service create========================");
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if(!isGpsEnabled(locationManager)){
+        if (!isGpsEnabled(locationManager)) {
             Log.e("GPS", "ERROR: GPS导航未开启，请设置！");
             return;
         }
-        handler.postDelayed(runnable, 5000);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        String provider = locationManager.getBestProvider(GPSUtils.getInstance().getCriteria(), true);
+        //开启位置监听
+        locationManager.requestLocationUpdates(provider, 5000, 1, new MyLocationListener());
+
     }
 
     @Override
@@ -91,29 +106,4 @@ public class GPSService extends Service {
         return isOpenGPS || isOpenNetwork;
     }
 
-    /**
-     * 位置监听
-     */
-    private LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            //TODO: 位置改变回调
-
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            //TODO： 状态改变回掉
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
 }

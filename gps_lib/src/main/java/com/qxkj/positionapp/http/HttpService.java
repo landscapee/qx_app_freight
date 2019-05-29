@@ -1,4 +1,5 @@
-package com.qxkj.positionapp;
+package com.qxkj.positionapp.http;
+
 
 import retrofit2.Call;
 import retrofit2.http.GET;

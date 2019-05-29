@@ -10,10 +10,9 @@ import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.qxkj.positionapp.observer.LocationObservable;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.qxkj.positionapp.http.CellInfo;
+import com.qxkj.positionapp.http.CellLocationResponse;
+import com.qxkj.positionapp.http.HttpService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -26,12 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GetIdUtil {
 
-    static List<LocationObservable> obableList = new ArrayList<>();
 
     //单例
     private static GetIdUtil getIdUtil = new GetIdUtil();
-
-    private LocationEntity locationEntity = new LocationEntity();
 
     private GetIdUtil() {
 
@@ -84,8 +80,6 @@ public class GetIdUtil {
 
     public void getLocationInfo(Context context) {
 
-        Log.e("GPS", "getLocationInfo run......");
-
         try {
             CellInfo cellInfo = getCellInfo(context);
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
@@ -99,7 +93,7 @@ public class GetIdUtil {
                     .build();
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://api.cellocation.com:81/")
-                    .client(client)//此client是为了打印信息
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             HttpService httpService = retrofit.create(HttpService.class);
@@ -111,9 +105,7 @@ public class GetIdUtil {
                 public void onResponse(Call<CellLocationResponse> call, Response<CellLocationResponse> response) {
                     Log.e("GPS Service", "SUCCES:获取到位置信息");
                     CellLocationResponse result = response.body();
-                    locationEntity.setLatitude(result.getLat());
-                    locationEntity.setLongitude(result.getLon());
-                    notifyLocationUpdate(locationEntity);
+                    GPSUtils.getInstance().notifyLocationUpdate(new LocationEntity(result.getLon(), result.getLat()));
                     Log.e("    [GPS info]", "经度：" + result.getLat() + ", 维度:" + result.getLon());
                 }
 
@@ -128,90 +120,4 @@ public class GetIdUtil {
         }
     }
 
-    private static class CellInfo {
-        private int mcc;
-        private int mnc;
-        private int lac;
-        private int cid;
-
-        public int getMcc() {
-            return mcc;
-        }
-
-        public void setMcc(int mcc) {
-            this.mcc = mcc;
-        }
-
-        public int getMnc() {
-            return mnc;
-        }
-
-        public void setMnc(int mnc) {
-            this.mnc = mnc;
-        }
-
-        public int getLac() {
-            return lac;
-        }
-
-        public void setLac(int lac) {
-            this.lac = lac;
-        }
-
-        public int getCid() {
-            return cid;
-        }
-
-        public void setCid(int cid) {
-            this.cid = cid;
-        }
-    }
-
-    public LocationEntity getLocationEntity() {
-        return locationEntity;
-    }
-
-    /**
-     * 注册监听
-     *
-     * @param observerable
-     */
-    public void register(LocationObservable observerable) {
-        obableList.add(observerable);
-    }
-
-    /**
-     * 取消注册监听
-     *
-     * @param observerable
-     */
-    public void unRegister(LocationObservable observerable) {
-        obableList.remove(observerable);
-    }
-
-    /**
-     * gps位置更新
-     * @param locationEntity
-     */
-    public void notifyLocationUpdate(LocationEntity locationEntity) {
-        for (LocationObservable observerable : obableList) {
-            observerable.receiveLocationUpdate(locationEntity);
-        }
-    }
-
-    /**
-     * 如果注册了，直接解绑
-     */
-    public void unRegisterIfAready(LocationObservable observable){
-        obableList.remove(observable);
-    }
-
-    /**
-     * 是否注册
-     * @param observable
-     * @return
-     */
-    public boolean isRegister(LocationObservable observable){
-        return obableList.contains(observable);
-    }
 }

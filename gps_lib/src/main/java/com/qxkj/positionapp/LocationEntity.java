@@ -1,8 +1,20 @@
 package com.qxkj.positionapp;
 
 public class LocationEntity {
-    private double longitude;//经度
-    private double latitude;//纬度
+
+    public LocationEntity(){
+
+    }
+
+    public LocationEntity(double longitude, double latitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    //经度
+    private double longitude;
+    //纬度
+    private double latitude;
 
     public double getLongitude() {
         return longitude;
