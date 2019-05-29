@@ -15,9 +15,9 @@ public class GetPhoneParametersPresenter extends BasePresenter {
 
     public void getPhoneParameters(PhoneParametersEntity model) {
         mRequestView.showNetDialog();
-        ((GetPhoneParametersModel) mRequestModel).getPhoneParameters(model, new IResultLisenter<FlightBean>() {
+        ((GetPhoneParametersModel) mRequestModel).getPhoneParameters(model, new IResultLisenter<String>() {
             @Override
-            public void onSuccess(FlightBean result) {
+            public void onSuccess(String result) {
                 ((GetPhoneParametersContract.getPhoneParametersView) mRequestView).getPhoneParametersResult(result);
                 mRequestView.dissMiss();
             }

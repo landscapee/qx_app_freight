@@ -11,6 +11,6 @@ public class GetPhoneParametersContract {
     }
 
     public interface getPhoneParametersView extends IBaseView {
-        void getPhoneParametersResult(FlightBean result);
+        void getPhoneParametersResult(String result);
     }
 }

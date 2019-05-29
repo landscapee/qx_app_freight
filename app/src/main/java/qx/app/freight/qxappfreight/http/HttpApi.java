@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.http;
 
+import java.io.ObjectStreamClass;
 import java.util.List;
 import java.util.Map;
 
@@ -495,9 +496,8 @@ public interface HttpApi {
 
 
     //用于接收手机参数的实体
-    @POST("app/getPhoneParameters")
-    @FormUrlEncoded
-    Observable<BaseEntity<FlightBean>> getPhoneParameters(@FieldMap Map<String, String> map);
+    @POST("app/userSignIn")
+    Observable<BaseEntity<Object>> getPhoneParameters(@Body PhoneParametersEntity model);
 
     //详情
     @POST("scheduling/getFlightInfoByFlightIdForCargo")

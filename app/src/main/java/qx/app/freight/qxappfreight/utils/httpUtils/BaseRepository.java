@@ -75,6 +75,21 @@ public abstract class BaseRepository {
                     }
                 });
     }
+
+    protected static <T> Observable<String> notingflightTransform(Observable<BaseEntity<Object>> observable) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(baseEntity -> {
+                    if (null != baseEntity && "1000".equals(baseEntity.getResponseCode())) {
+                        return "成功";
+                    }else if("10000".equals(baseEntity.getResponseCode())){
+                        return "异常登录";
+                    } else {
+                        throw new DefaultException(baseEntity.getMessage());
+                    }
+                });
+    }
     /*******
      * Data是个int，直接返回data
      * @param observable
@@ -105,12 +120,13 @@ public abstract class BaseRepository {
                 .flatMap((Function<BaseEntity<T>, Observable<T>>) baseEntity -> {
                     if (null != baseEntity && "1000".equals(baseEntity.getResponseCode())) {
                         return Observable.just(baseEntity.getData());
-                    } else if (baseEntity == null) {
-                        throw new DefaultException("服务器数据异常");
+                    }else if("10000".equals(baseEntity.getResponseCode())){
+                        throw new DefaultException("异常登录");
                     } else {
                         throw new DefaultException(baseEntity.getMessage());
                     }
                 });
     }
+
 
 }

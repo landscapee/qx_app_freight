@@ -802,8 +802,8 @@ public class UpdateRepository extends BaseRepository {
     /*****
      * 用于接收手机参数的实体
      */
-    public Observable<FlightBean> getPhoneParameters(Map<String,String> map ) {
-        return flightTransform(mUpdateApisFlight.getPhoneParameters(map));
+    public Observable<String> getPhoneParameters(PhoneParametersEntity entity ) {
+        return notingflightTransform(mUpdateApisFlight.getPhoneParameters(entity));
     }
 
     /***

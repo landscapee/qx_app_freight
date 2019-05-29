@@ -27,13 +27,17 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
+import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
+import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.presenter.UpdateVersionPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
@@ -48,7 +52,7 @@ import retrofit2.http.GET;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView  {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -76,7 +80,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mBtnLogin.setOnClickListener(v -> {
             login();
 //            test();
-//            startActivity(new Intent(this,AddClearStorageActivity.class));
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -362,4 +365,5 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         installIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         startActivity(installIntent);
     }
+
 }

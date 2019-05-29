@@ -17,11 +17,7 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 public class GetPhoneParametersModel extends BaseModel implements GetPhoneParametersContract.getPhoneParametersModel {
     @Override
     public void getPhoneParameters(PhoneParametersEntity entity, IResultLisenter lisenter) {
-        Gson gson = new Gson();
-        Map<String, String> map = new HashMap<>();
-        String str = gson.toJson(entity);
-        map.put("param", str);
-        Disposable subscription = UpdateRepository.getInstance().getPhoneParameters(map)
+        Disposable subscription = UpdateRepository.getInstance().getPhoneParameters(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
