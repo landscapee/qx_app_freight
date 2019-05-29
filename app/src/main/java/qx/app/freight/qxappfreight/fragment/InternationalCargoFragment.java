@@ -165,6 +165,6 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
 
     @Override
     public void onLoadMore() {
-        //TODO
+        mMfrvData.finishLoadMore();
     }
 }

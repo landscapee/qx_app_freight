@@ -44,9 +44,9 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  *
  * create by swd
  */
-public class FlightListBaggerFragment extends BaseFragment implements LookLUggageScannigFlightContract.lookLUggageScannigFlightView, EmptyLayout.OnRetryLisenter {
+public class FlightListBaggerFragment extends BaseFragment implements LookLUggageScannigFlightContract.lookLUggageScannigFlightView,MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
-    RecyclerView mMfrvData;
+    MultiFunctionRecylerView mMfrvData;
 
     FlightListAdapter mAdapter;
     List<FlightLuggageBean> mList;  //筛选过后的数据
@@ -74,6 +74,8 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     private void initView() {
         mPresenter = new LookLUggageScannigFlightPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMfrvData.setRefreshListener(this);
+        mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
         mAdapter = new FlightListAdapter(mList);
@@ -123,6 +125,9 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void toastView(String error) {
+
+            mMfrvData.finishRefresh();
+//            mMfrvData.finishLoadMore();
         ToastUtil.showToast(error);
         Log.e("22222", "toastView: "+error);
     }
@@ -148,8 +153,19 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
+        mMfrvData.finishRefresh();
         mListTemp.clear();
         mListTemp.addAll(flightLuggageBeans);
         seachWithNum();
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+    }
+
+    @Override
+    public void onLoadMore() {
+        mMfrvData.finishLoadMore();
     }
 }

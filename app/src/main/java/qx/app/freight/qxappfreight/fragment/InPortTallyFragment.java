@@ -181,6 +181,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void onLoadMore() {
+//        mCurrentPage++;
+        mMfrvData.finishLoadMore();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -229,12 +231,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
+//            mListTemp.clear();
         } else {
-            mCurrentPage++;
             mMfrvData.finishLoadMore();
         }
+        //看代码是没有做分页的，所以clear放这里
         mListTemp.clear();
-
         for (TransportDataBase item:transportListBeans){
             if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")){
                 mListTemp.add(item);

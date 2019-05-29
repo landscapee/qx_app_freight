@@ -32,11 +32,11 @@ public class FlightListAdapter extends BaseMultiItemQuickAdapter<FlightLuggageBe
 //        }else {
 //            helper.setGone(R.id.iv_lock,true);
 //        }
-//        if (item.getFlightIndicator().equals("D")){
-//            helper.setGone(R.id.iv_lock,false);
-//        }else {
-//            helper.setGone(R.id.iv_lock,true);
-//        }
+        if (item.getFlightIndicator().equals("D")){
+            helper.setGone(R.id.iv_lock,false);
+        }else {
+            helper.setGone(R.id.iv_lock,true);
+        }
         if (item.getFlightCourseByAndroid() != null && item.getFlightCourseByAndroid().size() >1 ){
             switch (helper.getItemViewType()){
                 case 2:

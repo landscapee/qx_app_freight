@@ -136,8 +136,9 @@
         </LinearLayout>
     </LinearLayout>
     <ImageView
+        android:visibility="gone"
         android:id="@+id/iv_lock"
-        android:src="@mipmap/complete"
+        android:src="@mipmap/ic_international"
         android:layout_width="25dp"
         android:layout_height="25dp" />
 
