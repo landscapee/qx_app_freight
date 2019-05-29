@@ -76,8 +76,7 @@ public class GetIdUtil {
 
     public void getLocationInfo(Context context) {
 
-        Log.e("dime", "getLocationInfo run......");
-        LocationEntity result = new LocationEntity();
+        Log.e("GPS", "getLocationInfo run......");
         try {
             CellInfo cellInfo = getCellInfo(context);
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
@@ -114,7 +113,7 @@ public class GetIdUtil {
                 }
             });
         } catch (Exception e) {
-            Log.e("dime error", e.getMessage());
+            Log.e("GPS", "Exception: " + e.getMessage());
             e.printStackTrace();
         }
     }
