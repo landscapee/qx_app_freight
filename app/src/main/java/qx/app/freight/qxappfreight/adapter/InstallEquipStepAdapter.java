@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
