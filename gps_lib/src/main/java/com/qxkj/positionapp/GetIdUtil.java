@@ -10,6 +10,11 @@ import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.qxkj.positionapp.observer.LocationObservable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -21,20 +26,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GetIdUtil {
 
+    static List<LocationObservable> obableList = new ArrayList<>();
+
     //单例
     private static GetIdUtil getIdUtil = new GetIdUtil();
 
     private LocationEntity locationEntity = new LocationEntity();
 
-    private GetIdUtil(){
+    private GetIdUtil() {
 
     }
 
     /**
      * 单例
+     *
      * @return
      */
-    public static GetIdUtil getSingleInstance(){
+    public static GetIdUtil getSingleInstance() {
         return getIdUtil;
     }
 
@@ -77,18 +85,19 @@ public class GetIdUtil {
     public void getLocationInfo(Context context) {
 
         Log.e("GPS", "getLocationInfo run......");
+
         try {
             CellInfo cellInfo = getCellInfo(context);
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
                 //打印retrofit日志
-                Log.e("tagRetrofit","msg = "+message);
+                Log.e("tagRetrofit", "msg = " + message);
             });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             //okhttp设置部分，此处还可再设置网络参数
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
                     .build();
-            Retrofit retrofit=new Retrofit.Builder()
+            Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://api.cellocation.com:81/")
                     .client(client)//此client是为了打印信息
                     .addConverterFactory(GsonConverterFactory.create())
@@ -104,6 +113,7 @@ public class GetIdUtil {
                     CellLocationResponse result = response.body();
                     locationEntity.setLatitude(result.getLat());
                     locationEntity.setLongitude(result.getLon());
+                    notifyLocationUpdate(locationEntity);
                     Log.e("    [GPS info]", "经度：" + result.getLat() + ", 维度:" + result.getLon());
                 }
 
@@ -157,7 +167,31 @@ public class GetIdUtil {
         }
     }
 
-    public LocationEntity getLocationEntity(){
+    public LocationEntity getLocationEntity() {
         return locationEntity;
+    }
+
+    /**
+     * 注册监听
+     *
+     * @param observerable
+     */
+    public void register(LocationObservable observerable) {
+        obableList.add(observerable);
+    }
+
+    /**
+     * 取消注册监听
+     *
+     * @param observerable
+     */
+    public void unRegister(LocationObservable observerable) {
+        obableList.remove(observerable);
+    }
+
+    public void notifyLocationUpdate(LocationEntity locationEntity) {
+        for (LocationObservable observerable : obableList) {
+            observerable.receiveLocationUpdate(locationEntity);
+        }
     }
 }
