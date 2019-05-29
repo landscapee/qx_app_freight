@@ -11,8 +11,8 @@ public class CellLocationResponse {
      */
 
     private int errcode;
-    private long lat;
-    private long lon;
+    private double lat;
+    private double lon;
     private String radius;
     private String address;
 
@@ -24,19 +24,19 @@ public class CellLocationResponse {
         this.errcode = errcode;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(long lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public long getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(long lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
