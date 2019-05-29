@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+
+        debugRelease {
+
+        }
+
+        debug {
+
+        }
+        release {
+
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+
+    compileOnly 'com.squareup.retrofit2:retrofit:2.3.0'
+    compileOnly 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compileOnly 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compileOnly 'com.squareup.okhttp3:okhttp:3.12.1'
+    compileOnly 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+}

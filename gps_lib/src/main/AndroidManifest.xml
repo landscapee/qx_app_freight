@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.qxkj.positionapp">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application>
+
+        <service android:name=".GPSService">
+
+        </service>
+
+    </application>
+
+</manifest>
