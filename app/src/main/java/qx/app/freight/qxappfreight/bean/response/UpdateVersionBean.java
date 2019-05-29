@@ -12,10 +12,28 @@ public class UpdateVersionBean {
      * versionName : null
      * versionCodeRS : 2
      */
-    private String downloadUrl;
     private String updateMsg;
-    private String updateTime;
+
+    private String id;
+    /**
+     * 版本号
+     */
     private String versionCode;
-    private String versionName;
-    private int versionCodeRS;
+
+    /**
+     * app下载地址
+     */
+    private String downloadPath;
+    /**
+     * 更新时间
+     */
+    private long updateTime;
+    /**
+     * 是否强制更新 0：否 1：是
+     */
+    private int updateFlag;
+    /**
+     * 是否是当前版本 0：否 1：是
+     */
+    private int isCurrentVersion;
 }

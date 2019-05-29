@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
@@ -798,6 +799,13 @@ public class UpdateRepository extends BaseRepository {
         return flightTransform(mUpdateApisFlight.flightdynamic(model));
     }
 
+    /*****
+     * 用于接收手机参数的实体
+     */
+    public Observable<FlightBean> getPhoneParameters(Map<String,String> map ) {
+        return flightTransform(mUpdateApisFlight.getPhoneParameters(map));
+    }
+
     /***
      * 航班详情
      * @param model
@@ -943,8 +951,8 @@ public class UpdateRepository extends BaseRepository {
     }
 
     //版本更新
-    public Observable<UpdateVersionBean> updateVersion(Map<String, String> map) {
-        return transform(getService().updateVersion(map));
+    public Observable<UpdateVersionBean> updateVersion() {
+        return transform(getService().updateVersion());
     }
 
     public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode){

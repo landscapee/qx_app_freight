@@ -279,7 +279,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         if (appInfo != null) {
             versionCode = appInfo.versionCode;
         }
-        if (versionCode < mVersionBean.getVersionCodeRS())
+        if (versionCode < mVersionBean.getIsCurrentVersion())
             showAppUpdateDialog();
     }
 
@@ -293,7 +293,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     @Override
                     public void sure() {
                         // 下载app
-                        if (mVersionBean.getDownloadUrl() == null || mVersionBean.getDownloadUrl().length() == 0) {
+                        if (mVersionBean.getDownloadPath() == null || mVersionBean.getDownloadPath().length() == 0) {
                             ToastUtil.showToast("下载地址获取有误");
                         } else {
                             downLoadFile(mVersionBean);
@@ -314,7 +314,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     public void downLoadFile(UpdateVersionBean version) {
         ToastUtil.showToast("程序更新中...");
-        String wholeUrl = version.getDownloadUrl();
+        String wholeUrl = version.getDownloadPath();
         String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
         String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
         DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());

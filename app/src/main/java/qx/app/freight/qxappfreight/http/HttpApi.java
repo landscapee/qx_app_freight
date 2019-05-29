@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
@@ -492,6 +493,12 @@ public interface HttpApi {
     @POST("scheduling/getFlightList")
     Observable<BaseEntity<FlightBean>> flightdynamic(@Body BaseFilterEntity model);
 
+
+    //用于接收手机参数的实体
+    @POST("app/getPhoneParameters")
+    @FormUrlEncoded
+    Observable<BaseEntity<FlightBean>> getPhoneParameters(@FieldMap Map<String, String> map);
+
     //详情
     @POST("scheduling/getFlightInfoByFlightIdForCargo")
     Observable<BaseEntity<FlightInfoBean>> flightInfo(@Body BaseFilterEntity model);
@@ -525,9 +532,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
 
     //版本更新
-    @POST("app/scheduling/findVersionUpdate")
-    @FormUrlEncoded
-    Observable<BaseEntity<UpdateVersionBean>> updateVersion(@FieldMap Map<String, String> map);
+    @GET("service-base-sysmanage/version/getCurrentVersionInfo")
+    Observable<BaseEntity<UpdateVersionBean>> updateVersion();
 
     /**
      * 获取库区接口
@@ -540,4 +546,5 @@ public interface HttpApi {
     //xxx
     @GET("service-product-transport/tp-api/getAllRemoteArea")
     Observable<BaseEntity<List<GetAllRemoteAreaBean>>> getAllRemoteArea();
+
 }
