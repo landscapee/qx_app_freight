@@ -28,4 +28,5 @@ public class InstallEquipEntity {
     private int taskType;
     private String workerName;
     private List<String> stepCodeList;
+    private boolean widePlane;//是否是宽体机
 }
