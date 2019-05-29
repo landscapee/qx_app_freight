@@ -78,17 +78,18 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 //                imageExpand.setImageResource(R.mipmap.up);
 //            }
 //        });
-
+        mRecyclerView.setVisibility(View.GONE);
+        collView.collapse();
+        imageExpand.setImageResource(R.mipmap.down);
         if (item.isExpand()){
-//            mRecyclerView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             collView.expand();
             imageExpand.setImageResource(R.mipmap.up);
         }
         else {
-//            mRecyclerView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
             collView.collapse();
             imageExpand.setImageResource(R.mipmap.down);
-
         }
         /**
          *   滑动监听  device 设备保障
