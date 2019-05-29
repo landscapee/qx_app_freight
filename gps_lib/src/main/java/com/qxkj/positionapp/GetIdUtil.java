@@ -21,8 +21,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GetIdUtil {
 
+    //单例
+    private static GetIdUtil getIdUtil = new GetIdUtil();
 
-    private static CellInfo getCellInfo(Context mContext) {
+    private LocationEntity locationEntity = new LocationEntity();
+
+    private GetIdUtil(){
+
+    }
+
+    /**
+     * 单例
+     * @return
+     */
+    public static GetIdUtil getSingleInstance(){
+        return getIdUtil;
+    }
+
+
+    private CellInfo getCellInfo(Context mContext) {
         CellInfo result = new CellInfo();
         TelephonyManager manager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         String operator = manager.getNetworkOperator();
@@ -57,7 +74,7 @@ public class GetIdUtil {
         return result;
     }
 
-    public static void getLocationInfo(Context context) {
+    public void getLocationInfo(Context context) {
 
         Log.e("dime", "getLocationInfo run......");
         LocationEntity result = new LocationEntity();
@@ -86,6 +103,8 @@ public class GetIdUtil {
                 public void onResponse(Call<CellLocationResponse> call, Response<CellLocationResponse> response) {
                     Log.e("GPS Service", "SUCCES:获取到位置信息");
                     CellLocationResponse result = response.body();
+                    locationEntity.setLatitude(result.getLat());
+                    locationEntity.setLongitude(result.getLon());
                     Log.e("    [GPS info]", "经度：" + result.getLat() + ", 维度:" + result.getLon());
                 }
 
@@ -137,5 +156,9 @@ public class GetIdUtil {
         public void setCid(int cid) {
             this.cid = cid;
         }
+    }
+
+    public LocationEntity getLocationEntity(){
+        return locationEntity;
     }
 }

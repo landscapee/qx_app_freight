@@ -70,7 +70,7 @@ public class GPSService extends Service {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            GetIdUtil.getLocationInfo(GPSService.this);
+            GetIdUtil.getSingleInstance().getLocationInfo(GPSService.this);
             if(GPS_RUN) {
                 handler.postDelayed(this, GPS_SECONDS);
             }
