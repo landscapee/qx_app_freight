@@ -352,5 +352,10 @@ public class InWaybillRecord implements Serializable {
      */
     private  List<RcInfoOverweight> overWeightList;
 
+    /**
+     * 库区字段 用来显示
+     */
+    private String warehouseAreaDisplay;
+
 
 }

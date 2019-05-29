@@ -472,6 +472,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 reservoirTv.setText(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
                 //设置库区的id
                 mInWaybillRecord.setWarehouseArea(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
+                mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
                 //设置库区type
                 mInWaybillRecord.setWarehouseAreaType(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirType());
                 mInWaybillRecord.setWarehouseLocation("库位未知");
@@ -570,6 +571,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 String reservoir = acceptTerminalTodoBeanList.get(position).getReservoirName();//库区已经选择
                 reservoirTv.setText(acceptTerminalTodoBeanList.get(position).getReservoirName());
                 mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
+                mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.get(position).getReservoirName());
                 mInWaybillRecord.setWarehouseLocation("库位未知");
             }
         });

@@ -36,7 +36,7 @@ public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseVi
             helper.setText(R.id.tv_orderid, item.getWaybillCode());//运单号
         }
         helper.setText(R.id.tv_goods_number, item.getTallyingTotal() + "")//总件数
-                .setText(R.id.tv_area, item.getWarehouseArea())//库区
+                .setText(R.id.tv_area, item.getWarehouseAreaDisplay())//库区
                 .setText(R.id.tv_postion, item.getWarehouseLocation());
         if (item.getCounterUbnormalGoodsList() != null && item.getCounterUbnormalGoodsList().size() > 0) {
             CounterUbnormalGoods counterUbnormalGoodsTemp = item.getCounterUbnormalGoodsList().get(0);
