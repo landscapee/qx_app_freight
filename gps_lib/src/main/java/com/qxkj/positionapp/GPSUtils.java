@@ -11,6 +11,7 @@ import com.qxkj.positionapp.observer.LocationObservable;
 import com.qxkj.positionapp.observer.MyLocation;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -87,7 +88,8 @@ public class GPSUtils {
         }
         boolean isNetWorkEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         boolean isGpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isNetWorkEnable && !isGpsEnable) {
+
+        if(isGpsEnabled(locationManager)){
             Log.e("GPS", "ERROR: GPS导航未开启，请设置！");
             return null;
         }
@@ -100,13 +102,19 @@ public class GPSUtils {
     }
 
     /**
-     * 通过网络请求获取GPS
+     * 检查gps是否开启
      *
+     * @param locationManager
      * @return
      */
-    public void getLocationBySIM(Context context) {
-        GetIdUtil.getSingleInstance().getLocationInfo(context);
+    public static boolean isGpsEnabled(LocationManager locationManager) {
+        boolean isOpenGPS = locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isOpenNetwork = locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        return isOpenGPS || isOpenNetwork;
     }
+
 
 
     /**
@@ -138,11 +146,17 @@ public class GPSUtils {
      *
      * @return
      */
-    public LocationEntity getLocation() {
+    public LocationEntity getCurrentLocation() {
         return locationEntity;
     }
 
-    public void setLocation(double lon, double lat) {
+    /**
+     * 更新locationEntity
+     * @param lon
+     * @param lat
+     */
+    public void updateLocationEntity(double lon, double lat) {
+        locationEntity.setTime(System.currentTimeMillis());
         locationEntity.setLongitude(lon);
         locationEntity.setLatitude(lat);
     }

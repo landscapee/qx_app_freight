@@ -1,34 +1,22 @@
 package com.qxkj.positionapp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.text.InputType;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by zzq/guohao on 2019/5/29 11:43
  *
  * @title gps定位功能
- *
-
- *
  */
 public class GPSService extends Service {
 
-    static int GPS_SECONDS = 5000;
+    static int GPS_SECONDS = 10000;
 
     boolean GPS_RUN = true;
 
@@ -36,8 +24,11 @@ public class GPSService extends Service {
 
     LocationManager locationManager;
 
+    static final String TAG = "GPS";
+
     /**
      * 启动service
+     *
      * @param context
      */
     public static void startGPSService(Context context) {
@@ -56,18 +47,22 @@ public class GPSService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.e("GPS", "==========================GPS Service create========================");
+        Log.e(TAG, "==========================GPSService Start========================");
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!isGpsEnabled(locationManager)) {
-            Log.e("GPS", "ERROR: GPS导航未开启，请设置！");
+            Log.e(TAG, "ERROR: GPS导航未开启，请设置！");
             return;
         }
 
         String provider = locationManager.getBestProvider(GPSUtils.getInstance().getCriteria(), true);
+
         //开启位置监听
-        locationManager.requestLocationUpdates(provider, 5000, 1, new MyLocationListener());
+        locationManager.requestLocationUpdates(provider, 100, 1, new MyLocationListener());
+
+        //开启
+        handler.post(runnable);
 
     }
 
@@ -85,10 +80,27 @@ public class GPSService extends Service {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            GetIdUtil.getSingleInstance().getLocationInfo(GPSService.this);
-            if(GPS_RUN) {
-                handler.postDelayed(this, GPS_SECONDS);
+            //间隔10秒更新数据
+            if (System.currentTimeMillis() - GPSUtils.getInstance().getCurrentLocation().getTime() > 10000) {
+                //直接获取
+                LocationEntity locationEntity = GPSUtils.getInstance().getLastKnownLocation(GPSService.this);
+                if (locationEntity != null) {
+                    Log.e(TAG, "直接获取定位成功！");
+                    GPSUtils.getInstance().updateLocationEntity(locationEntity.getLongitude(), locationEntity.getLatitude());
+                } else {
+                    //网络获取
+                    if (GpsNetworkUtils.getSingleInstance().isNetworkGpsEnable(GPSService.this)) {
+                        locationEntity = GpsNetworkUtils.getSingleInstance().getLocationBySIM(GPSService.this);
+                        if (locationEntity != null) {
+                            Log.e(TAG, "网络获取成功！");
+                            GPSUtils.getInstance().updateLocationEntity(locationEntity.getLongitude(), locationEntity.getLatitude());
+                        }
+                    } else {
+                        Log.e(TAG, "Final Error: 获取不到定位信息，等GPS自己更新吧");
+                    }
+                }
             }
+            handler.postDelayed(this, 2000);
         }
     };
 
