@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.presenter.UpdateVersionPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -52,7 +53,7 @@ import retrofit2.http.GET;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView  {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView, GetPhoneParametersContract.getPhoneParametersView  {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -75,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         versionPresenter.updateVersion();
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("suchao");
+        mEtUserName.setText("");
         mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();
@@ -93,33 +94,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
-//        int a = 3;
-//        ToastUtil.showToast(testSwitch(a)+"=====ssssss");
-//        getDeviceInfo();
-
-
         try {
             installInputMethod();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-//    private String testSwitch(int a) {
-//
-//        switch (a){
-//            case 0:
-//                return "0";
-//            case 1:
-//                return "1";
-//            case 2:
-//                return "2";
-//            case 3:
-//                return "3";
-//           default:
-//               return "4";
-//        }
-//    }
 
 //    private void getDeviceInfo(){
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
@@ -128,12 +108,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getPhoneDevice());
 //    }
 
-    //用于测试的方法
-    private void test() {
-//        BaggerInputDialog dialog = new BaggerInputDialog();
-//        dialog.setData(this,null);
-//        dialog.show(getSupportFragmentManager(), "123");
-    }
 
     /**
      * 登录方法
@@ -196,13 +170,35 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 }
             }
             UserInfoSingle.setUser(loginBean);
-            MainActivity.startActivity(this);
-            finish();
-//            Intent intent = new Intent(this, WayBillQueryActivity.class);
-//            startActivityForResult(intent, 444);
+            loginTpPC(loginBean);
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
+    }
+
+    /**
+     * 通知运输装卸机PC 监听 该用户已经上线
+     * @param loginBean
+     */
+    private void loginTpPC(LoginResponseBean loginBean) {
+
+        mPresenter = new GetPhoneParametersPresenter(this);
+        PhoneParametersEntity mPhoneParametersEntity = new PhoneParametersEntity();
+        mPhoneParametersEntity.setUserId(loginBean.getUserId());
+        mPhoneParametersEntity.setPhoneNumber(loginBean.getPhone());
+        mPhoneParametersEntity.setDeviceId(DeviceInfoUtil.getPhoneDevice());
+        ((GetPhoneParametersPresenter)mPresenter).getPhoneParameters(mPhoneParametersEntity);
+    }
+    @Override
+    public void getPhoneParametersResult(String result) {
+        if (!"".equals(result)){
+            toMainAct();
+        }
+
+    }
+    private void toMainAct() {
+        MainActivity.startActivity(this);
+        finish();
     }
 
 //    @Override
@@ -365,5 +361,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         installIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         startActivity(installIntent);
     }
+
 
 }

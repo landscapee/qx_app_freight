@@ -6,6 +6,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
 import qx.app.freight.qxappfreight.contract.LookLUggageScannigFlightContract;
@@ -37,10 +38,10 @@ public class BaggageAreaSubPresenter extends BasePresenter {
 
     public void ScooterInfoList(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((BaggageAreaSubModel) mRequestModel).scooterInfoList(model, new IResultLisenter<List<ScooterInfoListBean>>() {
+        ((BaggageAreaSubModel) mRequestModel).scooterInfoList(model, new IResultLisenter<ScooterInfoListDataBean>() {
             @Override
-            public void onSuccess(List<ScooterInfoListBean> scooterInfoListBeans) {
-                ((BaggageAreaSubContract.baggageAreaSubView) mRequestView).scooterInfoListResult(scooterInfoListBeans);
+            public void onSuccess(ScooterInfoListDataBean scooterInfoListBeans) {
+                ((BaggageAreaSubContract.baggageAreaSubView) mRequestView).scooterInfoListResult(scooterInfoListBeans.getRecords());
                 mRequestView.dissMiss();
             }
 

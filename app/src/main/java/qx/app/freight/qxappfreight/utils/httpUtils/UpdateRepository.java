@@ -74,6 +74,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -330,7 +331,7 @@ public class UpdateRepository extends BaseRepository {
      * @param baseFilterEntity
      * @return
      */
-    public Observable<List<ScooterInfoListBean>> scooterInfoList(BaseFilterEntity baseFilterEntity) {
+    public Observable<ScooterInfoListDataBean> scooterInfoList(BaseFilterEntity baseFilterEntity) {
         return transform(getService().scooterInfoList(baseFilterEntity));
     }
 

@@ -6,6 +6,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
 import qx.app.freight.qxappfreight.model.InternationalCargoReportModel;
 
@@ -35,10 +36,10 @@ public class InternationalCargoReportPresenter extends BasePresenter {
 
     public void scooterInfoList(BaseFilterEntity entity) {
         mRequestView.showNetDialog();
-        ((InternationalCargoReportModel) mRequestModel).scooterInfoList(entity, new IResultLisenter<List<ScooterInfoListBean>>() {
+        ((InternationalCargoReportModel) mRequestModel).scooterInfoList(entity, new IResultLisenter<ScooterInfoListDataBean>() {
             @Override
-            public void onSuccess(List<ScooterInfoListBean> result) {
-                ((InternationalCargoReportContract.internationalCargoReportView) mRequestView).scooterInfoListResult(result);
+            public void onSuccess(ScooterInfoListDataBean result) {
+                ((InternationalCargoReportContract.internationalCargoReportView) mRequestView).scooterInfoListResult(result.getRecords());
                 mRequestView.dissMiss();
             }
 
