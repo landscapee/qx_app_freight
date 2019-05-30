@@ -18,6 +18,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.loadinglist.RegularEntity;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
@@ -53,7 +54,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
             }
             spBerth.setVisibility(View.GONE);
             spGoodsPos.setVisibility(View.GONE);
-            helper.setText(R.id.tv_berth, item.getBerth());
+            helper.setText(R.id.tv_berth, StringUtil.toText(item.getBerth()));
             helper.setText(R.id.tv_goods_position, item.getGoodsPosition());
         } else {//真实数据
             helper.getView(R.id.iv_lock_status).setVisibility(View.VISIBLE);
