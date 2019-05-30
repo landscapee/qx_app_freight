@@ -11,15 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qxkj.positionapp.GPSService;
-import com.qxkj.positionapp.GPSUtils;
-import com.qxkj.positionapp.GetIdUtil;
-import com.qxkj.positionapp.LocationEntity;
-import com.qxkj.positionapp.observer.LocationObservable;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,16 +26,14 @@ import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
-import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements LocationObservable{
+public class MainActivity extends BaseActivity {
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -104,7 +93,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 
 
     private void initServices() {
-        GPSService.startGPSService(this);
+//        GPSService.startGPSService(this);
 //        GetIdUtil.getSingleInstance().register(this);
         //根据登录返回的
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
@@ -307,9 +296,4 @@ public class MainActivity extends BaseActivity implements LocationObservable{
         }
     }
 
-    @Override
-    public void receiveLocationUpdate(LocationEntity locationEntity) {
-        if (locationEntity != null)
-            ToastUtil.showToast("经度:"+locationEntity.getLongitude()+"纬度:"+locationEntity.getLatitude());
-    }
 }
