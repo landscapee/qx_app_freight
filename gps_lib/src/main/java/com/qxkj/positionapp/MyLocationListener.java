@@ -13,11 +13,14 @@ import android.util.Log;
 public class MyLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
-        Log.e("GPS", "LocationChanged");
+        Log.e("GPS", "LocationChanged: 位置更新了");
         LocationEntity locationEntity = new LocationEntity();
         locationEntity.setLongitude(location.getLongitude());
-        locationEntity.setLatitude(location.getLatitude());
-        GPSUtils.getInstance().notifyLocationUpdate(locationEntity);
+        /**
+         * 被动更新locationEntity信息
+         * 优先级最高，立刻更新
+         */
+        GPSUtils.getInstance().updateLocationEntity(location.getLongitude(), location.getLatitude());
     }
 
     @Override
