@@ -303,8 +303,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> scanScooter(@Body TransportTodoListBean model);
 
     //扫描板车查询
-    @GET("service-product-transport/tp-main-info/scooterWithUser/{user}")
-    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user);
+    @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId);
 
 
     //查询出待运输

@@ -210,8 +210,9 @@ public class TimeUtils {
      * @param second 时分间带冒号
      * @return
      */
-    public static String date2Tasktime3(long second) {
-        if (second <= 0) {
+    public static String date2Tasktime3(Long second) {
+
+        if (second == null||second <= 0) {
             return "--:--";
         }
         String seconds = (second / 1000) + "";
@@ -333,8 +334,8 @@ public class TimeUtils {
      * @param second
      * @return
      */
-    public static String getDay(long second) {
-        if (second <= 0) {
+    public static String getDay(Long second) {
+        if (second == null||second <= 0) {
             return "-";
         }
         String seconds = (second / 1000) + "";

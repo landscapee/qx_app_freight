@@ -146,7 +146,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),"flightId");
     }
     /**
      * 开始按钮是否可以点击

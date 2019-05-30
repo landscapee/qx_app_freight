@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
@@ -142,15 +143,15 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        for (LoginResponseBean.RoleRSBean mRoleRSBean:UserInfoSingle.getInstance().getRoleRS()){
+            if (Constants.COLLECTION.equals(mRoleRSBean.getRoleCode())){
+                tempBean.setRole(mRoleRSBean.getRoleCode());
+            }
+        }
         entity.setFilter(tempBean);
-
         entity.setCurrentStep("");
-
         entity.setSize(Constants.PAGE_SIZE);
-
         entity.setCurrent(1);
-
         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
     }
 

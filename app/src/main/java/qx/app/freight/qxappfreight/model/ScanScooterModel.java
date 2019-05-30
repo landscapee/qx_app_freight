@@ -40,8 +40,8 @@ public class ScanScooterModel extends BaseModel implements ScanScooterContract.s
     }
 
     @Override
-    public void scooterWithUser(String user, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().scooterWithUser(user)
+    public void scooterWithUser(String user,String flightId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scooterWithUser(user,flightId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

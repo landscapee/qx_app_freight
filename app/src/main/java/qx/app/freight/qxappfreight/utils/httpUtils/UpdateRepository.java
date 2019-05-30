@@ -465,8 +465,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportTodoListBean>> scooterWithUser(String model) {
-        return transform(getService().scooterWithUser(model));
+    public Observable<List<TransportTodoListBean>> scooterWithUser(String model,String flightId) {
+        return transform(getService().scooterWithUser(model,flightId));
     }
 
     /*****

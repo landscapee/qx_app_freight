@@ -113,14 +113,14 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "拉货上报");
         mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        mPresenter = new ScanScooterPresenter(this);
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),mData.getFlightId());
         mCurrentTaskId = mData.getTaskId();
         mTvFlightInfo.setText(mData.getFlightNo());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
@@ -346,7 +346,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     @Override
     public void scanScooterResult(String result) {
         if (!"".equals(result)) {
-            ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
+            ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),mData.getFlightId());
         }
     }
 

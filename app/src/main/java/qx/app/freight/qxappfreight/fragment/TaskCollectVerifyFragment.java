@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
@@ -119,7 +120,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        for (LoginResponseBean.RoleRSBean mRoleRSBean:UserInfoSingle.getInstance().getRoleRS()){
+            if (Constants.RECEIVE.equals(mRoleRSBean.getRoleCode())){
+                tempBean.setRole(mRoleRSBean.getRoleCode());
+            }
+        }
         entity.setFilter(tempBean);
         entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);

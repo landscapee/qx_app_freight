@@ -133,11 +133,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         }
         //计算本次任务能拉多少板车（所有子任务能拉板车数量的和）
         if (mAcceptTerminalTodoBean != null) {
-            tpNum = 0;
+            //首件行李 任务分配板数为0  但是默认必须 大于一个板车 才能开始运输
+            if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()))
+                tpNum = 1;
+            else
+                tpNum = 0;
             for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
                 tpNum += mOutFieldTaskBean.getNum();
             }
-
         }
 
         doingRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -226,7 +229,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId());
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),mAcceptTerminalTodoBean.get(0).getFlightId());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
