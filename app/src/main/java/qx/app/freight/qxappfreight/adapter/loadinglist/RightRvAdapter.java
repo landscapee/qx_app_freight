@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.adapter.loadinglist;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 装机单位置右边的适配器
@@ -32,9 +32,9 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
         TextView tvType = helper.getView(R.id.tv_type);
         TextView tvNumber = helper.getView(R.id.tv_number);
         TextView[] tvList = {tvBoardNumber, tvUldNumber, tvTarget, tvType, tvWeight, tvNumber};
-        ImageView ivPullDown=helper.getView(R.id.iv_pull_down);
-        helper.setText(R.id.tv_board_number, String.valueOf(item.getBoardNumber())).setText(R.id.tv_uld_number, item.getUldNumber())
-                .setText(R.id.tv_target_name, item.getTarget()).setText(R.id.tv_weight, String.valueOf(item.getWeight())).setText(R.id.tv_type, item.getType()).setText(R.id.tv_number, String.valueOf(item.getNumber()));
+        ImageView ivPullDown = helper.getView(R.id.iv_pull_down);
+        helper.setText(R.id.tv_board_number, StringUtil.toText(String.valueOf(item.getBoardNumber()))).setText(R.id.tv_uld_number, StringUtil.toText(item.getUldNumber()))
+                .setText(R.id.tv_target_name, StringUtil.toText(item.getTarget())).setText(R.id.tv_weight, StringUtil.toText(String.valueOf(item.getWeight()))).setText(R.id.tv_type, StringUtil.toText(item.getType())).setText(R.id.tv_number, StringUtil.toText(String.valueOf(item.getNumber())));
         tvNumber.setVisibility(View.GONE);
         if (helper.getAdapterPosition() == 0) {
             for (TextView tv : tvList) {
@@ -43,13 +43,13 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
             }
             ivPullDown.setVisibility(View.GONE);
         } else {
-            if (item.isShowPull()){
+            if (item.isShowPull()) {
                 ivPullDown.setVisibility(View.VISIBLE);
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#ee3f8e"));
                     tv.setBackgroundColor(Color.parseColor("#ffffff"));
                 }
-            }else {
+            } else {
                 ivPullDown.setVisibility(View.GONE);
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#666666"));

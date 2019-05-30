@@ -12,6 +12,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
@@ -39,7 +40,7 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType())+item.getScooterCode());
         helper.setText(R.id.tv_flight_type,mInfo.getFlightNo());
         helper.setText(R.id.tv_seat,mInfo.getSeat());
-        helper.setText(R.id.tv_flight_arrive_time, TimeUtils.getHMDay(Long.valueOf(mInfo.getArrivalTime())));
+        helper.setText(R.id.tv_flight_arrive_time, StringUtil.toText(TimeUtils.getHMDay(mInfo.getArrivalTime())));
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {

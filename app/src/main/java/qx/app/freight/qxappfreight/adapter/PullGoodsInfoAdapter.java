@@ -8,15 +8,13 @@ import android.widget.EditText;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
@@ -36,7 +34,7 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
     @Override
     protected void convert(BaseViewHolder helper, TransportTodoListBean item) {
         if (item.getInfoType() == Constants.TYPE_PULL_BILL) {
-            helper.setText(R.id.tv_bill_number, item.getBillNumber());
+            helper.setText(R.id.tv_bill_number, StringUtil.toText(item.getBillNumber()));
         }
         helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getTpScooterType()) + item.getTpScooterCode());//板车类型
         View viewDelete = helper.getView(R.id.ll_delete);
@@ -46,13 +44,13 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
                 , item.getTpCargoWeight()
                 , item.getTpCargoVolume()));
         //航班号
-        helper.setText(R.id.tv_flight_number, item.getTpFlightNumber());
+        helper.setText(R.id.tv_flight_number, StringUtil.toText(item.getTpFlightNumber()));
         //机位号
-        helper.setText(R.id.tv_place_number, item.getTpFlightLocate());
+        helper.setText(R.id.tv_place_number, StringUtil.toText(item.getTpFlightLocate()));
         // 时间
-        helper.setText(R.id.tv_plan_time, TimeUtils.getHMDay(item.getTpFlightTime()));
+        helper.setText(R.id.tv_plan_time, StringUtil.toText(TimeUtils.getHMDay(item.getTpFlightTime())));
         //舱位
-        helper.setText(R.id.tv_cangwei_info, item.getTpFreightSpace());
+        helper.setText(R.id.tv_cangwei_info, StringUtil.toText(item.getTpFreightSpace()));
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {

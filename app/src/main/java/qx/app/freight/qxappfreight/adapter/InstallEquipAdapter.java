@@ -16,6 +16,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
@@ -51,8 +52,8 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
         tvTime.setCompoundDrawablePadding(5);
-        helper.setText(R.id.tv_plane_info, item.getFlightInfo());
-        helper.setText(R.id.tv_craft_number, item.getAirCraftNo());
+        helper.setText(R.id.tv_plane_info, StringUtil.toText(item.getFlightInfo()));
+        helper.setText(R.id.tv_craft_number, StringUtil.toText(item.getAirCraftNo()));
         ImageView ivTwoPlace = helper.getView(R.id.iv_two_place);
         if (TextUtils.isEmpty(item.getStartPlace())) {//只要出发地没有，则证明没有航线信息，全部展示view应该隐藏起来
             helper.getView(R.id.tv_start_place).setVisibility(View.GONE);
@@ -77,7 +78,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
                 helper.setText(R.id.tv_end_place, item.getEndPlace());
             }
         }
-        helper.setText(R.id.tv_seat, item.getSeat());
+        helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         InstallEquipStepAdapter adapter = new InstallEquipStepAdapter(item.getList());
