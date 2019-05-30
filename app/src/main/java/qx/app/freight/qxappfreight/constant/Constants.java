@@ -170,4 +170,26 @@ public class Constants {
     public static final String TP_START = "CargoOutTransportStart";	//运输开始
     public static final String TP_END = "CargoOutTransportEnd";	//运输 结束
 
+    /**
+      * 待运区
+      */
+    public static final int WAIT_AREA = 1;
+/**
+  * 临时区
+  */
+    public static final int TEMP_AREA = 2;
+/**
+  * 行李区
+  */
+    public static final int BAGGAGE_AREA = 3;
+/**
+  * 机下
+  */
+    public static final int OFF_BOX_AREA = 4;
+
+/**
+  * 库区
+  */
+    public static final int WAREHOUSE_AREA = 5;
+
 }

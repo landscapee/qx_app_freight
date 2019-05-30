@@ -33,14 +33,17 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
+import qx.app.freight.qxappfreight.contract.GetAllRemoteAreaContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.BaggageAreaSubPresenter;
+import qx.app.freight.qxappfreight.presenter.GetAllRemoteAreaPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -50,7 +53,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 扫行李板车
  */
-public class BaggageListActivity extends BaseActivity implements BaggageAreaSubContract.baggageAreaSubView {
+public class BaggageListActivity extends BaseActivity implements BaggageAreaSubContract.baggageAreaSubView, GetAllRemoteAreaContract.getAllRemoteAreaView {
 
     @BindView(R.id.mfrv_receive_good)
     SlideRecyclerView mSlideRV;
@@ -62,6 +65,8 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     private BaggerListAdapter mAdapter;
     private List<TransportTodoListBean> mList;
     private CustomToolbar toolbar;
+
+    private List<String> mAbnormalList; //行李区列表
 
     FlightLuggageBean flightBean;
     private int flag = 0;
@@ -75,7 +80,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     public void businessLogic(Bundle savedInstanceState) {
         Intent intent =  getIntent();
         flightBean =(FlightLuggageBean)intent.getSerializableExtra("flightBean");
-
+        mAbnormalList = new ArrayList<>();
         EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
@@ -85,7 +90,9 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     }
 
     private void initView() {
-        mPresenter = new BaggageAreaSubPresenter(this);
+        mPresenter = new GetAllRemoteAreaPresenter(this);
+        ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
+//        mPresenter = new BaggageAreaSubPresenter(this);
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mList = new ArrayList<>();
         mAdapter = new BaggerListAdapter(mList);
@@ -204,7 +211,13 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         if (Constants.SCAN_RESULT == resultCode) {
             String mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (flag ==1){
-                submitScooter(mScooterCode);
+                for (String item: mAbnormalList){
+                    if (mScooterCode.equals(item)){
+                        submitScooter(mScooterCode);
+                        return;
+                    }
+                }
+                ToastUtil.showToast("无该行李转盘");
 
             }else {
                 isIncludeScooterCode(mScooterCode);
@@ -267,6 +280,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         entity.setCurrent(1);
         entity.setSize(10);
         entity.setFilter(myAgentListBean);
+        mPresenter = new BaggageAreaSubPresenter(this);
         ((BaggageAreaSubPresenter)mPresenter).ScooterInfoList(entity);
     }
 
@@ -291,5 +305,15 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
 
 //        String json = JSON.toJSONString(mList);
 //        ((BaggageAreaSubPresenter)mPresenter).baggageAreaSub(json);
+    }
+
+    @Override
+    public void getAllRemoteAreaResult(List<GetAllRemoteAreaBean> getAllRemoteAreaBean) {
+
+        for (GetAllRemoteAreaBean item:getAllRemoteAreaBean) {
+            if (item.getAreaType()==Constants.BAGGAGE_AREA){
+                mAbnormalList.add(item.getAreaId());
+            }
+        }
     }
 }
