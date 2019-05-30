@@ -157,7 +157,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(mAdapter);
         TaskFragment fragment = (TaskFragment) getParentFragment();
         if (fragment != null) {
             fragment.setTitleText(mList.size());
@@ -209,7 +209,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mMfrvData.finishLoadMore();
             }
             mCacheList.clear();
-            mAdapter.notifyDataSetChanged();
+            mMfrvData.notifyForAdapter(mAdapter);
         }
         ;
         List<Boolean> checkedList = new ArrayList<>();
