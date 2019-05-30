@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.qxkj.positionapp.GetIdUtil;
-import com.qxkj.positionapp.observer.LocationObservable;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;

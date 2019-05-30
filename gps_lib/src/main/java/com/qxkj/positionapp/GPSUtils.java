@@ -86,10 +86,8 @@ public class GPSUtils {
         if (locationManager == null) {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
-        boolean isNetWorkEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        boolean isGpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if(isGpsEnabled(locationManager)){
+        if(!isGpsEnabled(locationManager)){
             Log.e("GPS", "ERROR: GPS导航未开启，请设置！");
             return null;
         }
