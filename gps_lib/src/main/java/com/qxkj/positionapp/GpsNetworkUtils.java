@@ -55,7 +55,7 @@ public class GpsNetworkUtils {
      * @param context
      */
     @SuppressLint("MissingPermission")
-    public LocationEntity getLocationBySIM(Context context) {
+    public void getLocationBySIM(Context context) {
         //组装参数
         CellInfo cellInfo = new CellInfo();
         if (telephonyManager == null) {
@@ -106,26 +106,26 @@ public class GpsNetworkUtils {
 
         Call<CellLocationResponse> call = httpService.getLocationInfo(cellInfo.getMcc() + "", cellInfo.getMnc() + "", cellInfo.getLac() + "", cellInfo.getCid() + "");
 
-        try {
-            Response<CellLocationResponse> response = call.execute();
-            if (response.body().getErrcode() == 0) {
-                Log.e("GPS", "Net Success");
-                return new LocationEntity(response.body().getLon(), response.body().getLat());
-            } else if (response.body().getErrcode() == 10000) {
-                Log.e("GPS", "Net ERROR: 参数错误");
-                return null;
-            } else if (response.body().getErrcode() == 10001) {
-                Log.e("GPS", "Net ERROR: 无查询结果");
-                return null;
-            } else {
-                Log.e("GPS", "Net ERROR: 未知错误");
-                return null;
+        call.enqueue(new Callback<CellLocationResponse>() {
+            @Override
+            public void onResponse(Call<CellLocationResponse> call, Response<CellLocationResponse> response) {
+                if (response.body().getErrcode() == 0) {
+                    Log.e("GPS", "Net Success");
+                    GPSUtils.getInstance().updateLocationEntity(response.body().getLon(), response.body().getLat());
+                } else if (response.body().getErrcode() == 10000) {
+                    Log.e("GPS", "Net ERROR: 参数错误");
+                } else if (response.body().getErrcode() == 10001) {
+                    Log.e("GPS", "Net ERROR: 无查询结果");
+                } else {
+                    Log.e("GPS", "Net ERROR: 未知错误");
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("GPS", "Net Fail:" + e.toString());
-        }
-        return null;
+
+            @Override
+            public void onFailure(Call<CellLocationResponse> call, Throwable t) {
+                Log.e("GPS", "Net Fail:" + t.getMessage());
+            }
+        });
     }
 
 
