@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
@@ -149,7 +151,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
         mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
         mLoginEntity.setType("MT");
-        mLoginEntity.setSysCode("10080000");
+        List<String> syss = new ArrayList <>();
+        syss.add("10040000");//外场
+        syss.add("10080000");//货运
+        mLoginEntity.setSysCode(syss);
         return mLoginEntity;
     }
 

@@ -32,13 +32,12 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
  * 运输adapter
- *
  */
-public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBean, BaseViewHolder>{
+public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBean, BaseViewHolder> {
 
     private OnStepListener mOnStepListener;
 
-    public DriverOutTaskAdapter(List<AcceptTerminalTodoBean> mDatas) {
+    public DriverOutTaskAdapter(List <AcceptTerminalTodoBean> mDatas) {
         super(R.layout.item_driver_out_task, mDatas);
     }
 
@@ -47,22 +46,22 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
     protected void convert(BaseViewHolder helper, AcceptTerminalTodoBean item) {
 
 //        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
-        helper.setText(R.id.tv_task_id,item.getTaskNumber());
-        helper.setText(R.id.tv_task_num,"任务单号:"+item.getTaskId());
+        helper.setText(R.id.tv_task_id, item.getTaskNumber());
+        helper.setText(R.id.tv_task_num, "任务单号:" + item.getTaskId());
         helper.setText(R.id.tv_task_type, item.getProjectName());
-        helper.setText(R.id.tv_task_status,"#执行中#");
+        helper.setText(R.id.tv_task_status, "#执行中#");
         //列表设置
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         RecyclerView mRecyclerView = helper.getView(R.id.rv_step);
         mRecyclerView.setLayoutManager(manager);
 
-        List<List<OutFieldTaskBean>> list1 = new ArrayList<>();
+        List <List <OutFieldTaskBean>> list1 = new ArrayList <>();
         list1.addAll(item.getUseTasks());
         TaskStepAdapter mTaskStepAdapter = new TaskStepAdapter(list1);
         mRecyclerView.setAdapter(mTaskStepAdapter);
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
 
-        ImageView imageExpand =  helper.getView(R.id.iv_expand);
+        ImageView imageExpand = helper.getView(R.id.iv_expand);
 //        View view = helper.getConvertView();
 //        view.setOnClickListener(v -> {
 //
@@ -81,12 +80,11 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         mRecyclerView.setVisibility(View.GONE);
         collView.collapse();
         imageExpand.setImageResource(R.mipmap.down);
-        if (item.isExpand()){
+        if (item.isExpand()) {
             mRecyclerView.setVisibility(View.VISIBLE);
             collView.expand();
             imageExpand.setImageResource(R.mipmap.up);
-        }
-        else {
+        } else {
             mRecyclerView.setVisibility(View.GONE);
             collView.collapse();
             imageExpand.setImageResource(R.mipmap.down);
@@ -98,26 +96,25 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         mTaskStepAdapter.setOnSlideExecuteListener(new TaskStepAdapter.onSlideExecuteListener() {
             @Override
             public void onSlideExecuteListener(int step, int position) {
-                switch (step){
+                switch (step) {
                     case 0:
-                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType())||Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                            mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//宽体机卸机保障
                         {
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                            mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
-                        }
-                        else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                        } else
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 1:
-                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType())||Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                            mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 2:
-                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         break;
                 }
             }
@@ -125,21 +122,26 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             @Override
             public void onClickListener(int step, int position) {
 
-                switch (step){
+                switch (step) {
                     case 0:
-                        if (!Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType())&&!Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                        if (!Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) && !Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//不是设备保障和宽体机装机保障
 //                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
 //                        else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                            if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//宽体机卸机保障
+                            {
+                                toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
+                            } else
+                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
+
                         break;
                     case 1:
                         if (!Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) && !Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))
 //                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
 //                        else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(),item.getUseTasks().get(position),item.getTransfortType());
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 2:
-                        mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
+                        mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         break;
                 }
             }
@@ -148,21 +150,22 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 
     /**
      * 为跳转到装机界面 组装数据
+     *
      * @param mOutFieldTaskBean
      */
     private void toLoadPlaneActivity(OutFieldTaskBean mOutFieldTaskBean) {
-            Intent intent = new Intent(mContext, TPUnloadPlaneActivity.class);
-            intent.putExtra("plane_info", mOutFieldTaskBean);
-             mContext.startActivity(intent);
+        Intent intent = new Intent(mContext, TPUnloadPlaneActivity.class);
+        intent.putExtra("plane_info", mOutFieldTaskBean);
+        mContext.startActivity(intent);
     }
 
-    public interface OnStepListener{
+    public interface OnStepListener {
 
-        void onStepListener(int step,int parentPosition,int position);
+        void onStepListener(int step, int parentPosition, int position);
 
     }
 
-    public void setmOnStepListener(OnStepListener onStepListener){
+    public void setmOnStepListener(OnStepListener onStepListener) {
         this.mOnStepListener = onStepListener;
     }
 
