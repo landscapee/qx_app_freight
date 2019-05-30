@@ -83,7 +83,7 @@ public class YesterdayFragment extends BaseFragment implements FlightdynamicCont
     public void flightdynamicResult(FlightBean result) {
         mData.add("全部(" + result.getTotal() + ")");
         mData.add("进港(" + result.getArrive() + ")");
-        mData.add("离岗(" + result.getDeparture() + ")");
+        mData.add("离港(" + result.getDeparture() + ")");
         mData.add("返航(" + result.getReversal() + ")");
         mData.add("备降(" + result.getPreparation() + ")");
 

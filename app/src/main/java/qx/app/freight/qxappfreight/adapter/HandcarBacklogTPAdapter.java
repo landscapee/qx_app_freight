@@ -33,7 +33,7 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
         //件数 - 重量 - 体积
 
         helper.setText(R.id.allocate_info,String.format(mContext.getString(R.string.format_store_number_goods_info)
-        ,StringUtil.formatString2(item.getTpCargoNumber())
+        ,item.getTpCargoNumber()+""
         ,StringUtil.formatString2(item.getTpCargoWeight())
         , StringUtil.formatString2(item.getTpCargoVolume())));
         //航班号

@@ -346,6 +346,12 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setDtoType(8);
                 entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
                 entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+                entity.setTpStartLocate("seat");
+                entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
+                entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
+                entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
+                entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
+
                 infos.add(entity);
             }
             for (ScooterInfoListBean bean : mListPac) {
@@ -361,6 +367,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setDtoType(8);
                 entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
                 entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+                entity.setTpStartLocate("seat");
+                entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
+                entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
+                entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
+                entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
                 infos.add(entity);
             }
             if (infos.size() == 0) {

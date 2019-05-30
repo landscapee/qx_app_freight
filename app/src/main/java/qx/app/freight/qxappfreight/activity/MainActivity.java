@@ -12,8 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qxkj.positionapp.GPSService;
+import com.qxkj.positionapp.GPSUtils;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +34,7 @@ import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
+import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;

@@ -23,7 +23,7 @@ public class StoreInfoRvAdapter extends BaseQuickAdapter<MainListBean.DataBean.S
 
     @Override
     protected void convert(BaseViewHolder helper, MainListBean.DataBean.SingeDataBean item) {
-        helper.setText(R.id.tv_goods_order, "001").setText(R.id.tv_goods_number, String.format(mContext.getString(R.string.format_store_number_goods_info), StringUtil.formatString2(item.getSingleNumber()), StringUtil.formatString2(item.getSingleWeight()), StringUtil.formatString2(item.getSingleVolume())));
+        helper.setText(R.id.tv_goods_order, "001").setText(R.id.tv_goods_number, String.format(mContext.getString(R.string.format_store_number_goods_info), item.getSingleNumber()+"", StringUtil.formatString2(item.getSingleWeight()), StringUtil.formatString2(item.getSingleVolume())));
         helper.setText(R.id.tv_goods_info, String.format(mContext.getString(R.string.format_store_goods_info), item.getGoodsName(), item.getPackageType(), mGoodsType));
         if (!TextUtils.isEmpty(item.getStoreInfo())) {
             helper.getView(R.id.ll_store_info).setVisibility(View.VISIBLE);

@@ -149,6 +149,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
         mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
         mLoginEntity.setType("MT");
+        mLoginEntity.setSysCode("10080000");
         return mLoginEntity;
     }
 

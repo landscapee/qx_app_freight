@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
+import com.qxkj.positionapp.GPSService;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.BuildConfig;
@@ -32,6 +33,8 @@ public class MyApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+
+        GPSService.startGPSService(this);
 
         Log.e("Application：运行模式>>>", BuildConfig.Model);
 

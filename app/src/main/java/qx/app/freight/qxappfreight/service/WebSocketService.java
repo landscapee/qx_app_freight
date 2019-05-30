@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.gson.Gson;
+import com.qxkj.positionapp.GPSUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,19 +28,24 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.StompHeader;
 
-public class WebSocketService extends Service {
+public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView{
     private static String uri;
     public Context mContext;
     private static StompClient mStompClient;
@@ -48,7 +55,8 @@ public class WebSocketService extends Service {
     private Gson mGson = new Gson();
     private int flag = 0;
 
-
+    private GpsInfoEntity gpsInfoEntity; // gps 上传实体
+    private SaveGpsInfoPresenter saveGpsInfoPresenter;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -186,7 +194,40 @@ public class WebSocketService extends Service {
         compositeDisposable.add(dispTopic3);
 
         mStompClient.connect(headers);
+
+
+        saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
+        //测试
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sendGps();
+                    TimeUnit.SECONDS.sleep(30000);
+
+                }catch (Exception e){
+
+                }
+
+            }
+        });
+        thread.start();
+
     }
+
+    private void sendGps() {
+        Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude()+"");
+        gpsInfoEntity = new GpsInfoEntity();
+        gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
+        gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
+        if (UserInfoSingle.getInstance() != null)
+            gpsInfoEntity.setUserId(UserInfoSingle.getInstance().getUserId());
+        else
+            gpsInfoEntity.setUserId("admin");
+        gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
+    }
+
 
     private void sendLoadingListPush(String result) {
         EventBus.getDefault().post(result);
@@ -255,6 +296,26 @@ public class WebSocketService extends Service {
     public static void actionStop(Context ctx) {
         Intent i = new Intent(ctx, WebSocketService.class);
         ctx.stopService(i);
+    }
+
+    @Override
+    public void saveGpsInfoResult(String result) {
+        Log.e("GPS上传：",result);
+    }
+
+    @Override
+    public void toastView(String error) {
+        Log.e("GPS上传：",error);
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
     }
 
     public class WebSocketBinder extends Binder {
