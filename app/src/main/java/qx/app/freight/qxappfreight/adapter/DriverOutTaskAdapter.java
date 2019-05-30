@@ -104,6 +104,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                         else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//宽体机卸机保障
                         {
+                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                         }
                         else

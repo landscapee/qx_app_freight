@@ -106,7 +106,6 @@
                         android:imeOptions="actionDone"
                         android:maxLength="20"
                         android:background="@null"
-                        android:inputType="date"
                         android:layout_marginStart="13dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

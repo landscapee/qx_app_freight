@@ -74,6 +74,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -199,8 +200,8 @@ public interface HttpApi {
     Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
     //板车列表信息
-    @POST("service-base-sysmanage/bd/list")
-    Observable<BaseEntity<List<ScooterInfoListBean>>> scooterInfoList(@Body BaseFilterEntity model);
+    @POST("service-bussiness-facility/bd/list")
+    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
 
     //ULD号查询
     @POST("service-base-sysmanage/uld/list")

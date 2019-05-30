@@ -110,14 +110,14 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     private void interHistoryAct(int position) {
         String titleName;
-        if (mCSlist.get(position).getTaskType()==1){
+        if (mCHlist.get(position).getTaskType()==1){
             titleName = "全仓清库";
         }else {
             titleName = "鲜活清库";
         }
         startActivity(new Intent(getContext(), ClearStorageDetailActivity.class)
                 .putExtra("taskTitle",titleName)
-                .putExtra("taskId",mCSlist.get(position).getId()));
+                .putExtra("taskId",mCHlist.get(position).getId()));
     }
 
     private void interNewAct(int position) {

@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.model.ScooterInfoListModel;
 
@@ -22,10 +23,10 @@ public class ScooterInfoListPresenter extends BasePresenter {
 
     public void ScooterInfoList(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((ScooterInfoListModel) mRequestModel).scooterInfoList(model, new IResultLisenter<List<ScooterInfoListBean>>() {
+        ((ScooterInfoListModel) mRequestModel).scooterInfoList(model, new IResultLisenter<ScooterInfoListDataBean>() {
             @Override
-            public void onSuccess(List<ScooterInfoListBean> scooterInfoListBeans) {
-                ((ScooterInfoListContract.scooterInfoListView) mRequestView).scooterInfoListResult(scooterInfoListBeans);
+            public void onSuccess(ScooterInfoListDataBean scooterInfoListBeans) {
+                ((ScooterInfoListContract.scooterInfoListView) mRequestView).scooterInfoListResult(scooterInfoListBeans.getRecords());
                 mRequestView.dissMiss();
             }
 
