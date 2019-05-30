@@ -93,6 +93,9 @@ public class GPSUtils {
         }
         String provide = locationManager.getBestProvider(getCriteria(), true);
         Location location = locationManager.getLastKnownLocation(provide);
+        if(location == null){
+            return null;
+        }
         return new LocationEntity(location.getLongitude(), location.getLatitude());
     }
 

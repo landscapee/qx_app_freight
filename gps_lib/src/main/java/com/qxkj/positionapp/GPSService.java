@@ -58,12 +58,12 @@ public class GPSService extends Service {
 
         Log.e("GPS", "==========================GPS Service create========================");
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         if (!isGpsEnabled(locationManager)) {
             Log.e("GPS", "ERROR: GPS导航未开启，请设置！");
             return;
         }
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String provider = locationManager.getBestProvider(GPSUtils.getInstance().getCriteria(), true);
         //开启位置监听
