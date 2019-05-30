@@ -9,8 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ import qx.app.freight.qxappfreight.activity.ClearStorageDetailActivity;
 import qx.app.freight.qxappfreight.adapter.ClearHistoryAdapter;
 import qx.app.freight.qxappfreight.adapter.ClearStorageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
@@ -42,6 +42,8 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     MultiFunctionRecylerView mMfrvData;
     @BindView(R.id.mfrv_history)
     MultiFunctionRecylerView mMfrvDataHistory;
+    @BindView(R.id.ll_clear)
+    LinearLayout mLLClear;
 
     //新的任务
     private ClearStorageAdapter mCSadapter;
@@ -67,6 +69,20 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        int rw = 0;
+        for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+            if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                rw = 1;
+                break;
+            }
+        }
+        if (rw == 1) {
+            mLLClear.setVisibility(View.VISIBLE);
+        } else {
+            mLLClear.setVisibility(View.GONE);
+        }
+
+
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         //最新
         mMfrvData.setRefreshListener(new MultiFunctionRecylerView.OnRefreshListener() {
@@ -110,26 +126,26 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     private void interHistoryAct(int position) {
         String titleName;
-        if (mCHlist.get(position).getTaskType()==1){
+        if (mCHlist.get(position).getTaskType() == 1) {
             titleName = "全仓清库";
-        }else {
+        } else {
             titleName = "鲜活清库";
         }
         startActivity(new Intent(getContext(), ClearStorageDetailActivity.class)
-                .putExtra("taskTitle",titleName)
-                .putExtra("taskId",mCHlist.get(position).getId()));
+                .putExtra("taskTitle", titleName)
+                .putExtra("taskId", mCHlist.get(position).getId()));
     }
 
     private void interNewAct(int position) {
         String titleName;
-        if (mCSlist.get(position).getTaskType()==1){
+        if (mCSlist.get(position).getTaskType() == 1) {
             titleName = "全仓清库";
-        }else {
+        } else {
             titleName = "鲜活清库";
         }
         startActivity(new Intent(getContext(), AddClearStorageActivity.class)
-                .putExtra("taskTitle",titleName)
-                .putExtra("taskId",mCSlist.get(position).getId()));
+                .putExtra("taskTitle", titleName)
+                .putExtra("taskId", mCSlist.get(position).getId()));
     }
 
 

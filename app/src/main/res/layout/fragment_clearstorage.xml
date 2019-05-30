@@ -1,51 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <qx.app.freight.qxappfreight.widget.CustomToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+    >
 
     <TextView
-        android:id="@+id/tv_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="3dp"
-        android:text="新的任务"
-        android:textColor="#1A71F3"
-        android:textSize="12sp" />
-
-
-    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
-        android:id="@+id/mfrv_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="7dp"
-        android:layout_weight="1" />
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="非进港理货没有清库功能"
+        />
 
-
-    <TextView
-        android:id="@+id/tv_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="3dp"
-        android:text="历史记录"
-        android:textColor="#999999"
-        android:textSize="12sp" />
-
-    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
-        android:id="@+id/mfrv_history"
+    <LinearLayout
+        android:id="@+id/ll_clear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="7dp"
-        android:layout_weight="1" />
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
 
-</LinearLayout>
+        <qx.app.freight.qxappfreight.widget.CustomToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/tv_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="3dp"
+            android:text="新的任务"
+            android:textColor="#1A71F3"
+            android:textSize="12sp" />
+
+
+        <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+            android:id="@+id/mfrv_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="1" />
+
+
+        <TextView
+            android:id="@+id/tv_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="3dp"
+            android:text="历史记录"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+            android:id="@+id/mfrv_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</FrameLayout>
