@@ -64,23 +64,15 @@ public class GpsNetworkUtils {
         String operator = telephonyManager.getNetworkOperator();
         cellInfo.setMcc(Integer.parseInt(operator.substring(0, 3)));
         cellInfo.setMnc(Integer.parseInt(operator.substring(3)));
-        int type = telephonyManager.getNetworkType();
+        int type = telephonyManager.getPhoneType();
 
         //需要判断网络类型，因为获取数据的方法不一样
-        if (type == TelephonyManager.NETWORK_TYPE_CDMA
-                || type == TelephonyManager.NETWORK_TYPE_1xRTT
-                || type == TelephonyManager.NETWORK_TYPE_EVDO_0
-                || type == TelephonyManager.NETWORK_TYPE_EVDO_A
-                || type == TelephonyManager.NETWORK_TYPE_EVDO_B) {
+        if (type == TelephonyManager.PHONE_TYPE_CDMA) {
             // 电信cdma网
             CdmaCellLocation cdma = (CdmaCellLocation) telephonyManager.getCellLocation();
             cellInfo.setCid(cdma.getBaseStationId());
             cellInfo.setLac(cdma.getNetworkId());
-        } else if (type == TelephonyManager.NETWORK_TYPE_GPRS
-                || type == TelephonyManager.NETWORK_TYPE_EDGE
-                || type == TelephonyManager.NETWORK_TYPE_HSDPA
-                || type == TelephonyManager.NETWORK_TYPE_UMTS
-                || type == TelephonyManager.NETWORK_TYPE_LTE) {
+        } else if (type == TelephonyManager.PHONE_TYPE_GSM) {
             // 移动和联通GSM网
             GsmCellLocation location = (GsmCellLocation) telephonyManager.getCellLocation();
             cellInfo.setCid(location.getCid());
