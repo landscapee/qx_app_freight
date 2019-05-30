@@ -36,11 +36,15 @@ public class GPSService extends Service {
         context.startService(intent);
     }
 
-    public static void startGPSService(Context context, int seconds) {
-        GPS_SECONDS = seconds;
+    /**
+     * 停止服务
+     * @param context
+     */
+    public static void stopGPSServer(Context context){
         Intent intent = new Intent(context, GPSService.class);
-        context.startService(intent);
+        context.stopService(intent);
     }
+
 
     @SuppressLint("MissingPermission")
     @Override
@@ -69,6 +73,7 @@ public class GPSService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e(TAG, "==========================GPSService Stop========================");
         GPS_RUN = false;
     }
 
