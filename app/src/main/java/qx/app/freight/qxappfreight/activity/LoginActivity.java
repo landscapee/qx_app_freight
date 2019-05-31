@@ -79,10 +79,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
         mEtUserName.setText("");
-        mPresenter = new LoginPresenter(this);
         mBtnLogin.setOnClickListener(v -> {
             login();
-//            test();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -118,6 +116,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         if (TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())) {
             ToastUtil.showToast("账号或者密码不能为空");
         } else {
+            mPresenter = new LoginPresenter(this);
             ((LoginPresenter) mPresenter).login(getLoginEntity());
         }
     }
