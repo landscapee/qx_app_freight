@@ -92,7 +92,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (!nowDoTaskId.equals(list.get(position).getTaskId())){
                 nowDoTaskId = list.get(position).getTaskId();
-                setListStatus();
+//                setListStatus();
             }
 
         });
@@ -275,6 +275,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                 }
             }
             list.addAll(acceptTerminalTodoBeanList);
+            mMfrvData.notifyForAdapter(adapter);
             setListStatus();
             TaskFragment fragment = (TaskFragment) getParentFragment();
             if (fragment != null) {
@@ -287,17 +288,18 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     }
 
     /**
-     * 展开之前执行的任务 且只展开一个任务
+     * 滚动到指定位置
      */
     private void setListStatus() {
-            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean :list){
-                  if (nowDoTaskId.equals(mAcceptTerminalTodoBean.getTaskId())){
-                      mAcceptTerminalTodoBean.setExpand(true);
+            for (int i =0;i<list.size() ;i++){
+                  if (nowDoTaskId.equals(list.get(i).getTaskId())){
+
+                      mMfrvData.setVerticalScrollbarPosition(i);
+                      list.get(i).setExpand(true);
+                      adapter.notifyDataSetChanged();
                   }
-                  else
-                      mAcceptTerminalTodoBean.setExpand(false);
             }
-        mMfrvData.notifyForAdapter(adapter);
+
 
     }
 

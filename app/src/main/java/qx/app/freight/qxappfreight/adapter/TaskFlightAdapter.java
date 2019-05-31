@@ -48,8 +48,8 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
                 }
             }
 
-            helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()));
-            helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()));
+            helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType())+item.getBeginAreaId());
+            helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType())+item.getEndAreaId());
             ImageView ivFlag = helper.getView(R.id.iv_flag);
             if ("D".equals(item.getFlights().getMovement()))
                 ivFlag.setImageResource(R.mipmap.li);
