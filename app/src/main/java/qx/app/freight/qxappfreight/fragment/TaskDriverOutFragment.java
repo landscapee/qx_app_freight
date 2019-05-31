@@ -295,7 +295,8 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                   if (nowDoTaskId.equals(list.get(i).getTaskId())){
 
                       mMfrvData.setVerticalScrollbarPosition(i);
-
+                      list.get(i).setExpand(true);
+                      adapter.notifyDataSetChanged();
                   }
             }
 

@@ -60,7 +60,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBe
         TaskStepAdapter mTaskStepAdapter = new TaskStepAdapter(list1);
         mRecyclerView.setAdapter(mTaskStepAdapter);
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
-
+        collView.collapse();
         mRecyclerView.setVisibility(View.GONE);
         ImageView imageExpand = helper.getView(R.id.iv_expand);
         View view = helper.getConvertView();
@@ -78,18 +78,15 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBe
                 imageExpand.setImageResource(R.mipmap.up);
             }
         });
-//        mRecyclerView.setVisibility(View.GONE);
-//        collView.collapse();
-//        imageExpand.setImageResource(R.mipmap.down);
-//        if (item.isExpand()) {
-//            mRecyclerView.setVisibility(View.VISIBLE);
-//            collView.expand();
-//            imageExpand.setImageResource(R.mipmap.up);
-//        } else {
-//            mRecyclerView.setVisibility(View.GONE);
-//            collView.collapse();
-//            imageExpand.setImageResource(R.mipmap.down);
-//        }
+        if (item.isExpand()) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            collView.expand();
+            imageExpand.setImageResource(R.mipmap.up);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            collView.collapse();
+            imageExpand.setImageResource(R.mipmap.down);
+        }
         /**
          *   滑动监听  device 设备保障
          *   step  0 开始（进入执行运输界面、进入宽体机卸机保障界面） 1 结束 2 领受
