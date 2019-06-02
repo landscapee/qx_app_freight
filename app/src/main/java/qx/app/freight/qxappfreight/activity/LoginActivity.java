@@ -7,10 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,29 +18,28 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
-import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
-import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
+import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
-import qx.app.freight.qxappfreight.presenter.UpdateVersionPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -52,12 +48,16 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
-import retrofit2.http.GET;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView, GetPhoneParametersContract.getPhoneParametersView  {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -76,9 +76,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
-        UpdateVersionPresenter versionPresenter = new UpdateVersionPresenter(this);
-        versionPresenter.updateVersion();
-        mEtPassWord.setText("");
+        checkVersion();
+        mEtPassWord.setText("111111");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
         mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
@@ -101,6 +100,48 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    private void checkVersion() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
+            //打印retrofit日志
+            Log.e("tagRetrofit", "msg = " + message);
+        });
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
+                .addInterceptor(loggingInterceptor)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.UPDATE_URL_DEBUG)
+                .client(client)//此client是为了打印信息
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        HttpApi httpService = retrofit.create(HttpApi.class);
+        Call<UpdateVersionBean> call = httpService.updateVersion("newPhone2");
+        call.enqueue(new Callback<UpdateVersionBean>() {
+            @Override
+            public void onResponse(Call<UpdateVersionBean> call, Response<UpdateVersionBean> response) {
+                UpdateVersionBean updataBean = response.body();
+                if (updataBean == null) {
+                    ToastUtil.showToast("获取应用更新信息失败");
+                    return;
+                }
+                mVersionBean = updataBean;
+                PackageInfo appInfo = AppUtil.getPackageInfo(LoginActivity.this);
+                int versionCode = 0;
+                if (appInfo != null) {
+                    versionCode = appInfo.versionCode;
+                }
+                if (versionCode != mVersionBean.getIsCurrentVersion()) {
+                    showAppUpdateDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateVersionBean> call, Throwable t) {
+                Log.e("tagUpdate", "更新版本出错");
+            }
+        });
     }
 
 //    private void getDeviceInfo(){
@@ -148,7 +189,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     }
 
     /**
-     *  组装登录参数
+     * 组装登录参数
+     *
      * @return
      */
     private LoginEntity getLoginEntity() {
@@ -156,7 +198,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
         mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
         mLoginEntity.setType("MT");
-        List<String> syss = new ArrayList <>();
+        List<String> syss = new ArrayList<>();
         syss.add("10040000");//外场
         syss.add("10080000");//货运
         mLoginEntity.setSysCode(syss);
@@ -190,6 +232,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 通知运输装卸机PC 监听 该用户已经上线
+     *
      * @param loginBean
      */
     private void loginTpPC(LoginResponseBean loginBean) {
@@ -199,16 +242,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mPhoneParametersEntity.setUserId(loginBean.getUserId());
         mPhoneParametersEntity.setPhoneNumber(loginBean.getPhone());
         mPhoneParametersEntity.setDeviceId(DeviceInfoUtil.getPhoneDevice());
-        ((GetPhoneParametersPresenter)mPresenter).getPhoneParameters(mPhoneParametersEntity);
+        ((GetPhoneParametersPresenter) mPresenter).getPhoneParameters(mPhoneParametersEntity);
     }
+
     @Override
     public void getPhoneParametersResult(String result) {
-        if (!"".equals(result)){
+        if (!"".equals(result)) {
 //            toMainAct();
-            Log.e("通知运输监控已登录",result);
+            Log.e("通知运输监控已登录", result);
         }
 
     }
+
     private void toMainAct() {
         MainActivity.startActivity(this);
         finish();
@@ -277,23 +322,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void onBackPressed() {
         quitApp();
-    }
-
-    @Override
-    public void updateVersionResult(UpdateVersionBean updataBean) {
-        if (updataBean == null) {
-            ToastUtil.showToast("获取应用更新信息失败");
-            return;
-        }
-        mVersionBean = updataBean;
-        PackageInfo appInfo = AppUtil.getPackageInfo(this);
-        int versionCode = 0;
-        if (appInfo != null) {
-            versionCode = appInfo.versionCode;
-        }
-        if (versionCode < mVersionBean.getIsCurrentVersion()) {
-            showAppUpdateDialog();
-        }
     }
 
     /**

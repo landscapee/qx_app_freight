@@ -3,6 +3,8 @@ package qx.app.freight.qxappfreight.presenter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
@@ -15,20 +17,20 @@ public class UpdateVersionPresenter extends BasePresenter {
         mRequestModel = new UpdateVersionModel();
     }
 
-    public void updateVersion() {
-        mRequestView.showNetDialog();
-        ((UpdateVersionModel) mRequestModel).updateVersion(new IResultLisenter<UpdateVersionBean>() {
-            @Override
-            public void onSuccess(UpdateVersionBean updataBean) {
-                ((UpdateVersionContract.updateView) mRequestView).updateVersionResult(updataBean);
-                mRequestView.dissMiss();
-            }
-
-            @Override
-            public void onFail(@NotNull String error) {
-                mRequestView.toastView(error);
-                mRequestView.dissMiss();
-            }
-        });
+    public void updateVersion(Map<String,String> params) {
+//        mRequestView.showNetDialog();
+//        ((UpdateVersionModel) mRequestModel).updateVersion(params,new IResultLisenter<UpdateVersionBean>() {
+//            @Override
+//            public void onSuccess(UpdateVersionBean updataBean) {
+//                ((UpdateVersionContract.updateView) mRequestView).updateVersionResult(updataBean);
+//                mRequestView.dissMiss();
+//            }
+//
+//            @Override
+//            public void onFail(@NotNull String error) {
+//                mRequestView.toastView(error);
+//                mRequestView.dissMiss();
+//            }
+//        });
     }
 }

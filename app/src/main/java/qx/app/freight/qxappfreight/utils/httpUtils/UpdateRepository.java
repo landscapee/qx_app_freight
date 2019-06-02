@@ -951,11 +951,6 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().internationalCargoReport(requestBody));
     }
 
-    //版本更新
-    public Observable<UpdateVersionBean> updateVersion() {
-        return transform(getService().updateVersion());
-    }
-
     public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode){
         return transform(getService().listReservoirInfoByCode(deptCode));
     }

@@ -8,7 +8,10 @@ import java.io.File;
 import qx.app.freight.qxappfreight.R;
 
 public class Constants {
+    //更新版本用的参数常量
     public static final String APP_NAME = "智慧货运_";
+    public static final String UPDATE_URL_DEBUG = "http://173.100.1.51:80/";
+    public static final String UPDATE_URL_TEST = "http://173.101.1.51:80/";
     //====================================================角色分类======================================================
     /**
      * 安检
