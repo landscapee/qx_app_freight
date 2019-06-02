@@ -239,6 +239,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             }
             else{
                 mMfrvData.finishLoadMore();
+
+
+
+
             }
             list1.addAll(transportListBeans.getRecords());
             seachWith();
