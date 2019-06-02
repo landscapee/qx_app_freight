@@ -92,13 +92,8 @@ public class GPSService extends Service {
                 if (locationEntity != null) {
                     Log.e(TAG, "直接获取定位成功！");
                     GPSUtils.getInstance().updateLocationEntity(locationEntity.getLongitude(), locationEntity.getLatitude());
-                } else {
-                    //网络获取
-                    if (GpsNetworkUtils.getSingleInstance().isNetworkGpsEnable(GPSService.this)) {
-                        GpsNetworkUtils.getSingleInstance().getLocationBySIM(GPSService.this);
-                    } else {
-                        Log.e(TAG, "Final Error: 获取不到定位信息，等GPS自己更新吧");
-                    }
+                }else{
+                    Log.e(TAG, "定位更新失败");
                 }
             }
             handler.postDelayed(this, 2000);
