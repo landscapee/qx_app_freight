@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import qx.app.freight.qxappfreight.contract.NoReadCountContract;
 import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -156,12 +159,29 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     }
 
     private void loginOut() {
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(getContext());
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        CommonDialog dialog = new CommonDialog(getContext());
+        dialog.setTitle("退出登录")
+                .setMessage("是否退出登录")
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            UserInfoSingle.setUserNil();
+                            ActManager.getAppManager().finishAllActivity();
+                            WebSocketService.stopServer(getContext());
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
 
     }
 
