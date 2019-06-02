@@ -31,10 +31,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -239,18 +236,6 @@
                 <action android:name="android.intent.ACTION_DECODE_DATA" />
             </intent-filter>
         </receiver>
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="qx.app.freight.qxappfreight.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
-        </provider>
-
-
     </application>
 
 </manifest>

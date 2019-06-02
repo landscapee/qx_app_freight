@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
@@ -49,11 +52,12 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import retrofit2.http.GET;
 
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView, GetPhoneParametersContract.getPhoneParametersView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, UpdateVersionContract.updateView, GetPhoneParametersContract.getPhoneParametersView  {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -92,11 +96,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
-        try {
-            installInputMethod();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            installInputMethod();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 //    private void getDeviceInfo(){
@@ -148,7 +152,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
         mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
         mLoginEntity.setType("MT");
-        List<String> syss = new ArrayList<>();
+        List<String> syss = new ArrayList <>();
         syss.add("10040000");//外场
         syss.add("10080000");//货运
         mLoginEntity.setSysCode(syss);
@@ -173,7 +177,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 }
             }
             UserInfoSingle.setUser(loginBean);
-            loginTpPC(loginBean);
+            toMainAct();
+//            loginTpPC(loginBean);
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
@@ -181,7 +186,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 通知运输装卸机PC 监听 该用户已经上线
-     *
      * @param loginBean
      */
     private void loginTpPC(LoginResponseBean loginBean) {
@@ -191,17 +195,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mPhoneParametersEntity.setUserId(loginBean.getUserId());
         mPhoneParametersEntity.setPhoneNumber(loginBean.getPhone());
         mPhoneParametersEntity.setDeviceId(DeviceInfoUtil.getPhoneDevice());
-        ((GetPhoneParametersPresenter) mPresenter).getPhoneParameters(mPhoneParametersEntity);
+        ((GetPhoneParametersPresenter)mPresenter).getPhoneParameters(mPhoneParametersEntity);
     }
-
     @Override
     public void getPhoneParametersResult(String result) {
-        if (!"".equals(result)) {
+        if (!"".equals(result)){
             toMainAct();
         }
 
     }
-
     private void toMainAct() {
         MainActivity.startActivity(this);
         finish();
