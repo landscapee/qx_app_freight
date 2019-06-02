@@ -32,14 +32,17 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
+import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
+import qx.app.freight.qxappfreight.contract.GetUnLoadListBillContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
@@ -47,6 +50,7 @@ import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
+import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
@@ -60,7 +64,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView , GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView{
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -116,7 +120,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        PushDataUtil.handlePushInfo(result,mCurrentTaskId,this);
+        PushDataUtil.handlePushInfo(result, mCurrentTaskId, this);
     }
 
     @Override
@@ -178,7 +182,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
         mTvSeat.setText(mData.getSeat());
         long arrive;
-        if (mData.getActualArriveTime()!=0) {//有实际到达时间
+        if (mData.getActualArriveTime() != 0) {//有实际到达时间
             arrive = mData.getActualArriveTime();
         } else {
             arrive = mData.getScheduleTime();
@@ -217,11 +221,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     private void setListeners() {
         mTvUnloadBillInfo.setOnClickListener(v -> {
-            mPresenter=new GetFlightCargoResPresenter(this);
-            LoadingListRequestEntity entity = new LoadingListRequestEntity();
-            entity.setDocumentType(2);
+            mPresenter = new GetUnLoadListBillPresenter(this);
+            UnLoadRequestEntity entity = new UnLoadRequestEntity();
+            entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
             entity.setFlightId(mData.getFlightId());
-            ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+            ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
         });
         mIvControl1.setOnClickListener(v -> {
             if (mSlideRvGoods.getVisibility() == View.GONE) {
@@ -241,9 +245,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 mIvControl2.setImageResource(R.mipmap.down);
             }
         });
-        mLlScanGoods.setOnClickListener(v ->{
-                mIsScanGoods = true;
-                ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");});
+        mLlScanGoods.setOnClickListener(v -> {
+            mIsScanGoods = true;
+            ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
+        });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
             ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
@@ -300,10 +305,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
             }
         });
-        ivNoticeTp.setOnClickListener(v ->{
+        ivNoticeTp.setOnClickListener(v -> {
             noticeTp();
         });
     }
+
     /**
      * 通知开始运输
      */
@@ -318,7 +324,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("cargo");
-            entity.setTpFlightId(mData.getFlightId()+"");
+            entity.setTpFlightId(mData.getFlightId() + "");
             entity.setTpFlightNumber(mData.getFlightNo());
             entity.setTpFlightLocate(mData.getSeat());
             entity.setTpStartLocate("seat");
@@ -336,7 +342,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("baggage");
-            entity.setTpFlightId(mData.getFlightId()+"");
+            entity.setTpFlightId(mData.getFlightId() + "");
             entity.setTpFlightNumber(mData.getFlightNo());
             entity.setTpFlightLocate(mData.getSeat());
             entity.setTpStartLocate("seat");
@@ -488,12 +494,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void getLoadingListResult(LoadingListBean result) {
-        if (result!=null){
-            List<LoadingListBean.DataBean.ContentObjectBean> list = result.getData().get(0).getContentObject();
-            UnloadBillInfoDialog unloadBillInfoDialog=new UnloadBillInfoDialog();
-            unloadBillInfoDialog.setData(list,this);
-            unloadBillInfoDialog.show(getSupportFragmentManager(),"unload_bill");
-        }
     }
 
     @Override
@@ -519,5 +519,19 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     @Override
     public void scooterWithUserResult(List<TransportTodoListBean> result) {
 
+    }
+
+    @Override
+    public void getUnLoadingListResult(UnLoadListBillBean result) {
+        if (result != null) {
+            if (result.getData() != null) {
+                List<UnLoadListBillBean.DataBean.ContentObjectBean> list = result.getData().getContentObject();
+                UnloadBillInfoDialog unloadBillInfoDialog = new UnloadBillInfoDialog();
+                unloadBillInfoDialog.setData(list, this);
+                unloadBillInfoDialog.show(getSupportFragmentManager(), "unload_bill");
+            } else {
+                ToastUtil.showToast(result.getMessage());
+            }
+        }
     }
 }

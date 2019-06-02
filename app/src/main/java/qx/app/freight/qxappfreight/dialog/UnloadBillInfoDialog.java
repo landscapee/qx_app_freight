@@ -22,6 +22,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ChooseStoreroomAdapter;
 import qx.app.freight.qxappfreight.adapter.UnloadBillAdapter;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -31,9 +32,9 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
  */
 public class UnloadBillInfoDialog extends DialogFragment {
     private Context context;
-    private List<LoadingListBean.DataBean.ContentObjectBean> list;
+    private List<UnLoadListBillBean.DataBean.ContentObjectBean> list;
 
-    public void setData(List<LoadingListBean.DataBean.ContentObjectBean> mList, Context context) {
+    public void setData(List<UnLoadListBillBean.DataBean.ContentObjectBean> mList, Context context) {
         this.list = mList;
         this.context = context;
     }
@@ -49,7 +50,6 @@ public class UnloadBillInfoDialog extends DialogFragment {
         Window window = dialog.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.CENTER; // 紧贴底部
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
         RecyclerView rvUnloadBill = dialog.findViewById(R.id.rv_unload_bill);

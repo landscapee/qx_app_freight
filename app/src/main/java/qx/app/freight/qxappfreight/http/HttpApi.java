@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.http;
 
-import java.io.ObjectStreamClass;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -48,7 +48,6 @@ import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
-import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -71,17 +70,15 @@ import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
-import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
-import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -126,7 +123,7 @@ public interface HttpApi {
 
     //收验详情
     @GET("service-product-transportcheck/ins/get/{waybillId}/{freightId}/{taskTypeCode}")
-    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId,@Path("taskTypeCode") String taskTypeCode);
+    Observable<BaseEntity<TestInfoListBean>> testInfo(@Path("waybillId") String waybillId, @Path("freightId") String freightId, @Path("taskTypeCode") String taskTypeCode);
 
     /***********收运****************************/
 
@@ -283,7 +280,7 @@ public interface HttpApi {
 
     /***********************运输*****************************/
 
-     //扫描板车并锁定 (首件行李  通知运输使用)
+    //扫描板车并锁定 (首件行李  通知运输使用)
     @POST("service-product-transport/tp-main-info/postScooterDataManual")
     Observable<BaseEntity<Object>> scanLockScooter(@Body TransportEndEntity model);
 
@@ -328,6 +325,7 @@ public interface HttpApi {
     //运输 -异常结束
     @POST("service-product-transport/tp-main-info/transportEndException")
     Observable<BaseEntity<Object>> exceptionTpEnd(@Body ExceptionReportEntity exceptionReportEntity);
+
     /***********************装卸机*****************************/
     //出港装机 -异常上报
     @POST("service-product-transport/tp-exception-report/exceptionReport")
@@ -525,7 +523,7 @@ public interface HttpApi {
 
     //清库运单模糊查询
     @GET("service-bussiness-reservoir/inventory/listWaybillCode")
-    Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code,@Query("inventoryTaskId") String inventoryTaskId);
+    Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
 
 
     /*********************国际货物***************************/
@@ -535,10 +533,11 @@ public interface HttpApi {
 
     //版本更新检测
     @POST("app/scheduling/findVersionUpdate")
-    Call<UpdateVersionBean> updateVersion(@Query("deviceType")String deviceType);
+    Call<UpdateVersionBean> updateVersion(@Query("deviceType") String deviceType);
 
     /**
      * 获取库区接口
+     *
      * @param deptCode 从用户信息里面获取
      * @return
      */
@@ -548,5 +547,9 @@ public interface HttpApi {
     //xxx
     @GET("service-product-transport/tp-api/getAllRemoteArea")
     Observable<BaseEntity<List<GetAllRemoteAreaBean>>> getAllRemoteArea();
+
+    //获取卸机单数据
+    @POST("service-product-stowage/ft-report/queryUnloadingMachine")
+    Observable<UnLoadListBillBean> getUnLoadingList(@Body UnLoadRequestEntity model);
 
 }
