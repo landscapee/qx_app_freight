@@ -14,6 +14,8 @@ public class HttpConstant {
     //websocket 地址
     public static final String WEBSOCKET = BuildConfig.WEBSOCKET;//"173.100.1.78:7004";
     public static final String WEBSOCKETURL = BuildConfig.WEBSOCKETURL;//推送地址
+
+    public static final String UPDATE_CHECK_VERSION_URL = BuildConfig.VERSION_URL;//检测版本更新的地址
     /**
      * 显示图片的地址
      */

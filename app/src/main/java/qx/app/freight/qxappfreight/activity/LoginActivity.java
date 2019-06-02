@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
@@ -126,7 +127,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .addInterceptor(loggingInterceptor)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.UPDATE_URL_DEBUG)
+                .baseUrl(HttpConstant.UPDATE_CHECK_VERSION_URL)
                 .client(client)//此client是为了打印信息
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

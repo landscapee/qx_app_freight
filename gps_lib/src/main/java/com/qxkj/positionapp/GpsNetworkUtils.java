@@ -74,7 +74,6 @@ public class GpsNetworkUtils {
                 telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             }
             String operator = telephonyManager.getNetworkOperator();
-
             cellInfo.setMcc(Integer.parseInt(operator.substring(0, 3)));
             cellInfo.setMnc(Integer.parseInt(operator.substring(3)));
             List<android.telephony.CellInfo> cellList = telephonyManager.getAllCellInfo();
@@ -100,6 +99,7 @@ public class GpsNetworkUtils {
                     cellInfo.setLac(cellIdentityWcdma.getLac());
                     cellInfo.setCid(cellIdentityWcdma.getCid());
                 }
+                Log.e("tagGps","cell=======lac:"+cellInfo.getLac()+";cid:"+cellInfo.getCid());
             }
             //网络请求
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
