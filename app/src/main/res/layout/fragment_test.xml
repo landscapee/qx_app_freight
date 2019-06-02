@@ -1,69 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<qx.app.freight.qxappfreight.widget.PowerFullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <qx.app.freight.qxappfreight.widget.CustomToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登录" />
-
-        <Button
-            android:id="@+id/button_input_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="收验" />
-
-        <Button
-            android:id="@+id/button_check_person"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="检查报检员" />
-
-        <Button
-            android:id="@+id/button_check_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="检查证明文件" />
-
-        <Button
-            android:id="@+id/button_check_cargo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="检查货物" />
-
-        <Button
-            android:id="@+id/button_input_cargo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="收货" />
-
-        <Button
-            android:id="@+id/button_add_cargo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/background"
-            android:text="新增" />
-
-        <Button
-            android:id="@+id/button_input_warehouse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="入库" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/button_select_warehouse_position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="选择仓库位置" />
-    </LinearLayout>
-</qx.app.freight.qxappfreight.widget.PowerFullLayout>
+            android:layout_width="match_parent"
+            android:id="@+id/tv_text"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="IM开发中"
+            />
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="登录" />
+
+            <Button
+                android:id="@+id/button_input_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收验" />
+
+            <Button
+                android:id="@+id/button_check_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查报检员" />
+
+            <Button
+                android:id="@+id/button_check_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查证明文件" />
+
+            <Button
+                android:id="@+id/button_check_cargo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查货物" />
+
+            <Button
+                android:id="@+id/button_input_cargo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收货" />
+
+            <Button
+                android:id="@+id/button_add_cargo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/background"
+                android:text="新增" />
+
+            <Button
+                android:id="@+id/button_input_warehouse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="入库" />
+
+            <TextView
+                android:id="@+id/button_select_warehouse_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择仓库位置" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

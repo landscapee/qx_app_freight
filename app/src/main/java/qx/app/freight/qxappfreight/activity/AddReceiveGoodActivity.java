@@ -340,12 +340,12 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("数据提交中……");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
 

@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,18 +25,23 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.PowerFullLayout;
 
 public class TestFragment extends BaseFragment {
-
+    @BindView(R.id.toolbar)
+    CustomToolbar mToolBar;
     @BindView(R.id.button_select_warehouse_position)
     TextView btnTest;
+    @BindView(R.id.tv_text)
+    TextView mTvText;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_test, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mToolBar.setMainTitle(Color.WHITE, "消息");
         initView();
         return view;
     }
