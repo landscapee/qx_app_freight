@@ -186,7 +186,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             //板车号
             mScooterCode = result.getData();
             if (!TextUtils.isEmpty(mScooterCode)) {
-                mTvScooter.setText(mScooterCode);
                 //板车号
                 getNumberInfo(mScooterCode);
             }
@@ -199,7 +198,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (!"".equals(mScooterCode)) {
-                mTvScooter.setText(mScooterCode);
                 //板车号
                 getNumberInfo(mScooterCode);
             } else {
@@ -288,6 +286,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
             scooterInfo = scooterInfoListBeans.get(0);
             if ("2".equals(scooterInfoListBeans.get(0).getScooterType())) {
+                mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
                 mEdtDeadWeight.setHint("平板车不能输入重量");
                 mEtUldNumber.setHint("平板车不能输入ULD号");
                 mEdtDeadWeight.setFocusable(false);
