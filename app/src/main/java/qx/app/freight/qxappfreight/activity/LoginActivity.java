@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
+import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
@@ -43,6 +44,7 @@ import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.DownloadUtils;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -57,7 +59,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView, UpdateVersionContract.updateView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -95,11 +97,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         });
         checkPermissions();
         checkPermissionsForWindow();
-//        try {
-//            installInputMethod();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+        //输入法 下载安装
+        DownloadUtils downloadUtils = new DownloadUtils(this);
+        //是否按安装输入法
+        if(!downloadUtils.isInstall()){
+            //是否已经下载
+            if(downloadUtils.isDownload()){
+                //直接安装
+                downloadUtils.showDialogInstall();
+            }else{
+                //下载
+                downloadUtils.showDialogDownload();
+            }
+        }else{
+            ToastUtil.showToast("输入法已经就位！");
+        }
+
     }
 
     private void checkVersion() {
@@ -324,6 +338,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         quitApp();
     }
 
+    @Override
+    public void updateVersionResult(UpdateVersionBean updataBean) {
+        if (updataBean == null) {
+            ToastUtil.showToast("获取应用更新信息失败");
+            return;
+        }
+        mVersionBean = updataBean;
+        PackageInfo appInfo = AppUtil.getPackageInfo(this);
+        int versionCode = 0;
+        if (appInfo != null) {
+            versionCode = appInfo.versionCode;
+        }
+        if (versionCode < mVersionBean.getIsCurrentVersion()) {
+            showAppUpdateDialog();
+        }
+    }
+
     /**
      * 弹出下载提示框
      */
@@ -359,72 +390,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
         String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
         DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
-    }
-
-    /**
-     * 安装搜狗输入法
-     */
-    public void installInputMethod() {
-
-        for (PackageInfo info : getPackageManager().getInstalledPackages(0)) {
-            if ("com.hit.wi".equals(info.packageName)) {
-                ToastUtil.showToast("已经安装WI输入法！");
-                Log.e("dime", "已经装过了");
-                return;
-            }
-        }
-        Log.e("dime", "即将安装WI输入法");
-        //        ToastUtil.showToast("即将安装WI输入法！");
-        //com.sohu.inputmethod.sogou
-
-
-        //apk拷贝后的地址
-        String filePath = getExternalCacheDir().getAbsolutePath() + File.separator + "WiInput_sign.apk";
-
-        //将SogouInput_sign.apk文件拷贝到sk卡中
-        InputStream is = null;
-        FileOutputStream fos;
-        File file = new File(filePath);
-        file.deleteOnExit();
-        try {
-            is = getAssets().open("wiinput");
-            fos = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int len = 0;
-            while ((len = is.read(buffer)) > 0) {
-                fos.write(buffer, 0, len);
-            }
-            fos.close();
-            is.close();
-
-            boolean xxx = file.exists();
-
-            Log.e("dime", "apk存在吗：" + xxx);
-
-            //完成拷贝后，开始安装
-            Intent installIntent = new Intent(Intent.ACTION_VIEW);
-            installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //使用fileProvider安装
-//                Uri apkUri = FileProvider.getUriForFile(this, "qx.app.freight.qxappfreight.fileProvider", file);
-//                installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-//                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(installIntent);
-            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                //普通安装
-                installIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                Log.e("dime", file.getAbsolutePath());
-                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(installIntent);
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("dime", e.getMessage());
-        }
     }
 
 
