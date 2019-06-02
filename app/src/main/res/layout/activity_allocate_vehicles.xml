@@ -11,7 +11,7 @@
         <!--android:gravity="center_horizontal|center_vertical"-->
         <!--android:text="待执行" />-->
 
-    <android.support.v7.widget.RecyclerView
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_allocate_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

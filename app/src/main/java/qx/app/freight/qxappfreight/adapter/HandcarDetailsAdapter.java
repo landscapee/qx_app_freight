@@ -36,7 +36,7 @@ public class HandcarDetailsAdapter extends BaseQuickAdapter<FtGroupScooter, Base
         helper.setText(R.id.tv_waybill_count,item.getNumber()+"");
         helper.setText(R.id.tv_weight,item.getWeight()+"");
         ImageView imgDelete = helper.getView(R.id.iv_delete);
-
+        //不是本航班
         if (item.getInFlight()!=null && item.getInFlight() == 1){
             helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.red));
             helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.red));
@@ -44,7 +44,7 @@ public class HandcarDetailsAdapter extends BaseQuickAdapter<FtGroupScooter, Base
             helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.red));
             imgDelete.setImageResource(R.mipmap.delete);
 
-        }
+        }//不是本航段的
         else if(item.getInFlightCourse()!=null && item.getInFlightCourse() == 0){
             helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.yellow));
             helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.yellow));

@@ -9,4 +9,5 @@ import lombok.Data;
 @Data
 public class GetScooterListInfoEntity {
     private String flightId;
+    private String taskId;
 }

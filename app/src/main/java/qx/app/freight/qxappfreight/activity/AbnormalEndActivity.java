@@ -372,7 +372,8 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     public void getAllRemoteAreaResult(List<GetAllRemoteAreaBean> getAllRemoteAreaBean) {
         if (null !=getAllRemoteAreaBean){
             for (int i = 0; i < getAllRemoteAreaBean.size(); i++) {
-                mAbnormalList.add(getAllRemoteAreaBean.get(i).getAreaId());
+                if (Constants.WAIT_AREA == getAllRemoteAreaBean.get(i).getAreaType() || Constants.TEMP_AREA == getAllRemoteAreaBean.get(i).getAreaType())
+                        mAbnormalList.add(getAllRemoteAreaBean.get(i).getAreaId());
             }
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,R.layout.item_spinner_general, mAbnormalList);
             mAbnormalSpinner.setAdapter(spinnerAdapter);

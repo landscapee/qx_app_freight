@@ -242,7 +242,7 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> getAirWaybillPrefix(@Query("iata") String iata);
 
     //组板提交
-    @POST("service-product-cargotallying/fightScooter/submit")
+    @POST("service-product-cargotallying/fightScooter/submit2")
     Observable<BaseEntity<Object>> fightScooterSubmit(@Body FightScooterSubmitEntity model);
 
     //理货退回到预配 -- guohao
@@ -254,7 +254,7 @@ public interface HttpApi {
     Observable<BaseEntity<AddScooterBean>> addScooter();
 
     //数据获取(获取该航班的板车/板车的收运记录/无板收运记录)
-    @POST("service-product-cargotallying/fightScooter/listByFightId")
+    @POST("service-product-cargotallying/fightScooter/getTodoScooters")
     Observable<BaseEntity<GetScooterListInfoBean>> getScooterListInfo(@Body GetScooterListInfoEntity getScooterListInfoEntity);
 
     /***********************复重*****************************/

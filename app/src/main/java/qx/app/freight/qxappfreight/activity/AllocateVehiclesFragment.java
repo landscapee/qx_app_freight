@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
+import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
@@ -35,7 +36,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  */
 public class AllocateVehiclesFragment extends BaseFragment implements GetInfosByFlightIdContract.getInfosByFlightIdView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_allocate_list)
-    RecyclerView mMfrvAllocateList;
+    MultiFunctionRecylerView mMfrvAllocateList;
 
     private AllocateVehiclesAdapter adapter;
 
@@ -62,6 +63,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMfrvAllocateList.setOnRetryLisenter(this);
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入板车号", text -> {
             searchString = text;
@@ -82,7 +84,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
                 }
             }
         }
-        adapter.notifyDataSetChanged();
+        mMfrvAllocateList.notifyForAdapter(adapter);
     }
 
     private void initData() {
@@ -120,7 +122,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             getData();
             dismissProgessDialog();
