@@ -131,30 +131,16 @@ public class GpsNetworkUtils {
         if (telephonyManager == null) {
             telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         }
-        int type = telephonyManager.getNetworkType();
+        int type = telephonyManager.getPhoneType();
         //判断权限
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e("GPS", "Permission Denied: ACCESS_FINE_LOCATION");
             return false;
         }
         //需要判断网络类型，因为获取数据的方法不一样
-        if (
-            //电信cdma网
-                type == TelephonyManager.NETWORK_TYPE_CDMA
-                        || type == TelephonyManager.NETWORK_TYPE_1xRTT
-                        || type == TelephonyManager.NETWORK_TYPE_EVDO_0
-                        || type == TelephonyManager.NETWORK_TYPE_EVDO_A
-                        || type == TelephonyManager.NETWORK_TYPE_EVDO_B
-                        // 移动和联通GSM网
-                        || type == TelephonyManager.NETWORK_TYPE_GPRS
-                        || type == TelephonyManager.NETWORK_TYPE_EDGE
-                        || type == TelephonyManager.NETWORK_TYPE_HSDPA
-                        || type == TelephonyManager.NETWORK_TYPE_UMTS
-                        || type == TelephonyManager.NETWORK_TYPE_LTE) {
+        //电信cdma网 || 移动和联通GSM网
+        if (type == TelephonyManager.PHONE_TYPE_CDMA || type == TelephonyManager.PHONE_TYPE_GSM) {
             return true;
-        } else if (type == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
-            Log.e("GPS", "电话卡不可用");
-            return false;
         } else {
             Log.e("GPS", "Network Unable");
             return false;
