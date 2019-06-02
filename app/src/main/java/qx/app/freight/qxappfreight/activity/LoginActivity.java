@@ -147,6 +147,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .show();
     }
 
+    /**
+     *  组装登录参数
+     * @return
+     */
     private LoginEntity getLoginEntity() {
         LoginEntity mLoginEntity = new LoginEntity();
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
@@ -178,7 +182,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             }
             UserInfoSingle.setUser(loginBean);
             toMainAct();
-//            loginTpPC(loginBean);
+            loginTpPC(loginBean);
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
@@ -200,7 +204,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void getPhoneParametersResult(String result) {
         if (!"".equals(result)){
-            toMainAct();
+//            toMainAct();
+            Log.e("通知运输监控已登录",result);
         }
 
     }
