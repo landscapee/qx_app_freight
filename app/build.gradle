@@ -20,7 +20,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1   //app根据此数字进行版本自动迭代
-        versionName "1.0"
+        versionName "1.0_190602"
 
         javaCompileOptions {
             annotationProcessorOptions {

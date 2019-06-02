@@ -231,13 +231,13 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (transportListBeans != null) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
             //未分页
-            list1.clear();
+
             if (pageCurrent == 1) {
 //                list.clear();
+                list1.clear();
                 mMfrvData.finishRefresh();
             }
             else{
-
                 mMfrvData.finishLoadMore();
             }
             list1.addAll(transportListBeans.getRecords());
