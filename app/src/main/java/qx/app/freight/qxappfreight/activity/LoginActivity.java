@@ -361,23 +361,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * 弹出下载提示框
      */
     private void showAppUpdateDialog() {
-        CommonDialog dialog = new CommonDialog(this);
-        dialog.setTitle("版本更新")
-                .setMessage("这个是提示内容")
-                .setNegativeButton("立即更新")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(false)
-                .setOnClickListener(new CommonDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog, boolean confirm) {
-                        if (confirm) {
-                            ToastUtil.showToast("点击了左边的按钮");
-                        } else {
-                            ToastUtil.showToast("点击了右边的按钮");
-                        }
-                    }
-                })
-                .show();
+//        CommonDialog dialog = new CommonDialog(this);
+//        dialog.setTitle("版本更新")
+//                .setMessage("这个是提示内容")
+//                .setNegativeButton("立即更新")
+//                .isCanceledOnTouchOutside(false)
+//                .isCanceled(false)
+//                .setOnClickListener(new CommonDialog.OnClickListener() {
+//                    @Override
+//                    public void onClick(Dialog dialog, boolean confirm) {
+//                        if (confirm) {
+//                            ToastUtil.showToast("点击了左边的按钮");
+//                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+//                        }
+//                    }
+//                })
+//                .show();
 
 
         final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
