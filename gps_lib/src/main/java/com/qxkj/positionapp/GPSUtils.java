@@ -7,6 +7,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qxkj.positionapp.observer.LocationObservable;
 import com.qxkj.positionapp.observer.MyLocation;
 
@@ -25,6 +27,8 @@ import java.util.List;
  */
 
 public class GPSUtils {
+
+    static final String SharePreferenceKey = "GPS";
 
     /**
      * 单例
@@ -204,6 +208,16 @@ public class GPSUtils {
      */
     public boolean isRegister(LocationObservable observable) {
         return obableList.contains(observable);
+    }
+
+    public void saveLoction(Context context, LocationEntity entity){
+        SharedPreferencesUtil.setString(context, SharePreferenceKey, entity.toString());
+    }
+
+    public LocationEntity getLocation(Context context){
+        String locationStr = SharedPreferencesUtil.getString(context, SharePreferenceKey, "");
+        LocationEntity entity = new Gson().fromJson(locationStr, LocationEntity.class);
+        return entity;
     }
 
 

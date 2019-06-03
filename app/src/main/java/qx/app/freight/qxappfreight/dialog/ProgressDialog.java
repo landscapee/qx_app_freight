@@ -35,14 +35,15 @@ public class ProgressDialog extends DialogFragment {
     private void initViews() {
         msgTv = convertView.findViewById(R.id.dialog_tv_msg);
         pb = convertView.findViewById(R.id.dialog_pb);
-        msgTv.setOnClickListener(v -> {
-            super.dismiss();
-            onDismissListener.refreshUI(false);
-        });
-        pb.setOnClickListener(v -> {
-            super.dismiss();
-            onDismissListener.refreshUI(true);
-        });
+
+//        msgTv.setOnClickListener(v -> {
+//            super.dismiss();
+//            onDismissListener.refreshUI(false);
+//        });
+//        pb.setOnClickListener(v -> {
+//            super.dismiss();
+//            onDismissListener.refreshUI(true);
+//        });
     }
 
     @NonNull
@@ -72,7 +73,11 @@ public class ProgressDialog extends DialogFragment {
     }
 
     public void setProgress(int progress){
-        pb.setProgress(progress);
-        msgTv.setText("下载中：" + progress + "%");
+        if(pb != null){
+            pb.setProgress(progress);
+        }
+        if(msgTv != null){
+            msgTv.setText("下载中：" + progress + "%");
+        }
     }
 }
