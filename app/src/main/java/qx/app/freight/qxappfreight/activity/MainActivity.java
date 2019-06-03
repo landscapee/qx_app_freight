@@ -103,7 +103,9 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 
 
     private void initServices() {
+        //开启定位服务
         GPSService.startGPSService(this);
+
 //        GetIdUtil.getSingleInstance().register(this);
         //根据登录返回的
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");

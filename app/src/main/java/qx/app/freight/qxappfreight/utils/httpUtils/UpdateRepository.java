@@ -43,6 +43,8 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
@@ -141,6 +143,22 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<AgentBean> agentTransportationList(BaseFilterEntity param) {
         return transform(getService().agentTransportationList(param));
+    }
+
+    /*****
+     * @param
+     * @return
+     */
+    public Observable<DeclareApplyForRecords> changeStorageList(BaseFilterEntity param) {
+        return transform(getService().changeStorageList(param));
+    }
+    /*****
+     * 存储变更
+     * @param
+     * @return
+     */
+    public Observable<String> changeStorage(ChangeStorageBean param) {
+        return nothingtransform(getService().changeStorage(param));
     }
 
     /***

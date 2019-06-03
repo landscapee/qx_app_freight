@@ -34,8 +34,6 @@ public class MyApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
-        GPSService.startGPSService(this);
-
         Log.e("Application：运行模式>>>", BuildConfig.Model);
 
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
