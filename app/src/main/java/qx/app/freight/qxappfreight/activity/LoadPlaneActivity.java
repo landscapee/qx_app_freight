@@ -17,12 +17,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -78,7 +74,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        PushDataUtil.handlePushInfo(result,mCurrentTaskId,this);
+        PushDataUtil.handlePushInfo(result, mCurrentTaskId, this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -172,14 +168,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightId(mCurrentFlightId);
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         mTvPullGoodsReport.setOnClickListener(v -> {
-            if (mLoadingList.size() == 0) {
-                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
-            } else {
-                Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
-                intent.putExtra("plane_info", data);
-                intent.putExtra("loading_list_data", mLoadingList.get(0));
-                LoadPlaneActivity.this.startActivity(intent);
-            }
+            Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
+            intent.putExtra("plane_info", data);
+            intent.putExtra("id", data.getId());
+            LoadPlaneActivity.this.startActivity(intent);
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);

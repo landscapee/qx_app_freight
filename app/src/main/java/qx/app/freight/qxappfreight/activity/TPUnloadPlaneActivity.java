@@ -33,20 +33,25 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
+import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
+import qx.app.freight.qxappfreight.contract.GetUnLoadListBillContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
+import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
+import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
@@ -62,7 +67,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, ScanScooterContract.scanScooterView  {
+public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView  {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -105,7 +110,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     TextView mTvEndUnload;//结束卸机
     @BindView(R.id.iv_notice_tp)
     ImageView ivNoticeTp;
-
+    @BindView(R.id.tv_look_unload_bill_info)
+    TextView mTvUnloadBillInfo;//显示卸机单数据
 
     private boolean mIsScanGoods = true;
     private List<ScooterInfoListBean> mListGoods = new ArrayList<>();
@@ -233,6 +239,13 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
             noticeTp();
 
+        });
+        mTvUnloadBillInfo.setOnClickListener(v -> {
+            mPresenter = new GetUnLoadListBillPresenter(this);
+            UnLoadRequestEntity entity = new UnLoadRequestEntity();
+            entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
+            entity.setFlightId(mOutFieldTaskBean.getFlightId());
+            ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
         });
         setListeners();
     }
@@ -569,5 +582,19 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     @Override
     public void scooterWithUserResult(List <TransportTodoListBean> result) {
 
+    }
+
+    @Override
+    public void getUnLoadingListResult(UnLoadListBillBean result) {
+        if (result != null) {
+            if (result.getData() != null) {
+                List<UnLoadListBillBean.DataBean.ContentObjectBean> list = result.getData().getContentObject();
+                UnloadBillInfoDialog unloadBillInfoDialog = new UnloadBillInfoDialog();
+                unloadBillInfoDialog.setData(list, this);
+                unloadBillInfoDialog.show(getSupportFragmentManager(), "unload_bill");
+            } else {
+                ToastUtil.showToast(result.getMessage());
+            }
+        }
     }
 }
