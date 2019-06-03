@@ -77,21 +77,12 @@ public class DownloadUtils {
 
             @Override
             public void onResponse(Call call, Response response) {
-                Log.e("dimexx", Thread.currentThread().getName());
-//                Log.e("dime", "下载Total=" + response.body().contentLength());
-//                Toast.makeText(context, "开始下载了", Toast.LENGTH_LONG).show();
-                ((AppCompatActivity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "开始下载了!!!!!!!!", Toast.LENGTH_LONG).show();
-                    }
-                });
-                showDialogInstall();
                 long total = response.body().contentLength();
                 FileOutputStream fos = null;
                 InputStream inputStream = null;
-                progressDialog = new ProgressDialog();
 
+                //进度条对话框
+                progressDialog = new ProgressDialog();
                 progressDialog.setData(context, new ProgressDialog.OnDismissListener() {
                     @Override
                     public void refreshUI(boolean isLocal) {
@@ -101,6 +92,7 @@ public class DownloadUtils {
                     }
                 });
                 progressDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "download");
+
                 try {
                     fos = new FileOutputStream(file);
                     byte[] bytes = new byte[1024];

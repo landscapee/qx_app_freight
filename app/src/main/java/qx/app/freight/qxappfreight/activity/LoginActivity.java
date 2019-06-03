@@ -76,7 +76,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        Log.e("dimelog", Thread.currentThread().getName());
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
