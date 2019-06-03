@@ -145,7 +145,6 @@ public class TomorrowFragment extends BaseFragment implements FlightdynamicContr
             simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
             simplePagerTitleView.setOnClickListener(v -> {
                 viewPager.setCurrentItem(index);
-                ToastUtil.showToast("明天" + index + "");
             });
 
             return simplePagerTitleView;

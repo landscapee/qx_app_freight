@@ -149,7 +149,6 @@ public class TodayFragment extends BaseFragment implements FlightdynamicContract
             simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
             simplePagerTitleView.setOnClickListener(v -> {
                 viewPager.setCurrentItem(index);
-                ToastUtil.showToast("今天" + index + "");
             });
 
             return simplePagerTitleView;

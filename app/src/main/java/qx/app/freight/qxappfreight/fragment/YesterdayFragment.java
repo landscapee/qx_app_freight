@@ -150,7 +150,6 @@ public class YesterdayFragment extends BaseFragment implements FlightdynamicCont
             simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
             simplePagerTitleView.setOnClickListener(v -> {
                 viewPager.setCurrentItem(index);
-                ToastUtil.showToast("昨天"+index + "");
             });
 
             return simplePagerTitleView;
