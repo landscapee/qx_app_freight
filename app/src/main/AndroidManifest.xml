@@ -160,6 +160,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AllocaaateScanActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SubPackageWaybillActivity"
