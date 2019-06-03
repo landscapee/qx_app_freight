@@ -233,8 +233,9 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         if (transportListBeans != null) {
             //未分页
-            mCacheList.clear();
+
             if (pageCurrent == 1) {
+                mCacheList.clear();
 //                list.clear();
                 mMfrvData.finishRefresh();
             } else {
