@@ -86,7 +86,6 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private String mCurrentTaskId;
     private List<String> mTpScooterCodeList = new ArrayList<>();
     private TransportTodoListBean mNewBillBean;
-    private LoadingListBean.DataBean mModel;
     private String mWaybillCode;
     private Map<String, GetWaybillInfoByIdDataBean.DataMainBean> mCodeMap = new HashMap<>();
     private LoadAndUnloadTodoBean mData;
@@ -181,7 +180,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 if (infoFull) {
                     mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
                     ExceptionReportEntity entity = new ExceptionReportEntity();
-                    entity.setLoadingListId(mModel.getId());
+                    entity.setLoadingListId(getIntent().getStringExtra("id"));
                     entity.setFlightId(Long.valueOf(mData.getFlightId()));
                     entity.setFlightNum(mData.getFlightNo());
                     entity.setReType(3);
@@ -413,14 +412,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mNewBillBean.setTpFlightNumber(mData.getFlightNo());
             mNewBillBean.setTpFlightLocate(mData.getSeat());
             mNewBillBean.setTpFlightTime(mData.getScheduleTime());
-            String berth = "";
-            mModel = (LoadingListBean.DataBean) getIntent().getSerializableExtra("loading_list_data");
-            for (LoadingListBean.DataBean.ContentObjectBean data : mModel.getContentObject()) {
-                if (data.getTailer().equals(entity.getScooterCode())) {
-                    berth = data.getPos();
-                }
-            }
-            mNewBillBean.setTpFregihtSpace(berth);
+            mNewBillBean.setTpFregihtSpace("");
             mNewBillBean.setMaxBillWeight(Double.valueOf(entity.getScooterWeight()));
             ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity_scan_waybill", "当前航班：" + mData.getFlightNo());
         } else {
