@@ -3,45 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#EFF2F3"
+    android:orientation="vertical"
     tools:context=".activity.StoreTypeChangeActivity">
 
     <LinearLayout
-        android:gravity="center"
-        android:background="@color/white"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="90dp">
+        android:layout_height="90dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/tv_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="运单号：011-78912345"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
             android:background="@drawable/shape_rect_blue_b3d1fb"
+            android:paddingLeft="35dp"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingRight="35dp"
+            android:paddingBottom="@dimen/dp_8"
+            android:text="运单号：011-78912345"
             android:textColor="#ff136bef"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="货物"
             android:layout_marginTop="6dp"
+            android:text="货物"
             android:textColor="#ff888888"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:background="@color/white"
-        android:layout_marginTop="@dimen/dp_7"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_marginTop="@dimen/dp_7"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
@@ -51,112 +51,160 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="旧存储类型"
-            style="@style/public_tv_16sp"/>
+            android:textColor="#136BEF"
+            android:textSize="16sp" />
+
         <LinearLayout
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tv_old_type"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                style="@style/public_tv_16sp" />
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:src="@mipmap/drop_select"
-                android:layout_width="@dimen/dp_15"
-                android:layout_height="@dimen/dp_15" />
+                android:textColor="#136BEF"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:background="@color/white"
-        android:layout_marginTop="@dimen/dp_7"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_marginTop="@dimen/dp_7"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
         <TextView
+            style="@style/public_tv_16sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="新存储类型"
-            style="@style/public_tv_16sp"/>
+            android:text="新存储类型" />
+
         <LinearLayout
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:id="@+id/ll_storage_type"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tv_type"
+                style="@style/public_tv_16sp"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                android:spinnerMode="dropdown"
-                style="@style/public_tv_16sp" />
+                android:spinnerMode="dropdown" />
+
             <ImageView
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_15"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:src="@mipmap/drop_select"
-                android:layout_width="@dimen/dp_15"
-                android:layout_height="@dimen/dp_15" />
+                android:src="@mipmap/drop_select" />
         </LinearLayout>
     </LinearLayout>
 
     <View style="@style/line_horizontal_979797" />
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
         <TextView
+            style="@style/public_tv_16sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="存储库区"
-            style="@style/public_tv_16sp"/>
+            android:text="存储库区" />
+
         <LinearLayout
-            android:layout_marginStart="10dp"
             android:id="@+id/ll_baozhuang"
-            android:orientation="horizontal"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/tv_baozhuang"
+                android:id="@+id/tv_storage"
+                style="@style/public_tv_16sp"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                android:spinnerMode="dropdown"
-                style="@style/public_tv_16sp" />
+                android:spinnerMode="dropdown" />
+
             <ImageView
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_15"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:src="@mipmap/drop_select"
-                android:layout_width="@dimen/dp_15"
-                android:layout_height="@dimen/dp_15" />
+                android:src="@mipmap/drop_select" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="冷藏温度" />
+
+        <LinearLayout
+            android:id="@+id/ll_lengcang"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_lengcang"
+                style="@style/public_tv_16sp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_15"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/drop_select" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#FFEFF2F3"/>
+        android:layout_weight="1"
+        android:background="#FFEFF2F3" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -171,26 +219,26 @@
             android:id="@+id/btn_refuse"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/dp_5"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_black"
             android:text="拒绝申请"
-            android:layout_gravity="left"
-            android:textColor="@color/black"
-            android:layout_marginRight="@dimen/dp_5"/>
+            android:textColor="@color/black" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.01"/>
+            android:layout_weight="0.01" />
 
         <Button
             android:id="@+id/btn_accept"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="right"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_blue"
             android:text="接受申请"
-            android:layout_gravity="right"
             android:textColor="@color/white" />
     </LinearLayout>
 

@@ -16,19 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
-import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
-import static qx.app.freight.qxappfreight.app.MyApplication.getContext;
-
 /**
  * 货品列表页adapter
- *
  */
 public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseViewHolder> {
     public MainListRvAdapter(List<TransportDataBase> mDatas) {
@@ -48,12 +42,12 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
 
         TextView tvStatusName = helper.getView(R.id.tv_step_name);
         ImageView ivFlag = helper.getView(R.id.iv_flag);
-        TextView  tvOldWayBillCode = helper.getView(R.id.tv_old_waybill_code);
+        TextView tvOldWayBillCode = helper.getView(R.id.tv_old_waybill_code);
 
         tvOldWayBillCode.setVisibility(View.GONE);
         helper.getView(R.id.ll_collection).setVisibility(View.VISIBLE);
         ivFlag.setVisibility(View.GONE);
-        switch (item.getTaskTypeCode()){
+        switch (item.getTaskTypeCode()) {
             case "changeApply":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 tvStatusName.setText("换单审核");
@@ -79,30 +73,38 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
             case "receive":
                 helper.getView(R.id.ll_collection).setVisibility(View.GONE);
                 break;
+            case "reReceive":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setText("补单收验");
+                break;
+            case "changeCollection":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.red));
+                tvStatusName.setText("存储变更");
+                break;
         }
 
 
         String coldStr = "";
-       switch (item.getColdStorage()){
-           case "0":
-               coldStr = "普通  ";
-               break;
-           case "1":
-               coldStr = "贵重  ";
-               break;
-           case "2":
-               coldStr = "危险  ";
-               break;
-           case "3":
-               coldStr = "活体  ";
-               break;
-           case "4":
-               coldStr = "冷藏 | "+ item.getRefrigeratedTemperature()+"℃  ";
-               break;
-       }
-       if (item.getSpecialCargoCode() != null && !"".equals(item.getSpecialCargoCode())){
-           coldStr = coldStr + "特货"+item.getSpecialCargoCode();
-       }
+        switch (item.getColdStorage()) {
+            case "0":
+                coldStr = "普通  ";
+                break;
+            case "1":
+                coldStr = "贵重  ";
+                break;
+            case "2":
+                coldStr = "危险  ";
+                break;
+            case "3":
+                coldStr = "活体  ";
+                break;
+            case "4":
+                coldStr = "冷藏 | " + item.getRefrigeratedTemperature() + "℃  ";
+                break;
+        }
+        if (item.getSpecialCargoCode() != null && !"".equals(item.getSpecialCargoCode())) {
+            coldStr = coldStr + "特货" + item.getSpecialCargoCode();
+        }
         helper.setText(R.id.tv_store_info, coldStr);
 
 //        helper.setText(R.id.tv_store_info, String.format(mContext.getString(R.string.format_store_info),item.getColdStorage().equals("0") ? "不冷藏" : "冷藏", 10, 321));
@@ -113,9 +115,9 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
         //航班号
         helper.setText(R.id.tv_flight_number, item.getFlightNumber());
         //航班预计起飞时间
-        helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info),TimeUtils.date2Tasktime3(item.getFlightDate()) , TimeUtils.getDay(item.getFlightDate())));
+        helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getFlightDate()), TimeUtils.getDay(item.getFlightDate())));
         //航空公司-代理公司
-        helper.setText(R.id.tv_company_info, String.format(mContext.getString(R.string.format_company_info),item.getFlightName(), item.getFreightName()));
+        helper.setText(R.id.tv_company_info, String.format(mContext.getString(R.string.format_company_info), item.getFlightName(), item.getFreightName()));
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
         RecyclerView rvDetail = helper.getView(R.id.rv_detail_list);
         rvDetail.setLayoutManager(manager);

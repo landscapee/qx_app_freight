@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
 import qx.app.freight.qxappfreight.activity.DeliveryVerifyActivity;
 import qx.app.freight.qxappfreight.activity.ReturnGoodsActivity;
+import qx.app.freight.qxappfreight.activity.StoreTypeChangeActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -130,6 +131,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 break;
             case "RR_collectReturn"://出港退货
                 ReturnGoodsActivity.startActivity(getActivity(), bean);
+                break;
+
+            case "changeCollection": //存储变更
+                StoreTypeChangeActivity.startActivity(getActivity(),bean);
                 break;
         }
     }

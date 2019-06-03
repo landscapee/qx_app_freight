@@ -42,6 +42,8 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
@@ -172,6 +174,14 @@ public interface HttpApi {
     //出港收货 -收运
     @POST("service-product-receivecargo/rc/list")
     Observable<BaseEntity<AgentBean>> agentTransportationList(@Body BaseFilterEntity model);
+
+    //出港收货 -收运
+    @POST("service-product-receivecargo/rc/list")
+    Observable<BaseEntity<DeclareApplyForRecords>> changeStorageList(@Body BaseFilterEntity model);
+
+    //存储变更 -收运
+    @POST("service-product-receivecargo/rc/changeStorage")
+    Observable<BaseEntity<Object>> changeStorage(@Body ChangeStorageBean model);
 
     //查询集装箱列表信息
     @POST("service-base-sysmanage/uld/list")
