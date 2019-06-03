@@ -27,7 +27,7 @@ public class UpdateVersionBean {
     /**
      * 更新时间
      */
-    private long updateTime;
+//    private long updateTime;
     /**
      * 是否强制更新 0：否 1：是
      */

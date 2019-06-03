@@ -79,6 +79,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
+import qx.app.freight.qxappfreight.model.UpdateVersionBean2;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -533,7 +534,7 @@ public interface HttpApi {
 
     //版本更新检测
     @POST("app/scheduling/findVersionUpdate")
-    Call<UpdateVersionBean> updateVersion(@Query("deviceType") String deviceType);
+    Call<UpdateVersionBean2> updateVersion(@Query("deviceType") String deviceType);
 
     /**
      * 获取库区接口

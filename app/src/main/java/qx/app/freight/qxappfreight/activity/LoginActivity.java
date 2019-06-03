@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
 import qx.app.freight.qxappfreight.http.HttpApi;
+import qx.app.freight.qxappfreight.model.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
@@ -67,7 +68,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     EditText mEtPassWord;
     @BindView(R.id.et_username)
     EditText mEtUserName;
-    private UpdateVersionBean mVersionBean;
+    private UpdateVersionBean2 mVersionBean;
 
     @Override
     public int getLayoutId() {
@@ -132,11 +133,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         HttpApi httpService = retrofit.create(HttpApi.class);
-        Call<UpdateVersionBean> call = httpService.updateVersion("newPhone2");
-        call.enqueue(new Callback<UpdateVersionBean>() {
+        Call<UpdateVersionBean2> call = httpService.updateVersion("newPhone2");
+        call.enqueue(new Callback<UpdateVersionBean2>() {
             @Override
-            public void onResponse(Call<UpdateVersionBean> call, Response<UpdateVersionBean> response) {
-                UpdateVersionBean updataBean = response.body();
+            public void onResponse(Call<UpdateVersionBean2> call, Response<UpdateVersionBean2> response) {
+                UpdateVersionBean2 updataBean = response.body();
                 if (updataBean == null) {
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
@@ -147,13 +148,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 if (appInfo != null) {
                     versionCode = appInfo.versionCode;
                 }
-                if (versionCode != mVersionBean.getIsCurrentVersion()) {
+                if (versionCode != mVersionBean.getData().getVersionCodeRS()) {
                     showAppUpdateDialog();
                 }
             }
 
             @Override
-            public void onFailure(Call<UpdateVersionBean> call, Throwable t) {
+            public void onFailure(Call<UpdateVersionBean2> call, Throwable t) {
                 Log.e("tagUpdate", "更新版本出错");
             }
         });
@@ -341,32 +342,51 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void updateVersionResult(UpdateVersionBean updataBean) {
-        if (updataBean == null) {
-            ToastUtil.showToast("获取应用更新信息失败");
-            return;
-        }
-        mVersionBean = updataBean;
-        PackageInfo appInfo = AppUtil.getPackageInfo(this);
-        int versionCode = 0;
-        if (appInfo != null) {
-            versionCode = appInfo.versionCode;
-        }
-        if (versionCode < mVersionBean.getIsCurrentVersion()) {
-            showAppUpdateDialog();
-        }
+//        if (updataBean == null) {
+//            ToastUtil.showToast("获取应用更新信息失败");
+//            return;
+//        }
+//        mVersionBean = updataBean;
+//        PackageInfo appInfo = AppUtil.getPackageInfo(this);
+//        int versionCode = 0;
+//        if (appInfo != null) {
+//            versionCode = appInfo.versionCode;
+//        }
+//        if (versionCode < mVersionBean.getIsCurrentVersion()) {
+//            showAppUpdateDialog();
+//        }
     }
 
     /**
      * 弹出下载提示框
      */
     private void showAppUpdateDialog() {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle("版本更新")
+                .setMessage("这个是提示内容")
+                .setNegativeButton("立即更新")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(false)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            ToastUtil.showToast("点击了左边的按钮");
+                        } else {
+                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+
+
         final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
         appUpdateDailog.setAppUpdateDialogData(mVersionBean,
                 new AppUpdateDailog.AppUpdateLinstener() {
                     @Override
                     public void sure() {
                         // 下载app
-                        if (mVersionBean.getDownloadPath() == null || mVersionBean.getDownloadPath().length() == 0) {
+                        if (mVersionBean.getData().getDownloadUrl() == null || mVersionBean.getData().getDownloadUrl().length() == 0) {
                             ToastUtil.showToast("下载地址获取有误");
                         } else {
                             downLoadFile(mVersionBean);
@@ -385,12 +405,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     /**
      * 下载apk
      */
-    public void downLoadFile(UpdateVersionBean version) {
+    public void downLoadFile(UpdateVersionBean2 version) {
         ToastUtil.showToast("程序更新中...");
-        String wholeUrl = version.getDownloadPath();
+        String wholeUrl = version.getData().getDownloadUrl();
         String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
         String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
-        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getVersionCode() + ".apk", Tools.getFilePath());
+        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getData().getVersionCode() + ".apk", Tools.getFilePath());
     }
 
 

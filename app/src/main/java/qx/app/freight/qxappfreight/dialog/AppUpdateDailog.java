@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
+import qx.app.freight.qxappfreight.model.UpdateVersionBean2;
 
 /*
  * 版本更新dialog
@@ -56,10 +57,10 @@ public class AppUpdateDailog extends Dialog implements
         void sure();
     }
 
-    public void setAppUpdateDialogData(UpdateVersionBean appVersion, AppUpdateLinstener appUpdateLinstener) {
+    public void setAppUpdateDialogData(UpdateVersionBean2 appVersion, AppUpdateLinstener appUpdateLinstener) {
         try {
-            vtime.setText(appVersion.getVersionCode());
-            vContent.setText(appVersion.getUpdateMsg());
+            vtime.setText(appVersion.getData().getVersionCode());
+            vContent.setText(appVersion.getData().getUpdateMsg());
         } catch (Exception e) {
             e.printStackTrace();
         }
