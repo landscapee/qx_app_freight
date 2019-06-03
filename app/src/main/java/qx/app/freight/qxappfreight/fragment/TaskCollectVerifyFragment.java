@@ -52,12 +52,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     private int pageCurrent = 1;
 
-    private List<TransportDataBase> transportListList1;
-    private List<TransportDataBase> transportListList;
+    private List<TransportDataBase> transportListList1 = new ArrayList<>();
+    private List<TransportDataBase> transportListList = new ArrayList<>();
     private String seachString = "";
-    TaskFragment fragment;
+    private TaskFragment fragment;
 
     private TransportDataBase mBean;
+
 
     @Nullable
     @Override
@@ -70,6 +71,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fragment = (TaskFragment) getParentFragment();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -81,7 +83,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             seachString = text;
             seachWith();
         });
-        fragment = (TaskFragment) getParentFragment();
         initData();
     }
 
@@ -96,15 +97,15 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 }
             }
         }
-        if (fragment != null) {
-            fragment.setTitleText(transportListList1.size());
-        }
+//        if (fragment != null) {
+//            fragment.setTitleText(transportListList1.size());
+//        }
         mMfrvData.notifyForAdapter(adapter);
     }
 
     private void initData() {
-        transportListList = new ArrayList<>();
-        transportListList1 = new ArrayList<>();
+//        transportListList = new ArrayList<>();
+//        transportListList1 = new ArrayList<>();
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -120,8 +121,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        for (LoginResponseBean.RoleRSBean mRoleRSBean:UserInfoSingle.getInstance().getRoleRS()){
-            if (Constants.RECEIVE.equals(mRoleRSBean.getRoleCode())){
+        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
+            if (Constants.RECEIVE.equals(mRoleRSBean.getRoleCode())) {
                 tempBean.setRole(mRoleRSBean.getRoleCode());
             }
         }
@@ -237,10 +238,23 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 mMfrvData.finishLoadMore();
             }
             transportListList1.addAll(transportListBean.getRecords());
+            if (fragment != null) {
+                fragment.setTitleText(transportListList1.size());
+            }
             seachWith();
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (fragment != null)
+                fragment.setTitleText(transportListList1.size());
+        }
+
     }
 
     @Override
@@ -253,12 +267,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                         , result.getDeclareWaybillAddition().getAddtionInvoices()
                         , mBean.getTaskId()
                         , result.getDeclareWaybillAddition().getWaybillId()
-                        , result.getSpotFlag()+""
+                        , result.getSpotFlag() + ""
                         , result.getFlightNumber()
                         , result.getShipperCompanyId()
                         , mBean.getWaybillCode()
-                        ,mBean.getId()
-                        ,result.getAdditionTypeArr()
+                        , mBean.getId()
+                        , result.getAdditionTypeArr()
                 );
             }
         } else {

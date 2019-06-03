@@ -88,6 +88,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
     private MyAgentListBean mList;
     private int tag;
+    private String wayBillId;
+    private String taskTypeCode;
 
     /**
      * @param context
@@ -95,12 +97,14 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
      * @param waybillCode //     * @param declareItemBean  品名列表 已取消
      * @param cargoCn     品名以逗号隔开
      */
-    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag) {
+    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag,String wayBillId,String taskTypeCode) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
 //        starter.putExtra("mScooterCode", mScooterCode);
         starter.putExtra("waybillCode", waybillCode);
         starter.putExtra("cargoCn", cargoCn);
+        starter.putExtra("wayBillId", wayBillId);
+        starter.putExtra("taskTypeCode", taskTypeCode);
         starter.putExtra("tag", tag);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("MyAgentListBean", (Serializable) declareItem);
@@ -150,6 +154,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mTvInfo.setText(Html.fromHtml(content));
         mMyAgentListBean = new MyAgentListBean();
         waybillId = getIntent().getStringExtra("waybillId");
+        wayBillId = getIntent().getStringExtra("wayBillId");
+        taskTypeCode = getIntent().getStringExtra("taskTypeCode");
 //        mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         cargoCn = getIntent().getStringExtra("cargoCn");
@@ -221,6 +227,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setId("");
         //运单id
         mMyAgentListBean.setWaybillId(waybillId);
+        //
+        mMyAgentListBean.setTaskTypeCode(taskTypeCode);
+
+        mMyAgentListBean.setAddOrderId(wayBillId);
 
         mMyAgentListBean.setWaybillCode(waybillCode);
         //品名

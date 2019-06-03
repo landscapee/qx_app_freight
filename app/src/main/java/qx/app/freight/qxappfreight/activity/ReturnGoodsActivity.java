@@ -28,7 +28,7 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
 import qx.app.freight.qxappfreight.contract.ReturnCargoCommitContract;
 import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
@@ -50,6 +50,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     private TransportDataBase mBean;
     private List<MyAgentListBean> list;
     private CustomToolbar toolbar;
+    private int pageCurrent = 1;
 
 
     public static void startActivity(Activity context, TransportDataBase mBean) {
@@ -85,8 +86,9 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(mBean.getId());
-        baseFilterEntity.setSize(10);
-        baseFilterEntity.setCurrent(1);
+        myAgentListBean.setTaskTypeCode(mBean.getTaskTypeCode());
+        baseFilterEntity.setSize(Constants.PAGE_SIZE);
+        baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
         ((AgentTransportationListPresent) mPresenter).agentTransportationList(baseFilterEntity);
         click();
@@ -146,11 +148,13 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void onRefresh() {
+        pageCurrent = 1;
         initData();
     }
 
     @Override
     public void onLoadMore() {
+        pageCurrent++;
         initData();
     }
 
@@ -165,7 +169,11 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void toastView(String error) {
-
+        if (pageCurrent == 1) {
+            mMfrvAllocateList.finishRefresh();
+        } else {
+            mMfrvAllocateList.finishLoadMore();
+        }
     }
 
     @Override
@@ -180,16 +188,21 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void agentTransportationListResult(AgentBean myAgentListBean) {
-        mMfrvAllocateList.finishRefresh();
-        mMfrvAllocateList.finishLoadMore();
-        toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + myAgentListBean.getRcInfo().size() + ")");
-        if (0 != myAgentListBean.getRcInfo().size()) {
-            list = myAgentListBean.getRcInfo();
-            adapter = new ReturnGoodAdapter(myAgentListBean.getRcInfo());
-            mMfrvAllocateList.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        } else {
-            ToastUtil.showToast("数据为空");
+        if (myAgentListBean!=null) {
+            if (pageCurrent == 1) {
+                mMfrvAllocateList.finishRefresh();
+            } else {
+                mMfrvAllocateList.finishLoadMore();
+            }
+            toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + myAgentListBean.getRcInfo().size() + ")");
+            if (0 != myAgentListBean.getRcInfo().size()) {
+                list = myAgentListBean.getRcInfo();
+                adapter = new ReturnGoodAdapter(myAgentListBean.getRcInfo());
+                mMfrvAllocateList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            } else {
+                ToastUtil.showToast("数据为空");
+            }
         }
     }
 

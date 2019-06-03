@@ -178,7 +178,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void startAct(MyAgentListBean myAgentListBean, int tag) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag);
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode);
     }
 
 
