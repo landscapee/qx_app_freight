@@ -47,7 +47,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         //逾期费用
         holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
-        holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getWarehouseArea(),"-"));
+        holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getRqName(),"-"));
 
 //                .setText(R.id.consignee,bean.getConsignee())
 //                .setText(R.id.consignee_phone,bean.getConsigneePhone())

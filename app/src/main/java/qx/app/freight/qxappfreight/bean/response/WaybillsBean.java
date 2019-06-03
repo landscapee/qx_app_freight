@@ -99,6 +99,9 @@ public class WaybillsBean {
     private long updateDate;
     private String updateUser;
     private Object errors;
+
+    private String rqName;//库区 获取储存
+
     /**
      * 已提货件数
      */

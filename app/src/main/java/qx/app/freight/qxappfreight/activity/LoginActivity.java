@@ -99,21 +99,21 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkPermissions();
         checkPermissionsForWindow();
 
-        //输入法 下载安装
-        DownloadUtils downloadUtils = new DownloadUtils(this);
-        //是否按安装输入法
-        if(!downloadUtils.isInstall()){
-            //是否已经下载
-            if(downloadUtils.isDownload()){
-                //直接安装
-                downloadUtils.showDialogInstall();
-            }else{
-                //下载
-                downloadUtils.showDialogDownload();
-            }
-        }else{
-            ToastUtil.showToast("输入法已经就位！");
-        }
+//        //输入法 下载安装
+//        DownloadUtils downloadUtils = new DownloadUtils(this);
+//        //是否按安装输入法
+//        if(!downloadUtils.isInstall()){
+//            //是否已经下载
+//            if(downloadUtils.isDownload()){
+//                //直接安装
+//                downloadUtils.showDialogInstall();
+//            }else{
+//                //下载
+//                downloadUtils.showDialogDownload();
+//            }
+//        }else{
+//            ToastUtil.showToast("输入法已经就位！");
+//        }
 
     }
 

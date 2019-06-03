@@ -10,11 +10,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryDetailAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
@@ -23,13 +25,15 @@ import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
+import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
-public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView {
+public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView , ListReservoirInfoContract.listReservoirInfoView{
 
     @BindView(R.id.r_view)
     RecyclerView rView;
@@ -58,6 +62,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     private List<WaybillsBean> mList ;
 
+    private HashMap<String,String> areas = new HashMap <>();
 
     @Override
     public int getLayoutId() {
@@ -67,10 +72,14 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         toolbar = getToolbar();
-
         setToolbarShow(View.VISIBLE);
         initView();
-        getData();
+        getAreaType();
+    }
+
+    private void getAreaType() {
+        mPresenter = new ListReservoirInfoPresenter(this);
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
     }
 
     private void initView() {
@@ -118,7 +127,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
     //根据流水单号获取列表
     private void getData() {
-
+        mPresenter = new ArrivalDeliveryInfoPresenter(this);
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setBillId(bean.getSerialNumber());
         ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
@@ -158,8 +167,12 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     @Override
     public void arrivalDeliveryInfoResult(ArrivalDeliveryInfoBean result) {
+
         mList.clear();
         mList.addAll(result.getWaybills());
+        for (WaybillsBean mWaybillsBean:mList){
+            mWaybillsBean.setRqName(areas.get(mWaybillsBean.getWarehouseArea()));
+        }
         mAdapter.notifyDataSetChanged();
         int already = 0;
         for (WaybillsBean mWaybillsBean:mList){
@@ -205,11 +218,20 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+        showProgessDialog("请求中……");
     }
 
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    @Override
+    public void listReservoirInfoResult(List <ReservoirArea> mReservoirAreas) {
+        areas.clear();
+        for (ReservoirArea mReservoirArea:mReservoirAreas){
+            areas.put(mReservoirArea.getId(),mReservoirArea.getReservoirName());
+        }
+        getData();
     }
 }

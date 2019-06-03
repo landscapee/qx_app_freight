@@ -87,7 +87,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(mAdapter);
     }
 
     @Override
