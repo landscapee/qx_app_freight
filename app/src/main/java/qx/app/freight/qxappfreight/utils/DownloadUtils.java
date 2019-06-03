@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,17 +23,32 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.dialog.ProgressDialog;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 public class DownloadUtils {
 
-    final String DownloadUrl = "https://raw.githubusercontent.com/dimoge/test/master/WiInput_sign.apk";
+    /**
+     * 输入法下载地址
+     */
+    final String DownloadUrl = BuildConfig.INPUT_APK_DOWNLOAD;
+
+    /**
+     * 本次存储路径
+     */
     String apkFilPath = "";
+
+    /**
+     * 下载进度条
+     */
     ProgressDialog progressDialog;
 
     Context context;
 
+    /**
+     * 下载是否完成
+     */
     boolean download_finish = false;
 
     public DownloadUtils(Context context) {
@@ -40,6 +56,9 @@ public class DownloadUtils {
         apkFilPath = context.getExternalCacheDir().getAbsolutePath() + File.separator + "WiInput_sign.apk";
     }
 
+    /**
+     * 下载apk
+     */
     public void downloadApk() {
 
         File file = new File(apkFilPath);
@@ -58,16 +77,25 @@ public class DownloadUtils {
 
             @Override
             public void onResponse(Call call, Response response) {
-                Log.e("dime", "下载Total=" + response.body().contentLength());
-
+                Log.e("dimexx", Thread.currentThread().getName());
+//                Log.e("dime", "下载Total=" + response.body().contentLength());
+//                Toast.makeText(context, "开始下载了", Toast.LENGTH_LONG).show();
+                ((AppCompatActivity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "开始下载了!!!!!!!!", Toast.LENGTH_LONG).show();
+                    }
+                });
+                showDialogInstall();
                 long total = response.body().contentLength();
                 FileOutputStream fos = null;
                 InputStream inputStream = null;
                 progressDialog = new ProgressDialog();
+
                 progressDialog.setData(context, new ProgressDialog.OnDismissListener() {
                     @Override
                     public void refreshUI(boolean isLocal) {
-                        if(download_finish){
+                        if (download_finish) {
                             call.cancel();
                         }
                     }
@@ -88,7 +116,13 @@ public class DownloadUtils {
                     download_finish = true;
                     progressDialog.dismiss();
                     //是否开始安装
-                    showDialogInstall();
+                    ((AppCompatActivity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogInstall();
+                        }
+                    });
+
                     Log.e("dime", "下载完成");
                 } catch (IOException e) {
                     Log.e("dime", "下载错误:" + e.getMessage());
@@ -110,6 +144,9 @@ public class DownloadUtils {
         });
     }
 
+    /**
+     * 显示是否安装的对话框
+     */
     public void showDialogInstall() {
         CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle("输入法")
@@ -133,7 +170,7 @@ public class DownloadUtils {
     }
 
     /**
-     * 开始下载的弹框提示
+     * 显示是否下载的对话框
      */
     public void showDialogDownload() {
         CommonDialog dialog = new CommonDialog(context);
@@ -185,9 +222,9 @@ public class DownloadUtils {
     }
 
     /**
-     * 输入法是否安装
+     * 判断输入法是否安装
      *
-     * @return
+     * @return true：安装， false：未安装
      */
     public boolean isInstall() {
         for (PackageInfo info : context.getPackageManager().getInstalledPackages(0)) {
@@ -203,11 +240,15 @@ public class DownloadUtils {
     /**
      * 是否已经下载成功
      *
-     * @return
+     * @return true：已经下载apk， false：没有完成下载
      */
     public boolean isDownload() {
         File file = new File(apkFilPath);
         return file.exists();
+    }
+
+    public interface DownloadFinish{
+        void downloadFinish();
     }
 
 
