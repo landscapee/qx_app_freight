@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -53,12 +54,16 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     @BindView(R.id.tv_lengcang)
     TextView mTvLengCang;
 
+    @BindView(R.id.ll_base_temperature)
+    LinearLayout llBaseTemperature;
+
 
     private TransportDataBase data;
     private CustomToolbar toolbar;
     private DeclareApplyForRecords mEntity = new DeclareApplyForRecords();
     private List<String> storageList; //1：贵重  2：危险 3：活体 4：冷藏 0：普货
     private List<String> temperatureList; //温度
+    private int storageOption;//选中得储存类型
 
     public static void startActivity(Activity context, TransportDataBase transportDataBase) {
         Intent starter = new Intent(context, StoreTypeChangeActivity.class);
@@ -167,9 +172,9 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             case R.id.ll_storage_type:
                 showStoragePickView();
                 break;
-//            case R.id.ll_temperature:
-//                showtempretruePickView();
-//                break;
+            case R.id.ll_temperature:
+                showtempretruePickView();
+                break;
         }
     }
     private void showStoragePickView() {
