@@ -19,7 +19,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     private String positiveBtn;
     private String negativeBtn;
     private String title;
-    private OnClickListener listener;
+    protected OnClickListener listener;
 
     public CommonDialog(Context context) {
         super(context, R.style.CommomDialog);

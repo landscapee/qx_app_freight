@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.ProgressDialog;
+import qx.app.freight.qxappfreight.dialog.UpDateVersionDialog;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
@@ -359,7 +360,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      *             vContent.setText(appVersion.getData().getUpdateMsg());
      */
     private void showAppUpdateDialog() {
-        CommonDialog dialog = new CommonDialog(this);
+        UpDateVersionDialog dialog = new UpDateVersionDialog(this);
         dialog.setTitle("版本更新")
                 .setMessage("更新版本："+mVersionBean.getData().getVersionCode()+"\n更新内容："+mVersionBean.getData().getUpdateMsg())
                 .setNegativeButton("立即更新")

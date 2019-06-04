@@ -68,7 +68,7 @@ public class DownloadInstall {
                 response = call.execute();
             } catch (IOException e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                publishProgress(-1);
                 Log.e(TAG, "下载失败>>>>\n" + e.getMessage());
                 return null;
             }
@@ -96,6 +96,7 @@ public class DownloadInstall {
                 return file;
             } catch (Exception e) {
                 Log.e(TAG, "保存文件失败：>>>>\n" + e.getMessage());
+                publishProgress(-1);
                 progressDialog.dismiss();
                 return null;
             } finally {
@@ -108,6 +109,7 @@ public class DownloadInstall {
                     }
                 } catch (IOException ioe) {
                     Log.e(TAG, "流关闭失败");
+                    publishProgress(-1);
                 }
             }
         }
@@ -134,6 +136,13 @@ public class DownloadInstall {
             super.onProgressUpdate(values);
             //更新进度条
             progressDialog.setProgress(values[0]);
+            if (values[0]==100){
+                progressDialog.dismiss();
+            }else if (values[0]==-1){
+                ToastUtil.showToast("安装失败！");
+                progressDialog.dismiss();
+            }
+
         }
     }
 
