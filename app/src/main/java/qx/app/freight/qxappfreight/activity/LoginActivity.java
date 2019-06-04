@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
+import qx.app.freight.qxappfreight.dialog.ProgressDialog;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
@@ -39,6 +41,7 @@ import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.DownloadInstall;
 import qx.app.freight.qxappfreight.utils.DownloadUtils;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -402,13 +405,26 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * http://10.16.23.156:9082/acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7
      */
     public void downLoadFile(UpdateVersionBean2 version) {
-        ToastUtil.showToast("程序更新中...");
-        String wholeUrl = version.getData().getDownloadUrl();
-//        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
-//        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
-        String base = "http://10.16.23.156:9082";
-        String left = "acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7";
-        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getData().getVersionCode() + ".apk", Tools.getFilePath());
+//        ToastUtil.showToast("程序更新中...");
+//        String wholeUrl = version.getData().getDownloadUrl();
+////        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
+////        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
+//        String base = "http://10.16.23.156:9082";
+//        String left = "acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7";
+        String saveFilePath = Tools.getFilePath() + Constants.APP_NAME + version.getData().getVersionCode() + ".apk";
+//        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getData().getVersionCode() + ".apk", Tools.getFilePath());
+
+
+        ProgressDialog progressDialog = new ProgressDialog();
+        progressDialog.setData(this, null);
+        DownloadInstall downloadInstall = new DownloadInstall.Builder()
+                .Context(this)
+                .downloadUrl(version.getData().getDownloadUrl())
+                .saveFilePath(saveFilePath)
+                .progressDialog(progressDialog).build();
+        if(!downloadInstall.isAppInstall("qx.app.freight.qxappfreight")){
+            downloadInstall.start();
+        }
     }
 
 

@@ -193,7 +193,7 @@ public class DownloadInstall {
             return this;
         }
 
-        public Builder downloadUrl(String downloaddUrl) {
+        public Builder downloadUrl(String downloadUrl) {
             this.downloadUrl = downloadUrl;
             return this;
         }
