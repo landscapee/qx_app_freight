@@ -176,7 +176,7 @@ public class DownloadInstall {
     /**
      * 构建类
      */
-    public class Builder {
+    public static class Builder {
         public String saveFilePath;
         public ProgressDialog progressDialog;
         public Context context;
@@ -209,7 +209,8 @@ public class DownloadInstall {
         }
 
         public DownloadInstall build() {
-            return new DownloadInstall(this);
+            DownloadInstall downloadInstall = new DownloadInstall(this);
+            return downloadInstall;
         }
     }
 
