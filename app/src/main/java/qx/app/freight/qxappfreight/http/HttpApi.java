@@ -74,6 +74,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
+import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -182,6 +183,10 @@ public interface HttpApi {
     //存储变更 -收运
     @POST("service-product-receivecargo/rc/changeStorage")
     Observable<BaseEntity<Object>> changeStorage(@Body ChangeStorageBean model);
+
+    // 查询库区-收运
+    @POST("service-bussiness-reservoir/reservoir/list")
+    Observable<BaseEntity<SearchReservoirBean>> searchReservoir(@Body BaseFilterEntity model);
 
     //查询集装箱列表信息
     @POST("service-base-sysmanage/uld/list")

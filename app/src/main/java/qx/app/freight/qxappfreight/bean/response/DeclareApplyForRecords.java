@@ -14,7 +14,7 @@ public class DeclareApplyForRecords {
         /**
          * 0,1,2,3 自定义
          */
-        private Integer applyForType;
+        private int applyForType;
 
         /**
          * 运单id
@@ -42,12 +42,12 @@ public class DeclareApplyForRecords {
         private int orgStorage;
 
         /**
-         * 存储温度
+         * 新存储温度
          */
         private String refrigeratedTemperature;
 
         /**
-         * 存储温度
+         * 原始存储温度
          */
         private String orgRefrigeratedTemperature;
 

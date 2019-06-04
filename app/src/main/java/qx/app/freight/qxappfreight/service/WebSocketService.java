@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -201,14 +202,15 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    sendGps();
-                    TimeUnit.SECONDS.sleep(30000);
+                while (true){
+                    try {
+                        sendGps();
+                        Thread.sleep(30000);
 
-                }catch (Exception e){
-
+                    }catch (Exception e){
+                        Log.e("GPS while (true)", e.getMessage());
+                    }
                 }
-
             }
         });
         thread.start();
@@ -217,15 +219,21 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     private void sendGps() {
         Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude()+"");
-        gpsInfoEntity = new GpsInfoEntity();
-        gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
-        gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
-        if (UserInfoSingle.getInstance() != null)
-            gpsInfoEntity.setUserId(UserInfoSingle.getInstance().getUserId());
-        else
-            gpsInfoEntity.setUserId("admin");
-        gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
-        saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
+        if (GPSUtils.getInstance().getCurrentLocation().getLatitude()<=0.0){
+            Log.e("GPS位置：", "位置为0 不提交");
+        }
+        else {
+            gpsInfoEntity = new GpsInfoEntity();
+            gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
+            gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
+            if (UserInfoSingle.getInstance() != null)
+                gpsInfoEntity.setUserId(UserInfoSingle.getInstance().getUserId());
+            else
+                gpsInfoEntity.setUserId("admin");
+            gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+            saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
+        }
+
     }
 
 
