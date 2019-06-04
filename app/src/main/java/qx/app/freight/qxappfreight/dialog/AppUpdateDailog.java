@@ -15,8 +15,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
-import qx.app.freight.qxappfreight.model.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 
 /*
  * 版本更新dialog

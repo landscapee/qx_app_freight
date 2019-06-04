@@ -1,11 +1,8 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,9 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +32,8 @@ import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
-import qx.app.freight.qxappfreight.dialog.AppUpdateDailog;
 import qx.app.freight.qxappfreight.http.HttpApi;
-import qx.app.freight.qxappfreight.model.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.service.DownloadFileService;
@@ -359,47 +352,49 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 弹出下载提示框
+     *   vtime.setText(appVersion.getData().getVersionCode());
+     *             vContent.setText(appVersion.getData().getUpdateMsg());
      */
     private void showAppUpdateDialog() {
-//        CommonDialog dialog = new CommonDialog(this);
-//        dialog.setTitle("版本更新")
-//                .setMessage("这个是提示内容")
-//                .setNegativeButton("立即更新")
-//                .isCanceledOnTouchOutside(false)
-//                .isCanceled(false)
-//                .setOnClickListener(new CommonDialog.OnClickListener() {
-//                    @Override
-//                    public void onClick(Dialog dialog, boolean confirm) {
-//                        if (confirm) {
-//                            ToastUtil.showToast("点击了左边的按钮");
-//                        } else {
-//                            ToastUtil.showToast("点击了右边的按钮");
-//                        }
-//                    }
-//                })
-//                .show();
-
-
-        final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
-        appUpdateDailog.setAppUpdateDialogData(mVersionBean,
-                new AppUpdateDailog.AppUpdateLinstener() {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle("版本更新")
+                .setMessage("更新版本："+mVersionBean.getData().getVersionCode()+"\n更新内容："+mVersionBean.getData().getUpdateMsg())
+                .setNegativeButton("立即更新")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(false)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
-                    public void sure() {
-                        // 下载app
+                    public void onClick(Dialog dialog, boolean confirm) {
                         if (mVersionBean.getData().getDownloadUrl() == null || mVersionBean.getData().getDownloadUrl().length() == 0) {
                             ToastUtil.showToast("下载地址获取有误");
                         } else {
                             downLoadFile(mVersionBean);
                         }
-                        appUpdateDailog.dismiss();
                     }
+                })
+                .show();
 
-                    @Override
-                    public void cancel() {
-                        appUpdateDailog.dismiss();
-                    }
-                });
-        appUpdateDailog.show();
+
+//        final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
+//        appUpdateDailog.setAppUpdateDialogData(mVersionBean,
+//                new AppUpdateDailog.AppUpdateLinstener() {
+//                    @Override
+//                    public void sure() {
+//                        // 下载app
+//                        if (mVersionBean.getData().getDownloadUrl() == null || mVersionBean.getData().getDownloadUrl().length() == 0) {
+//                            ToastUtil.showToast("下载地址获取有误");
+//                        } else {
+//                            downLoadFile(mVersionBean);
+//                        }
+//                        appUpdateDailog.dismiss();
+//                    }
+//
+//                    @Override
+//                    public void cancel() {
+//                        appUpdateDailog.dismiss();
+//                    }
+//                });
+//        appUpdateDailog.show();
     }
 
     /**

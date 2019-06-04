@@ -1,4 +1,4 @@
-package qx.app.freight.qxappfreight.model;
+package qx.app.freight.qxappfreight.bean.response;
 
 /**
  * created by swd
