@@ -74,9 +74,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
 //        checkVersion();
-        mEtPassWord.setText("250017");
+        mEtPassWord.setText("");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("zhoumi");
+        mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });

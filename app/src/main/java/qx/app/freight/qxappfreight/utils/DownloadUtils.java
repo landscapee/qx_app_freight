@@ -227,7 +227,6 @@ public class DownloadUtils {
     public boolean isInstall() {
         for (PackageInfo info : context.getPackageManager().getInstalledPackages(0)) {
             if ("com.hit.wi".equals(info.packageName)) {
-                ToastUtil.showToast("已经安装WI输入法！");
                 Log.e("dime", "已经装过了");
                 return true;
             }

@@ -108,7 +108,7 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(mAdapter);
     }
 
     @Override
