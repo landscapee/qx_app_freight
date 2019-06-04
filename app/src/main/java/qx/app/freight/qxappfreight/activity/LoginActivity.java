@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
-//        checkVersion();
+        checkVersion();
         mEtPassWord.setText("250017");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
         mEtUserName.setText("zhoumi");
@@ -399,12 +399,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 下载apk
+     * http://10.16.23.156:9082/acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7
      */
     public void downLoadFile(UpdateVersionBean2 version) {
         ToastUtil.showToast("程序更新中...");
         String wholeUrl = version.getData().getDownloadUrl();
-        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
-        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
+//        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
+//        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
+        String base = "http://10.16.23.156:9082";
+        String left = "acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7";
         DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getData().getVersionCode() + ".apk", Tools.getFilePath());
     }
 
