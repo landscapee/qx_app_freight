@@ -88,7 +88,7 @@ public class GPSUtils {
     @SuppressLint("MissingPermission")
     public LocationEntity getLastKnownLocation(Context context) {
         if (locationManager == null) {
-            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
 
         if(!isGpsEnabled(locationManager)){

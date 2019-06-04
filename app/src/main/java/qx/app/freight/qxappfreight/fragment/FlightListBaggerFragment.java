@@ -108,7 +108,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mMfrvData.notifyForAdapter(mAdapter);
     }
 
     @Override
