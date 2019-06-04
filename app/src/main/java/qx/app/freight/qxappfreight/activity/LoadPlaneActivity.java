@@ -182,28 +182,28 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvEndInstall.setOnClickListener(v -> {
-            if (mLoadingList.size() == 0) {
-                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
-            } else {
-                boolean doRight = true;
-                for (LoadingListBean.DataBean entity1 : mLoadingList) {
+//            if (mLoadingList.size() == 0) {
+//                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
+//            } else {
+                boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
+               /* for (LoadingListBean.DataBean entity1 : mLoadingList) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
                         if (!entity2.isLocked()) {
                             doRight = false;
                             break;
                         }
                     }
-                }
+                }*/
                 if (doRight) {
                     GetFlightCargoResBean bean = new GetFlightCargoResBean();
                     bean.setTpFlightId(data.getFlightId());
-                    bean.setTaskId(data.getTaskId());
+                    bean.setTaskId(data.getId());
                     bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
                     ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
                 } else {
                     ToastUtil.showToast("有未锁定修改的数据，请检查！");
                 }
-            }
+//            }
         });
     }
 
