@@ -91,7 +91,12 @@ public class DownloadInstall {
                     fos.write(bytes, 0, len);
                     PROGRESS_CURRENT += len;
                     //更新进度
-                    publishProgress((int) ((int) PROGRESS_CURRENT * 100 / PROGRESS_TOTAL));
+                    if (PROGRESS_TOTAL != -1) {
+                        publishProgress((int) (PROGRESS_CURRENT * 100 / PROGRESS_TOTAL));
+                    } else {
+                        publishProgress(50);
+                    }
+
                 }
                 return file;
             } catch (Exception e) {
@@ -124,6 +129,8 @@ public class DownloadInstall {
         protected void onPostExecute(File file) {
             super.onPostExecute(file);
             //完成下载，开始安装
+            progressDialog.setProgress(100);
+            progressDialog.dismiss();
             if (file != null) {
                 //开始安装
                 installApk(file);
@@ -136,9 +143,9 @@ public class DownloadInstall {
             super.onProgressUpdate(values);
             //更新进度条
             progressDialog.setProgress(values[0]);
-            if (values[0]==100){
+            if (values[0] == 100) {
                 progressDialog.dismiss();
-            }else if (values[0]==-1){
+            } else if (values[0] == -1) {
                 ToastUtil.showToast("安装失败！");
                 progressDialog.dismiss();
             }
@@ -149,11 +156,12 @@ public class DownloadInstall {
 
     /**
      * 该apk是否安装
+     *
      * @return
      */
     public boolean isAppInstall(String packageName) {
         for (PackageInfo info : context.getPackageManager().getInstalledPackages(0)) {
-            if(info.packageName == packageName){
+            if (info.packageName == packageName) {
                 return true;
             }
         }
