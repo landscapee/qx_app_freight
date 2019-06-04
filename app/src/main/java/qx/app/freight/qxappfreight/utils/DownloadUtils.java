@@ -103,7 +103,13 @@ public class DownloadUtils {
                         fos.write(bytes, 0, len);
                         sum += len;
                         Log.e("dime", "进度：sum=" + sum + ", total=" + total);
-                        progressDialog.setProgress((int) (100 * sum / total));
+                        long finalSum = sum;
+                        ((AppCompatActivity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.setProgress((int) (100 * finalSum / total));
+                            }
+                        });
                     }
                     download_finish = true;
                     progressDialog.dismiss();
