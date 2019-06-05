@@ -429,9 +429,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .downloadUrl(version.getData().getDownloadUrl())
                 .saveFilePath(saveFilePath)
                 .progressDialog(progressDialog).build();
-        if(!downloadInstall.isAppInstall("qx.app.freight.qxappfreight")){
-            downloadInstall.start();
-        }
+        downloadInstall.start();
     }
 
 

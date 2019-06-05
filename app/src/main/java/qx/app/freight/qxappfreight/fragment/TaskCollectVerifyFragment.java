@@ -58,7 +58,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private TaskFragment fragment;
 
     private TransportDataBase mBean;
-
+    private boolean isShow =false;
 
     @Nullable
     @Override
@@ -239,7 +239,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             }
             transportListList1.addAll(transportListBean.getRecords());
             if (fragment != null) {
-                fragment.setTitleText(transportListList1.size());
+                if (isShow)
+                    fragment.setTitleText(transportListList1.size());
             }
             seachWith();
         } else {
@@ -250,6 +251,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
         if (isVisibleToUser) {
             if (fragment != null)
                 fragment.setTitleText(transportListList1.size());

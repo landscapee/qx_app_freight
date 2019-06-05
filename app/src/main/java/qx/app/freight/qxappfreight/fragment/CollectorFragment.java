@@ -57,6 +57,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private String seachString = "";
     private TaskFragment mTaskFragment;
 
+    private boolean isShow =false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -245,7 +246,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             list1.addAll(transportListBeans.getRecords());
             seachWith();
             if (mTaskFragment != null) {
-                mTaskFragment.setTitleText(list1.size());
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
@@ -255,6 +257,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
         if (isVisibleToUser) {
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(list1.size());

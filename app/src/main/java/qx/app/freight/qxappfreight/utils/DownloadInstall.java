@@ -166,7 +166,7 @@ public class DownloadInstall {
      */
     public boolean isAppInstall(String packageName) {
         for (PackageInfo info : context.getPackageManager().getInstalledPackages(0)) {
-            if (info.packageName == packageName) {
+            if (info.packageName.equals(packageName)) {
                 return true;
             }
         }
