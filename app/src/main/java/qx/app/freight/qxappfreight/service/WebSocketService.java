@@ -199,7 +199,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         //GPS 数据提交线程
-        Thread thread = new Thread(new Runnable() {
+        Thread threadGps = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
@@ -213,7 +213,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                 }
             }
         });
-//        thread.start();
+        threadGps.start();
 
     }
 
