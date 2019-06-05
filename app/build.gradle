@@ -51,6 +51,7 @@ android {
         debugRelease.initWith(buildTypes.debug)
         product.initWith(buildTypes.debug)
 
+        //测试环境(可调试)
         debugRelease{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
@@ -61,6 +62,7 @@ android {
             }
         }
 
+        //生产环境
         product {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
@@ -71,6 +73,7 @@ android {
             }
         }
 
+        //开发环境
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -82,6 +85,7 @@ android {
             }
         }
 
+        //测试环境
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
