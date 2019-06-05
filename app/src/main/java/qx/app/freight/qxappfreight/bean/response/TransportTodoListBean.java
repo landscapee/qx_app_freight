@@ -130,13 +130,13 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     //运单号码
     private String billNumber;
     //是板车下拉还是运单下拉type值
-    private Integer infoType;
-    private Integer maxBillNumber;
-    private Double maxBillWeight;
+    private int infoType;
+    private int maxBillNumber;
+    private double maxBillWeight;
     private String billCode;
     private String waybillId;
-    private Integer pullInNumber;//拉货上报输入的板车拉的件数
-    private Double pullInWeight;//拉货上报输入的板车拉的重量
+    private int pullInNumber;//拉货上报输入的板车拉的件数
+    private double pullInWeight;//拉货上报输入的板车拉的重量
 
     private String taskPk;//子任务id
 
