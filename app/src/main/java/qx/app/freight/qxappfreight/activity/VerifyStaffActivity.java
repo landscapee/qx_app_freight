@@ -215,8 +215,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
                     ToastUtil.showToast(this, "不合格");
-                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, mSpotResult, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid, mJianYan);
-//                    ToastUtil.showToast(this, "不合格");
                     mPresenter = new SubmissionPresenter(this);
                     StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
                     mStorageCommitEntity.setWaybillId(Tid);
@@ -237,7 +235,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setInsEndTime(123);
                     mStorageCommitEntity.setInsUserHead("");
                     ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
-//                    VerifyFileActivity.startActivity(this, mTaskTypeCode, mWaybillId, mId, mAdditionTypeArr, mTaskId, filePath, mSpotFlag, 1, mFlightNumber, mShipperCompanyId, mWaybillCode, Tid);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
@@ -248,7 +245,10 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 break;
 
             case R.id.gh_user:
-                ChoiceUserActivity.startActivity(this, mAcTestInfoListBean);
+                if (null ==mAcTestInfoListBean.getFreightInfo()) {
+                    ToastUtil.showToast("没有可以选择的角色，请先添加");
+                } else
+                    ChoiceUserActivity.startActivity(this, mAcTestInfoListBean);
                 break;
 
 //            case R.id.btn_take_photo_re:
@@ -290,7 +290,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                tvBjStart.setText(mFreightBean.getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(mFreightBean.getInspectionBookStart()) + "-");
                 tvBjStart.setText(TimeUtils.date3time(mFreightBean.getInspectionBookStart()) + "至");
                 //报检结束时间
-                tvBjEnd.setText( TimeUtils.date3time(mFreightBean.getInspectionBookEnd()));
+                tvBjEnd.setText(TimeUtils.date3time(mFreightBean.getInspectionBookEnd()));
                 //危险开始时间
                 tvWxStart.setText(TimeUtils.date3time(mFreightBean.getDangerBookStart()) + "至");
                 //危险结束时间
@@ -379,7 +379,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 //报检员备案照片
                 GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
-            }else
+            } else
                 ToastUtil.showToast("数据为空");
         } else
             ToastUtil.showToast("数据为空");
@@ -403,10 +403,10 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void submissionResult(String result) {
-        if (!TextUtils.isEmpty(result)){
+        if (!TextUtils.isEmpty(result)) {
             ToastUtil.showToast(result);
+            setResult(404);
             finish();
         }
-
     }
 }

@@ -237,7 +237,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (transportListBeans != null) {
             //未分页
             if (pageCurrent == 1) {
-//                list.clear();
                 list1.clear();
                 mMfrvData.finishRefresh();
             } else {
@@ -245,7 +244,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             }
             list1.addAll(transportListBeans.getRecords());
             seachWith();
-//            mMfrvData.notifyForAdapter(adapter);
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
             }

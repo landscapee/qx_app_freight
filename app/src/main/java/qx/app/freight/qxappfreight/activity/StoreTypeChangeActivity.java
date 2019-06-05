@@ -187,6 +187,10 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
 
     //库区
     private void showBaozhuangPickView() {
+        if (reservoirList.size()==0){
+            ToastUtil.showToast("数据为空，不能选择");
+            return;
+        }
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
