@@ -26,6 +26,7 @@ public class ProgressDialog extends DialogFragment {
 
     TextView msgTv;
     ProgressBar pb;
+    ProgressBar pbCircle;
 
     public void setData(Context context, OnDismissListener onDismissListener) {
         this.context = context;
@@ -35,6 +36,8 @@ public class ProgressDialog extends DialogFragment {
     private void initViews() {
         msgTv = convertView.findViewById(R.id.dialog_tv_msg);
         pb = convertView.findViewById(R.id.dialog_pb);
+        pbCircle = convertView.findViewById(R.id.dialog_pb_circle);
+
 
 //        msgTv.setOnClickListener(v -> {
 //            super.dismiss();
@@ -79,5 +82,10 @@ public class ProgressDialog extends DialogFragment {
         if(msgTv != null){
             msgTv.setText("下载中：" + progress + "%");
         }
+    }
+    public void hidePro(){
+        pb.setVisibility(View.GONE);
+        pbCircle.setVisibility(View.VISIBLE);
+        msgTv.setText("安装包下载中……");
     }
 }

@@ -94,7 +94,7 @@ public class DownloadInstall {
                     if (PROGRESS_TOTAL != -1) {
                         publishProgress((int) (PROGRESS_CURRENT * 100 / PROGRESS_TOTAL));
                     } else {
-                        publishProgress(50);
+                        publishProgress(-2);//文件长度为-1  不显示进度条
                     }
 
                 }
@@ -142,13 +142,18 @@ public class DownloadInstall {
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //更新进度条
-            progressDialog.setProgress(values[0]);
+
             if (values[0] == 100) {
                 progressDialog.dismiss();
             } else if (values[0] == -1) {
                 ToastUtil.showToast("安装失败！");
                 progressDialog.dismiss();
             }
+            else if (values[0] == -2){
+                progressDialog.hidePro();
+            }
+            else
+                progressDialog.setProgress(values[0]);
 
         }
     }

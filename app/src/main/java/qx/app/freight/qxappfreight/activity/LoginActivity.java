@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
         checkVersion();
-        mEtPassWord.setText("250017");
+        mEtPassWord.setText("");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
         mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 downloadUtils.showDialogDownload();
             }
         }else{
-            ToastUtil.showToast("输入法已经就位！");
+            Log.e("输入法：","输入法已经安装！");
         }
 
     }
@@ -130,7 +130,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         HttpApi httpService = retrofit.create(HttpApi.class);
-        Call<UpdateVersionBean2> call = httpService.updateVersion("newPhone2");
+        Call<UpdateVersionBean2> call = httpService.updateVersion("newphone2");
         call.enqueue(new Callback<UpdateVersionBean2>() {
             @Override
             public void onResponse(Call<UpdateVersionBean2> call, Response<UpdateVersionBean2> response) {
@@ -139,6 +139,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
                 }
+                if(1000 != updataBean.getResponseCode()){
+                    ToastUtil.showToast("获取应用更新信息失败");
+                    return;
+                }
+
                 mVersionBean = updataBean;
                 PackageInfo appInfo = AppUtil.getPackageInfo(LoginActivity.this);
                 int versionCode = 0;
@@ -361,11 +366,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     private void showAppUpdateDialog() {
         UpDateVersionDialog dialog = new UpDateVersionDialog(this);
+
         dialog.setTitle("版本更新")
                 .setMessage("更新版本："+mVersionBean.getData().getVersionCode()+"\n更新内容："+mVersionBean.getData().getUpdateMsg())
                 .setNegativeButton("立即更新")
                 .isCanceledOnTouchOutside(false)
-                .isCanceled(false)
+                .isCanceled(true)
                 .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
