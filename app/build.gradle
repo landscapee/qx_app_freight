@@ -47,11 +47,24 @@ android {
     }
 
     buildTypes {
+
         debugRelease.initWith(buildTypes.debug)
+        product.initWith(buildTypes.debug)
+
         debugRelease{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
             properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "release.properties"))
+            Set<String> keys = properties.keySet()
+            for (String key : keys) {
+                buildConfigField("String", key, "\"" + properties.get(key) + "\"")
+            }
+        }
+
+        product {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
+            properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "product.properties"))
             Set<String> keys = properties.keySet()
             for (String key : keys) {
                 buildConfigField("String", key, "\"" + properties.get(key) + "\"")

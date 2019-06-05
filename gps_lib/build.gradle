@@ -21,6 +21,10 @@ android {
         debug {
 
         }
+
+        product {
+
+        }
         release {
 
         }
