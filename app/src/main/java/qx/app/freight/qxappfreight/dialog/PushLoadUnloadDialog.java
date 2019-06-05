@@ -25,6 +25,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +68,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         mIvGif = convertView.findViewById(R.id.iv_start_gif);
         mSlideView = convertView.findViewById(R.id.slide_right_start);
         mRvData.setLayoutManager(new LinearLayoutManager(context));
-        mAdapter=new DialogLoadUnloadPushAdapter(list);
+        mAdapter = new DialogLoadUnloadPushAdapter(list);
         mRvData.setAdapter(mAdapter);
         setListeners();
     }
@@ -74,6 +76,26 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     public void refreshData() {
         mAdapter.notifyDataSetChanged();
         setListeners();
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            Class c = Class.forName("android.support.v4.app.DialogFragment");
+            Constructor con = c.getConstructor();
+            Object obj = con.newInstance();
+            Field dismissed = c.getDeclaredField("mDismissed");
+            dismissed.setAccessible(true);
+            dismissed.set(obj, false);
+            Field shownByMe = c.getDeclaredField("mShownByMe");
+            shownByMe.setAccessible(true);
+            shownByMe.set(obj, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.add(this, tag);
+        ft.commitAllowingStateLoss();
     }
 
     private void setListeners() {
