@@ -387,10 +387,12 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
 
     @Override
     public void showNetDialog() {
+        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
+        dismissProgessDialog();
     }
 
     @Override

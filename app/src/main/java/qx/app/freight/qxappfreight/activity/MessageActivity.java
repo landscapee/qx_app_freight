@@ -160,7 +160,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+        showProgessDialog("请求中......");
     }
 
     @Override

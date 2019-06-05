@@ -59,7 +59,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
         mRvSearchResult.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
 
-            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode(),resultData.get(position).getId()));
+            EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode(), resultData.get(position).getId()));
             finish();
 
         });
@@ -77,10 +77,10 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s.toString())){
+                if (!TextUtils.isEmpty(s.toString())) {
                     mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
-                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(),taskId);
-                }else {
+                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(), taskId);
+                } else {
                     resultData.clear();
                     adapter.notifyDataSetChanged();
                 }
@@ -119,11 +119,11 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 }

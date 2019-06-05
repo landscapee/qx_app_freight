@@ -127,11 +127,11 @@ public class InPortTallyActivity extends BaseActivity implements MultiFunctionRe
         for (InportTallyBean bean : result) {
             InPortTallyListEntity model = new InPortTallyListEntity();
             model.setWaybill(bean.getWaybillCode());
-            if (!TextUtils.isEmpty(bean.getRoute())){
-                String[]info=bean.getRoute().split("-");
+            if (!TextUtils.isEmpty(bean.getRoute())) {
+                String[] info = bean.getRoute().split("-");
                 model.setStartPlace(info[0]);
                 model.setMiddlePlace("");
-                model.setEndPlace(info[info.length-1]);
+                model.setEndPlace(info[info.length - 1]);
             }
             model.setDocName(bean.getMailType());
             model.setDocArrived(bean.getDocumentDelivery() == 1);
@@ -190,12 +190,12 @@ public class InPortTallyActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

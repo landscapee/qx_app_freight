@@ -252,9 +252,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void showNetDialog() {
+        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
+        dismissProgessDialog();
     }
 }

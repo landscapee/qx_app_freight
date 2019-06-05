@@ -223,7 +223,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
-            entity.setWidePlane(bean.getWidthAirFlag()==0);
+            entity.setWidePlane(bean.getWidthAirFlag() == 0);
             entity.setShowDetail(false);
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
@@ -387,11 +387,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 }
