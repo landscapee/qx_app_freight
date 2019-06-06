@@ -293,8 +293,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         if (transportListBeans != null&&transportListBeans.size()>0) {
             TaskFragment fragment = (TaskFragment) getParentFragment();
 
+            //因为没有分页，不做分页判断
+            list1.clear();
+
             if (pageCurrent == 1) {
-                list1.clear();
+
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();
