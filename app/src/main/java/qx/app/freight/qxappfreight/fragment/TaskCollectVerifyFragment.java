@@ -199,10 +199,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportDataBase mTransportListBean : transportListList1) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-                    transportListList1.remove(mTransportListBean);
-            }
+            getData();
+//            for (TransportDataBase mTransportListBean : transportListList1) {
+//                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
+//                    transportListList1.remove(mTransportListBean);
+//            }
         }
         seachWith();
     }

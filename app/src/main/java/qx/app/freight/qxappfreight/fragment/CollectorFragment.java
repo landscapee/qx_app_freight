@@ -210,12 +210,12 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
             list1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-
-            for (TransportDataBase mTransportListBean : list1) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
-                    list1.remove(mTransportListBean);
-                }
-            }
+            loadData();
+//            for (TransportDataBase mTransportListBean : list1) {
+//                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
+//                    list1.remove(mTransportListBean);
+//                }
+//            }
         }
         seachWith();
     }

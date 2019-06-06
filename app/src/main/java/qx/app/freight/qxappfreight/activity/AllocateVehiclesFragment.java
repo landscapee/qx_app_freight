@@ -24,6 +24,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
@@ -104,7 +105,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void getData() {
         BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
         entity.setUserId("weighter");
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        entity.setRoleCode(Constants.WEIGHTER);
         ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
     }
 
