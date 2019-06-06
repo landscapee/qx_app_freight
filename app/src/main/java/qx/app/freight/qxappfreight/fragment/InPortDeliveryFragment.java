@@ -56,6 +56,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     private String searchString; //条件搜索关键字
 
+    private TaskFragment mTaskFragment;
+    private boolean isShow =false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,8 +70,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!EventBus.getDefault().isRegistered(this))
-                EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        mTaskFragment = (TaskFragment) getParentFragment();
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入流水号", text -> {
             searchString = text;
@@ -243,29 +248,17 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         loadData();
     }
 
-    /** -- guohao
-    @Override
-    public void transportListContractResult(TransportListBean transportListBeans) {
-        if (transportListBeans != null) {
-            TaskFragment fragment = (TaskFragment) getParentFragment();
 
-            if (pageCurrent == 1) {
-                list1.clear();
-                mMfrvData.finishRefresh();
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser) {
+            if (mTaskFragment != null) {
+                mTaskFragment.setTitleText(list1.size());
             }
-            else{
-                mMfrvData.finishLoadMore();
-            }
-            list1.addAll(transportListBeans.getRecords());
-            seachWithNum();
-            if (fragment != null) {
-                fragment.setTitleText(transportListBeans.getRecords().size());
-            }
-        } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
         }
     }
-     */
 
     @Override
     public void toastView(String error) {
