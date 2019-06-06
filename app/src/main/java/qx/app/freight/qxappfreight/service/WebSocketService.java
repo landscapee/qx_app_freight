@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.listener.CollectionClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -54,7 +55,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static final String TAG = "websocket";
     private CompositeDisposable compositeDisposable;
     private Gson mGson = new Gson();
-    private int flag = 0;
 
     private GpsInfoEntity gpsInfoEntity; // gps 上传实体
     private SaveGpsInfoPresenter saveGpsInfoPresenter;
@@ -67,7 +67,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
             Log.e(TAG, "推送服务url为null");
             return;
         }
-
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
 //        Log.e(TAG, uri);
         //请求头
@@ -85,18 +84,12 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             Log.e(TAG, "webSocket 打开");
-                            flag = 0;
-//                            createStompClient(flag);
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
-                            flag = 1;
-//                            createStompClient(flag);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 关闭");
-                            flag = 1;
-//                            createStompClient(flag);
                             resetSubscriptions();
                             break;
                         case FAILED_SERVER_HEARTBEAT:
@@ -217,6 +210,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     }
 
+
     private void sendGps() {
         Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude()+"");
         if (GPSUtils.getInstance().getCurrentLocation().getLatitude()<=0.0){
@@ -244,6 +238,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static void startService(Activity activtity, String url) {
         uri = url;
         actionStart(activtity);
+    }
+    public static void Collection(String uri){
+        new CollectionClient(uri);
     }
 
     //强制登出
@@ -279,17 +276,17 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
 
     //创建长连接，服务器端没有心跳机制的情况下，启动timer来检查长连接是否断开，如果断开就执行重连
-    private void createStompClient(int flag) {
-        if (1 == flag)
-            onCreate();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mStompClient.send("websocket 心跳包");
-                Log.e("websocket 心跳包", "发送中");
-            }
-        }, 5000, 5000);
-    }
+//    private void createStompClient(int flag) {
+//        if (1 == flag)
+//            onCreate();
+//        mTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                mStompClient.send("websocket 心跳包");
+//                Log.e("websocket 心跳包", "发送中");
+//            }
+//        }, 5000, 5000);
+//    }
 
     @Override
     public void onDestroy() {
