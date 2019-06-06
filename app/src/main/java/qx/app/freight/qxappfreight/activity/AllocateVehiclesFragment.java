@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     private List<GetInfosByFlightIdBean> list1; //原始list
 
     private String searchString = "";
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+
+    private boolean isShow =false;
 
     @Nullable
     @Override
@@ -64,12 +69,27 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
         super.onActivityCreated(savedInstanceState);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvAllocateList.setOnRetryLisenter(this);
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入板车号", text -> {
-            searchString = text;
-            seachWithNum();
-        });
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(list1.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+
+        }
     }
 
     //根据条件筛选数据
@@ -84,7 +104,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
                 }
             }
         }
-        mMfrvAllocateList.notifyForAdapter(adapter);
+        if (mMfrvAllocateList!=null){
+            mMfrvAllocateList.notifyForAdapter(adapter);
+        }
+
     }
 
     private void initData() {
@@ -133,6 +156,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
         list1.clear();
         list1.addAll(getInfosByFlightIdBeans);
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(list1.size());
+        }
         seachWithNum();
     }
 }
