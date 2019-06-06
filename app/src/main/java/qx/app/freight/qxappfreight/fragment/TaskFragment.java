@@ -83,6 +83,9 @@ public class TaskFragment extends BaseFragment {
     public SearchToolbar getSearchView(){
         return mSearchBar;
     }
+    public CustomToolbar getToolbar(){
+        return mToolBar;
+    }
     private void gotoScan() {
         if (TextUtils.isEmpty(nowRoleCode)){
             return;
@@ -208,8 +211,14 @@ public class TaskFragment extends BaseFragment {
             }
 
         }
-        if(list_Title.size() > 0)
+
+        if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
+            //如果第一个是外场运输就把搜索框隐藏
+            if (list_Title.get(0).equals("外场运输")){
+                mToolBar.setRightIconViewVisiable(false);
+            }
+        }
         else
             ToastUtil.showToast("该用户没有被分配角色");
 

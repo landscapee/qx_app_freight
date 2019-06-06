@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -45,7 +48,9 @@ import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 外场运输
@@ -60,6 +65,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     private int slidePosition,slidePositionChild,step;
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
+
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private CustomToolbar mToolBar;//父容器标题
+    private boolean isShow =false;
 
     private int max = 0,index = 0; //用于执行多个子任务的领受操作
 
@@ -79,6 +89,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
+        mToolBar = mTaskFragment.getToolbar();
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         initData();
@@ -120,6 +133,25 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setSize(Constants.PAGE_SIZE);
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(list.size());
+            if (mToolBar!=null){
+                mToolBar.setRightIconViewVisiable(false);
+            }
+
+        }else {
+            if (mToolBar!=null){
+                mToolBar.setRightIconViewVisiable(true);
+            }
+        }
     }
 
     /**
@@ -277,9 +309,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             list.addAll(acceptTerminalTodoBeanList);
             mMfrvData.notifyForAdapter(adapter);
             setListStatus();
-            TaskFragment fragment = (TaskFragment) getParentFragment();
-            if (fragment != null) {
-                fragment.setTitleText(list.size());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list.size());
             }
 
         } else {
