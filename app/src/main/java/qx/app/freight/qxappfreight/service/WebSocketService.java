@@ -16,39 +16,26 @@ import com.qxkj.positionapp.GPSUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
-import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
 import qx.app.freight.qxappfreight.listener.CollectionClient;
+import qx.app.freight.qxappfreight.listener.InstallEquipClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
-import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView{
 
@@ -67,7 +54,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         super.onCreate();
 //        EventBus.getDefault().isRegistered(this);
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
-
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
             if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
                 if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
@@ -77,17 +63,21 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                 } else
                     taskAssignType = 2;
             }
+            //多角色 需要保持多个 web socket 链接
             switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
                 case "collection":
                     Collection(HttpConstant.WEBSOCKETURL
                             + "userId=" + UserInfoSingle.getInstance().getUserId()
                             + "&taskAssignType=" + taskAssignType
                             + "&type=MT"
-                            + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode());
+                            + "&role=collection" );
                     break;
-
-                case "1":
-
+                case "supervision":
+                    InstallEquipClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=supervision");
                     break;
             }
         }
@@ -264,6 +254,10 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     }
     public void Collection(String uri){
         new CollectionClient(uri,this);
+        new InstallEquipClient(uri,this);
+    }
+    public void InstallEquipClient(String uri){
+        new InstallEquipClient(uri,this);
     }
 
     //强制登出
