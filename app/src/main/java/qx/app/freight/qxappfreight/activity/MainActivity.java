@@ -16,6 +16,7 @@ import com.qxkj.positionapp.GPSUtils;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
 
+import org.fusesource.hawtdispatch.internal.InactiveMetricsCollector;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -25,6 +26,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -36,9 +39,12 @@ import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
+import qx.app.freight.qxappfreight.listener.CollectionClient;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import ua.naiksoftware.stomp.dto.LifecycleEvent;
+import ua.naiksoftware.stomp.provider.ConnectionProvider;
 
 /**
  * 主页面
@@ -116,11 +122,32 @@ public class MainActivity extends BaseActivity implements LocationObservable{
                 taskAssignType = 3;
             } else
                 taskAssignType = 2;
-            WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
-                    + "userId=" + UserInfoSingle.getInstance().getUserId()
-                    + "&taskAssignType=" + taskAssignType
-                    + "&type=MT"
-                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+
+            for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+                switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
+                    case "collection":
+                        WebSocketService.Collection(HttpConstant.WEBSOCKETURL
+                                + "userId=" + UserInfoSingle.getInstance().getUserId()
+                                + "&taskAssignType=" + taskAssignType
+                                + "&type=MT"
+                                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(i));
+                        break;
+
+                    case "1":
+                        WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
+                                + "userId=" + UserInfoSingle.getInstance().getUserId()
+                                + "&taskAssignType=" + taskAssignType
+                                + "&type=MT"
+                                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+                        break;
+                }
+            }
+
+//            WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
+//                    + "userId=" + UserInfoSingle.getInstance().getUserId()
+//                    + "&taskAssignType=" + taskAssignType
+//                    + "&type=MT"
+//                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
 
             Log.e("webSocketUrl=====",HttpConstant.WEBSOCKETURL
                     + "userId=" + UserInfoSingle.getInstance().getUserId()
@@ -128,6 +155,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
                     + "&type=MT"
                     + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         }
+
 
     }
 
