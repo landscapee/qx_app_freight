@@ -123,6 +123,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
             } else
                 taskAssignType = 2;
 
+
             for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
                 switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
                     case "collection":
