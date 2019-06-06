@@ -69,8 +69,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private InstallEquipStepAdapter mSlideadapter;
     private int mOperatePos;
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
-    private String mSearchText;
     private InstallEquipAdapter mAdapter;
+
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow =false;
 
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
@@ -132,35 +136,49 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new InstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入航班号", text -> {
-            mSearchText = text;
-            seachByText();
-        });
+
         loadData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mCacheList.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    searchString = text;
+                    seachByText();
+                });
+            }
+
+        }
     }
 
     private void seachByText() {
         mList.clear();
-        if (TextUtils.isEmpty(mSearchText)) {
+        if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mCacheList);
         } else {
             for (InstallEquipEntity item : mCacheList) {
-                if (item.getFlightInfo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                if (item.getFlightInfo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
-        TaskFragment fragment = (TaskFragment) getParentFragment();
-        if (fragment != null) {
-            fragment.setTitleText(mList.size());
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
         }
     }
 
@@ -316,9 +334,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
         seachByText();
         setSlideListener(checkedList);
-        TaskFragment fragment = (TaskFragment) getParentFragment();
-        if (fragment != null) {
-            fragment.setTitleText(mList.size());
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(mCacheList.size());
         }
     }
 

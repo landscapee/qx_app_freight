@@ -45,7 +45,11 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
     List<FlightLuggageBean> mList;  //筛选过后的数据
     List<FlightLuggageBean> mListTemp; //原始数据
 
-    private String searchString = ""; //搜索框里面的搜索关键字
+    private int pageCurrent = 1;
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow =false;
 
     @Nullable
     @Override
@@ -59,6 +63,8 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         initView();
     }
 
@@ -77,21 +83,30 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
             startActivity(new Intent(getContext(), InternationalCargoListActivity.class).putExtra("flightBean",mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
-        //行李上报-搜索逻辑
-        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
-            @Override
-            public void onSearched(String text) {
-                searchString = text;
-                seachWithNum();
-            }
-        });
+
     }
 
     private void loadData() {
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setMinutes("120");
         ((GetAllInternationalAndMixedFlightPresenter) mPresenter).addScooter(entity);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mListTemp.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+
+        }
     }
 
     /**
@@ -108,7 +123,9 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
                 }
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -124,19 +141,29 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
     }
     @Override
     public void getAllInternationalAndMixedFlightResult(List<FlightLuggageBean> flightLuggageBeans) {
-        mMfrvData.finishRefresh();
-        mMfrvData.finishLoadMore();
+        //因为没有分页，不做分页判断
         mListTemp.clear();
+        if (pageCurrent == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
         mListTemp.addAll(flightLuggageBeans);
-        setTitleNum(mListTemp.size());
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(mListTemp.size());
+        }
         seachWithNum();
     }
 
     @Override
     public void toastView(String error) {
-        mMfrvData.finishRefresh();
-        mMfrvData.finishLoadMore();
         ToastUtil.showToast(error);
+        if (pageCurrent == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
     }
 
     @Override
@@ -160,11 +187,13 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
 
     @Override
     public void onRefresh() {
+        pageCurrent = 1;
         loadData();
     }
 
     @Override
     public void onLoadMore() {
-        mMfrvData.finishLoadMore();
+        pageCurrent++;
+        loadData();
     }
 }

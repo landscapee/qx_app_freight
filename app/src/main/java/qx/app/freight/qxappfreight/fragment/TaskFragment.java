@@ -66,14 +66,17 @@ public class TaskFragment extends BaseFragment {
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
                 mSearchBar.getSearchView().setText("");
-                mToolBar.setVisibility(View.VISIBLE);
-                mSearchBar.setVisibility(View.GONE);
-                // 向左边移入
-                mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
-                // 向右边移出
-                mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
             });
         return view;
     }
@@ -130,6 +133,18 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 nowRoleCode = list_Title.get(i);
+                if (View.VISIBLE ==mSearchBar.getVisibility()){
+                    mSearchBar.getSearchView().setText("");
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
+                }
+
             }
 
             @Override
