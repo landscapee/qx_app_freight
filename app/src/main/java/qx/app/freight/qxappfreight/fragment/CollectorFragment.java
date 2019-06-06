@@ -55,8 +55,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private List<TransportDataBase> list = new ArrayList<>();
     private int pageCurrent = 1;
     private String seachString = "";
-    private TaskFragment mTaskFragment;
-
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow =false;
     @Nullable
     @Override
@@ -70,15 +70,16 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         initView();
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入运单号", text -> {
-            seachString = text;
-            seachWith();
-        });
+//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入运单号", text -> {
+//            seachString = text;
+//            seachWith();
+//        });
         loadData();
     }
 
@@ -93,7 +94,10 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 }
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
+
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(adapter);
+        }
     }
 
 
@@ -237,7 +241,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Override
     public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
-            //未分页
             if (pageCurrent == 1) {
                 list1.clear();
                 mMfrvData.finishRefresh();
@@ -262,6 +265,13 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if (isVisibleToUser) {
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(list1.size());
+
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    seachString = text;
+                    seachWith();
+                });
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -35,7 +37,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 出港-配载-复重页面
  * Created by pr
  */
-public class AllocateVehiclesFragment extends BaseFragment implements GetInfosByFlightIdContract.getInfosByFlightIdView, EmptyLayout.OnRetryLisenter {
+public class AllocateVehiclesFragment extends BaseFragment implements GetInfosByFlightIdContract.getInfosByFlightIdView, EmptyLayout.OnRetryLisenter, MultiFunctionRecylerView.OnRefreshListener {
     @BindView(R.id.mfrv_allocate_list)
     MultiFunctionRecylerView mMfrvAllocateList;
 
@@ -44,7 +46,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     private List<GetInfosByFlightIdBean> list; //条件list
     private List<GetInfosByFlightIdBean> list1; //原始list
 
-    private String searchString = "";
+    private int pageCurrent = 1;
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow =false;
 
     @Nullable
     @Override
@@ -65,12 +71,27 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
         super.onActivityCreated(savedInstanceState);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvAllocateList.setOnRetryLisenter(this);
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入板车号", text -> {
-            searchString = text;
-            seachWithNum();
-        });
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(list1.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+
+        }
     }
 
     //根据条件筛选数据
@@ -85,13 +106,18 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
                 }
             }
         }
-        mMfrvAllocateList.notifyForAdapter(adapter);
+        if (mMfrvAllocateList!=null){
+            mMfrvAllocateList.notifyForAdapter(adapter);
+        }
+
     }
 
     private void initData() {
         list = new ArrayList<>();
         list1 = new ArrayList<>();
         adapter = new AllocateVehiclesAdapter(list);
+        mMfrvAllocateList.setRefreshListener(this);
+        mMfrvAllocateList.setOnRetryLisenter(this);
         mMfrvAllocateList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
 //            ToastUtil.showToast(getContext(), list.get(position));
@@ -111,6 +137,12 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
 
     @Override
     public void toastView(String error) {
+        ToastUtil.showToast(getActivity(), error);
+        if (pageCurrent == 1) {
+            mMfrvAllocateList.finishRefresh();
+        } else {
+            mMfrvAllocateList.finishLoadMore();
+        }
     }
 
     @Override
@@ -132,8 +164,31 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
 
     @Override
     public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+        //因为没有分页，不做分页判断
         list1.clear();
+
+        if (pageCurrent == 1) {
+            mMfrvAllocateList.finishRefresh();
+        } else {
+            mMfrvAllocateList.finishLoadMore();
+        }
         list1.addAll(getInfosByFlightIdBeans);
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(list1.size());
+        }
         seachWithNum();
+    }
+
+    @Override
+    public void onRefresh() {
+        pageCurrent = 1;
+        getData();
+    }
+
+    @Override
+    public void onLoadMore() {
+        pageCurrent++;
+        getData();
     }
 }

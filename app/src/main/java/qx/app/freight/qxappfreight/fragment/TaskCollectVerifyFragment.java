@@ -54,8 +54,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     private List<TransportDataBase> transportListList1 = new ArrayList<>();
     private List<TransportDataBase> transportListList = new ArrayList<>();
-    private String seachString = "";
-    private TaskFragment fragment;
+    private String seachString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
 
     private TransportDataBase mBean;
     private boolean isShow =false;
@@ -71,19 +72,38 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fragment = (TaskFragment) getParentFragment();
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
 
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入运单号", text -> {
-            seachString = text;
-            seachWith();
-        });
+//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入运单号", text -> {
+//            seachString = text;
+//            seachWith();
+//        });
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(transportListList1.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入运单号", text -> {
+                    seachString = text;
+                    seachWith();
+                });
+            }
+
+        }
     }
 
     public void seachWith() {
@@ -97,10 +117,10 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 }
             }
         }
-//        if (fragment != null) {
-//            fragment.setTitleText(transportListList1.size());
-//        }
-        mMfrvData.notifyForAdapter(adapter);
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(adapter);
+        }
+
     }
 
     private void initData() {
@@ -239,25 +259,14 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 mMfrvData.finishLoadMore();
             }
             transportListList1.addAll(transportListBean.getRecords());
-            if (fragment != null) {
+            if (mTaskFragment != null) {
                 if (isShow)
-                    fragment.setTitleText(transportListList1.size());
+                    mTaskFragment.setTitleText(transportListList1.size());
             }
             seachWith();
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isShow = isVisibleToUser;
-        if (isVisibleToUser) {
-            if (fragment != null)
-                fragment.setTitleText(transportListList1.size());
-        }
-
     }
 
     @Override

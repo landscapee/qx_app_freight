@@ -50,9 +50,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private List<TransportDataBase> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
-    private String searchString = "";
-
-    private TaskFragment mTaskFragment;
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow =false;
 
     @Nullable
@@ -70,6 +70,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             EventBus.getDefault().register(this);
         }
         mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -87,15 +88,33 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         });
         mMfrvData.setAdapter(mAdapter);
         mPresenter = new GroupBoardToDoPresenter(this);
-        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
-            @Override
-            public void onSearched(String text) {
-               searchString = text;
-               seachWithNum();
-            }
-        });
+//        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
+//            @Override
+//            public void onSearched(String text) {
+//               searchString = text;
+//               seachWithNum();
+//            }
+//        });
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mListTemp.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入流水号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+
+        }
     }
 
     private void seachWithNum() {
@@ -110,7 +129,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     private void initData() {
@@ -213,16 +234,6 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isShow = isVisibleToUser;
-        if (isVisibleToUser) {
-            if (mTaskFragment != null)
-                mTaskFragment.setTitleText(mListTemp.size());
-        }
-    }
-
-    @Override
     public void toastView(String error) {
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
@@ -257,5 +268,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         }
         seachWithNum();
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(mListTemp.size());
+        }
     }
 }

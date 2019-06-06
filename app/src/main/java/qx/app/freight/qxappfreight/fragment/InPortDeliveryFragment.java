@@ -56,7 +56,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     private String searchString; //条件搜索关键字
 
-    private TaskFragment mTaskFragment;
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow =false;
 
     @Nullable
@@ -74,12 +75,25 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             EventBus.getDefault().register(this);
         }
         mTaskFragment = (TaskFragment) getParentFragment();
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入流水号", text -> {
-            searchString = text;
-            seachWithNum();
-        });
+        searchToolbar = mTaskFragment.getSearchView();
         initView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(list1.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入流水号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+        }
     }
 
     private void seachWithNum() {
@@ -93,7 +107,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 }
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -248,18 +264,6 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         loadData();
     }
 
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isShow = isVisibleToUser;
-        if (isVisibleToUser) {
-            if (mTaskFragment != null) {
-                mTaskFragment.setTitleText(list1.size());
-            }
-        }
-    }
-
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
@@ -284,7 +288,6 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         if (transportListBeans != null&&transportListBeans.size()>0) {
-            TaskFragment fragment = (TaskFragment) getParentFragment();
 
             //因为没有分页，不做分页判断
             list1.clear();
@@ -297,8 +300,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             }
             list1.addAll(transportListBeans);
             seachWithNum();
-            if (fragment != null) {
-                fragment.setTitleText(transportListBeans.size());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
