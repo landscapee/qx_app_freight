@@ -98,7 +98,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
 
     private void initView() {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+                EventBus.getDefault().register(this);
 //        list = new ArrayList<>();
 //        list1 = new ArrayList<>();
         adapter = new MainListRvAdapter(list);

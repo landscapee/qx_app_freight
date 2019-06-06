@@ -738,7 +738,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             flightInfo = scooterListInfoBean.getFlight();
 
             //当前航段 赋值
-            CURRENT_FLIGHT_COURSE_EN = flightInfo.getFlightInfo().getFlightCourseByAndroid().get(0);
+            CURRENT_FLIGHT_COURSE_EN = flightInfo.getFlightInfo().getFlightCourseByAndroid().get(1);
 
             //初始化航段UI
             String flightPartStr = flightInfo.getFlightInfo().getFlightCourseCn().get(0);

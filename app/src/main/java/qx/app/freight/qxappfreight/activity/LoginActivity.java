@@ -58,7 +58,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * 登录页面
  */
-public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView, UpdateVersionContract.updateView {
+public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.et_password)
@@ -299,7 +299,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        else
 //        {
 //            ((LoginPresenter) mPresenter).loginQxAi(getLoginQxAiEntity());
-//
 //        }
 
     }
@@ -340,23 +339,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void onBackPressed() {
         quitApp();
-    }
-
-    @Override
-    public void updateVersionResult(UpdateVersionBean updataBean) {
-//        if (updataBean == null) {
-//            ToastUtil.showToast("获取应用更新信息失败");
-//            return;
-//        }
-//        mVersionBean = updataBean;
-//        PackageInfo appInfo = AppUtil.getPackageInfo(this);
-//        int versionCode = 0;
-//        if (appInfo != null) {
-//            versionCode = appInfo.versionCode;
-//        }
-//        if (versionCode < mVersionBean.getIsCurrentVersion()) {
-//            showAppUpdateDialog();
-//        }
     }
 
     /**

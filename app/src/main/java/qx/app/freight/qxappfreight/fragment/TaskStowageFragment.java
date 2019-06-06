@@ -128,7 +128,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
-        entity.setRoleCode("preplaner");
+        entity.setRoleCode(Constants.PREPLANER);
         entity.setUndoType(2);
         List<String> ascs=new ArrayList<>();
         ascs.add("ETD");

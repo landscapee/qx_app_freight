@@ -67,7 +67,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+                EventBus.getDefault().register(this);
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入流水号", text -> {
             searchString = text;

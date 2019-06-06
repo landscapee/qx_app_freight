@@ -47,7 +47,7 @@ public class CargoHandlingWaybillAdapter extends BaseQuickAdapter<FtGroupScooter
         helper.setText(R.id.tv_waybill_count, item.getNumber() + "");
         helper.setText(R.id.tv_weight, item.getWeight() + "");
         helper.setText(R.id.tv_volume, item.getVolume() + "");
-        helper.setText(R.id.tv_destination, (item.getDestinationStation() == null) ? item.getDestinationStation() : item.getDestinationStation() + "/" + item.getToCityCn());//目的站
+        helper.setText(R.id.tv_destination, (item.getDestinationStation() == null) ? item.getDestinationStation() : item.getDestinationStation() + "/" + item.getToCityEn());//目的站
         if (!StringUtil.isEmpty(item.getRepName()))
             helper.setText(R.id.tv_warehouse_area, item.getRepName());
         else
