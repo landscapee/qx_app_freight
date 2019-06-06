@@ -108,7 +108,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mListTemp.size());
             if (searchToolbar!=null){
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入流水号", text -> {
                     searchString = text;
                     seachWithNum();
                 });
