@@ -52,6 +52,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     private String searchString = "";
 
+    private TaskFragment mTaskFragment;
+    private boolean isShow =false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        mTaskFragment = (TaskFragment) getParentFragment();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -206,6 +210,16 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         }
         seachWithNum();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser) {
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mListTemp.size());
+        }
     }
 
     @Override
