@@ -114,51 +114,41 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 
 //        GetIdUtil.getSingleInstance().register(this);
         //根据登录返回的
-        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
-        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
-            if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-                taskAssignType = 1;
-            } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-                taskAssignType = 3;
-            } else
-                taskAssignType = 2;
+//        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+//        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
+//            if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+//                taskAssignType = 1;
+//            } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+//                taskAssignType = 3;
+//            } else
+//                taskAssignType = 2;
+            WebSocketService.startService(this);
 
-
-            for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
-                switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
-                    case "collection":
-                        WebSocketService.Collection(HttpConstant.WEBSOCKETURL
-                                + "userId=" + UserInfoSingle.getInstance().getUserId()
-                                + "&taskAssignType=" + taskAssignType
-                                + "&type=MT"
-                                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(i));
-                        break;
-
-                    case "1":
-                        WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
-                                + "userId=" + UserInfoSingle.getInstance().getUserId()
-                                + "&taskAssignType=" + taskAssignType
-                                + "&type=MT"
-                                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-                        break;
-                }
-            }
+//            for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+//                switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
+//                    case "collection":
+//                        WebSocketService.Collection(HttpConstant.WEBSOCKETURL
+//                                + "userId=" + UserInfoSingle.getInstance().getUserId()
+//                                + "&taskAssignType=" + taskAssignType
+//                                + "&type=MT"
+//                                + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(i));
+//                        break;
+//
+//                    case "1":
+//
+//                        break;
+//                }
+//            }
 
 //            WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
 //                    + "userId=" + UserInfoSingle.getInstance().getUserId()
 //                    + "&taskAssignType=" + taskAssignType
 //                    + "&type=MT"
 //                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+//
+//        }
+}
 
-            Log.e("webSocketUrl=====",HttpConstant.WEBSOCKETURL
-                    + "userId=" + UserInfoSingle.getInstance().getUserId()
-                    + "&taskAssignType=" + taskAssignType
-                    + "&type=MT"
-                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        }
-
-
-    }
 
     private void initFragment() {
 //        PagerAdapter pagerAdapter = new PagerAdapter(this, getSupportFragmentManager());

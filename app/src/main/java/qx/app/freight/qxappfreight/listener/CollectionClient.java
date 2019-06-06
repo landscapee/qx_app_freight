@@ -1,7 +1,12 @@
 package qx.app.freight.qxappfreight.listener;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
@@ -16,8 +21,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
@@ -28,30 +39,31 @@ public class CollectionClient extends StompClient {
     public static final String TAG = "websocket";
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
+    private Context mContext;
 
     @SuppressLint("CheckResult")
-    public CollectionClient(String uri) {
+    public CollectionClient(String uri,Context mContext) {
         super(new GetConnectionProvider());
-        Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        this.mContext = mContext;
+        StompClient my=  Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
-        headers.add(new StompHeader(TAG, "guest"));
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        lifecycle()
+        my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
-                            Log.e(TAG, "webSocket 打开");
+                            Log.e(TAG, "webSocket  Collect 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket 关闭");
+                            Log.e(TAG, "websocket Collect 关闭");
                             resetSubscriptions();
                             break;
                         case FAILED_SERVER_HEARTBEAT:
@@ -61,7 +73,7 @@ public class CollectionClient extends StompClient {
                 });
 
         //订阅   待办
-        Disposable dispTopic1 = this.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
+        Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
@@ -71,6 +83,33 @@ public class CollectionClient extends StompClient {
                 }, throwable -> Log.e(TAG, "张硕订阅失败", throwable));
 
         compositeDisposable.add(dispTopic1);
+        //订阅  登录地址
+        Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
+                    if (null != topicMessage.getPayload()) {
+//                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
+//                        showdialog1();
+                        showDialog();
+                    }
+                }, throwable -> {
+                    Log.e(TAG, "订阅失败", throwable);
+                });
+        compositeDisposable.add(dispTopic);
+        //订阅   消息中心地址
+        Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "周弦订阅成功 " + topicMessage.getPayload());
+                    WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
+                    sendMessageEventBus(mWebSocketMessBean);
+                }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
+
+        compositeDisposable.add(dispTopic2);
+        my.connect();
     }
 
     //用于代办刷新
@@ -108,6 +147,31 @@ public class CollectionClient extends StompClient {
             return null;
         }
     }
+    private void showDialog() {
+        CommonDialog dialog = new CommonDialog(mContext);
+        dialog.setTitle("提示")
+                .setMessage("你的账号在其他地方登陆！请重新登陆")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog1, confirm) -> loginOut());
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> dialog.show());
+    }
+    //强制登出
+    private void loginOut() {
+        UserInfoSingle.setUserNil();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(MyApplication.getContext());
+        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mContext.startActivity(intent);
 
+    }
+    //消息推送
+    public  void sendMessageEventBus(WebSocketMessageBean bean) {
+        EventBus.getDefault().post(bean);
+    }
 
 }

@@ -133,6 +133,8 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private String taskId = null;//待办任务ID
     private String flightId = null;//待办航班id
+    private String  taskTypeCode = null;
+
 
     private CommonPopupWindow window;
     RecyclerView dataRc;
@@ -145,10 +147,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private CabinAdapter mSpProductAdapter;
 
 
-    public static void startActivity(Context context, String taskId, String flightId) {
+    public static void startActivity(Context context, String taskId, String flightId,String taskTypeCode) {
         Intent intent = new Intent(context, CargoHandlingActivity.class);
         intent.putExtra("taskId", taskId);
         intent.putExtra("flightId", flightId);
+        intent.putExtra("taskTypeCode", taskTypeCode);
         context.startActivity(intent);
     }
 
@@ -170,7 +173,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         taskId = getIntent().getStringExtra("taskId");
         flightId = getIntent().getStringExtra("flightId");
-
+        taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         mPresenter = new GetScooterListInfoPresenter(this);
         GetScooterListInfoEntity mGetScooterListInfoEntity = new GetScooterListInfoEntity();
         mGetScooterListInfoEntity.setFlightId(flightId);
@@ -514,6 +517,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mFightScooterSubmitEntity.setDeleteRcInfos(listDeleteYes);
         mFightScooterSubmitEntity.setScooters(listHandcar_ORIGIN);
         mFightScooterSubmitEntity.setWithoutScootereRcInfos(listWaybill_ORIGIN);
+        mFightScooterSubmitEntity.setCurrentStep(taskTypeCode);
         ((GetScooterListInfoPresenter) mPresenter).freightInfo(mFightScooterSubmitEntity);
 
     }

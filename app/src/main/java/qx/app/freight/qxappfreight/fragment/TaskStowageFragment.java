@@ -150,7 +150,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
      * @param bean
      */
     private void turnToDetailActivity(TransportDataBase bean) {
-        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId());
+        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId(),bean.getTaskTypeCode());
     }
 
     /**
