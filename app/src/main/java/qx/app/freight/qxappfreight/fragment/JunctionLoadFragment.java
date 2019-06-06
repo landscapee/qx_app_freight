@@ -72,6 +72,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
     private String mSearchText;
     private InstallEquipAdapter mAdapter;
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow =false;
 
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
@@ -133,6 +136,8 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -147,6 +152,24 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         loadData();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mCacheList.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    mSearchText = text;
+                    seachByText();
+                });
+            }
+
+        }
+    }
+
     private void seachByText() {
         mList.clear();
         if (TextUtils.isEmpty(mSearchText)) {
@@ -158,10 +181,8 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
-        TaskFragment fragment = (TaskFragment) getParentFragment();
-        if (fragment != null) {
-            fragment.setTitleText(mList.size());
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
         }
     }
 
@@ -264,9 +285,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
         seachByText();
         setSlideListener();
-        TaskFragment fragment = (TaskFragment) getParentFragment();
-        if (fragment != null) {
-            fragment.setTitleText(mList.size());
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(mCacheList.size());
         }
     }
 

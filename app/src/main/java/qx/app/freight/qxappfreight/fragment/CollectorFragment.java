@@ -75,11 +75,11 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         initView();
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入运单号", text -> {
-            seachString = text;
-            seachWith();
-        });
+//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入运单号", text -> {
+//            seachString = text;
+//            seachWith();
+//        });
         loadData();
     }
 
