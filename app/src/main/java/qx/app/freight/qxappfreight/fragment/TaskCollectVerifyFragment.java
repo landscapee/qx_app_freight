@@ -159,7 +159,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void getTaskInfo(TransportDataBase bean) {
         mBean = bean;
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getWaybillId());
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(bean.getId());
     }
 
     /**

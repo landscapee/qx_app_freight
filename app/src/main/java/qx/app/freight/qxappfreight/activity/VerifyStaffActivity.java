@@ -225,7 +225,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setFileCheck(1);
                     mStorageCommitEntity.setTaskTypeCode(mTaskTypeCode);
                     mStorageCommitEntity.setType(1);
-                    mStorageCommitEntity.setTaskId(mSpotFlag);
+                    mStorageCommitEntity.setTaskId(mTaskId);
                     mStorageCommitEntity.setUserId(mFlightNumber);
                     //新加
                     mStorageCommitEntity.setInsUserName("");
