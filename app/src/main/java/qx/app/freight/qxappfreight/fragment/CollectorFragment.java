@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -202,9 +203,13 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222", "daibanCode" + daibanCode);
         if (!TextUtils.isEmpty(daibanCode)) {
-            chooseCode(daibanCode);
+            String[] parts = daibanCode.split("\\/");
+            List<String> strsToList= Arrays.asList(parts);
+            if (strsToList.size()>=4){
+                chooseCode(strsToList.get(3));
+            }
+
         }
     }
 
