@@ -80,6 +80,7 @@ public class GetInfosByFlightIdBean {
         private String logUserId;
         private String remark;
         private String seat;
+        private String reWeightTaskId;
 
 
 }

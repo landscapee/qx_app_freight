@@ -389,18 +389,18 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @SuppressLint("SetTextI18n")
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean bean) {
-        if (bean!=null){
-            mData = bean;
-            tvFlightid.setText(bean.getFlightNo());
-            tvNameFront.setText(bean.getScooterCode());
-            tvDeadweightFront.setText(bean.getScooterWeight()+"kg");
-            tvUld.setText(bean.getUldType()+" "+bean.getUldCode()+" "+bean.getIata());
-            tvUldSelf.setText(bean.getUldWeight()+"kg");
-            //收运净重
-            tvNetweightFront.setText(bean.getWeight()+"kg");
+//        if (bean!=null){
+//            mData = bean;
+//            tvFlightid.setText(bean.getFlightNo());
+//            tvNameFront.setText(bean.getScooterCode());
+//            tvDeadweightFront.setText(bean.getScooterWeight()+"kg");
+//            tvUld.setText(bean.getUldType()+" "+bean.getUldCode()+" "+bean.getIata());
+//            tvUldSelf.setText(bean.getUldWeight()+"kg");
+//            //收运净重
 //            tvNetweightFront.setText(bean.getWeight()+"kg");
-
-        }
+////            tvNetweightFront.setText(bean.getWeight()+"kg");
+//
+//        }
     }
 
     @Override
