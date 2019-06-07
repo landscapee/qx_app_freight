@@ -28,8 +28,14 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.listener.BeforehandClient;
 import qx.app.freight.qxappfreight.listener.CollectionClient;
+import qx.app.freight.qxappfreight.listener.DeliveryClient;
 import qx.app.freight.qxappfreight.listener.InstallEquipClient;
+import qx.app.freight.qxappfreight.listener.OffSiteEscortClient;
+import qx.app.freight.qxappfreight.listener.PreplanerClient;
+import qx.app.freight.qxappfreight.listener.ReceiveClient;
+import qx.app.freight.qxappfreight.listener.WeighterClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -37,18 +43,18 @@ import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.StompClient;
 
-public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView{
+public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
 
     public Context mContext;
     private static StompClient mStompClient;
     public static final String TAG = "websocket";
     private CompositeDisposable compositeDisposable;
     private Gson mGson = new Gson();
-
     private GpsInfoEntity gpsInfoEntity; // gps 上传实体
     private SaveGpsInfoPresenter saveGpsInfoPresenter;
-
     private int taskAssignType = 0;
+    public static boolean isTopic =false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -64,157 +70,76 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                     taskAssignType = 2;
             }
             //多角色 需要保持多个 web socket 链接
-            switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()){
-                case "collection":
+            switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()) {
+                case "collection": //收运
                     Collection(HttpConstant.WEBSOCKETURL
                             + "userId=" + UserInfoSingle.getInstance().getUserId()
                             + "&taskAssignType=" + taskAssignType
                             + "&type=MT"
-                            + "&role=collection" );
+                            + "&role=collection");
                     break;
-                case "supervision":
+                case "receive": //收验
+                    ReceiveClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=receive");
+                    break;
+                case "supervision":  //运输 -装卸机
                     InstallEquipClient(HttpConstant.WEBSOCKETURL
                             + "userId=" + UserInfoSingle.getInstance().getUserId()
                             + "&taskAssignType=" + taskAssignType
                             + "&type=MT"
                             + "&role=supervision");
                     break;
+                case "offSiteEscort":  //运输
+                    OffSiteEscortClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=offSiteEscort");
+                    break;
+                case "preplaner":  //预配-组板
+                    PreplanerClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=preplaner");
+                    break;
+                case "weighter"://复重
+                    WeighterClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=weighter");
+                    break;
+                case "delivery_in"://进港提货
+                    DeliveryClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=delivery_in");
+                    break;
+                case "beforehand_in"://进港理货
+                    BeforehandClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=beforehand_in");
+                    break;
             }
         }
-//        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
-////        Log.e(TAG, uri);
-//        //请求头
-//        List<StompHeader> headers = new ArrayList<>();
-//        headers.add(new StompHeader(TAG, "guest"));
-//        headers.add(new StompHeader(TAG, "guest"));
-//        //超时连接
-//        mStompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
-//        resetSubscriptions();
-//        //创建连接
-//        Disposable dispLifecycle = mStompClient.lifecycle()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(lifecycleEvent -> {
-//                    switch (lifecycleEvent.getType()) {
-//                        case OPENED:
-//                            Log.e(TAG, "webSocket 打开");
-//                            break;
-//                        case ERROR:
-//                            Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
-//                            break;
-//                        case CLOSED:
-//                            Log.e(TAG, "websocket 关闭");
-//                            resetSubscriptions();
-//                            break;
-//                        case FAILED_SERVER_HEARTBEAT:
-//                            Log.e(TAG, "Stomp failed server heartbeat");
-//                            break;
-//                    }
-//                });
-//        compositeDisposable.add(dispLifecycle);
-//
-//        //订阅  登录地址
-//        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(topicMessage -> {
-//                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
-//                    if (null != topicMessage.getPayload()) {
-////                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
-////                        showdialog1();
-//                        ();
-//                    }
-//                }, throwable -> {
-//                    Log.e(TAG, "订阅失败", throwable);
-//                });
-//
-//        compositeDisposable.add(dispTopic);
-//        //订阅  装机单变更推送
-//        Disposable loadingListPush = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(topicMessage -> {
-//                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
-//                    if (null != topicMessage.getPayload()) {
-//                        sendLoadingListPush(topicMessage.getPayload());
-//                    }
-//                }, throwable -> {
-//                    Log.e(TAG, "订阅失败", throwable);
-//                });
-//
-//        compositeDisposable.add(loadingListPush);
-//        //订阅   待办
-//        Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(topicMessage -> {
-//                    Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
-//                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
-//                    sendReshEventBus(mWebSocketBean);
-//                }, throwable -> Log.e(TAG, "张硕订阅失败", throwable));
-//
-//        compositeDisposable.add(dispTopic1);
-//
-//        //订阅   消息中心地址
-//        Disposable dispTopic2 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(topicMessage -> {
-//                    Log.d(TAG, "周弦订阅成功 " + topicMessage.getPayload());
-//                    WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-//                    sendMessageEventBus(mWebSocketMessBean);
-//                }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
-//
-//        compositeDisposable.add(dispTopic2);
-//        //订阅   运输 装卸机
-//        Disposable dispTopic3 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(topicMessage -> {
-//                    Log.e(TAG, topicMessage.getPayload());
-//                    if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
-//                        if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
-//                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-//                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-//                            sendLoadUnLoadGroupBoard(data);
-//                        } else if (topicMessage.getPayload().contains("taskType:2")) {//运输
-//                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-//                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-//                            sendLoadUnLoadGroupBoard(data);
-//                        }
-//                    } else {
-//                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2")|| topicMessage.getPayload().contains("taskType:3")|| topicMessage.getPayload().contains("taskType:5")) {//装卸机
-//                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-//                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-//                            sendLoadUnLoadGroupBoard(data);
-//                        } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
-//                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-//                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-//                            sendLoadUnLoadGroupBoard(data);
-//                        }else {
-//                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-//                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-//                            sendLoadUnLoadGroupBoard(data);
-//                        }
-//                    }
-//                }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
-//
-//        compositeDisposable.add(dispTopic3);
-//
-//        mStompClient.connect(headers);
-
-
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         //GPS 数据提交线程
         Thread threadGps = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                while (true) {
                     try {
                         sendGps();
                         Thread.sleep(30000);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.e("GPS while (true)", e.getMessage());
                     }
                 }
@@ -226,11 +151,10 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
 
     private void sendGps() {
-        Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude()+"");
-        if (GPSUtils.getInstance().getCurrentLocation().getLatitude()<=0.0){
+        Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude() + "");
+        if (GPSUtils.getInstance().getCurrentLocation().getLatitude() <= 0.0) {
             Log.e("GPS位置：", "位置为0 不提交");
-        }
-        else {
+        } else {
             gpsInfoEntity = new GpsInfoEntity();
             gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
             gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
@@ -252,12 +176,34 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static void startService(Activity activtity) {
         actionStart(activtity);
     }
-    public void Collection(String uri){
-        new CollectionClient(uri,this);
-        new InstallEquipClient(uri,this);
+
+    public void Collection(String uri) {
+        new CollectionClient(uri, this);
+        new InstallEquipClient(uri, this);
     }
-    public void InstallEquipClient(String uri){
-        new InstallEquipClient(uri,this);
+
+    public void InstallEquipClient(String uri) {
+        new InstallEquipClient(uri, this);
+    }
+
+    public void PreplanerClient(String uri) {
+        new PreplanerClient(uri, this);
+    }
+
+    public void WeighterClient(String uri) {
+        new WeighterClient(uri, this);
+    }
+    public void DeliveryClient(String uri) {
+        new DeliveryClient(uri, this);
+    }
+    public void BeforehandClient(String uri) {
+        new BeforehandClient(uri, this);
+    }
+    public void OffSiteEscortClient(String uri) {
+        new OffSiteEscortClient(uri, this);
+    }
+    public void ReceiveClient(String uri) {
+        new ReceiveClient(uri, this);
     }
 
     //强制登出
@@ -292,19 +238,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     }
 
 
-    //创建长连接，服务器端没有心跳机制的情况下，启动timer来检查长连接是否断开，如果断开就执行重连
-//    private void createStompClient(int flag) {
-//        if (1 == flag)
-//            onCreate();
-//        mTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                mStompClient.send("websocket 心跳包");
-//                Log.e("websocket 心跳包", "发送中");
-//            }
-//        }, 5000, 5000);
-//    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -322,12 +255,12 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     @Override
     public void saveGpsInfoResult(String result) {
-        Log.e("GPS上传：",result);
+        Log.e("GPS上传：", result);
     }
 
     @Override
     public void toastView(String error) {
-        Log.e("GPS上传：",error);
+        Log.e("GPS上传：", error);
     }
 
     @Override

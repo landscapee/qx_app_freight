@@ -24,12 +24,10 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
-import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -37,12 +35,7 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.provider.ConnectionProvider;
 
-
-/****
- * 装卸机推送
- *
- */
-public class InstallEquipClient extends StompClient {
+public class ReceiveClient extends StompClient {
 
     public static final String TAG = "websocket";
     private Gson mGson = new Gson();
@@ -50,7 +43,7 @@ public class InstallEquipClient extends StompClient {
     private Context mContext;
 
     @SuppressLint("CheckResult")
-    public InstallEquipClient(String uri, Context mContext) {
+    public ReceiveClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
@@ -84,40 +77,19 @@ public class InstallEquipClient extends StompClient {
                     }
                 });
 
-        //订阅   运输 装卸机
-        Disposable dispTopic3 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
+
+
+        //订阅   待办
+        Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
-                    Log.e(TAG, topicMessage.getPayload());
-                    if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
-                        if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:2")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    } else {
-                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else {
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    }
-                }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
+                    Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                    sendReshEventBus(mWebSocketBean);
+                }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
 
-        compositeDisposable.add(dispTopic3);
+        compositeDisposable.add(dispTopic1);
         if(!WebSocketService.isTopic){
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
@@ -145,6 +117,11 @@ public class InstallEquipClient extends StompClient {
             compositeDisposable.add(dispTopic2);
         }
         my.connect();
+    }
+
+    //用于代办刷新
+    public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
     }
 
     private void resetSubscriptions() {
@@ -178,16 +155,6 @@ public class InstallEquipClient extends StompClient {
         }
     }
 
-    //用于装卸机运输推送刷新弹窗
-    public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
-        EventBus.getDefault().post(bean);
-    }
-
-    //消息推送
-    public void sendMessageEventBus(WebSocketMessageBean bean) {
-        EventBus.getDefault().post(bean);
-    }
-
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")
@@ -210,5 +177,8 @@ public class InstallEquipClient extends StompClient {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mContext.startActivity(intent);
     }
-
+    //消息推送
+    public  void sendMessageEventBus(WebSocketMessageBean bean) {
+        EventBus.getDefault().post(bean);
+    }
 }

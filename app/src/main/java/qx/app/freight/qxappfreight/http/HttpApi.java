@@ -73,6 +73,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -172,9 +173,12 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> returnCargoCommit(@Body TransportListCommitEntity model);
 
 
-    //出港收货 -收运
+    //出港退货 -收运
     @POST("service-product-receivecargo/rc/list")
     Observable<BaseEntity<AgentBean>> agentTransportationList(@Body BaseFilterEntity model);
+    //出港退货 -收运
+    @POST("service-product-receivecargo/rc/list")
+    Observable<BaseEntity<List<ReturnBean>>> returnTransportationList(@Body BaseFilterEntity model);
 
     //出港收货 -收运
     @POST("service-product-receivecargo/rc/list")

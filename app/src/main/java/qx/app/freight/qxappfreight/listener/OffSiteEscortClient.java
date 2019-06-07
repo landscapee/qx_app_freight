@@ -37,23 +37,17 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.provider.ConnectionProvider;
 
-
-/****
- * 装卸机推送
- *
- */
-public class InstallEquipClient extends StompClient {
-
+public class OffSiteEscortClient extends StompClient {
     public static final String TAG = "websocket";
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
     @SuppressLint("CheckResult")
-    public InstallEquipClient(String uri, Context mContext) {
+    public OffSiteEscortClient(String uri,Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
-        StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        StompClient my=  Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
@@ -101,7 +95,7 @@ public class InstallEquipClient extends StompClient {
                             sendLoadUnLoadGroupBoard(data);
                         }
                     } else {
-                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")) {//装卸机
+                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2")|| topicMessage.getPayload().contains("taskType:3")|| topicMessage.getPayload().contains("taskType:5")) {//装卸机
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
@@ -109,7 +103,7 @@ public class InstallEquipClient extends StompClient {
                             CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
-                        } else {
+                        }else {
                             CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                             CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                             sendLoadUnLoadGroupBoard(data);
@@ -118,6 +112,7 @@ public class InstallEquipClient extends StompClient {
                 }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
         compositeDisposable.add(dispTopic3);
+
         if(!WebSocketService.isTopic){
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
@@ -182,12 +177,10 @@ public class InstallEquipClient extends StompClient {
     public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
         EventBus.getDefault().post(bean);
     }
-
     //消息推送
-    public void sendMessageEventBus(WebSocketMessageBean bean) {
+    public  void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
-
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")
@@ -210,5 +203,4 @@ public class InstallEquipClient extends StompClient {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mContext.startActivity(intent);
     }
-
 }

@@ -57,17 +57,21 @@ public class CollectionClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
+                            WebSocketService.isTopic = true;
                             Log.e(TAG, "webSocket  Collect 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
+                            WebSocketService.isTopic = false;
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket Collect 关闭");
+                            WebSocketService.isTopic = false;
                             resetSubscriptions();
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
+                            WebSocketService.isTopic = false;
                             break;
                     }
                 });
@@ -77,38 +81,38 @@ public class CollectionClient extends StompClient {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
-                    Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
+                    Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
                     WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                     sendReshEventBus(mWebSocketBean);
-                }, throwable -> Log.e(TAG, "张硕订阅失败", throwable));
+                }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
 
         compositeDisposable.add(dispTopic1);
-        //订阅  登录地址
-        Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
-                    if (null != topicMessage.getPayload()) {
-//                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
-//                        showdialog1();
-                        showDialog();
-                    }
-                }, throwable -> {
-                    Log.e(TAG, "订阅失败", throwable);
-                });
-        compositeDisposable.add(dispTopic);
-        //订阅   消息中心地址
-        Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "周弦订阅成功 " + topicMessage.getPayload());
-                    WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                    sendMessageEventBus(mWebSocketMessBean);
-                }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
+        if(!WebSocketService.isTopic){
+            //订阅  登录地址
+            Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
+                        if (null != topicMessage.getPayload()) {
+                            showDialog();
+                        }
+                    }, throwable -> {
+                        Log.e(TAG, "websocket-->登录失败", throwable);
+                    });
+            compositeDisposable.add(dispTopic);
+            //订阅   消息中心地址
+            Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
+                        WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
+                        sendMessageEventBus(mWebSocketMessBean);
+                    }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
 
-        compositeDisposable.add(dispTopic2);
+            compositeDisposable.add(dispTopic2);
+        }
         my.connect();
     }
 
