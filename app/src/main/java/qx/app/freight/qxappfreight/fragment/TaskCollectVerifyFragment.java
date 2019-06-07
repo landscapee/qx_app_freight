@@ -210,6 +210,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void onEventMainThread(String refresh) {
         if (refresh.equals("collectVerify_refresh")) {
             Log.e("refresh", refresh);
+            pageCurrent=1;
             initData();
         }
     }
