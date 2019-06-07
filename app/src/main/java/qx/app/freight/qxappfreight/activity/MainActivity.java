@@ -119,7 +119,8 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 //            if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
 //                taskAssignType = 1;
 //            } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-//                taskAssignType = 3;
+//                taskAssignType =
+// 3;
 //            } else
 //                taskAssignType = 2;
             WebSocketService.startService(this);

@@ -134,7 +134,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mWaybillCode = getIntent().getStringExtra("waybillCode");
         Tid = getIntent().getStringExtra("tid");
         insCheck = getIntent().getIntExtra("insCheck", 0);
-        if (!mAdditionTypeArr.equals("[]")) {
+        if (!mAdditionTypeArr.equals("[]")&&!TextUtils.isEmpty(mAdditionTypeArr)) {
             Gson mGson = new Gson();
             AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices[].class);
             List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);

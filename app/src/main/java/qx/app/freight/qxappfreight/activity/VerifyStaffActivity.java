@@ -158,34 +158,34 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
         ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId, mTaskTypeCode);
-        List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
-            staffCheckInfo.setId(i + "");
-            staffCheckInfo.setValue("李" + i + "蛋");
-            staffCheckInfos.add(staffCheckInfo);
-        }
-        initSpinnerData(staffCheckInfos);
+//        List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
+//        for (int i = 0; i < 5; i++) {
+//            GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
+//            staffCheckInfo.setId(i + "");
+//            staffCheckInfo.setValue("李" + i + "蛋");
+//            staffCheckInfos.add(staffCheckInfo);
+//        }
+//        initSpinnerData(staffCheckInfos);
     }
 
-    private void initSpinnerData(List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos) {
-        GeneralSpinnerAdapter<GeneralSpinnerBean.StaffCheckInfo> typeAdapter = new GeneralSpinnerAdapter(this, staffCheckInfos);
-        mSpSelectStaff.setAdapter(typeAdapter);
-        mSpSelectStaff.setDropDownVerticalOffset(10);
-        mStaffId = staffCheckInfos.get(0).getId();
-        mStaffName = staffCheckInfos.get(0).getValue();
-        mSpSelectStaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mStaffId = staffCheckInfos.get(position).getId();
-                mStaffName = staffCheckInfos.get(position).getValue();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
+//    private void initSpinnerData(List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos) {
+//        GeneralSpinnerAdapter<GeneralSpinnerBean.StaffCheckInfo> typeAdapter = new GeneralSpinnerAdapter(this, staffCheckInfos);
+//        mSpSelectStaff.setAdapter(typeAdapter);
+//        mSpSelectStaff.setDropDownVerticalOffset(10);
+//        mStaffId = staffCheckInfos.get(0).getId();
+//        mStaffName = staffCheckInfos.get(0).getValue();
+//        mSpSelectStaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                mStaffId = staffCheckInfos.get(position).getId();
+//                mStaffName = staffCheckInfos.get(position).getValue();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
+//    }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv, R.id.iv_staff_photo_now, R.id.gh_user})
     public void onClick(View view) {

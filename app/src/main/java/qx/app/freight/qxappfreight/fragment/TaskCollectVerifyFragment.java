@@ -273,19 +273,35 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         if (null != result) {
             if (null != mBean) {
-                VerifyStaffActivity.startActivity(getActivity()
-                        , mBean.getTaskTypeCode()
-                        , result.getDeclareWaybillAddition().getId()
-                        , result.getDeclareWaybillAddition().getAddtionInvoices()
-                        , mBean.getTaskId()
-                        , result.getDeclareWaybillAddition().getWaybillId()
-                        , result.getSpotFlag() + ""
-                        , result.getFlightNumber()
-                        , result.getShipperCompanyId()
-                        , mBean.getWaybillCode()
-                        , mBean.getId()
-                        , result.getAdditionTypeArr()
-                );
+                if (null==result.getDeclareWaybillAddition()) {
+                    VerifyStaffActivity.startActivity(getActivity()
+                            , mBean.getTaskTypeCode()
+                            , ""
+                            , ""
+                            , mBean.getTaskId()
+                            , mBean.getWaybillId()
+                            , result.getSpotFlag() + ""
+                            , result.getFlightNumber()
+                            , result.getShipperCompanyId()
+                            , mBean.getWaybillCode()
+                            , mBean.getId()
+                            , result.getAdditionTypeArr()
+                    );
+                }else {
+                    VerifyStaffActivity.startActivity(getActivity()
+                            , mBean.getTaskTypeCode()
+                            , result.getDeclareWaybillAddition().getId()
+                            , result.getDeclareWaybillAddition().getAddtionInvoices()
+                            , mBean.getTaskId()
+                            , mBean.getWaybillId()
+                            , result.getSpotFlag() + ""
+                            , result.getFlightNumber()
+                            , result.getShipperCompanyId()
+                            , mBean.getWaybillCode()
+                            , mBean.getId()
+                            , result.getAdditionTypeArr()
+                    );
+                }
             }
         } else {
             ToastUtil.showToast("收验点击事件为空");
