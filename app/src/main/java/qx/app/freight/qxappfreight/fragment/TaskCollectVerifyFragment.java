@@ -60,7 +60,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private SearchToolbar searchToolbar;//父容器的输入框
 
     private TransportDataBase mBean;
-    private boolean isShow =false;
+    private boolean isShow = false;
 
     @Nullable
     @Override
@@ -93,11 +93,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser){
-            Log.e("111111", "setUserVisibleHint: "+ "展示");
+        if (isVisibleToUser) {
+            Log.e("111111", "setUserVisibleHint: " + "展示");
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(transportListList1.size());
-            if (searchToolbar!=null){
+            if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
                     seachString = text;
                     seachWith();
@@ -118,7 +118,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 }
             }
         }
-        if (mMfrvData!=null){
+        if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(adapter);
         }
 
@@ -168,14 +168,14 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e( "========",daibanCode);
+        Log.e("========", daibanCode);
         if (!TextUtils.isEmpty(daibanCode)) {
             String[] parts = daibanCode.split("\\/");
-            List<String> strsToList= Arrays.asList(parts);
-            Log.e( "========1",daibanCode);
-            if (strsToList.size()>=4){
+            List<String> strsToList = Arrays.asList(parts);
+            Log.e("========1", daibanCode);
+            if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(2));
-                Log.e( "========2",daibanCode);
+                Log.e("========2", daibanCode);
             }
         }
     }
@@ -217,7 +217,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void onEventMainThread(String refresh) {
         if (refresh.equals("collectVerify_refresh")) {
             Log.e("refresh", refresh);
-            pageCurrent=1;
+            pageCurrent = 1;
             initData();
         }
     }
@@ -225,7 +225,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            transportListList1.addAll(mWebSocketResultBean.getChgData());
+            if ("receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()))
+                transportListList1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             getData();
 //            for (TransportDataBase mTransportListBean : transportListList1) {
@@ -281,7 +282,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         if (null != result) {
             if (null != mBean) {
-                if (null==result.getDeclareWaybillAddition()) {
+                if (null == result.getDeclareWaybillAddition()) {
                     VerifyStaffActivity.startActivity(getActivity()
                             , mBean.getTaskTypeCode()
                             , ""
@@ -295,7 +296,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                             , mBean.getId()
                             , result.getAdditionTypeArr()
                     );
-                }else {
+                } else {
                     VerifyStaffActivity.startActivity(getActivity()
                             , mBean.getTaskTypeCode()
                             , result.getDeclareWaybillAddition().getId()

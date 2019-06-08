@@ -99,9 +99,6 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     private void click() {
         mBtSure.setOnClickListener(v -> {
-//            if (list.size() <= 0) {
-//                return;
-//            }
             mPresenter = new ReturnCargoCommitPresenter(this);
             TransportListCommitEntity entity = new TransportListCommitEntity();
             entity.setTaskId(mBean.getTaskId());
@@ -109,8 +106,6 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
             entity.setUserId(UserInfoSingle.getInstance().getUserId());
             ((ReturnCargoCommitPresenter) mPresenter).returnCargoCommit(entity);
         });
-
-
     }
 
     @Override

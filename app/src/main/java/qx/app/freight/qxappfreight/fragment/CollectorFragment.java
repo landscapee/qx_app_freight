@@ -58,7 +58,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private String seachString = "";
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
-    private boolean isShow =false;
+    private boolean isShow = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             }
         }
 
-        if (mMfrvData!=null){
+        if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(adapter);
         }
     }
@@ -104,7 +105,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     private void initView() {
         if (!EventBus.getDefault().isRegistered(this))
-                EventBus.getDefault().register(this);
+            EventBus.getDefault().register(this);
 //        list = new ArrayList<>();
 //        list1 = new ArrayList<>();
         adapter = new MainListRvAdapter(list);
@@ -141,7 +142,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 break;
 
             case "changeCollection": //存储变更
-                StoreTypeChangeActivity.startActivity(getActivity(),bean);
+                StoreTypeChangeActivity.startActivity(getActivity(), bean);
                 break;
         }
     }
@@ -205,8 +206,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         String daibanCode = result.getData();
         if (!TextUtils.isEmpty(daibanCode)) {
             String[] parts = daibanCode.split("\\/");
-            List<String> strsToList= Arrays.asList(parts);
-            if (strsToList.size()>=4){
+            List<String> strsToList = Arrays.asList(parts);
+            if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(2));
             }
 
@@ -216,8 +217,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
-            list1.addAll(mWebSocketResultBean.getChgData());
+            if ("collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()))
+                list1.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
@@ -271,7 +272,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(list1.size());
 
-            if (searchToolbar!=null){
+            if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入板车号", text -> {
                     seachString = text;
                     seachWith();

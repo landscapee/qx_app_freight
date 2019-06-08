@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
@@ -126,6 +130,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
         mPresenter = new GetInfosByFlightIdPresenter(this);
 //        getData();
     }
+
+
 
 
     public void getData() {

@@ -42,10 +42,11 @@ public class CollectionClient extends StompClient {
     private Context mContext;
 
     @SuppressLint("CheckResult")
-    public CollectionClient(String uri,Context mContext) {
+    public CollectionClient(String uri, Context mContext) {
         super(new GetConnectionProvider());
         this.mContext = mContext;
-        StompClient my=  Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        Log.e(TAG, "websocket-->收运连接地址" + uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
@@ -75,19 +76,18 @@ public class CollectionClient extends StompClient {
                             break;
                     }
                 });
-
-        //订阅   待办
-        Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
-                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
-                    sendReshEventBus(mWebSocketBean);
-                }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
-
-        compositeDisposable.add(dispTopic1);
-        if(!WebSocketService.isTopic){
+        if (!WebSocketService.isTopic) {
+            //订阅   待办
+            Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                        WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                        sendReshEventBus(mWebSocketBean);
+                    }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
+            Log.e(TAG, "websocket-->收运订阅地址：" + "/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList");
+            compositeDisposable.add(dispTopic1);
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())
@@ -151,6 +151,7 @@ public class CollectionClient extends StompClient {
             return null;
         }
     }
+
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")
@@ -163,6 +164,7 @@ public class CollectionClient extends StompClient {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> dialog.show());
     }
+
     //强制登出
     private void loginOut() {
         UserInfoSingle.setUserNil();
@@ -173,8 +175,9 @@ public class CollectionClient extends StompClient {
         mContext.startActivity(intent);
 
     }
+
     //消息推送
-    public  void sendMessageEventBus(WebSocketMessageBean bean) {
+    public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
 

@@ -146,10 +146,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
             }
         });
         threadGps.start();
-
     }
-
-
     private void sendGps() {
         Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude() + "");
         if (GPSUtils.getInstance().getCurrentLocation().getLatitude() <= 0.0) {
@@ -179,7 +176,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     public void Collection(String uri) {
         new CollectionClient(uri, this);
-//        new InstallEquipClient(uri, this);
     }
 
     public void InstallEquipClient(String uri) {
