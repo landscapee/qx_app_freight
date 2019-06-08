@@ -66,14 +66,14 @@ public class InstallEquipClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
-                            Log.e(TAG, "webSocket  Collect 打开");
+                            Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket Collect 关闭");
+                            Log.e(TAG, "websocket 装卸机 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
                             break;

@@ -91,6 +91,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     TextView reservoirTv;//库区
     @BindView(R.id.tv_location)
     TextView locationTv;//库位
+    @BindView(R.id.et_location)
+    EditText locationEt;//库位  暂修改为 输入框
+
     @BindView(R.id.tv_is_transit)
     TextView isTransitTv;//转关
     @BindView(R.id.btn_submit)
@@ -293,6 +296,9 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 ToastUtil.showToast("请选择库区");
                 return;
             }
+            if (!StringUtil.isEmpty(locationEt.getText().toString()))
+                mInWaybillRecord.setWarehouseLocation(locationEt.getText().toString());
+
             mInWaybillRecord.setCounterUbnormalGoodsList(counterUbnormalGoodsList);
             mInWaybillRecord.setOverWeightList(rcInfoOverweight);
             Intent intent = new Intent(SortingAddActivity.this, SortingActivity.class);
@@ -475,7 +481,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
                 //设置库区type
                 mInWaybillRecord.setWarehouseAreaType(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirType());
-                mInWaybillRecord.setWarehouseLocation("库位未知");
+                mInWaybillRecord.setWarehouseLocation("");
             }
         });
     }
@@ -572,7 +578,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 reservoirTv.setText(acceptTerminalTodoBeanList.get(position).getReservoirName());
                 mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
                 mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.get(position).getReservoirName());
-                mInWaybillRecord.setWarehouseLocation("库位未知");
+                mInWaybillRecord.setWarehouseLocation("");
             }
         });
     }

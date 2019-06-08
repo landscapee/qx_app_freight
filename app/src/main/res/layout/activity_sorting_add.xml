@@ -161,7 +161,20 @@
             android:layout_weight="1"
             android:drawableRight="@mipmap/drop_select"
             android:gravity="right"
-            android:text="请选择库位 " />
+            android:text="请选择库位 "
+            android:visibility="gone"
+            />
+        <EditText
+            android:id="@+id/et_location"
+            style="@style/public_tv_16sp_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text=""
+            android:background="@color/transparent"
+            />
+
 
     </LinearLayout>
 

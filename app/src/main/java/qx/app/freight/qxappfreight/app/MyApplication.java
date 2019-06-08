@@ -29,7 +29,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appContext = getApplicationContext();
-//        UnCatchHandler.getInstance(appContext).init();
+        UnCatchHandler.getInstance(appContext).init();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();

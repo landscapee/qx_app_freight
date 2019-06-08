@@ -737,6 +737,14 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         if (scooterListInfoBean != null) {
             //总数据源 赋值
             listHandcar_ORIGIN = scooterListInfoBean.getScooters();
+            //为无板运单增加 inFlight 默认值
+            for (FtGroupScooter mFtGroupScooter:scooterListInfoBean.getWithoutScootereRcInfos()){
+                if (mFtGroupScooter.getInFlight() == null)
+                    mFtGroupScooter.setInFlight((short)0);
+//                mFtGroupScooter.setNumber(5);
+//                mFtGroupScooter.setWeight(50d);
+//                mFtGroupScooter.setVolume(20d);
+            }
             listWaybill_ORIGIN = scooterListInfoBean.getWithoutScootereRcInfos();
             //航班信息 赋值
             flightInfo = scooterListInfoBean.getFlight();

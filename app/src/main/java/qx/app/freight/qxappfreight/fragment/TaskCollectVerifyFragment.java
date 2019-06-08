@@ -168,11 +168,14 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
+        Log.e( "========",daibanCode);
         if (!TextUtils.isEmpty(daibanCode)) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList= Arrays.asList(parts);
+            Log.e( "========1",daibanCode);
             if (strsToList.size()>=4){
-                chooseCode(strsToList.get(3));
+                chooseCode(strsToList.get(2));
+                Log.e( "========2",daibanCode);
             }
         }
     }
@@ -183,8 +186,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportDataBase item : transportListList) {
-            if (daibanCode.equals(item.getId())) {
+        for (TransportDataBase item : transportListList1) {
+            if (daibanCode.equals(item.getWaybillCode())) {
                 getTaskInfo(item);
                 return;
             }

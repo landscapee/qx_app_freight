@@ -136,7 +136,7 @@ public class Constants {
     public static final String SACN_DATA = "scan_data";
 
     //===================================================分页数据获取条数======================================================
-    public static final int PAGE_SIZE = 50;//列表分页获取的单页最大的数量
+    public static final int PAGE_SIZE = 100;//列表分页获取的单页最大的数量
 
 
     //im加的字段常量

@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.bean.response;
 import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 @Data
 public class WebSocketResultBean {
@@ -12,5 +13,23 @@ public class WebSocketResultBean {
      */
     private String flag; //N是新增, D是删除
     private List <TransportDataBase> chgData;
+
+    public List<TransportDataBase> getChgData(){
+        if (chgData !=null&&chgData.size()>0){
+            if (StringUtil.isEmpty(chgData.get(0).getWaybillId()))
+                chgData.get(0).setWaybillId(chgData.get(0).getId());
+            if (StringUtil.isEmpty(chgData.get(0).getCargoCn())&&chgData.get(0).getDeclareItem()!=null &&chgData.get(0).getDeclareItem().size()>0){
+                String cargoName = "";
+                String packagingType = "";
+                for (DeclareItem mDeclareItem:chgData.get(0).getDeclareItem()){
+                    cargoName += mDeclareItem.getCargoCn();
+                }
+                chgData.get(0).setCargoCn(cargoName);
+            }
+
+        }
+
+        return chgData;
+    }
 
 }

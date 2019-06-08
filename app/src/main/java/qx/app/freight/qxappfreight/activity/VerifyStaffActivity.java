@@ -365,7 +365,11 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             if (testInfoListBeanList.getFreightInfo().size() > 0) {
                 mAcTestInfoListBean = testInfoListBeanList;
                 //获取抽验结果
-                mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
+                if (mAcTestInfoListBean.getInsInfo()==null){
+                    mSpotResult =0;
+                }
+                else
+                    mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
                 //报检员姓名
                 tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
                 //报检开始时间

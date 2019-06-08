@@ -59,14 +59,14 @@ public class ReceiveClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
-                            Log.e(TAG, "webSocket  Collect 打开");
+                            Log.e(TAG, "webSocket  收验 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket 收验 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket Collect 关闭");
+                            Log.e(TAG, "websocket 收验 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
                             break;

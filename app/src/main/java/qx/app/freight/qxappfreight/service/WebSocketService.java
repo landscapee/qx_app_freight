@@ -179,7 +179,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     public void Collection(String uri) {
         new CollectionClient(uri, this);
-        new InstallEquipClient(uri, this);
+//        new InstallEquipClient(uri, this);
     }
 
     public void InstallEquipClient(String uri) {

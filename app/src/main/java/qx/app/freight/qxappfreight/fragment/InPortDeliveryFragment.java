@@ -205,7 +205,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList= Arrays.asList(parts);
             if (strsToList.size()>=4){
-                chooseCode(strsToList.get(3));
+                chooseCode(strsToList.get(1));
             }
 
         }
