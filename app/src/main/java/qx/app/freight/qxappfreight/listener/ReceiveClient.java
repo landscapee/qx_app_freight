@@ -59,7 +59,6 @@ public class ReceiveClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
-                            WebSocketService.isTopic = true;
                             Log.e(TAG, "webSocket  收验 打开");
                             break;
                         case ERROR:
@@ -78,6 +77,7 @@ public class ReceiveClient extends StompClient {
                     }
                 });
         if (!WebSocketService.isTopic) {
+            WebSocketService.isTopic = true;
             //订阅   待办
             Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
                     .subscribeOn(Schedulers.io())
