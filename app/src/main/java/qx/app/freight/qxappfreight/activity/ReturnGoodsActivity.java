@@ -145,7 +145,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("提交中");
+        showProgessDialog("数据提交中……");
     }
 
     @Override

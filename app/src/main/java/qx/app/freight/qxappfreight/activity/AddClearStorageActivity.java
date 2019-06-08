@@ -359,11 +359,11 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 }

@@ -201,7 +201,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+        showProgessDialog("数据提交中……");
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -124,10 +125,15 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     }
 
     public void commit(int type) {
+        if (TextUtils.isEmpty(mTvType.getText())) {
+            ToastUtil.showToast("请先选择存储类型");
+            return;
+        }
         mPresenter = new ChangeStoragePresenter(this);
         ChangeStorageBean entity = new ChangeStorageBean();
         entity.setDeclareApplyForRecords(mEntity);
         entity.setTaskId(data.getTaskId());
+        entity.setChargeFlag(data.getChargeFlag());
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setJudge(type); //1通过 0拒绝
         ((ChangeStoragePresenter) mPresenter).changeStorage(entity);
@@ -278,22 +284,22 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
 
     @Override
     public void toastView(String error) {
-
+        Log.e("-----",error);
     }
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("数据提交中……");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override
     public void changeStorageResult(String result) {
-        if (TextUtils.isEmpty(result)) {
+        if (!TextUtils.isEmpty(result)) {
             EventBus.getDefault().post("collector_refresh");
             ToastUtil.showToast(result);
             finish();

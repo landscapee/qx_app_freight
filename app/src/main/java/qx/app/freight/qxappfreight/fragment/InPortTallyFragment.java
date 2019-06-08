@@ -220,7 +220,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            mListTemp.addAll(mWebSocketResultBean.getChgData());
+            if ("beforehand_in".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                mListTemp.addAll(mWebSocketResultBean.getChgData());
+                mTaskFragment.setTitleText(mListTemp.size());
+            }
+
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportDataBase mTransportListBean : mList) {
                 if (mWebSocketResultBean.getChgData().get(0).getId() != null) {

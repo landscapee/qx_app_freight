@@ -264,12 +264,12 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     @Override
     public void showNetDialog() {
-
+            showProgessDialog("数据提交中……");
     }
 
     @Override
     public void dissMiss() {
-
+            dismissProgessDialog();
     }
 
     @Override

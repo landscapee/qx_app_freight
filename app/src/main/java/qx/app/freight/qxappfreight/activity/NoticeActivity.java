@@ -163,12 +163,12 @@ public class NoticeActivity extends BaseActivity implements FindUserNoticeByPage
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
 

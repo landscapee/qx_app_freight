@@ -273,12 +273,12 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

@@ -118,6 +118,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showProgessDialog(String message) {
         if (!TextUtils.isEmpty(message))
             mTextView.setText(message);
+        else {
+            mTextView.setText("加载中……");}
         mProgessbarDialog.show();
     }
 

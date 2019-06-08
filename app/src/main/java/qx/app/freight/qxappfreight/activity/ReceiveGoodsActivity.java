@@ -349,12 +349,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     public void showNetDialog() {
-//        showProgessDialog("提交中");
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
     }
 
 

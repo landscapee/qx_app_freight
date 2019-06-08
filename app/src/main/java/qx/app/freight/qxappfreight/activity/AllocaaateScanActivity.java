@@ -430,7 +430,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+        showProgessDialog("数据提交中……");
     }
 
     @Override

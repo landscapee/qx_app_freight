@@ -224,12 +224,12 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

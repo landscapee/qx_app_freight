@@ -21,4 +21,6 @@ public class ChangeStorageBean {
 
     private DeclareApplyForRecords declareApplyForRecords;
 
+    private String chargeFlag;
+
 }
