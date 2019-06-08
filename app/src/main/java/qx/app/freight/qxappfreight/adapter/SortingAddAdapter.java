@@ -34,7 +34,6 @@ import qx.app.freight.qxappfreight.utils.ExceptionUtils;
  */
 public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, BaseViewHolder> {
 
-    FragmentManager manager;
     private OnSlectPicListener onSlectPicListener;
     private OnExceptionChooseListener onExceptionChooseListener;
 

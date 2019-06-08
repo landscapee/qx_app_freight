@@ -116,7 +116,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="输入件数"
-                android:textColor="@color/black_3"
+                android:textColor="#737B8B"
                 android:textSize="13sp"
                 android:background="@color/transparent"
                 android:inputType="number"

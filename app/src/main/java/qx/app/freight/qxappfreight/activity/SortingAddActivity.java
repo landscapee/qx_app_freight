@@ -103,7 +103,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     @BindView(R.id.tv_remark)
     EditText remarkEdt;//备注
     @BindView(R.id.tv_overweight)
-    TextView tvOverweight;//备注
+    TextView tvOverweight;//超重
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -307,7 +307,26 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             setResult(RESULT_OK, intent);
             finish();
         });
+        idEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length()==3){
+                    idEdt.setTextColor(Color.parseColor("#888888"));
+                }else {
+                    idEdt.setTextColor(Color.parseColor("#ff0000"));
+                }
+            }
+        });
         //运单号后缀事件
         idEdt2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -322,8 +341,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.e("2222222", "afterTextChanged: "+s.toString().trim());
-                editChange(s.toString().trim());
+                    editChange(s.toString());
             }
 
         });
@@ -363,15 +381,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                 .show();
 
     }
-
-    /**
-     * x修改 逻辑
-     */
-    private void typeUpdate() {
-        //将前一个页面传过来的数据渲染的页面上
-
-    }
-
     /**
      * 激光扫码回调
      */
@@ -449,13 +458,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         mPresenter = new ListReservoirInfoPresenter(this);
         ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
 //        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
-    }
-
-    /**
-     * 提交方法
-     */
-    private void submit() {
-
     }
 
     @Override

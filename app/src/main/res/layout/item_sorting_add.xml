@@ -61,6 +61,7 @@
                 android:background="@color/transparent"
                 android:gravity="center"
                 android:inputType="number"
+                android:maxLength="5"
                 android:hint="输入异常件数" />
 
             <View
