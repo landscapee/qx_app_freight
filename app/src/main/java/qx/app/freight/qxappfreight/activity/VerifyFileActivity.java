@@ -174,7 +174,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.agree_tv:
-                ToastUtil.showToast(this, "合格");
                 VerifyCargoActivity.startActivity(this,
                         mTaskTypeCode,
                         mWaybillId,

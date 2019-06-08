@@ -192,7 +192,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         switch (view.getId()) {
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
-                    ToastUtil.showToast(this, "合格");
                     VerifyFileActivity.startActivity(this,
                             mTaskTypeCode,
                             mWaybillId,
@@ -214,7 +213,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 break;
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
-                    ToastUtil.showToast(this, "不合格");
                     mPresenter = new SubmissionPresenter(this);
                     StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
                     mStorageCommitEntity.setWaybillId(Tid);
