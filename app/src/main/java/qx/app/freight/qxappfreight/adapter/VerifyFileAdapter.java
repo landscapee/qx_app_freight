@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,9 +22,11 @@ public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.Addt
         //名字
         helper.setText(R.id.tv_name, item.getFileTypeName());
         //文件
-        helper.setText(R.id.tv_accessory, "电子文件预览");
-
-
-
+        if (TextUtils.isEmpty(item.getFilePath())){
+            helper.getView(R.id.iv_verify).setVisibility(View.GONE);
+            helper.getView(R.id.tv_accessory).setVisibility(View.GONE);
+        }else{
+            helper.setText(R.id.tv_accessory, "电子文件预览");
+        }
     }
 }
