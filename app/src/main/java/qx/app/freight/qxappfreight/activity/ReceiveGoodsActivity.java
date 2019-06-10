@@ -259,7 +259,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 mPresenter = new TransportListCommitPresenter(this);
                 mMfrvData.closeMenu();
                 ((TransportListCommitPresenter) mPresenter).deleteCollectionInfo(list.get(position).getId());
-                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
             }
         });
         mBtnPrinting.setOnClickListener(v -> {
