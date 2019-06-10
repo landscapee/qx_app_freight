@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -50,6 +51,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     TextView mTvCollectRequire;
     @BindView(R.id.tv_wenjian)
     TextView mTvWenjian;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
 
     private VerifyFileAdapter mAdapter;
@@ -136,10 +139,16 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mWaybillCode = getIntent().getStringExtra("waybillCode");
         Tid = getIntent().getStringExtra("tid");
         insCheck = getIntent().getIntExtra("insCheck", 0);
-        if ("[]".equals(mAdditionTypeArr)&&"[]".equals(mJianYan))
+        if ("[]".equals(mAdditionTypeArr)&&"[]".equals(mJianYan)){
+
+            llContent.setVisibility(View.GONE);
             mTvWenjian.setVisibility(View.VISIBLE);
-        else
+        }
+        else{
+            llContent.setVisibility(View.VISIBLE);
             mTvWenjian.setVisibility(View.GONE);
+        }
+
         if (!mAdditionTypeArr.equals("[]") && !TextUtils.isEmpty(mAdditionTypeArr)) {
             Gson mGson = new Gson();
             AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices[].class);
