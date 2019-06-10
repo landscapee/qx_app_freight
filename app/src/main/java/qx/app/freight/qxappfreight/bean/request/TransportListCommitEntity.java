@@ -16,6 +16,7 @@ public class TransportListCommitEntity {
     private String type;
     private String taskId;
     private String userId;
+    private String userName;
     private String waybillId;
     private String taskTypeCode;
     private String addOrderId;

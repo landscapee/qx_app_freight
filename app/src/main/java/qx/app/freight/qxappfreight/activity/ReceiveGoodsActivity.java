@@ -190,6 +190,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setType("1");//1提交
             transportListCommitEntity.setTaskId(taskId);//当前任务id
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
+            transportListCommitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
             transportListCommitEntity.setWaybillId(wayBillId);
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
