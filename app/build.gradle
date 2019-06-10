@@ -238,7 +238,8 @@ build.doLast {
             println "找到待签名文件[release] >>" + signApk_Release_dir
             println "找到待签名文件[product] >>" + signApk_Product_dir
         } else {
-            println "待签名文件NOT FOUND >>" + signApk_dir
+            println "待签名文件NOT FOUND >>" + signApk_Release_dir
+            println "待签名文件NOT FOUND >>" + signApk_Product_dir
             println "………………………………………………加密异常退出………………………………………………"
             return
         }
