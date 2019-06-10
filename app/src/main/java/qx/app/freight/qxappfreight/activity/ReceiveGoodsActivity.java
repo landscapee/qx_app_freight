@@ -232,6 +232,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(waybillId);
+        myAgentListBean.setTaskTypeCode(taskTypeCode);
         baseFilterEntity.setSize(10);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
