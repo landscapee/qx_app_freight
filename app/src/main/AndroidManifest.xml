@@ -227,6 +227,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" /> <!-- 注册服务 -->
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />
