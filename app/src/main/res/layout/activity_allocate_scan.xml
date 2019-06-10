@@ -259,7 +259,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
                     android:hint="请输入重量"
-                    android:inputType="numberDecimal"
+                    android:inputType="numberSigned"
                     android:background="@null"
                     android:maxLength="15"
                     style="@style/public_tv_16sp" />
@@ -362,7 +362,9 @@
             android:background="@color/white"
             android:text="返回理货"
             android:textSize="18sp"
-            android:textColor="#bcbcbc" />
+            android:textColor="#bcbcbc"
+            android:visibility="gone"
+            />
         <Button
             android:id="@+id/btn_confirm"
             android:layout_weight="1"

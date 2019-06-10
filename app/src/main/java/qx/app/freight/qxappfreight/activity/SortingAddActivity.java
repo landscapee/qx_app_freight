@@ -62,7 +62,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  * <p>
  * create by guohap - 2019/4/26
  */
-public class SortingAddActivity extends BaseActivity implements ReservoirContract.reservoirView, UploadsContract.uploadsView, ListReservoirInfoContract.listReservoirInfoView {
+public class SortingAddActivity extends BaseActivity implements ReservoirContract.reservoirView, UploadsContract.uploadsView {
 
     CustomToolbar customToolbar;
 
@@ -108,6 +108,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -125,9 +126,8 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         });
         //新增页面的逻辑， 是修改还是新增？ TYPE == ADD / UPDATE
         TYPE = getIntent().getStringExtra("TYPE");
-
         INDEX = getIntent().getIntExtra("INDEX", 0);
-
+        mTestBeanList = (List <ChooseStoreroomDialog2.TestBean>) getIntent().getSerializableExtra("mTestBeanList");
         if (TYPE.equals(SortingActivity.TYPE_ADD)) {
             Log.e("dime", "进入了addd");
             //如果是新增数据， 直接初始化
@@ -175,7 +175,12 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             }
 
             sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() == null ? "" : mInWaybillRecord.getTallyingTotal() + "");
-            reservoirTv.setText(mInWaybillRecord.getWarehouseArea());
+            //根据 id 获取库区
+            for (ChooseStoreroomDialog2.TestBean mTestbean:mTestBeanList){
+                if (mInWaybillRecord.getWarehouseArea().equals(mTestbean.getId()))
+                        reservoirTv.setText(mTestbean.getName());
+            }
+
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
             if (mInWaybillRecord.getTransit() != null) {
                 locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
@@ -184,6 +189,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         } else {
             Log.e("dime", "不知道进入了哪里");
         }
+
         //初始化recyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(SortingAddActivity.this));
         mAdapter = new SortingAddAdapter(SortingAddActivity.this, counterUbnormalGoodsList);
@@ -240,7 +246,20 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
         //库区按钮 点击事件
         reservoirTv.setOnClickListener(listener -> {
-            getReservoirAll();
+            ChooseStoreroomDialog2 chooseStoreroomDialog = new ChooseStoreroomDialog2();
+            chooseStoreroomDialog.setData(mTestBeanList, SortingAddActivity.this);
+            chooseStoreroomDialog.show(getSupportFragmentManager(), "guohao");
+            chooseStoreroomDialog.setChooseDialogInterface(new ChooseDialogInterface() {
+                @Override
+                public void confirm(int position) {
+                    Log.e("dime", "选择了库区：" + position);
+                    String reservoir = mTestBeanList.get(position).getId();//库区已经选择
+                    reservoirTv.setText(mTestBeanList.get(position).getName());
+                    mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
+                    mInWaybillRecord.setWarehouseAreaDisplay(mTestBeanList.get(position).getName());
+                    mInWaybillRecord.setWarehouseLocation("");
+                }
+            });
         });
 
         //库位按钮 点击事件
@@ -444,48 +463,18 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     }
 
-    /**
-     * 选择库区方法
-     */
-    private void getReservoirAll() {
-//        mPresenter = new ReservoirPresenter(this);
-//        BaseFilterEntity entity = new BaseFilterEntity();
-////        entity.setFilter("12");
-//        entity.setCurrent(1);
-//        entity.setSize(10);
-//        ((ReservoirPresenter) mPresenter).reservoir(entity);
 
-        mPresenter = new ListReservoirInfoPresenter(this);
-        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
-//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
-    }
 
     @Override
     public void reservoirResult(ReservoirBean acceptTerminalTodoBeanList) {
-        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
-        //显示库区选择面板
-        List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
-        for (ReservoirBean.RecordsBean item : acceptTerminalTodoBeanList.getRecords()) {
-            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
-            testBean.setName(item.getReservoirName());
-            mTestBeanList.add(testBean);
-        }
-        ChooseStoreroomDialog2 chooseStoreroomDialog = new ChooseStoreroomDialog2();
-        chooseStoreroomDialog.setData(mTestBeanList, SortingAddActivity.this);
-        chooseStoreroomDialog.show(getSupportFragmentManager(), "guohao");
-        chooseStoreroomDialog.setChooseDialogInterface(new ChooseDialogInterface() {
-            @Override
-            public void confirm(int position) {
-                Log.e("dime", "选择了库区：" + position);
-                reservoirTv.setText(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
-                //设置库区的id
-                mInWaybillRecord.setWarehouseArea(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
-                mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirName());
-                //设置库区type
-                mInWaybillRecord.setWarehouseAreaType(acceptTerminalTodoBeanList.getRecords().get(position).getReservoirType());
-                mInWaybillRecord.setWarehouseLocation("");
-            }
-        });
+//        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
+//        z//显示库区选择面板
+//        for (ReservoirBean.RecordsBean item : acceptTerminalTodoBeanList.getRecords()) {
+//            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
+//            testBean.setName(item.getReservoirName());
+//            mTestBeanList.add(testBean);
+//        }
+
     }
 
     @Override
@@ -559,29 +548,5 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     }
 
-    @Override
-    public void listReservoirInfoResult(List<ReservoirArea> acceptTerminalTodoBeanList) {
-        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
-        //显示库区选择面板
-        List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
-        for (ReservoirArea item : acceptTerminalTodoBeanList) {
-            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
-            testBean.setName(item.getReservoirName());
-            mTestBeanList.add(testBean);
-        }
-        ChooseStoreroomDialog2 chooseStoreroomDialog = new ChooseStoreroomDialog2();
-        chooseStoreroomDialog.setData(mTestBeanList, SortingAddActivity.this);
-        chooseStoreroomDialog.show(getSupportFragmentManager(), "guohao");
-        chooseStoreroomDialog.setChooseDialogInterface(new ChooseDialogInterface() {
-            @Override
-            public void confirm(int position) {
-                Log.e("dime", "选择了库区：" + position);
-                String reservoir = acceptTerminalTodoBeanList.get(position).getReservoirName();//库区已经选择
-                reservoirTv.setText(acceptTerminalTodoBeanList.get(position).getReservoirName());
-                mInWaybillRecord.setWarehouseArea(reservoir);//库区的id
-                mInWaybillRecord.setWarehouseAreaDisplay(acceptTerminalTodoBeanList.get(position).getReservoirName());
-                mInWaybillRecord.setWarehouseLocation("");
-            }
-        });
-    }
+
 }

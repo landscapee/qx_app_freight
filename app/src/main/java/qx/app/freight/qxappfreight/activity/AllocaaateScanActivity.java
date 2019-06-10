@@ -82,7 +82,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private String chenNum; //秤号
     private String mScooterCode;//板车号
     private double dValue; //差值
-    private double dRate; //差率
+    private Double dRate; //差率
     private double reviseWeight; //修订重量
     private double crossWeight; //毛重
     private double goodsWeight; //收运净重
@@ -224,10 +224,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 保存班车信息
      */
     private void saveScooter() {
-        if (-3>dRate||dRate>3){
-            ToastUtil.showToast("复重差率不合格,无法提交");
-            return;
-        }
+//        if (-3>dRate||dRate>3){
+//            ToastUtil.showToast("复重差率不合格,无法提交");
+//            return;
+//        }
         if (reviseWeight!=0){
             if (selectorOption ==10){
                 ToastUtil.showToast("人工干预的情况下备注不能为空");
@@ -317,7 +317,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
         dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight()+reviseWeight);
 //        dValue =crossWeight -(mData.getScooterWeight()+mData.getWeight()+mData.getUldWeight());
-        dRate = CalculateUtil.calculateGradient(4, dValue, crossWeight);
+        dRate = (double) Math.round( CalculateUtil.calculateGradient(2, dValue, crossWeight) * 100) / 100;
 
         //复磅差值
         tvDvalueFront.setText(dValue+"kg");

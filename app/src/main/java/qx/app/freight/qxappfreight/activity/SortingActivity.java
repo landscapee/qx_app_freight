@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import qx.app.freight.qxappfreight.adapter.SortingInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.InWaybill;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
@@ -36,9 +38,12 @@ import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
+import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
+import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog2;
 import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
+import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -52,7 +57,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
  * <p>
  * create by guohao - 2019/4/26
  */
-public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView {
+public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView, ListReservoirInfoContract.listReservoirInfoView {
 
     String flightNo = "";
     String arriveTime = "";
@@ -100,6 +105,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     //recycler 页脚
     TextView tvFoot;
 
+    List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_sorting;
@@ -140,14 +147,22 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
             intentAdd.putExtra("TYPE", TYPE_ADD);
             intentAdd.putExtra("FLIGHTNo", flightNo);
+            Bundle bundle = new Bundle();
+            if (mTestBeanList.size() > 0)
+                bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+            else {
+                ToastUtil.showToast("未获取到库区");
+                return;
+            }
+            intentAdd.putExtras(bundle);
             startActivityForResult(intentAdd, 1);
 //            showDialog();
         });
         //初始化presenter
-        mPresenter = new InWaybillRecordPresenter(this);
+
         //暂存，提交请求
         tempBtn.setOnClickListener(listener -> {
-
+            mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
                     .setMessage("确认暂存吗？")
@@ -181,7 +196,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         });
         //提交请求
         doneBtn.setOnClickListener(listener -> {
-
+            mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
                     .setMessage("确认提交？")
@@ -220,6 +235,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     private void getData() {
         //初始化数据
+        mPresenter = new InWaybillRecordPresenter(this);
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setTaskFlag(0);
         entity.setFlightId(transportListBean.getFlightId());
@@ -341,6 +357,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             intent.putExtra("DATA", updateInWaybillRecord);
             intent.putExtra("INDEX", position);
+            Bundle bundle = new Bundle();
+            if (mTestBeanList.size() > 0)
+                bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+            else {
+                ToastUtil.showToast("未获取到库区");
+                return;
+            }
+            intent.putExtras(bundle);
             //去修改
             SortingActivity.this.startActivityForResult(intent, 2);
         });
@@ -381,8 +405,23 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             recyclerView.closeMenu();
         });
         recyclerView.closeMenu();
+        getReservoirAll();
     }
+    /**
+     * 选择库区方法
+     */
+    private void getReservoirAll() {
+//        mPresenter = new ReservoirPresenter(this);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+////        entity.setFilter("12");
+//        entity.setCurrent(1);
+//        entity.setSize(10);
+//        ((ReservoirPresenter) mPresenter).reservoir(entity);
 
+        mPresenter = new ListReservoirInfoPresenter(this);
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
+//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
+    }
     @Override
     public void resultSubmit(Object o) {
         Log.e("dime", "提交/暂存，返回值：" + o.toString());
@@ -480,6 +519,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
         intentAdd.putExtra("TYPE", TYPE_ADD);
         intentAdd.putExtra("newCode", code);
+        Bundle bundle = new Bundle();
+        if (mTestBeanList.size() > 0)
+            bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+        else {
+            ToastUtil.showToast("未获取到库区");
+            return;
+        }
+        intentAdd.putExtras(bundle);
         startActivityForResult(intentAdd, 1);
     }
 
@@ -488,5 +535,17 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         String s0=ss.substring(0, 3); //前3位
         String s00=ss.substring(3, 11); //后8位
         return s0+"-"+s00;
+    }
+
+    @Override
+    public void listReservoirInfoResult(List<ReservoirArea> acceptTerminalTodoBeanList) {
+        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
+        //显示库区选择面板
+        for (ReservoirArea item : acceptTerminalTodoBeanList) {
+            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
+            testBean.setName(item.getReservoirName());
+            mTestBeanList.add(testBean);
+        }
+
     }
 }

@@ -49,8 +49,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     MultiFunctionRecylerView mMfrvData;
 
     InPortDeliveryAdapter mAdapter;
-    List<TransportDataBase> mList; //adapter 绑定的条件list
-    List<TransportDataBase> list1; //原始list
+    List <TransportDataBase> mList; //adapter 绑定的条件list
+    List <TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
 
@@ -58,7 +58,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
-    private boolean isShow =false;
+    private boolean isShow = false;
 
     @Nullable
     @Override
@@ -83,11 +83,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser){
-            Log.e("111111", "setUserVisibleHint: "+ "展示");
+        if (isVisibleToUser) {
+            Log.e("111111", "setUserVisibleHint: " + "展示");
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(list1.size());
-            if (searchToolbar!=null){
+            if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入流水号", text -> {
                     searchString = text;
                     seachWithNum();
@@ -107,7 +107,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 }
             }
         }
-        if (mMfrvData!=null){
+        if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(mAdapter);
         }
     }
@@ -124,8 +124,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mList = new ArrayList<>();
-        list1 = new ArrayList<>();
+        mList = new ArrayList <>();
+        list1 = new ArrayList <>();
         mAdapter = new InPortDeliveryAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             turnToDetailActivity(mList.get(position));
@@ -167,7 +167,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
         entity.setUndoType(3);
 
-        List<String> ascs = new ArrayList<>();
+        List <String> ascs = new ArrayList <>();
         ascs.add("flight_number");
         ascs.add("lastUpdate_time");
 
@@ -190,7 +190,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                .putExtra("num2", bean.getWaybillCount())
 //                .putExtra("taskId", bean.getTaskId())
 //                .putExtra("billId", bean.getSerialNumber())
-                .putExtra("DATA",bean));
+                .putExtra("DATA", bean));
     }
 
     /**
@@ -203,8 +203,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
         if (!TextUtils.isEmpty(daibanCode)) {
             String[] parts = daibanCode.split("\\/");
-            List<String> strsToList= Arrays.asList(parts);
-            if (strsToList.size()>=4){
+            List <String> strsToList = Arrays.asList(parts);
+            if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(1));
             }
 
@@ -249,6 +249,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     public void onRetry() {
         showProgessDialog("加载数据中……");
         new Handler().postDelayed(() -> {
+            pageCurrent = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -286,26 +287,21 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
-        if (transportListBeans != null&&transportListBeans.size()>0) {
+    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
 
-            //因为没有分页，不做分页判断
+        if (pageCurrent == 1) {
             list1.clear();
-
-            if (pageCurrent == 1) {
-
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            list1.addAll(transportListBeans);
-            seachWithNum();
-            if (mTaskFragment != null) {
-                if (isShow)
-                    mTaskFragment.setTitleText(list1.size());
-            }
+            mMfrvData.finishRefresh();
         } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
+            mMfrvData.finishLoadMore();
+        }
+        if (transportListBeans != null && transportListBeans.size() > 0) {
+            list1.addAll(transportListBeans);
+        }
+        seachWithNum();
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(list1.size());
         }
     }
 }
