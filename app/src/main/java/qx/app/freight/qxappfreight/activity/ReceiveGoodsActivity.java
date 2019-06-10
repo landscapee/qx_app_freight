@@ -379,12 +379,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     list.set(listPostion, mMyAgentListBean);
                 }
             } else if (mTag == 1) {
-                for (MyAgentListBean item : list) {
-                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
-                        ToastUtil.showToast("请勿添加重复的板车");
-                        return;
-                    }
-                }
+//                for (MyAgentListBean item : list) {
+//                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
+//                        ToastUtil.showToast("请勿添加重复的板车");
+//                        return;
+//                    }
+//                }
                 list.add(mMyAgentListBean);
             }
             toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");

@@ -141,9 +141,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 ToastUtil.showToast(this, "请输入件数");
             } else if ("".equals(mEdtNumber.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入重量");
-            } else if ("".equals(mTvScooter.getText().toString().trim())) {
-                ToastUtil.showToast(this, "请输入板车号");
-            } else {
+            }
+//            else if ("".equals(mTvScooter.getText().toString().trim())) {
+//                ToastUtil.showToast(this, "请输入板车号");
+//            }
+            else {
                 finishForResult();
             }
         });

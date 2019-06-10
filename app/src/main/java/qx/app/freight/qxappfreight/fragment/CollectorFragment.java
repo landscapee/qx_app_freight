@@ -219,7 +219,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             if ("collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
-                mTaskFragment.setTitleText(list1.size());
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             loadData();
