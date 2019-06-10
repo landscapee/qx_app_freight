@@ -53,6 +53,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
@@ -196,6 +197,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
+                    model.setDeptId(UserInfoSingle.getInstance().getDepId());
+                    model.setArea(getIntent().getStringExtra("area_id"));
+                    model.setExceptionCode(getIntent().getStringExtra("step_code"));
                     model.setFiles(null);
                     ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {

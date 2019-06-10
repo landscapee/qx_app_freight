@@ -326,15 +326,17 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         });
         mLlScanGoods.setOnClickListener(v ->{
             mIsScanGoods = true;
-            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
-            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mTvErrorReport.setOnClickListener(
                 v -> {
                     Intent intent = new Intent(TPUnloadPlaneActivity.this, ErrorReportActivity.class);
+                    intent.putExtra("area_id", mOutFieldTaskBean.getFlights().getSeat());//area_id
+                    intent.putExtra("step_code", Constants.TP_START);//step_code
                     intent.putExtra("flight_number", mOutFieldTaskBean.getFlights().getFlightNo());//航班号
                     intent.putExtra("task_id", mOutFieldTaskBean.getTaskId());//任务id
                     intent.putExtra("flight_id", mOutFieldTaskBean.getFlights().getFlightId());//Flight id

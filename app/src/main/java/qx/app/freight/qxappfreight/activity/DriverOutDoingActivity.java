@@ -444,11 +444,13 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 }
                 if (!flightNumList.isEmpty()) {
                     Intent intent = new Intent(this, ErrorReportActivity.class);
-//                    intent.putStringArrayListExtra("plane_info_list", (ArrayList <OutFieldTaskBean>) flightNumList);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("plane_info_list", (ArrayList <OutFieldTaskBean>) flightNumList);
                     intent.putExtras(bundle);
-//                    intent.putExtra("error_type", 4);
+                    intent.putExtra("error_type", 4);
+                    intent.putExtra("area_id", "");//area_id
+                    intent.putExtra("step_code", Constants.TP_START);//step_code
+                    intent.putExtra("task_id",flightNumList.get(0).getTaskId());//任务id
                     startActivity(intent);
                 }
                 break;
