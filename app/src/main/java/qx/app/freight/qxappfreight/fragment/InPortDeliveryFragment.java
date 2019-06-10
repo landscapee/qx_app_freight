@@ -199,13 +199,14 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222", "提货代办流水号： " + daibanCode);
+
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
         if (!TextUtils.isEmpty(daibanCode)) {
             String[] parts = daibanCode.split("\\/");
             List <String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
-                chooseCode(strsToList.get(1));
+                chooseCode(strsToList.get(3));
+                Log.e("22222", "提货代办流水号： " + strsToList.get(2));
             }
 
         }

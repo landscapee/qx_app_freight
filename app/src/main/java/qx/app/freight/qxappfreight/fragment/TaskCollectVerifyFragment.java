@@ -174,7 +174,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             List<String> strsToList = Arrays.asList(parts);
             Log.e("========1", daibanCode);
             if (strsToList.size() >= 4) {
-                chooseCode(strsToList.get(2));
+                chooseCode(strsToList.get(3));
                 Log.e("========2", daibanCode);
             }
         }

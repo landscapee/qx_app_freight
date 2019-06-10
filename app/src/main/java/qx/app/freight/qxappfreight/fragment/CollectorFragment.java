@@ -208,7 +208,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
-                chooseCode(strsToList.get(2));
+                chooseCode(strsToList.get(3));
             }
 
         }

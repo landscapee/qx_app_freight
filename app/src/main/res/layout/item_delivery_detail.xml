@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/black_3"
-                android:text="逾期费用：" />
+                android:text="预期费用：" />
             <TextView
                 android:id="@+id/tv_cost"
                 android:singleLine="true"

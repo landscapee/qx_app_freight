@@ -176,11 +176,12 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
             sortingNumEdt.setText(mInWaybillRecord.getTallyingTotal() == null ? "" : mInWaybillRecord.getTallyingTotal() + "");
             //根据 id 获取库区
-            for (ChooseStoreroomDialog2.TestBean mTestbean:mTestBeanList){
-                if (mInWaybillRecord.getWarehouseArea().equals(mTestbean.getId()))
+            if (mInWaybillRecord.getWarehouseArea() != null){
+                for (ChooseStoreroomDialog2.TestBean mTestbean:mTestBeanList){
+                    if (mInWaybillRecord.getWarehouseArea().equals(mTestbean.getId()))
                         reservoirTv.setText(mTestbean.getName());
+                }
             }
-
             locationTv.setText(mInWaybillRecord.getWarehouseLocation());
             if (mInWaybillRecord.getTransit() != null) {
                 locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");

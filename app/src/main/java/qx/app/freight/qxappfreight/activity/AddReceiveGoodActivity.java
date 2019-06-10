@@ -299,7 +299,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             scooterInfo = scooterInfoListBeans.get(0);
             if ("2".equals(scooterInfoListBeans.get(0).getScooterType())) {
                 mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
-                mEdtDeadWeight.setHint("平板车不能输入重量");
+                mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
                 mEtUldNumber.setHint("平板车不能输入ULD号");
                 mEdtDeadWeight.setFocusable(false);
                 mEdtDeadWeight.setEnabled(false);
