@@ -10,6 +10,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.AddtionInvoices, BaseViewHolder> {
 
@@ -26,6 +27,7 @@ public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.Addt
             helper.getView(R.id.iv_verify).setVisibility(View.GONE);
             helper.getView(R.id.tv_accessory).setVisibility(View.GONE);
         }else{
+            helper.getView(R.id.iv_verify).setVisibility(View.VISIBLE);
             helper.setText(R.id.tv_accessory, "电子文件预览");
         }
     }

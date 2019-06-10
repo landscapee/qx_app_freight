@@ -158,34 +158,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
         ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId, mTaskTypeCode);
-//        List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            GeneralSpinnerBean.StaffCheckInfo staffCheckInfo = new GeneralSpinnerBean.StaffCheckInfo();
-//            staffCheckInfo.setId(i + "");
-//            staffCheckInfo.setValue("李" + i + "蛋");
-//            staffCheckInfos.add(staffCheckInfo);
-//        }
-//        initSpinnerData(staffCheckInfos);
     }
 
-//    private void initSpinnerData(List<GeneralSpinnerBean.StaffCheckInfo> staffCheckInfos) {
-//        GeneralSpinnerAdapter<GeneralSpinnerBean.StaffCheckInfo> typeAdapter = new GeneralSpinnerAdapter(this, staffCheckInfos);
-//        mSpSelectStaff.setAdapter(typeAdapter);
-//        mSpSelectStaff.setDropDownVerticalOffset(10);
-//        mStaffId = staffCheckInfos.get(0).getId();
-//        mStaffName = staffCheckInfos.get(0).getValue();
-//        mSpSelectStaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                mStaffId = staffCheckInfos.get(position).getId();
-//                mStaffName = staffCheckInfos.get(position).getValue();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
-//    }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv, R.id.iv_staff_photo_now, R.id.gh_user})
     public void onClick(View view) {
@@ -369,17 +343,22 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 else
                     mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
                 //报检员姓名
-                tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
+//                tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
                 //报检开始时间
-                tvBjStart.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart()) + "至");
+//                tvBjStart.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart()) + "至");
+                tvBjStart.setText("- -至"+"- -");
                 //报检结束时间
-                tvBjEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd()));
+//                tvBjEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd()));
+                tvBjEnd.setText("");
                 //危险开始时间
-                tvWxStart.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart()) + "至");
+//                tvWxStart.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart()) + "至");
+                tvWxStart.setText("- -至"+"- -");
                 //危险结束时间
-                tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
+//                tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
+                tvWxEnd.setText("");
                 //报检员备案照片
-                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
+//                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
+//                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).placeholder().into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
             } else{
 //                ToastUtil.showToast("数据为空");

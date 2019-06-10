@@ -48,6 +48,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     RecyclerView mMfrvData;
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
+    @BindView(R.id.tv_wenjian)
+    TextView mTvWenjian;
 
 
     private VerifyFileAdapter mAdapter;
@@ -134,7 +136,11 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mWaybillCode = getIntent().getStringExtra("waybillCode");
         Tid = getIntent().getStringExtra("tid");
         insCheck = getIntent().getIntExtra("insCheck", 0);
-        if (!mAdditionTypeArr.equals("[]")&&!TextUtils.isEmpty(mAdditionTypeArr)) {
+        if ("[]".equals(mAdditionTypeArr)&&"[]".equals(mJianYan))
+            mTvWenjian.setVisibility(View.VISIBLE);
+        else
+            mTvWenjian.setVisibility(View.GONE);
+        if (!mAdditionTypeArr.equals("[]") && !TextUtils.isEmpty(mAdditionTypeArr)) {
             Gson mGson = new Gson();
             AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices[].class);
             List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
@@ -143,13 +149,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             mMfrvData.setLayoutManager(new LinearLayoutManager(this));
             mAdapter = new VerifyFileAdapter(mList);
             mMfrvData.setAdapter(mAdapter);
-
-            mAdapter.setOnItemClickListener((adapter, view, position) -> {
-                        List<String> array = new ArrayList<>();
-                        array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
-                        ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
-                    }
-            );
         } else if (!TextUtils.isEmpty(mJianYan)) {
             Gson mGson = new Gson();
             HeChaBean[] addtionInvoices = mGson.fromJson(mJianYan, HeChaBean[].class);
@@ -158,6 +157,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             for (int i = 0; i < heChaBeanList.size(); i++) {
                 AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
                 add.setFileTypeName(heChaBeanList.get(i).getName());
+                add.setFilePath(heChaBeanList.get(i).getValue());
                 addList.add(add);
             }
             mList.addAll(addList);
@@ -167,6 +167,12 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         } else
             ToastUtil.showToast("数据为空");
 
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+                    List<String> array = new ArrayList<>();
+                    array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
+                    ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
+                }
+        );
 
     }
 

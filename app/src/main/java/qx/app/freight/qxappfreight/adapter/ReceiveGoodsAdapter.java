@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,8 +23,23 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
     @SuppressLint("StringFormatMatches")
     @Override
     protected void convert(BaseViewHolder helper, MyAgentListBean item) {
-
-        helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType()+"")+ item.getScooterCode());
+        //0大滚筒 1小滚筒  2平板车
+        if (TextUtils.isEmpty(item.getScooterType())) {
+            String code = item.getScooterCode().substring(0, 1);
+            switch (code) {
+                case "0":
+                    helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue("0") + item.getScooterCode());
+                    break;
+                case "1":
+                    helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue("1") + item.getScooterCode());
+                    break;
+                case "2":
+                    helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue("2") + item.getScooterCode());
+                    break;
+            }
+        } else {
+            helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType() + "") + item.getScooterCode());
+        }
         //板车自重
         helper.setText(R.id.tv_receive_weight, item.getScooterWeight() + "kg");
         //品名~件数~重量~体积
