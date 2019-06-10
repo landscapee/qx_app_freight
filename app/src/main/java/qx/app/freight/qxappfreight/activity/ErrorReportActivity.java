@@ -51,6 +51,7 @@ import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
+import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -197,10 +198,14 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
-                    model.setDeptId(UserInfoSingle.getInstance().getDepId());
+                    String deptCode=UserInfoSingle.getInstance().getDeptCode();
+                    model.setDeptId((deptCode.contains("-")?deptCode.substring(0,deptCode.indexOf("-")):deptCode));
                     model.setArea(getIntent().getStringExtra("area_id"));
                     model.setExceptionCode(getIntent().getStringExtra("step_code"));
                     model.setFiles(null);
+                    TransportEndEntity endEntity=new TransportEndEntity();
+                    endEntity.setTaskId(mCurrentTaskId);
+                    model.setTransportAppDto(endEntity);
                     ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {
                     pressImage(getNoAddPictureList());
@@ -347,6 +352,13 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setFlightId(Long.valueOf(mFlightId));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
+        String deptCode=UserInfoSingle.getInstance().getDeptCode();
+        model.setDeptId((deptCode.contains("-")?deptCode.substring(0,deptCode.indexOf("-")):deptCode));
+        model.setArea(getIntent().getStringExtra("area_id"));
+        model.setExceptionCode(getIntent().getStringExtra("step_code"));
+        TransportEndEntity endEntity=new TransportEndEntity();
+        endEntity.setTaskId(mCurrentTaskId);
+        model.setTransportAppDto(endEntity);
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
     }
 

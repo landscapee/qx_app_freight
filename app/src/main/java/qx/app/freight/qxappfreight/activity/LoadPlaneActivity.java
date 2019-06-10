@@ -179,7 +179,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             intent.putExtra("task_id", data.getTaskId());//任务id
             intent.putExtra("flight_id", data.getFlightId());//Flight id
             intent.putExtra("area_id", data.getSeat());//area_id
-            intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position",-1)));//step_code
+            intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position",-1)).getOperationCode());//step_code
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
         });
