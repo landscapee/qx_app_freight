@@ -48,14 +48,14 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
         helper.getView(R.id.ll_collection).setVisibility(View.VISIBLE);
         ivFlag.setVisibility(View.GONE);
         switch (item.getTaskTypeCode()) {
-            case "changeApply":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                tvStatusName.setText("换单审核");
-                ivFlag.setVisibility(View.VISIBLE);
-                ivFlag.setImageResource(R.mipmap.collect_switch);
-                tvOldWayBillCode.setVisibility(View.VISIBLE);
-                tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
-                break;
+//            case "changeApply":
+//                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+//                tvStatusName.setText("换单审核");
+//                ivFlag.setVisibility(View.VISIBLE);
+//                ivFlag.setImageResource(R.mipmap.collect_switch);
+//                tvOldWayBillCode.setVisibility(View.VISIBLE);
+//                tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
+//                break;
             case "collection":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
                 tvStatusName.setText("出港收货");

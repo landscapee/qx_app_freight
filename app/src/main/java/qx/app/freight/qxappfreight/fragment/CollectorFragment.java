@@ -26,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
-import qx.app.freight.qxappfreight.activity.DeliveryVerifyActivity;
 import qx.app.freight.qxappfreight.activity.ReturnGoodsActivity;
 import qx.app.freight.qxappfreight.activity.StoreTypeChangeActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
@@ -118,9 +117,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     private void trunToCollectorActivity(TransportDataBase bean) {
         switch (bean.getTaskTypeCode()) {
-            case "changeApply": //换单审核
-                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
-                break;
+//            case "changeApply": //换单审核
+//                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
+//                break;
             case "collection"://出港收货
                 Log.e("tagTest", "id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
@@ -217,7 +216,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            //非换单审核的全部都加
+            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow)
                     mTaskFragment.setTitleText(list1.size());
