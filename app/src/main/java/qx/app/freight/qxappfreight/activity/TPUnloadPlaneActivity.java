@@ -339,7 +339,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                     intent.putExtra("step_code", Constants.TP_START);//step_code
                     intent.putExtra("flight_number", mOutFieldTaskBean.getFlights().getFlightNo());//航班号
                     intent.putExtra("task_id", mOutFieldTaskBean.getTaskId());//任务id
-                    intent.putExtra("flight_id", mOutFieldTaskBean.getFlights().getFlightId());//Flight id
+                    intent.putExtra("flight_id", String.valueOf(mOutFieldTaskBean.getFlights().getFlightId()));//Flight id
                     intent.putExtra("error_type", 2);
                     TPUnloadPlaneActivity.this.startActivity(intent);
                 });
