@@ -98,7 +98,7 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         Intent starter = new Intent(mContext, ScanManagerActivity.class);
         starter.putExtra("flag", flag)
                 .putExtra("laserAndZxing", true);
-        ((Activity) mContext).startActivityForResult(starter, 0);
+        mContext.startActivity(starter);
     }
 
     @Override
