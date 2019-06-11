@@ -169,7 +169,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("========", daibanCode);
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             Log.e("========1", daibanCode);

@@ -203,7 +203,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {

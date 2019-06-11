@@ -99,7 +99,7 @@ public class TaskFragment extends BaseFragment {
 //                break;
             default:
 //                ToastUtil.showToast(getContext(), "扫码");
-                ScanManagerActivity.startActivity(getContext(),"scan");
+                ScanManagerActivity.startActivity(getContext(),"MainActivity");
         }
 
     }

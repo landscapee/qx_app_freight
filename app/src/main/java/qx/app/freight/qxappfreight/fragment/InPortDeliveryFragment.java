@@ -201,7 +201,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         String daibanCode = result.getData();
 
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List <String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {

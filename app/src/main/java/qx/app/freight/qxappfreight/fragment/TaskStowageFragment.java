@@ -160,7 +160,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
