@@ -20,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -65,6 +66,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     EditText mEtPassWord;
     @BindView(R.id.et_username)
     EditText mEtUserName;
+    @BindView(R.id.tv_copyright_version)
+    TextView tvCopyVersion;
     private UpdateVersionBean2 mVersionBean;
 
     @Override
@@ -77,6 +80,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
+        tvCopyVersion.setText(" @成都双流国际机场版权所有（v"+ BuildConfig.VERSION_NAME +"）");
         checkVersion();
         mEtPassWord.setText("");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());

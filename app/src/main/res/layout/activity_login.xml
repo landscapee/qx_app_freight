@@ -18,12 +18,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <TextView
+                android:id="@+id/tv_copyright_version"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="22dp"
                 android:layout_width="wrap_content"
                 android:layout_height="17dp"
-                android:text=" @成都双流国际机场版权所有（v1.0.0）"
+                android:text=" @成都双流国际机场版权所有（v?.?.?）"
                 android:textColor="#ff909699"
                 android:textSize="12sp"/>
         </RelativeLayout>
