@@ -81,6 +81,7 @@ public class GetInfosByFlightIdBean {
         private String remark;
         private String seat;
         private String reWeightTaskId;
+        private String currentStep;
 
 
 }
