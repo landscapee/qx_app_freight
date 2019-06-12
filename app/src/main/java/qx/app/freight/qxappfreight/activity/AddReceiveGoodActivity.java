@@ -90,6 +90,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private int tag;
     private String wayBillId;
     private String taskTypeCode;
+    private String id;
 
     /**
      * @param context
@@ -97,7 +98,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
      * @param waybillCode //     * @param declareItemBean  品名列表 已取消
      * @param cargoCn     品名以逗号隔开
      */
-    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag,String wayBillId,String taskTypeCode) {
+    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag,String wayBillId,String taskTypeCode,String id) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
 //        starter.putExtra("mScooterCode", mScooterCode);
@@ -106,6 +107,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         starter.putExtra("wayBillId", wayBillId);
         starter.putExtra("taskTypeCode", taskTypeCode);
         starter.putExtra("tag", tag);
+        starter.putExtra("id", id);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("MyAgentListBean", (Serializable) declareItem);
         starter.putExtras(mBundle);
@@ -161,6 +163,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //        mScooterCode = getIntent().getStringExtra("mScooterCode");
         waybillCode = getIntent().getStringExtra("waybillCode");
         cargoCn = getIntent().getStringExtra("cargoCn");
+        id = getIntent().getStringExtra("id");
         tag = getIntent().getIntExtra("tag", 0);
         mList = (MyAgentListBean) getIntent().getSerializableExtra("MyAgentListBean");
         if (2 == tag) {
@@ -227,12 +230,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private void finishForResult() {
         //id
         mMyAgentListBean.setId("");
+        mMyAgentListBean.setAddOrderId(id);
         //运单id
         mMyAgentListBean.setWaybillId(waybillId);
         //
         mMyAgentListBean.setTaskTypeCode(taskTypeCode);
 
-        mMyAgentListBean.setAddOrderId(wayBillId);
+//        mMyAgentListBean.setAddOrderId(wayBillId);
 
         mMyAgentListBean.setWaybillCode(waybillCode);
         //品名
