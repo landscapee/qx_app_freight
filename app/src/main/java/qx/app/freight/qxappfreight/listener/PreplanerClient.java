@@ -42,10 +42,14 @@ public class PreplanerClient extends StompClient {
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
-    @SuppressLint("CheckResult")
     public PreplanerClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
+        connect(uri);
+    }
+
+    @SuppressLint("CheckResult")
+    public void connect(String uri){
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));

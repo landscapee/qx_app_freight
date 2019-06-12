@@ -49,10 +49,14 @@ public class InstallEquipClient extends StompClient {
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
-    @SuppressLint("CheckResult")
     public InstallEquipClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
+        connect(uri);
+    }
+
+    @SuppressLint("CheckResult")
+    public void connect(String uri) {
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
@@ -118,7 +122,7 @@ public class InstallEquipClient extends StompClient {
                 }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
         compositeDisposable.add(dispTopic3);
-        if(!WebSocketService.isTopic){
+        if (!WebSocketService.isTopic) {
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())
