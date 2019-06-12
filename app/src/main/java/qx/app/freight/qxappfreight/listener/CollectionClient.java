@@ -41,10 +41,14 @@ public class CollectionClient extends StompClient {
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
-    @SuppressLint("CheckResult")
     public CollectionClient(String uri, Context mContext) {
         super(new GetConnectionProvider());
         this.mContext = mContext;
+        connect(uri);
+    }
+
+    @SuppressLint("CheckResult")
+    public void connect(String uri){
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         Log.e(TAG, "websocket-->收运连接地址" + uri);
         List<StompHeader> headers = new ArrayList<>();
@@ -58,16 +62,18 @@ public class CollectionClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
-                            Log.e(TAG, "webSocket  Collect 打开");
+                            Log.e(TAG, "webSocket  收运 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
+                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket Collect 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
+                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");

@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +41,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public void onCreate() {
         super.onCreate();
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+        if (null == UserInfoSingle.getInstance().getRoleRS())
+            return;
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
             if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
                 if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
@@ -151,8 +152,12 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         }
     }
 
-    public static void startService(Activity activtity) {
+    public static void startService(Context activtity) {
         actionStart(activtity);
+    }
+    private static void actionStart(Context ctx) {
+        Intent i = new Intent(ctx, WebSocketService.class);
+        ctx.startService(i);
     }
 
     public void Collection(String uri) {
@@ -192,10 +197,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         super.onDestroy();
     }
 
-    private static void actionStart(Context ctx) {
-        Intent i = new Intent(ctx, WebSocketService.class);
-        ctx.startService(i);
-    }
+
 
     @Override
     public void saveGpsInfoResult(String result) {

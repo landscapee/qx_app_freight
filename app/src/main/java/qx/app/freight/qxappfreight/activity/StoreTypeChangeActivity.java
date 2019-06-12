@@ -103,6 +103,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         storageList.add("危险");
         storageList.add("活体");
         storageList.add("冷藏");
+
         temperatureList = new ArrayList<>();
         reservoirList = new ArrayList<>();
         for (int i = -30; i < 31; i++) {
@@ -168,6 +169,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
                     break;
                 case 4:
                     mTvOldType.setText("冷藏");
+                    llBaseTemperature.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -193,7 +195,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
 
     //库区
     private void showBaozhuangPickView() {
-        if (reservoirList.size()==0){
+        if (reservoirList.size() == 0) {
             ToastUtil.showToast("数据为空，不能选择");
             return;
         }
@@ -284,7 +286,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
 
     @Override
     public void toastView(String error) {
-        Log.e("-----",error);
+        Log.e("-----", error);
     }
 
     @Override

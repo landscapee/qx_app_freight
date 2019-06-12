@@ -89,6 +89,7 @@ public class TransportDataBase implements Serializable {
     private String consigneePostcode;
     private String consigneeAddress;
     private String specialCargoCode;
+    //存储类型
     private String coldStorage;
     private String totalNumberPackages;
     private String billingWeight;
@@ -162,5 +163,7 @@ public class TransportDataBase implements Serializable {
      * 提货人身份证
      * */
     private String receiverIdentityCard;
+
+
 
 }

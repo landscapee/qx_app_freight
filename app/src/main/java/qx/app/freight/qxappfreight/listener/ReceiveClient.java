@@ -42,10 +42,16 @@ public class ReceiveClient extends StompClient {
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
-    @SuppressLint("CheckResult")
+
     public ReceiveClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
+        connect(uri);
+
+    }
+
+    @SuppressLint("CheckResult")
+    public void connect(String uri) {
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         Log.e(TAG, "websocket-->收运连接地址" + uri);
         List<StompHeader> headers = new ArrayList<>();
@@ -64,11 +70,13 @@ public class ReceiveClient extends StompClient {
                         case ERROR:
                             Log.e(TAG, "websocket 收验 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
+                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 收验 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
+                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
@@ -116,6 +124,7 @@ public class ReceiveClient extends StompClient {
         }
         my.connect();
     }
+
 
     //用于代办刷新
     public static void sendReshEventBus(WebSocketResultBean bean) {
