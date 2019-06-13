@@ -3,8 +3,10 @@ package qx.app.freight.qxappfreight.listener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.telecom.DisconnectCause;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -14,6 +16,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -40,6 +44,9 @@ public class CollectionClient extends StompClient {
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
     private Context mContext;
+    private Timer mTimer;
+    private TimerTask mTimerTask;
+
 
     public CollectionClient(String uri, Context mContext) {
         super(new GetConnectionProvider());
@@ -48,11 +55,22 @@ public class CollectionClient extends StompClient {
     }
 
     @SuppressLint("CheckResult")
-    public void connect(String uri){
+    public void connect(String uri) {
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         Log.e(TAG, "websocket-->收运连接地址" + uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
+//        mTimer = new Timer();
+//        mTimerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                Log.e(TAG,"测试断开连接");
+//                my.disconnect();
+//            }
+//        };
+//        mTimer.schedule(mTimerTask, 20000,20000);
+
+
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
