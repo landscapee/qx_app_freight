@@ -203,7 +203,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
@@ -217,10 +217,11 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             //非换单审核的全部都加
-            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) && "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             loadData();
