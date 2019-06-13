@@ -82,6 +82,7 @@ public class GetInfosByFlightIdBean {
         private String seat;
         private String reWeightTaskId;
         private String currentStep;
+        private double personUpdateValue;
 
 
 }
