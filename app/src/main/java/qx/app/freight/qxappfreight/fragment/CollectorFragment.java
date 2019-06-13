@@ -111,7 +111,6 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             trunToCollectorActivity(list.get(position));
-
         });
     }
 
@@ -121,7 +120,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 //                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
 //                break;
             case "collection"://出港收货
-                Log.e("tagTest", "id====" + bean.getId());
+                Log.e("tagTest", "出港收货===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
                         .putExtra("wayBillId", bean.getWaybillId())
                         .putExtra("taskId", bean.getTaskId())
@@ -129,7 +128,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                         .putExtra("taskTypeCode", bean.getTaskTypeCode()));
                 break;
             case "reCollection"://补单收运
-                Log.e("tagTest", "id====" + bean.getId());
+                Log.e("tagTest", "补单收运===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
                         .putExtra("wayBillId", bean.getWaybillId())
                         .putExtra("taskId", bean.getTaskId())
@@ -203,7 +202,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {

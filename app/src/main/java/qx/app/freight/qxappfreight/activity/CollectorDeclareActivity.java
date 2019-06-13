@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.CollectorDeclareAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
@@ -90,7 +86,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private String wayBillId;
     private String taskId;
     private String taskTypeCode;
-//    private CollectorDeclareAdapter mAdapter;
+    //    private CollectorDeclareAdapter mAdapter;
 //    private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
 
@@ -115,7 +111,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(getIntent().getStringExtra("id"));
     }
 
     private void initTitle() {
