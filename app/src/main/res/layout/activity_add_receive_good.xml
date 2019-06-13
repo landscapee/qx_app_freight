@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="请输入体积"
-                android:inputType="numberSigned"
+                android:inputType="numberDecimal"
                 android:singleLine="true"
                 android:textSize="16sp" />
 
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="请点击取重"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:singleLine="true"
                 android:textSize="16sp" />
 
@@ -210,7 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:hint="请手动输入"
+                android:hint="请扫码"
                 android:singleLine="true"
                 android:textSize="16sp" />
 
@@ -247,7 +247,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:hint="请手动输入"
+                android:hint=""
                 android:singleLine="true"
                 android:textSize="16sp" />
         </LinearLayout>
