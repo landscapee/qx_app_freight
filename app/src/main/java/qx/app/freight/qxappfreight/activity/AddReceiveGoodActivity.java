@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -121,6 +122,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "新增");
