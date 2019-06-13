@@ -223,7 +223,6 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
                 rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
                 rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
                 rcInfosEntity.setScooterType(mMyAgentListBean.getScooterType());
                 rcInfosEntity.setScooterCode(mMyAgentListBean.getScooterCode());
                 rcInfosEntity.setScooterWeight(mMyAgentListBean.getScooterWeight());
