@@ -238,9 +238,11 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                     return;
                 }else {
                     mData.setRemark(etOther.getText().toString());
+                    mData.setPersonUpdateValue(reviseWeight);
                 }
             }else {
                 mData.setRemark(tvScan.getText().toString());
+                mData.setPersonUpdateValue(reviseWeight);
             }
         }
         mData.setReWeight(crossWeight);

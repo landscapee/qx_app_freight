@@ -83,18 +83,19 @@ public class WeighterClient extends StompClient {
                     }
                 });
 
-        //订阅   待办
-        Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
-                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
-                    sendReshEventBus(mWebSocketBean);
-                }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
 
-        compositeDisposable.add(dispTopic1);
         if(!WebSocketService.isTopic){
+            //订阅   待办
+            Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                        WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                        sendReshEventBus(mWebSocketBean);
+                    }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
+
+            compositeDisposable.add(dispTopic1);
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())

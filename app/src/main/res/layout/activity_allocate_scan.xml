@@ -259,7 +259,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
                     android:hint="请输入重量"
-                    android:inputType="numberSigned"
+                    android:inputType="numberDecimal"
                     android:background="@null"
                     android:maxLength="15"
                     style="@style/public_tv_16sp" />

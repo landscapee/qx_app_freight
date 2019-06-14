@@ -216,6 +216,24 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
                 rcInfosEntity.setRepType(mMyAgentListBean.getRepType());
                 rcInfosEntity.setRepPlaceId(mMyAgentListBean.getRepPlaceId());
+
+                rcInfosEntity.setId(id);
+                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
+                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
+                rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
+                rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
+                rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
+                rcInfosEntity.setScooterType(mMyAgentListBean.getScooterType());
+                rcInfosEntity.setScooterCode(mMyAgentListBean.getScooterCode());
+                rcInfosEntity.setScooterWeight(mMyAgentListBean.getScooterWeight());
+                rcInfosEntity.setRepName(mMyAgentListBean.getRepName());
+                rcInfosEntity.setRepPlaceNum(mMyAgentListBean.getRepPlaceNum());
+                rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
+                rcInfosEntity.setUldCode(mMyAgentListBean.getUldCode());
+                rcInfosEntity.setUldType(mMyAgentListBean.getUldType());
+                rcInfosEntity.setUldWeight(mMyAgentListBean.getUldWeight());
+                rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
+                rcInfosEntity.setDelFlag(mMyAgentListBean.getDelFlag());
                 mListRcInfosEntity.add(rcInfosEntity);
             }
             transportListCommitEntity.setRcInfos(mListRcInfosEntity);

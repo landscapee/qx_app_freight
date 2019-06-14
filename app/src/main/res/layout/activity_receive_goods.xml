@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="未收运记录"
+            android:text="退货记录"
             android:textColor="#333333"
             android:textSize="@dimen/sp_14"
             android:gravity="center_vertical"/>

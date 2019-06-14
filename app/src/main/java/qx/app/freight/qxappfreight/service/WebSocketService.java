@@ -239,4 +239,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
     }
+
+
+
 }

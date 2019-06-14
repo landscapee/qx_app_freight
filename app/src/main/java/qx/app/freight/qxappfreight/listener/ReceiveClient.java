@@ -53,7 +53,7 @@ public class ReceiveClient extends StompClient {
     @SuppressLint("CheckResult")
     public void connect(String uri) {
         StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
-        Log.e(TAG, "websocket-->收运连接地址" + uri);
+        Log.e(TAG, "websocket-->收验连接地址" + uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接

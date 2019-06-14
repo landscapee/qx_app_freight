@@ -216,10 +216,11 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             //非换单审核的全部都加
-            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) && "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             loadData();

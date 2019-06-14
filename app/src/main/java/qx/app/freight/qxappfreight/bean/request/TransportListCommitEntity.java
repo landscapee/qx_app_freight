@@ -34,7 +34,7 @@ public class TransportListCommitEntity {
         private String[] cargoId;
         private String cargoCn;
         private int number;
-        private int weight;
+        private double weight;
         private double volume;
         private List<String> packagingType;
         private String scooterId;
@@ -46,6 +46,14 @@ public class TransportListCommitEntity {
         private String reservoirType;
         private String repName;
         private String repPlaceNum;
+        private String scooterType;
+        private String scooterCode;
+        private String scooterWeight;
+        private String uldCode;
+        private String uldType;
+        private int uldWeight;
+        private int delFlag;
+        private long createDate;
         private  List<RcInfoOverweight> rcInfoOverweight;
 
     }

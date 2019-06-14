@@ -169,7 +169,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("========", daibanCode);
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             Log.e("========1", daibanCode);
@@ -225,7 +225,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) && "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 transportListList1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow)
                     mTaskFragment.setTitleText(transportListList1.size());

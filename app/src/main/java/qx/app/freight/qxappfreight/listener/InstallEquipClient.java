@@ -89,42 +89,41 @@ public class InstallEquipClient extends StompClient {
                             break;
                     }
                 });
-
-        //订阅   运输 装卸机
-        Disposable dispTopic3 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.e(TAG, topicMessage.getPayload());
-                    if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
-                        if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:2")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    } else {
-                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else {
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    }
-                }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
-
-        compositeDisposable.add(dispTopic3);
         if (!WebSocketService.isTopic) {
+            //订阅   运输 装卸机
+            Disposable dispTopic3 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.e(TAG, topicMessage.getPayload());
+                        if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
+                            if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
+                                CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
+                            } else if (topicMessage.getPayload().contains("taskType:2")) {//运输
+                                CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
+                            }
+                        } else {
+                            if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")) {//装卸机
+                                CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
+                            } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
+                                CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
+                            } else {
+                                CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
+                            }
+                        }
+                    }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
+
+            compositeDisposable.add(dispTopic3);
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())
