@@ -46,7 +46,7 @@ public class CollectionClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-
+    private CommonDialog dialog = new CommonDialog(mContext);
 
     public CollectionClient(String uri, Context mContext) {
         super(new GetConnectionProvider());
@@ -186,7 +186,7 @@ public class CollectionClient extends StompClient {
                 .setOnClickListener((dialog1, confirm) -> loginOut());
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
+        handler.post(() -> dialog.dismiss());
     }
 
     //强制登出
