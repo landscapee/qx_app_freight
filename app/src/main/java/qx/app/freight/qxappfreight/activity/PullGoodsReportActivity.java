@@ -119,11 +119,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "拉货上报");
         mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
-        if (mData.getMovement()==4){//如果是组合装卸机任务，拉货上报时需要传组合航班任务的id
-            mMainFlightId=mData.getRelateInfoObj().getFlightId();
-        }else {
-            mMainFlightId=mData.getFlightId();
-        }
+        mMainFlightId=mData.getFlightId();
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),mMainFlightId);
         mCurrentTaskId = mData.getTaskId();

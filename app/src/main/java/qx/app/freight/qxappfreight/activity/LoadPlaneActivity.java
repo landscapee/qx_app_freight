@@ -114,7 +114,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         LoadAndUnloadTodoBean data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         mCurrentTaskId = data.getTaskId();
-        toolbar.setMainTitle(Color.WHITE, data.getFlightNo() + "  装机");
+        toolbar.setMainTitle(Color.WHITE, (data.getFlightNo()) + "  装机");
         mTvPlaneInfo.setText(data.getFlightNo());
         mTvFlightType.setText(data.getAircraftno());
         String route = data.getRoute();
@@ -179,7 +179,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             intent.putExtra("task_id", data.getTaskId());//任务id
             intent.putExtra("flight_id", data.getFlightId());//Flight id
             intent.putExtra("area_id", data.getSeat());//area_id
-            intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position",-1)).getOperationCode());//step_code
+            intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position", -1)).getOperationCode());//step_code
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
         });
@@ -187,7 +187,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //            if (mLoadingList.size() == 0) {
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
-                boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
+            boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
                /* for (LoadingListBean.DataBean entity1 : mLoadingList) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
                         if (!entity2.isLocked()) {
@@ -196,15 +196,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
                     }
                 }*/
-                if (doRight) {
-                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                    bean.setTpFlightId(data.getFlightId());
-                    bean.setTaskId(data.getId());
-                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-                } else {
-                    ToastUtil.showToast("有未锁定修改的数据，请检查！");
-                }
+            if (doRight) {
+                GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                bean.setTpFlightId(data.getFlightId());
+                bean.setTaskId(data.getId());
+                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+            } else {
+                ToastUtil.showToast("有未锁定修改的数据，请检查！");
+            }
 //            }
         });
     }
