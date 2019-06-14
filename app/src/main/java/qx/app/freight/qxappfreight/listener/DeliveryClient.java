@@ -73,7 +73,7 @@ public class DeliveryClient extends StompClient {
                             Log.e(TAG, "websocket 进港提货 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
-                            connect(uri);
+//                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
