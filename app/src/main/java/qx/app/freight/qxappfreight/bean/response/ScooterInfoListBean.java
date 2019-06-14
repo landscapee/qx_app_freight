@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.bean.response;
 
-import java.util.List;
-
 import lombok.Data;
 
 /**

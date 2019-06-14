@@ -61,6 +61,7 @@ public class DeliveryClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  进港提货 打开");
                             break;
                         case ERROR:

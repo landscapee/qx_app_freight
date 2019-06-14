@@ -194,49 +194,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setWaybillId(wayBillId);
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
-            List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
+            List<MyAgentListBean> myAgentListBeans = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
-                TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
-                rcInfosEntity.setAddOrderId(id);
-                rcInfosEntity.setTaskTypeCode(taskTypeCode);
-                rcInfosEntity.setId(mMyAgentListBean.getId());
-                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
-                rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
-                rcInfosEntity.setReservoirType(reservoirType);
-                rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
-                rcInfosEntity.setRepName(reservoirName);
-                rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
-                rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
-                rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
-                rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
-                rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
-                rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
-                rcInfosEntity.setRepType(mMyAgentListBean.getRepType());
-                rcInfosEntity.setRepPlaceId(mMyAgentListBean.getRepPlaceId());
-
-                rcInfosEntity.setId(id);
-                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
-                rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                rcInfosEntity.setWeight(mMyAgentListBean.getWeight());
-                rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                rcInfosEntity.setScooterType(mMyAgentListBean.getScooterType());
-                rcInfosEntity.setScooterCode(mMyAgentListBean.getScooterCode());
-                rcInfosEntity.setScooterWeight(mMyAgentListBean.getScooterWeight());
-                rcInfosEntity.setRepName(mMyAgentListBean.getRepName());
-                rcInfosEntity.setRepPlaceNum(mMyAgentListBean.getRepPlaceNum());
-                rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
-                rcInfosEntity.setUldCode(mMyAgentListBean.getUldCode());
-                rcInfosEntity.setUldType(mMyAgentListBean.getUldType());
-                rcInfosEntity.setUldWeight(mMyAgentListBean.getUldWeight());
-                rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
-                rcInfosEntity.setDelFlag(mMyAgentListBean.getDelFlag());
-                mListRcInfosEntity.add(rcInfosEntity);
+                myAgentListBeans.add(mMyAgentListBean);
             }
-            transportListCommitEntity.setRcInfos(mListRcInfosEntity);
+            transportListCommitEntity.setRcInfos(myAgentListBeans);
             transportListCommitEntity.setTaskTypeCode(taskTypeCode);
             transportListCommitEntity.setAddOrderId(id);
             ((TransportListCommitPresenter) mPresenter).transportListCommit(transportListCommitEntity);
@@ -423,7 +385,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             if (!"".equals(mScooterCode)) {
                 getNumberInfo(mScooterCode);
             } else {
-                ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
+                ToastUtil.showToast("扫码数据为空请重新扫码");
             }
         } else {
             Log.e("resultCode", "收货页面不是200");
@@ -479,7 +441,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void sendPrintMessageResult(String result) {
         isPrint = true;
-        ToastUtil.showToast(result);
+        ToastUtil.showToast(result+"");
     }
 
     private void printWayBill() {

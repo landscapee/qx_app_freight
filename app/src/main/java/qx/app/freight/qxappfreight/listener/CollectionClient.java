@@ -46,7 +46,6 @@ public class CollectionClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-    private CommonDialog dialog = new CommonDialog(mContext);
 
     public CollectionClient(String uri, Context mContext) {
         super(new GetConnectionProvider());
@@ -80,6 +79,7 @@ public class CollectionClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  收运 打开");
                             break;
                         case ERROR:

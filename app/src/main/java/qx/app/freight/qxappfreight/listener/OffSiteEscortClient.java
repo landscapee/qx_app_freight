@@ -64,6 +64,7 @@ public class OffSiteEscortClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  外场运输 打开");
                             break;
                         case ERROR:

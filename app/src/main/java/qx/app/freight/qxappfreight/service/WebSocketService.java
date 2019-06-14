@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.qxkj.positionapp.GPSUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,17 +31,19 @@ import ua.naiksoftware.stomp.StompClient;
 
 public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
     public Context mContext;
-    private static StompClient mStompClient;
+    //    private static StompClient mStompClient;
     public static final String TAG = "websocket";
     private GpsInfoEntity gpsInfoEntity; // gps 上传实体
     private SaveGpsInfoPresenter saveGpsInfoPresenter;
     private int taskAssignType = 0;
     public static boolean isTopic = false;
+    public static List<StompClient> mStompClient;
 
     @Override
     public void onCreate() {
         super.onCreate();
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+        mStompClient = new ArrayList<>();
         if (null == UserInfoSingle.getInstance().getRoleRS())
             return;
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
@@ -155,6 +158,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static void startService(Context activtity) {
         actionStart(activtity);
     }
+
     private static void actionStart(Context ctx) {
         Intent i = new Intent(ctx, WebSocketService.class);
         ctx.startService(i);
@@ -198,7 +202,6 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     }
 
 
-
     @Override
     public void saveGpsInfoResult(String result) {
         Log.e("GPS上传：", result);
@@ -232,14 +235,15 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     //停止连接
     public static void stopServer(Context context) {
-        if (mStompClient != null) {
-            mStompClient.disconnect();
-            mStompClient = null;
+        if (mStompClient.size() != 0) {
+            for (int i = 0; i < mStompClient.size(); i++) {
+                Log.e(TAG, "关闭了" + i + "个连接");
+                mStompClient.get(i).disconnect();
+            }
         }
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
     }
-
 
 
 }

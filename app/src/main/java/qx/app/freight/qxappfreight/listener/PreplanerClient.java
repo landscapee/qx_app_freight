@@ -50,7 +50,7 @@ public class PreplanerClient extends StompClient {
 
     @SuppressLint("CheckResult")
     public void connect(String uri) {
-        StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        StompClient my= Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
@@ -63,6 +63,7 @@ public class PreplanerClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  组板 打开");
                             break;
                         case ERROR:

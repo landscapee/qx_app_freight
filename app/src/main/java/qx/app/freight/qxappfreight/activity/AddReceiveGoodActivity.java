@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetWeightContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
@@ -92,6 +93,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private String wayBillId;
     private String taskTypeCode;
     private String id;
+    private String scooterId;
+    private String scooterType;
 
     /**
      * @param context
@@ -232,14 +235,14 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     private void finishForResult() {
         //id
-        mMyAgentListBean.setId("");
+        mMyAgentListBean.setId(mList.getId());
+        mMyAgentListBean.setScooterId(scooterId);
+        mMyAgentListBean.setScooterType(scooterType);
         mMyAgentListBean.setAddOrderId(id);
         //运单id
         mMyAgentListBean.setWaybillId(waybillId);
         //
         mMyAgentListBean.setTaskTypeCode(taskTypeCode);
-
-//        mMyAgentListBean.setAddOrderId(wayBillId);
 
         mMyAgentListBean.setWaybillCode(waybillCode);
         //品名
@@ -304,6 +307,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
             scooterInfo = scooterInfoListBeans.get(0);
+            scooterId = scooterInfoListBeans.get(0).getId();
+            scooterType = scooterInfoListBeans.get(0).getScooterType();
             if ("2".equals(scooterInfoListBeans.get(0).getScooterType())) {
                 mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
                 mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");

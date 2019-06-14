@@ -70,6 +70,7 @@ public class InstallEquipClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:

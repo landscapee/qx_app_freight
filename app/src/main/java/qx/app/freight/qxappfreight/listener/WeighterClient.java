@@ -62,6 +62,7 @@ public class WeighterClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.isTopic = true;
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  负重 打开");
                             break;
                         case ERROR:

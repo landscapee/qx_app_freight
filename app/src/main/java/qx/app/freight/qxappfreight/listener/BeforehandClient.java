@@ -41,7 +41,6 @@ public class BeforehandClient extends StompClient {
     private CompositeDisposable compositeDisposable;
     private Context mContext;
 
-
     public BeforehandClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
@@ -62,7 +61,7 @@ public class BeforehandClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
-
+                            WebSocketService.mStompClient.add(my);
                             Log.e(TAG, "webSocket  进港理货 打开");
                             break;
                         case ERROR:
