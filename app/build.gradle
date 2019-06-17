@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 println "青霄科技：项目根路径" + getRootProject().getProjectDir().absolutePath
@@ -13,6 +15,13 @@ if (!RELEASE_PROPERTIES_EXIST == true) {
     println "青霄科技：签名配置文件sign.properties！\n--------------release模式运行"
 }
 
+def getVersionName() {
+    def sdf = new SimpleDateFormat("yyMMddHH")
+    return sdf.format(new Date())
+}
+
+def auto_verison_name = getVersionName()
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -20,7 +29,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 6   //app根据此数字进行版本自动迭代
-        versionName "1.0_1906014"
+        versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -52,9 +61,10 @@ android {
         debugProduct.initWith(buildTypes.debug)
 
         //测试环境(可调试)
-        debugRelease{
+        debugRelease {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //设置ip
             properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "release.properties"))
             Set<String> keys = properties.keySet()
             for (String key : keys) {
@@ -65,7 +75,8 @@ android {
         //生产环境
         product {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //设置ip
             properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "product.properties"))
             Set<String> keys = properties.keySet()
             for (String key : keys) {
@@ -80,7 +91,8 @@ android {
         //生产环境
         debugProduct {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'            //设置ip
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //设置ip
             properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "product.properties"))
             Set<String> keys = properties.keySet()
             for (String key : keys) {
