@@ -189,7 +189,7 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> changeStorage(@Body ChangeStorageBean model);
 
     // 查询库区-收运
-    @POST("service-bussiness-reservoir/reservoir/list")
+    @POST("service-bussiness-warehouse/reservoir/list")
     Observable<BaseEntity<SearchReservoirBean>> searchReservoir(@Body BaseFilterEntity model);
 
     //查询集装箱列表信息
@@ -209,11 +209,11 @@ public interface HttpApi {
     Observable<BaseEntity<MyAgentListBean>> exist(@Path("scooterId") String scooterId);
 
     //查询库区
-    @POST("service-bussiness-reservoir/reservoir/autoReservoir")
+    @POST("service-bussiness-warehouse/reservoir/autoReservoir")
     Observable<BaseEntity<AutoReservoirBean>> autoReservoirv(@Body BaseFilterEntity model);
 
     //查询所有库区
-    @POST("service-bussiness-reservoir/reservoir/list")
+    @POST("service-bussiness-warehouse/reservoir/list")
     Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
     //板车列表信息
@@ -529,19 +529,19 @@ public interface HttpApi {
     /*********************清库***********************************/
 
     //清库列表
-    @POST("service-bussiness-reservoir/inventory/listInventoryTaskByPage")
+    @POST("service-bussiness-warehouse/inventory/listInventoryTaskByPage")
     Observable<BaseEntity<InventoryQueryBean>> inventoryQuery(@Body BaseFilterEntity entity);
 
     //清库提交
-    @POST("service-bussiness-reservoir/inventory/addInventoryDetail")
+    @POST("service-bussiness-warehouse/inventory/addInventoryDetail")
     Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
     //清库详情
-    @POST("service-bussiness-reservoir/inventory/listInventoryDetail")
+    @POST("service-bussiness-warehouse/inventory/listInventoryDetail")
     Observable<BaseEntity<List<InventoryDetailEntity>>> listInventoryDetail(@Body BaseFilterEntity entity);
 
     //清库运单模糊查询
-    @GET("service-bussiness-reservoir/inventory/listWaybillCode")
+    @GET("service-bussiness-warehouse/inventory/listWaybillCode")
     Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
 
 
@@ -560,7 +560,7 @@ public interface HttpApi {
      * @param deptCode 从用户信息里面获取
      * @return
      */
-    @GET("service-bussiness-reservoir/reservoir/listReservoirInfoByCode/{deptCode}")
+    @GET("service-bussiness-warehouse/reservoir/listReservoirInfoByCode/{deptCode}")
     Observable<BaseEntity<List<ReservoirArea>>> listReservoirInfoByCode(@Path("deptCode") String deptCode);
 
     //xxx

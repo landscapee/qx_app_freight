@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -28,12 +27,12 @@ import me.shaohui.advancedluban.Luban;
 import me.shaohui.advancedluban.OnCompressListener;
 import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.contract.TestInfoContract;
@@ -79,53 +78,23 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     @BindView(R.id.gh_user)
     TextView GhUser;
 
-    private String mStaffId;
-    private String mStaffName;
     private String mImageHead;//头像路径
-    private String mAdditionTypeArr;
-    private String mTaskId;
     private String fileName;
     private String filePath;
-    private String mWaybillId;
-    private String mSpotFlag;
     private int mSpotResult;
-    private String insCheck; //报检是否合格1合格 0不合格
-    private String mFlightNumber;//航班号
-    private String mShipperCompanyId;
-    private String mId;
-    private String mTaskTypeCode;
-    private String mWaybillCode;
-    private String Tid;
-    private String mJianYan;
+    private TransportDataBase mBean;
+    private DeclareWaybillBean mDecBean;
 
     private TestInfoListBean mAcTestInfoListBean = new TestInfoListBean();
 
     public static void startActivity(Activity context,
-                                     String taskTypeCode,
-                                     String id,
-                                     String additionTypeArr,
-                                     String taskId,
-                                     String waybillId,
-                                     String spotFlag,
-                                     String flightNumber,
-                                     String shipperCompanyId,
-                                     String waybillCode,
-                                     String tid,
-                                     String mJianYan
+                                     TransportDataBase mBean,
+                                     DeclareWaybillBean mDecBean
 
     ) {
         Intent intent = new Intent(context, VerifyStaffActivity.class);
-        intent.putExtra("taskTypeCode", taskTypeCode);
-        intent.putExtra("id", id);
-        intent.putExtra("additionTypeArr", additionTypeArr);
-        intent.putExtra("taskId", taskId);
-        intent.putExtra("waybillId", waybillId);
-        intent.putExtra("spotFlag", spotFlag);
-        intent.putExtra("flightNumber", flightNumber);
-        intent.putExtra("shipperCompanyId", shipperCompanyId);
-        intent.putExtra("waybillCode", waybillCode);
-        intent.putExtra("tid", tid);
-        intent.putExtra("mJianYan", mJianYan);
+        intent.putExtra("mBean", mBean);
+        intent.putExtra("mDecBean", mDecBean);
         context.startActivityForResult(intent, 0);
     }
 
@@ -141,23 +110,14 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         toolbar.setMainTitle(Color.WHITE, "核查报检员身份");
         String text = StringUtil.format(this, R.string.format_certificate_date, "2018-12-12", "2019-12-12");
         mTvCertificateInDate.setText(text);
-        mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
-        mJianYan = getIntent().getStringExtra("mJianYan");
-        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
-        mId = getIntent().getStringExtra("id");
-        mWaybillId = getIntent().getStringExtra("waybillId");
-        mWaybillCode = getIntent().getStringExtra("waybillCode");
-        mTaskId = getIntent().getStringExtra("taskId");
-        mSpotFlag = getIntent().getStringExtra("spotFlag");
-        mFlightNumber = getIntent().getStringExtra("flightNumber");
-        mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
-        Tid = getIntent().getStringExtra("tid");
+        mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
         initData();
     }
 
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
-        ((TestInfoPresenter) mPresenter).testInfo(mWaybillId, mShipperCompanyId, mTaskTypeCode);
+        ((TestInfoPresenter) mPresenter).testInfo(mBean.getWaybillId(), mDecBean.getShipperCompanyId(), mBean.getTaskTypeCode());
     }
 
 
@@ -167,20 +127,11 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.agree_tv:
                 if (!"".equals(filePath)) {
                     VerifyFileActivity.startActivity(this,
-                            mTaskTypeCode,
-                            mWaybillId,
-                            mId,
-                            mAdditionTypeArr,
-                            mTaskId,
+                            mBean,
+                            mDecBean,
                             filePath,
-                            mSpotFlag,
                             mSpotResult,
-                            0,
-                            mFlightNumber,
-                            mShipperCompanyId,
-                            mWaybillCode,
-                            Tid,
-                            mJianYan
+                            0
                     );
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
@@ -189,16 +140,16 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 if (!"".equals(filePath)) {
                     mPresenter = new SubmissionPresenter(this);
                     StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
-                    mStorageCommitEntity.setWaybillId(Tid);
-                    mStorageCommitEntity.setWaybillCode(mWaybillCode);
+                    mStorageCommitEntity.setWaybillId(mBean.getId());
+                    mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                     mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
                     mStorageCommitEntity.setInsFile(filePath);
                     mStorageCommitEntity.setInsCheck(1);
                     mStorageCommitEntity.setFileCheck(1);
-                    mStorageCommitEntity.setTaskTypeCode(mTaskTypeCode);
+                    mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
                     mStorageCommitEntity.setType(1);
-                    mStorageCommitEntity.setTaskId(mTaskId);
-                    mStorageCommitEntity.setUserId(mFlightNumber);
+                    mStorageCommitEntity.setTaskId(mBean.getTaskId());
+                    mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
                     //新加
                     mStorageCommitEntity.setInsUserName("");
                     mStorageCommitEntity.setInsDangerEnd(123);
@@ -217,7 +168,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 break;
 
             case R.id.gh_user:
-                if (null ==mAcTestInfoListBean.getFreightInfo()) {
+                if (null == mAcTestInfoListBean.getFreightInfo()) {
                     ToastUtil.showToast("没有可以选择的角色，请先添加");
                 } else
                     ChoiceUserActivity.startActivity(this, mAcTestInfoListBean);
@@ -337,22 +288,21 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             if (testInfoListBeanList.getFreightInfo().size() > 0) {
                 mAcTestInfoListBean = testInfoListBeanList;
                 //获取抽验结果
-                if (mAcTestInfoListBean.getInsInfo()==null){
-                    mSpotResult =0;
-                }
-                else
+                if (mAcTestInfoListBean.getInsInfo() == null) {
+                    mSpotResult = 0;
+                } else
                     mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
                 //报检员姓名
 //                tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
                 //报检开始时间
 //                tvBjStart.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookStart()) + "至");
-                tvBjStart.setText("- -至"+"- -");
+                tvBjStart.setText("- -至" + "- -");
                 //报检结束时间
 //                tvBjEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getInspectionBookEnd()));
                 tvBjEnd.setText("");
                 //危险开始时间
 //                tvWxStart.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart() == 0 ? "- -至" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookStart()) + "至");
-                tvWxStart.setText("- -至"+"- -");
+                tvWxStart.setText("- -至" + "- -");
                 //危险结束时间
 //                tvWxEnd.setText(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd() == 0 ? "- -" : TimeUtils.date3time(testInfoListBeanList.getFreightInfo().get(0).getDangerBookEnd()));
                 tvWxEnd.setText("");
@@ -360,10 +310,10 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).into(mIvStaffOld1);
 //                GlideUtil.load(HttpConstant.IMAGEURL + testInfoListBeanList.getFreightInfo().get(0).getInspectionHead()).placeholder().into(mIvStaffOld1);
 //            GlideUtil.load("https://www.baidu.com/img/bd_logo1.png?where=super").into(mIvStaffOld1);
-            } else{
+            } else {
 //                ToastUtil.showToast("数据为空");
             }
-        } else{
+        } else {
 //            ToastUtil.showToast("数据为空");
         }
 
