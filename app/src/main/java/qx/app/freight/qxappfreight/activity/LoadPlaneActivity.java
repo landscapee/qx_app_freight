@@ -113,11 +113,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         LoadAndUnloadTodoBean data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
-        mCurrentTaskId = data.getTaskId();
-        toolbar.setMainTitle(Color.WHITE, (data.getFlightNo()) + "  装机");
-        mTvPlaneInfo.setText(data.getFlightNo());
-        mTvFlightType.setText(data.getAircraftno());
-        String route = data.getRoute();
+        //是否是连班航班,连班航班的话所有关联操作都应该使用连班航班的数据
+        boolean mIsKeepOnTask = data.getMovement() == 4;
+        mCurrentTaskId = mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId();
+        toolbar.setMainTitle(Color.WHITE, (mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo()) + "  装机");
+        mTvPlaneInfo.setText(mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo());
+        mTvFlightType.setText(mIsKeepOnTask ? data.getRelateInfoObj().getAircraftno() : data.getAircraftno());
+        String route = mIsKeepOnTask ? data.getRelateInfoObj().getRoute() : data.getRoute();
         String start = "", middle = "", end = "";
         if (route != null) {
             String[] placeArray = route.split(",");
@@ -155,14 +157,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvTargetPlace.setText(end);
             }
         }
-        mTvSeat.setText(data.getSeat());
-        mTvStartTime.setText(TimeUtils.getHMDay(data.getScheduleTime()));
+        mTvSeat.setText(mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());
+        mTvStartTime.setText(TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getScheduleTime() : data.getScheduleTime()));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
-        mCurrentFlightId = data.getFlightId();
+        mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
         entity.setFlightId(mCurrentFlightId);
@@ -175,10 +177,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
-            intent.putExtra("flight_number", data.getFlightNo());//航班号
-            intent.putExtra("task_id", data.getTaskId());//任务id
-            intent.putExtra("flight_id", data.getFlightId());//Flight id
-            intent.putExtra("area_id", data.getSeat());//area_id
+            intent.putExtra("flight_number", mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo());//航班号
+            intent.putExtra("task_id", mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId());//任务id
+            intent.putExtra("flight_id", mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId());//Flight id
+            intent.putExtra("area_id", mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());//area_id
             intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position", -1)).getOperationCode());//step_code
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
