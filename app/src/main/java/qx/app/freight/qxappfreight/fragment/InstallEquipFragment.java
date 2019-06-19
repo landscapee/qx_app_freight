@@ -386,7 +386,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideadapter.notifyDataSetChanged();
-            if (mOperatePos == 4) {
+            if (mOperatePos == 4||mOperatePos==5) {
                 mCurrentPage = 1;
                 loadData();
                 mOperatePos = 0;

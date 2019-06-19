@@ -219,20 +219,19 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             helper.setText(R.id.tv_flight_number, item.getFlightNo());
             helper.setText(R.id.tv_flight_info, item.getAircraftno());
             ImageView ivType = helper.getView(R.id.iv_task_type);
-            boolean hasActualTime = item.getActualArriveTime() == 0;
+            boolean hasActualTime = item.getActualArriveTime() != 0;
             TextView tvTime = helper.getView(R.id.tv_time);
             tvTime.setText(hasActualTime ? TimeUtils.getHMDay(item.getActualArriveTime()) : TimeUtils.getHMDay(item.getScheduleTime()));
             Drawable drawableLeft;
             if (item.getTaskType() == 1) {
                 ivType.setImageResource(R.mipmap.li);
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
             } else {
                 ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
-                if (hasActualTime) {
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
-                } else {
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
-                }
+            }
+            if (hasActualTime) {
+                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+            } else {
+                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
             }
             tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
             tvTime.setCompoundDrawablePadding(3);

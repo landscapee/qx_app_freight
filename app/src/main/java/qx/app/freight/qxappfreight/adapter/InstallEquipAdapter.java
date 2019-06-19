@@ -36,19 +36,18 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
-        boolean hasActualTime = TextUtils.isEmpty(item.getActualTime());
-        tvTime.setText(hasActualTime ? item.getScheduleTime() : item.getActualTime());
+        boolean hasActualTime = !TextUtils.isEmpty(item.getActualTime());
+        tvTime.setText(hasActualTime ? item.getActualTime() : item.getScheduleTime());
         Drawable drawableLeft;
         if (item.getTaskTpye() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
-            if (hasActualTime) {
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
-            } else {
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
-            }
+        }
+        if (hasActualTime) {
+            drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+        } else {
+            drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
         tvTime.setCompoundDrawablePadding(5);
