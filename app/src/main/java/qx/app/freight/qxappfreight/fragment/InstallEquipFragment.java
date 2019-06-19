@@ -283,7 +283,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     posNow = i;
                     break;
                 } else if (timeNow.contains(":0")) {
-                    hasChecked = true;
+                    if (!timeNow.equals("0:0")){//如果已经调过滑动开始装机或卸机接口，再次滑动不去调接口
+                        hasChecked = true;
+                    }
                     posNow = i;
                     break;
                 }
@@ -348,7 +350,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void setSlideListener(List<Boolean> checkedList) {
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             //滑动步骤去调接口，以及跳转页面
-            if (smallPos == 3 && checkedList.get(bigPos)) {
+            if ((smallPos == 3||smallPos==4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
                 Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
             } else {
                 mOperatePos = smallPos;
