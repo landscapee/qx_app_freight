@@ -68,7 +68,7 @@ public class Constants {
     public static String JUNCTION_LOAD = "clipping";
 
     /**
-     * 结载
+     * 国际货物
      *
      */
     public static String INTERNATIONAL_GOODS = "international_goods";

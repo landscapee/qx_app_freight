@@ -161,7 +161,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             }
             mFlightNumber = mFlightNumberList.get(0);
             mFlightId = mFlightberList.get(0).getFlightId();
-
+            mCurrentTaskId =mFlightberList.get(0).getTaskId();
             mTvFlightInfo.setText(mFlightNumber);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
             mSpinner.setAdapter(spinnerAdapter);

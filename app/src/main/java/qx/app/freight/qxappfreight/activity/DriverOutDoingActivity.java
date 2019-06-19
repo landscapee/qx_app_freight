@@ -234,14 +234,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
-            ScanManagerActivity.startActivity(this);
+        if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())&&"baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType())&&tpStatus == 0) {
+            isSureEndLoc(result.getData());
         } else {
             if (tpStatus == 0) {
                 ToastUtil.showToast("运输已经开始，无法再次扫版");
                 return;
             }
-            if (listScooter.size() >= tpNum) {
+          if (listScooter.size() >= tpNum&&!Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
 
                 ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
                 return;
@@ -757,6 +757,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         mTransportTodoListBean.setNum(mOutFieldTaskBean.getNum());
                         mTransportTodoListBean.setCarType(mOutFieldTaskBean.getTransfortType());
                         mTransportTodoListBean.setTpCargoType(mOutFieldTaskBean.getCargoType());
+                        mTransportTodoListBean.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
+                        mTransportTodoListBean.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                     }
                 }
             }

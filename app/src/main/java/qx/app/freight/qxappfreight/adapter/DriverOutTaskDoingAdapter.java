@@ -53,8 +53,8 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
 
         helper.setChecked(R.id.cb_flight,item.isSelect());
 
-        helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpStartLocate()));
-        helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpDestinationLocate()) );
+        helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpStartLocate())+item.getMTransportTodoListBeans().get(0).getBeginAreaId());
+        helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getMTransportTodoListBeans().get(0).getTpDestinationLocate())+item.getMTransportTodoListBeans().get(0).getEndAreaId() );
 
         TextView link = helper.getView(R.id.tv_flight_link1);
 

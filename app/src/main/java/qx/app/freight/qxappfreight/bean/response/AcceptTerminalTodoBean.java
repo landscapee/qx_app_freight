@@ -22,7 +22,7 @@ public class AcceptTerminalTodoBean implements Serializable {
 
     private List<List<OutFieldTaskBean>> useTasks;
 
-    private String transfortType; //0-大滚筒（宽），1-大滚筒（窄），2-小滚筒，3-平板
+    private String transfortType; //0-大滚筒（宽），1-小滚筒，2-平板，3-大滚筒（窄）
 
 //    private Map<String, List <OutFieldTaskBean>> collect;
 
