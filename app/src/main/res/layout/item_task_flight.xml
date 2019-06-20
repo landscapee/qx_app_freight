@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,44 +29,26 @@
             android:id="@+id/tv_flight_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="5dp"
             android:text="B-2310"
             android:textColor="@color/black_3"
-            android:textStyle="bold"
-            android:layout_marginStart="12dp"
-            />
+            android:textStyle="bold" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/tv_flight_start"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_flight_info_container"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="PEK"
-            android:textColor="@color/black_3"
-            android:drawableRight="@mipmap/airlane"
-            />
-
-        <TextView
-            android:id="@+id/tv_flight_link1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/airlane"
-            android:text="PEK"
-            android:textColor="@color/black_3" />
-
-        <TextView
-            android:id="@+id/tv_flight_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CTU"
-            android:textColor="@color/black_3" />
-
-
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,35 +63,33 @@
             android:id="@+id/iv_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/li"
-            />
+            android:src="@mipmap/li" />
 
         <TextView
             android:id="@+id/tv_flight_place"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:drawableLeft="@mipmap/placement"
             android:text="101"
             android:textColor="@color/gray_888"
-            android:layout_weight="1"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ji"
-            />
+            android:src="@mipmap/ji" />
 
         <TextView
             android:id="@+id/tv_arrive_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/format_arrive_info"
-            android:textSize="@dimen/sp_14"
             android:textColor="@color/gray_888"
-            android:layout_weight="1"
+            android:textSize="@dimen/sp_14"
 
             />
 
@@ -119,49 +98,47 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
-            android:text=""
-            android:textColor="@color/gray_888"
             android:layout_weight="1.5"
             android:gravity="right"
-            android:textSize="14sp"
-            />
+            android:text=""
+            android:textColor="@color/gray_888"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_rect_gray_gap"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_marginTop="13dp"
+        android:background="@drawable/shape_rect_gray_gap"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        >
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
+
         <TextView
             android:id="@+id/tv_begin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#738598"
             android:text="待运区1"
-            android:textSize="12sp"
-            />
+            android:textColor="#738598"
+            android:textSize="12sp" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/path3"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            />
+            android:src="@mipmap/path3" />
+
         <TextView
             android:id="@+id/tv_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#738598"
             android:text="暂存区1"
-            android:textSize="12sp"
-            />
+            android:textColor="#738598"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

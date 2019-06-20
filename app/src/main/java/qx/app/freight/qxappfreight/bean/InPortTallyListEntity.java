@@ -8,9 +8,7 @@ import lombok.Data;
 @Data
 public class InPortTallyListEntity implements Serializable {
     private String waybill;
-    private String startPlace;
-    private String middlePlace;
-    private String endPlace;
+    private List<String> flightInfoList;
     private String docName;//AWBA
     private boolean docArrived;//Y N
     private int docNumber;

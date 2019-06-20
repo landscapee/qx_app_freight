@@ -8,6 +8,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -69,14 +71,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
     TextView mTvFlightType;//航班类型
-    @BindView(R.id.tv_start_place)
-    TextView mTvStartPlace;//航班起点
-    @BindView(R.id.iv_two_place)
-    ImageView mIvTwoPlace;
-    @BindView(R.id.tv_middle_place)
-    TextView mTvMiddlePlace;//航班中转点
-    @BindView(R.id.tv_target_place)
-    TextView mTvTargetPlace;//航班终点
+    @BindView(R.id.ll_flight_info_container)
+    LinearLayout mLlInfo;//航班信息容器
     @BindView(R.id.tv_seat)
     TextView mTvSeat;//航班机位数
     @BindView(R.id.tv_arrive_time)
@@ -143,43 +139,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mTvPlaneInfo.setText(mData.getFlightNo());
         mTvFlightType.setText(mData.getAircraftno());
         String route = mData.getRoute();
-        String start = "", middle = "", end = "";
+        List<String> resultList = new ArrayList<>();
         if (route != null) {
             String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
             for (String str : placeArray) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
             }
-            if (resultList.size() == 3) {
-                middle = resultList.get(1);
-            }
-            start = resultList.get(0);
-            end = resultList.get(resultList.size() - 1);
         }
-        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
-            mTvStartPlace.setVisibility(View.GONE);
-            mIvTwoPlace.setVisibility(View.GONE);
-            mTvMiddlePlace.setVisibility(View.GONE);
-            mTvTargetPlace.setVisibility(View.GONE);
-        } else {
-            if (TextUtils.isEmpty(middle)) {//没有中转站信息
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mIvTwoPlace.setVisibility(View.VISIBLE);
-                mTvMiddlePlace.setVisibility(View.GONE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setText(end);
-            } else {
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mIvTwoPlace.setVisibility(View.GONE);
-                mTvMiddlePlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mTvMiddlePlace.setText(middle);
-                mTvTargetPlace.setText(end);
-            }
-        }
+        FlightInfoLayout layout = new FlightInfoLayout(this, resultList);
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mData.getSeat());
         long arrive;
         if (mData.getActualArriveTime() != 0) {//有实际到达时间

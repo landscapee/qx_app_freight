@@ -51,6 +51,5 @@ public class DynamicInfoAdapter extends BaseQuickAdapter<FlightBean.FlightsBean,
         }
         //状态
         helper.setText(R.id.tv_state, item.getFlightStatus());
-
     }
 }

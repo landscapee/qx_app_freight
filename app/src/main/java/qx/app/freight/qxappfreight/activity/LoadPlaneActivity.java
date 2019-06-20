@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,10 +34,12 @@ import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomRecylerView;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
  * 理货装机页面
@@ -49,14 +51,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvPlaneInfo;
     @BindView(R.id.tv_flight_craft)
     TextView mTvFlightType;
-    @BindView(R.id.tv_start_place)
-    TextView mTvStartPlace;
-    @BindView(R.id.iv_two_place)
-    ImageView mIvTwoPlace;
-    @BindView(R.id.tv_middle_place)
-    TextView mTvMiddlePlace;
-    @BindView(R.id.tv_target_place)
-    TextView mTvTargetPlace;
+    @BindView(R.id.ll_flight_info_container)
+    LinearLayout mLlInfoContainer;
     @BindView(R.id.tv_seat)
     TextView mTvSeat;
     @BindView(R.id.tv_start_time)
@@ -120,43 +116,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvPlaneInfo.setText(mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo());
         mTvFlightType.setText(mIsKeepOnTask ? data.getRelateInfoObj().getAircraftno() : data.getAircraftno());
         String route = mIsKeepOnTask ? data.getRelateInfoObj().getRoute() : data.getRoute();
-        String start = "", middle = "", end = "";
-        if (route != null) {
-            String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
-            for (String str : placeArray) {
-                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
-                resultList.add(temp);
-            }
-            if (resultList.size() == 3) {
-                middle = resultList.get(1);
-            }
-            start = resultList.get(0);
-            end = resultList.get(resultList.size() - 1);
-        }
-        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
-            mTvStartPlace.setVisibility(View.GONE);
-            mIvTwoPlace.setVisibility(View.GONE);
-            mTvMiddlePlace.setVisibility(View.GONE);
-            mTvTargetPlace.setVisibility(View.GONE);
-        } else {
-            if (TextUtils.isEmpty(middle)) {//没有中转站信息
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mIvTwoPlace.setVisibility(View.VISIBLE);
-                mTvMiddlePlace.setVisibility(View.GONE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setText(end);
-            } else {
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mIvTwoPlace.setVisibility(View.GONE);
-                mTvMiddlePlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mTvMiddlePlace.setText(middle);
-                mTvTargetPlace.setText(end);
-            }
-        }
+        FlightInfoLayout layout = new FlightInfoLayout(this, StringUtil.getFlightList(route));
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfoContainer.addView(layout, paramsMain);
         mTvSeat.setText(mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());
         mTvStartTime.setText(TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getScheduleTime() : data.getScheduleTime()));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

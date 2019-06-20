@@ -230,4 +230,22 @@ public class StringUtil {
             entity.setFlightInfoList(resultList);
         }
     }
+
+    /**
+     * 解析航线数据，返回航站三字码列表
+     * @param route
+     * @return
+     */
+    public static List<String> getFlightList(String route){
+        List<String> result=new ArrayList<>();
+        if (route!=null){
+            String[] placeArray = route.split(",");
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str : placeList) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                result.add(temp);
+            }
+        }
+        return result;
+    }
 }

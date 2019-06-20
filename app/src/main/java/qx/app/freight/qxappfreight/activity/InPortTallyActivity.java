@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.contract.InPortTallyContract;
 import qx.app.freight.qxappfreight.presenter.InPortTallyPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -127,12 +128,7 @@ public class InPortTallyActivity extends BaseActivity implements MultiFunctionRe
         for (InportTallyBean bean : result) {
             InPortTallyListEntity model = new InPortTallyListEntity();
             model.setWaybill(bean.getWaybillCode());
-            if (!TextUtils.isEmpty(bean.getRoute())) {
-                String[] info = bean.getRoute().split("-");
-                model.setStartPlace(info[0]);
-                model.setMiddlePlace("");
-                model.setEndPlace(info[info.length - 1]);
-            }
+            model.setFlightInfoList(StringUtil.getFlightList(bean.getRoute()));
             model.setDocName(bean.getMailType());
             model.setDocArrived(bean.getDocumentDelivery() == 1);
             model.setDocNumber(bean.getTotalNumberPackages());

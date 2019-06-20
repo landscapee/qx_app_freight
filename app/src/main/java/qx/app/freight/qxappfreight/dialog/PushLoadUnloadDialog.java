@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +14,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,8 +28,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -39,8 +38,10 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
@@ -168,15 +169,6 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         initViews();
         return dialog;
     }
-//    public void showDialog(FragmentManager fragmentManager) {
-//        FragmentTransaction ft = fragmentManager.beginTransaction();
-//        Fragment prev = fragmentManager.findFragmentByTag(getTag());
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//        show(ft, getTag());
-//    }
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
@@ -235,38 +227,11 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             }
             tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
             tvTime.setCompoundDrawablePadding(3);
-            List<String> result = new ArrayList<>();
-            if (item.getRoute() != null && item.getRoute().contains(",")) {
-                String[] placeArray = item.getRoute().split(",");
-                List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
-                for (String str : placeList) {
-                    String temp = str.replaceAll("[^a-z^A-Z]", "");
-                    result.add(temp);
-                }
-            }
-            if (result.size() == 0) {//没有航线信息
-                helper.getView(R.id.tv_start_place).setVisibility(View.GONE);
-                helper.getView(R.id.iv_two_place).setVisibility(View.GONE);
-                helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
-                helper.getView(R.id.tv_end_place).setVisibility(View.GONE);
-            } else {
-                if (result.size() == 2) {//只有起点和终点
-                    helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
-                    helper.getView(R.id.iv_two_place).setVisibility(View.VISIBLE);
-                    helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
-                    helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
-                    helper.setText(R.id.tv_start_place, result.get(0));
-                    helper.setText(R.id.tv_end_place, result.get(result.size() - 1));
-                } else {//至少有三个地方
-                    helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
-                    helper.getView(R.id.iv_two_place).setVisibility(View.GONE);
-                    helper.getView(R.id.tv_middle_place).setVisibility(View.VISIBLE);
-                    helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
-                    helper.setText(R.id.tv_start_place, result.get(0));
-                    helper.setText(R.id.tv_middle_place, result.get(1));
-                    helper.setText(R.id.tv_end_place, result.get(result.size() - 1));
-                }
-            }
+            List<String> result = StringUtil.getFlightList(item.getRoute());
+            FlightInfoLayout layout = new FlightInfoLayout(context, result);
+            LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout llContainer = helper.getView(R.id.ll_flight_info_container);
+            llContainer.addView(layout, paramsMain);
             helper.setText(R.id.tv_seat, item.getSeat());
         }
     }
