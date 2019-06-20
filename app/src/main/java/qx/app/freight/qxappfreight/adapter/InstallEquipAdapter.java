@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
  * 装机列表适配器
@@ -53,30 +55,10 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         tvTime.setCompoundDrawablePadding(5);
         helper.setText(R.id.tv_plane_info, StringUtil.toText(item.getFlightInfo()));
         helper.setText(R.id.tv_craft_number, StringUtil.toText(item.getAirCraftNo()));
-        ImageView ivTwoPlace = helper.getView(R.id.iv_two_place);
-        if (TextUtils.isEmpty(item.getStartPlace())) {//只要出发地没有，则证明没有航线信息，全部展示view应该隐藏起来
-            helper.getView(R.id.tv_start_place).setVisibility(View.GONE);
-            helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
-            ivTwoPlace.setVisibility(View.GONE);
-            helper.getView(R.id.tv_end_place).setVisibility(View.GONE);
-        } else {
-            if (TextUtils.isEmpty(item.getMiddlePlace())) {//中转站名为空
-                helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
-                helper.setText(R.id.tv_start_place, item.getStartPlace());
-                helper.getView(R.id.tv_middle_place).setVisibility(View.GONE);
-                ivTwoPlace.setVisibility(View.VISIBLE);
-                helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
-                helper.setText(R.id.tv_end_place, item.getEndPlace());
-            } else {
-                helper.getView(R.id.tv_start_place).setVisibility(View.VISIBLE);
-                helper.getView(R.id.tv_middle_place).setVisibility(View.VISIBLE);
-                ivTwoPlace.setVisibility(View.GONE);
-                helper.getView(R.id.tv_end_place).setVisibility(View.VISIBLE);
-                helper.setText(R.id.tv_start_place, item.getStartPlace());
-                helper.setText(R.id.tv_middle_place, item.getMiddlePlace());
-                helper.setText(R.id.tv_end_place, item.getEndPlace());
-            }
-        }
+        LinearLayout container = helper.getView(R.id.ll_flight_info_container);
+        FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));

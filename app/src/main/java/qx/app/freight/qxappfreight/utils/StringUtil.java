@@ -218,9 +218,7 @@ public class StringUtil {
      */
     public static void setFlightRoute(String route, InstallEquipEntity entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setStartPlace("");
-            entity.setMiddlePlace("");
-            entity.setEndPlace("");
+            entity.setFlightInfoList(new ArrayList<>());
         } else {
             String[] placeArray = route.split(",");
             List<String> resultList = new ArrayList<>();
@@ -229,15 +227,7 @@ public class StringUtil {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
             }
-            if (placeArray.length == 2) {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace("");
-                entity.setEndPlace(resultList.get(resultList.size() - 1));
-            } else {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace(resultList.get(1));
-                entity.setEndPlace(resultList.get(2));
-            }
+            entity.setFlightInfoList(resultList);
         }
     }
 }
