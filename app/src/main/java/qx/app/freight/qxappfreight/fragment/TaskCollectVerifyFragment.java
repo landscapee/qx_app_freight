@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.SearchTodoTaskContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
+import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -231,6 +233,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     mTaskFragment.setTitleText(transportListList1.size());
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+            ActManager.getAppManager().finishReceive();
+            ToastUtil.showToast("当前任务以在其他设备或终端完成");
             getData();
 //            for (TransportDataBase mTransportListBean : transportListList1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))

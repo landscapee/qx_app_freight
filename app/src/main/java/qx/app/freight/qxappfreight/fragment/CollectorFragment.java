@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
+import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -223,6 +224,8 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+            ActManager.getAppManager().finishReCollection();
+            ToastUtil.showToast("当前任务以在其他设备或终端完成");
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
