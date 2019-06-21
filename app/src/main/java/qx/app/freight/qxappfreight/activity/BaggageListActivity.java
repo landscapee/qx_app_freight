@@ -40,10 +40,12 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageAreaSubContract;
 import qx.app.freight.qxappfreight.contract.GetAllRemoteAreaContract;
+import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.presenter.BaggageAreaSubPresenter;
 import qx.app.freight.qxappfreight.presenter.GetAllRemoteAreaPresenter;
+import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -53,7 +55,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 扫行李板车
  */
-public class BaggageListActivity extends BaseActivity implements BaggageAreaSubContract.baggageAreaSubView, GetAllRemoteAreaContract.getAllRemoteAreaView {
+public class BaggageListActivity extends BaseActivity implements BaggageAreaSubContract.baggageAreaSubView, GetAllRemoteAreaContract.getAllRemoteAreaView, ScanScooterCheckUsedContract.ScanScooterCheckView {
 
     @BindView(R.id.mfrv_receive_good)
     SlideRecyclerView mSlideRV;
@@ -70,6 +72,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
 
     FlightLuggageBean flightBean;
     private int flag = 0;
+    private String mScooterCode;
 
     @Override
     public int getLayoutId() {
@@ -209,7 +212,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Constants.SCAN_RESULT == resultCode) {
-            String mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             if (flag ==1){
                 for (String item: mAbnormalList){
                     if (mScooterCode.equals(item)){
@@ -220,7 +223,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
                 ToastUtil.showToast("无该行李转盘");
 
             }else {
-                isIncludeScooterCode(mScooterCode);
+                checkScooterCode(mScooterCode);
 
             }
 
@@ -233,9 +236,9 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("BaggageListActivity")) {
             //板车号
-            String mScooterCode = result.getData();
+            mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {
-                isIncludeScooterCode(mScooterCode);
+                checkScooterCode(mScooterCode);
             } else {
                 ToastUtil.showToast("扫码数据为空请重新扫码");
             }
@@ -255,6 +258,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
                 BaseFilterEntity entity = new BaseFilterEntity();
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
                 entity.setFlightId(flightBean.getFlightId());
+                mPresenter = new BaggageAreaSubPresenter(this);
                 ((BaggageAreaSubPresenter)mPresenter).lookLUggageScannigFlight(entity);
             }
         }
@@ -314,6 +318,24 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             if (item.getAreaType()==Constants.BAGGAGE_AREA){
                 mAbnormalList.add(item.getAreaId());
             }
+        }
+    }
+
+    /**检测板车号是否可用
+     *
+     * @param scooterCode
+     */
+    private void checkScooterCode(String scooterCode){
+        mPresenter = new ScanScooterCheckUsedPresenter(this);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+    }
+
+    @Override
+    public void checkScooterCodeResult(BaseEntity<Object> result) {
+        if ("200".equals(result.getStatus())) {
+            isIncludeScooterCode(mScooterCode);
+        } else {
+            ToastUtil.showToast("操作不合法，不能重复扫描");
         }
     }
 }
