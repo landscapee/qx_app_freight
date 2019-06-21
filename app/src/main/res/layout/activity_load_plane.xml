@@ -51,7 +51,7 @@
                 android:layout_weight="1" />
             <LinearLayout
                 android:id="@+id/ll_flight_info_container"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
