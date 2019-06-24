@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
@@ -570,5 +571,13 @@ public interface HttpApi {
     //获取卸机单数据
     @POST("service-product-stowage/ft-report/queryUnloadingMachine")
     Observable<UnLoadListBillBean> getUnLoadingList(@Body UnLoadRequestEntity model);
+
+    /**
+     * 待办 锁定
+     * @param entity
+     * @return
+     */
+    @POST("/service-base-taskassign/taskHandler/taskLock")
+    Observable<BaseEntity<Object>> taskLock(@Body TaskLockEntity entity);
 
 }

@@ -33,12 +33,15 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -48,7 +51,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 收运
  */
-public class CollectorFragment extends BaseFragment implements TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class CollectorFragment extends BaseFragment implements TaskLockContract.taskLockView, TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
@@ -56,9 +59,15 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private List<TransportDataBase> list = new ArrayList<>();
     private int pageCurrent = 1;
     private String seachString = "";
-    private TaskFragment mTaskFragment; //父容器fragment
+    private TaskFragment mTaskFragment;
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
+
+    /**
+     * 待办锁定 当前列表postion
+     */
+
+    private int TASK_LOCK_POSTION = -1;
 
     @Nullable
     @Override
@@ -104,14 +113,26 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
 
     private void initView() {
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
 //        list = new ArrayList<>();
 //        list1 = new ArrayList<>();
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            trunToCollectorActivity(list.get(position));
+
+            TASK_LOCK_POSTION = position;
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(list.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode("receive");
+
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
+
         });
     }
 
@@ -262,8 +283,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
             list1.addAll(transportListBeans.getRecords());
             seachWith();
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
@@ -275,8 +297,9 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
+            }
 
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入板车号", text -> {
@@ -303,5 +326,17 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     @Override
     public void dissMiss() {
+    }
+
+    /**
+     * 待办锁定结果返回
+     *
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if (TASK_LOCK_POSTION != -1) {
+            trunToCollectorActivity(list.get(TASK_LOCK_POSTION));
+        }
     }
 }

@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
@@ -996,5 +997,14 @@ public class UpdateRepository extends BaseRepository {
 
     public Observable<UnLoadListBillBean> getUnLoadingList(UnLoadRequestEntity entity) {
         return getService().getUnLoadingList(entity);
+    }
+
+    /**
+     * 待办锁定
+     * @param entity
+     * @return
+     */
+    public Observable<String> taskLock(TaskLockEntity entity){
+        return nothingtransform(getService().taskLock(entity));
     }
 }
