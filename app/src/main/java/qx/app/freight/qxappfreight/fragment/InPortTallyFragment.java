@@ -31,18 +31,22 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 进港理货fragment
  */
-public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter {
+public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, TaskLockContract.taskLockView, GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
@@ -54,6 +58,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow =false;
+
+    /**
+     * 待办锁定 当前列表postion
+     */
+    private int TASK_LOCK_POSTION = -1;
 
     @Nullable
     @Override
@@ -78,7 +87,18 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
             public void toDetail(TransportDataBase item) {
-                turnToDetailActivity(item);
+                TASK_LOCK_POSTION = mList.indexOf(item);
+
+                mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.INPORTTALLY);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
+
             }
 
             @Override
@@ -105,8 +125,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         isShow = isVisibleToUser;
         if (isVisibleToUser){
             Log.e("111111", "setUserVisibleHint: "+ "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
             if (searchToolbar!=null){
                 searchToolbar.setHintAndListener("请输入流水号", text -> {
                     searchString = text;
@@ -184,7 +205,18 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : mList) {
             if (daibanCode.equals(item.getId())) {
-                turnToDetailActivity(item);
+
+                TASK_LOCK_POSTION = mList.indexOf(item);
+
+                mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.INPORTTALLY);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
                 return;
             }
         }
@@ -273,8 +305,20 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         }
         seachWithNum();
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
+        }
+    }
+
+    /**
+     * 待办锁定
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < mList.size()) {
+            turnToDetailActivity(mList.get(TASK_LOCK_POSTION));
         }
     }
 }
