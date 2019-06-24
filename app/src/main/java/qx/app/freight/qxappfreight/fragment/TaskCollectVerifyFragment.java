@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
@@ -38,8 +39,10 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.SearchTodoTaskContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -48,7 +51,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 出港-收验
  */
-public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
+public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, TaskLockContract.taskLockView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
@@ -63,6 +66,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     private TransportDataBase mBean;
     private boolean isShow = false;
+
+    /**
+     * 待办锁定 当前列表postion
+     */
+    private int TASK_LOCK_POSTION = -1;
 
     @Nullable
     @Override
@@ -80,8 +88,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
 
 //        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
 //        searchToolbar.setHintAndListener("请输入运单号", text -> {
@@ -97,8 +106,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(transportListList1.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
                     seachString = text;
@@ -132,7 +142,17 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            getTaskInfo(transportListList.get(position));
+
+            TASK_LOCK_POSTION = position;
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(transportListList.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(Constants.RECEIVE);
+
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
         });
         getData();
     }
@@ -229,8 +249,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) && "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 transportListList1.addAll(mWebSocketResultBean.getChgData());
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(transportListList1.size());
+                }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             ActManager.getAppManager().finishReceive();
@@ -248,9 +269,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), "数据为空");
-        if (pageCurrent == 1)
+        if (pageCurrent == 1) {
             mMfrvData.finishRefresh();
-        else {
+        } else {
             mMfrvData.finishLoadMore();
         }
     }
@@ -276,8 +297,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             }
             transportListList1.addAll(transportListBean.getRecords());
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(transportListList1.size());
+                }
             }
             seachWith();
         } else {
@@ -299,5 +321,14 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void sendPrintMessageResult(String result) {
 
+    }
+
+    /**
+     * 待办锁定
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        getTaskInfo(transportListList.get(TASK_LOCK_POSTION));
     }
 }
