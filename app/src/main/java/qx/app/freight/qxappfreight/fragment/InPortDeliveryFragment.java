@@ -31,10 +31,14 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -43,8 +47,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 进港-交货页面
  * Created by swd
  */
-//TransportListContract.transportListContractView ,
-public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, TaskLockContract.taskLockView,  MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
@@ -59,6 +62,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
+
+    /**
+     * 待办锁定 当前列表postion
+     */
+    private int TASK_LOCK_POSTION = -1;
 
     @Nullable
     @Override
@@ -85,8 +93,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入流水号", text -> {
                     searchString = text;
@@ -128,7 +137,17 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         list1 = new ArrayList <>();
         mAdapter = new InPortDeliveryAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            turnToDetailActivity(mList.get(position));
+
+            TASK_LOCK_POSTION = position;
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(mList.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(Constants.INPORTDELIVERY);
+
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
         mMfrvData.setAdapter(mAdapter);
@@ -301,8 +320,20 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         }
         seachWithNum();
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(list1.size());
+            }
+        }
+    }
+
+    /**
+     * 待办锁定
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < mList.size()) {
+            turnToDetailActivity(mList.get(TASK_LOCK_POSTION));
         }
     }
 }
