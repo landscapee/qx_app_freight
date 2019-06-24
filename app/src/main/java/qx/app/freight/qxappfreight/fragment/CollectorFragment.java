@@ -129,7 +129,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             taskIdList.add(list.get(position).getTaskId());
             entity.setTaskId(taskIdList);
             entity.setUserId(UserInfoSingle.getInstance().getUserId());
-            entity.setRoleCode("receive");
+            entity.setRoleCode(Constants.COLLECTION);
 
             ((TaskLockPresenter) mPresenter).taskLock(entity);
 
