@@ -172,7 +172,7 @@ public class TaskFragment extends BaseFragment {
                 list_Title.add("收运");
             } else if (Constants.PREPLANER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskStowageFragment());
-                list_Title.add("理货");
+                list_Title.add("组板");
 
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
@@ -198,7 +198,7 @@ public class TaskFragment extends BaseFragment {
                 list_Title.add("进港提货");
             } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港理货");
+                list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");

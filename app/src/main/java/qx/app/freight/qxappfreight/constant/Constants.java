@@ -32,7 +32,7 @@ public class Constants {
      */
     public static String RECEIVE = "receive";
     /**
-     * 预配
+     * 预配-组板
      */
     public static String PREPLANER = "preplaner";
     /**
@@ -83,7 +83,7 @@ public class Constants {
      */
     public static String INPORTDELIVERY = "delivery_in";
     /**
-     * 进港理货
+     * 进港分拣
      */
     public static String INPORTTALLY = "beforehand_in";
 

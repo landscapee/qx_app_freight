@@ -39,6 +39,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static boolean isTopic = false;
     public static List<StompClient> mStompClient;
 
+    private boolean isContinue = true; //线程控制
+    private Thread threadGps = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -124,18 +127,22 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         }
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         //GPS 数据提交线程
-        Thread threadGps = new Thread(() -> {
-            while (true) {
-                try {
-                    sendGps();
-                    Thread.sleep(30000);
+        isContinue = true;
+        if (threadGps == null){
+            threadGps = new Thread(() -> {
+                while (isContinue) {
+                    try {
+                        sendGps();
+                        Thread.sleep(30000);
 
-                } catch (Exception e) {
-                    Log.e("GPS while (true)", e.getMessage());
+                    } catch (Exception e) {
+                        Log.e("GPS while (true)", e.getMessage());
+                    }
                 }
-            }
-        });
-        threadGps.start();
+            });
+        }
+        if (!threadGps.isAlive())
+            threadGps.start();
     }
 
     private void sendGps() {
@@ -199,6 +206,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isContinue = false;
     }
 
 
