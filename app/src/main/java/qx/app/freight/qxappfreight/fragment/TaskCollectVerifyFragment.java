@@ -329,6 +329,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      */
     @Override
     public void taskLockResult(String result) {
-        getTaskInfo(transportListList.get(TASK_LOCK_POSTION));
+        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < transportListList.size()) {
+            getTaskInfo(transportListList.get(TASK_LOCK_POSTION));
+        }
     }
 }

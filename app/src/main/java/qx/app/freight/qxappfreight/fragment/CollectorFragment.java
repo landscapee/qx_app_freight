@@ -335,7 +335,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
      */
     @Override
     public void taskLockResult(String result) {
-        if (TASK_LOCK_POSTION != -1) {
+        if (TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < list.size()) {
             trunToCollectorActivity(list.get(TASK_LOCK_POSTION));
         }
     }
