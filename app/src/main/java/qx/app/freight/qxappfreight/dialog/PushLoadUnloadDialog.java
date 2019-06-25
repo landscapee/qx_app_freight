@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +36,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -211,20 +213,50 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             helper.setText(R.id.tv_flight_number, item.getFlightNo());
             helper.setText(R.id.tv_flight_info, item.getAircraftno());
             ImageView ivType = helper.getView(R.id.iv_task_type);
-            boolean hasActualTime = item.getActualArriveTime() != 0;
             TextView tvTime = helper.getView(R.id.tv_time);
-            tvTime.setText(hasActualTime ? TimeUtils.getHMDay(item.getActualArriveTime()) : TimeUtils.getHMDay(item.getScheduleTime()));
-            Drawable drawableLeft;
+            Drawable drawableLeft = null;
             if (item.getTaskType() == 1) {
                 ivType.setImageResource(R.mipmap.li);
-            } else {
+            } else {//2或5都默认显示进港卸机
                 ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
             }
-            if (hasActualTime) {
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+            String time;
+            int timeType;
+            if (item.getTaskType() == 2 || item.getTaskType() == 5) {//是卸机
+                if (!StringUtil.isTimeNull(String.valueOf(item.getAta()))) {
+                    time = TimeUtils.getHMDay(item.getAta());
+                    timeType = Constants.TIME_TYPE_AUTUAL;
+                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEta()))) {
+                    time = TimeUtils.getHMDay(item.getEta());
+                    timeType = Constants.TIME_TYPE_EXCEPT;
+                } else {
+                    time = TimeUtils.getHMDay(item.getSta());
+                    timeType = Constants.TIME_TYPE_PLAN;
+                }
             } else {
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                if (!StringUtil.isTimeNull(String.valueOf(item.getAtd()))) {
+                    time = TimeUtils.getHMDay(item.getAtd());
+                    timeType = Constants.TIME_TYPE_AUTUAL;
+                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEtd()))) {
+                    time = TimeUtils.getHMDay(item.getEtd());
+                    timeType = Constants.TIME_TYPE_EXCEPT;
+                } else {
+                    time = TimeUtils.getHMDay(item.getStd());
+                    timeType = Constants.TIME_TYPE_PLAN;
+                }
             }
+            switch (timeType) {
+                case Constants.TIME_TYPE_AUTUAL:
+                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                    break;
+                case Constants.TIME_TYPE_EXCEPT:
+                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                    break;
+                case Constants.TIME_TYPE_PLAN:
+                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                    break;
+            }
+            tvTime.setText(time);
             tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
             tvTime.setCompoundDrawablePadding(3);
             List<String> result = StringUtil.getFlightList(item.getRoute());

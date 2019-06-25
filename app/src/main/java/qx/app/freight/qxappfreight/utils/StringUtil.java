@@ -11,7 +11,6 @@ import android.text.style.TextAppearanceSpan;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,13 +46,14 @@ public class StringUtil {
 
     /**
      * 对字符串做非null 判断 返回想要的 默认值
+     *
      * @param response
      * @param defaultStr 默认值
      * @return
      */
-    public static String toText(String response,String defaultStr) {
+    public static String toText(String response, String defaultStr) {
         String result = defaultStr;
-        if (!TextUtils.isEmpty(response)&& !"null".equals(response)) {
+        if (!TextUtils.isEmpty(response) && !"null".equals(response)) {
             result = response;
         }
         return result;
@@ -61,13 +61,14 @@ public class StringUtil {
 
     /**
      * 改变文字的颜色 通过html标签
+     *
      * @param content 文字内容
-     * @param color 文字颜色 16进制值
+     * @param color   文字颜色 16进制值
      * @return 添加html颜色标签后的文字
      */
-    public static String changeTextColor(String content,String color){
+    public static String changeTextColor(String content, String color) {
 
-        content  = "<font color='" +color + "'>"+content+"</font>";
+        content = "<font color='" + color + "'>" + content + "</font>";
 
         return content;
     }
@@ -95,69 +96,74 @@ public class StringUtil {
         }
         return flag;
     }
-    public static SpannableStringBuilder getAutoColorText(String text){
-        String splitTexts[]=text.split(":");
+
+    public static SpannableStringBuilder getAutoColorText(String text) {
+        String splitTexts[] = text.split(":");
         SpannableStringBuilder builderText = new SpannableStringBuilder(text);
         ColorStateList blue = ColorStateList.valueOf(Color.parseColor("#31ccbd"));
         ColorStateList red = ColorStateList.valueOf(Color.RED);
-        if (splitTexts.length==2){
-            int index=text.indexOf(":");
-            boolean flag=text.substring(index+1,index+2).equals("Y");
+        if (splitTexts.length == 2) {
+            int index = text.indexOf(":");
+            boolean flag = text.substring(index + 1, index + 2).equals("Y");
             TextAppearanceSpan textAppearanceSpan;
-            if (flag){
+            if (flag) {
                 textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
-            }else {
+            } else {
                 textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
             }
-            builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             return builderText;
-        }else {
-            List<Integer> indexes=getIndex(text,":");
-            for (Integer index:indexes){
-                boolean flag=text.substring(index+1,index+2).equals("Y");
+        } else {
+            List<Integer> indexes = getIndex(text, ":");
+            for (Integer index : indexes) {
+                boolean flag = text.substring(index + 1, index + 2).equals("Y");
                 TextAppearanceSpan textAppearanceSpan;
-                if (flag){
+                if (flag) {
                     textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
-                }else {
+                } else {
                     textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
                 }
-                builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             }
             return builderText;
         }
     }
-    private static List<Integer> getIndex(String strings, String str){
-        List<Integer> list=new ArrayList<>();
-        int flag=0;
-        while (strings.contains(str)){
+
+    private static List<Integer> getIndex(String strings, String str) {
+        List<Integer> list = new ArrayList<>();
+        int flag = 0;
+        while (strings.contains(str)) {
             //截取包含自身在内的前边部分
-            String aa= strings.substring(0,strings.indexOf(str)+str.length());
-            flag=flag+aa.length();
-            list.add(flag-str.length());
-            strings=strings.substring(strings.indexOf(str)+str.length());
+            String aa = strings.substring(0, strings.indexOf(str) + str.length());
+            flag = flag + aa.length();
+            list.add(flag - str.length());
+            strings = strings.substring(strings.indexOf(str) + str.length());
         }
         return list;
     }
 
     /**
      * 转换为 保留两位小数的 字符串
+     *
      * @param value
      * @return
      */
-    public static String formatString2(Object value){
-        if(null == value)
+    public static String formatString2(Object value) {
+        if (null == value)
             return "0";
-        return  String.format("%.1f", value);
+        return String.format("%.1f", value);
     }
+
     /**
      * 去掉后面无用的零
+     *
      * @param value
      * @return
      */
-    public static String formatStringDeleteDot(String value){
+    public static String formatStringDeleteDot(String value) {
         if (value == null || "".equals(value))
             return "0";
-        if(value.indexOf(".") > 0){
+        if (value.indexOf(".") > 0) {
             //正则表达
             value = value.replaceAll("0+?$", "");//去掉后面无用的零
 
@@ -171,6 +177,7 @@ public class StringUtil {
     public static boolean isEmpty(String str) {
         return (str == null || str.length() == 0) && isBlank(str);
     }
+
     private static boolean isBlank(String str) {
         return (str == null || str.trim().length() == 0);
     }
@@ -193,7 +200,9 @@ public class StringUtil {
         return new String(c);
     }
 
-    /** * 去除特殊字符或将所有中文标号替换为英文标号
+    /**
+     * 去除特殊字符或将所有中文标号替换为英文标号
+     *
      * @param str
      * @return
      */
@@ -205,11 +214,13 @@ public class StringUtil {
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
     }
+
     public static boolean isContains(String str1, String str2) {
         if (isEmpty(str1))
             return false;
         else return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
     }
+
     /**
      * 设置航线数据
      *
@@ -233,18 +244,33 @@ public class StringUtil {
 
     /**
      * 解析航线数据，返回航站三字码列表
+     *
      * @param route
      * @return
      */
-    public static List<String> getFlightList(String route){
-        List<String> result=new ArrayList<>();
-        if (route!=null){
+    public static List<String> getFlightList(String route) {
+        List<String> result = new ArrayList<>();
+        if (route != null) {
             String[] placeArray = route.split(",");
             List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 result.add(temp);
             }
+        }
+        return result;
+    }
+
+    /**
+     * 判断时间字符串为空
+     *
+     * @param time 参数
+     * @return 结果
+     */
+    public static boolean isTimeNull(String time) {
+        boolean result = false;
+        if (time == null || "0".equals(time)) {
+            result = true;
         }
         return result;
     }

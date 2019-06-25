@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,12 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import me.shaohui.advancedluban.Luban;
@@ -52,9 +46,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.ExceptionReportPresenter;
@@ -97,11 +89,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private String mFlightId;//被选中的 板车号
 
 
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        PushDataUtil.handlePushInfo(result,mCurrentTaskId,this);
+        PushDataUtil.handlePushInfo(result, mCurrentTaskId, this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -132,9 +122,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mPhotoPath.get(position).equals("111")){
+                if (mPhotoPath.get(position).equals("111")) {
                     choosePictrue();
-                }else {
+                } else {
                     previewPictrue(position);
                 }
 
@@ -143,7 +133,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId() == R.id.iv_delete){
+                if (view.getId() == R.id.iv_delete) {
                     mPhotoPath.remove(position);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -151,17 +141,17 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         });
         mRvPhoto.setLayoutManager(new GridLayoutManager(this, 4));
         mRvPhoto.setAdapter(mAdapter);
-        mFlightberList = (ArrayList <OutFieldTaskBean>) getIntent().getSerializableExtra("plane_info_list");
+        mFlightberList = (ArrayList<OutFieldTaskBean>) getIntent().getSerializableExtra("plane_info_list");
         mFlightId = getIntent().getStringExtra("flight_id");
         if (mFlightberList != null) {
-            mFlightNumberList = new ArrayList <>();
+            mFlightNumberList = new ArrayList<>();
             mSpinner.setVisibility(View.VISIBLE);
-            for (OutFieldTaskBean mOutFieldTaskBean: mFlightberList){
+            for (OutFieldTaskBean mOutFieldTaskBean : mFlightberList) {
                 mFlightNumberList.add(mOutFieldTaskBean.getFlightNo());
             }
             mFlightNumber = mFlightNumberList.get(0);
             mFlightId = mFlightberList.get(0).getFlightId();
-            mCurrentTaskId =mFlightberList.get(0).getTaskId();
+            mCurrentTaskId = mFlightberList.get(0).getTaskId();
             mTvFlightInfo.setText(mFlightNumber);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.item_spinner_general, mFlightNumberList);
             mSpinner.setAdapter(spinnerAdapter);
@@ -180,16 +170,16 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         } else {
             mTvFlightInfo.setVisibility(View.VISIBLE);
             mFlightNumber = getIntent().getStringExtra("flight_number");
-            mCurrentTaskId =getIntent().getStringExtra("task_id");
+            mCurrentTaskId = getIntent().getStringExtra("task_id");
             mTvFlightInfo.setText(mFlightNumber);
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
         mTvDate.setText(sdf.format(new Date()));
         mBtnCommit.setOnClickListener(v -> {
-            if (getNoAddPictureList().size()==0&&TextUtils.isEmpty(mEtDetailInfo.getText().toString())){
+            if (getNoAddPictureList().size() == 0 && TextUtils.isEmpty(mEtDetailInfo.getText().toString())) {
                 ToastUtil.showToast("请添加文字或图片说明（至少一种）");
-            }else {
+            } else {
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
@@ -198,12 +188,12 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
-                    String deptCode=UserInfoSingle.getInstance().getDeptCode();
-                    model.setDeptId((deptCode.contains("-")?deptCode.substring(0,deptCode.indexOf("-")):deptCode));
+                    String deptCode = UserInfoSingle.getInstance().getDeptCode();
+                    model.setDeptId((deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode));
                     model.setArea(getIntent().getStringExtra("area_id"));
                     model.setExceptionCode(getIntent().getStringExtra("step_code"));
                     model.setFiles(null);
-                    TransportEndEntity endEntity=new TransportEndEntity();
+                    TransportEndEntity endEntity = new TransportEndEntity();
                     endEntity.setTaskId(mCurrentTaskId);
                     model.setTransportAppDto(endEntity);
                     ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
@@ -217,13 +207,13 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     /**
      * 选择相册照片
      */
-    private void choosePictrue(){
+    private void choosePictrue() {
         List<String> originList = new ArrayList<>();
         if (mAdapter == null) {
             originList.addAll(mPhotoPath);
         } else {
             originList.addAll(mPhotoPath);
-            originList.remove(originList.size()-1);
+            originList.remove(originList.size() - 1);
         }
         MultiImageSelector.create(ErrorReportActivity.this)
                 .showCamera(true) // 是否显示相机. 默认为显示
@@ -234,17 +224,17 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     }
 
     /**
-     *预览照片
+     * 预览照片
      * 忽略最后一个
      */
-    private void previewPictrue(int position){
-        ImgPreviewAct.startPreview(ErrorReportActivity.this,getNoAddPictureList(),position);
+    private void previewPictrue(int position) {
+        ImgPreviewAct.startPreview(ErrorReportActivity.this, getNoAddPictureList(), position);
     }
 
-    private List<String> getNoAddPictureList(){
+    private List<String> getNoAddPictureList() {
         List<String> list = new ArrayList<>();
         list.addAll(mPhotoPath);
-        list.remove(list.size()-1);
+        list.remove(list.size() - 1);
         return list;
     }
 
@@ -352,11 +342,11 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setFlightId(Long.valueOf(mFlightId));
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
-        String deptCode=UserInfoSingle.getInstance().getDeptCode();
-        model.setDeptId((deptCode.contains("-")?deptCode.substring(0,deptCode.indexOf("-")):deptCode));
+        String deptCode = UserInfoSingle.getInstance().getDeptCode();
+        model.setDeptId((deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode));
         model.setArea(getIntent().getStringExtra("area_id"));
         model.setExceptionCode(getIntent().getStringExtra("step_code"));
-        TransportEndEntity endEntity=new TransportEndEntity();
+        TransportEndEntity endEntity = new TransportEndEntity();
         endEntity.setTaskId(mCurrentTaskId);
         model.setTransportAppDto(endEntity);
         ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
@@ -369,9 +359,9 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
 
     @Override
     public void showNetDialog() {
-        if (mPhotoPath.size()!=0){
+        if (mPhotoPath.size() != 0) {
             showProgessDialog("图片上传中");
-        }else {
+        } else {
             showProgessDialog("");
         }
     }

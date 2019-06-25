@@ -68,11 +68,20 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private Object cancelTime;
     private Object beginLoadUnloadTime;
     private RelateInfoObjBean relateInfoObj;
+    /**
+     * 进港卸机看到达，出港装机看离港
+     */
+    private long sta;//计划到达时间
+    private long eta;//预计到达时间
+    private long ata;//实际到达时间
+    private long std;//计划离港时间
+    private long etd;//预计离港时间
+    private long atd;//实际离港时间
     private List<OperationStepObjBean> operationStepObj;
     private int widthAirFlag;//0是宽体机，1是窄体机
 
     @Data
-    public static class RelateInfoObjBean implements Serializable{
+    public static class RelateInfoObjBean implements Serializable {
         /**
          * id : null
          * workerId : null
@@ -138,10 +147,19 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private Object relateInfo;
         private Object operationStepObj;
         private Object relateInfoObj;
+        /**
+         * 进港卸机看到达，出港装机看离港
+         */
+        private long sta;//计划到达时间
+        private long eta;//预计到达时间
+        private long ata;//实际到达时间
+        private long std;//计划离港时间
+        private long etd;//预计离港时间
+        private long atd;//实际离港时间
     }
 
     @Data
-    public static class OperationStepObjBean implements Serializable{
+    public static class OperationStepObjBean implements Serializable {
         /**
          * operationCode : FreightLoadReceived
          * operationName : 领受

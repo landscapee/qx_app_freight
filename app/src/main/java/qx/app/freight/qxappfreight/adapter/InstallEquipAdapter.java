@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.adapter;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
@@ -38,18 +38,23 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
-        boolean hasActualTime = !TextUtils.isEmpty(item.getActualTime());
-        tvTime.setText(hasActualTime ? item.getActualTime() : item.getScheduleTime());
-        Drawable drawableLeft;
+        tvTime.setText(item.getTimeForShow());
+        Drawable drawableLeft=null;
         if (item.getTaskTpye() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
         }
-        if (hasActualTime) {
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
-        } else {
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+        switch (item.getTimeType()) {
+            case Constants.TIME_TYPE_AUTUAL:
+                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                break;
+            case Constants.TIME_TYPE_EXCEPT:
+                drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                break;
+            case Constants.TIME_TYPE_PLAN:
+                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                break;
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
         tvTime.setCompoundDrawablePadding(5);

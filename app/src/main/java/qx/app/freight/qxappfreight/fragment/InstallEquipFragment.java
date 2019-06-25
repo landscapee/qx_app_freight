@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
@@ -74,7 +74,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private String searchString = "";//条件搜索关键字
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
-    private boolean isShow =false;
+    private boolean isShow = false;
 
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
@@ -152,11 +152,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser){
-            Log.e("111111", "setUserVisibleHint: "+ "展示");
+        if (isVisibleToUser) {
+            Log.e("111111", "setUserVisibleHint: " + "展示");
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
-            if (searchToolbar!=null){
+            if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入板车号", text -> {
                     searchString = text;
                     seachByText();
@@ -177,7 +177,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
             }
         }
-        if (mMfrvData!=null){
+        if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(mAdapter);
         }
     }
@@ -253,11 +253,33 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setTaskId(bean.getTaskId());
             entity.setTaskTpye(bean.getTaskType());
             entity.setWorkerName(bean.getWorkerName());
-            if (bean.getActualArriveTime() != 0) {
-                entity.setActualTime(TimeUtils.getHMDay(bean.getActualArriveTime()));
+            String time;
+            int timeType;
+            if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
+                if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {
+                    time = TimeUtils.getHMDay(bean.getAta());
+                    timeType = Constants.TIME_TYPE_AUTUAL;
+                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {
+                    time = TimeUtils.getHMDay(bean.getEta());
+                    timeType = Constants.TIME_TYPE_EXCEPT;
+                } else {
+                    time = TimeUtils.getHMDay(bean.getSta());
+                    timeType = Constants.TIME_TYPE_PLAN;
+                }
             } else {
-                entity.setScheduleTime(TimeUtils.getHMDay(bean.getScheduleTime()));
+                if (!TextUtils.isEmpty(String.valueOf(bean.getAtd()))) {
+                    time = TimeUtils.getHMDay(bean.getAtd());
+                    timeType = Constants.TIME_TYPE_AUTUAL;
+                } else if (!TextUtils.isEmpty(String.valueOf(bean.getEtd()))) {
+                    time = TimeUtils.getHMDay(bean.getEtd());
+                    timeType = Constants.TIME_TYPE_EXCEPT;
+                } else {
+                    time = TimeUtils.getHMDay(bean.getStd());
+                    timeType = Constants.TIME_TYPE_PLAN;
+                }
             }
+            entity.setTimeForShow(time);
+            entity.setTimeType(timeType);
             StringUtil.setFlightRoute(bean.getRoute(), entity);
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
@@ -283,7 +305,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     posNow = i;
                     break;
                 } else if (timeNow.contains(":0")) {
-                    if (!timeNow.equals("0:0")){//如果已经调过滑动开始装机或卸机接口，再次滑动不去调接口
+                    if (!timeNow.equals("0:0")) {//如果已经调过滑动开始装机或卸机接口，再次滑动不去调接口
                         hasChecked = true;
                     }
                     posNow = i;
@@ -350,7 +372,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void setSlideListener(List<Boolean> checkedList) {
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             //滑动步骤去调接口，以及跳转页面
-            if ((smallPos == 3||smallPos==4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
+            if ((smallPos == 3 || smallPos == 4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
                 Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
             } else {
                 mOperatePos = smallPos;
@@ -388,7 +410,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideadapter.notifyDataSetChanged();
-            if (mOperatePos == 4||mOperatePos==5) {
+            if (mOperatePos == 4 || mOperatePos == 5) {
                 mCurrentPage = 1;
                 loadData();
                 mOperatePos = 0;

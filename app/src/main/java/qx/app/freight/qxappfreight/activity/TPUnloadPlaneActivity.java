@@ -160,6 +160,10 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mOutFieldTaskBean.getFlights().getSeat());
         long arrive;
+        //不晓得改不改
+        //不晓得改不改
+        //不晓得改不改
+        //不晓得改不改
         if (!TextUtils.isEmpty(mOutFieldTaskBean.getFlights().getActualTime() + "") && !"0".equals(mOutFieldTaskBean.getFlights().getActualTime() + "")) {//有实际到达时间
             arrive = Long.valueOf(mOutFieldTaskBean.getFlights().getActualTime() + "");
         } else {

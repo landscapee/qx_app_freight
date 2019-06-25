@@ -19,19 +19,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ScanInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -50,13 +45,13 @@ import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
-import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -151,13 +146,15 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mData.getSeat());
-        long arrive;
-        if (mData.getActualArriveTime() != 0) {//有实际到达时间
-            arrive = mData.getActualArriveTime();
-        } else {
-            arrive = mData.getScheduleTime();
+        String time;
+        if (!StringUtil.isTimeNull(String.valueOf(mData.getAta()))) {//有实际到达显示实际到达时间
+            time = TimeUtils.getHMDay(mData.getAta());
+        } else if (!StringUtil.isTimeNull(String.valueOf(mData.getEta()))) {//预计到达时间
+            time = TimeUtils.getHMDay(mData.getEta());
+        } else {                                                    //计划到达时间
+            time = TimeUtils.getHMDay(mData.getSta());
         }
-        mTvArriveTime.setText(TimeUtils.getHMDay(arrive));
+        mTvArriveTime.setText(time);
         String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
         mTvScanGoods.setText(Html.fromHtml(scanGoods));
         String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";

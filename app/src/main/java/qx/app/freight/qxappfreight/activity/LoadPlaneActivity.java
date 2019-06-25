@@ -120,7 +120,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mLlInfoContainer.addView(layout, paramsMain);
         mTvSeat.setText(mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());
-        mTvStartTime.setText(TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getScheduleTime() : data.getScheduleTime()));
+        String time;
+        if (!StringUtil.isTimeNull(String.valueOf(mIsKeepOnTask ? data.getRelateInfoObj().getAtd() : data.getAtd()))) {
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getAtd() : data.getAtd());
+        } else if (!StringUtil.isTimeNull(String.valueOf(mIsKeepOnTask ? data.getRelateInfoObj().getEtd() : data.getEtd()))) {
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getEtd() : data.getEtd());
+        } else {
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getStd() : data.getStd());
+        }
+        mTvStartTime.setText(time);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
