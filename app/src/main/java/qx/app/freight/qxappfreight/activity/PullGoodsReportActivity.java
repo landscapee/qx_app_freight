@@ -336,7 +336,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 mPresenter = new ScanScooterPresenter(this);
                 TransportTodoListBean mainIfos = new TransportTodoListBean();
                 mainIfos.setTpScooterCode(scooterCode);
-                mainIfos.setTpFlightId(mMainFlightId);
+                mainIfos.setFlightId(mMainFlightId);
                 mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 mainIfos.setDtoType(8);
                 mainIfos.setTpStartLocate("seat");
@@ -415,7 +415,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mNewBillBean.setTpScooterCode(entity.getScooterCode());
             mTpScooterCodeList.add(entity.getScooterCode());
             mNewBillBean.setTpScooterType(entity.getScooterType() + "");
-            mNewBillBean.setTpFlightNumber(mData.getFlightNo());
+            mNewBillBean.setFlightNo(mData.getFlightNo());
             mNewBillBean.setTpFlightLocate(mData.getSeat());
             mNewBillBean.setTpFlightTime(mData.getScheduleTime());
             mNewBillBean.setTpFregihtSpace("");
