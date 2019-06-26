@@ -39,7 +39,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
-        Drawable drawableLeft=null;
+        Drawable drawableLeft = null;
         if (item.getTaskTpye() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {

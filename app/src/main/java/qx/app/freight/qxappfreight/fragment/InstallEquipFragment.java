@@ -229,7 +229,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mCacheList.clear();
             mMfrvData.notifyForAdapter(mAdapter);
         }
-        ;
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -267,10 +266,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     timeType = Constants.TIME_TYPE_PLAN;
                 }
             } else {
-                if (!TextUtils.isEmpty(String.valueOf(bean.getAtd()))) {
+                if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {
                     time = TimeUtils.getHMDay(bean.getAtd());
                     timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!TextUtils.isEmpty(String.valueOf(bean.getEtd()))) {
+                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {
                     time = TimeUtils.getHMDay(bean.getEtd());
                     timeType = Constants.TIME_TYPE_EXCEPT;
                 } else {
@@ -357,6 +356,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mCacheList.add(entity);
         }
         seachByText();
+        if (mMfrvData != null) {
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
         setSlideListener(checkedList);
         if (mTaskFragment != null) {
             if (isShow)
