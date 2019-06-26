@@ -60,9 +60,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private boolean isShow =false;
 
     /**
-     * 待办锁定 当前列表postion
+     * 待办锁定 当前的任务bean
      */
-    private int TASK_LOCK_POSTION = -1;
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -87,7 +87,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
             public void toDetail(TransportDataBase item) {
-                TASK_LOCK_POSTION = mList.indexOf(item);
+                CURRENT_TASK_BEAN = item;
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -206,7 +206,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         for (TransportDataBase item : mList) {
             if (daibanCode.equals(item.getId())) {
 
-                TASK_LOCK_POSTION = mList.indexOf(item);
+                CURRENT_TASK_BEAN = item;
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -317,8 +317,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      */
     @Override
     public void taskLockResult(String result) {
-        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < mList.size()) {
-            turnToDetailActivity(mList.get(TASK_LOCK_POSTION));
+        if(CURRENT_TASK_BEAN != null) {
+            turnToDetailActivity(CURRENT_TASK_BEAN);
         }
     }
 }
