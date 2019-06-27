@@ -273,14 +273,14 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setTaskId(mData.getTaskId());//代办数据中的id
                 infos.add(entity);
             }
-            if (infos.size() == 0) {
-                ToastUtil.showToast("请选择上传板车信息再提交");
-            } else {
+//            if (infos.size() == 0) {
+//                ToastUtil.showToast("请选择上传板车信息再提交");
+//            } else {
                 model.setSeat(mData.getSeat());
                 model.setScooters(infos);
                 mPresenter = new ArrivalDataSavePresenter(this);
                 ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
-            }
+//            }
         });
         ivNoticeTp.setOnClickListener(v -> {
             noticeTp();

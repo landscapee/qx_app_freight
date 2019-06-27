@@ -39,14 +39,12 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -76,6 +74,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
+    private List<String> mTaskIdList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -92,9 +91,22 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                if (list != null) {
-                    mListCache.addAll(list);
+                List<String> pushTaskIds = new ArrayList<>();
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    pushTaskIds.add(bean.getTaskId());
                 }
+                List<String> removeTaskIds = new ArrayList<>();
+                for (LoadAndUnloadTodoBean bean : list) {
+                    if (pushTaskIds.contains(bean.getTaskId())) {
+                        removeTaskIds.add(bean.getTaskId());
+                    }
+                }
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (removeTaskIds.contains(bean.getTaskId())) {
+                        mListCache.remove(bean);
+                    }
+                }
+                mListCache.addAll(list);
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
@@ -114,6 +126,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                         Log.e("tagPuth", "显示推送任务=========");
                         mDialog.show(getFragmentManager(), "11");
                         mShouldNewDialog = false;
+                    }else {
+                        loadData();
+                        mListCache.clear();
                     }
                 } else {
                     Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -214,6 +229,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void getEndInstallTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+        mTaskIdList.clear();
         if (loadAndUnloadTodoBean.size() == 0) {
             if (mCurrentPage == 1) {
                 mMfrvData.finishRefresh();
@@ -232,6 +248,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
         mCurrentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+            mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setShowDetail(false);

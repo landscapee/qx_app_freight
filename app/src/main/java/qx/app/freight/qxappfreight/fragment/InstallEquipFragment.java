@@ -76,6 +76,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
+    private List<String> mTaskIdList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -92,9 +93,22 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                if (list != null) {
-                    mListCache.addAll(list);
+                List<String> pushTaskIds = new ArrayList<>();
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    pushTaskIds.add(bean.getTaskId());
                 }
+                List<String> removeTaskIds = new ArrayList<>();
+                for (LoadAndUnloadTodoBean bean : list) {
+                    if (pushTaskIds.contains(bean.getTaskId())) {
+                        removeTaskIds.add(bean.getTaskId());
+                    }
+                }
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (removeTaskIds.contains(bean.getTaskId())) {
+                        mListCache.remove(bean);
+                    }
+                }
+                mListCache.addAll(list);
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
@@ -114,6 +128,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         Log.e("tagPuth", "显示推送任务=========");
                         mDialog.show(getFragmentManager(), "11");
                         mShouldNewDialog = false;
+                    }else {
+                        loadData();
+                        mListCache.clear();
                     }
                 } else {
                     Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -222,6 +239,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+        mTaskIdList.clear();
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -231,6 +249,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
         mCurrentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+            mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setWidePlane(bean.getWidthAirFlag() == 0);
