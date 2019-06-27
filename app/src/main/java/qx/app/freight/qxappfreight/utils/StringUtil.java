@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 
 
 public class StringUtil {
@@ -273,5 +275,40 @@ public class StringUtil {
             result = true;
         }
         return result;
+    }
+
+    /**
+     * 根据数据设置时间和时间显示类型
+     * @param bean  服务器传回的数据
+     * @param entity    本地封装的数据model
+     */
+    public static void setTimeAndType(LoadAndUnloadTodoBean bean,InstallEquipEntity entity){
+        String time;
+        int timeType;
+        if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
+            if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {//实际到达时间
+                time = TimeUtils.getHMDay(bean.getAta());
+                timeType = Constants.TIME_TYPE_AUTUAL;
+            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {//预计到达时间
+                time = TimeUtils.getHMDay(bean.getEta());
+                timeType = Constants.TIME_TYPE_EXCEPT;
+            } else {//计划到达时间
+                time = TimeUtils.getHMDay(bean.getSta());
+                timeType = Constants.TIME_TYPE_PLAN;
+            }
+        } else {//装机机任务显示时间
+            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
+                time = TimeUtils.getHMDay(bean.getAtd());
+                timeType = Constants.TIME_TYPE_AUTUAL;
+            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
+                time = TimeUtils.getHMDay(bean.getEtd());
+                timeType = Constants.TIME_TYPE_EXCEPT;
+            } else {//计划时间
+                time = TimeUtils.getHMDay(bean.getStd());
+                timeType = Constants.TIME_TYPE_PLAN;
+            }
+        }
+        entity.setTimeForShow(time);
+        entity.setTimeType(timeType);
     }
 }

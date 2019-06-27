@@ -166,6 +166,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
     }
 
+    /**
+     * 根据搜索框输入检索对应的结果项
+     */
     private void seachByText() {
         mList.clear();
         mMfrvData.notifyForAdapter(mAdapter);
@@ -221,16 +224,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-//        if (loadAndUnloadTodoBean.size() == 0) {
-////            if (mCurrentPage == 1) {
-////                mMfrvData.finishRefresh();
-////            } else {
-////                mMfrvData.finishLoadMore();
-////            }
-////            mCacheList.clear();
-////            mMfrvData.notifyForAdapter(mAdapter);
-////        }
-////        ;
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -247,41 +240,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
-            entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机；5，装卸机
+            entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
             entity.setFlightType("M");
             entity.setId(bean.getId());
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());
-            entity.setTaskTpye(bean.getTaskType());
             entity.setWorkerName(bean.getWorkerName());
-            String time;
-            int timeType;
-            if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {
-                    time = TimeUtils.getHMDay(bean.getAta());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {
-                    time = TimeUtils.getHMDay(bean.getEta());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getSta());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            } else {
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {
-                    time = TimeUtils.getHMDay(bean.getAtd());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {
-                    time = TimeUtils.getHMDay(bean.getEtd());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getStd());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            }
-            entity.setTimeForShow(time);
-            entity.setTimeType(timeType);
-            StringUtil.setFlightRoute(bean.getRoute(), entity);
+            StringUtil.setTimeAndType(bean,entity);//设置对应的时间和时间图标显示
+            StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
@@ -298,23 +264,23 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 times.add(bean.getStartLoadTime() + ":" + bean.getEndLoadTime());
             }
             times.add(String.valueOf(bean.getCloseDoorTime()));
-            int posNow = 0;
+            int posNow = 0;//判断当前代办任务应该进行哪一步的int值
             boolean hasChecked = false;
             for (int i = 0; i < times.size(); i++) {
                 String timeNow = times.get(i);
                 if ("0".equals(timeNow)) {
                     posNow = i;
                     break;
-                } else if (timeNow.contains(":0")) {
-                    if (!timeNow.equals("0:0")) {//如果已经调过滑动开始装机或卸机接口，再次滑动不去调接口
+                } else if (timeNow.contains(":0")) {//至少跳转到装机或卸机页面去过，不过没有点击结束装机或卸机
+                    if (!timeNow.equals("0:0")) {//timeNow的格式为“1990000:0”，说明进过装机或卸机页面，但是按返回按钮等退出页面了
                         hasChecked = true;
                     }
                     posNow = i;
                     break;
                 }
             }
-            checkedList.add(hasChecked);
-            int size = (bean.getTaskType() == 1 || bean.getTaskType() == 2) ? 5 : 6;
+            checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
+            int size = (bean.getTaskType() == 1 || bean.getTaskType() == 2) ? 5 : 6;//如果是装机或卸机的话则总共步骤数为5，否则为6
             for (int i = 0; i < size; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
                 entity1.setFlightType(entity.getFlightType());
@@ -327,16 +293,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     entity1.setStepName(mStepNamesInstallUninstall[i]);
                 }
                 int type;
-                if (i < posNow) {
+                if (i < posNow) {//在应该执行的步骤前，类型为已执行
                     type = 0;
-                } else if (i == posNow) {
+                } else if (i == posNow) {//是应该执行的步骤，类型为当前执行
                     type = 1;
-                } else {
+                } else {//否则是未执行
                     type = 2;
                 }
                 entity1.setItemType(type);
                 entity1.setData(bean);
-                if (i == 3 || (bean.getTaskType() == 5 && i == 4)) {//设置对应时间的显示
+                if (i == 3 || (bean.getTaskType() == 5 && i == 4)) {//只要位置是第四步，或者代办类型是装卸机一体并且位置是第五步，则需要根据服务器传回的时间显示成指定的格式
                     String[] timeArray = times.get(i).split(":");
                     String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));
                     String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
@@ -347,9 +313,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 data.add(entity1);
             }
             List<String> codeList = new ArrayList<>();
-            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
+            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
                 String code = bean.getOperationStepObj().get(i).getOperationCode();
-                if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {
+                if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {//排除了装机结束和卸机结束的code，宽体机滑动开始卸机时会自动调取步骤接口生成卸机开始和卸机结束时间
                     codeList.add(bean.getOperationStepObj().get(i).getOperationCode());
                 }
             }

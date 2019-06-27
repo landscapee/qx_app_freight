@@ -157,6 +157,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         List<String> routes = mOutFieldTaskBean.getFlights().getRoute();
         FlightInfoLayout layout = new FlightInfoLayout(this, routes);
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfo.removeAllViews();
         mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mOutFieldTaskBean.getFlights().getSeat());
         long arrive;

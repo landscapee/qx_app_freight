@@ -31,6 +31,7 @@ public class InPortTallyListAdapter extends BaseQuickAdapter<InPortTallyListEnti
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container.removeAllViews();
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_way_bill, item.getWaybill());
         String docText = String.format(mContext.getString(R.string.format_doc_arrive_info), (item.isDocArrived()) ? "Y|" + item.getDocName() : "N");

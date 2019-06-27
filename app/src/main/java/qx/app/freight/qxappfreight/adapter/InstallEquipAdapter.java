@@ -40,7 +40,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
-        if (item.getTaskTpye() == 1) {//装机
+        if (item.getTaskType() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进

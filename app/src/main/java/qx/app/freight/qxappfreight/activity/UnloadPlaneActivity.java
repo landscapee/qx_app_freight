@@ -144,6 +144,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
         FlightInfoLayout layout = new FlightInfoLayout(this, resultList);
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfo.removeAllViews();
         mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mData.getSeat());
         String time;
