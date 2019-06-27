@@ -95,10 +95,12 @@ public class MultiFunctionRecylerView extends LinearLayout {
     public void setOnRetryLisenter(EmptyLayout.OnRetryLisenter lisenter) {
         mElEmpty.setOnRetryLisenter(lisenter);
     }
-    public void finishRefresh(){
+
+    public void finishRefresh() {
         mRefreshView.finishRefresh();
     }
-    public void finishLoadMore(){
+
+    public void finishLoadMore() {
 
         mRefreshView.finishLoadMore();
     }

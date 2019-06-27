@@ -26,4 +26,5 @@ public class InstallEquipEntity {
     private String workerName;
     private List<String> stepCodeList;
     private boolean widePlane;//是否是宽体机
+    private boolean acceptTask=false;//是否已经领受任务
 }

@@ -93,22 +93,27 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                List<String> pushTaskIds = new ArrayList<>();
+                List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
                 for (LoadAndUnloadTodoBean bean : mListCache) {
                     pushTaskIds.add(bean.getTaskId());
                 }
-                List<String> removeTaskIds = new ArrayList<>();
+                List<String> removeTaskIds = new ArrayList<>();//将最新推送过来的数据的taskId保存起来
                 for (LoadAndUnloadTodoBean bean : list) {
-                    if (pushTaskIds.contains(bean.getTaskId())) {
+                    if (pushTaskIds.contains(bean.getTaskId())) {//如果已经存储过该taskId，则将对应的taskId记录下来以便删除重复数据
                         removeTaskIds.add(bean.getTaskId());
                     }
                 }
                 for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (removeTaskIds.contains(bean.getTaskId())) {
+                    if (removeTaskIds.contains(bean.getTaskId())) {//删除重复的旧数据，更新新数据
                         mListCache.remove(bean);
                     }
                 }
                 mListCache.addAll(list);
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据
+                        mListCache.remove(bean);
+                    }
+                }
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
@@ -125,12 +130,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         mShouldNewDialog = true;
                     });
                     if (!mDialog.isAdded()) {
-                        Log.e("tagPuth", "显示推送任务=========");
-                        mDialog.show(getFragmentManager(), "11");
-                        mShouldNewDialog = false;
-                    }else {
-                        loadData();
-                        mListCache.clear();
+                        if (mTaskIdList.contains(list.get(0).getTaskId())){
+                            loadData();
+                            mListCache.clear();
+                        }else {
+                            Log.e("tagPuth", "显示推送任务=========");
+                            mDialog.show(getFragmentManager(), "11");
+                            mShouldNewDialog = false;
+                        }
                     }
                 } else {
                     Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -296,6 +303,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     break;
                 }
             }
+            if (posNow > 0) {
+                entity.setAcceptTask(true);
+            }
             checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
             int size = (bean.getTaskType() == 1 || bean.getTaskType() == 2) ? 5 : 6;//如果是装机或卸机的话则总共步骤数为5，否则为6
             for (int i = 0; i < size; i++) {
@@ -368,6 +378,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 } else {
                     go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
+                    if (smallPos==0){//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
+                        loadData();
+                    }
                 }
             }
         });

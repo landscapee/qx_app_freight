@@ -91,22 +91,27 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                List<String> pushTaskIds = new ArrayList<>();
+                List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
                 for (LoadAndUnloadTodoBean bean : mListCache) {
                     pushTaskIds.add(bean.getTaskId());
                 }
-                List<String> removeTaskIds = new ArrayList<>();
+                List<String> removeTaskIds = new ArrayList<>();//将最新推送过来的数据的taskId保存起来
                 for (LoadAndUnloadTodoBean bean : list) {
-                    if (pushTaskIds.contains(bean.getTaskId())) {
+                    if (pushTaskIds.contains(bean.getTaskId())) {//如果已经存储过该taskId，则将对应的taskId记录下来以便删除重复数据
                         removeTaskIds.add(bean.getTaskId());
                     }
                 }
                 for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (removeTaskIds.contains(bean.getTaskId())) {
+                    if (removeTaskIds.contains(bean.getTaskId())) {//删除重复的旧数据，更新新数据
                         mListCache.remove(bean);
                     }
                 }
                 mListCache.addAll(list);
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据
+                        mListCache.remove(bean);
+                    }
+                }
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
@@ -239,7 +244,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             mCacheList.clear();
             mAdapter.notifyDataSetChanged();
         }
-        ;
         mCacheList.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
@@ -269,6 +273,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
             int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;
+            if (posNow > 0) {
+                entity.setAcceptTask(true);
+            }
             for (int i = 0; i < 2; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
                 entity1.setFlightType(entity.getFlightType());
