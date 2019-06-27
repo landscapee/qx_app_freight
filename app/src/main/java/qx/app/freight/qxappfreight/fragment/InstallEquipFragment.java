@@ -39,14 +39,12 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -246,7 +244,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());
             entity.setWorkerName(bean.getWorkerName());
-            StringUtil.setTimeAndType(bean,entity);//设置对应的时间和时间图标显示
+            StringUtil.setTimeAndType(bean, entity);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();

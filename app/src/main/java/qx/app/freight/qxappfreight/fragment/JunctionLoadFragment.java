@@ -238,44 +238,17 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
-            entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机；5，装卸机
+            entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
             entity.setFlightType("M");
             entity.setId(bean.getId());
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());
-            entity.setTaskTpye(bean.getTaskType());
             entity.setWorkerName(bean.getWorkerName());
-            String time;
-            int timeType;
-            if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {
-                    time = TimeUtils.getHMDay(bean.getAta());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {
-                    time = TimeUtils.getHMDay(bean.getEta());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getSta());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            } else {
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {
-                    time = TimeUtils.getHMDay(bean.getAtd());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {
-                    time = TimeUtils.getHMDay(bean.getEtd());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getStd());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            }
-            entity.setTimeForShow(time);
-            entity.setTimeType(timeType);
+            StringUtil.setTimeAndType(bean, entity);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add("0");
-            StringUtil.setFlightRoute(bean.getRoute(), entity);
+            StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
             int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;

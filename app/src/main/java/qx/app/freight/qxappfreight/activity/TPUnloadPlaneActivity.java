@@ -179,11 +179,15 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mScanGoodsAdapter = new TpScanInfoAdapter(mListGoods, mOutFieldTaskBean.getFlights());
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
-            mListGoods.remove(position);
-            mSlideRvGoods.closeMenu();
-            mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
-            mScanGoodsAdapter.notifyDataSetChanged();
+            if (mListGoods.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
+                mListGoods.remove(position);
+                mSlideRvGoods.closeMenu();
+                mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
+                mScanGoodsAdapter.notifyDataSetChanged();
+            }
         });
         mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
@@ -191,11 +195,15 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mScanPacAdapter = new TpScanInfoAdapter(mListPac, mOutFieldTaskBean.getFlights());
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
-            mListPac.remove(position);
-            mSlideRvPac.closeMenu();
-            mTvPacNumber.setText(String.valueOf(mListPac.size()));
-            mScanPacAdapter.notifyDataSetChanged();
+            if (mListPac.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
+                mListPac.remove(position);
+                mSlideRvPac.closeMenu();
+                mTvPacNumber.setText(String.valueOf(mListPac.size()));
+                mScanPacAdapter.notifyDataSetChanged();
+            }
         });
         mScanPacAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
@@ -224,6 +232,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         Log.e("tag", "卸机id======" + mOutFieldTaskBean.getId());
         List<TransportTodoListBean> infos = new ArrayList<>();
         for (ScooterInfoListBean bean : mListGoods) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
@@ -242,6 +251,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             infos.add(entity);
         }
         for (ScooterInfoListBean bean : mListPac) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
