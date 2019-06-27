@@ -168,6 +168,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     private void seachByText() {
         mList.clear();
+        mMfrvData.notifyForAdapter(mAdapter);
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mCacheList);
         } else {
@@ -220,15 +221,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        if (loadAndUnloadTodoBean.size() == 0) {
-            if (mCurrentPage == 1) {
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            mCacheList.clear();
-            mMfrvData.notifyForAdapter(mAdapter);
-        }
+//        if (loadAndUnloadTodoBean.size() == 0) {
+////            if (mCurrentPage == 1) {
+////                mMfrvData.finishRefresh();
+////            } else {
+////                mMfrvData.finishLoadMore();
+////            }
+////            mCacheList.clear();
+////            mMfrvData.notifyForAdapter(mAdapter);
+////        }
+////        ;
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -356,9 +358,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mCacheList.add(entity);
         }
         seachByText();
-        if (mMfrvData != null) {
-            mMfrvData.notifyForAdapter(mAdapter);
-        }
         setSlideListener(checkedList);
         if (mTaskFragment != null) {
             if (isShow)
