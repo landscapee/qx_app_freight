@@ -97,7 +97,7 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.e(TAG, topicMessage.getPayload());
-                        if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
+                        if (topicMessage.getPayload().trim().contains("\"cancelFlag\":true")) {//任务取消的推送
                             if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
@@ -106,10 +106,10 @@ public class InstallEquipClient extends StompClient {
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
-                            }else if (topicMessage.getPayload().contains("taskType:6")) {//航班不保障了
+                            }else if (topicMessage.getPayload().contains("\"taskType\":6")) {//航班不保障了
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                                data.setSplitTask(false);//航班不保障了
+                                data.setConfirmTask(false);//航班不保障了
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         } else {
