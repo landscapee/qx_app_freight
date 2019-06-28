@@ -90,8 +90,17 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {
-            if (result.isCancelFlag() || result.isChangeWorkerUser() || result.isSplitTask()) {
+            if (result.isChangeWorkerUser() || result.isSplitTask()) {
                 loadData();
+            } else if (result.isCancelFlag()) {
+                if (!result.isConfirmTask()) {//不再保障任务了
+                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    String flightName = list.get(0).getFlightNo();
+                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据将重新刷新");
+                    loadData();
+                } else {//取消任务
+                    loadData();
+                }
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
