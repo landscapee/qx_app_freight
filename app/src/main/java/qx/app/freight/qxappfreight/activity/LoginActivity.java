@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +27,16 @@ import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
-import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.ProgressDialog;
 import qx.app.freight.qxappfreight.dialog.UpDateVersionDialog;
 import qx.app.freight.qxappfreight.http.HttpApi;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
-import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.DownloadInstall;
@@ -80,11 +76,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
-        tvCopyVersion.setText(" @成都双流国际机场版权所有（v"+ BuildConfig.VERSION_NAME +"）");
+        tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
         checkVersion();
-        mEtPassWord.setText("111111");
+        mEtPassWord.setText("");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("zhangbing");
+        mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });
@@ -104,17 +100,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         //输入法 下载安装
         DownloadUtils downloadUtils = new DownloadUtils(this);
         //是否按安装输入法
-        if(!downloadUtils.isInstall()){
+        if (!downloadUtils.isInstall()) {
             //是否已经下载
-            if(downloadUtils.isDownload()){
+            if (downloadUtils.isDownload()) {
                 //直接安装
                 downloadUtils.showDialogInstall();
-            }else{
+            } else {
                 //下载
                 downloadUtils.showDialogDownload();
             }
-        }else{
-            Log.e("输入法：","输入法已经安装！");
+        } else {
+            Log.e("输入法：", "输入法已经安装！");
         }
 
     }
@@ -143,7 +139,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
                 }
-                if(1000 != updataBean.getResponseCode()){
+                if (1000 != updataBean.getResponseCode()) {
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
                 }
@@ -347,14 +343,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 弹出下载提示框
-     *   vtime.setText(appVersion.getData().getVersionCode());
-     *             vContent.setText(appVersion.getData().getUpdateMsg());
+     * vtime.setText(appVersion.getData().getVersionCode());
+     * vContent.setText(appVersion.getData().getUpdateMsg());
      */
     private void showAppUpdateDialog() {
         UpDateVersionDialog dialog = new UpDateVersionDialog(this);
 
         dialog.setTitle("版本更新")
-                .setMessage("更新版本："+mVersionBean.getData().getVersionCode()+"\n更新内容："+mVersionBean.getData().getUpdateMsg())
+                .setMessage("更新版本：" + mVersionBean.getData().getVersionCode() + "\n更新内容：" + mVersionBean.getData().getUpdateMsg())
                 .setNegativeButton("立即更新")
                 .isCanceledOnTouchOutside(false)
                 .isCanceled(true)

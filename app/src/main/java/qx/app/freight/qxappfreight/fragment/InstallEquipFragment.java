@@ -93,7 +93,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             if (result.isChangeWorkerUser() || result.isSplitTask()) {
                 loadData();
             } else if (result.isCancelFlag()) {
-                if (!result.isConfirmTask()) {//不再保障任务了
+                if (!result.isConfirmTask()) {//不再保障任务
                     List<LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据将重新刷新");
@@ -144,7 +144,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                             loadData();
                             mListCache.clear();
                         } else {
-                            Log.e("tagPuth", "显示推送任务=========");
                             mDialog.show(getFragmentManager(), "11");
                             mShouldNewDialog = false;
                         }
@@ -154,7 +153,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
                             .subscribe(aLong -> {
-                                Log.e("tagPuth", "添加过了=========");
                                 mDialog.refreshData();
                             });
                 }
@@ -184,7 +182,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            Log.e("111111", "setUserVisibleHint: " + "展示");
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
@@ -227,7 +224,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void loadData() {
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-//        entity.setWorkerId("3628f73591914a48ab5613d6c7b7ce64");
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
@@ -269,7 +265,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setWidePlane(bean.getWidthAirFlag() == 0);
-            entity.setShowDetail(false);
             if (mSpecialTaskId != null && mSpecialTaskId.equals(bean.getTaskId())) {//mSpecialTaskId不为空，则说明进去过装机卸机页面点击过结束装机或卸机，回到代办列表页面，该值对应的数据应该默认展开
                 entity.setShowDetail(true);
                 mSpecialTaskId = null;
@@ -317,7 +312,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
             }
             if (posNow > 0) {
-                entity.setAcceptTask(true);
+                entity.setAcceptTask(true);//已经领受过任务
+            } else {
+                entity.setAcceptTask(false);//没有领受过任务
             }
             checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
             int size = (bean.getTaskType() == 1 || bean.getTaskType() == 2) ? 5 : 6;//如果是装机或卸机的话则总共步骤数为5，否则为6
@@ -392,7 +389,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 } else {
                     go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
                     if (smallPos == 0) {//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
-                        loadData();
+                        Observable.timer(1, TimeUnit.SECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()) // 延迟1秒去调接口获取代办数据，否则数据仍然为未领受
+                                .subscribe(aLong -> loadData());
                     }
                 }
             }

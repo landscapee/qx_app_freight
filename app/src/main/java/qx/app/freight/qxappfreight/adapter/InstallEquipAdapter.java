@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,10 +36,8 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
     protected void convert(BaseViewHolder helper, InstallEquipEntity item) {
         helper.setIsRecyclable(false);
         if (!item.isAcceptTask()) {
-            Log.e("tagTest","任务未领受，黄色");
             helper.itemView.setBackgroundColor(Color.parseColor("#FFAC00"));
-        }else {
-            Log.e("tagTest","任务领受，白色");
+        } else {
             helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         helper.setText(R.id.tv_plane_type, (item.isWidePlane()) ? "宽体机" : "窄体机");
