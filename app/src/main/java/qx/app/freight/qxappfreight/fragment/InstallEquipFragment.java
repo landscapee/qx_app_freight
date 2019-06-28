@@ -77,6 +77,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
     private List<String> mTaskIdList = new ArrayList<>();
+    private String mSpecialTaskId = null;//专门记录由点击了结束装机或卸机返回刷新数据的taskId，匹配到该taskId则item应该展开
 
     @Nullable
     @Override
@@ -130,10 +131,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         mShouldNewDialog = true;
                     });
                     if (!mDialog.isAdded()) {
-                        if (mTaskIdList.contains(list.get(0).getTaskId())){
+                        if (mTaskIdList.contains(list.get(0).getTaskId())) {
                             loadData();
                             mListCache.clear();
-                        }else {
+                        } else {
                             Log.e("tagPuth", "显示推送任务=========");
                             mDialog.show(getFragmentManager(), "11");
                             mShouldNewDialog = false;
@@ -166,7 +167,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new InstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-
         loadData();
     }
 
@@ -184,7 +184,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     seachByText();
                 });
             }
-
         }
     }
 
@@ -193,7 +192,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
      */
     private void seachByText() {
         mList.clear();
-        mMfrvData.notifyForAdapter(mAdapter);
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mCacheList);
         } else {
@@ -208,9 +206,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("InstallEquipFragment_refresh")) {
+        if (result.contains("InstallEquipFragment_refresh")) {
+            mSpecialTaskId = result.split("@")[1];
             loadData();
         }
     }
@@ -261,6 +261,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             InstallEquipEntity entity = new InstallEquipEntity();
             entity.setWidePlane(bean.getWidthAirFlag() == 0);
             entity.setShowDetail(false);
+            if (mSpecialTaskId != null && mSpecialTaskId.equals(bean.getTaskId())) {//mSpecialTaskId不为空，则说明进去过装机卸机页面点击过结束装机或卸机，回到代办列表页面，该值对应的数据应该默认展开
+                entity.setShowDetail(true);
+                mSpecialTaskId = null;
+            }
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
@@ -378,7 +382,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 } else {
                     go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
-                    if (smallPos==0){//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
+                    if (smallPos == 0) {//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
                         loadData();
                     }
                 }

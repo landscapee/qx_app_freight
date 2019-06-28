@@ -35,7 +35,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
     @Override
     protected void convert(BaseViewHolder helper, InstallEquipEntity item) {
         helper.setIsRecyclable(false);
-        if (!item.isAcceptTask()){
+        if (!item.isAcceptTask()) {
             helper.itemView.setBackgroundColor(Color.parseColor("#FFAC00"));
         }
         helper.setText(R.id.tv_plane_type, (item.isWidePlane()) ? "宽体机" : "窄体机");

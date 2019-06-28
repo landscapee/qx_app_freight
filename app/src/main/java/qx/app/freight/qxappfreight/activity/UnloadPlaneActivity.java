@@ -276,10 +276,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 //            if (infos.size() == 0) {
 //                ToastUtil.showToast("请选择上传板车信息再提交");
 //            } else {
-                model.setSeat(mData.getSeat());
-                model.setScooters(infos);
-                mPresenter = new ArrivalDataSavePresenter(this);
-                ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
+            model.setSeat(mData.getSeat());
+            model.setScooters(infos);
+            mPresenter = new ArrivalDataSavePresenter(this);
+            ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
 //            }
         });
         ivNoticeTp.setOnClickListener(v -> {
@@ -458,7 +458,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     @Override
     public void arrivalDataSaveResult(String result) {
         ToastUtil.showToast("结束卸机成功");
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
 

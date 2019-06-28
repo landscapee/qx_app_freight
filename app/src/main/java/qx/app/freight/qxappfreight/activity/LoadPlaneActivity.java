@@ -210,7 +210,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     public void flightDoneInstallResult(String result) {
         ToastUtil.showToast("结束装机成功");
         Log.e("tagNet", "result=====" + result);
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
 
