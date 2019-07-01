@@ -392,13 +392,12 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                         for (ScooterInfoListBean bean : result) {
                             bean.setFlightType("D");
                         }
-                        showBoardInfos(result);
                     } else {
                         for (ScooterInfoListBean bean : result) {
                             bean.setFlightType("I");
                         }
-                        showBoardInfos(result);
                     }
+                    showBoardInfos(result);
                 });
                 dialog.setCancelable(false);
                 dialog.show(getSupportFragmentManager(), "111");

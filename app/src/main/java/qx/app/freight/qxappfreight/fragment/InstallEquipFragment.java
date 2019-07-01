@@ -96,8 +96,13 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (!result.isConfirmTask()) {//不再保障任务
                     List<LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
-                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据将重新刷新");
-                    loadData();
+                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) //等待2秒后调取代办接口，避免数据库数据错误
+                            .subscribe(aLong -> {
+                                loadData();
+                            });
                 } else {//取消任务
                     loadData();
                 }
@@ -131,7 +136,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     mDialog.setData(getContext(), mListCache, success -> {
                         if (success) {
                             ToastUtil.showToast("领受装卸机新任务成功");
-                            loadData();
+                            Observable.timer(300, TimeUnit.MILLISECONDS)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                                    .subscribe(aLong -> {
+                                        loadData();
+                                    });
                             mListCache.clear();
                         } else {
                             Log.e("tagPush", "推送出错了");
