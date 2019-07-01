@@ -7,16 +7,16 @@ import lombok.Data;
 public class GetInfosByFlightIdBean {
         /**id   :    板id
          * scooterId : 板车id
-         * flightId : 航班计划id
+         * flightId : 航班计划id    flightInfoId
          * total : 装载数量
          * weight : 装载重量
          * volume : 装载体积
-         * flightDestination : 目的地
+         * flightDestination : 目的地  destinationStation
          * suggestRepository : 建议仓位
          * uldId : uld id(集装器记录ID)
-         * createDate :
+         * createDate :   改成  createTime
          * createUser : 创建人
-         * updateDate : 修改时间
+         * updateDate : 修改时间  updateTime
          * updateUser : 修改人
          * delFlag : 删除标识: 0删除 , 1未删除.
          * rcInfoList : {}
@@ -39,6 +39,7 @@ public class GetInfosByFlightIdBean {
          * taskId : 任务id
          * logUserId :  登录人id
          * seat  :   机位号
+         * rePureWeight  :   复重净重
          */
 
 
@@ -46,16 +47,16 @@ public class GetInfosByFlightIdBean {
 
         private String id;
         private String scooterId;
-        private String flightId;
+        private String flightInfoId;
         private String total;
         private double weight;
         private double volume;
-        private String flightDestination;
+        private String destinationStation;
         private String suggestRepository;
         private String uldId;
-        private String createDate;
+        private String createTime;
         private String createUser;
-        private String updateDate;
+        private String updateTime;
         private String updateUser;
         private String delFlag;
         private Object rcInfoList;
@@ -83,6 +84,7 @@ public class GetInfosByFlightIdBean {
         private String reWeightTaskId;
         private String currentStep;
         private double personUpdateValue;
+        private double rePureWeight;
 
 
 }
