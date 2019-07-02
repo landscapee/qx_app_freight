@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
@@ -56,6 +57,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -121,6 +123,10 @@ public interface HttpApi {
     //暂存提交
     @POST("service-product-transportcheck/ins/commit")
     Observable<BaseEntity<Object>> storageCommit(@Body StorageCommitEntity model);
+
+    //批量收验
+    @POST("service-product-transportcheck/ins/commitList")
+    Observable<BaseEntity<Object>> commitReceiveList(@Body List<StorageCommitEntity> model);
 
     //修改收验
     @GET("service-product-transportcheck/ins/update")
@@ -297,6 +303,10 @@ public interface HttpApi {
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
     Observable<BaseEntity<Object>> returnWeighing(@Body ReturnWeighingEntity model);
+
+    //复重 / 获取航班所有板车
+    @POST("service-product-cargoweighing/scooter/getTodoScooters")
+    Observable<BaseEntity<List<GetTodoScootersBean>>> getTodoScooters(@Body TodoScootersEntity model);
 
     /***********************运输*****************************/
 

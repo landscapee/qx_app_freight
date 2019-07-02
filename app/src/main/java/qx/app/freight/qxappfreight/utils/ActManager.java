@@ -104,14 +104,18 @@ public class ActManager {
         if (activityStack != null) {
             for (int i = 0; i < activityStack.size(); i++) {
                 if ("AddReceiveGoodActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
-                    finishActivity(AddReceiveGoodActivity.class);
-                }else if("CollectorDeclareActivity".equals(activityStack.get(i).getClass().getSimpleName())){
-                    finishActivity(CollectorDeclareActivity.class);
-                }else if("ReceiveGoodsActivity".equals(activityStack.get(i).getClass().getSimpleName())){
-                    finishActivity(CollectorDeclareActivity.class);
+                    finishOther(activityStack.get(i));
+                } if("CollectorDeclareActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                } if("ReceiveGoodsActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
                 }
             }
         }
+    }
+
+    public void finishOther(Activity act){
+        act.finish();
     }
 
     //收验关闭
@@ -119,11 +123,11 @@ public class ActManager {
         if (activityStack != null) {
             for (int i = 0; i < activityStack.size(); i++) {
                 if ("VerifyStaffActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
-                    finishActivity(VerifyStaffActivity.class);
-                }else if("VerifyFileActivity".equals(activityStack.get(i).getClass().getSimpleName())){
-                    finishActivity(VerifyFileActivity.class);
-                }else if("VerifyCargoActivity".equals(activityStack.get(i).getClass().getSimpleName())){
-                    finishActivity(VerifyCargoActivity.class);
+                    finishOther(activityStack.get(i));
+                } if("VerifyFileActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                } if("VerifyCargoActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
                 }
             }
         }

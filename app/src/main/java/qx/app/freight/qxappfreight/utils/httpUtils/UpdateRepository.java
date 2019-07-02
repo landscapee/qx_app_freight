@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
@@ -57,6 +58,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -207,6 +209,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> storageCommit(StorageCommitEntity storageCommitEntity) {
         return nothingtransform(getService().storageCommit(storageCommitEntity));
+    }
+
+
+    /****
+     * 收验批量提交
+     */
+    public Observable<String> commitReceiveList(List<StorageCommitEntity> storageCommitEntity) {
+        return nothingtransform(getService().commitReceiveList(storageCommitEntity));
     }
 
     /******
@@ -716,6 +726,16 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> returnWeighing(ReturnWeighingEntity model) {
         return nothingtransform(getService().returnWeighing(model));
+    }
+
+
+    /****
+     * 复重 / 获取航班所有板车
+     * @param model
+     * @return
+     */
+    public Observable<List<GetTodoScootersBean>> getTodoScooters(TodoScootersEntity model) {
+        return transform(getService().getTodoScooters(model));
     }
 
 
