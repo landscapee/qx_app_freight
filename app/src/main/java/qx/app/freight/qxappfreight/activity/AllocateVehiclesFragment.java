@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,6 +28,7 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
@@ -78,6 +81,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvAllocateList.setOnRetryLisenter(this);
         mTaskFragment = (TaskFragment) getParentFragment();
@@ -163,7 +169,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      * 根据板车号获取板车信息
      */
     public void getScooterByScooterCode(String scooterCode){
-
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setScooterCode(scooterCode);
+        ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
     }
 
     @Override
@@ -205,6 +213,18 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         getData();
     }
 
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+            String daibanCode = result.getData();
+            getScooterByScooterCode(daibanCode);
+        }
+
+    }
+
     @Override
     public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         //因为没有分页，不做分页判断
@@ -225,6 +245,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-
+        ToastUtil.showToast("根据板车号查询板车信息成功");
     }
 }
