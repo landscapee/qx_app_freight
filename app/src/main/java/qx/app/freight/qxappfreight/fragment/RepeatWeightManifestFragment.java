@@ -8,16 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
+import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 
 /**复重-舱单列表
  * created by swd
  * 2019/7/2 11:24
  */
-public class RepeatWeightManifestFragment extends BaseFragment {
+public class RepeatWeightManifestFragment extends BaseFragment implements TodoScootersContract.todoScootersView {
     @BindView(R.id.rl_view)
     RecyclerView rlView;
 
@@ -44,6 +49,26 @@ public class RepeatWeightManifestFragment extends BaseFragment {
     }
 
     private void initView() {
+
+    }
+
+    @Override
+    public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
+
+    }
+
+    @Override
+    public void toastView(String error) {
+
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
 
     }
 }

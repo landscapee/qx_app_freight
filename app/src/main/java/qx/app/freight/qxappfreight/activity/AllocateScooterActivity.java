@@ -2,12 +2,14 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,9 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.fragment.RepeatWeightManifestFragment;
 import qx.app.freight.qxappfreight.fragment.RepeatWeightScooterFragment;
+import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
-/**复重环节，查看舱单列表
+/**复重环节，查看舱单列表 查看板车列表
  *
  */
 public class AllocateScooterActivity extends BaseActivity {
@@ -43,7 +46,9 @@ public class AllocateScooterActivity extends BaseActivity {
     public void businessLogic(Bundle savedInstanceState) {
         flightId = getIntent().getStringExtra("flightId");
         taskId = getIntent().getStringExtra("taskId");
-
+        CustomToolbar toolbar = getToolbar();
+        toolbar.setMainTitle(Color.WHITE, "查看详情");
+        toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         setAdapter();
     }
 

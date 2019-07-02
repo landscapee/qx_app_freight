@@ -19,18 +19,24 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightScooterAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.contract.TodoScootersContract;
+import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
 
 /**复重-板车列表
  * created by swd
  * 2019/7/2 11:25
  */
-public class RepeatWeightScooterFragment extends BaseFragment {
+public class RepeatWeightScooterFragment extends BaseFragment implements TodoScootersContract.todoScootersView {
     @BindView(R.id.rl_view)
     RecyclerView rlView;
 
     private RepeatWeightScooterAdapter adapter;
     private List<GetInfosByFlightIdBean> list;
+
+    private String flightId;
+    private String taskId;
 
     public static RepeatWeightScooterFragment getInstance(String flightInfoId, String taskId) {
         RepeatWeightScooterFragment fragment = new RepeatWeightScooterFragment();
@@ -52,7 +58,18 @@ public class RepeatWeightScooterFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        flightId = getArguments().getString("flightInfoId");
+        taskId = getArguments().getString("taskId");
         initView();
+        initData();
+    }
+
+    private void initData() {
+        mPresenter = new TodoScootersPresenter(this);
+        TodoScootersEntity entity = new TodoScootersEntity();
+        entity.setFlightInfoId(flightId);
+        entity.setTaskId(taskId);
+        ((TodoScootersPresenter) mPresenter).todoScooters(entity);
     }
 
     private void initView() {
@@ -63,6 +80,28 @@ public class RepeatWeightScooterFragment extends BaseFragment {
         adapter.setOnItemClickListener((adapter, view, position) -> {
 
         });
+
+    }
+
+    @Override
+    public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
+        list.clear();
+        list.addAll(result);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void toastView(String error) {
+
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
 
     }
 }

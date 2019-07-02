@@ -306,7 +306,7 @@ public interface HttpApi {
 
     //复重 / 获取航班所有板车
     @POST("service-product-cargoweighing/scooter/getTodoScooters")
-    Observable<BaseEntity<List<GetTodoScootersBean>>> getTodoScooters(@Body TodoScootersEntity model);
+    Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
 
     /***********************运输*****************************/
 

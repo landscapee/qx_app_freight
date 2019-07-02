@@ -26,7 +26,7 @@ public class GetInfosByFlightIdBean {
          * reDifferenceRate : 复重差率
          * reWeightFinish : 复重完成标识: 0待复重, 1完成, 2复重异常
          * scooterCode : 板车号
-         * scooterType : 1:大板  2:小板
+         * scooterType : 板车类型0小 1中 2大
          * uldCode : 集装器编号
          * uldType : 集装器类型
          * iata : 航司二制码

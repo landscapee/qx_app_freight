@@ -5,6 +5,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.model.TodoScootersModel;
@@ -18,9 +19,9 @@ public class TodoScootersPresenter extends BasePresenter {
 
     public void todoScooters(TodoScootersEntity model) {
         mRequestView.showNetDialog();
-        ((TodoScootersModel) mRequestModel).todoScooters(model, new IResultLisenter<List<GetTodoScootersBean>>() {
+        ((TodoScootersModel) mRequestModel).todoScooters(model, new IResultLisenter<List<GetInfosByFlightIdBean>>() {
             @Override
-            public void onSuccess(List<GetTodoScootersBean> airlineRequireBeans) {
+            public void onSuccess(List<GetInfosByFlightIdBean> airlineRequireBeans) {
                 ((TodoScootersContract.todoScootersView) mRequestView).todoScootersResult(airlineRequireBeans);
                 mRequestView.dissMiss();
             }
