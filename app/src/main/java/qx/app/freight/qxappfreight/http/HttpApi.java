@@ -278,7 +278,7 @@ public interface HttpApi {
     Observable<BaseEntity<GetScooterListInfoBean>> getScooterListInfo(@Body GetScooterListInfoEntity getScooterListInfoEntity);
 
     /***********************复重*****************************/
-    //复重数据获取
+    //复重数据获取   ！！弃用！！
     @POST("service-product-cargoweighing/scooter/getTaskList")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getInfosByFlightId(@Body BaseFilterEntity model);
 
