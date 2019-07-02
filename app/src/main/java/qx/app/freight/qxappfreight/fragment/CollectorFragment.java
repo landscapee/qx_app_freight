@@ -245,7 +245,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             ActManager.getAppManager().finishReCollection();
-            ToastUtil.showToast("当前任务以在其他设备或终端完成");
+//            ToastUtil.showToast("当前任务以在其他设备或终端完成");
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
