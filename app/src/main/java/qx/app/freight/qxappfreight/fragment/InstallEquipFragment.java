@@ -74,7 +74,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
 
-    private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
     private List<String> mTaskIdList = new ArrayList<>();
     private String mSpecialTaskId = null;//专门记录由点击了结束装机或卸机返回刷新数据的taskId，匹配到该taskId则item应该展开
@@ -90,23 +89,23 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {
-            if (result.isChangeWorkerUser() || result.isSplitTask()) {
+            if (result.isChangeWorkerUser() || result.isSplitTask()) {//换人或拆分任务直接刷新代办列表
                 loadData();
             } else if (result.isCancelFlag()) {
-                if (!result.isConfirmTask()) {//不再保障任务
+                if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
                     List<LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
                     Observable.timer(300, TimeUnit.MILLISECONDS)
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) //等待2秒后调取代办接口，避免数据库数据错误
+                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
                             .subscribe(aLong -> {
                                 loadData();
                             });
-                } else {//取消任务
+                } else {//取消任务，刷新代办列表
                     loadData();
                 }
-            } else {//新任务推送
+            } else {//新任务推送，筛选最新数据再添加进行展示
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
                 for (LoadAndUnloadTodoBean bean : mListCache) {
@@ -132,38 +131,35 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
-                if (mShouldNewDialog) {//需要重新new一个新任务推送框
-                    mDialog.setData(getContext(), mListCache, success -> {
-                        if (success) {
-                            ToastUtil.showToast("领受装卸机新任务成功");
-                            Observable.timer(300, TimeUnit.MILLISECONDS)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
-                                    .subscribe(aLong -> {
-                                        loadData();
-                                    });
-                            mListCache.clear();
-                        } else {
-                            Log.e("tagPush", "推送出错了");
-                            mListCache.clear();
-                        }
-                        mShouldNewDialog = true;
-                    });
-                    if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-                        if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
-                            loadData();
-                            mListCache.clear();
-                        } else {
-                            mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
-                        }
-                    }else {//刷新任务弹出框中的数据显示
+                mDialog.setData(getContext(), mListCache, success -> {
+                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                        ToastUtil.showToast("领受装卸机新任务成功");
                         Observable.timer(300, TimeUnit.MILLISECONDS)
                                 .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(aLong -> {
-                                    mDialog.refreshData();
+                                    loadData();
                                 });
+                        mListCache.clear();
+                    } else {//领受失败后，清空未领受列表缓存
+                        Log.e("tagPush", "推送出错了");
+                        mListCache.clear();
                     }
+                });
+                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+                    if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
+                        loadData();
+                        mListCache.clear();
+                    } else {
+                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+                    }
+                } else {//刷新任务弹出框中的数据显示
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(aLong -> {
+                                mDialog.refreshData();
+                            });
                 }
             }
         }
