@@ -108,7 +108,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         });
         mMfrvData.setAdapter(mAdapter);
-        mPresenter = new GroupBoardToDoPresenter(this);
+
 //        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
 //        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
 //            @Override
@@ -172,6 +172,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         ascs.add("ATA");
         ascs.add("STA");
         entity.setAscs(ascs);
+        mPresenter = new GroupBoardToDoPresenter(this);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
