@@ -238,7 +238,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mPresenter = new InWaybillRecordPresenter(this);
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setTaskFlag(0);
-        entity.setFlightId(transportListBean.getFlightId());
+        entity.setFlightInfoId(transportListBean.getFlightId());
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
 
