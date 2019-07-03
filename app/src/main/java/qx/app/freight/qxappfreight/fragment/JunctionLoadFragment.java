@@ -87,8 +87,22 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {
-            if (result.isCancelFlag() || result.isChangeWorkerUser() || result.isSplitTask()) {
+            if (result.isChangeWorkerUser() || result.isSplitTask()) {
                 loadData();
+            } else if (result.isCancelFlag()) {
+                if (!result.isConfirmTask()) {//不再保障任务
+                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    String flightName = list.get(0).getFlightNo();
+                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) //等待2秒后调取代办接口，避免数据库数据错误
+                            .subscribe(aLong -> {
+                                loadData();
+                            });
+                } else {//取消任务
+                    loadData();
+                }
             } else {
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
@@ -119,7 +133,12 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     mDialog.setData(getContext(), mListCache, success -> {
                         if (success) {
                             ToastUtil.showToast("领受结载新任务成功");
-                            loadData();
+                            Observable.timer(300, TimeUnit.MILLISECONDS)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                                    .subscribe(aLong -> {
+                                        loadData();
+                                    });
                             mListCache.clear();
                         } else {
                             Log.e("tagPush", "推送出错了");
@@ -128,21 +147,20 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                         mShouldNewDialog = true;
                     });
                     if (!mDialog.isAdded()) {
-                        Log.e("tagPuth", "显示推送任务=========");
-                        mDialog.show(getFragmentManager(), "11");
-                        mShouldNewDialog = false;
+                        if (mTaskIdList.contains(list.get(0).getTaskId())) {
+                            loadData();
+                            mListCache.clear();
+                        } else {
+                            mDialog.show(getFragmentManager(), "11");
+                        }
                     }else {
-                        loadData();
-                        mListCache.clear();
+                        Observable.timer(300, TimeUnit.MILLISECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                                .subscribe(aLong -> {
+                                    mDialog.refreshData();
+                                });
                     }
-                } else {
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
-                            .subscribe(aLong -> {
-                                Log.e("tagPuth", "添加过了=========");
-                                mDialog.refreshData();
-                            });
                 }
             }
         }
@@ -235,15 +253,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void getEndInstallTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
-        if (loadAndUnloadTodoBean.size() == 0) {
-            if (mCurrentPage == 1) {
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            mCacheList.clear();
-            mAdapter.notifyDataSetChanged();
-        }
         mCacheList.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
@@ -255,7 +264,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
-            entity.setShowDetail(false);
+            entity.setWidePlane(bean.getWidthAirFlag() == 0);
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
@@ -308,8 +317,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
     }
 
-    private boolean mShouldRefreshData = false;
-
     /**
      * 设置滑动监听
      */
@@ -318,7 +325,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             //滑动步骤去调接口，以及跳转页面
             mOperatePos = smallPos;
             mSlideadapter = adapter;
-            mShouldRefreshData = smallPos == 1;
             go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
         });
     }
@@ -345,16 +351,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideadapter.notifyDataSetChanged();
-            if (mOperatePos == 4) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-            } else if (mShouldRefreshData) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-                mShouldRefreshData = false;
-            }
+            mCurrentPage = 1;
+            loadData();
+            mOperatePos = 0;
         }
     }
 

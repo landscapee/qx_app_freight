@@ -106,7 +106,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 } else {//取消任务
                     loadData();
                 }
-            } else {
+            } else {//新任务推送
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
                 for (LoadAndUnloadTodoBean bean : mListCache) {
@@ -125,14 +125,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
                 mListCache.addAll(list);
                 for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据
+                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据，目的在于推送过来新任务弹窗提示时如果收到任务动态信息，需要将修改后的任务信息展示出来
                         mListCache.remove(bean);
                     }
                 }
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
-                if (mShouldNewDialog) {
+                if (mShouldNewDialog) {//需要重新new一个新任务推送框
                     mDialog.setData(getContext(), mListCache, success -> {
                         if (success) {
                             ToastUtil.showToast("领受装卸机新任务成功");
@@ -149,22 +149,21 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         }
                         mShouldNewDialog = true;
                     });
-                    if (!mDialog.isAdded()) {
-                        if (mTaskIdList.contains(list.get(0).getTaskId())) {
+                    if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+                        if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
                             loadData();
                             mListCache.clear();
                         } else {
-                            mDialog.show(getFragmentManager(), "11");
-                            mShouldNewDialog = false;
+                            mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
                         }
+                    }else {//刷新任务弹出框中的数据显示
+                        Observable.timer(300, TimeUnit.MILLISECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                                .subscribe(aLong -> {
+                                    mDialog.refreshData();
+                                });
                     }
-                } else {
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
-                            .subscribe(aLong -> {
-                                mDialog.refreshData();
-                            });
                 }
             }
         }
