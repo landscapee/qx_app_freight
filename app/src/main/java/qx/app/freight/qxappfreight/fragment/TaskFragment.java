@@ -90,17 +90,19 @@ public class TaskFragment extends BaseFragment {
         if (TextUtils.isEmpty(nowRoleCode)){
             return;
         }
-        switch (nowRoleCode){
-            case "复重":
-                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
-                mContext.startActivity(intent);
-                break;
-//            case "":
+
+        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        switch (nowRoleCode){
+//            case "复重":
+//                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
+//                mContext.startActivity(intent);
 //                break;
-            default:
-//                ToastUtil.showToast(getContext(), "扫码");
-                ScanManagerActivity.startActivity(getContext(),"MainActivity");
-        }
+////            case "":
+////                break;
+//            default:
+////                ToastUtil.showToast(getContext(), "扫码");
+//                ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        }
 
     }
 

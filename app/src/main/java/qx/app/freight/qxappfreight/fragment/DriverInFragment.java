@@ -177,7 +177,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
                 break;
             case R.id.btn_error:
                 Intent intent = new Intent(getContext(), ErrorReportActivity.class);
-                intent.putExtra("plane_info", list.get(0).getTpFlightNumber());
+                intent.putExtra("plane_info", list.get(0).getFlightNo());
                 intent.putExtra("error_type", 3);
                 getContext().startActivity(intent);
                 break;

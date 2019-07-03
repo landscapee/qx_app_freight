@@ -45,8 +45,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private Integer tpCargoNumber;
     private Double tpCargoWeight;
     private Double tpCargoVolume;
-    private String tpFlightId;
-    private String tpFlightNumber;
+    private String flightId;
     private String tpFlightLocate;
     private Long tpFlightTime;
     private String tpFregihtSpace;
@@ -120,9 +119,9 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     //出港行李数据上传终端ID
     private String baggageSubTerminal;
     //
-    private String tpAsFlightId;
+    private String asFlightId;
     //业务id
-    private String tpFlightBusId;
+    private String flightInfoId;
     //
     private int tpFlightType; //航班类型,0 国内出港,1,国内进港 2国外出港 3国内进港
     //仓位

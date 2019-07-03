@@ -362,8 +362,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
         TransportEndEntity transportEndEntity = new TransportEndEntity();
         mPresenter = new ScanScooterPresenter(this);
-        mainIfos.setTpFlightId(mAcceptTerminalTodoBean.get(0).getFlightId());
-        mainIfos.setTpFlightNumber(mAcceptTerminalTodoBean.get(0).getFlightNo());
+        mainIfos.setFlightId(mAcceptTerminalTodoBean.get(0).getFlightId());
+        mainIfos.setFlightNo(mAcceptTerminalTodoBean.get(0).getFlightNo());
         mainIfos.setTpCargoType(mAcceptTerminalTodoBean.get(0).getCargoType());
         mainIfos.setTpType("进");
         mainIfos.setTpScooterCode(scooterCode);
@@ -552,7 +552,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).isSelect()) {
                 for (TransportTodoListBean mTransportTodoListBean : list.get(i).getMTransportTodoListBeans()) {
-                    if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getTpFlightNumber()))
+                    if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo()))
                         mListBeanBegin.add(mTransportTodoListBean);
                 }
                 for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
@@ -568,7 +568,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             for (TransportTodoListBean tr : mListBeanBegin) {
                 tr.setInSeat(1);
                 for (OutFieldTaskBean mOutFieldTaskBean : listEndTemp) {
-                    if (mOutFieldTaskBean.getFlightNo().equals(tr.getTpFlightNumber())) {
+                    if (mOutFieldTaskBean.getFlightNo().equals(tr.getFlightNo())) {
                         tr.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
                         tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
@@ -617,7 +617,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         //把被选中的航班 下的板车 加入 结束列表 ，被选中的子任务 加入子任务结束列表
         for (int i = 0; i < list.size(); i++) {
             for (TransportTodoListBean mTransportTodoListBean : list.get(i).getMTransportTodoListBeans()) {
-                if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getTpFlightNumber()))
+                if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo()))
                     mListBeanBegin.add(mTransportTodoListBean);
             }
             for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
@@ -631,7 +631,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             for (TransportTodoListBean tr : mListBeanBegin) {
                 tr.setInSeat(1);
                 for (OutFieldTaskBean mOutFieldTaskBean : listEndTemp) {
-                    if (mOutFieldTaskBean.getFlightNo().equals(tr.getTpFlightNumber())) {
+                    if (mOutFieldTaskBean.getFlightNo().equals(tr.getFlightNo())) {
                         tr.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
                         tr.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
                         tr.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
@@ -748,7 +748,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             // 把板车和任务信息 绑定起来
             for (TransportTodoListBean mTransportTodoListBean : listScooter) {
                 for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
-                    if (mTransportTodoListBean.getTpFlightNumber().equals(mOutFieldTaskBean.getFlightNo())) {
+                    if (mTransportTodoListBean.getFlightNo().equals(mOutFieldTaskBean.getFlightNo())) {
                         mTransportTodoListBean.setPlanePlace(mOutFieldTaskBean.getFlights().getSeat());
                         mTransportTodoListBean.setPlaneType(mOutFieldTaskBean.getFlights().getAircraftNo());
                         mTransportTodoListBean.setEtd(mOutFieldTaskBean.getFlights().getScheduleTime());
@@ -766,10 +766,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             list.clear();
             // 把所有板车 通过 航班号 归类到航班下
             for (TransportTodoListBean mTransportTodoListBean : result) {
-                if (mapFlight.get(mTransportTodoListBean.getTpFlightNumber()) == null) {
+                if (mapFlight.get(mTransportTodoListBean.getFlightNo()) == null) {
                     FlightOfScooterBean mFlightOfScooterBean = new FlightOfScooterBean();
                     //把上面绑定到板车上的航班数据 添加到 自己创建的航班对象里面
-                    mFlightOfScooterBean.setFlightNo(mTransportTodoListBean.getTpFlightNumber());
+                    mFlightOfScooterBean.setFlightNo(mTransportTodoListBean.getFlightNo());
                     mFlightOfScooterBean.setPlanePlace(mTransportTodoListBean.getPlanePlace());
                     mFlightOfScooterBean.setPlaneType(mTransportTodoListBean.getPlaneType());
                     mFlightOfScooterBean.setEtd(mTransportTodoListBean.getEtd());
@@ -780,9 +780,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     List <TransportTodoListBean> listBeans = new ArrayList <>();
                     listBeans.add(mTransportTodoListBean);
                     mFlightOfScooterBean.setMTransportTodoListBeans(listBeans);
-                    mapFlight.put(mTransportTodoListBean.getTpFlightNumber(), mFlightOfScooterBean);
+                    mapFlight.put(mTransportTodoListBean.getFlightNo(), mFlightOfScooterBean);
                 } else {
-                    mapFlight.get(mTransportTodoListBean.getTpFlightNumber()).getMTransportTodoListBeans().add(mTransportTodoListBean);
+                    mapFlight.get(mTransportTodoListBean.getFlightNo()).getMTransportTodoListBeans().add(mTransportTodoListBean);
                 }
             }
 

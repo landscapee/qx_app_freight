@@ -102,6 +102,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     TextView tvFoot;
 
     List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
+    private int mConfirmPos = -1;
 
     @Override
     public int getLayoutId() {
@@ -234,7 +235,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mPresenter = new InWaybillRecordPresenter(this);
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setTaskFlag(0);
-        entity.setFlightId(transportListBean.getFlightId());
+        entity.setFlightInfoId(transportListBean.getFlightId());
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
 
@@ -274,7 +275,6 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //新增
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
-            mInWaybillRecord.setFlightInfoId(transportListBean.getId());
             if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())) {
                 for (InWaybillRecord item : mList) {
                     if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())) {
@@ -374,8 +374,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
         mAdapter.setFooterView(tvFoot);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnAllArriveNotifyListener(item -> {
+        mAdapter.setOnAllArriveNotifyListener((item, pos) -> {
+            mConfirmPos=pos;
             mPresenter = new InWaybillRecordPresenter(SortingActivity.this);
+            item.setFlightInfoId(transportListBean.getFlightId());
             ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(item);
         });
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
@@ -443,7 +445,8 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @Override
     public void allGoodsArrivedResult(Object o) {
-        getData();
+        mList.get(mConfirmPos).setAllArrivedFlag(1);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

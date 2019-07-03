@@ -83,12 +83,12 @@ public class CollectionClient extends StompClient {
                             Log.e(TAG, "webSocket  收运 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket Collect 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket 收运 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
                             connect(uri);
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket Collect 关闭");
+                            Log.e(TAG, "websocket 收运 关闭");
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);

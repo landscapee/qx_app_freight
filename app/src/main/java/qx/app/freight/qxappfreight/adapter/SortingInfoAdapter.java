@@ -53,7 +53,7 @@ public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseVi
         TextView tvAllArrive = helper.getView(R.id.tv_all_arrive);
         if (item.getAllArrivedFlag() == 0) {
             tvAllArrive.setTextColor(Color.BLACK);
-            tvAllArrive.setOnClickListener(v -> onAllArriveNotifyListener.onAllArrived(item));
+            tvAllArrive.setOnClickListener(v -> onAllArriveNotifyListener.onAllArrived(item,helper.getAdapterPosition()));
         } else {
             tvAllArrive.setTextColor(mContext.getResources().getColor(R.color.gray_888));
         }
@@ -75,6 +75,6 @@ public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseVi
     }
 
     public interface OnAllArriveNotifyListener {
-        void onAllArrived(InWaybillRecord item);
+        void onAllArrived(InWaybillRecord item,int pos);
     }
 }

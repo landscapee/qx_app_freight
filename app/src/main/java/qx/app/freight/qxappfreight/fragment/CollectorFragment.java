@@ -64,10 +64,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     private boolean isShow = false;
 
     /**
-     * 待办锁定 当前列表postion
+     * 待办锁定 当前的任务bean
      */
-
-    private int TASK_LOCK_POSTION = -1;
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -122,7 +121,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
 
-            TASK_LOCK_POSTION = position;
+            CURRENT_TASK_BEAN = list.get(position);
             mPresenter = new TaskLockPresenter(this);
             TaskLockEntity entity = new TaskLockEntity();
             List<String> taskIdList = new ArrayList<>();
@@ -246,7 +245,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             ActManager.getAppManager().finishReCollection();
-            ToastUtil.showToast("当前任务以在其他设备或终端完成");
+//            ToastUtil.showToast("当前任务以在其他设备或终端完成");
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
@@ -265,7 +264,18 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list) {
             if (daibanCode.equals(item.getWaybillCode())) {
-                trunToCollectorActivity(item);
+
+                CURRENT_TASK_BEAN = item;
+                mPresenter = new TaskLockPresenter(this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.COLLECTION);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
+
                 return;
             }
         }
@@ -335,8 +345,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
      */
     @Override
     public void taskLockResult(String result) {
-        if (TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < list.size()) {
-            trunToCollectorActivity(list.get(TASK_LOCK_POSTION));
+        if (CURRENT_TASK_BEAN != null) {
+            trunToCollectorActivity(CURRENT_TASK_BEAN);
         }
     }
 }

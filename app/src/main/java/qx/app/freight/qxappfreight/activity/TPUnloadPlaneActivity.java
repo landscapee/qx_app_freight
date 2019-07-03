@@ -238,8 +238,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("cargo");
-            entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-            entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
             entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mOutFieldTaskBean.getFlights().getSeat());
@@ -257,8 +257,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("baggage");
-            entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-            entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
             entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mOutFieldTaskBean.getFlights().getSeat());
@@ -329,8 +329,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("cargo");
-                entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-                entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
                 entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);
@@ -350,8 +350,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("baggage");
-                entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-                entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
                 entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);

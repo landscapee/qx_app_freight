@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -60,9 +61,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private boolean isShow =false;
 
     /**
-     * 待办锁定 当前列表postion
+     * 待办锁定 当前的任务bean
      */
-    private int TASK_LOCK_POSTION = -1;
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -87,7 +88,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
             public void toDetail(TransportDataBase item) {
-                TASK_LOCK_POSTION = mList.indexOf(item);
+                CURRENT_TASK_BEAN = item;
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -107,7 +108,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         });
         mMfrvData.setAdapter(mAdapter);
-        mPresenter = new GroupBoardToDoPresenter(this);
+
 //        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
 //        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
 //            @Override
@@ -171,6 +172,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         ascs.add("ATA");
         ascs.add("STA");
         entity.setAscs(ascs);
+        mPresenter = new GroupBoardToDoPresenter(this);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
@@ -206,7 +208,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         for (TransportDataBase item : mList) {
             if (daibanCode.equals(item.getId())) {
 
-                TASK_LOCK_POSTION = mList.indexOf(item);
+                CURRENT_TASK_BEAN = item;
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -311,14 +313,19 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         }
     }
 
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
     /**
      * 待办锁定
      * @param result
      */
     @Override
     public void taskLockResult(String result) {
-        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < mList.size()) {
-            turnToDetailActivity(mList.get(TASK_LOCK_POSTION));
+        if(CURRENT_TASK_BEAN != null) {
+            turnToDetailActivity(CURRENT_TASK_BEAN);
         }
     }
 }

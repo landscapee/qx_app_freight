@@ -249,8 +249,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("cargo");
-                entity.setTpFlightId(mData.getFlightId());
-                entity.setTpFlightNumber(mData.getFlightNo());
+                entity.setFlightId(mData.getFlightId());
+                entity.setFlightNo(mData.getFlightNo());
                 entity.setTpFlightLocate(mData.getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);
@@ -264,8 +264,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("baggage");
-                entity.setTpFlightId(mData.getFlightId());
-                entity.setTpFlightNumber(mData.getFlightNo());
+                entity.setFlightId(mData.getFlightId());
+                entity.setFlightNo(mData.getFlightNo());
                 entity.setTpFlightLocate(mData.getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);
@@ -302,8 +302,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("cargo");
-            entity.setTpFlightId(mData.getFlightId() + "");
-            entity.setTpFlightNumber(mData.getFlightNo());
+            entity.setFlightId(mData.getFlightId() + "");
+            entity.setFlightNo(mData.getFlightNo());
             entity.setTpFlightLocate(mData.getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mData.getSeat());
@@ -321,8 +321,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("baggage");
-            entity.setTpFlightId(mData.getFlightId() + "");
-            entity.setTpFlightNumber(mData.getFlightNo());
+            entity.setFlightId(mData.getFlightId() + "");
+            entity.setFlightNo(mData.getFlightNo());
             entity.setTpFlightLocate(mData.getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mData.getSeat());

@@ -37,7 +37,7 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
         ,StringUtil.formatString2(item.getTpCargoWeight())
         , StringUtil.formatString2(item.getTpCargoVolume())));
         //航班号
-        helper.setText(R.id.allocate_flightnumber,item.getTpFlightNumber());
+        helper.setText(R.id.allocate_flightnumber,item.getFlightNo());
         //机位号
         helper.setText(R.id.allocate_machinenumber,item.getTpFlightLocate());
         // 时间

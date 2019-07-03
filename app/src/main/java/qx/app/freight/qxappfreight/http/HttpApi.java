@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
@@ -57,6 +58,7 @@ import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -85,6 +87,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -122,6 +125,10 @@ public interface HttpApi {
     //暂存提交
     @POST("service-product-transportcheck/ins/commit")
     Observable<BaseEntity<Object>> storageCommit(@Body StorageCommitEntity model);
+
+    //批量收验
+    @POST("service-product-transportcheck/ins/commitList")
+    Observable<BaseEntity<Object>> commitReceiveList(@Body List<StorageCommitEntity> model);
 
     //修改收验
     @GET("service-product-transportcheck/ins/update")
@@ -280,7 +287,7 @@ public interface HttpApi {
     Observable<BaseEntity<GetScooterListInfoBean>> getScooterListInfo(@Body GetScooterListInfoEntity getScooterListInfoEntity);
 
     /***********************复重*****************************/
-    //复重数据获取
+    //复重数据获取   ！！弃用！！
     @POST("service-product-cargoweighing/scooter/getTaskList")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getInfosByFlightId(@Body BaseFilterEntity model);
 
@@ -299,6 +306,16 @@ public interface HttpApi {
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
     Observable<BaseEntity<Object>> returnWeighing(@Body ReturnWeighingEntity model);
+
+    //复重 / 获取航班所有板车
+    @POST("service-product-cargoweighing/scooter/getTodoScooters")
+    Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
+
+    //复重 / 获取航班所有板车
+    @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
+    Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
+
+
 
     /***********************运输*****************************/
 

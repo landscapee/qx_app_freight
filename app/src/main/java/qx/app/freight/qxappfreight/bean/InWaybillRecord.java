@@ -295,7 +295,7 @@ public class InWaybillRecord implements Serializable {
      * 运单录入时间
      *
      */
-    private Long createDate;
+    private Long createTime;
 
     /**
      * 运单录入人
@@ -303,7 +303,7 @@ public class InWaybillRecord implements Serializable {
      */
     private String createUser;
 
-    private Long updateDate;
+    private Long updateTime;
 
     /**
      * 修改人

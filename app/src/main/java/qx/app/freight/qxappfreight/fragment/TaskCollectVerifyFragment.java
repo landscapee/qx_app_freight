@@ -68,9 +68,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private boolean isShow = false;
 
     /**
-     * 待办锁定 当前列表postion
+     * 待办锁定 当前的任务bean
      */
-    private int TASK_LOCK_POSTION = -1;
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -143,7 +143,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
 
-            TASK_LOCK_POSTION = position;
+            CURRENT_TASK_BEAN = transportListList.get(position);
             mPresenter = new TaskLockPresenter(this);
             TaskLockEntity entity = new TaskLockEntity();
             List<String> taskIdList = new ArrayList<>();
@@ -210,7 +210,18 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : transportListList1) {
             if (daibanCode.equals(item.getWaybillCode())) {
-                getTaskInfo(item);
+
+                CURRENT_TASK_BEAN = item;
+                mPresenter = new TaskLockPresenter(this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.RECEIVE);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
+
                 return;
             }
         }
@@ -255,7 +266,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             ActManager.getAppManager().finishReceive();
-            ToastUtil.showToast("当前任务以在其他设备或终端完成");
+//            ToastUtil.showToast("当前任务以在其他设备或终端完成");
             getData();
 //            for (TransportDataBase mTransportListBean : transportListList1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
@@ -329,8 +340,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      */
     @Override
     public void taskLockResult(String result) {
-        if(TASK_LOCK_POSTION != -1 && TASK_LOCK_POSTION < transportListList.size()) {
-            getTaskInfo(transportListList.get(TASK_LOCK_POSTION));
+        if(CURRENT_TASK_BEAN != null) {
+            getTaskInfo(CURRENT_TASK_BEAN);
         }
     }
 }

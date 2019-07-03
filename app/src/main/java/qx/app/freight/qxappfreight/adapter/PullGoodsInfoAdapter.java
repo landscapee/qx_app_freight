@@ -44,7 +44,7 @@ public class PullGoodsInfoAdapter extends BaseMultiItemQuickAdapter<TransportTod
                 , item.getTpCargoWeight()
                 , item.getTpCargoVolume()));
         //航班号
-        helper.setText(R.id.tv_flight_number, StringUtil.toText(item.getTpFlightNumber()));
+        helper.setText(R.id.tv_flight_number, StringUtil.toText(item.getFlightNo()));
         //机位号
         helper.setText(R.id.tv_place_number, StringUtil.toText(item.getTpFlightLocate()));
         // 时间

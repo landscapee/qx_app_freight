@@ -243,12 +243,12 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
             bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
             bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
 
-            bean.setTpFlightId(flightBean.getFlightId());
-            bean.setTpFlightNumber(flightBean.getFlightNo());
+            bean.setFlightId(flightBean.getFlightId());
+            bean.setFlightNo(flightBean.getFlightNo());
             bean.setTpFlightLocate(flightBean.getSeat());
             bean.setTpFlightTime(flightBean.getScheduleTime());
-            bean.setTpFlightBusId(flightBean.getId());
-            bean.setTpAsFlightId(flightBean.getSuccessionId());
+            bean.setFlightInfoId(flightBean.getId());
+            bean.setAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
             bean.setFlightIndicator("I");
 

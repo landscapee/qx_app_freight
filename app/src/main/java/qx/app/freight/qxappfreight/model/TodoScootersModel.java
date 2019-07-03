@@ -6,19 +6,14 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
+import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
-/**
- * TODO : xxx
- * Created by pr
- */
-public class GroupBoardToDoListModel extends BaseModel implements GroupBoardToDoContract.GroupBoardToDoModel {
+public class TodoScootersModel extends BaseModel implements TodoScootersContract.todoScootersModel {
     @Override
-    public void getGroupBoardToDo(GroupBoardRequestEntity model, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().getGroupBoardToDo(model)
+    public void todoScooters(TodoScootersEntity todoScootersEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getTodoScooters(todoScootersEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
@@ -28,8 +23,8 @@ public class GroupBoardToDoListModel extends BaseModel implements GroupBoardToDo
     }
 
     @Override
-    public void getScooterByScooterCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().getScooterByScooterCode(baseFilterEntity)
+    public void getManifest(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getManifest(baseFilterEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

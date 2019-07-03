@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.DeadObjectException;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
@@ -36,23 +33,18 @@ import me.shaohui.advancedluban.OnMultiCompressListener;
 import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InventoryInfoAdapter;
-import qx.app.freight.qxappfreight.adapter.SortingAddAdapter;
 import qx.app.freight.qxappfreight.adapter.SortingAddAdapter2;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.CounterUbnormalGoods;
-import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
-import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog;
 import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
-import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -263,7 +255,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
         try {
             List<InventoryUbnormalGoods> goodsList = Tools.deepCopy(counterUbnormalGoodsList);
-            detailEntity.setInventoryUbnormalGoods(goodsList);
+            detailEntity.setSmInventoryUbnormalGoods(goodsList);
         } catch (Exception e) {
 
         }

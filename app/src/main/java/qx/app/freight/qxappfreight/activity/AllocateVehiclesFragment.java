@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -14,10 +15,12 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,14 +28,19 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetInfosByFlightIdContract;
+import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GetInfosByFlightIdPresenter;
+import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -41,14 +49,14 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 出港-配载-复重页面
  * Created by pr
  */
-public class AllocateVehiclesFragment extends BaseFragment implements GetInfosByFlightIdContract.getInfosByFlightIdView, EmptyLayout.OnRetryLisenter, MultiFunctionRecylerView.OnRefreshListener {
+public class AllocateVehiclesFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter, MultiFunctionRecylerView.OnRefreshListener {
     @BindView(R.id.mfrv_allocate_list)
     MultiFunctionRecylerView mMfrvAllocateList;
 
     private AllocateVehiclesAdapter adapter;
 
-    private List<GetInfosByFlightIdBean> list; //条件list
-    private List<GetInfosByFlightIdBean> list1; //原始list
+    private List<TransportDataBase> list; //条件list
+    private List<TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
     private String searchString = "";//条件搜索关键字
@@ -73,6 +81,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvAllocateList.setOnRetryLisenter(this);
         mTaskFragment = (TaskFragment) getParentFragment();
@@ -104,8 +115,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
         if (TextUtils.isEmpty(searchString)) {
             list.addAll(list1);
         } else {
-            for (GetInfosByFlightIdBean item : list1) {
-                if (item.getScooterCode().toLowerCase().contains(searchString.toLowerCase())) {
+            for (TransportDataBase item : list1) {
+                if (item.getFlightNumber().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }
@@ -119,26 +130,48 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     private void initData() {
         list = new ArrayList<>();
         list1 = new ArrayList<>();
-        adapter = new AllocateVehiclesAdapter(list);
+        adapter = new AllocateVehiclesAdapter(list,getContext());
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setOnRetryLisenter(this);
         mMfrvAllocateList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-//            ToastUtil.showToast(getContext(), list.get(position));
-//            CargoHandlingActivity.startActivity(mContext,list.get(position).getTaskId(),list.get(position).getFlightId());
+            startActivity(new Intent(getActivity(),AllocateScooterActivity.class)
+                    .putExtra("flightId",list.get(position).getFlightId())
+                    .putExtra("taskId",list.get(position).getTaskId()));
         });
-        mPresenter = new GetInfosByFlightIdPresenter(this);
+//        mPresenter = new GetInfosByFlightIdPresenter(this);
 //        getData();
     }
 
-
-
-
+    /**
+     * 获取列表数据
+     */
     public void getData() {
-        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
-        entity.setUserId("weighter");
+        mPresenter = new GroupBoardToDoPresenter(this);
+
+        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//        {"stepOwner":"uef9de97d6c53428c946089d63cfaaa4c","undoType":2,"roleCode":"weighter","ascs":["ETD"]}
         entity.setRoleCode(Constants.WEIGHTER);
-        ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
+        entity.setUndoType(2);
+        List<String> ascs=new ArrayList<>();
+        ascs.add("ETD");
+        entity.setAscs(ascs);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+//
+//        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
+//        entity.setUserId("weighter");
+//        entity.setRoleCode(Constants.WEIGHTER);
+//        ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
+    }
+
+    /**
+     * 根据板车号获取板车信息
+     */
+    public void getScooterByScooterCode(String scooterCode){
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setScooterCode(scooterCode);
+        ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
     }
 
     @Override
@@ -169,24 +202,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     }
 
     @Override
-    public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
-        //因为没有分页，不做分页判断
-        list1.clear();
-
-        if (pageCurrent == 1) {
-            mMfrvAllocateList.finishRefresh();
-        } else {
-            mMfrvAllocateList.finishLoadMore();
-        }
-        list1.addAll(getInfosByFlightIdBeans);
-        if (mTaskFragment != null) {
-            if (isShow)
-                mTaskFragment.setTitleText(list1.size());
-        }
-        seachWithNum();
-    }
-
-    @Override
     public void onRefresh() {
         pageCurrent = 1;
         getData();
@@ -196,5 +211,42 @@ public class AllocateVehiclesFragment extends BaseFragment implements GetInfosBy
     public void onLoadMore() {
         pageCurrent++;
         getData();
+    }
+
+    /**
+     * 激光扫码回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+            String daibanCode = result.getData();
+            getScooterByScooterCode(daibanCode);
+        }
+
+    }
+
+    @Override
+    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
+        //因为没有分页，不做分页判断
+        list1.clear();
+
+        if (pageCurrent == 1) {
+            mMfrvAllocateList.finishRefresh();
+        } else {
+            mMfrvAllocateList.finishLoadMore();
+        }
+        list1.addAll(transportListBeans);
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(list1.size());
+        }
+        seachWithNum();
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+        if (getInfosByFlightIdBean!=null){
+            startActivity(new Intent(getActivity(),AllocaaateScanActivity.class).putExtra("dataBean",getInfosByFlightIdBean));
+        }
     }
 }
