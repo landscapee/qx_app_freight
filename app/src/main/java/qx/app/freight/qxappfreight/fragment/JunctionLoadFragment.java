@@ -39,14 +39,12 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -66,7 +64,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     private static final String[] mStepNames = {"领受", "舱单送达"};
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private InstallEquipStepAdapter mSlideadapter;
-    private int mOperatePos;
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
     private String mSearchText;
     private InstallEquipAdapter mAdapter;
@@ -74,8 +71,8 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
 
-    private boolean mShouldNewDialog = true;
     private PushLoadUnloadDialog mDialog = null;
+    private List<String> mTaskIdList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -88,39 +85,75 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {
-            if (result.isCancelFlag() || result.isChangeWorkerUser() || result.isSplitTask()) {
+            if (result.isChangeWorkerUser()) {//换人直接刷新代办列表
                 loadData();
-            } else {
+            } else if (result.isCancelFlag()) {
+                if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
+                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    String flightName = list.get(0).getFlightNo();
+                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
+                            .subscribe(aLong -> {
+                                loadData();
+                            });
+                } else {//取消任务，刷新代办列表
+                    loadData();
+                }
+            } else {//新任务推送，筛选最新数据再添加进行展示
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                if (list != null) {
-                    mListCache.addAll(list);
+                List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    pushTaskIds.add(bean.getTaskId());
+                }
+                List<String> removeTaskIds = new ArrayList<>();//将最新推送过来的数据的taskId保存起来
+                for (LoadAndUnloadTodoBean bean : list) {
+                    if (pushTaskIds.contains(bean.getTaskId())) {//如果已经存储过该taskId，则将对应的taskId记录下来以便删除重复数据
+                        removeTaskIds.add(bean.getTaskId());
+                    }
+                }
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (removeTaskIds.contains(bean.getTaskId())) {//删除重复的旧数据，更新新数据
+                        mListCache.remove(bean);
+                    }
+                }
+                mListCache.addAll(list);
+                for (LoadAndUnloadTodoBean bean : mListCache) {
+                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据，目的在于推送过来新任务弹窗提示时如果收到任务动态信息，需要将修改后的任务信息展示出来
+                        mListCache.remove(bean);
+                    }
                 }
                 if (mDialog == null) {
                     mDialog = new PushLoadUnloadDialog();
                 }
-                if (mShouldNewDialog) {
-                    mDialog.setData(getContext(), mListCache, success -> {
-                        if (success) {
-                            ToastUtil.showToast("领受结载新任务成功");
-                            loadData();
-                            mListCache.clear();
-                        } else {
-                            Log.e("tagPush", "推送出错了");
-                            mListCache.clear();
-                        }
-                        mShouldNewDialog = true;
-                    });
-                    if (!mDialog.isAdded()) {
-                        Log.e("tagPuth", "显示推送任务=========");
-                        mDialog.show(getFragmentManager(), "11");
-                        mShouldNewDialog = false;
+                mDialog.setData(getContext(), mListCache, success -> {
+                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                        ToastUtil.showToast("领受结载新任务成功");
+                        Observable.timer(300, TimeUnit.MILLISECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(aLong -> {
+                                    loadData();
+                                });
+                        mListCache.clear();
+                    } else {//领受失败后，清空未领受列表缓存
+                        Log.e("tagPush", "推送出错了");
+                        mListCache.clear();
                     }
-                } else {
+                });
+                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+                    if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
+                        loadData();
+                        mListCache.clear();
+                    } else {
+                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+                    }
+                } else {//刷新任务弹出框中的数据显示
                     Observable.timer(300, TimeUnit.MILLISECONDS)
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) // timer 默认在新线程，所以需要切换回主线程
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(aLong -> {
-                                Log.e("tagPuth", "添加过了=========");
                                 mDialog.refreshData();
                             });
                 }
@@ -214,16 +247,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void getEndInstallTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        if (loadAndUnloadTodoBean.size() == 0) {
-            if (mCurrentPage == 1) {
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            mCacheList.clear();
-            mAdapter.notifyDataSetChanged();
-        }
-        ;
+        mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
@@ -232,53 +256,30 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
         mCurrentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+            mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             InstallEquipEntity entity = new InstallEquipEntity();
-            entity.setShowDetail(false);
+            entity.setWidePlane(bean.getWidthAirFlag() == 0);
             entity.setAirCraftNo(bean.getAircraftno());
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
-            entity.setTaskTpye(bean.getTaskType());//1，装机；2，卸机；5，装卸机
+            entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
             entity.setFlightType("M");
             entity.setId(bean.getId());
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());
-            entity.setTaskTpye(bean.getTaskType());
             entity.setWorkerName(bean.getWorkerName());
-            String time;
-            int timeType;
-            if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {
-                    time = TimeUtils.getHMDay(bean.getAta());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {
-                    time = TimeUtils.getHMDay(bean.getEta());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getSta());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            } else {
-                if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {
-                    time = TimeUtils.getHMDay(bean.getAtd());
-                    timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {
-                    time = TimeUtils.getHMDay(bean.getEtd());
-                    timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
-                    time = TimeUtils.getHMDay(bean.getStd());
-                    timeType = Constants.TIME_TYPE_PLAN;
-                }
-            }
-            entity.setTimeForShow(time);
-            entity.setTimeType(timeType);
+            StringUtil.setTimeAndType(bean, entity);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add("0");
-            StringUtil.setFlightRoute(bean.getRoute(), entity);
+            StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
             int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;
+            if (posNow > 0) {
+                entity.setAcceptTask(true);
+            }
             for (int i = 0; i < 2; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
                 entity1.setFlightType(entity.getFlightType());
@@ -311,17 +312,13 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
     }
 
-    private boolean mShouldRefreshData = false;
-
     /**
      * 设置滑动监听
      */
     private void setSlideListener() {
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             //滑动步骤去调接口，以及跳转页面
-            mOperatePos = smallPos;
             mSlideadapter = adapter;
-            mShouldRefreshData = smallPos == 1;
             go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
         });
     }
@@ -348,16 +345,8 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideadapter.notifyDataSetChanged();
-            if (mOperatePos == 4) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-            } else if (mShouldRefreshData) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-                mShouldRefreshData = false;
-            }
+            mCurrentPage = 1;
+            loadData();
         }
     }
 

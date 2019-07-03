@@ -9,13 +9,13 @@ def signFilePath = getRootProject().getProjectDir().absolutePath + File.separato
 def RELEASE_PROPERTIES_EXIST = false;
 File f = new File(signFilePath)
 RELEASE_PROPERTIES_EXIST = f.exists()
-if (!RELEASE_PROPERTIES_EXIST == true) {
+if (!RELEASE_PROPERTIES_EXIST) {
     println "青霄科技：没有找到签名配置文件！\n--------------debug模式运行"
 } else {
-    println "青霄科技：签名配置文件sign.properties！\n--------------release模式运行"
+    println "青霄科技：找到签名配置文件sign.properties！\n--------------release模式运行"
 }
 
-def getVersionName() {
+static def getVersionName() {
     def sdf = new SimpleDateFormat("yyMMddHH")
     return sdf.format(new Date())
 }
@@ -56,10 +56,8 @@ android {
     }
 
     buildTypes {
-
         debugRelease.initWith(buildTypes.debug)
         debugProduct.initWith(buildTypes.debug)
-
         //测试环境(可调试)
         debugRelease {
             minifyEnabled false
@@ -71,7 +69,6 @@ android {
                 buildConfigField("String", key, "\"" + properties.get(key) + "\"")
             }
         }
-
         //生产环境
         product {
             minifyEnabled false
@@ -87,7 +84,6 @@ android {
                 signingConfig signingConfigs.release
             }
         }
-
         //生产环境
         debugProduct {
             minifyEnabled false
@@ -130,9 +126,7 @@ android {
             if (RELEASE_PROPERTIES_EXIST) {
                 signingConfig signingConfigs.release
             }
-
         }
-
     }
     repositories {
         flatDir {
@@ -150,7 +144,6 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-
 }
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
@@ -233,7 +226,6 @@ dependencies {
 }
 
 build.doLast {
-
     println "===========================执行doLast============================="
     if (RELEASE_PROPERTIES_EXIST) {
         def SEPARATOR = File.separator

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,6 +143,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
         FlightInfoLayout layout = new FlightInfoLayout(this, resultList);
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfo.removeAllViews();
         mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mData.getSeat());
         String time;
@@ -163,11 +163,15 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, mData);
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
-            mListGoods.remove(position);
-            mSlideRvGoods.closeMenu();
-            mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
-            mScanGoodsAdapter.notifyDataSetChanged();
+            if (mListGoods.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
+                mListGoods.remove(position);
+                mSlideRvGoods.closeMenu();
+                mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
+                mScanGoodsAdapter.notifyDataSetChanged();
+            }
         });
         mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
@@ -175,11 +179,15 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         mScanPacAdapter = new ScanInfoAdapter(mListPac, mData);
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
-            mListPac.remove(position);
-            mSlideRvPac.closeMenu();
-            mTvPacNumber.setText(String.valueOf(mListPac.size()));
-            mScanPacAdapter.notifyDataSetChanged();
+            if (mListPac.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
+                mListPac.remove(position);
+                mSlideRvPac.closeMenu();
+                mTvPacNumber.setText(String.valueOf(mListPac.size()));
+                mScanPacAdapter.notifyDataSetChanged();
+            }
         });
         mScanPacAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
@@ -265,14 +273,14 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 entity.setTaskId(mData.getTaskId());//代办数据中的id
                 infos.add(entity);
             }
-            if (infos.size() == 0) {
-                ToastUtil.showToast("请选择上传板车信息再提交");
-            } else {
-                model.setSeat(mData.getSeat());
-                model.setScooters(infos);
-                mPresenter = new ArrivalDataSavePresenter(this);
-                ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
-            }
+//            if (infos.size() == 0) {
+//                ToastUtil.showToast("请选择上传板车信息再提交");
+//            } else {
+            model.setSeat(mData.getSeat());
+            model.setScooters(infos);
+            mPresenter = new ArrivalDataSavePresenter(this);
+            ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
+//            }
         });
         ivNoticeTp.setOnClickListener(v -> {
             noticeTp();
@@ -288,6 +296,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         Log.e("tag", "卸机id======" + mData.getId());
         List<TransportTodoListBean> infos = new ArrayList<>();
         for (ScooterInfoListBean bean : mListGoods) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
@@ -306,6 +315,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             infos.add(entity);
         }
         for (ScooterInfoListBean bean : mListPac) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
@@ -382,13 +392,12 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                         for (ScooterInfoListBean bean : result) {
                             bean.setFlightType("D");
                         }
-                        showBoardInfos(result);
                     } else {
                         for (ScooterInfoListBean bean : result) {
                             bean.setFlightType("I");
                         }
-                        showBoardInfos(result);
                     }
+                    showBoardInfos(result);
                 });
                 dialog.setCancelable(false);
                 dialog.show(getSupportFragmentManager(), "111");
@@ -448,7 +457,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     @Override
     public void arrivalDataSaveResult(String result) {
         ToastUtil.showToast("结束卸机成功");
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
 

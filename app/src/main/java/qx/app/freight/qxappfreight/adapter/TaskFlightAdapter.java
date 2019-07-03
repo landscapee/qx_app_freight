@@ -34,6 +34,7 @@ public class TaskFlightAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
             FlightInfoLayout layout = new FlightInfoLayout(mContext, routes);
             LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             LinearLayout container = helper.getView(R.id.ll_flight_info_container);
+            container.removeAllViews();
             container.addView(layout, paramsMain);
             helper.setText(R.id.tv_begin, MapValue.getLocationValue(item.getBeginAreaType()) + item.getBeginAreaId());
             helper.setText(R.id.tv_end, MapValue.getLocationValue(item.getEndAreaType()) + item.getEndAreaId());

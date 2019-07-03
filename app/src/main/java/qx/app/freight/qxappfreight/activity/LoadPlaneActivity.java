@@ -118,6 +118,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         String route = mIsKeepOnTask ? data.getRelateInfoObj().getRoute() : data.getRoute();
         FlightInfoLayout layout = new FlightInfoLayout(this, StringUtil.getFlightList(route));
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfoContainer.removeAllViews();
         mLlInfoContainer.addView(layout, paramsMain);
         mTvSeat.setText(mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());
         String time;
@@ -209,7 +210,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     public void flightDoneInstallResult(String result) {
         ToastUtil.showToast("结束装机成功");
         Log.e("tagNet", "result=====" + result);
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
 

@@ -57,6 +57,7 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightRoute());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
+        container.removeAllViews();
         container.addView(layout, paramsMain);
         ImageView ivFlag = helper.getView(R.id.iv_flag);
         if ("离".equals(item.getMTransportTodoListBeans().get(0).getTpType()) || "拉".equals(item.getMTransportTodoListBeans().get(0).getTpType()))

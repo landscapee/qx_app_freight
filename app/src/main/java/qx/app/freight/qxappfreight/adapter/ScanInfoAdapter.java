@@ -61,7 +61,6 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         tvTime.setText(time);
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
         tvTime.setCompoundDrawablePadding(5);
-        helper.setText(R.id.tv_flight_arrive_time, StringUtil.toText(TimeUtils.getHMDay(mInfo.getArrivalTime())));
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {

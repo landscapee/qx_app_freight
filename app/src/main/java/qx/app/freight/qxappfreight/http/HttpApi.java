@@ -7,6 +7,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
@@ -184,6 +185,7 @@ public interface HttpApi {
     //出港退货 -收运
     @POST("service-product-receivecargo/rc/list")
     Observable<BaseEntity<AgentBean>> agentTransportationList(@Body BaseFilterEntity model);
+
     //出港退货 -收运
     @POST("service-product-receivecargo/rc/list")
     Observable<BaseEntity<List<ReturnBean>>> returnTransportationList(@Body BaseFilterEntity model);
@@ -495,6 +497,15 @@ public interface HttpApi {
     @DELETE("service-product-cargotallying/sorting/deleteByIdForAndroid/{id}")
     Observable<BaseEntity<Object>> deleteInWayBillRecordById(@Path("id") String id);
 
+    /**
+     * * 进港分拣 - 通知服务器已全部到齐
+     *
+     * @param data 需要通知已全部到齐的数据
+     * @return 成功/失败
+     */
+    @POST("service-product-cargotallying/sorting/saveRecord")
+    Observable<BaseEntity<Object>> allGoodsArrived(@Body InWaybillRecord data);
+
 
     /***********************消息中心*****************************/
 
@@ -591,6 +602,7 @@ public interface HttpApi {
 
     /**
      * 待办 锁定
+     *
      * @param entity
      * @return
      */

@@ -356,6 +356,10 @@ public class InWaybillRecord implements Serializable {
      * 库区字段 用来显示
      */
     private String warehouseAreaDisplay;
-
+    /**
+     * 货物全部到齐标识: 0.未全部到齐; 1.全部到齐;
+     * (ps : 每批到货的货物, 非运单所有货物)
+     */
+    private int allArrivedFlag;
 
 }

@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,14 +34,20 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, InstallEquipEntity item) {
+        helper.setIsRecyclable(false);
+        if (!item.isAcceptTask()) {
+            helper.itemView.setBackgroundColor(Color.parseColor("#FFAC00"));
+        } else {
+            helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
         helper.setText(R.id.tv_plane_type, (item.isWidePlane()) ? "宽体机" : "窄体机");
         ImageView ivControl = helper.getView(R.id.iv_control);
         LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
-        Drawable drawableLeft=null;
-        if (item.getTaskTpye() == 1) {//装机
+        Drawable drawableLeft = null;
+        if (item.getTaskType() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
@@ -63,6 +70,7 @@ public class InstallEquipAdapter extends BaseQuickAdapter<InstallEquipEntity, Ba
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container.removeAllViews();
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
         RecyclerView rvStep = helper.getView(R.id.rv_step);

@@ -263,6 +263,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             FlightInfoLayout layout = new FlightInfoLayout(context, result);
             LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             LinearLayout llContainer = helper.getView(R.id.ll_flight_info_container);
+            llContainer.removeAllViews();
             llContainer.addView(layout, paramsMain);
             helper.setText(R.id.tv_seat, item.getSeat());
         }
