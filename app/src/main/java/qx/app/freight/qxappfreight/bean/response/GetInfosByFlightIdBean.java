@@ -1,10 +1,12 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class GetInfosByFlightIdBean {
+public class GetInfosByFlightIdBean implements Serializable {
         /**id   :    板id
          * scooterId : 板车id
          * flightId : 航班计划id    flightInfoId

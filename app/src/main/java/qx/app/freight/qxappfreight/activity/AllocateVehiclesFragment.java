@@ -245,6 +245,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-        ToastUtil.showToast("根据板车号查询板车信息成功");
+        if (getInfosByFlightIdBean!=null){
+            startActivity(new Intent(getActivity(),AllocaaateScanActivity.class).putExtra("dataBean",getInfosByFlightIdBean));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,14 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightScooterAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
@@ -78,7 +78,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         rlView.setLayoutManager(new LinearLayoutManager(getContext()));
         rlView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
+            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean",list.get(position)));
         });
 
     }

@@ -25,6 +25,23 @@ public class RepeatWeightScooterAdapter extends BaseQuickAdapter<GetInfosByFligh
             //件数~重量~体积
             helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTotal(), item.getWeight(), item.getVolume()));
 
+            String scooterType;
+            switch (item.getReWeightFinish()) {
+                case 0:
+                    scooterType = "待复重";
+                    break;
+                case 1:
+                    scooterType = "完成";
+                    break;
+                case 2:
+                    scooterType = "复重异常";
+                    break;
+                default:
+                    scooterType = "待复重";
+            }
+            //板车类型~板车号
+            helper.setText(R.id.tv_scooter_type, scooterType);
+
         }
 
 

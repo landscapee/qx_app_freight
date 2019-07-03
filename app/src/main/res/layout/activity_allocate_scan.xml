@@ -152,29 +152,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="收运净重"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_netweight_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:text="本次复磅毛重"
                     style="@style/public_tv_16sp_2"/>
                 <EditText
@@ -224,6 +201,7 @@
                         android:text="复磅差值"
                         style="@style/public_tv_16sp_2" />
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/tv_dvalue_front"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -246,6 +224,7 @@
                         android:text="复磅差率"
                         style="@style/public_tv_16sp_2" />
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/tv_gradient_front"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -254,6 +233,59 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                style="@style/line_horizontal_979797" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="复重净重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_netweight_fz"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="收运净重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_netweight_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <View
                 style="@style/line_horizontal_979797" />
@@ -283,7 +315,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end"
-                        android:hint="请输入重量"
+                        android:hint="请输入"
                         android:inputType="numberDecimal"
                         android:background="@null"
                         android:maxLength="15"
