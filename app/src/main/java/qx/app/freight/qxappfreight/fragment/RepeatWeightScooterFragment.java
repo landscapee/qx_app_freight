@@ -22,6 +22,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
+import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
 
 /**复重-板车列表
@@ -88,6 +89,11 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         list.clear();
         list.addAll(result);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getManifestResult(List<ManifestBillModel> result) {
+
     }
 
     @Override

@@ -86,6 +86,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -307,6 +308,12 @@ public interface HttpApi {
     //复重 / 获取航班所有板车
     @POST("service-product-cargoweighing/scooter/getTodoScooters")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
+
+    //复重 / 获取航班所有板车
+    @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
+    Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
+
+
 
     /***********************运输*****************************/
 

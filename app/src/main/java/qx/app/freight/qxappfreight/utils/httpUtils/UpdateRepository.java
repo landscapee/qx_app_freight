@@ -88,6 +88,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
+import qx.app.freight.qxappfreight.model.ManifestBillModel;
 
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
@@ -736,6 +737,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<GetInfosByFlightIdBean>> getTodoScooters(TodoScootersEntity model) {
         return transform(getService().getTodoScooters(model));
+    }
+
+     /****
+     * 复重 / 获取航班所有板车
+     * @param model
+     * @return
+     */
+    public Observable<List<ManifestBillModel>> getManifest(BaseFilterEntity model) {
+        return transform(getService().getManifest(model));
     }
 
 
