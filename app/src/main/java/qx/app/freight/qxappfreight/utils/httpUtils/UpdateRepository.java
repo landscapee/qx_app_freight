@@ -8,6 +8,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
@@ -928,6 +929,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> deleteInWayBillRecordById(String id) {
         return nothingtransform(getService().deleteInWayBillRecordById(id));
+    }
+    /**
+     * 进港分拣 - 通知服务器已全部到齐
+     *
+     * @param data 需要通知已全部到齐的数据
+     * @return 成功/失败
+     */
+    public Observable<String> allGoodsArrived(InWaybillRecord data) {
+        return nothingtransform(getService().allGoodsArrived(data));
     }
 
     /**

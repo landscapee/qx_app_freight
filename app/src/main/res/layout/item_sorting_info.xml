@@ -21,6 +21,7 @@
         android:id="@+id/tv_orderid"
         style="@style/public_tv_14sp"
         android:layout_width="0dp"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_weight="7"
         android:text="999-47372080" />
@@ -29,6 +30,7 @@
         android:id="@+id/tv_goods_number"
         style="@style/public_tv_14sp"
         android:layout_width="0dp"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:text="10" />
@@ -37,6 +39,7 @@
         android:id="@+id/tv_area"
         style="@style/public_tv_14sp"
         android:layout_width="0dp"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_weight="4"
         android:text="鲜货区" />
@@ -46,6 +49,7 @@
         style="@style/public_tv_14sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:layout_weight="4"
         android:singleLine="true"
         android:ellipsize="end"
@@ -59,10 +63,23 @@
         android:layout_weight="4.5"
         android:drawableRight="@mipmap/right"
         android:text="有货无单"
+        android:visibility="gone"
         android:singleLine="true"
         android:ellipsize="end"
         android:gravity="right"
         android:textColor="@color/red" />
+    <TextView
+        android:id="@+id/tv_all_arrive"
+        style="@style/public_tv_14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4.5"
+        android:drawableRight="@mipmap/right"
+        android:text="确定到齐"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:textColor="@color/black" />
 
     </LinearLayout>
 

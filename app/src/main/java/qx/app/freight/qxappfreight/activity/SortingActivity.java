@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,7 +26,6 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.SortingInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.InWaybill;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -36,12 +34,10 @@ import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog2;
 import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
-import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -258,9 +254,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
                         if (confirm) {
 
                         } else {
-                            if (TextUtils.isEmpty(dialog1.getMessage())){
+                            if (TextUtils.isEmpty(dialog1.getMessage())) {
                                 ToastUtil.showToast("输入为空");
-                            }else {
+                            } else {
                                 turnToAddActivity(dialog1.getMessage());
                             }
 
@@ -278,9 +274,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //新增
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
-            if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())){
-                for (InWaybillRecord item:mList){
-                    if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())){
+            mInWaybillRecord.setFlightInfoId(transportListBean.getId());
+            if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())) {
+                for (InWaybillRecord item : mList) {
+                    if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())) {
                         ToastUtil.showToast("不能添加相同运单号");
                         return;
                     }
@@ -318,9 +315,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             resultBean.setList(mList);
         } else {
             for (InWaybillRecord item : resultBean.getList()) {
-                if(item.getDelFlag() == null || item.getDelFlag() == 0){
+                if (item.getDelFlag() == null || item.getDelFlag() == 0) {
                     mList.add(item);
-                }else if(item.getDelFlag() == 1){
+                } else if (item.getDelFlag() == 1) {
                     mListDel.add(item);
                 }
             }
@@ -377,12 +374,15 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
         mAdapter.setFooterView(tvFoot);
         recyclerView.setAdapter(mAdapter);
-
+        mAdapter.setOnAllArriveNotifyListener(item -> {
+            mPresenter = new InWaybillRecordPresenter(SortingActivity.this);
+            ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(item);
+        });
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
             //数据被删除了
             CURRENT_DELETE_POSITION = position;
             //更新总运单数，总件数
-            resultBean.setCount(resultBean.getCount()-1);
+            resultBean.setCount(resultBean.getCount() - 1);
             resultBean.setTotal(resultBean.getTotal() - mList.get(CURRENT_DELETE_POSITION).getTallyingTotal());
             tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
             //操作数据源
@@ -407,6 +407,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         recyclerView.closeMenu();
         getReservoirAll();
     }
+
     /**
      * 选择库区方法
      */
@@ -422,6 +423,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
 //        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
     }
+
     @Override
     public void resultSubmit(Object o) {
         Log.e("dime", "提交/暂存，返回值：" + o.toString());
@@ -437,6 +439,11 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mList.remove(CURRENT_DELETE_POSITION);
         mAdapter.notifyDataSetChanged();
         CURRENT_DELETE_POSITION = -1;
+    }
+
+    @Override
+    public void allGoodsArrivedResult(Object o) {
+        getData();
     }
 
     @Override
@@ -459,24 +466,25 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
      * 激光扫码回调
      */
     private String newCode;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("SortingActivity")){
+        if (result.getFunctionFlag().equals("SortingActivity")) {
             newCode = "";
             String code = result.getData();
             Log.e("22222", "运单号" + code);
-            if (!TextUtils.isEmpty(code)&&code.length()>=10) {
-                if (code.startsWith("DN")){
-                    newCode = "DN-"+code.substring(2,10);
-                }else {
-                    if (code.length()>=11){
-                        newCode =editChange(code);
-                    }else {
+            if (!TextUtils.isEmpty(code) && code.length() >= 10) {
+                if (code.startsWith("DN")) {
+                    newCode = "DN-" + code.substring(2, 10);
+                } else {
+                    if (code.length() >= 11) {
+                        newCode = editChange(code);
+                    } else {
                         ToastUtil.showToast("无效的运单号");
                         return;
                     }
                 }
-            }else {
+            } else {
                 ToastUtil.showToast("无效的运单号");
                 return;
             }
@@ -487,23 +495,23 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     /**
      * 跳转到新增界面
      */
-    private void turnToAddActivity(String code){
+    private void turnToAddActivity(String code) {
 
         recyclerView.closeMenu();
         boolean isEditChange;
         String[] parts = code.split("-");
         String ss = parts[1];
-        String s1=""; //后8位的前7位
-        String s2=""; //后8位的最后1位
-        s1 = ss.substring(0,7);
-        s2 = ss.substring(7,8);
-        if (StringUtil.isDouble(s1)&&StringUtil.isDouble(s2)){
-            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
-        }else {
-            isEditChange=false;
+        String s1 = ""; //后8位的前7位
+        String s2 = ""; //后8位的最后1位
+        s1 = ss.substring(0, 7);
+        s2 = ss.substring(7, 8);
+        if (StringUtil.isDouble(s1) && StringUtil.isDouble(s2)) {
+            isEditChange = Integer.parseInt(s1) % 7 == Integer.parseInt(s2);
+        } else {
+            isEditChange = false;
         }
 
-        if (!isEditChange){
+        if (!isEditChange) {
             ToastUtil.showToast("无效的运单号");
             return;
         }
@@ -531,10 +539,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     }
 
     //判断运单号后缀是否符合规则
-    private String  editChange(String ss) {
-        String s0=ss.substring(0, 3); //前3位
-        String s00=ss.substring(3, 11); //后8位
-        return s0+"-"+s00;
+    private String editChange(String ss) {
+        String s0 = ss.substring(0, 3); //前3位
+        String s00 = ss.substring(3, 11); //后8位
+        return s0 + "-" + s00;
     }
 
     @Override
