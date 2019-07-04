@@ -26,7 +26,7 @@ public class RepeatWeightManifestAdapter extends BaseQuickAdapter<WaybillsBean, 
                 .setText(R.id.tv_num, item.getTotalnum()+"")
                 .setText(R.id.tv_weight ,item.getTotalweight()+"")
                 .setText(R.id.tv_volume,item.getTotalVolume()+"")
-                .setText(R.id.tv_code,item.getSpecialCode())
+                .setText(R.id.tv_code,StringUtil.toText(item.getSpecialCode()))
                 .setText(R.id.tv_mark,item.getRemark());
     }
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -52,6 +53,8 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 public class AllocateVehiclesFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter, MultiFunctionRecylerView.OnRefreshListener {
     @BindView(R.id.mfrv_allocate_list)
     MultiFunctionRecylerView mMfrvAllocateList;
+    @BindView(R.id.tv_history)
+    TextView tvHistory;
 
     private AllocateVehiclesAdapter adapter;
 
@@ -84,6 +87,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        tvHistory.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(),AllocaaateHistoryActivity.class));
+        });
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvAllocateList.setOnRetryLisenter(this);
         mTaskFragment = (TaskFragment) getParentFragment();

@@ -36,6 +36,8 @@ public class GetInfosByFlightIdBean implements Serializable {
          * uldWeight : 集装器自重
          * flightNo : 航班号
          * std : 预计起飞时间
+         * etd : 预计离岗时间
+         * scheduleTime : 计划时间
          * aircraftNo : 机尾号
          * dayOfMonth : 当月的几号
          * taskId : 任务id
@@ -76,6 +78,8 @@ public class GetInfosByFlightIdBean implements Serializable {
         private double uldWeight;
         private String flightNo;
         private long std;
+        private long etd;
+        private long scheduleTime;
         private String aircraftNo;
         private String dayOfMonth;
 
