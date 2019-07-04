@@ -55,6 +55,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
@@ -316,6 +317,11 @@ public interface HttpApi {
     Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
 
 
+
+
+    //复重 / 复重历史
+    @POST("service-product-cargoweighing/scooter/getHistoryScootersPage")
+    Observable<BaseEntity<GetHistoryBean>> getHistoryScootersPage(@Body BaseFilterEntity model);
 
     /***********************运输*****************************/
 

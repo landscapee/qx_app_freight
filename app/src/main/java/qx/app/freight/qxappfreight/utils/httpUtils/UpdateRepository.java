@@ -56,6 +56,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
@@ -738,6 +739,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<GetInfosByFlightIdBean>> getTodoScooters(TodoScootersEntity model) {
         return transform(getService().getTodoScooters(model));
+    }
+
+    /****
+     * //复重 / 复重历史
+     * @param model
+     * @return
+     */
+    public Observable<GetHistoryBean> getHistoryScootersPage(BaseFilterEntity model) {
+        return transform(getService().getHistoryScootersPage(model));
     }
 
      /****
