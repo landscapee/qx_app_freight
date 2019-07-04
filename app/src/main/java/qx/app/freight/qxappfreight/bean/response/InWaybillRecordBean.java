@@ -19,4 +19,6 @@ public class InWaybillRecordBean implements Serializable {
     int count;//运单总数
     int total;//总数量
     int closeFlag;//关闭标识(0开启;1关闭;)
+    double charterReWeight; //包机重量
+    String flightType ;// 包机类型 (L包机 / H货包)
 }

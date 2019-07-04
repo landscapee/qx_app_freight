@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -83,6 +85,11 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
+    @BindView(R.id.ll_re_weight)
+
+    LinearLayout llReWeight;
+    @BindView(R.id.edt_re_weight)
+    EditText edtReWeight;
 
     @BindView(R.id.tv_flight_no)
     TextView flightNoTv;
@@ -159,6 +166,15 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
         //暂存，提交请求
         tempBtn.setOnClickListener(listener -> {
+            //如果是包机L  货包 H  必须输入整机复重重量
+            if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+                if (TextUtils.isEmpty(edtReWeight.getText().toString())){
+                    ToastUtil.showToast("请输入整机复重重量");
+                    return;
+                }
+                submitEntity.setCharterReWeight(edtReWeight.getText().toString());
+            }
+
             mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
@@ -193,6 +209,15 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         });
         //提交请求
         doneBtn.setOnClickListener(listener -> {
+            //如果是包机L  货包 H  必须输入整机复重重量
+            if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+                if (TextUtils.isEmpty(edtReWeight.getText().toString())){
+                    ToastUtil.showToast("请输入整机复重重量");
+                    return;
+                }
+                submitEntity.setCharterReWeight(edtReWeight.getText().toString());
+            }
+
             mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
@@ -324,10 +349,23 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             mList = resultBean.getList();
             Log.e("dime", "服务器的数据，分拣信息长度 = " + mList.size());
         }
+        //如果是包机L  货包 H  让输入框显示出来
+        if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+            llReWeight.setVisibility(View.VISIBLE);
+            if (resultBean.getCharterReWeight() ==0){
+                edtReWeight.setText("");
+            }else {
+                edtReWeight.setText(resultBean.getCharterReWeight()+"");
+            }
+
+        }else {
+            llReWeight.setVisibility(View.GONE);
+        }
+
         //初始化提交实体类
-        submitEntity.setFlightId(transportListBean.getFlightId());
-        submitEntity.setFlightYLId(transportListBean.getFlightYLId());
-        submitEntity.setFlightNum(transportListBean.getFlightNumber());
+        submitEntity.setFlightInfoId(transportListBean.getFlightId());
+        submitEntity.setFlightId(transportListBean.getFlightYLId());
+        submitEntity.setFlightNo(transportListBean.getFlightNo());
         submitEntity.setTaskId(transportListBean.getTaskId());
         submitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
         submitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
