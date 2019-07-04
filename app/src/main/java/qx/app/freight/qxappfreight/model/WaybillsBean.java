@@ -70,6 +70,7 @@ public class WaybillsBean {
     private int inFlightVolume;
     private int totalVolume;
     private String remark;
+    private String specialCode;
     private Object updateWeight;
     private Object mailType;
     private int updateFlag;

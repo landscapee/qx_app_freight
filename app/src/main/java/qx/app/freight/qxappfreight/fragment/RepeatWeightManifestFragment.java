@@ -82,7 +82,9 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
     public void getManifestResult(List<ManifestBillModel> result) {
         if (result!=null&&result.size()!=0){
             for (ManifestBillModel item:result) {
-                list.addAll(item.getWaybills());
+                if (item.getWaybills()!=null) {
+                    list.addAll(item.getWaybills());
+                }
             }
         }
         adapter.notifyDataSetChanged();

@@ -311,8 +311,8 @@ public interface HttpApi {
     @POST("service-product-cargoweighing/scooter/getTodoScooters")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
 
-    //复重 / 获取航班所有板车
-    @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
+    //复重 / 获取航班舱单信息
+    @POST("service-product-stowage/stowage-waybill-info/getLodPrint")
     Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
 
 

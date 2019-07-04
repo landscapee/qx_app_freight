@@ -43,7 +43,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.AllocateScooterActivity"></activity>
+        <activity android:name=".activity.AllocaaateHistoryActivity"></activity>
+        <activity android:name=".activity.AllocateScooterActivity" />
         <activity android:name=".activity.StoreTypeChangeActivity" />
         <activity android:name=".activity.ClearStorageDetailActivity" />
         <activity

@@ -88,5 +88,15 @@ public class GetInfosByFlightIdBean implements Serializable {
         private double personUpdateValue;
         private double rePureWeight;
 
+        /**
+         * 复重称重人id
+         */
+        private String reWeighedUserId;
+
+        /**
+         * 复重称重完成时间
+         */
+        private long reWeighedTime;
+
 
 }

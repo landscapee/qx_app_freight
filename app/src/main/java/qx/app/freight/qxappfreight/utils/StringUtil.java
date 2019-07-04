@@ -40,7 +40,7 @@ public class StringUtil {
      */
     public static String toText(String response) {
         String result = "- -";
-        if (!TextUtils.isEmpty(response)) {
+        if (!TextUtils.isEmpty(response) && !"null".equals(response)) {
             result = response;
         }
         return result;

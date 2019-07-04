@@ -7,6 +7,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.model.WaybillsBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * created by swd
@@ -20,12 +21,12 @@ public class RepeatWeightManifestAdapter extends BaseQuickAdapter<WaybillsBean, 
 
     @Override
     protected void convert(BaseViewHolder helper, WaybillsBean item) {
-        helper.setText(R.id.waybill_code,item.getWaybillId())
-                .setText(R.id.tv_name,item.getCargoCn())
+        helper.setText(R.id.waybill_code,item.getWaybillCode())
+                .setText(R.id.tv_name, StringUtil.toText(item.getCargoCn()))
                 .setText(R.id.tv_num, item.getTotalnum()+"")
                 .setText(R.id.tv_weight ,item.getTotalweight()+"")
                 .setText(R.id.tv_volume,item.getTotalVolume()+"")
-                .setText(R.id.tv_code,"")
+                .setText(R.id.tv_code,item.getSpecialCode())
                 .setText(R.id.tv_mark,item.getRemark());
     }
 

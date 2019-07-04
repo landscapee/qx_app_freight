@@ -310,6 +310,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mData.setRePureWeight(goodsWeight);
 //        mData.setWeight(goodsWeight);
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
+        mData.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
+        mData.setReWeighedTime(System.currentTimeMillis());
         //提交弹窗
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")
