@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -48,11 +47,12 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         List<RegularEntity> leftData = new ArrayList<>();
         List<ScrollEntity> rightData = new ArrayList<>();
         boolean shouldShowGoodsPos;
-        List<String> berthList=new ArrayList<>();
-        List<String> goodsPosList=new ArrayList<>();
+        List<String> berthList = new ArrayList<>();
+        List<String> goodsPosList = new ArrayList<>();
+        if (item.getContentObject() != null && item.getContentObject().size() != 0) {
             for (LoadingListBean.DataBean.ContentObjectBean entity : item.getContentObject()) {
                 RegularEntity left = new RegularEntity();
-                if (!berthList.contains(entity.getPos())){
+                if (!berthList.contains(entity.getPos())) {
                     berthList.add(entity.getPos());
                 }
                 entity.setStartBerth(entity.getPos());
@@ -60,7 +60,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 left.setLocked(false);
                 left.setShowPull(entity.isShowPullDown());
                 shouldShowGoodsPos = !TextUtils.isEmpty(entity.getLocation());
-                if (!goodsPosList.contains(entity.getLocation())&&!TextUtils.isEmpty(entity.getLocation())){
+                if (!goodsPosList.contains(entity.getLocation()) && !TextUtils.isEmpty(entity.getLocation())) {
                     goodsPosList.add(entity.getLocation());
                 }
                 if (shouldShowGoodsPos) {
@@ -77,13 +77,14 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 right.setShowPull(entity.isShowPullDown());
                 rightData.add(right);
             }
+        }
         RegularEntity titleLeft = new RegularEntity();
         titleLeft.setLockTitle("锁定");
         titleLeft.setBerth("舱位");
-        boolean showGoodPosTitle=false;//只要有一条数据有货位信息就应该显示货位那一列数据
-        for (RegularEntity entity:leftData){
-            if (!TextUtils.isEmpty(entity.getGoodsPosition())){
-                showGoodPosTitle=true;
+        boolean showGoodPosTitle = false;//只要有一条数据有货位信息就应该显示货位那一列数据
+        for (RegularEntity entity : leftData) {
+            if (!TextUtils.isEmpty(entity.getGoodsPosition())) {
+                showGoodPosTitle = true;
                 break;
             }
         }
@@ -99,7 +100,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         titleRight.setWeight("重量");
 //        titleRight.setNumber("件数");
         rightData.add(0, titleRight);
-        for (RegularEntity left:leftData){
+        for (RegularEntity left : leftData) {
             left.setBerthList(berthList);
             left.setGoodsPosList(goodsPosList);
         }
@@ -108,16 +109,16 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         LeftRvAdapter leftRvAdapter = new LeftRvAdapter(leftData);
         rvLeft.setLayoutManager(new LinearLayoutManager(mContext));
         rvLeft.setAdapter(leftRvAdapter);
-        leftRvAdapter.setOnLockClickListener(itemPos -> item.getContentObject().get(itemPos-1).setLocked(true));
+        leftRvAdapter.setOnLockClickListener(itemPos -> item.getContentObject().get(itemPos - 1).setLocked(true));
         leftRvAdapter.setOnBerthChoseListener((itemPos, berth) -> {
-            if (berth.equals(item.getContentObject().get(itemPos-1).getStartBerth())){
-                item.getContentObject().get(itemPos-1).setCargoStatus(0);
-            }else {
-                item.getContentObject().get(itemPos-1).setCargoStatus(1);
+            if (berth.equals(item.getContentObject().get(itemPos - 1).getStartBerth())) {
+                item.getContentObject().get(itemPos - 1).setCargoStatus(0);
+            } else {
+                item.getContentObject().get(itemPos - 1).setCargoStatus(1);
             }
-            item.getContentObject().get(itemPos-1).setPos(berth);
+            item.getContentObject().get(itemPos - 1).setPos(berth);
         });
-        leftRvAdapter.setOnGoodsPosChoseListener((itemPos, goodsPos) ->  item.getContentObject().get(itemPos-1).setGoodsPosition(goodsPos));
+        leftRvAdapter.setOnGoodsPosChoseListener((itemPos, goodsPos) -> item.getContentObject().get(itemPos - 1).setGoodsPosition(goodsPos));
         RightRvAdapter rightRvAdapter = new RightRvAdapter(rightData);
         rvRight.setLayoutManager(new LinearLayoutManager(mContext));
         rvRight.setAdapter(rightRvAdapter);

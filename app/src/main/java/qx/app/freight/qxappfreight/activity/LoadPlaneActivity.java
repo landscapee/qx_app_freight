@@ -49,7 +49,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * 理货装机页面
  */
-public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView , LoadAndUnloadTodoContract.loadAndUnloadTodoView{
+public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.rv_data)
     CustomRecylerView mRvData;
     @BindView(R.id.tv_plane_info)
@@ -200,14 +200,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
             mRvData.setAdapter(adapter);
             adapter.setOnOverLoadListener(entity -> {
-                LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                requestModel.setCreateDate(entity.getCreateDate());
-                requestModel.setFlightNo(entity.getFlightNo());
-                requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
-                requestModel.setCreateUser(entity.getCreateUser());
-                requestModel.setFlightId(entity.getFlightId());
-                requestModel.setContent(entity.getContentObject());
-                ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
+                    LoadingListSendEntity requestModel = new LoadingListSendEntity();
+                    requestModel.setCreateDate(entity.getCreateDate());
+                    requestModel.setFlightNo(entity.getFlightNo());
+                    requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
+                    requestModel.setCreateUser(entity.getCreateUser());
+                    requestModel.setFlightId(entity.getFlightId());
+                    requestModel.setContent(entity.getContentObject());
+                    ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                } else {
+                    ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
+                }
             });
         }
     }
@@ -226,7 +230,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(data.getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
