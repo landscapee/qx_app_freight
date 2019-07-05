@@ -401,7 +401,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<TransportTodoListBean>>> loadAndUnloadCarSubmit();
 
     //装机 - 装机单
-    @POST("service-product-stowage/ft-report/getFlightCargotallyingResultByAndroid")
+    @POST("service-product-finishloading/stowage-report-info/getFlightCargotallyingResultByAndroid")
     Observable<LoadingListBean> getLoadingList(@Body LoadingListRequestEntity entity);
 
     //判断板车是否被扫描上传过
@@ -413,7 +413,7 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> flightDoneInstall(@Body GetFlightCargoResBean model);
 
     //发送至结载
-    @POST("service-product-stowage/ft-report/installedAdviceForAndroid")
+    @POST("service-product-finishloading/stowage-report-info/installedAdviceForAndroid")
     Observable<BaseEntity<Object>> overLoad(@Body LoadingListSendEntity model);
 
     //装卸机代办   1是装机  2是卸机  3装卸机

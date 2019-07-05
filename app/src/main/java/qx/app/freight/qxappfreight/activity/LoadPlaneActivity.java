@@ -25,18 +25,23 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
+import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomRecylerView;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
@@ -44,7 +49,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * 理货装机页面
  */
-public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView {
+public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.rv_data)
     CustomRecylerView mRvData;
     @BindView(R.id.tv_plane_info)
@@ -67,6 +72,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private String mCurrentTaskId;
     private String mCurrentFlightId;
     private WaitCallBackDialog mWaitCallBackDialog;
+    private LoadAndUnloadTodoBean data;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -108,7 +114,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        LoadAndUnloadTodoBean data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         //是否是连班航班,连班航班的话所有关联操作都应该使用连班航班的数据
         boolean mIsKeepOnTask = data.getMovement() == 4;
         mCurrentTaskId = mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId();
@@ -194,24 +200,38 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
             mRvData.setAdapter(adapter);
             adapter.setOnOverLoadListener(entity -> {
-                LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                requestModel.setCreateDate(entity.getCreateDate());
-                requestModel.setFlightNo(entity.getFlightNo());
-                requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
-                requestModel.setCreateUser(entity.getCreateUser());
-                requestModel.setFlightId(entity.getFlightId());
-                requestModel.setContent(entity.getContentObject());
-                ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
+                    LoadingListSendEntity requestModel = new LoadingListSendEntity();
+                    requestModel.setCreateDate(entity.getCreateDate());
+                    requestModel.setFlightNo(entity.getFlightNo());
+                    requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
+                    requestModel.setCreateUser(entity.getCreateUser());
+                    requestModel.setFlightId(entity.getFlightId());
+                    requestModel.setContent(entity.getContentObject());
+                    ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                } else {
+                    ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
+                }
             });
         }
     }
 
     @Override
     public void flightDoneInstallResult(String result) {
-        ToastUtil.showToast("结束装机成功");
-        Log.e("tagNet", "result=====" + result);
-        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
-        finish();
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(data.getId());
+        entity.setFlightId(Long.valueOf(data.getFlightId()));
+        entity.setFlightTaskId(data.getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode("FreightLoadFinish");
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(data.getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
@@ -233,5 +253,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    @Override
+    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+        ToastUtil.showToast("结束装机成功");
+        Log.e("tagNet", "result=====" + result);
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
+        finish();
     }
 }

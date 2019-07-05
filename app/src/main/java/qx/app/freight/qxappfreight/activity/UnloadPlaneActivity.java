@@ -26,6 +26,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -38,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.GetUnLoadListBillContract;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
@@ -45,14 +47,17 @@ import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
 import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDataSavePresenter;
 import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -60,7 +65,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView {
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView , LoadAndUnloadTodoContract.loadAndUnloadTodoView{
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -456,9 +461,20 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void arrivalDataSaveResult(String result) {
-        ToastUtil.showToast("结束卸机成功");
-        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
-        finish();
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(mData.getId());
+        entity.setFlightId(Long.valueOf(mData.getFlightId()));
+        entity.setFlightTaskId(mData.getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode("FreightUnloadFinish");
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(mData.getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
@@ -511,5 +527,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 ToastUtil.showToast(result.getMessage());
             }
         }
+    }
+
+    @Override
+    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+        ToastUtil.showToast("结束卸机成功");
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
+        finish();
     }
 }
