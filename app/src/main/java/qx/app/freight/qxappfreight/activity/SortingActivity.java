@@ -482,8 +482,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
     }
 
     @Override
-    public void allGoodsArrivedResult(Object o) {
+    public void allGoodsArrivedResult(String o) {
+
         mList.get(mConfirmPos).setAllArrivedFlag(1);
+        mList.get(mConfirmPos).setId(String.valueOf(o));
         mAdapter.notifyDataSetChanged();
     }
 

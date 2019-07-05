@@ -981,7 +981,7 @@ public class UpdateRepository extends BaseRepository {
      * @return 成功/失败
      */
     public Observable<String> allGoodsArrived(InWaybillRecord data) {
-        return nothingtransform(getService().allGoodsArrived(data));
+        return nothingDatatransform(getService().allGoodsArrived(data));
     }
 
     /**

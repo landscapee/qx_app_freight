@@ -68,9 +68,9 @@ public class InWaybillRecordPresenter extends BasePresenter {
         });
     }
     public void allGoodsArrived(InWaybillRecord data){
-        ((InWaybillRecordModel)mRequestModel).allGoodsArrived(data, new IResultLisenter() {
+        ((InWaybillRecordModel)mRequestModel).allGoodsArrived(data, new IResultLisenter<String>() {
             @Override
-            public void onSuccess(Object o) {
+            public void onSuccess(String o) {
                 ((InWaybillRecordContract.inWaybillRecordView)mRequestView).allGoodsArrivedResult(o);
             }
 

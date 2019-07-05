@@ -30,6 +30,6 @@ public class InWaybillRecordContract {
 
         void resultDeleteById(Object o);
 
-        void allGoodsArrivedResult(Object o);
+        void allGoodsArrivedResult(String o);
     }
 }
