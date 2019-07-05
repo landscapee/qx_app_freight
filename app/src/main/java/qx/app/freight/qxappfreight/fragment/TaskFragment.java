@@ -65,7 +65,7 @@ public class TaskFragment extends BaseFragment {
         });
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
-                mSearchBar.getSearchView().setText("");
+                mSearchBar.getSearchView().setText("请输入");
 
                     mToolBar.setVisibility(View.VISIBLE);
                     mSearchBar.setVisibility(View.GONE);

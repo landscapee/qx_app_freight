@@ -19,9 +19,11 @@ public class CalculateUtil {
             return 100d;
         }
         BigDecimal c = new BigDecimal( a / b);
+        c = c.multiply(new BigDecimal(100));
         c = c.setScale(num, BigDecimal.ROUND_HALF_UP);
+
         double d = c.doubleValue();
-        d = d*100;
+        //d = d*100;
         return d;
 //        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
     }

@@ -397,7 +397,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         //复重差值 = 复重净重 - 组板净重
         dValue =goodsWeight -mData.getWeight();
         //复重差率=（（复重净重-组板净重）/组板净重）*100%
-        dRate =  CalculateUtil.calculateGradient(4, dValue, crossWeight);
+        dRate =  CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
 
         //复磅差值
         tvDvalueFront.setText(dValue+"kg");
