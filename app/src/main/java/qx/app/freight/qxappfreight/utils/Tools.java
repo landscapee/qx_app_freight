@@ -4,8 +4,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -288,6 +291,15 @@ public class Tools {
      */
     public static String generateUniqueKey(){
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    public static void showSoftKeyboard(View view) {
+        Handler handle = new Handler();
+
+        handle.postDelayed(() -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view, 0);
+        }, 0);
     }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -85,22 +86,24 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
 
 
         String coldStr = "";
-        switch (item.getColdStorage()) {
-            case "0":
-                coldStr = "普通  ";
-                break;
-            case "1":
-                coldStr = "贵重  ";
-                break;
-            case "2":
-                coldStr = "危险  ";
-                break;
-            case "3":
-                coldStr = "活体  ";
-                break;
-            case "4":
-                coldStr = "冷藏 | " + item.getRefrigeratedTemperature() + "℃  ";
-                break;
+        if (!TextUtils.isEmpty(item.getColdStorage())) {
+            switch (item.getColdStorage()) {
+                case "0":
+                    coldStr = "普通  ";
+                    break;
+                case "1":
+                    coldStr = "贵重  ";
+                    break;
+                case "2":
+                    coldStr = "危险  ";
+                    break;
+                case "3":
+                    coldStr = "活体  ";
+                    break;
+                case "4":
+                    coldStr = "冷藏 | " + item.getRefrigeratedTemperature() + "℃  ";
+                    break;
+            }
         }
         if (item.getSpecialCargoCode() != null && !"".equals(item.getSpecialCargoCode())) {
             coldStr = coldStr + "特货" + item.getSpecialCargoCode();

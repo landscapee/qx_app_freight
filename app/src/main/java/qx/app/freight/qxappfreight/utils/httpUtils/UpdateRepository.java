@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
@@ -49,6 +50,7 @@ import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -64,6 +66,7 @@ import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
@@ -87,6 +90,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -1057,4 +1061,30 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> taskLock(TaskLockEntity entity){
         return nothingtransform(getService().taskLock(entity));
     }
+
+    /**
+     * ULD根据字段过滤
+     * @param entity
+     * @return
+     */
+    public Observable<UldLikeBean> likePage(BaseFilterEntity entity){
+        return transform(getService().likePage(entity));
+    }
+
+    /**
+     * ULD根据字段过滤
+     * @param type
+     * @return
+     */
+    public Observable<List<ListByTypeBean>> listByType(String type, String name){
+        return transform(getService().listByType(type,name));
+    }
+
+    public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity){
+        return nothingtransform(getService().saveOrUpdate(entity));
+    }
+    public Observable<List<FindAirlineAllBean>> findAirlineAll(){
+        return transform(getService().findAirlineAll());
+    }
 }
+
