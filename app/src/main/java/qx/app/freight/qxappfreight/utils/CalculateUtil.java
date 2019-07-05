@@ -14,10 +14,15 @@ public class CalculateUtil {
      * @param b 除数
      * @return 返回一个乘了100的数  加%就是百分比
      */
-    public static Double calculateGradient(int num,double a ,double b){
+    public static double calculateGradient(int num,double a ,double b){
         if (b==0){
             return 100d;
         }
-        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
+        BigDecimal c = new BigDecimal( a / b);
+        c = c.setScale(num, BigDecimal.ROUND_HALF_UP);
+        double d = c.doubleValue();
+        d = d*100;
+        return d;
+//        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
     }
 }
