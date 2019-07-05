@@ -325,7 +325,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             Log.e("dime", "服务器的数据，分拣信息长度 = " + mList.size());
         }
         //初始化提交实体类
-        submitEntity.setFlightId(transportListBean.getFlightId());
+        submitEntity.setFlightInfoId(transportListBean.getFlightId());
         submitEntity.setFlightYLId(transportListBean.getFlightYLId());
         submitEntity.setFlightNum(transportListBean.getFlightNumber());
         submitEntity.setTaskId(transportListBean.getTaskId());
