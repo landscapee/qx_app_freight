@@ -73,8 +73,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                                      int insCheck
     ) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
-        intent.putExtra("mBean",mBean);
-        intent.putExtra("mDecBean",mDecBean);
+        intent.putExtra("mBean", mBean);
+        intent.putExtra("mDecBean", mDecBean);
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotResult", spotResult);
         intent.putExtra("insCheck", insCheck);
@@ -102,18 +102,18 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
         insCheck = getIntent().getIntExtra("insCheck", 0);
-        if ("[]".equals(mDecBean.getDeclareWaybillAddition().getAddtionInvoices())&&"[]".equals(mDecBean.getAdditionTypeArr())){
+
+        if (null == mDecBean.getSpWaybillFile().getAddtionInvoices() && "[]".equals(mDecBean.getAdditionTypeArr())) {
             llContent.setVisibility(View.GONE);
             mTvWenjian.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             llContent.setVisibility(View.VISIBLE);
             mTvWenjian.setVisibility(View.GONE);
         }
 
-        if (!mDecBean.getDeclareWaybillAddition().getAddtionInvoices().equals("[]") && !TextUtils.isEmpty(mDecBean.getDeclareWaybillAddition().getAddtionInvoices())) {
+        if (null != mDecBean.getSpWaybillFile().getAddtionInvoices() && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
             Gson mGson = new Gson();
-            AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getDeclareWaybillAddition().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
+            AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
             List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
             mList.clear();
             mList.addAll(addtionInvoices1);
@@ -144,7 +144,6 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                     ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
                 }
         );
-
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})

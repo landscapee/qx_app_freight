@@ -131,7 +131,7 @@ public class InPortTallyActivity extends BaseActivity implements MultiFunctionRe
             model.setFlightInfoList(StringUtil.getFlightList(bean.getRoute()));
             model.setDocName(bean.getMailType());
             model.setDocArrived(bean.getDocumentDelivery() == 1);
-            model.setDocNumber(bean.getTotalNumberPackages());
+            model.setDocNumber(bean.getTotalNumber());
             model.setDocWeight(bean.getTotalWeight());
             model.setManifestNumber(bean.getManifestTotal());
             model.setManifestWeight(bean.getManifestWeight());

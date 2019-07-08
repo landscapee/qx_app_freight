@@ -284,7 +284,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
 //            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
-            mData.setTotalNumberPackages(number);
+            mData.setTotalNumber(number);
             mData.setTotalWeight(Integer.valueOf(weight));
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
@@ -319,7 +319,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             flightLineEnd.setText(mData.getDestinationStation());
         }
         flightCompany.setText(mData.getFlightName());
-        tvTotalNum.setText(String.valueOf(mData.getTotalNumberPackages()));
+        tvTotalNum.setText(String.valueOf(mData.getTotalNumber()));
         tvTotalWeight.setText(String.valueOf(mData.getTotalWeight()));
         tvTotalVolume.setText(String.valueOf(mData.getTotalVolume()));
 //        tvWeight.setText(String.valueOf(mData.getBillingWeight()));
@@ -359,7 +359,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvTemperature.setText(mData.getRefrigeratedTemperature());
 
         tvName.setText(mData.getCargoCn());
-        tvNumber.setText(String.valueOf(mData.getTotalNumberPackages()));
+        tvNumber.setText(String.valueOf(mData.getTotalNumber()));
         tvWeight.setText(String.valueOf(mData.getTotalWeight()));
         tvVolume.setText(String.valueOf(mData.getTotalVolume()));
         tvType.setText(mData.getPackagingType());

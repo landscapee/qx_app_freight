@@ -75,7 +75,7 @@ public class RcDeclareWaybill {
     /**
      * 总件数
      */
-    private Integer totalNumberPackages;
+    private Integer totalNumber;
 
     /**
      * 计费重量
