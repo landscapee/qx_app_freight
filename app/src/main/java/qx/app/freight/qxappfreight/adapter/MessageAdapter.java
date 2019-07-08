@@ -23,7 +23,7 @@ public class MessageAdapter extends BaseQuickAdapter<PageListBean.RecordsBean, B
     protected void convert(BaseViewHolder helper, PageListBean.RecordsBean item) {
 
         helper.setText(R.id.tv_title,item.getContent())
-                .setText(R.id.tv_time, TimeUtils.date2Tasktime6(item.getCreateDate()));
+                .setText(R.id.tv_time, TimeUtils.date2Tasktime6(item.getCreateTime()));
 
         if (item.getReadingStatus() ==0){
             helper.setVisible(R.id.ll_red_point,true);

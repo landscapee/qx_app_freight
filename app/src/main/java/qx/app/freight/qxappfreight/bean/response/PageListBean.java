@@ -31,7 +31,7 @@ public class PageListBean {
          * readingStatus : 1
          */
         private String id;
-        private long createDate;
+        private long createTime;
         private String createUser;
         private String content;
         private int readingStatus;
