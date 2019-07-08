@@ -607,7 +607,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<GetAllRemoteAreaBean>>> getAllRemoteArea();
 
     //获取卸机单数据
-    @POST("service-product-stowage/ft-report/queryUnloadingMachine")
+    @POST("service-product-finishloading/stowage-report-info/queryUnloadingMachine")
     Observable<UnLoadListBillBean> getUnLoadingList(@Body UnLoadRequestEntity model);
 
     /**
