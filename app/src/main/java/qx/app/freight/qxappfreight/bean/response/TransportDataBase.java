@@ -93,7 +93,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private String specialCargoCode;
     //存储类型
     private String coldStorage;
-    private String totalNumberPackages;
+    private String totalNumber;
     private String billingWeight;
     private String totalWeight;
     private String totalVolume;

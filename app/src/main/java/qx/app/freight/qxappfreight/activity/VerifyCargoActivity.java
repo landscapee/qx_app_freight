@@ -128,7 +128,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mSportResult = getIntent().getIntExtra("spotResult", -1);
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
-        ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightNumber().substring(0, 2));
+        ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightName());
 
         Log.e("dime", "spotFlat=" + mDecBean.getSpotFlag() + ", spotResult=" + mSportResult);
         if (mDecBean.getSpotFlag().equals("0")) {

@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -181,7 +180,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void getTaskInfo(TransportDataBase bean) {
         mBean = bean;
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(bean.getId());
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(bean.getWaybillId());
     }
 
     /**

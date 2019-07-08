@@ -255,7 +255,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                         int number = Integer.parseInt(etNumber.getText().toString());
                         String billCode = mPullBillList.get(index).getBillCode();//获取当前输入框对应的item的运单code
                         GetWaybillInfoByIdDataBean.DataMainBean billBean = mCodeMap.get(billCode);
-                        int leftNumber = (int) billBean.getTotalNumberPackages();//根据运单code获取该运单允许分装的剩余最大件数
+                        int leftNumber = (int) billBean.getTotalNumber();//根据运单code获取该运单允许分装的剩余最大件数
                         if (number > leftNumber) {
                             ToastUtil.showToast("数量输入不合法，已设置为允许的件数最大值");
                             etNumber.setText("" + leftNumber);
@@ -269,7 +269,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                                 usedNumber += bean1.getPullInNumber();
                             }
                         }
-                        billBean.setBillItemNumber((int) (billBean.getTotalNumberPackages() - usedNumber));
+                        billBean.setBillItemNumber((int) (billBean.getTotalNumber() - usedNumber));
                     }
                 } else {
                     if (!TextUtils.isEmpty(etNumber.getText().toString())) {
@@ -455,10 +455,10 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             if (!mMainFlightId.equals(addScooterBean.getData().getFlightId())) {
                 ToastUtil.showToast("扫描的运单数据非当前航班，请重试");
             } else {
-                if (addScooterBean.getData().getTotalNumberPackages() <= 0 || addScooterBean.getData().getTotalWeight() <= 0) {
+                if (addScooterBean.getData().getTotalNumber() <= 0 || addScooterBean.getData().getTotalWeight() <= 0) {
                     ToastUtil.showToast("当前运单已全部被拉下");
                 } else {
-                    mNewBillBean.setTpCargoNumber((int) addScooterBean.getData().getTotalNumberPackages());
+                    mNewBillBean.setTpCargoNumber((int) addScooterBean.getData().getTotalNumber());
                     mNewBillBean.setTpCargoWeight(addScooterBean.getData().getTotalWeight());
                     mNewBillBean.setTpCargoVolume(Double.valueOf(addScooterBean.getData().getTotalVolume()));
                     setBillDataList(mWaybillCode, mNewBillBean);

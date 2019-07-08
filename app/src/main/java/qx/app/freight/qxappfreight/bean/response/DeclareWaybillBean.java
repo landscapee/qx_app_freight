@@ -77,7 +77,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 总件数
      */
-    private int totalNumberPackages;
+    private int totalNumber;
 
     /**
      * 重量
@@ -108,6 +108,9 @@ public class DeclareWaybillBean implements Serializable {
      * 航班ID
      */
     private String flightId;
+
+
+    private String freightId;
 
     /**
      * 流程ID
@@ -254,7 +257,7 @@ public class DeclareWaybillBean implements Serializable {
      */
     private String newWaybillCode;
 
-    private DeclareWaybillAddition declareWaybillAddition;
+    private DeclareWaybillAddition spWaybillFile;
 
     /**
      * 板车号

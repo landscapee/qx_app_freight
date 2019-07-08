@@ -117,7 +117,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 
     private void initData() {
         mPresenter = new TestInfoPresenter(this);
-        ((TestInfoPresenter) mPresenter).testInfo(mBean.getWaybillId(), mDecBean.getShipperCompanyId(), mBean.getTaskTypeCode());
+        ((TestInfoPresenter) mPresenter).testInfo(mBean.getWaybillId(), mDecBean.getFreightId(), mBean.getTaskTypeCode());
     }
 
 

@@ -81,7 +81,7 @@ public class InWaybillRecord implements Serializable {
      * 运单总件数
      *
      */
-    private Integer totalNumberPackages;
+    private Integer totalNumber;
 
     /**
      * 运单总重量
