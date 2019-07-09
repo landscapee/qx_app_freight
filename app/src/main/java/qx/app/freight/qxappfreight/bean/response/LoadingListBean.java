@@ -46,11 +46,11 @@ public class LoadingListBean implements Serializable{
          */
         private boolean showDetail;
         private String id;
-        private String flightId;
+        private String flightInfoId;
         private String version;
         private String content;
         private int reviewStatus;
-        private long createDate;
+        private long createTime;
         private String createUser;
         private long updateDate;
         private Object updateUser;

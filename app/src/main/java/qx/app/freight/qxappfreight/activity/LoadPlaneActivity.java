@@ -202,11 +202,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             adapter.setOnOverLoadListener(entity -> {
                 if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
                     LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                    requestModel.setCreateDate(entity.getCreateDate());
-                    requestModel.setFlightNo(entity.getFlightNo());
+                    requestModel.setCreateTime(entity.getCreateTime());
                     requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
                     requestModel.setCreateUser(entity.getCreateUser());
-                    requestModel.setFlightId(entity.getFlightId());
+                    requestModel.setFlightInfoId(entity.getFlightInfoId());
                     requestModel.setContent(entity.getContentObject());
                     ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
                 } else {
