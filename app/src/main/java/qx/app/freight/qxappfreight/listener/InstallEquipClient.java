@@ -8,12 +8,15 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -48,6 +51,8 @@ public class InstallEquipClient extends StompClient {
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
     private Context mContext;
+    private Timer mTimer;
+    private TimerTask mTimerTask;
 
     public InstallEquipClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -63,7 +68,7 @@ public class InstallEquipClient extends StompClient {
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        my.lifecycle()
+        Disposable dispLifecycle = my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -71,6 +76,7 @@ public class InstallEquipClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
+                            sendMess(my);
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
@@ -90,6 +96,7 @@ public class InstallEquipClient extends StompClient {
                             break;
                     }
                 });
+        compositeDisposable.add(dispLifecycle);
         if (!WebSocketService.isTopic) {
             //订阅   运输 装卸机
             Disposable dispTopic3 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
@@ -106,7 +113,7 @@ public class InstallEquipClient extends StompClient {
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
-                            }else if (topicMessage.getPayload().contains("\"taskType\":6")) {//航班不保障了
+                            } else if (topicMessage.getPayload().contains("\"taskType\":6")) {//航班不保障了
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 data.setConfirmTask(false);//航班不保障了
@@ -156,6 +163,19 @@ public class InstallEquipClient extends StompClient {
             compositeDisposable.add(dispTopic2);
         }
         my.connect();
+    }
+
+    public void sendMess(StompClient my) {
+        mTimer = new Timer();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("json", "123");
+        mTimerTask = new TimerTask() {
+            public void run() {
+                compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                Log.e("websocket", "发送消息" + jsonObject.toJSONString());
+            }
+        };
+        mTimer.schedule(mTimerTask, 20000, 30000);
     }
 
     private void resetSubscriptions() {

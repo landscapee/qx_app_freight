@@ -59,6 +59,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                     taskAssignType = 2;
             }
             //多角色 需要保持多个 web socket 链接
+
             switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()) {
                 case "collection": //收运
                     Collection(HttpConstant.WEBSOCKETURL
@@ -123,12 +124,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=beforehand_in");
                     break;
+
             }
         }
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         //GPS 数据提交线程
         isContinue = true;
-        if (threadGps == null){
+        if (threadGps == null) {
             threadGps = new Thread(() -> {
                 while (isContinue) {
                     try {

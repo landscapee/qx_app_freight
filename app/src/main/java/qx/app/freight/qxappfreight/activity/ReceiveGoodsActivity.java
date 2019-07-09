@@ -192,6 +192,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
             transportListCommitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
             transportListCommitEntity.setWaybillId(wayBillId);
+            transportListCommitEntity.setWaybillCode(mDeclare.getWaybillCode());
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
             List<MyAgentListBean> myAgentListBeans = new ArrayList<>();
