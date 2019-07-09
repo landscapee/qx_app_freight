@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.HeChaBean;
+import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
@@ -64,13 +65,15 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private int mSpotResult;
     private TransportDataBase mBean;
     private DeclareWaybillBean mDecBean;
+    private TestInfoListBean  mAcTestInfoListBean;
 
     public static void startActivity(Activity context,
                                      TransportDataBase mBean,
                                      DeclareWaybillBean mDecBean,
                                      String filePath,
                                      int spotResult,
-                                     int insCheck
+                                     int insCheck,
+                                     TestInfoListBean  mAcTestInfoListBean
     ) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
         intent.putExtra("mBean", mBean);
@@ -78,6 +81,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         intent.putExtra("filePath", filePath);
         intent.putExtra("spotResult", spotResult);
         intent.putExtra("insCheck", insCheck);
+        intent.putExtra("mAcTestInfoListBean", mAcTestInfoListBean);
         context.startActivityForResult(intent, 0);
     }
 
@@ -99,11 +103,12 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private void initData() {
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
         insCheck = getIntent().getIntExtra("insCheck", 0);
 
-        if (null == mDecBean.getSpWaybillFile().getAddtionInvoices() && "[]".equals(mDecBean.getAdditionTypeArr())) {
+        if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && "[]".equals(mDecBean.getAdditionTypeArr())) {
             llContent.setVisibility(View.GONE);
             mTvWenjian.setVisibility(View.VISIBLE);
         } else {
@@ -111,7 +116,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             mTvWenjian.setVisibility(View.GONE);
         }
 
-        if (null != mDecBean.getSpWaybillFile().getAddtionInvoices() && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
+        if ( "[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices())  && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
             Gson mGson = new Gson();
             AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
             List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
@@ -157,7 +162,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         insCheck,//报检是否合格0合格 1不合格
                         0,//资质是否合格0合格 1不合格
                         mSpotResult,
-                        UserInfoSingle.getInstance().getUserId()
+                        UserInfoSingle.getInstance().getUserId(),
+                        mAcTestInfoListBean
                 );
                 break;
             case R.id.refuse_tv:
@@ -174,12 +180,15 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mStorageCommitEntity.setTaskId(mBean.getTaskId());
                 mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
                 //新加
-                mStorageCommitEntity.setInsUserName("");
-                mStorageCommitEntity.setInsDangerEnd(123);
-                mStorageCommitEntity.setInsDangerStart(123);
-                mStorageCommitEntity.setInsStartTime(123);
-                mStorageCommitEntity.setInsEndTime(123);
-                mStorageCommitEntity.setInsUserHead("");
+                mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+                mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+                mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+                mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+                mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+                if (null != mAcTestInfoListBean.getInsInfo()) {
+                    mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+                    mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+                }
                 ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
                 break;
         }

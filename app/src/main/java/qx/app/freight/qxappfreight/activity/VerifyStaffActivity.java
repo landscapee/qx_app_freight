@@ -85,6 +85,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     private TransportDataBase mBean;
     private DeclareWaybillBean mDecBean;
 
+    private StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
+
     private TestInfoListBean mAcTestInfoListBean = new TestInfoListBean();
 
     public static void startActivity(Activity context,
@@ -131,15 +133,16 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                             mDecBean,
                             filePath,
                             mSpotResult,
-                            0
+                            0,
+                            mAcTestInfoListBean
                     );
+
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
                 break;
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
                     mPresenter = new SubmissionPresenter(this);
-                    StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
                     mStorageCommitEntity.setWaybillId(mBean.getId());
                     mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                     mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
@@ -150,13 +153,6 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setType(1);
                     mStorageCommitEntity.setTaskId(mBean.getTaskId());
                     mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
-                    //新加
-                    mStorageCommitEntity.setInsUserName("");
-                    mStorageCommitEntity.setInsDangerEnd(123);
-                    mStorageCommitEntity.setInsDangerStart(123);
-                    mStorageCommitEntity.setInsStartTime(123);
-                    mStorageCommitEntity.setInsEndTime(123);
-                    mStorageCommitEntity.setInsUserHead("");
                     ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
@@ -207,6 +203,16 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (resultCode == 33) {
             TestInfoListBean.FreightInfoBean mFreightBean = (TestInfoListBean.FreightInfoBean) data.getSerializableExtra("Choice");
             if (mFreightBean != null) {
+                //添加报检员头像地址
+                mStorageCommitEntity.setInsUserHead(mFreightBean.getInspectionHead() + "");
+                mStorageCommitEntity.setInsUserName(mFreightBean.getInspectionName());
+                mStorageCommitEntity.setInsUserId(mFreightBean.getId());
+                mStorageCommitEntity.setInsDangerStart(mFreightBean.getDangerBookStart());
+                mStorageCommitEntity.setInsDangerEnd(mFreightBean.getDangerBookEnd());
+                if (null != mAcTestInfoListBean.getInsInfo()) {
+                    mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+                    mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+                }
                 //报检员姓名
                 tvBaoJianYuan.setText(mFreightBean.getInspectionName());
                 //报检开始时间
