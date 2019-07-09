@@ -182,9 +182,10 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
                         reservoirTv.setText(mTestbean.getName());
                 }
             }
-            locationTv.setText(mInWaybillRecord.getWarehouseLocation());
+            //textview改成edittext显示
+            locationEt.setText(mInWaybillRecord.getWarehouseLocation());
             if (mInWaybillRecord.getTransit() != null) {
-                locationTv.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
+                locationEt.setText(mInWaybillRecord.getTransit() == 0 ? "否" : "是");
             }
             remarkEdt.setText("" + mInWaybillRecord.getRemark() == null?"":mInWaybillRecord.getRemark());
         } else {
