@@ -8,12 +8,15 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -41,6 +44,8 @@ public class PreplanerClient extends StompClient {
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
     private Context mContext;
+    private Timer mTimer;
+    private TimerTask mTimerTask;
 
     public PreplanerClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -56,7 +61,7 @@ public class PreplanerClient extends StompClient {
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        my.lifecycle()
+        Disposable dispLifecycle =  my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -64,6 +69,7 @@ public class PreplanerClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
+                            sendMess(my);
                             Log.e(TAG, "webSocket  组板 打开");
                             break;
                         case ERROR:
@@ -83,6 +89,7 @@ public class PreplanerClient extends StompClient {
                             break;
                     }
                 });
+        compositeDisposable.add(dispLifecycle);
         if (!WebSocketService.isTopic) {
             //订阅   待办
             Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
@@ -126,6 +133,19 @@ public class PreplanerClient extends StompClient {
     //用于代办刷新
     public static void sendReshEventBus(WebSocketResultBean bean) {
         EventBus.getDefault().post(bean);
+    }
+
+    public void sendMess(StompClient my) {
+        mTimer = new Timer();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("json", "123");
+        mTimerTask = new TimerTask() {
+            public void run() {
+                compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                Log.e("websocket", "发送消息" + jsonObject.toJSONString());
+            }
+        };
+        mTimer.schedule(mTimerTask, 20000, 30000);
     }
 
     private void resetSubscriptions() {

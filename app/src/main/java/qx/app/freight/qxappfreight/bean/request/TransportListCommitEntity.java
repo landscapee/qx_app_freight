@@ -17,11 +17,12 @@ public class TransportListCommitEntity {
     private String type;
     private String taskId;
     private String userId;
-    private String userName;
     private String waybillId;
+    private String waybillCode;
     private String taskTypeCode;
-    private String addOrderId;
     private DeclareWaybillBean waybillInfo;
+    private String addOrderId;
+    private String userName;
     private List<MyAgentListBean> rcInfos;
     private List<SecurityCheckResult> securityResultList;
 

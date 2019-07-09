@@ -347,4 +347,9 @@ public class DeclareWaybillBean implements Serializable {
      *  * 剩余体积
      */
     private double surplusOfVolume;
+    private String storageTypeName;
+    private String storageType;
+
+
+
 }

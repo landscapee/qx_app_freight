@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.bean.request;
 
-import java.sql.Timestamp;
-
 import lombok.Data;
 
 /**
@@ -26,48 +24,47 @@ public class StorageCommitEntity {
      *   "userId" : "当前提交人id"
      * }
      */
-    private String waybillId;
-    private String insUserId;
-    private String waybillCode;
-    private String taskTypeCode;
     private String insFile;
+    private String waybillId;
+    private String waybillCode;
     private int insCheck;
     private int fileCheck;
     private int packaging;
     private int require;
     private int spotResult;
-    private String unspotReson;
     private int insStatus;
-    private int type;
-    private String taskId;
-    private String userId;
+    private String insUserId;
     /**
      * 报检员名称
      */
     private String insUserName;
-
     /**
      * 报检员危险开始时间
      */
     private long insDangerStart;
-
     /**
      * 报检员危险结束时间
      */
     private long insDangerEnd;
-
+    /**
+     * 报检员资质结束时间
+     */
+    private long insEndTime;
+    /**
+     * 报检员头像地址
+     */
+    private String insUserHead;
+    private int type;
+    private String taskId;
+    private String taskTypeCode;
+    private String unspotReson;
+    private String userId;
     /**
      * 报检员资质起始时间
      */
     private long insStartTime;
 
-    /**
-     * 报检员资质结束时间
-     */
-    private long insEndTime;
 
-    /**
-     * 报检员头像地址
-     */
-    private String insUserHead;
+
+
 }

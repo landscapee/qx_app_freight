@@ -298,9 +298,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     @Override
     public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
-
+        //没有分页
+        list1.clear();
         if (pageCurrent == 1) {
-            list1.clear();
+
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();

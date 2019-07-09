@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
+import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
@@ -86,6 +87,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     private TransportDataBase mBean;
     private DeclareWaybillBean mDecBean;
+    private TestInfoListBean mAcTestInfoListBean;
 
 
     public static void startActivity(Activity context,
@@ -95,7 +97,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
                                      int insCheck,
                                      int fileCheck,
                                      int spotResult,
-                                     String userId
+                                     String userId,
+                                     TestInfoListBean mAcTestInfoListBean
     ) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
         intent.putExtra("mBean", mBean);
@@ -105,6 +108,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         intent.putExtra("fileCheck", fileCheck);
         intent.putExtra("userId", userId);
         intent.putExtra("spotResult", spotResult);
+        intent.putExtra("mAcTestInfoListBean", mAcTestInfoListBean);
         context.startActivityForResult(intent, 0);
     }
 
@@ -120,6 +124,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         toolbar.setMainTitle(Color.WHITE, "核查货物");
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         insFile = getIntent().getStringExtra("insFile");
         insCheck = getIntent().getIntExtra("insCheck", 0);
         fileCheck = getIntent().getIntExtra("fileCheck", 0);
@@ -197,12 +202,15 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             mStorageCommitEntity.setTaskId(mBean.getTaskId());
             mStorageCommitEntity.setUserId(userId);
             //新加
-            mStorageCommitEntity.setInsUserName("");
-            mStorageCommitEntity.setInsDangerEnd(123);
-            mStorageCommitEntity.setInsDangerStart(123);
-            mStorageCommitEntity.setInsStartTime(123);
-            mStorageCommitEntity.setInsEndTime(123);
-            mStorageCommitEntity.setInsUserHead("");
+            mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+            mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+            mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+            mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+            mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+            if (null != mAcTestInfoListBean.getInsInfo()) {
+                mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+                mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+            }
             ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
         });
 
