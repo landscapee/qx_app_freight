@@ -74,11 +74,13 @@ public class WeighterClient extends StompClient {
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 负重 出错", lifecycleEvent.getException());
+                            mTimer.cancel();
                             WebSocketService.isTopic = false;
                             connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 负重 关闭");
+                            mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);

@@ -72,17 +72,20 @@ public class BeforehandClient extends StompClient {
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 进港理货 出错", lifecycleEvent.getException());
+                            mTimer.cancel();
                             WebSocketService.isTopic = false;
                             connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 进港理货 关闭");
+                            mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
+                            mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
