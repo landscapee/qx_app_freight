@@ -28,21 +28,25 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.RecordsBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.contract.BaseParamContract;
 import qx.app.freight.qxappfreight.contract.ChangeStorageContract;
 import qx.app.freight.qxappfreight.contract.ChangeStorageListContract;
 import qx.app.freight.qxappfreight.contract.SearchReservoirContract;
+import qx.app.freight.qxappfreight.presenter.BaseParamPresenter;
 import qx.app.freight.qxappfreight.presenter.ChangeStorageListPresenter;
 import qx.app.freight.qxappfreight.presenter.ChangeStoragePresenter;
 import qx.app.freight.qxappfreight.presenter.SearchReservoirPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
-public class StoreTypeChangeActivity extends BaseActivity implements ChangeStorageListContract.changeStorageListView, ChangeStorageContract.changeStorageView, SearchReservoirContract.searchReservoirView {
+public class StoreTypeChangeActivity extends BaseActivity implements ChangeStorageListContract.changeStorageListView, ChangeStorageContract.changeStorageView, SearchReservoirContract.searchReservoirView, BaseParamContract.baseParamView {
 
     @BindView(R.id.tv_change)
     TextView mTvChange;
@@ -91,7 +95,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "存储类型变更审核");
         initView();
-        initData();
+
     }
 
     private void initView() {
@@ -99,19 +103,26 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         if (data == null)
             return;
         storageList = new ArrayList<>();
-        storageList.add("普货");
-        storageList.add("贵重");
-        storageList.add("危险");
-        storageList.add("活体");
-        storageList.add("冷藏");
-
         resTypeList = new ArrayList<>();
-        resTypeList.add("ctu_airport_were_house_00001");
-        resTypeList.add("ctu_airport_were_house_00003");
-        resTypeList.add("ctu_airport_were_house_00005");
-        resTypeList.add("ctu_airport_were_house_00002");
-        resTypeList.add("ctu_airport_were_house_00004");
-
+//        storageList.add("普货");
+//        storageList.add("贵重");
+//        storageList.add("危险");
+//        storageList.add("活体");
+//        storageList.add("冷藏");
+        mPresenter = new BaseParamPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setCurrent(1);
+        entity.setSize(20);
+        RecordsBean mBaseEntity = new RecordsBean();
+        mBaseEntity.setOutletType("ctu_airport_cargo_00001");
+        mBaseEntity.setType("11");
+        entity.setFilter(mBaseEntity);
+        ((BaseParamPresenter) mPresenter).baseParam(entity);
+//        resTypeList.add("ctu_airport_were_house_00001");
+//        resTypeList.add("ctu_airport_were_house_00003");
+//        resTypeList.add("ctu_airport_were_house_00005");
+//        resTypeList.add("ctu_airport_were_house_00002");
+//        resTypeList.add("ctu_airport_were_house_00004");
         temperatureList = new ArrayList<>();
         reservoirList = new ArrayList<>();
         for (int i = -30; i < 31; i++) {
@@ -140,7 +151,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         }
         mPresenter = new ChangeStoragePresenter(this);
         ChangeStorageBean entity = new ChangeStorageBean();
-        entity.setDeclareApplyForRecords(mEntity);
+        entity.setSpStorageChangeInfo(mEntity);
         entity.setTaskId(data.getTaskId());
         entity.setChargeFlag(data.getChargeFlag());
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -162,12 +173,16 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     public void changeStorageListResult(DeclareApplyForRecords result) {
         if (result != null) {
             mEntity = result;
-            mTvOldType.setText(storageList.get(result.getOrgStorage()));
-            mTvType.setText(storageList.get(result.getStorage()));
-            if (result.getOrgStorage() == 4) {
+            for (int i = 0; i < resTypeList.size(); i++) {
+                if (result.getOrgStorage().equals(resTypeList.get(i))) {
+                    mTvOldType.setText(storageList.get(i));
+                    mTvType.setText(storageList.get(i));
+                }
+            }
+            if (result.getOrgStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
                 llBaseTemperature.setVisibility(View.VISIBLE);
             }
-            getShowStorage(result.getOrgStorage(), resTypeList.get(result.getOrgStorage()));
+            getShowStorage(result.getOrgStorage());
         }
     }
 
@@ -213,9 +228,9 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 mTvType.setText(storageList.get(options1));
-                getShowStorage(options1, resTypeList.get(options1));
+                getShowStorage(resTypeList.get(options1));
                 storageOption = options1;
-                if (options1 == 4) {
+                if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
                 } else {
                     llBaseTemperature.setVisibility(View.GONE);
@@ -228,15 +243,15 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         pickerView.show();
     }
 
-    public void getShowStorage(int type, String resType) {
-        mEntity.setStorage(type);
+    public void getShowStorage(String resType) {
+        mEntity.setStorage(resType);
         mPresenter = new SearchReservoirPresenter(StoreTypeChangeActivity.this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setCurrent(1);
         entity.setSize(10);
         ReservoirArea mBean = new ReservoirArea();
         mBean.setCode("ctu_airport_cargo_00001");
-        mBean.setReservoirType(resType);
+        mBean.setReservoirSaveType(resType);
         entity.setFilter(mBean);
         ((SearchReservoirPresenter) mPresenter).searchReservoir(entity);
     }
@@ -288,10 +303,25 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     public void searchReservoirResult(SearchReservoirBean searchReservoirBeanList) {
         if (searchReservoirBeanList != null) {
             reservoirList.clear();
-            for (int i = 0; i < searchReservoirBeanList.getRecords().size(); i++) {
-                reservoirList.add(searchReservoirBeanList.getRecords().get(i).getReservoirName());
-            }
-            mTvStorage.setText(searchReservoirBeanList.getRecords().get(0).getReservoirName());
+            if (searchReservoirBeanList.getRecords().size() > 0) {
+                for (int i = 0; i < searchReservoirBeanList.getRecords().size(); i++) {
+                    reservoirList.add(searchReservoirBeanList.getRecords().get(i).getReservoirName());
+                }
+                mTvStorage.setText(searchReservoirBeanList.getRecords().get(0).getReservoirName());
+            } else
+                mTvStorage.setText("");
+        }
+    }
+
+    @Override
+    public void baseParamResult(BaseParamBean changeStorageBean) {
+        if (null != changeStorageBean) {
+            if (changeStorageBean.getRecords().size() > 0)
+                for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
+                    storageList.add(changeStorageBean.getRecords().get(i).getName());
+                    resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
+                }
+            initData();
         }
     }
 }

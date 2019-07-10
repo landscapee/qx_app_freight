@@ -129,13 +129,13 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mMfrvData.setAdapter(mAdapter);
             } else if (!TextUtils.isEmpty(mDecBean.getAdditionTypeArr())) {
                 Gson mGson = new Gson();
-                HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getAdditionTypeArr(), HeChaBean[].class);
+                HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), HeChaBean[].class);
                 List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
                 List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
                 for (int i = 0; i < heChaBeanList.size(); i++) {
                     AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
-                    add.setFileTypeName(heChaBeanList.get(i).getName());
-                    add.setFilePath(heChaBeanList.get(i).getValue());
+                    add.setFileTypeName(heChaBeanList.get(i).getFileTypeName());
+                    add.setFilePath(heChaBeanList.get(i).getFilePath());
                     addList.add(add);
                 }
                 mList.addAll(addList);

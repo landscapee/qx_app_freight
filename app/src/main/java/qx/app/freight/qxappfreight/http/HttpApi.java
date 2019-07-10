@@ -46,6 +46,7 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
@@ -164,6 +165,10 @@ public interface HttpApi {
     //预配组板获取代办数据
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<List<TransportDataBase>>> getGroupBoardToDo(@Body GroupBoardRequestEntity model);
+
+    //存储类型变更
+    @POST("service-bussiness-baseparam/baseParam/list")
+    Observable<BaseEntity<BaseParamBean>> baseParam(@Body BaseFilterEntity model);
 
     /**
      * 收验，代办 -- pr & guohao

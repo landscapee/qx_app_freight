@@ -19,7 +19,7 @@ public class ChangeStorageBean {
      */
     private int judge;
 
-    private DeclareApplyForRecords declareApplyForRecords;
+    private DeclareApplyForRecords spStorageChangeInfo;
 
     private String chargeFlag;
 

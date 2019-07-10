@@ -47,6 +47,7 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
@@ -325,6 +326,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<TransportDataBase>> getGroupBoardToDo(GroupBoardRequestEntity model) {
         return transform(getService().getGroupBoardToDo(model));
+    }
+    /********
+     * 代办收运列表
+     * @param model
+     * @return
+     */
+    public Observable<BaseParamBean> baseParam(BaseFilterEntity model) {
+        return transform(getService().baseParam(model));
     }
 
 
