@@ -108,47 +108,50 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
         insCheck = getIntent().getIntExtra("insCheck", 0);
 
-        if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && "[]".equals(mDecBean.getAdditionTypeArr())) {
-            llContent.setVisibility(View.GONE);
-            mTvWenjian.setVisibility(View.VISIBLE);
-        } else {
-            llContent.setVisibility(View.VISIBLE);
-            mTvWenjian.setVisibility(View.GONE);
-        }
+        if (null != mDecBean.getSpWaybillFile()) {
 
-        if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
-            Gson mGson = new Gson();
-            AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
-            List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
-            mList.clear();
-            mList.addAll(addtionInvoices1);
-            mMfrvData.setLayoutManager(new LinearLayoutManager(this));
-            mAdapter = new VerifyFileAdapter(mList);
-            mMfrvData.setAdapter(mAdapter);
-        } else if (!TextUtils.isEmpty(mDecBean.getAdditionTypeArr())) {
-            Gson mGson = new Gson();
-            HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getAdditionTypeArr(), HeChaBean[].class);
-            List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
-            List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
-            for (int i = 0; i < heChaBeanList.size(); i++) {
-                AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
-                add.setFileTypeName(heChaBeanList.get(i).getName());
-                add.setFilePath(heChaBeanList.get(i).getValue());
-                addList.add(add);
+            if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && "[]".equals(mDecBean.getAdditionTypeArr())) {
+                llContent.setVisibility(View.GONE);
+                mTvWenjian.setVisibility(View.VISIBLE);
+            } else {
+                llContent.setVisibility(View.VISIBLE);
+                mTvWenjian.setVisibility(View.GONE);
             }
-            mList.addAll(addList);
-            mMfrvData.setLayoutManager(new LinearLayoutManager(this));
-            mAdapter = new VerifyFileAdapter(mList);
-            mMfrvData.setAdapter(mAdapter);
-        } else
-            ToastUtil.showToast("数据为空");
 
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
-                    List<String> array = new ArrayList<>();
-                    array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
-                    ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
+            if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
+                Gson mGson = new Gson();
+                AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
+                List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
+                mList.clear();
+                mList.addAll(addtionInvoices1);
+                mMfrvData.setLayoutManager(new LinearLayoutManager(this));
+                mAdapter = new VerifyFileAdapter(mList);
+                mMfrvData.setAdapter(mAdapter);
+            } else if (!TextUtils.isEmpty(mDecBean.getAdditionTypeArr())) {
+                Gson mGson = new Gson();
+                HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getAdditionTypeArr(), HeChaBean[].class);
+                List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
+                List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
+                for (int i = 0; i < heChaBeanList.size(); i++) {
+                    AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
+                    add.setFileTypeName(heChaBeanList.get(i).getName());
+                    add.setFilePath(heChaBeanList.get(i).getValue());
+                    addList.add(add);
                 }
-        );
+                mList.addAll(addList);
+                mMfrvData.setLayoutManager(new LinearLayoutManager(this));
+                mAdapter = new VerifyFileAdapter(mList);
+                mMfrvData.setAdapter(mAdapter);
+            } else
+                ToastUtil.showToast("数据为空");
+
+            mAdapter.setOnItemClickListener((adapter, view, position) -> {
+                        List<String> array = new ArrayList<>();
+                        array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
+                        ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
+                    }
+            );
+        }
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
