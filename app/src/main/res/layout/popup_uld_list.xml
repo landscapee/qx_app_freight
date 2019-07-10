@@ -84,7 +84,9 @@
             android:background="@drawable/btn_blue_press"
             android:text="提交"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"
+            />
 
     </LinearLayout>
 

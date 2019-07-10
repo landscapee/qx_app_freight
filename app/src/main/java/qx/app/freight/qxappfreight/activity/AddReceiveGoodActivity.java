@@ -339,14 +339,23 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setScooterWeight(mTvCooterWeight.getText().toString().trim());
         //判断ULD号是否为10位
         if (mTvUldnumber.getText().toString().length() == 10) {
-            //ULD号
-            mMyAgentListBean.setUldCode(mTvUldnumber.getText().toString().trim());
-            //ULD Id
-            mMyAgentListBean.setUldId(mLikePageBean.getId());
-            //ULD TYPE
-            mMyAgentListBean.setUldType(mLikePageBean.getUldType());
-            //ULD自重
-            mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
+            if (mLikePageBean!=null){
+                //ULD号
+                mMyAgentListBean.setUldCode(mLikePageBean.getUldCode());
+                //ULD Id
+                mMyAgentListBean.setUldId(mLikePageBean.getId());
+                //ULD TYPE
+                mMyAgentListBean.setUldType(mLikePageBean.getUldType());
+
+                mMyAgentListBean.setIata(mLikePageBean.getIata());
+                //ULD自重
+                mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
+            }
+            else {
+                ToastUtil.showToast("ULD输入有误");
+                return;
+            }
+
         }
 //        else {
 //            mMyAgentListBean.setUldWeight(0);
@@ -497,7 +506,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mPopAll = getLayoutInflater().inflate(R.layout.popup_uld_list, null);
             windowAll = new PopupWindow(mPopAll,
                     DisplayUtil.dp2Px(this, 340),
-                    DisplayUtil.dp2Px(this, 163));
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             // 点击popuwindow外让其消失
             windowAll.setOutsideTouchable(true);
             btnAll = mPopAll.findViewById(R.id.btn_submit);
@@ -538,9 +547,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             uldAdapter = new UldAdapter(ulds);
             rcUld.setAdapter(uldAdapter);
             uldAdapter.setOnItemClickListener((result, position) -> {
-                mEtUldNumber.setText(result);
+//                mEtUldNumber.setText(result);
                 mLikePageBean = LikePageBeans.get(position);
-                mEdtDeadWeight.setText(LikePageBeans.get(position).getUldWeight());
+                mTvUldnumber.setText(result);
+                mEdtDeadWeight.setText(mLikePageBean.getUldWeight());
+                ulds.clear();
+                uldAdapter.notifyDataSetChanged();
+                dismissPopWindows();
             });
 
 
@@ -548,8 +561,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 dismissPopWindows();
             });
             btnAll.setOnClickListener((v) -> {
-                mTvUldnumber.setText(mEtUldNumber.getText());
-                dismissPopWindows();
+
             });
             windowAll.setOnDismissListener(() -> {
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -620,9 +632,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 return false;
             });
             ivCloseAdd.setOnClickListener((v) -> {
-                ulds.clear();
+//                ulds.clear();
                 uldTypes.clear();
-                uldAdapter.notifyDataSetChanged();
+//                uldAdapter.notifyDataSetChanged();
                 uldTypeAdapter.notifyDataSetChanged();
                 dismissPopWindowsAdd();
             });
@@ -719,11 +731,12 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         }
     }
 
-    private void searchAirline(String airline) {
+    private void searchAirline(String iata) {
+        iata = iata.toUpperCase();
         List<FindAirlineAllBean> airLineBeans = new ArrayList<>();
         airLineBeans.clear();
         for (FindAirlineAllBean mFindAirlineAllBean : findAirlineAllBeans) {
-            if (mFindAirlineAllBean.getIata().contains(airline)) {
+            if (mFindAirlineAllBean.getIata().contains(iata)) {
                 airLineBeans.add(mFindAirlineAllBean);
             }
         }
@@ -808,8 +821,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mTvUldnumber.setText(mLikePageBean.getUldType() + mLikePageBean.getUldCode() + mLikePageBean.getIata());
             mEdtDeadWeight.setText(mLikePageBean.getUldWeight());
         }
-
-
         ToastUtil.showToast(result);
     }
 

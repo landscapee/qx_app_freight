@@ -243,16 +243,20 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         return new WebSocketBinder();
     }
 
-    //停止连接
+    //停止连接 并关闭服务
     public static void stopServer(Context context) {
+        closeLink();
+        Intent startSrv = new Intent(context, WebSocketService.class);
+        context.stopService(startSrv);
+    }
+    //停止连接
+    public static void closeLink() {
         if (mStompClient.size() != 0) {
             for (int i = 0; i < mStompClient.size(); i++) {
                 Log.e(TAG, "关闭了" + i + "个连接");
                 mStompClient.get(i).disconnect();
             }
         }
-        Intent startSrv = new Intent(context, WebSocketService.class);
-        context.stopService(startSrv);
     }
 
 

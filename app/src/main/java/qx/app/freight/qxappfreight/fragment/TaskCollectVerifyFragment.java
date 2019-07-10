@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
+import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -114,7 +115,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     seachWith();
                 });
             }
-
         }
     }
 

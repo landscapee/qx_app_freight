@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -116,7 +117,7 @@ public class StringUtil {
             builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             return builderText;
         } else {
-            List<Integer> indexes = getIndex(text, ":");
+            List <Integer> indexes = getIndex(text, ":");
             for (Integer index : indexes) {
                 boolean flag = text.substring(index + 1, index + 2).equals("Y");
                 TextAppearanceSpan textAppearanceSpan;
@@ -131,8 +132,8 @@ public class StringUtil {
         }
     }
 
-    private static List<Integer> getIndex(String strings, String str) {
-        List<Integer> list = new ArrayList<>();
+    private static List <Integer> getIndex(String strings, String str) {
+        List <Integer> list = new ArrayList <>();
         int flag = 0;
         while (strings.contains(str)) {
             //截取包含自身在内的前边部分
@@ -163,7 +164,7 @@ public class StringUtil {
      * @return
      */
     public static String formatStringDeleteDot(String value) {
-        if (value == null || "".equals(value))
+        if (value == null || "".equals(value) || isNumeric(value))
             return "0";
         if (value.indexOf(".") > 0) {
             //正则表达
@@ -173,6 +174,31 @@ public class StringUtil {
 
         }
         return value;
+    }
+
+    /**
+     *      * 匹配是否包含数字
+     *      * @param str 可能为中文，也可能是-19162431.1254，不使用BigDecimal的话，变成-1.91624311254E7
+     *      * @return
+     *      * @author yutao
+     *      * @date 2016年11月14日下午7:41:22
+     *      
+     */
+    public static boolean isNumeric(String str) {
+        // 该正则表达式可以匹配所有的数字 包括负数
+        Pattern pattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;//异常 说明包含非数字。
+        }
+
+        Matcher isNum = pattern.matcher(bigStr); // matcher是全匹配
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
     }
 
 
@@ -231,11 +257,11 @@ public class StringUtil {
      */
     public static void setFlightRoute(String route, InstallEquipEntity entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setFlightInfoList(new ArrayList<>());
+            entity.setFlightInfoList(new ArrayList <>());
         } else {
             String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            List <String> resultList = new ArrayList <>();
+            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
@@ -250,11 +276,11 @@ public class StringUtil {
      * @param route
      * @return
      */
-    public static List<String> getFlightList(String route) {
-        List<String> result = new ArrayList<>();
+    public static List <String> getFlightList(String route) {
+        List <String> result = new ArrayList <>();
         if (route != null) {
             String[] placeArray = route.split(",");
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 result.add(temp);
@@ -279,10 +305,11 @@ public class StringUtil {
 
     /**
      * 根据数据设置时间和时间显示类型
-     * @param bean  服务器传回的数据
-     * @param entity    本地封装的数据model
+     *
+     * @param bean   服务器传回的数据
+     * @param entity 本地封装的数据model
      */
-    public static void setTimeAndType(LoadAndUnloadTodoBean bean,InstallEquipEntity entity){
+    public static void setTimeAndType(LoadAndUnloadTodoBean bean, InstallEquipEntity entity) {
         String time;
         int timeType;
         if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
