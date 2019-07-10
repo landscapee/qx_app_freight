@@ -231,8 +231,12 @@ public interface HttpApi {
     @POST("service-bussiness-warehouse/reservoir/list")
     Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
+//    //板车列表信息
+//    @POST("service-bussiness-facility/bd/list")
+//    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
+
     //板车列表信息
-    @POST("service-bussiness-facility/bd/list")
+    @POST(" /service-product-cargotallying/base-scooter/getUsableScooters")
     Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
 
     //ULD号查询
