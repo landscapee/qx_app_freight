@@ -32,11 +32,14 @@
             android:id="@+id/tv_rerutn_good_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textColor="@color/black"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/dp_7"
             android:layout_marginRight="14dp"
-            android:text="123" />
+            android:text="大鸡，鸡苗|222.00件|1.00m³|11.00kg" />
 
     </LinearLayout>
 

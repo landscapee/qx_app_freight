@@ -38,8 +38,8 @@ public class ReturnGoodAdapter extends BaseQuickAdapter<ReturnBean, BaseViewHold
                 //重量
                 item.getWeight()));
         //库区|库位
-        helper.setText(R.id.tv_return_good_nu, String.format(mContext.getString(R.string.format_company_info),item.getRepName()
-        ,item.getRepPlaceNum()));
+        helper.setText(R.id.tv_return_good_nu, String.format(mContext.getString(R.string.format_company_info),(item.getRepName()==null)?"- -":item.getRepName()
+        ,(item.getRepPlaceNum()==null)?"- -":item.getRepPlaceNum()));
         //运单名
         helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType()+"")+ item.getScooterCode());
     }
