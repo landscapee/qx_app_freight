@@ -36,8 +36,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.CargoHandlingAdapter;
-import qx.app.freight.qxappfreight.adapter.HandcarDetailsAdapter;
 import qx.app.freight.qxappfreight.adapter.UldAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
@@ -46,7 +44,6 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
-import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
 import qx.app.freight.qxappfreight.bean.response.LikePageBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
@@ -89,8 +86,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     TextView tvProductName;    //品名
     @BindView(R.id.edt_dead_weight)
     EditText mEdtDeadWeight;   //ULD自重
-    @BindView(R.id.et_uldnumber)
-    EditText mEtUldNumber;     //Uld号
+    //    @BindView(R.id.et_uldnumber)
+//    EditText mEtUldNumber;     //Uld号
     @BindView(R.id.tv_cooter_weight)
     TextView mTvCooterWeight;  //板车重量
     @BindView(R.id.tv_scooter)
@@ -111,8 +108,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     ImageView mIvScan;          //扫一扫
     @BindView(R.id.ll_add)
     LinearLayout llAdd;
-    @BindView(R.id.rc_uld)
-    RecyclerView rcUld;
+    //    @BindView(R.id.rc_uld)
+//    RecyclerView rcUld;
+    @BindView(R.id.tv_uldnumber)
+    TextView mTvUldnumber;
 
     private MyAgentListBean mMyAgentListBean;
     private String waybillId, waybillCode;
@@ -153,6 +152,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     //当前航段三字码
     private boolean isPopWindow = false;
 
+    private PopupWindow windowAll;
+    private View mPopAll;
+
+    private Button btnAll;
+
     /**
      * @param context
      * @param waybillId
@@ -192,7 +196,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 v -> {
                     mEdtOverWeight.setText("");
                     mEdtDeadWeight.setText("");
-                    mEtUldNumber.setText("");
+                    mTvUldnumber.setText("");
                     mTvCooterWeight.setText("");
                     mTvScooter.setText("");
                     mTvWeight.setText("");
@@ -207,9 +211,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             } else if ("".equals(mEdtNumber.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入重量");
             }
-//            else if ("".equals(mTvScooter.getText().toString().trim())) {
-//                ToastUtil.showToast(this, "请输入板车号");
-//            }
             else {
                 finishForResult();
             }
@@ -221,32 +222,15 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
         getAirlineData();
 
-        mEtUldNumber.setOnTouchListener((v, event) -> {
-            Tools.showSoftKeyboard(mEtUldNumber);
-            return false;
+//        mEtUldNumber.setOnTouchListener((v, event) -> {
+//            initPopupWindow();
+////            Tools.showSoftKeyboard(mEtUldNumber);
+////            return false;
+//        });
+        mTvUldnumber.setOnClickListener(v -> {
+            showPopWindowUld();
         });
-        mEtUldNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!StringUtil.isEmpty(mEtUldNumber.getText().toString())) {
-                    uldCount = mEtUldNumber.getText().toString().length();
-                    searchUld(mEtUldNumber.getText().toString());
-                } else {
-                    ulds.clear();
-                    uldAdapter.notifyDataSetChanged();
-                }
-            }
-        });
     }
 
     private void initView() {
@@ -268,7 +252,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 mEdtNumber.setText(mList.getNumber() + "");
                 mTvWeight.setText(mList.getWeight() + "");
                 mTvCooterWeight.setText(mList.getScooterWeight());
-                mEtUldNumber.setText(mList.getUldCode());
+                mTvUldnumber.setText(mList.getUldCode());
                 mEdtDeadWeight.setText(mList.getUldWeight() + "");
                 mTvScooter.setText(mList.getScooterCode());
             }
@@ -283,17 +267,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         llOverweight.setOnClickListener(v -> {
             showPopWindowList();
         });
-
-        //Uld模糊查询关联
-        rcUld.setLayoutManager(new LinearLayoutManager(this));
-        uldAdapter = new UldAdapter(ulds);
-        rcUld.setAdapter(uldAdapter);
-        uldAdapter.setOnItemClickListener((result, position) -> {
-            mEtUldNumber.setText(result);
-            mLikePageBean = LikePageBeans.get(position);
-            mEdtDeadWeight.setText(LikePageBeans.get(position).getUldWeight());
-        });
-
         mIvScan.setOnClickListener(v -> ScanManagerActivity.startActivity(AddReceiveGoodActivity.this));
     }
 
@@ -365,9 +338,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //板车自重
         mMyAgentListBean.setScooterWeight(mTvCooterWeight.getText().toString().trim());
         //判断ULD号是否为10位
-        if (mEtUldNumber.getText().toString().length() == 10) {
+        if (mTvUldnumber.getText().toString().length() == 10) {
             //ULD号
-            mMyAgentListBean.setUldCode(mEtUldNumber.getText().toString().trim());
+            mMyAgentListBean.setUldCode(mTvUldnumber.getText().toString().trim());
             //ULD Id
             mMyAgentListBean.setUldId(mLikePageBean.getId());
             //ULD TYPE
@@ -427,11 +400,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             if ("2".equals(scooterInfoListBeans.get(0).getScooterType())) {
                 mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
                 mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
-//                mEtUldNumber.setHint("平板车不能输入ULD号");
-//                mEdtDeadWeight.setFocusable(false);
-//                mEdtDeadWeight.setEnabled(false);
-//                mEtUldNumber.setFocusable(false);
-//                mEtUldNumber.setEnabled(false);
             } else {
                 //板车号
                 mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
@@ -521,6 +489,94 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         getWindow().setAttributes(lp);
         windowAdd.setAnimationStyle(R.style.animTranslate);
         windowAdd.showAtLocation(btnAllAdd, Gravity.CENTER, 0, 0);
+    }
+
+
+    private void initPopupWindow() {
+        if (windowAll == null) {
+            mPopAll = getLayoutInflater().inflate(R.layout.popup_uld_list, null);
+            windowAll = new PopupWindow(mPopAll,
+                    DisplayUtil.dp2Px(this, 340),
+                    DisplayUtil.dp2Px(this, 163));
+            // 点击popuwindow外让其消失
+            windowAll.setOutsideTouchable(true);
+            btnAll = mPopAll.findViewById(R.id.btn_submit);
+            ImageView ivClose = mPopAll.findViewById(R.id.iv_close);
+            EditText mEtUldNumber = mPopAll.findViewById(R.id.et_uldnumber);
+            RecyclerView rcUld = mPopAll.findViewById(R.id.rc_uld);
+            windowAll.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            windowAll.setFocusable(true);
+
+            mEtUldNumber.setOnTouchListener((v, event) -> {
+                Tools.showSoftKeyboard(mEtUldNumber);
+                return false;
+            });
+
+            mEtUldNumber.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (!StringUtil.isEmpty(mEtUldNumber.getText().toString())) {
+                        uldCount = mEtUldNumber.getText().toString().length();
+                        searchUld(mEtUldNumber.getText().toString());
+                    } else {
+                        ulds.clear();
+                        uldAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+
+            //Uld模糊查询关联
+            rcUld.setLayoutManager(new LinearLayoutManager(this));
+            uldAdapter = new UldAdapter(ulds);
+            rcUld.setAdapter(uldAdapter);
+            uldAdapter.setOnItemClickListener((result, position) -> {
+                mEtUldNumber.setText(result);
+                mLikePageBean = LikePageBeans.get(position);
+                mEdtDeadWeight.setText(LikePageBeans.get(position).getUldWeight());
+            });
+
+
+            ivClose.setOnClickListener((v) -> {
+                dismissPopWindows();
+            });
+            btnAll.setOnClickListener((v) -> {
+                mTvUldnumber.setText(mEtUldNumber.getText());
+                dismissPopWindows();
+            });
+            windowAll.setOnDismissListener(() -> {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1.0f;
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(lp);
+                isPopWindow = false;
+            });
+        }
+//        setDataPop1();
+    }
+
+    private void showPopWindowUld() {
+        initPopupWindow();
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.3f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+        windowAll.setAnimationStyle(R.style.animTranslate);
+        windowAll.showAtLocation(btnAll, Gravity.CENTER, 0, 0);
+    }
+
+    private void dismissPopWindows() {
+        if (windowAll != null) {
+            windowAll.dismiss();
+            windowAll = null;
+        }
     }
 
 
@@ -616,28 +672,28 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 }
             });
             btnAllAdd.setOnClickListener((v) -> {
-                    LikePageBean mLikePageBeanNew = new LikePageBean();
-                        if (StringUtil.isEmpty(etUldNo.getText().toString()) || StringUtil.isEmpty(etUldType.getText().toString())
-                                || StringUtil.isEmpty(etUldAirline.getText().toString()) || StringUtil.isEmpty(etULDWeight.getText().toString())
-                                || etUldNo.getText().toString().length() < 5 || etUldAirline.getText().toString().length() < 2
-                                || etUldType.getText().toString().length() < 3) {
-                            ToastUtil.showToast("请填写完整的ULD信息");
-                            return;
-                        } else {
-                            SaveOrUpdateEntity mSaveOrUpdateEntity = new SaveOrUpdateEntity();
-                            mSaveOrUpdateEntity.setUldCode(etUldNo.getText().toString());
-                            mSaveOrUpdateEntity.setUldType(etUldType.getText().toString());
-                            mSaveOrUpdateEntity.setIata(etUldAirline.getText().toString());
-                            mSaveOrUpdateEntity.setUldWeight(etULDWeight.getText().toString());
+                LikePageBean mLikePageBeanNew = new LikePageBean();
+                if (StringUtil.isEmpty(etUldNo.getText().toString()) || StringUtil.isEmpty(etUldType.getText().toString())
+                        || StringUtil.isEmpty(etUldAirline.getText().toString()) || StringUtil.isEmpty(etULDWeight.getText().toString())
+                        || etUldNo.getText().toString().length() < 5 || etUldAirline.getText().toString().length() < 2
+                        || etUldType.getText().toString().length() < 3) {
+                    ToastUtil.showToast("请填写完整的ULD信息");
+                    return;
+                } else {
+                    SaveOrUpdateEntity mSaveOrUpdateEntity = new SaveOrUpdateEntity();
+                    mSaveOrUpdateEntity.setUldCode(etUldNo.getText().toString());
+                    mSaveOrUpdateEntity.setUldType(etUldType.getText().toString());
+                    mSaveOrUpdateEntity.setIata(etUldAirline.getText().toString());
+                    mSaveOrUpdateEntity.setUldWeight(etULDWeight.getText().toString());
 
-                            mLikePageBeanNew.setIata(etUldAirline.getText().toString());
-                            mLikePageBeanNew.setUldCode(etUldNo.getText().toString());
-                            mLikePageBeanNew.setUldType(etUldType.getText().toString());
-                            mLikePageBeanNew.setUldWeight(etULDWeight.getText().toString());
-                            mLikePageBean = mLikePageBeanNew;
-                            addUld(mSaveOrUpdateEntity);
-                        }
-                    dismissPopWindowsAdd();
+                    mLikePageBeanNew.setIata(etUldAirline.getText().toString());
+                    mLikePageBeanNew.setUldCode(etUldNo.getText().toString());
+                    mLikePageBeanNew.setUldType(etUldType.getText().toString());
+                    mLikePageBeanNew.setUldWeight(etULDWeight.getText().toString());
+                    mLikePageBean = mLikePageBeanNew;
+                    addUld(mSaveOrUpdateEntity);
+                }
+                dismissPopWindowsAdd();
             });
             windowAdd.setOnDismissListener(() -> {
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -658,7 +714,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             etUldNo.setText("");
             etUldAirline.setText("");
             etULDWeight.setText("");
-
             windowAdd.dismiss();
             windowAdd = null;
         }
@@ -750,7 +805,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     public void saveOrUpdateResult(String result) {
 
         if (mLikePageBean != null) {
-            mEtUldNumber.setText(mLikePageBean.getUldType() + mLikePageBean.getUldCode() + mLikePageBean.getIata());
+            mTvUldnumber.setText(mLikePageBean.getUldType() + mLikePageBean.getUldCode() + mLikePageBean.getIata());
             mEdtDeadWeight.setText(mLikePageBean.getUldWeight());
         }
 

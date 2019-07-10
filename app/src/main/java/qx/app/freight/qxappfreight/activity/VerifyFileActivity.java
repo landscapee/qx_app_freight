@@ -65,7 +65,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     private int mSpotResult;
     private TransportDataBase mBean;
     private DeclareWaybillBean mDecBean;
-    private TestInfoListBean  mAcTestInfoListBean;
+    private TestInfoListBean mAcTestInfoListBean;
 
     public static void startActivity(Activity context,
                                      TransportDataBase mBean,
@@ -73,7 +73,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                                      String filePath,
                                      int spotResult,
                                      int insCheck,
-                                     TestInfoListBean  mAcTestInfoListBean
+                                     TestInfoListBean mAcTestInfoListBean
     ) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
         intent.putExtra("mBean", mBean);
@@ -116,7 +116,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             mTvWenjian.setVisibility(View.GONE);
         }
 
-        if ( "[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices())  && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
+        if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
             Gson mGson = new Gson();
             AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
             List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
@@ -180,11 +180,13 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mStorageCommitEntity.setTaskId(mBean.getTaskId());
                 mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
                 //新加
-                mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
-                mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
-                mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
-                mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
-                mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+                if (null != mAcTestInfoListBean.getFreightInfo()) {
+                    mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+                    mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+                    mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+                    mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+                    mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+                }
                 if (null != mAcTestInfoListBean.getInsInfo()) {
                     mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
                     mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());

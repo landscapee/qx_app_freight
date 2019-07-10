@@ -42,7 +42,7 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
         }
         if ("".equals(item.getScooterCode())) {
             helper.setText(R.id.tv_receive_nb, "");
-            helper.setText(R.id.tv_receive_weight,  "");
+            helper.setText(R.id.tv_receive_weight, "");
         } else {
             helper.setText(R.id.tv_receive_nb, MapValue.getCarTypeValue(item.getScooterType() + "") + item.getScooterCode());
             //板车自重
@@ -57,7 +57,7 @@ public class ReceiveGoodsAdapter extends BaseQuickAdapter<MyAgentListBean, BaseV
                 , item.getVolume()));
         //ULd编号~Uld体积
         helper.setText(R.id.tv_receive_uld, String.format(mContext.getString(R.string.format_receive_uld)
-                , item.getUldCode()
+                , item.getUldCode() == null ? "" : item.getUldCode()
                 , item.getUldWeight()));
         //超重重量
 //        helper.setText(R.id.tv_receive_sw, "超重" + item.getOverWeight() + "kg");

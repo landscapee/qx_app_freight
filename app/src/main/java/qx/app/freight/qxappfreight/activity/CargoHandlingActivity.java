@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,13 +16,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,15 +34,11 @@ import qx.app.freight.qxappfreight.adapter.CabinAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoCabinAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoHandlingAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoHandlingWaybillAdapter;
-import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
-import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
-import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
 import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
@@ -55,22 +46,17 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.AddScooterContract;
 import qx.app.freight.qxappfreight.contract.GetScooterListInfoContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.ScooterOperateContract;
 import qx.app.freight.qxappfreight.presenter.GetScooterListInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterOperatePresenter;
-import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
-import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -327,7 +313,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
 
-        window = new CommonPopupWindow(this, R.layout.popup_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
+        window = new CommonPopupWindow(this, R.layout.popup_uld_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             @Override
             protected void initView() {
                 View view = getContentView();
@@ -389,7 +375,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
 
-        window = new CommonPopupWindow(this, R.layout.popup_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
+        window = new CommonPopupWindow(this, R.layout.popup_uld_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             @Override
             protected void initView() {
                 View view = getContentView();
