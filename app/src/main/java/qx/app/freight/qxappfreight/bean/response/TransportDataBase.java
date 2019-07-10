@@ -132,6 +132,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private Object associateAirport;
     private String spotFlag;
     private long etd;
+    private long ata;
     private List<DeclareItem> declareItem;
     private boolean isExpand = false; //是否展开
     private String freightName; //货代公司名字
