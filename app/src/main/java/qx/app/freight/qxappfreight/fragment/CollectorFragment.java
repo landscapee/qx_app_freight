@@ -290,7 +290,11 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             } else {
                 mMfrvData.finishLoadMore();
             }
-            list1.addAll(transportListBeans.getRecords());
+            for (TransportDataBase record:transportListBeans.getRecords()){
+                if (!"changeApply".equals(record.getTaskTypeCode())){
+                    list1.add(record);
+                }
+            }
             seachWith();
             if (mTaskFragment != null) {
                 if (isShow) {
