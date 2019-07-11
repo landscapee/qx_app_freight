@@ -16,7 +16,7 @@ public class ExceptionUtils {
      * 异常类型信息选择框基本数据
      */
     public static final List<TestBean> testBeanList = Arrays.asList(
-            new TestBean("1、死亡", false),
+            new  TestBean("1、死亡", false),
             new TestBean("2、破损", false),
             new TestBean("3、腐烂", false),
             new TestBean("4、泄漏", false),

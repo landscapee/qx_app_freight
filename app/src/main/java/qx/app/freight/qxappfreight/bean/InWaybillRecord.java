@@ -362,4 +362,9 @@ public class InWaybillRecord implements Serializable {
      */
     private int allArrivedFlag;
 
+    /**
+     * 登录人姓名
+     */
+    private String createUserName;
+
 }

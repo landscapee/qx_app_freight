@@ -416,6 +416,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             mConfirmPos=pos;
             mPresenter = new InWaybillRecordPresenter(SortingActivity.this);
             item.setFlightInfoId(transportListBean.getFlightId());
+            item.setCreateUserName(UserInfoSingle.getInstance().getUsername());
             ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(item);
         });
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {

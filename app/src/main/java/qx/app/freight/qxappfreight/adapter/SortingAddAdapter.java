@@ -78,10 +78,10 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString().trim())) {
                     item.setUbnormalNum(Integer.valueOf(s.toString().trim()));
-                    item.getUbnormalType().add(1);
+//                    item.getUbnormalType().add(1);
                 } else {
                     item.setUbnormalNum(0);
-                    item.getUbnormalType().remove((Integer) 1);
+//                    item.getUbnormalType().remove((Integer) 1);
                 }
             }
         });

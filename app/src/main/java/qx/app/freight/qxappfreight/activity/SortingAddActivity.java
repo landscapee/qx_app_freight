@@ -222,6 +222,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             public void onExceptionChoose(int posstion) {
                 Log.e("dime", "位置信息：" + posstion);
                 ErrorTypeChooseDialog chooseExcetionDialog = new ErrorTypeChooseDialog();
+
                 chooseExcetionDialog.setData(ExceptionUtils.testBeanList, SortingAddActivity.this);
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
