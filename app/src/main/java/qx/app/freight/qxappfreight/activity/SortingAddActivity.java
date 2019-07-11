@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     int isTransit;//是否转关
 
     List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
+    List<RcInfoOverweight> rcTempInfoOverweight; // 超重记录列表备份（用于dialog）
 
     @BindView(R.id.edt_id)
     EditText idEdt;//运单号
@@ -392,15 +394,24 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
 
     //超重情况的弹窗
     private void showPopWindowList() {
-        SortingReturnGoodsDialog dialog = new SortingReturnGoodsDialog(this);
-        dialog.setData(rcInfoOverweight)
-                .setOnClickListener(new SortingReturnGoodsDialog.OnClickListener() {
-                    @Override
-                    public void onClick(String text) {
-                        tvOverweight.setText(text);
-                    }
-                })
-                .show();
+        try {
+
+            SortingReturnGoodsDialog dialog = new SortingReturnGoodsDialog(this);
+            rcTempInfoOverweight = Tools.deepCopy((ArrayList<RcInfoOverweight>) rcInfoOverweight);
+            dialog.setData(rcTempInfoOverweight)
+                    .setOnClickListener(new SortingReturnGoodsDialog.OnClickListener() {
+                        @Override
+                        public void onClick(String text) {
+                            tvOverweight.setText(text);
+                            rcInfoOverweight.clear();
+                            rcInfoOverweight.addAll(rcTempInfoOverweight);
+                        }
+                    })
+                    .show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
     /**

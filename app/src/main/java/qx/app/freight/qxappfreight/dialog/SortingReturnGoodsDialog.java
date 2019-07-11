@@ -118,7 +118,8 @@ public class SortingReturnGoodsDialog extends Dialog {
 //            }else {
 //                rcInfoOverweight.get(position).setDelFlag(1);
 //            }
-            rcInfoOverweight.get(position).setDelFlag(1);
+//            rcInfoOverweight.get(position).setDelFlag(1);
+            rcInfoOverweight.remove(position);
             overweightRecordAdapter.notifyDataSetChanged();
         });
     }
