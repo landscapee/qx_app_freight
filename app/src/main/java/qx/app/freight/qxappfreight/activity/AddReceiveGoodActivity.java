@@ -415,7 +415,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 //板车重量
                 mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
             }
-            ((ScooterInfoListPresenter) mPresenter).exist(scooterInfoListBeans.get(0).getId());
+//            ((ScooterInfoListPresenter) mPresenter).exist(scooterInfoListBeans.get(0).getId());
         } else {
             finishAndToast();
         }
