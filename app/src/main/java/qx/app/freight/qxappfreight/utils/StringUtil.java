@@ -164,7 +164,7 @@ public class StringUtil {
      * @return
      */
     public static String formatStringDeleteDot(String value) {
-        if (value == null || "".equals(value) || isNumeric(value))
+        if (value == null || "".equals(value) || !isNumeric(value))
             return "0";
         if (value.indexOf(".") > 0) {
             //正则表达
