@@ -264,8 +264,10 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            ActManager.getAppManager().finishReceive();
-//            ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            if (CURRENT_TASK_BEAN.getWaybillCode().equals(mWebSocketResultBean.getChgData().get(0).getWaybillCode())) {
+                ActManager.getAppManager().finishReceive();
+                ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            }
             getData();
 //            for (TransportDataBase mTransportListBean : transportListList1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))

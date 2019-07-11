@@ -244,8 +244,10 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            ActManager.getAppManager().finishReCollection();
-//            ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            if (CURRENT_TASK_BEAN.getWaybillCode().equals(mWebSocketResultBean.getChgData().get(0).getWaybillCode())) {
+                ActManager.getAppManager().finishReCollection();
+                ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            }
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
 //                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
@@ -290,8 +292,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             } else {
                 mMfrvData.finishLoadMore();
             }
-            for (TransportDataBase record:transportListBeans.getRecords()){
-                if (!"changeApply".equals(record.getTaskTypeCode())){
+            for (TransportDataBase record : transportListBeans.getRecords()) {
+                if (!"changeApply".equals(record.getTaskTypeCode())) {
                     list1.add(record);
                 }
             }

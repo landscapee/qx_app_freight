@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -156,7 +157,6 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //        });
 
     }
-
 
     @OnClick({R.id.btn_commit, R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
     public void onViewClicked(View view) {
@@ -374,4 +374,6 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private void turnToReceiveGoodsActivity() {
         ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId);
     }
+
+
 }
