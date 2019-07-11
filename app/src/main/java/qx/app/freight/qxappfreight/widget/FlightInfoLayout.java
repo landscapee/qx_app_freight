@@ -50,7 +50,7 @@ public class FlightInfoLayout extends LinearLayout {
             tv.setText(text);
             tv.setTextColor(Color.parseColor("#333333"));
             tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            tv.setTextSize(14);
+            tv.setTextSize(13);
             tv.setGravity(Gravity.CENTER);
             LayoutParams params = new LayoutParams(0, LayoutParams.MATCH_PARENT);
             params.weight = 1;
@@ -72,7 +72,7 @@ public class FlightInfoLayout extends LinearLayout {
                     TextView tv = new TextView(context);
                     tv.setText(flghtInfo.get(i));
                     tv.setTextColor(Color.parseColor("#333333"));
-                    tv.setTextSize(14);
+                    tv.setTextSize(13);
                     tv.setGravity(Gravity.CENTER);
                     LayoutParams params = new LayoutParams(0, LayoutParams.MATCH_PARENT);
                     params.weight = 1;

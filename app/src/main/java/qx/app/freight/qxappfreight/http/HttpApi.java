@@ -62,7 +62,6 @@ import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
-import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -330,8 +329,6 @@ public interface HttpApi {
     Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
 
 
-
-
     //复重 / 复重历史
     @POST("service-product-cargoweighing/scooter/getHistoryScootersPage")
     Observable<BaseEntity<GetHistoryBean>> getHistoryScootersPage(@Body BaseFilterEntity model);
@@ -368,7 +365,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<TransportTodoListBean>>> transportTodoList();
 
     //领受、运输
-        @POST("service-product-transport/tp-main-info/performTaskSteps")
+    @POST("service-product-transport/tp-main-info/performTaskSteps")
     Observable<BaseEntity<Object>> performTaskSteps(@Body PerformTaskStepsEntity model);
 
     //GPS
@@ -643,7 +640,7 @@ public interface HttpApi {
      * @return
      */
     @GET("service-bussiness-facility/baseParam/likeByType/{type}/{name}")
-    Observable<BaseEntity<List<ListByTypeBean>>> listByType(@Path("type") String type , @Path("name") String name);
+    Observable<BaseEntity<List<ListByTypeBean>>> listByType(@Path("type") String type, @Path("name") String name);
 
     /**
      * 添加或保存ULD集装箱

@@ -120,7 +120,6 @@
             android:background="@drawable/shape_rect_gray_888"
             android:gravity="center"
             android:text="拉货上报"
-            android:visibility="gone"
             android:textColor="@color/gray_888"
             android:textSize="@dimen/sp_18" />
 
