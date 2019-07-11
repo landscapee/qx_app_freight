@@ -104,7 +104,6 @@ public class SortingReturnGoodsDialog extends Dialog {
             int overweight = 0;
             for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
                 overweight += mRcInfoOverweight.getOverWeight();
-
             }
             if (listener != null) {
                 listener.onClick(overweight+"kg");

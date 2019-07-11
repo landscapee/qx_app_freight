@@ -27,4 +27,9 @@ public class CalculateUtil {
         return d;
 //        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
     }
+
+    public static double doubleSave2(double d){
+         BigDecimal b = new BigDecimal(d);
+         return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
 }

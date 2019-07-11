@@ -393,9 +393,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         }
 
         //复重净重=本次复磅毛重-板车自重-ULD自重-人工干预
-        goodsWeight = crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight);
+//        goodsWeight = crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight);
+        goodsWeight =CalculateUtil.doubleSave2(crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight));
         //复重差值 = 复重净重 - 组板净重
-        dValue =goodsWeight -mData.getWeight();
+        dValue =CalculateUtil.doubleSave2(goodsWeight -mData.getWeight());
         //复重差率=（（复重净重-组板净重）/组板净重）*100%
         dRate =  CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
 
