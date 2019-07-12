@@ -193,7 +193,7 @@ public class CollectionClient extends StompClient {
                 .setOnClickListener((dialog1, confirm) -> loginOut());
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.dismiss());
+        handler.post(() -> dialog.show());
     }
 
     //强制登出
