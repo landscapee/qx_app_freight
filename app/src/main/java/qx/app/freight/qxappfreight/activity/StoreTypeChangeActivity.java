@@ -215,6 +215,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 mTvStorage.setText(reservoirList.get(options1));
                 mEntity.setRepName(reservoirList.get(options1));
+
             }
         }).build();
         pickerView.setPicker(reservoirList);
@@ -228,6 +229,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 mTvType.setText(storageList.get(options1));
+                mEntity.setStorageTypeName(storageList.get(options1));
                 getShowStorage(resTypeList.get(options1));
                 storageOption = options1;
                 if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {

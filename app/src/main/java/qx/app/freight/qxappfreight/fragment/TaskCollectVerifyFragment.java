@@ -42,7 +42,6 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
-import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -257,16 +256,19 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) ||
+                    "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 transportListList1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow) {
                     mTaskFragment.setTitleText(transportListList1.size());
                 }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            if (CURRENT_TASK_BEAN.getWaybillCode().equals(mWebSocketResultBean.getChgData().get(0).getWaybillCode())) {
-                ActManager.getAppManager().finishReceive();
-                ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            if (null != CURRENT_TASK_BEAN) {
+                if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
+                    ActManager.getAppManager().finishReceive();
+                    ToastUtil.showToast("当前任务以在其他设备或终端完成");
+                }
             }
             getData();
 //            for (TransportDataBase mTransportListBean : transportListList1) {
@@ -323,7 +325,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         if (null != result) {
             if (null != mBean) {
-                VerifyStaffActivity.startActivity(getActivity(),mBean,result);
+                VerifyStaffActivity.startActivity(getActivity(), mBean, result);
             }
         } else {
             ToastUtil.showToast("收验点击事件为空");
@@ -337,11 +339,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     /**
      * 待办锁定
+     *
      * @param result
      */
     @Override
     public void taskLockResult(String result) {
-        if(CURRENT_TASK_BEAN != null) {
+        if (CURRENT_TASK_BEAN != null) {
             getTaskInfo(CURRENT_TASK_BEAN);
         }
     }

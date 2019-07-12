@@ -96,7 +96,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=offSiteEscort");
                     break;
-                case "preplaner":  //预配-组板
+                case "preplaner"://预配-组板
                     PreplanerClient(HttpConstant.WEBSOCKETURL
                             + "userId=" + UserInfoSingle.getInstance().getUserId()
                             + "&taskAssignType=" + taskAssignType

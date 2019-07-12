@@ -56,4 +56,6 @@ public class DeclareApplyForRecords {
         private String repName;
         private String repId;
         private String repPlaceNum;
+
+        private String storageTypeName;
 }

@@ -237,16 +237,20 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             //非换单审核的全部都加
-            if (!"changeApply".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) && "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if ("changeCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
                 }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            if (CURRENT_TASK_BEAN.getWaybillCode().equals(mWebSocketResultBean.getChgData().get(0).getWaybillCode())) {
-                ActManager.getAppManager().finishReCollection();
-                ToastUtil.showToast("当前任务以在其他设备或终端完成");
+            if (null != CURRENT_TASK_BEAN) {
+                if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
+                    ActManager.getAppManager().finishReCollection();
+                    ToastUtil.showToast("任务已完成");
+                }
             }
             loadData();
 //            for (TransportDataBase mTransportListBean : list1) {
