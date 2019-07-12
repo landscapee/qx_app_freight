@@ -66,6 +66,7 @@ import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.TransInformation;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -638,6 +639,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 uldTypeAdapter.notifyDataSetChanged();
                 dismissPopWindowsAdd();
             });
+            etUldType.setTransformationMethod(new TransInformation());
             etUldType.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -653,13 +655,15 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 public void afterTextChanged(Editable s) {
                     if (!StringUtil.isEmpty(etUldType.getText().toString())) {
                         uldTypeCount = etUldType.getText().toString().length();
-                        searchUldType(etUldType.getText().toString());
+                        if (uldTypeCount > 0)
+                            searchUldType(etUldType.getText().toString());
                     } else {
                         uldTypes.clear();
                         uldTypeAdapter.notifyDataSetChanged();
                     }
                 }
             });
+            etUldAirline.setTransformationMethod(new TransInformation());
             etUldAirline.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -675,7 +679,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 public void afterTextChanged(Editable s) {
                     if (!StringUtil.isEmpty(etUldAirline.getText().toString())) {
                         airlineCount = etUldAirline.getText().toString().length();
-                        searchAirline(etUldAirline.getText().toString());
+                        if (airlineCount > 0)
+                            searchAirline(etUldAirline.getText().toString());
                     } else {
                         airlineTwo.clear();
                         uldAirlineAdapter.notifyDataSetChanged();
@@ -741,8 +746,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             }
         }
         airlineTwo.clear();
-        if (airlineCount == 2 && airLineBeans.size() > 0) {
-            airLineBeans.clear();
+        if (airlineCount == 2) {
+            if (airLineBeans.size() < 1)
+                etUldAirline.setText("");
+           airLineBeans.clear();
         }
         for (FindAirlineAllBean mFindAirlineAllBean : airLineBeans) {
             airlineTwo.add(mFindAirlineAllBean.getIata() + "-" + mFindAirlineAllBean.getShortname());
@@ -799,7 +806,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void listByTypeResult(List<ListByTypeBean> result) {
-        if (uldTypeCount == 3 && result.size() == 1) {//10位uld号已经输完，并且检测到了该uld号
+        if (uldTypeCount == 3 ) {//10位uld号已经输完，并且检测到了该uld号
+            if (result.size() < 1)
+                etUldType.setText("");
             uldTypes.clear();
             uldTypeList.clear();
             uldTypeAdapter.notifyDataSetChanged();

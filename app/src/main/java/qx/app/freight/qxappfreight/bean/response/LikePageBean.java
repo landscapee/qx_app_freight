@@ -7,6 +7,17 @@ public class LikePageBean {
 
     private String id;
     private String uldCode;
+
+    public void setUldType(String uldType) {
+        uldType = uldType.toUpperCase();
+        this.uldType = uldType;
+    }
+
+    public void setIata(String iata) {
+        iata = iata.toUpperCase();
+        this.iata = iata;
+    }
+
     private String uldType;
     private String applyType;
     private String bulkingType;

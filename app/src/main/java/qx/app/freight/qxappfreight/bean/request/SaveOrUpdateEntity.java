@@ -13,4 +13,14 @@ public class SaveOrUpdateEntity {
     private String airType;
     private String iata;
     private int delFlag;
+
+    public void setUldType(String uldType) {
+        uldType = uldType.toUpperCase();
+        this.uldType = uldType;
+    }
+
+    public void setIata(String iata) {
+        iata = iata.toUpperCase();
+        this.iata = iata;
+    }
 }

@@ -189,6 +189,7 @@
                 android:paddingLeft="5dp"
                 android:singleLine="true"
                 android:text=""
+                android:inputType="number"
                 android:textColor="@color/black_ff3"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -258,7 +259,9 @@
             android:singleLine="true"
             android:text=""
             android:textColor="@color/black_ff3"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:maxLength="5"
+            />
     </LinearLayout>
 
     <LinearLayout
