@@ -23,4 +23,8 @@ public class ChangeStorageBean {
 
     private String chargeFlag;
 
+    private String mailType;
+
+
+
 }

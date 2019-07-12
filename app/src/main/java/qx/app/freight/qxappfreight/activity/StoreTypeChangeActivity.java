@@ -149,8 +149,19 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             ToastUtil.showToast("请先选择存储类型");
             return;
         }
-        mPresenter = new ChangeStoragePresenter(this);
         ChangeStorageBean entity = new ChangeStorageBean();
+        if (!data.getMailType().equals("")) {
+            switch (data.getMailType()) {
+                case "C":
+                    entity.setMailType("货物");
+                    break;
+
+                case "M":
+                    entity.setMailType("邮件");
+                    break;
+            }
+        }
+        mPresenter = new ChangeStoragePresenter(this);
         entity.setSpStorageChangeInfo(mEntity);
         entity.setTaskId(data.getTaskId());
         entity.setChargeFlag(data.getChargeFlag());
