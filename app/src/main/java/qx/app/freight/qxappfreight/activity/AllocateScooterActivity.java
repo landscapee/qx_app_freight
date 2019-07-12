@@ -55,11 +55,11 @@ public class AllocateScooterActivity extends BaseActivity {
     private void setAdapter() {
         fragmentList = new ArrayList<>();
         list_Title = new ArrayList<>();
-        list_Title.add("舱单");
         list_Title.add("板车");
+        list_Title.add("舱单");
 
-        fragmentList.add(RepeatWeightManifestFragment.getInstance(flightId));
         fragmentList.add(RepeatWeightScooterFragment.getInstance(flightId,taskId));
+        fragmentList.add(RepeatWeightManifestFragment.getInstance(flightId));
 
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), this, fragmentList, list_Title));
