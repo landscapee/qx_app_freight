@@ -133,6 +133,19 @@ public class ActManager {
         }
     }
 
+    //复重关闭
+    public void finishAllocate(){
+        if (activityStack != null) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                if ("AllocateScooterActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
+                    finishOther(activityStack.get(i));
+                } if("AllocaaateScanActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                }
+            }
+        }
+    }
+
 
     /**
      * 退出应用程序

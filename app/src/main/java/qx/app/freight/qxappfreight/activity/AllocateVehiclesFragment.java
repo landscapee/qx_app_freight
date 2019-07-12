@@ -135,15 +135,12 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             if ("weighter".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
-                list.addAll(mWebSocketResultBean.getChgData());
-                if (isShow) {
-                    mTaskFragment.setTitleText(list.size());
-                }
+                list1.addAll(mWebSocketResultBean.getChgData());
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getFlightId().equals(mWebSocketResultBean.getChgData().get(0).getFlightId())) {
-                    ActManager.getAppManager().finishReceive();
+                    ActManager.getAppManager().finishAllocate();
                     ToastUtil.showToast("任务已完成");
                 }
             }
