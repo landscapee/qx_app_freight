@@ -134,8 +134,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("checkWeight".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if ("checkWeight".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
+                seachWithNum();
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
@@ -146,7 +147,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             }
             getData();
         }
-        seachWithNum();
+
     }
 
     private void initData() {

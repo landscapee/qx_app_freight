@@ -76,7 +76,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @BindView(R.id.tv_uld_self)
     TextView tvUldSelf;
     @BindView(R.id.btn_read)
-    Button btnRead;
+    Button btnRead;//取消取重按钮，目前是隐藏了的
     @BindView(R.id.btn_return)
     Button btnReturn;
     @BindView(R.id.btn_confirm)

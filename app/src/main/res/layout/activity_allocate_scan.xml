@@ -162,7 +162,7 @@
                     android:gravity="center_vertical|end"
                     android:inputType="numberDecimal"
                     android:background="@null"
-                    android:hint="请点击取重"
+                    android:hint="请输入复磅值"
                     style="@style/public_tv_16sp_3"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -173,6 +173,7 @@
                     />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/btn_read"
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="27dp"
