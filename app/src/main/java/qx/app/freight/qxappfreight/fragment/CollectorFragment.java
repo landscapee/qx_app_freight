@@ -170,11 +170,12 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
-            if (Constants.COLLECTION.equals(mRoleRSBean.getRoleCode())) {
-                tempBean.setRole(mRoleRSBean.getRoleCode());
-            }
-        }
+        tempBean.setRole(Constants.COLLECTION);
+//        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
+//            if (Constants.COLLECTION.equals(mRoleRSBean.getRoleCode())) {
+//                tempBean.setRole(mRoleRSBean.getRoleCode());
+//            }
+//        }
         entity.setFilter(tempBean);
         entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);

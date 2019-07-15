@@ -192,6 +192,8 @@ public class InstallEquipClient extends StompClient {
 
     public void reConnect(String uri) {
         WebSocketService.subList.clear();
+        if (mTimerReConnect!=null)
+            mTimerReConnect.cancel();
         mTimerReConnect = new Timer();
         mTimerTaskReConnect = new TimerTask() {
             public void run() {

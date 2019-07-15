@@ -153,11 +153,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
-            if (Constants.RECEIVE.equals(mRoleRSBean.getRoleCode())) {
-                tempBean.setRole(mRoleRSBean.getRoleCode());
-            }
-        }
+        tempBean.setRole(Constants.RECEIVE);
+//        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
+//            if (Constants.RECEIVE.equals(mRoleRSBean.getRoleCode())) {
+//                tempBean.setRole(mRoleRSBean.getRoleCode());
+//            }
+//        }
         entity.setFilter(tempBean);
         entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);

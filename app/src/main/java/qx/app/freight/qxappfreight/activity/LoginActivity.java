@@ -240,6 +240,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //                    loginBean.setUserId(loginBean.getLoginid());
                     loginIm(loginBean);
                 }
+                if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())){
+                    ToastUtil.showToast(this, "组板只能使用PAD登录");
+                    return;
+                }
+
             }
             UserInfoSingle.setUser(loginBean);
             toMainAct();
