@@ -65,7 +65,7 @@ public class CollectionClient extends StompClient {
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        Disposable dispLifecycle =  my.lifecycle()
+        Disposable dispLifecycle = my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -73,14 +73,15 @@ public class CollectionClient extends StompClient {
                         case OPENED:
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
-                            if (mTimerReConnect!= null)
+                            if (mTimerReConnect != null)
                                 mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  收运 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 收运 出错", lifecycleEvent.getException());
-                            mTimer.cancel();
-                            if (WebSocketService.isTopic){
+                            if (mTimer != null)
+                                mTimer.cancel();
+                            if (WebSocketService.isTopic) {
                                 WebSocketService.setIsTopic(false);
                             }
 ////                            WebSocketService.isTopic = false;
@@ -89,14 +90,16 @@ public class CollectionClient extends StompClient {
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 收运 关闭");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -105,7 +108,7 @@ public class CollectionClient extends StompClient {
         if (!WebSocketService.isTopic) {
             WebSocketService.isTopic = true;
             //订阅   待办
-            if (WebSocketService.isExist(WebSocketService.ToList)){
+            if (WebSocketService.isExist(WebSocketService.ToList)) {
                 Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.ToList)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -118,7 +121,7 @@ public class CollectionClient extends StompClient {
                 compositeDisposable.add(dispTopic1);
                 Log.e(TAG, "websocket-->收运订阅地址：" + "/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList");
             }
-            if (WebSocketService.isExist(WebSocketService.Login)){
+            if (WebSocketService.isExist(WebSocketService.Login)) {
                 //订阅  登录地址
                 Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + WebSocketService.Login)
                         .subscribeOn(Schedulers.io())
@@ -134,7 +137,7 @@ public class CollectionClient extends StompClient {
                 compositeDisposable.add(dispTopic);
                 WebSocketService.subList.add(WebSocketService.Login);
             }
-            if (WebSocketService.isExist(WebSocketService.Message)){
+            if (WebSocketService.isExist(WebSocketService.Message)) {
                 //订阅   消息中心地址
                 Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.Message)
                         .subscribeOn(Schedulers.io())
@@ -169,6 +172,7 @@ public class CollectionClient extends StompClient {
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
     }
+
     public void reConnect(String uri) {
         WebSocketService.subList.clear();
         mTimerReConnect = new Timer();

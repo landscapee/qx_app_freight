@@ -80,27 +80,30 @@ public class InstallEquipClient extends StompClient {
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
-                            if (mTimerReConnect!= null)
+                            if (mTimerReConnect != null)
                                 mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             reConnect(uri);
 //                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -186,6 +189,7 @@ public class InstallEquipClient extends StompClient {
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
     }
+
     public void reConnect(String uri) {
         WebSocketService.subList.clear();
         mTimerReConnect = new Timer();
@@ -197,6 +201,7 @@ public class InstallEquipClient extends StompClient {
         };
         mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
     }
+
     private void resetSubscriptions() {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();

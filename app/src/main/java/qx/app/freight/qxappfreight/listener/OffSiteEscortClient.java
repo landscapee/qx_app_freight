@@ -51,21 +51,21 @@ public class OffSiteEscortClient extends StompClient {
     private Timer mTimerReConnect;
     private TimerTask mTimerTaskReConnect;
 
-    public OffSiteEscortClient(String uri,Context mContext) {
+    public OffSiteEscortClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
         connect(uri);
     }
 
     @SuppressLint("CheckResult")
-    public void connect(String uri){
-        StompClient my=  Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+    public void connect(String uri) {
+        StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        Disposable dispLifecycle =  my.lifecycle()
+        Disposable dispLifecycle = my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -74,33 +74,36 @@ public class OffSiteEscortClient extends StompClient {
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
-                            if (mTimerReConnect!= null)
+                            if (mTimerReConnect != null)
                                 mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  外场运输 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 外场运输 出错", lifecycleEvent.getException());
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             reConnect(uri);
 //                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 外场运输 关闭");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
                 });
         compositeDisposable.add(dispLifecycle);
-        if(!WebSocketService.isTopic){
+        if (!WebSocketService.isTopic) {
             //订阅   运输 装卸机
             Disposable dispTopic3 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
                     .subscribeOn(Schedulers.io())
@@ -118,7 +121,7 @@ public class OffSiteEscortClient extends StompClient {
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         } else {
-                            if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2")|| topicMessage.getPayload().contains("taskType:3")|| topicMessage.getPayload().contains("taskType:5")) {//装卸机
+                            if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")) {//装卸机
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
@@ -126,7 +129,7 @@ public class OffSiteEscortClient extends StompClient {
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
-                            }else {
+                            } else {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
@@ -182,6 +185,7 @@ public class OffSiteEscortClient extends StompClient {
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
     }
+
     public void reConnect(String uri) {
         WebSocketService.subList.clear();
         mTimerReConnect = new Timer();
@@ -222,10 +226,12 @@ public class OffSiteEscortClient extends StompClient {
     public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
         EventBus.getDefault().post(bean);
     }
+
     //消息推送
-    public  void sendMessageEventBus(WebSocketMessageBean bean) {
+    public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
+
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")

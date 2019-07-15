@@ -55,13 +55,13 @@ public class PreplanerClient extends StompClient {
 
     @SuppressLint("CheckResult")
     public void connect(String uri) {
-        StompClient my= Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
+        StompClient my = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(new StompHeader(TAG, "guest"));
         //超时连接
         withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-        Disposable dispLifecycle =  my.lifecycle()
+        Disposable dispLifecycle = my.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -74,20 +74,23 @@ public class PreplanerClient extends StompClient {
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 组板 出错", lifecycleEvent.getException());
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 组板 关闭");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            mTimer.cancel();
+                            if (mTimer != null)
+                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
