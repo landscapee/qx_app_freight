@@ -90,12 +90,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
-//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-//        searchToolbar.setHintAndListener("请输入运单号", text -> {
-//            seachString = text;
-//            seachWith();
-//        });
         initData();
     }
 
@@ -135,12 +129,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     }
 
     private void initData() {
-//        transportListList = new ArrayList<>();
-//        transportListList1 = new ArrayList<>();
         adapter = new MainListRvAdapter(transportListList);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
             CURRENT_TASK_BEAN = transportListList.get(position);
             mPresenter = new TaskLockPresenter(this);
             TaskLockEntity entity = new TaskLockEntity();
@@ -149,12 +140,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             entity.setTaskId(taskIdList);
             entity.setUserId(UserInfoSingle.getInstance().getUserId());
             entity.setRoleCode(Constants.RECEIVE);
-
             ((TaskLockPresenter) mPresenter).taskLock(entity);
         });
         getData();
     }
 
+    //获取数据
     private void getData() {
         mPresenter = new SearchTodoTaskPresenter(this);
         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
@@ -188,14 +179,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("========", daibanCode);
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
-            Log.e("========1", daibanCode);
             if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(3));
-                Log.e("========2", daibanCode);
             }
         }
     }
@@ -208,7 +196,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : transportListList1) {
             if (daibanCode.equals(item.getWaybillCode())) {
-
                 CURRENT_TASK_BEAN = item;
                 mPresenter = new TaskLockPresenter(this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -217,9 +204,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
                 entity.setRoleCode(Constants.RECEIVE);
-
                 ((TaskLockPresenter) mPresenter).taskLock(entity);
-
                 return;
             }
         }
@@ -243,7 +228,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         getData();
     }
 
-
+    //刷新列表数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String refresh) {
         if (refresh.equals("collectVerify_refresh")) {
@@ -253,6 +238,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         }
     }
 
+    //收验接受到推送过来的数据，添加或者删除数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
@@ -267,14 +253,10 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
                     ActManager.getAppManager().finishReceive();
-                    ToastUtil.showToast("当前任务以在其他设备或终端完成");
+                    ToastUtil.showToast("当前收验任务已完成");
                 }
             }
             getData();
-//            for (TransportDataBase mTransportListBean : transportListList1) {
-//                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId()))
-//                    transportListList1.remove(mTransportListBean);
-//            }
         }
         seachWith();
     }

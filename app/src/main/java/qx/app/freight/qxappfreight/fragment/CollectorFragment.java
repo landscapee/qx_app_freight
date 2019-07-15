@@ -91,6 +91,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
         loadData();
+        setUserVisibleHint(true);
     }
 
     private void seachWith() {
@@ -115,12 +116,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-//        list = new ArrayList<>();
-//        list1 = new ArrayList<>();
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
             CURRENT_TASK_BEAN = list.get(position);
             mPresenter = new TaskLockPresenter(this);
             TaskLockEntity entity = new TaskLockEntity();
@@ -129,7 +127,6 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             entity.setTaskId(taskIdList);
             entity.setUserId(UserInfoSingle.getInstance().getUserId());
             entity.setRoleCode(Constants.COLLECTION);
-
             ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
@@ -165,12 +162,10 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 break;
         }
     }
-
-
+    //获取数据
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
-
         TransportDataBase tempBean = new TransportDataBase();
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
@@ -232,7 +227,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 
         }
     }
-
+    //收运接受到推送增加或者删除数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
@@ -249,15 +244,10 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
                     ActManager.getAppManager().finishReCollection();
-                    ToastUtil.showToast("任务已完成");
+                    ToastUtil.showToast("当前收运任务已完成");
                 }
             }
             loadData();
-//            for (TransportDataBase mTransportListBean : list1) {
-//                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
-//                    list1.remove(mTransportListBean);
-//                }
-//            }
         }
         seachWith();
     }
@@ -270,7 +260,6 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list) {
             if (daibanCode.equals(item.getWaybillCode())) {
-
                 CURRENT_TASK_BEAN = item;
                 mPresenter = new TaskLockPresenter(this);
                 TaskLockEntity entity = new TaskLockEntity();
@@ -279,9 +268,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
                 entity.setRoleCode(Constants.COLLECTION);
-
                 ((TaskLockPresenter) mPresenter).taskLock(entity);
-
                 return;
             }
         }

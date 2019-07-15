@@ -211,8 +211,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 ToastUtil.showToast(this, "请输入件数");
             } else if ("".equals(mEdtNumber.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入重量");
-            }
-            else {
+            } else {
                 finishForResult();
             }
         });
@@ -229,7 +228,13 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 ////            return false;
 //        });
         mTvUldnumber.setOnClickListener(v -> {
-            showPopWindowUld();
+            if (null != scooterInfo) {
+                if (!TextUtils.isEmpty(mTvScooter.getText()) || !scooterInfo.getScooterType().equals("2"))
+                    showPopWindowUld();
+                else
+                    ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
+            }else
+                ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
         });
 
     }
@@ -340,7 +345,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setScooterWeight(mTvCooterWeight.getText().toString().trim());
         //判断ULD号是否为10位
         if (mTvUldnumber.getText().toString().length() == 10) {
-            if (mLikePageBean!=null){
+            if (mLikePageBean != null) {
                 //ULD号
                 mMyAgentListBean.setUldCode(mLikePageBean.getUldCode());
                 //ULD Id
@@ -351,8 +356,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 mMyAgentListBean.setIata(mLikePageBean.getIata());
                 //ULD自重
                 mMyAgentListBean.setUldWeight(Integer.valueOf(mEdtDeadWeight.getText().toString().trim()));
-            }
-            else {
+            } else {
                 ToastUtil.showToast("ULD输入有误");
                 return;
             }
@@ -749,7 +753,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         if (airlineCount == 2) {
             if (airLineBeans.size() < 1)
                 etUldAirline.setText("");
-           airLineBeans.clear();
+            airLineBeans.clear();
         }
         for (FindAirlineAllBean mFindAirlineAllBean : airLineBeans) {
             airlineTwo.add(mFindAirlineAllBean.getIata() + "-" + mFindAirlineAllBean.getShortname());
@@ -806,7 +810,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void listByTypeResult(List<ListByTypeBean> result) {
-        if (uldTypeCount == 3 ) {//10位uld号已经输完，并且检测到了该uld号
+        if (uldTypeCount == 3) {//10位uld号已经输完，并且检测到了该uld号
             if (result.size() < 1)
                 etUldType.setText("");
             uldTypes.clear();
