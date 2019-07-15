@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -47,6 +48,8 @@ public class OffSiteEscortClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
+    private Timer mTimerReConnect;
+    private TimerTask mTimerTaskReConnect;
 
     public OffSiteEscortClient(String uri,Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -71,13 +74,16 @@ public class OffSiteEscortClient extends StompClient {
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
+                            if (mTimerReConnect!= null)
+                                mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  外场运输 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 外场运输 出错", lifecycleEvent.getException());
                             mTimer.cancel();
                             WebSocketService.isTopic = false;
-                            connect(uri);
+                            reConnect(uri);
+//                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 外场运输 关闭");
@@ -175,6 +181,17 @@ public class OffSiteEscortClient extends StompClient {
             }
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
+    }
+    public void reConnect(String uri) {
+        WebSocketService.subList.clear();
+        mTimerReConnect = new Timer();
+        mTimerTaskReConnect = new TimerTask() {
+            public void run() {
+                if (NetworkUtils.isNetWorkAvailable(mContext))
+                    connect(uri);
+            }
+        };
+        mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
     }
 
     public static class GetConnectionProvider implements ConnectionProvider {

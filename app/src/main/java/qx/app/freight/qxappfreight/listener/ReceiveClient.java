@@ -31,6 +31,9 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.AppUtil;
+import qx.app.freight.qxappfreight.utils.NetworkUtils;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -46,7 +49,8 @@ public class ReceiveClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-
+    private Timer mTimerReConnect;
+    private TimerTask mTimerTaskReConnect;
 
     public ReceiveClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -72,13 +76,19 @@ public class ReceiveClient extends StompClient {
                         case OPENED:
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
+                            if (mTimerReConnect!= null)
+                                mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  收验 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 收验 出错", lifecycleEvent.getException());
                             mTimer.cancel();
-                            WebSocketService.isTopic = false;
-                            connect(uri);
+                            if (WebSocketService.isTopic){
+                                WebSocketService.setIsTopic(false);
+                            }
+////                            WebSocketService.isTopic = false;
+                            reConnect(uri);
+//                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 收验 关闭");
@@ -98,42 +108,51 @@ public class ReceiveClient extends StompClient {
         if (!WebSocketService.isTopic) {
             WebSocketService.isTopic = true;
             //订阅   待办
-            Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topicMessage -> {
-                        Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
-                        WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
-                        sendReshEventBus(mWebSocketBean);
-                    }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
-            Log.e(TAG, "websocket-->收验订阅地址：" + "/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList");
-            compositeDisposable.add(dispTopic1);
-            //订阅  登录地址
-            Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topicMessage -> {
-                        Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
-                        if (null != topicMessage.getPayload()) {
-                            showDialog();
-                        }
-                    }, throwable -> {
-                        Log.e(TAG, "websocket-->登录失败", throwable);
-                    });
-            compositeDisposable.add(dispTopic);
-            //订阅   消息中心地址
-            Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topicMessage -> {
-                        Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
-                        WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                        sendMessageEventBus(mWebSocketMessBean);
-                    }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
-
-            compositeDisposable.add(dispTopic2);
+            if (WebSocketService.isExist(WebSocketService.ToList)){
+                Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.ToList)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(topicMessage -> {
+                            Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                            WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                            sendReshEventBus(mWebSocketBean);
+                        }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
+                compositeDisposable.add(dispTopic1);
+                WebSocketService.subList.add(WebSocketService.ToList);
+                Log.e(TAG, "websocket-->收验订阅地址：" + "/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList");
+            }
+            if (WebSocketService.isExist(WebSocketService.Login)){
+                //订阅  登录地址
+                Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + WebSocketService.Login)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(topicMessage -> {
+                            Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
+                            if (null != topicMessage.getPayload()) {
+                                showDialog();
+                            }
+                        }, throwable -> {
+                            Log.e(TAG, "websocket-->登录失败", throwable);
+                        });
+                compositeDisposable.add(dispTopic);
+                WebSocketService.subList.add(WebSocketService.Login);
+            }
+            if (WebSocketService.isExist(WebSocketService.Message)){
+                //订阅   消息中心地址
+                Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.Message)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(topicMessage -> {
+                            Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
+                            WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
+                            sendMessageEventBus(mWebSocketMessBean);
+                        }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
+                compositeDisposable.add(dispTopic2);
+                WebSocketService.subList.add(WebSocketService.Message);
+            }
         }
-        my.connect();
+        if (NetworkUtils.isNetWorkAvailable(mContext))
+            my.connect();
     }
     public void sendMess(StompClient my) {
         mTimer = new Timer();
@@ -146,6 +165,17 @@ public class ReceiveClient extends StompClient {
             }
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
+    }
+    public void reConnect(String uri) {
+        WebSocketService.subList.clear();
+        mTimerReConnect = new Timer();
+        mTimerTaskReConnect = new TimerTask() {
+            public void run() {
+                if (NetworkUtils.isNetWorkAvailable(mContext))
+                    connect(uri);
+            }
+        };
+        mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
     }
 
     //用于代办刷新

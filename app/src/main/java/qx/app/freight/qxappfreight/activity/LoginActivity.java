@@ -151,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 if (appInfo != null) {
                     versionCode = appInfo.versionCode;
                 }
-                if (versionCode != mVersionBean.getData().getVersionCodeRS()) {
+                if (versionCode < mVersionBean.getData().getVersionCodeRS()) {
                     showAppUpdateDialog();
                 }
             }

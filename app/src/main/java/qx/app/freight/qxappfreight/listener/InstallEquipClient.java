@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -53,6 +54,8 @@ public class InstallEquipClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
+    private Timer mTimerReConnect;
+    private TimerTask mTimerTaskReConnect;
 
     public InstallEquipClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -77,13 +80,16 @@ public class InstallEquipClient extends StompClient {
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
                             sendMess(my);
+                            if (mTimerReConnect!= null)
+                                mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
                             mTimer.cancel();
                             WebSocketService.isTopic = false;
-                            connect(uri);
+                            reConnect(uri);
+//                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
@@ -180,7 +186,17 @@ public class InstallEquipClient extends StompClient {
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
     }
-
+    public void reConnect(String uri) {
+        WebSocketService.subList.clear();
+        mTimerReConnect = new Timer();
+        mTimerTaskReConnect = new TimerTask() {
+            public void run() {
+                if (NetworkUtils.isNetWorkAvailable(mContext))
+                    connect(uri);
+            }
+        };
+        mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
+    }
     private void resetSubscriptions() {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();

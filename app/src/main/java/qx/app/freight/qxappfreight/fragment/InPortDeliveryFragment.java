@@ -212,7 +212,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("delivery_in".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if ("DA_outbound".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 mTaskFragment.setTitleText(list1.size());
             }

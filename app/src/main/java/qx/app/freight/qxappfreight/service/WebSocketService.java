@@ -42,6 +42,11 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     private boolean isContinue = true; //线程控制
     private Thread threadGps = null;
 
+    public static String ToList ="/taskTodo/taskTodoList" ;
+    public static String Message = "/MT/msMsg";
+    public static String Login = "/MT/message";
+    public static List<String> subList = new ArrayList <>();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -251,6 +256,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     }
     //停止连接
     public static void closeLink() {
+        subList.clear();
         if (mStompClient.size() != 0) {
             for (int i = 0; i < mStompClient.size(); i++) {
                 Log.e(TAG, "关闭了" + i + "个连接");
@@ -259,5 +265,24 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         }
     }
 
+    public synchronized static void setIsTopic(boolean isTopic1){
+        isTopic = isTopic1;
+    }
+
+    /**
+     * 如果已经订阅 返回 false
+     * @param sub
+     * @return
+     */
+    public static boolean isExist(String sub){
+        boolean isExit = true;
+        for (String string :subList)
+        {
+            if (sub.equals(string)){
+                isExit = false;
+            }
+        }
+        return isExit;
+    }
 
 }
