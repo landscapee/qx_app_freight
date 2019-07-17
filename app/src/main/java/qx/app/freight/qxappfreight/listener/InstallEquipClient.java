@@ -149,6 +149,21 @@ public class InstallEquipClient extends StompClient {
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
+            //订阅  装机单变更推送
+            Log.e("tagPush","userid====="+UserInfoSingle.getInstance().getUserId());
+            Disposable loadingListPush = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
+                        if (null != topicMessage.getPayload()) {
+                            sendLoadingListPush(topicMessage.getPayload());
+                        }
+                    }, throwable -> {
+                        Log.e(TAG, "订阅失败", throwable);
+                    });
+
+            compositeDisposable.add(loadingListPush);
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())
@@ -244,7 +259,9 @@ public class InstallEquipClient extends StompClient {
     public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
-
+    private void sendLoadingListPush(String result) {
+        EventBus.getDefault().post(result);
+    }
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")
