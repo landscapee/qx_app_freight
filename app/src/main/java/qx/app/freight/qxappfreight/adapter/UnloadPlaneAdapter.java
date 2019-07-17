@@ -71,7 +71,13 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 right.setBoardNumber(entity.getTailer());
                 right.setUldNumber(entity.getUldNumber());
                 right.setTarget(entity.getDest());
-                right.setType("C".equals(entity.getType()) ? "cargo" : "mail");
+                String type="邮件";
+                if ("C".equals(entity.getType())){
+                    type="货物";
+                }else if ("BY".equals(entity.getType())){
+                    type="行李";
+                }
+                right.setType(type);
                 right.setWeight(String.valueOf(entity.getActWgt()));
                 right.setNumber(String.valueOf(entity.getNumber()));
                 right.setShowPull(entity.isShowPullDown());
@@ -96,7 +102,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         titleRight.setBoardNumber("板号");
         titleRight.setUldNumber("ULD号");
         titleRight.setTarget("目的地");
-        titleRight.setType("类型");
+        titleRight.setType("类别");
         titleRight.setWeight("重量");
 //        titleRight.setNumber("件数");
         rightData.add(0, titleRight);
