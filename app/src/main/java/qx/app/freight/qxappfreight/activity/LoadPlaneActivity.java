@@ -110,6 +110,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             EventBus.getDefault().register(this);
         }
         mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
+        mWaitCallBackDialog.setCancelable(false);
+        mWaitCallBackDialog.setCanceledOnTouchOutside(false);
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
