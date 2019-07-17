@@ -169,14 +169,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
             boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-               /* for (LoadingListBean.DataBean entity1 : mLoadingList) {
-                    for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
-                        if (!entity2.isLocked()) {
-                            doRight = false;
-                            break;
-                        }
+            LoadingListBean.DataBean entity1 = mLoadingList.get(0);
+            if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
+                for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
+                    if (!entity2.isLocked()) {
+                        doRight = false;
+                        break;
                     }
-                }*/
+                }
+            }
             if (doRight) {
                 GetFlightCargoResBean bean = new GetFlightCargoResBean();
                 bean.setTpFlightId(data.getFlightId());
@@ -204,6 +205,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             adapter.setOnOverLoadListener(entity -> {
                 if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
                     LoadingListSendEntity requestModel = new LoadingListSendEntity();
+                    requestModel.setFlightNo(data.getFlightNo());
                     requestModel.setCreateTime(entity.getCreateTime());
                     requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
                     requestModel.setCreateUser(entity.getCreateUser());

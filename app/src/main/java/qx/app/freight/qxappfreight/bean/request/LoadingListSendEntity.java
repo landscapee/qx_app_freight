@@ -16,6 +16,7 @@ public class LoadingListSendEntity {
      */
 
     private String flightInfoId;
+    private String flightNo;
     private long createTime;
     private String createUser;
     private String loadingUser;

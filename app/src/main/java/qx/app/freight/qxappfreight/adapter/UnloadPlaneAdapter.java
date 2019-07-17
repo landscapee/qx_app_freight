@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -43,6 +44,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         }
         helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
         ImageView ivControl = helper.getView(R.id.iv_control);
+        LinearLayout llControl = helper.getView(R.id.ll_controler);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
         List<RegularEntity> leftData = new ArrayList<>();
         List<ScrollEntity> rightData = new ArrayList<>();
@@ -139,7 +141,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             ivControl.setImageResource(R.mipmap.down);
             llDetail.collapse();
         }
-        ivControl.setOnClickListener(v -> {
+        llControl.setOnClickListener(v -> {
             item.setShowDetail(!item.isShowDetail());
             if (item.isShowDetail()) {
                 rvLeft.setVisibility(View.VISIBLE);
