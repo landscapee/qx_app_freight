@@ -84,7 +84,7 @@ android {
                 signingConfig signingConfigs.release
             }
         }
-        //生产环境
+        //生产环境(可调试)
         debugProduct {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -107,9 +107,9 @@ android {
                 buildConfigField("String", key, "\"" + properties.get(key) + "\"")
             }
             //配置打包签名的信息
-            if (RELEASE_PROPERTIES_EXIST) {
-                signingConfig signingConfigs.release
-            }
+//            if (RELEASE_PROPERTIES_EXIST) {
+//                signingConfig signingConfigs.release
+//            }
         }
 
         //测试环境
