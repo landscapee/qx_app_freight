@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -139,6 +140,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<LoginResponseBean> login(LoginEntity loginEntity) {
         return transform(getService().login(loginEntity));
+    }
+
+    /****
+     * 登录
+     * @param loginEntity
+     * @return
+     */
+    public Observable<String> updatePWD(UpdatePwdEntity loginEntity) {
+        return nothingtransform(getService().updatePWD(loginEntity));
     }
 
     /****

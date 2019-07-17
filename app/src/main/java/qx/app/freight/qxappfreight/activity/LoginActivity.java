@@ -38,7 +38,6 @@ import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
 import qx.app.freight.qxappfreight.utils.AppUtil;
-import qx.app.freight.qxappfreight.utils.CalculateUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.DownloadInstall;
 import qx.app.freight.qxappfreight.utils.DownloadUtils;
@@ -240,15 +239,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //                    loginBean.setUserId(loginBean.getLoginid());
                     loginIm(loginBean);
                 }
-                if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())){
+                if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())) {
                     ToastUtil.showToast(this, "组板只能使用PAD登录");
                     return;
                 }
-
             }
             UserInfoSingle.setUser(loginBean);
             toMainAct();
             loginTpPC(loginBean);
+            if (Constants.PSW_TYPE_NO.equals(loginBean.getCode())) {
+                UpdatePWDActivity.startActivity(this);
+            }
+
         } else {
             ToastUtil.showToast(this, "数据错误");
         }

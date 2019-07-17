@@ -39,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -112,6 +113,10 @@ public interface HttpApi {
     //登录接口
     @POST("/service-base-sysmanage/auth/login")
     Observable<BaseEntity<LoginResponseBean>> login(@Body LoginEntity model);
+
+    //修改密码
+    @POST("/service-base-sysmanage/auth/updatePWD")
+    Observable<BaseEntity<Object>> updatePWD(@Body UpdatePwdEntity model);
 
     //登录一期智能调度 获取im使用 token
     @POST("app/appLogin")

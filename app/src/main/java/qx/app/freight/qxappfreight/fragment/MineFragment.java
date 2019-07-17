@@ -23,6 +23,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.activity.NoticeActivity;
+import qx.app.freight.qxappfreight.activity.UpdatePWDActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -64,6 +65,8 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     ImageView ivNoticePoint;
     @BindView(R.id.ll_notice)
     LinearLayout llNotice;
+    @BindView(R.id.rl_message_change)
+    RelativeLayout llPsd;
     @BindView(R.id.tv_notice_num)
     TextView tvNoticeNum;
     @BindView(R.id.rl_notice)
@@ -139,7 +142,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         ((NoReadCountPresenter) mPresenter).noReadNoticeCount(UserInfoSingle.getInstance().getUserId());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
@@ -154,6 +157,10 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
             case R.id.rl_notice:
                 //跳转到通知公告
                 startActivity(new Intent(getContext(), NoticeActivity.class));
+                break;
+            case R.id.rl_message_change:
+                //密码修改
+                UpdatePWDActivity.startActivity(getActivity());
                 break;
         }
     }

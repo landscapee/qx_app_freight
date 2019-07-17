@@ -201,5 +201,12 @@ public class Constants {
     //计划时间
     public static final int TIME_TYPE_PLAN = 1;
 
+    //密码验证成功并且密码满足规范;
+    public static final String PSW_TYPE_YES = "0";
+    //密码不满足规范
+    public static final String PSW_TYPE_NO = "1";
+    //密码过期;其他密码验证失败
+    public static final String PSW_TYPE_OTHER = "2";
+
 
 }
