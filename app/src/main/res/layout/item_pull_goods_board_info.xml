@@ -101,6 +101,7 @@
                 android:paddingTop="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_5"
                 android:focusable="true"
+                android:visibility="gone"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
                 <TextView
