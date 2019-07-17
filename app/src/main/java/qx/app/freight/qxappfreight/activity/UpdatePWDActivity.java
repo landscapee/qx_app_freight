@@ -2,11 +2,12 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -23,13 +24,10 @@ import qx.app.freight.qxappfreight.presenter.UpdatePWDPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract.updatePWDView {
 
-    @BindView(R.id.title)
-    TextView title;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.tv_old_pwd)
     TextView tvOldPwd;
     @BindView(R.id.et_old_pwd)
@@ -51,6 +49,8 @@ public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract
 
     private LoginResponseBean loginBean;
 
+    private CustomToolbar toolbar;
+
     public static void startActivity(Activity context
     ) {
         Intent intent = new Intent(context, UpdatePWDActivity.class);
@@ -64,13 +64,13 @@ public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        toolbar.setTitle("");
-        toolbar.setNavigationIcon(R.mipmap.icon_back);
-        title.setText("修改密码");
+        setToolbarShow(View.VISIBLE);
+        toolbar = getToolbar();
+        toolbar.setMainTitle(Color.WHITE, "密码修改");
         initView();
         initData();
-
     }
+
 
     private void initView() {
 
