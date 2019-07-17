@@ -358,6 +358,12 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
     }
 
+    /**
+     * 扫描添加并锁定板车
+     * @param transportTodoListBeans
+     * @param mainIfos
+     * @param scooterCode
+     */
     private void updataScooter(List <TransportTodoListBean> transportTodoListBeans, TransportTodoListBean mainIfos, String scooterCode) {
 
         TransportEndEntity transportEndEntity = new TransportEndEntity();
@@ -833,6 +839,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         dismissProgessDialog();
     }
 
+    /**
+     * 检测板车是否使用回调结果
+     * @param result
+     */
     @Override
     public void checkScooterCodeResult(BaseEntity <Object> result) {
         if ("200".equals(result.getStatus())) {
