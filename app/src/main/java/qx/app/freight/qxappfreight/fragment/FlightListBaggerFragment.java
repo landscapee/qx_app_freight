@@ -87,7 +87,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             startActivity(new Intent(getContext(), BaggageListActivity.class).putExtra("flightBean",mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
-
+        setUserVisibleHint(true);
     }
 
     @Override

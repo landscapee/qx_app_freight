@@ -66,6 +66,7 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initView();
+        setUserVisibleHint(true);
     }
 
     /**
@@ -100,7 +101,7 @@ public class InternationalCargoFragment extends BaseFragment implements GetAllIn
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mListTemp.size());
             if (searchToolbar!=null){
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachWithNum();
                 });
