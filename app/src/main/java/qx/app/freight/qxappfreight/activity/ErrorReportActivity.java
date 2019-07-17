@@ -189,7 +189,11 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
                     String deptCode = UserInfoSingle.getInstance().getDeptCode();
-                    model.setDeptId((deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode));
+                    String deptId = "";
+                    if (deptCode != null) {
+                        deptId = (deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode);
+                    }
+                    model.setDeptId(deptId);
                     model.setArea(getIntent().getStringExtra("area_id"));
                     model.setExceptionCode(getIntent().getStringExtra("step_code"));
                     model.setFiles(null);
@@ -343,7 +347,11 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
         model.setReType(getIntent().getIntExtra("error_type", 1));
         String deptCode = UserInfoSingle.getInstance().getDeptCode();
-        model.setDeptId((deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode));
+        String deptId = "";
+        if (deptCode != null) {
+            deptId = (deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode);
+        }
+        model.setDeptId(deptId);
         model.setArea(getIntent().getStringExtra("area_id"));
         model.setExceptionCode(getIntent().getStringExtra("step_code"));
         TransportEndEntity endEntity = new TransportEndEntity();
