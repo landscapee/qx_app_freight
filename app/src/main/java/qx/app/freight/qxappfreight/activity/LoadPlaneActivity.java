@@ -200,7 +200,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         } else {
             mLoadingList.clear();
             if (result.getData() == null || result.getData().size() == 0) return;
-            mLoadingList.addAll(result.getData());
+//            mLoadingList.addAll(result.getData());
+            mLoadingList.add(result.getData().get(0));
             for (LoadingListBean.DataBean bean:mLoadingList){
                 bean.setShowDetail(true);
             }
