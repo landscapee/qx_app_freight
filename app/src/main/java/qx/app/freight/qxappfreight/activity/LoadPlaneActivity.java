@@ -169,12 +169,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
             boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-            LoadingListBean.DataBean entity1 = mLoadingList.get(0);
-            if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
-                for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
-                    if (!entity2.isLocked()) {
-                        doRight = false;
-                        break;
+            if (mLoadingList!=null&&mLoadingList.size()!=0) {
+                LoadingListBean.DataBean entity1 = mLoadingList.get(0);
+                if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
+                    for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
+                        if (!entity2.isLocked()) {
+                            doRight = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -199,6 +201,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             mLoadingList.clear();
             if (result.getData() == null || result.getData().size() == 0) return;
             mLoadingList.addAll(result.getData());
+            for (LoadingListBean.DataBean bean:mLoadingList){
+                bean.setShowDetail(true);
+            }
             Collections.reverse(mLoadingList);
             UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
             mRvData.setAdapter(adapter);

@@ -118,7 +118,8 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         boolean mIsKeepOnTask = mData.getMovement() == 4;
         mMainFlightId = mIsKeepOnTask ? mData.getRelateInfoObj().getFlightId() : mData.getFlightId();
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(), mMainFlightId);
+        String userId=UserInfoSingle.getInstance().getUserId();
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(userId, mMainFlightId);
         mCurrentTaskId = mIsKeepOnTask ? mData.getRelateInfoObj().getTaskId() : mData.getTaskId();
         mTvFlightInfo.setText(mIsKeepOnTask ? mData.getRelateInfoObj().getFlightNo() : mData.getFlightNo());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
