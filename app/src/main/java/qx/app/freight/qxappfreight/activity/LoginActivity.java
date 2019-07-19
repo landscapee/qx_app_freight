@@ -284,6 +284,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     }
 
+    /**
+     * 登录成功 跳转到主页
+     */
     private void toMainAct() {
         MainActivity.startActivity(this);
         finish();
