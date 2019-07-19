@@ -112,12 +112,12 @@ public class BaggageListConfirmActivity extends BaseActivity implements BaggageA
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
 

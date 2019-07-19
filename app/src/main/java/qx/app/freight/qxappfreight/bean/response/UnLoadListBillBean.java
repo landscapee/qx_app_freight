@@ -45,11 +45,11 @@ public class UnLoadListBillBean {
          */
 
         private String id;
-        private String flightId;
+        private String flightInfoId;
         private String version;
         private String content;
         private int reviewStatus;
-        private long createDate;
+        private long createTime;
         private String createUser;
         private long updateDate;
         private Object updateUser;

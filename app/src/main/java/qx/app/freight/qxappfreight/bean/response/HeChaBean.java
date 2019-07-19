@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class HeChaBean {
-    private String id;
-    private String name;
-    private String value;
-    private String des;
+    private String fileName;
+    private String filePath;
+    private String fileType;
+    private String fileTypeName;
 
 }

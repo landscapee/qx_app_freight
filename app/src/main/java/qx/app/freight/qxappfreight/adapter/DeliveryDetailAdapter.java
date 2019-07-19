@@ -32,7 +32,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
         holder.setText(R.id.tv_put_num,"待出库: "+waitPutCargoNum+"件 / 已出库:"+bean.getOutboundNumber()+"件");
 
-        holder.setText(R.id.total_info,"录单: "+bean.getTotalNumberPackages()+"件 / 分拣:"+bean.getTallyingTotal()+"件");
+        holder.setText(R.id.total_info,"录单: "+bean.getTotalNumber()+"件 / 分拣:"+bean.getTallyingTotal()+"件");
         //录单 件数 - 重量
 //        holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
 //                ,bean.getTotalNumberPackages()+""

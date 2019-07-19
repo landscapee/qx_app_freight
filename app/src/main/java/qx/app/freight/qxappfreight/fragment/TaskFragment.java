@@ -66,35 +66,43 @@ public class TaskFragment extends BaseFragment {
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
                 mSearchBar.getSearchView().setText("");
-                mToolBar.setVisibility(View.VISIBLE);
-                mSearchBar.setVisibility(View.GONE);
-                // 向左边移入
-                mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
-                // 向右边移出
-                mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
             });
         return view;
     }
     public SearchToolbar getSearchView(){
         return mSearchBar;
     }
+    public CustomToolbar getToolbar(){
+        return mToolBar;
+    }
     private void gotoScan() {
         if (TextUtils.isEmpty(nowRoleCode)){
             return;
         }
-        switch (nowRoleCode){
-            case "复重":
-                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
-                mContext.startActivity(intent);
-                break;
-//            case "":
+
+        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        switch (nowRoleCode){
+//            case "复重":
+//                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
+//                mContext.startActivity(intent);
 //                break;
-            default:
-//                ToastUtil.showToast(getContext(), "扫码");
-                ScanManagerActivity.startActivity(getContext(),"scan");
-        }
+////            case "":
+////                break;
+//            default:
+////                ToastUtil.showToast(getContext(), "扫码");
+//                ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        }
 
     }
 
@@ -130,6 +138,18 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 nowRoleCode = list_Title.get(i);
+                if (View.VISIBLE ==mSearchBar.getVisibility()){
+                    mSearchBar.getSearchView().setText("");
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
+                }
+
             }
 
             @Override
@@ -154,7 +174,7 @@ public class TaskFragment extends BaseFragment {
                 list_Title.add("收运");
             } else if (Constants.PREPLANER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskStowageFragment());
-                list_Title.add("理货");
+                list_Title.add("组板");
 
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
@@ -180,7 +200,7 @@ public class TaskFragment extends BaseFragment {
                 list_Title.add("进港提货");
             } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港理货");
+                list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");
@@ -193,8 +213,14 @@ public class TaskFragment extends BaseFragment {
             }
 
         }
-        if(list_Title.size() > 0)
+
+        if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
+            //如果第一个是外场运输就把搜索框隐藏
+            if (list_Title.get(0).equals("外场运输")){
+                mToolBar.setRightIconViewVisiable(false);
+            }
+        }
         else
             ToastUtil.showToast("该用户没有被分配角色");
 

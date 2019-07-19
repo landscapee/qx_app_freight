@@ -36,7 +36,7 @@ public class MyApplication extends Application {
 
         Log.e("Application：运行模式>>>", BuildConfig.Model);
 
-        CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
+//        CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
 
 //        initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

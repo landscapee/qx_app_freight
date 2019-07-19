@@ -178,7 +178,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void startAct(MyAgentListBean myAgentListBean, int tag) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode);
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode,id);
     }
 
 
@@ -190,34 +190,16 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setType("1");//1提交
             transportListCommitEntity.setTaskId(taskId);//当前任务id
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
+            transportListCommitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
             transportListCommitEntity.setWaybillId(wayBillId);
+            transportListCommitEntity.setWaybillCode(mDeclare.getWaybillCode());
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
-            List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
+            List<MyAgentListBean> myAgentListBeans = new ArrayList<>();
             for (MyAgentListBean mMyAgentListBean : list) {
-                TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
-                rcInfosEntity.setAddOrderId(id);
-                rcInfosEntity.setTaskTypeCode(taskTypeCode);
-                rcInfosEntity.setId(mMyAgentListBean.getId());
-                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
-                rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
-                rcInfosEntity.setReservoirType(reservoirType);
-                rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
-                rcInfosEntity.setRepName(reservoirName);
-                rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
-                rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
-                rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
-                rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
-                rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
-                rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
-                rcInfosEntity.setRepType(mMyAgentListBean.getRepType());
-                rcInfosEntity.setRepPlaceId(mMyAgentListBean.getRepPlaceId());
-                mListRcInfosEntity.add(rcInfosEntity);
+                myAgentListBeans.add(mMyAgentListBean);
             }
-            transportListCommitEntity.setRcInfos(mListRcInfosEntity);
+            transportListCommitEntity.setRcInfos(myAgentListBeans);
             transportListCommitEntity.setTaskTypeCode(taskTypeCode);
             transportListCommitEntity.setAddOrderId(id);
             ((TransportListCommitPresenter) mPresenter).transportListCommit(transportListCommitEntity);
@@ -231,6 +213,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(waybillId);
+        myAgentListBean.setTaskTypeCode(taskTypeCode);
         baseFilterEntity.setSize(10);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
@@ -257,14 +240,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 mPresenter = new TransportListCommitPresenter(this);
                 mMfrvData.closeMenu();
                 ((TransportListCommitPresenter) mPresenter).deleteCollectionInfo(list.get(position).getId());
-                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
             }
         });
         mBtnPrinting.setOnClickListener(v -> {
-            if (list.size() > 0)
-                showPopWindowList();
-            else
-                ToastUtil.showToast("请先添加收运记录");
+            ToastUtil.showToast("暂未开放");
+//            if (list.size() > 0)
+//                showPopWindowList();
+//            else
+//                ToastUtil.showToast("请先添加收运记录");
         });
         upData();
     }
@@ -349,12 +333,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Override
     public void showNetDialog() {
-//        showProgessDialog("提交中");
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
     }
 
 
@@ -378,12 +362,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     list.set(listPostion, mMyAgentListBean);
                 }
             } else if (mTag == 1) {
-                for (MyAgentListBean item : list) {
-                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
-                        ToastUtil.showToast("请勿添加重复的板车");
-                        return;
-                    }
-                }
+//                for (MyAgentListBean item : list) {
+//                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
+//                        ToastUtil.showToast("请勿添加重复的板车");
+//                        return;
+//                    }
+//                }
                 list.add(mMyAgentListBean);
             }
             toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");
@@ -403,7 +387,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             if (!"".equals(mScooterCode)) {
                 getNumberInfo(mScooterCode);
             } else {
-                ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
+                ToastUtil.showToast("扫码数据为空请重新扫码");
             }
         } else {
             Log.e("resultCode", "收货页面不是200");
@@ -459,7 +443,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void sendPrintMessageResult(String result) {
         isPrint = true;
-        ToastUtil.showToast(result);
+        ToastUtil.showToast(result+"");
     }
 
     private void printWayBill() {

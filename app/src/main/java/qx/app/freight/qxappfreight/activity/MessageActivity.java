@@ -90,7 +90,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
         BaseFilterEntity bean = new BaseFilterEntity();
         PageListEntity listBean =new PageListEntity();
         List<String> requestList = new ArrayList();
-        requestList.add("create_date");
+        requestList.add("create_time");
         listBean.setUserId(UserInfoSingle.getInstance().getUserId());
         listBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         bean.setSize(20);

@@ -104,7 +104,6 @@ public class SortingReturnGoodsDialog extends Dialog {
             int overweight = 0;
             for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
                 overweight += mRcInfoOverweight.getOverWeight();
-
             }
             if (listener != null) {
                 listener.onClick(overweight+"kg");
@@ -119,7 +118,8 @@ public class SortingReturnGoodsDialog extends Dialog {
 //            }else {
 //                rcInfoOverweight.get(position).setDelFlag(1);
 //            }
-            rcInfoOverweight.get(position).setDelFlag(1);
+//            rcInfoOverweight.get(position).setDelFlag(1);
+            rcInfoOverweight.remove(position);
             overweightRecordAdapter.notifyDataSetChanged();
         });
     }

@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.donkingliang.labels.LabelsView;
@@ -41,6 +43,7 @@ public class PutCargoInputDialog extends DialogFragment {
     private TextView tvOverweightCount;
     private EditText etNumber;
     private EditText etCar;
+    private ImageView ivClose;
 
     private int num = 0;
     private int overWeightCount ;
@@ -77,12 +80,16 @@ public class PutCargoInputDialog extends DialogFragment {
         tvOverweightCount = dialog.findViewById(R.id.tv_overweight_count);
         etNumber = dialog.findViewById(R.id.et_number);
         etCar = dialog.findViewById(R.id.et_car);
+        ivClose = dialog.findViewById(R.id.iv_close);
         etNumber.setText(num+"");
         tvOverweight.setText(overWeight+"kg");
         tvOverweightCount.setText(overWeightCount+"件");
         //初始化点击事件
         tvConfirm.setOnClickListener(v -> {
             toConFirm();
+        });
+        ivClose.setOnClickListener(v -> {
+            dismiss();
         });
 
         return dialog;

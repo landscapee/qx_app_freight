@@ -40,7 +40,7 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
             helper.setVisible(R.id.iv_international,false);
         }
 
-        helper.setText(R.id.allocate_flightnumber,item.getTpFlightNumber())
+        helper.setText(R.id.allocate_flightnumber,item.getFlightNo())
                 .setText(R.id.allocate_machinenumber,item.getTpFlightLocate())
                 .setText(R.id.tv_plan_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getTpFlightTime()) , TimeUtils.getDay((item.getTpFlightTime()))));
 

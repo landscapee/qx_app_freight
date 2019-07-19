@@ -2,8 +2,8 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,12 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.CollectorDeclareAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
@@ -90,7 +87,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private String wayBillId;
     private String taskId;
     private String taskTypeCode;
-//    private CollectorDeclareAdapter mAdapter;
+    //    private CollectorDeclareAdapter mAdapter;
 //    private List<DeclareItem> mList;
     private DeclareWaybillBean mData;
 
@@ -115,7 +112,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
-        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(wayBillId);
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(getIntent().getStringExtra("id"));
     }
 
     private void initTitle() {
@@ -161,7 +158,6 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     }
 
-
     @OnClick({R.id.btn_commit, R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -201,7 +197,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("");
+        showProgessDialog("数据提交中……");
     }
 
     @Override
@@ -288,7 +284,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
 //            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
-            mData.setTotalNumberPackages(number);
+            mData.setTotalNumber(number);
             mData.setTotalWeight(Integer.valueOf(weight));
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
@@ -323,7 +319,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             flightLineEnd.setText(mData.getDestinationStation());
         }
         flightCompany.setText(mData.getFlightName());
-        tvTotalNum.setText(String.valueOf(mData.getTotalNumberPackages()));
+        tvTotalNum.setText(String.valueOf(mData.getTotalNumber()));
         tvTotalWeight.setText(String.valueOf(mData.getTotalWeight()));
         tvTotalVolume.setText(String.valueOf(mData.getTotalVolume()));
 //        tvWeight.setText(String.valueOf(mData.getBillingWeight()));
@@ -363,7 +359,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvTemperature.setText(mData.getRefrigeratedTemperature());
 
         tvName.setText(mData.getCargoCn());
-        tvNumber.setText(String.valueOf(mData.getTotalNumberPackages()));
+        tvNumber.setText(String.valueOf(mData.getTotalNumber()));
         tvWeight.setText(String.valueOf(mData.getTotalWeight()));
         tvVolume.setText(String.valueOf(mData.getTotalVolume()));
         tvType.setText(mData.getPackagingType());
@@ -378,4 +374,6 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private void turnToReceiveGoodsActivity() {
         ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId);
     }
+
+
 }

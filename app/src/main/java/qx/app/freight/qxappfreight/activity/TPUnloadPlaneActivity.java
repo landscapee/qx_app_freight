@@ -8,6 +8,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ScanInfoAdapter;
 import qx.app.freight.qxappfreight.adapter.TpScanInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -62,23 +62,19 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 理货卸机页面
  */
-public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView  {
+public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
     TextView mTvFlightType;//航班类型
-    @BindView(R.id.tv_start_place)
-    TextView mTvStartPlace;//航班起点
-    @BindView(R.id.iv_two_place)
-    ImageView mIvTwoPlace;
-    @BindView(R.id.tv_middle_place)
-    TextView mTvMiddlePlace;//航班中转点
-    @BindView(R.id.tv_target_place)
+    @BindView(R.id.ll_flight_info_container)
+    LinearLayout mLlInfo;//航班信息容器
     TextView mTvTargetPlace;//航班终点
     @BindView(R.id.tv_seat)
     TextView mTvSeat;//航班机位数
@@ -118,7 +114,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     private List<ScooterInfoListBean> mListPac = new ArrayList<>();
     private TpScanInfoAdapter mScanGoodsAdapter;//扫描货物适配器
     private TpScanInfoAdapter mScanPacAdapter;//扫描行李适配器
-//    private String[] mInfo;
+    //    private String[] mInfo;
     private OutFieldTaskBean mOutFieldTaskBean;// 上个界面任务基本信息 和 航班信息
     private String mCurrentTaskId;
     private List<String> mTpScooterCodeList = new ArrayList<>();
@@ -158,52 +154,21 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         toolbar.setMainTitle(Color.WHITE, mOutFieldTaskBean.getFlights().getFlightNo() + "  卸机");
         mTvPlaneInfo.setText(mOutFieldTaskBean.getFlights().getFlightNo());
         mTvFlightType.setText(mOutFieldTaskBean.getFlights().getAircraftNo());
-
-        /**
-         * ！！！！！！！！！！！！！！！！！！！！代码遗留问题，默认只有三个航线信息！！！！！！！！！！
-         */
-        List<String>  routes = mOutFieldTaskBean.getFlights().getRoute();
-        String start = routes.get(0);
-        String middle ="";
-        String end = "";
-        if (routes!=null && routes.size() >= 2){
-            if (routes.size() > 2){
-                middle = routes.get(1);
-                end = routes.get(2);
-            }
-            else{
-                end = routes.get(1);
-            }
-        }
-        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
-            mTvStartPlace.setVisibility(View.GONE);
-            mIvTwoPlace.setVisibility(View.GONE);
-            mTvMiddlePlace.setVisibility(View.GONE);
-            mTvTargetPlace.setVisibility(View.GONE);
-        } else {
-            if (TextUtils.isEmpty(middle)) {//没有中转站信息
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mIvTwoPlace.setVisibility(View.VISIBLE);
-                mTvMiddlePlace.setVisibility(View.GONE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setText(end);
-            } else {
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mIvTwoPlace.setVisibility(View.GONE);
-                mTvMiddlePlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mTvMiddlePlace.setText(middle);
-                mTvTargetPlace.setText(end);
-            }
-        }
+        List<String> routes = mOutFieldTaskBean.getFlights().getRoute();
+        FlightInfoLayout layout = new FlightInfoLayout(this, routes);
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfo.removeAllViews();
+        mLlInfo.addView(layout, paramsMain);
         mTvSeat.setText(mOutFieldTaskBean.getFlights().getSeat());
         long arrive;
-        if (!TextUtils.isEmpty(mOutFieldTaskBean.getFlights().getActualTime()+"") && !"0".equals(mOutFieldTaskBean.getFlights().getActualTime()+"")) {//有实际到达时间
-            arrive = Long.valueOf(mOutFieldTaskBean.getFlights().getActualTime()+"");
+        //不晓得改不改
+        //不晓得改不改
+        //不晓得改不改
+        //不晓得改不改
+        if (!TextUtils.isEmpty(mOutFieldTaskBean.getFlights().getActualTime() + "") && !"0".equals(mOutFieldTaskBean.getFlights().getActualTime() + "")) {//有实际到达时间
+            arrive = Long.valueOf(mOutFieldTaskBean.getFlights().getActualTime() + "");
         } else {
-            arrive = Long.valueOf(mOutFieldTaskBean.getFlights().getScheduleTime()+"");
+            arrive = Long.valueOf(mOutFieldTaskBean.getFlights().getScheduleTime() + "");
         }
         mTvArriveTime.setText(TimeUtils.getHMDay(arrive));
         String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
@@ -214,11 +179,15 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mScanGoodsAdapter = new TpScanInfoAdapter(mListGoods, mOutFieldTaskBean.getFlights());
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
         mScanGoodsAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
-            mListGoods.remove(position);
-            mSlideRvGoods.closeMenu();
-            mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
-            mScanGoodsAdapter.notifyDataSetChanged();
+            if (mListGoods.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListGoods.get(position).getScooterCode());
+                mListGoods.remove(position);
+                mSlideRvGoods.closeMenu();
+                mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
+                mScanGoodsAdapter.notifyDataSetChanged();
+            }
         });
         mScanGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
@@ -226,16 +195,20 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         mScanPacAdapter = new TpScanInfoAdapter(mListPac, mOutFieldTaskBean.getFlights());
         mSlideRvPac.setAdapter(mScanPacAdapter);
         mScanPacAdapter.setOnDeleteClickListener((view, position) -> {
-            mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
-            mListPac.remove(position);
-            mSlideRvPac.closeMenu();
-            mTvPacNumber.setText(String.valueOf(mListPac.size()));
-            mScanPacAdapter.notifyDataSetChanged();
+            if (mListPac.get(position).isNoticeTransport()) {
+                ToastUtil.showToast("该板车已通知运输，无法删除");
+            } else {
+                mTpScooterCodeList.remove(mListPac.get(position).getScooterCode());
+                mListPac.remove(position);
+                mSlideRvPac.closeMenu();
+                mTvPacNumber.setText(String.valueOf(mListPac.size()));
+                mScanPacAdapter.notifyDataSetChanged();
+            }
         });
         mScanPacAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
 
-        ivNoticeTp.setOnClickListener(v ->{
+        ivNoticeTp.setOnClickListener(v -> {
 
             noticeTp();
 
@@ -259,13 +232,14 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         Log.e("tag", "卸机id======" + mOutFieldTaskBean.getId());
         List<TransportTodoListBean> infos = new ArrayList<>();
         for (ScooterInfoListBean bean : mListGoods) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("cargo");
-            entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
-            entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
             entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mOutFieldTaskBean.getFlights().getSeat());
@@ -277,13 +251,14 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             infos.add(entity);
         }
         for (ScooterInfoListBean bean : mListPac) {
+            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("baggage");
-            entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
-            entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
             entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
             entity.setTpStartLocate("seat");
             entity.setBeginAreaId(mOutFieldTaskBean.getFlights().getSeat());
@@ -324,20 +299,22 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 mIvControl2.setImageResource(R.mipmap.down);
             }
         });
-        mLlScanGoods.setOnClickListener(v ->{
+        mLlScanGoods.setOnClickListener(v -> {
             mIsScanGoods = true;
-            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
-            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mTvErrorReport.setOnClickListener(
                 v -> {
                     Intent intent = new Intent(TPUnloadPlaneActivity.this, ErrorReportActivity.class);
+                    intent.putExtra("area_id", mOutFieldTaskBean.getFlights().getSeat());//area_id
+                    intent.putExtra("step_code", Constants.TP_START);//step_code
                     intent.putExtra("flight_number", mOutFieldTaskBean.getFlights().getFlightNo());//航班号
                     intent.putExtra("task_id", mOutFieldTaskBean.getTaskId());//任务id
-                    intent.putExtra("flight_id", mOutFieldTaskBean.getFlights().getFlightId());//Flight id
+                    intent.putExtra("flight_id", String.valueOf(mOutFieldTaskBean.getFlights().getFlightId()));//Flight id
                     intent.putExtra("error_type", 2);
                     TPUnloadPlaneActivity.this.startActivity(intent);
                 });
@@ -352,8 +329,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("cargo");
-                entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
-                entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
                 entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);
@@ -373,8 +350,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
                 entity.setTpCargoType("baggage");
-                entity.setTpFlightId(mOutFieldTaskBean.getFlights().getFlightId()+"");
-                entity.setTpFlightNumber(mOutFieldTaskBean.getFlights().getFlightNo());
+                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
                 entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
                 entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 entity.setDtoType(8);
@@ -488,23 +465,24 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
 
     /**
-     *x循环执行 步骤任务。最后一条 再去拉去 列表
+     * x循环执行 步骤任务。最后一条 再去拉去 列表
+     *
      * @param mOutFieldTaskBean
      * @param step
      */
-    private void submitStep(OutFieldTaskBean mOutFieldTaskBean,int step){
+    private void submitStep(OutFieldTaskBean mOutFieldTaskBean, int step) {
         mPresenter = new LoadAndUnloadTodoPresenter(this);
-        PerformTaskStepsEntity entity=new PerformTaskStepsEntity();
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(0);
         entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
         entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-        entity.setLatitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition()==null)?"":Tools.getGPSPosition().getLongitude());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
 
         if (step == 0)
             entity.setOperationCode(Constants.TP_START);//任务开始
-        else if(step == 1)
+        else if (step == 1)
             entity.setOperationCode(Constants.TP_END);//任务结束
         else
             entity.setOperationCode(Constants.TP_ACCEPT);//任务领受
@@ -545,7 +523,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Override
     public void arrivalDataSaveResult(String result) {
-      submitStep(mOutFieldTaskBean,1);
+        submitStep(mOutFieldTaskBean, 1);
     }
 
     @Override
@@ -558,7 +536,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
 
     }
 
@@ -580,7 +558,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     }
 
     @Override
-    public void scooterWithUserResult(List <TransportTodoListBean> result) {
+    public void scooterWithUserResult(List<TransportTodoListBean> result) {
 
     }
 

@@ -1,6 +1,8 @@
 package qx.app.freight.qxappfreight.model;
 
-public class TestBean {
+import java.io.Serializable;
+
+public class TestBean implements Serializable {
     private int type;
     private int number;
 

@@ -5,14 +5,26 @@
     android:background="#EFF2F3"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_wenjian"
+        android:layout_width="match_parent"
+        android:text="暂无核查证明文件"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="18dp"
-        android:paddingRight="18dp">
+        android:paddingRight="18dp"
+        >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mfrv_verify"
@@ -21,6 +33,7 @@
             android:background="@color/white" />
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"

@@ -6,6 +6,13 @@ import android.content.Context;
 
 import java.util.Stack;
 
+import qx.app.freight.qxappfreight.activity.AddReceiveGoodActivity;
+import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
+import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
+import qx.app.freight.qxappfreight.activity.VerifyCargoActivity;
+import qx.app.freight.qxappfreight.activity.VerifyFileActivity;
+import qx.app.freight.qxappfreight.activity.VerifyStaffActivity;
+
 /**
  * activity 单列
  */
@@ -22,8 +29,7 @@ public class ActManager {
      */
     public static ActManager getAppManager() {
         if (instance == null) {
-            synchronized (ActManager.class)
-            {
+            synchronized (ActManager.class) {
                 if (instance == null)
                     instance = new ActManager();
             }
@@ -91,6 +97,55 @@ public class ActManager {
         }
         activityStack.clear();
     }
+
+
+    //收运关闭
+    public void finishReCollection() {
+        if (activityStack != null) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                if ("AddReceiveGoodActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
+                    finishOther(activityStack.get(i));
+                } if("CollectorDeclareActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                } if("ReceiveGoodsActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                }
+            }
+        }
+    }
+
+    public void finishOther(Activity act){
+        act.finish();
+    }
+
+    //收验关闭
+    public void finishReceive(){
+        if (activityStack != null) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                if ("VerifyStaffActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
+                    finishOther(activityStack.get(i));
+                } if("VerifyFileActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                } if("VerifyCargoActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                }
+            }
+        }
+    }
+
+    //复重关闭
+    public void finishAllocate(){
+        if (activityStack != null) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                if ("AllocateScooterActivity".equals(activityStack.get(i).getClass().getSimpleName())) {
+                    finishOther(activityStack.get(i));
+                } if("AllocaaateScanActivity".equals(activityStack.get(i).getClass().getSimpleName())){
+                    finishOther(activityStack.get(i));
+                }
+            }
+        }
+    }
+
 
     /**
      * 退出应用程序

@@ -19,13 +19,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
-import qx.app.freight.qxappfreight.activity.DeliveryVerifyActivity;
 import qx.app.freight.qxappfreight.activity.ReturnGoodsActivity;
 import qx.app.freight.qxappfreight.activity.StoreTypeChangeActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
@@ -33,13 +33,17 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
+import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -47,7 +51,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 收运
  */
-public class CollectorFragment extends BaseFragment implements TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class CollectorFragment extends BaseFragment implements TaskLockContract.taskLockView, TransportListContract.transportListContractView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private MainListRvAdapter adapter;
@@ -56,8 +60,14 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     private int pageCurrent = 1;
     private String seachString = "";
     private TaskFragment mTaskFragment;
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow = false;
 
-    private boolean isShow =false;
+    /**
+     * 待办锁定 当前的任务bean
+     */
+    private TransportDataBase CURRENT_TASK_BEAN = null;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,16 +80,18 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         initView();
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入运单号", text -> {
-            seachString = text;
-            seachWith();
-        });
+//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入运单号", text -> {
+//            seachString = text;
+//            seachWith();
+//        });
         loadData();
+        setUserVisibleHint(true);
     }
 
     private void seachWith() {
@@ -93,30 +105,40 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 }
             }
         }
-        mMfrvData.notifyForAdapter(adapter);
+
+        if (mMfrvData != null) {
+            mMfrvData.notifyForAdapter(adapter);
+        }
     }
 
 
     private void initView() {
-        if (!EventBus.getDefault().isRegistered(this))
-                EventBus.getDefault().register(this);
-//        list = new ArrayList<>();
-//        list1 = new ArrayList<>();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         adapter = new MainListRvAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            trunToCollectorActivity(list.get(position));
+            CURRENT_TASK_BEAN = list.get(position);
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(list.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(Constants.COLLECTION);
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
     }
 
     private void trunToCollectorActivity(TransportDataBase bean) {
         switch (bean.getTaskTypeCode()) {
-            case "changeApply": //换单审核
-                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
-                break;
+//            case "changeApply": //换单审核
+//                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
+//                break;
             case "collection"://出港收货
-                Log.e("tagTest", "id====" + bean.getId());
+                Log.e("tagTest", "出港收货===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
                         .putExtra("wayBillId", bean.getWaybillId())
                         .putExtra("taskId", bean.getTaskId())
@@ -124,7 +146,7 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                         .putExtra("taskTypeCode", bean.getTaskTypeCode()));
                 break;
             case "reCollection"://补单收运
-                Log.e("tagTest", "id====" + bean.getId());
+                Log.e("tagTest", "补单收运===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
                         .putExtra("wayBillId", bean.getWaybillId())
                         .putExtra("taskId", bean.getTaskId())
@@ -136,25 +158,24 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
                 break;
 
             case "changeCollection": //存储变更
-                StoreTypeChangeActivity.startActivity(getActivity(),bean);
+                StoreTypeChangeActivity.startActivity(getActivity(), bean);
                 break;
         }
     }
-
-
+    //获取数据
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
-
         TransportDataBase tempBean = new TransportDataBase();
         tempBean.setWaybillCode("");
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
-        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
-            if (Constants.COLLECTION.equals(mRoleRSBean.getRoleCode())) {
-                tempBean.setRole(mRoleRSBean.getRoleCode());
-            }
-        }
+        tempBean.setRole(Constants.COLLECTION);
+//        for (LoginResponseBean.RoleRSBean mRoleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
+//            if (Constants.COLLECTION.equals(mRoleRSBean.getRoleCode())) {
+//                tempBean.setRole(mRoleRSBean.getRoleCode());
+//            }
+//        }
         entity.setFilter(tempBean);
         entity.setCurrentStep("");
         entity.setSize(Constants.PAGE_SIZE);
@@ -198,24 +219,36 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(daibanCode)) {
-            chooseCode(daibanCode);
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+            String[] parts = daibanCode.split("\\/");
+            List<String> strsToList = Arrays.asList(parts);
+            if (strsToList.size() >= 4) {
+                chooseCode(strsToList.get(3));
+            }
+
         }
     }
-
+    //收运接受到推送增加或者删除数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
-            list1.addAll(mWebSocketResultBean.getChgData());
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-
-            for (TransportDataBase mTransportListBean : list1) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
-                    list1.remove(mTransportListBean);
+            //非换单审核的全部都加
+            if ("changeCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                list1.addAll(mWebSocketResultBean.getChgData());
+                if (isShow) {
+                    mTaskFragment.setTitleText(list1.size());
                 }
             }
+        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+            if (null != CURRENT_TASK_BEAN) {
+                if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
+                    ActManager.getAppManager().finishReCollection();
+                    ToastUtil.showToast("当前收运任务已完成");
+                }
+            }
+            loadData();
         }
         seachWith();
     }
@@ -227,8 +260,16 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
      */
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list) {
-            if (daibanCode.equals(item.getId())) {
-                trunToCollectorActivity(item);
+            if (daibanCode.equals(item.getWaybillCode())) {
+                CURRENT_TASK_BEAN = item;
+                mPresenter = new TaskLockPresenter(this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.COLLECTION);
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
                 return;
             }
         }
@@ -237,18 +278,22 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
     @Override
     public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null) {
-            //未分页
             if (pageCurrent == 1) {
                 list1.clear();
                 mMfrvData.finishRefresh();
             } else {
                 mMfrvData.finishLoadMore();
             }
-            list1.addAll(transportListBeans.getRecords());
+            for (TransportDataBase record : transportListBeans.getRecords()) {
+                if (!"changeApply".equals(record.getTaskTypeCode())) {
+                    list1.add(record);
+                }
+            }
             seachWith();
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else {
             ToastUtil.showToast(getActivity(), "数据为空");
@@ -260,8 +305,16 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
+            }
+
+            if (searchToolbar != null) {
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    seachString = text;
+                    seachWith();
+                });
+            }
         }
     }
 
@@ -281,5 +334,17 @@ public class CollectorFragment extends BaseFragment implements TransportListCont
 
     @Override
     public void dissMiss() {
+    }
+
+    /**
+     * 待办锁定结果返回
+     *
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if (CURRENT_TASK_BEAN != null) {
+            trunToCollectorActivity(CURRENT_TASK_BEAN);
+        }
     }
 }

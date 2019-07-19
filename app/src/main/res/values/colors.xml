@@ -17,6 +17,7 @@
     <color name="btn_bg_press">#007bad</color>
     <color name="txt_lable">#999999</color>
     <color name="txt_content2">#333333</color>
+    <color name="black_ff3">#FF333333</color>
 
     <color name="black_2">#222222</color>
     <color name="black_3">#333333</color>

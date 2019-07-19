@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import android.util.Log;
+
 import java.util.List;
 
 import lombok.Data;
@@ -233,37 +235,37 @@ public class FlightCabinInfo {
         private String aircraftNo;
         private String iata;
         private Object creator;
-        private long createTime;
+        private Long createTime;
         private Object updator;
         private Object updateTime;
-        private int hld1wgt;
-        private double hld1arm;
-        private int hld1vol;
-        private int hld1maxWgt;
+        private Double hld1wgt;
+        private Double hld1arm;
+        private Double hld1vol;
+        private Double hld1maxWgt;
         private String hld1identification;
-        private int hld1FwdHldMaxWgt;
-        private int hld2wgt;
-        private int hld2arm;
-        private int hld2vol;
-        private int hld2maxWgt;
+        private Double hld1FwdHldMaxWgt;
+        private Double hld2wgt;
+        private Double hld2arm;
+        private Double hld2vol;
+        private Double hld2maxWgt;
         private String hld2identification;
-        private int hld2AftHldMaxWgt;
-        private int hld3wgt;
-        private int hld3arm;
-        private int hld3vol;
-        private int hld3maxWgt;
+        private Double hld2AftHldMaxWgt;
+        private Double hld3wgt;
+        private Double hld3arm;
+        private Double hld3vol;
+        private Double hld3maxWgt;
         private String hld3identification;
-        private int hld3BagCntMinWgt;
-        private int hld4wgt;
-        private double hld4arm;
-        private int hld4vol;
-        private int hld4maxWgt;
+        private Double hld3BagCntMinWgt;
+        private Double hld4wgt;
+        private Double hld4arm;
+        private Double hld4vol;
+        private Double hld4maxWgt;
         private String hld4identification;
-        private int hld4ActTnkLmtWgt;
-        private int hld5wgt;
-        private int hld5arm;
-        private int hld5vol;
-        private int hld5maxWgt;
+        private Double hld4ActTnkLmtWgt;
+        private Double hld5wgt;
+        private Double hld5arm;
+        private Double hld5vol;
+        private Double hld5maxWgt;
         private String hld5identification;
         private String bulkHld;
         private String bagContType;
@@ -280,8 +282,8 @@ public class FlightCabinInfo {
         private String rmaxWgt;
         private String rcentroid;
         private int no;
-        private int flightMaxWgt;
-        private int flightMaxVol;
+        private Double flightMaxWgt;
+        private Double flightMaxVol;
         private List <CargosBean> cargos;
 
 
@@ -310,20 +312,20 @@ public class FlightCabinInfo {
             private String planType;
             private String pos;
             private String overlays;
-            private int maxWgt;
-            private double arm;
+            private Double maxWgt;
+            private Double arm;
             private String pr;
             private String ul;
             private String zone;
             private String validType;
             private String idx;
 
-            private int hldWgt;
-            private double hldArm;
-            private int hldVol;
-            private int hldMaxWgt;
+            private Double hldWgt;
+            private Double hldArm;
+            private Double hldVol;
+            private Double hldMaxWgt;
             private String hldIdentification;
-            private int hldActTnkLmtWgt;
+            private Double hldActTnkLmtWgt;
 
         }
     }
@@ -345,8 +347,8 @@ public class FlightCabinInfo {
 
         private String id;
         private String typeName;
-        private int typeLength;
-        private double typeWidth;
+        private Double typeLength;
+        private Double typeWidth;
         private int typeHeight;
         private int useState;
         private String displayUseState;

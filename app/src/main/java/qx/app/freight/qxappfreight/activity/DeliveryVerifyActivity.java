@@ -166,7 +166,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
             bigSize = "超大件";
         goodsSizeTv.setText("包装大小:" + bigSize);
         goodsSaveTypeTv.setText("储存类型:" + getColdStorage(declareWaybillBean));
-        goodsNumTv.setText("总件数:" + declareWaybillBean.getTotalNumberPackages());
+        goodsNumTv.setText("总件数:" + declareWaybillBean.getTotalNumber());
         goodsWeightTv.setText("总重量:" + declareWaybillBean.getTotalWeight());
         getGoodsWeightWithMoneyTv.setText("计费总量:" + declareWaybillBean.getBillingWeight());
         //recylerview

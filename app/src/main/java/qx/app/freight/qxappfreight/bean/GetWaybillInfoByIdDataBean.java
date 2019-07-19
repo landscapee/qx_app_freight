@@ -106,7 +106,7 @@ public class GetWaybillInfoByIdDataBean {
         private Object consigneeAddress;
         private String specialCargoCode;
         private int coldStorage;
-        private double totalNumberPackages;
+        private double totalNumber;
         private Object billingWeight;
         private double totalWeight;
         private int totalVolume;

@@ -53,8 +53,10 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     List<FlightLuggageBean> mListTemp; //原始数据
 
     private int pageCurrent = 1;
-    private String searchString = "";
-
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow =false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e("dime", "Fragment: 行李上报");
+        mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         initView();
 //        loadData();
     }
@@ -83,15 +87,24 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             startActivity(new Intent(getContext(), BaggageListActivity.class).putExtra("flightBean",mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
-        //行李上报-搜索逻辑
-        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
-            @Override
-            public void onSearched(String text) {
-                searchString = text;
-                seachWithNum();
+        setUserVisibleHint(true);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            if (mTaskFragment != null)
+                mTaskFragment.setTitleText(mListTemp.size());
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
             }
-        });
+
+        }
     }
 
     /**
@@ -108,7 +121,9 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
                 }
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -125,11 +140,12 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void toastView(String error) {
-
+        ToastUtil.showToast(getActivity(), error);
+        if (pageCurrent == 1) {
             mMfrvData.finishRefresh();
-//            mMfrvData.finishLoadMore();
-        ToastUtil.showToast(error);
-        Log.e("22222", "toastView: "+error);
+        } else {
+            mMfrvData.finishLoadMore();
+        }
     }
 
     @Override
@@ -153,19 +169,30 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-        mMfrvData.finishRefresh();
+        //因为没有分页，不做分页判断
         mListTemp.clear();
+        if (pageCurrent == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
         mListTemp.addAll(flightLuggageBeans);
+        if (mTaskFragment != null) {
+            if (isShow)
+                mTaskFragment.setTitleText(mListTemp.size());
+        }
         seachWithNum();
     }
 
     @Override
     public void onRefresh() {
+        pageCurrent = 1;
         loadData();
     }
 
     @Override
     public void onLoadMore() {
-        mMfrvData.finishLoadMore();
+        pageCurrent++;
+        loadData();
     }
 }

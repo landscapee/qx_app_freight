@@ -34,6 +34,10 @@ public class SearchToolbar extends LinearLayout {
         init(context);
     }
 
+    public void setHintAndListenerNull(){
+        mEtSearch.addTextChangedListener(null);
+    }
+
     public void setHintAndListener(String hint, OnTextSearchedListener listener) {
         mEtSearch.setHint(hint);
         mEtSearch.addTextChangedListener(new TextWatcher() {

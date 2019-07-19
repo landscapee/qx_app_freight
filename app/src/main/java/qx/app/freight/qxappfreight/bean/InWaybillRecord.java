@@ -81,7 +81,7 @@ public class InWaybillRecord implements Serializable {
      * 运单总件数
      *
      */
-    private Integer totalNumberPackages;
+    private Integer totalNumber;
 
     /**
      * 运单总重量
@@ -295,7 +295,7 @@ public class InWaybillRecord implements Serializable {
      * 运单录入时间
      *
      */
-    private Long createDate;
+    private Long createTime;
 
     /**
      * 运单录入人
@@ -303,7 +303,7 @@ public class InWaybillRecord implements Serializable {
      */
     private String createUser;
 
-    private Long updateDate;
+    private Long updateTime;
 
     /**
      * 修改人
@@ -356,6 +356,15 @@ public class InWaybillRecord implements Serializable {
      * 库区字段 用来显示
      */
     private String warehouseAreaDisplay;
+    /**
+     * 货物全部到齐标识: 0.未全部到齐; 1.全部到齐;
+     * (ps : 每批到货的货物, 非运单所有货物)
+     */
+    private int allArrivedFlag;
 
+    /**
+     * 登录人姓名
+     */
+    private String createUserName;
 
 }

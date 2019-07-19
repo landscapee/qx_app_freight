@@ -16,8 +16,20 @@ public class CalculateUtil {
      */
     public static double calculateGradient(int num,double a ,double b){
         if (b==0){
-            return 100;
+            return 100d;
         }
-        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
+        BigDecimal c = new BigDecimal( a / b);
+        c = c.multiply(new BigDecimal(100));
+        c = c.setScale(num, BigDecimal.ROUND_HALF_UP);
+
+        double d = c.doubleValue();
+        //d = d*100;
+        return d;
+//        return ((new BigDecimal( a / b).setScale(num, BigDecimal.ROUND_HALF_UP).doubleValue())*100);
+    }
+
+    public static double doubleSave2(double d){
+         BigDecimal b = new BigDecimal(d);
+         return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

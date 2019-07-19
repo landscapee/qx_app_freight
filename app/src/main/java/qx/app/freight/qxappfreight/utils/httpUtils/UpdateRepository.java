@@ -8,6 +8,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
@@ -31,11 +32,15 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -43,9 +48,11 @@ import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -53,12 +60,15 @@ import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
@@ -74,6 +84,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -81,9 +92,11 @@ import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
+import qx.app.freight.qxappfreight.model.ManifestBillModel;
 
 public class UpdateRepository extends BaseRepository {
     private volatile static UpdateRepository instance;
@@ -130,6 +143,15 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /****
+     * 登录
+     * @param loginEntity
+     * @return
+     */
+    public Observable<String> updatePWD(UpdatePwdEntity loginEntity) {
+        return nothingtransform(getService().updatePWD(loginEntity));
+    }
+
+    /****
      * 登录智能调度一期
      * @param
      * @return
@@ -144,6 +166,13 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<AgentBean> agentTransportationList(BaseFilterEntity param) {
         return transform(getService().agentTransportationList(param));
+    }
+    /*****
+     * @param
+     * @return
+     */
+    public Observable<List<ReturnBean>> returnTransportationList(BaseFilterEntity param) {
+        return transform(getService().returnTransportationList(param));
     }
 
     /*****
@@ -198,6 +227,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> storageCommit(StorageCommitEntity storageCommitEntity) {
         return nothingtransform(getService().storageCommit(storageCommitEntity));
+    }
+
+
+    /****
+     * 收验批量提交
+     */
+    public Observable<String> commitReceiveList(List<StorageCommitEntity> storageCommitEntity) {
+        return nothingtransform(getService().commitReceiveList(storageCommitEntity));
     }
 
     /******
@@ -299,6 +336,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<TransportDataBase>> getGroupBoardToDo(GroupBoardRequestEntity model) {
         return transform(getService().getGroupBoardToDo(model));
+    }
+    /********
+     * 代办收运列表
+     * @param model
+     * @return
+     */
+    public Observable<BaseParamBean> baseParam(BaseFilterEntity model) {
+        return transform(getService().baseParam(model));
     }
 
 
@@ -710,6 +755,34 @@ public class UpdateRepository extends BaseRepository {
     }
 
 
+    /****
+     * 复重 / 获取航班所有板车
+     * @param model
+     * @return
+     */
+    public Observable<List<GetInfosByFlightIdBean>> getTodoScooters(TodoScootersEntity model) {
+        return transform(getService().getTodoScooters(model));
+    }
+
+    /****
+     * //复重 / 复重历史
+     * @param model
+     * @return
+     */
+    public Observable<GetHistoryBean> getHistoryScootersPage(BaseFilterEntity model) {
+        return transform(getService().getHistoryScootersPage(model));
+    }
+
+     /****
+     * 复重 / 获取航班所有板车
+     * @param model
+     * @return
+     */
+    public Observable<List<ManifestBillModel>> getManifest(BaseFilterEntity model) {
+        return transform(getService().getManifest(model));
+    }
+
+
     /*****
      * 根据收费记录ID(流水号) 查询收费记录对应的进港运单记录
      * @param model
@@ -920,6 +993,15 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> deleteInWayBillRecordById(String id) {
         return nothingtransform(getService().deleteInWayBillRecordById(id));
     }
+    /**
+     * 进港分拣 - 通知服务器已全部到齐
+     *
+     * @param data 需要通知已全部到齐的数据
+     * @return 成功/失败
+     */
+    public Observable<String> allGoodsArrived(InWaybillRecord data) {
+        return nothingDatatransform(getService().allGoodsArrived(data));
+    }
 
     /**
      * 回退到预配 -- guohao
@@ -989,4 +1071,39 @@ public class UpdateRepository extends BaseRepository {
     public Observable<UnLoadListBillBean> getUnLoadingList(UnLoadRequestEntity entity) {
         return getService().getUnLoadingList(entity);
     }
+
+    /**
+     * 待办锁定
+     * @param entity
+     * @return
+     */
+    public Observable<String> taskLock(TaskLockEntity entity){
+        return nothingtransform(getService().taskLock(entity));
+    }
+
+    /**
+     * ULD根据字段过滤
+     * @param entity
+     * @return
+     */
+    public Observable<UldLikeBean> likePage(BaseFilterEntity entity){
+        return transform(getService().likePage(entity));
+    }
+
+    /**
+     * ULD根据字段过滤
+     * @param type
+     * @return
+     */
+    public Observable<List<ListByTypeBean>> listByType(String type, String name){
+        return transform(getService().listByType(type,name));
+    }
+
+    public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity){
+        return nothingtransform(getService().saveOrUpdate(entity));
+    }
+    public Observable<List<FindAirlineAllBean>> findAirlineAll(){
+        return transform(getService().findAirlineAll());
+    }
 }
+

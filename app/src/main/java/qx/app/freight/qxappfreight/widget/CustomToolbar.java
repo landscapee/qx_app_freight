@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -129,5 +130,14 @@ public class CustomToolbar extends LinearLayout {
         mRightIv.setVisibility(show);
         mRightIv.setImageResource(iconSrc);
         mRightIv.setOnClickListener(listener);
+    }
+
+    public void setRightIconViewVisiable(boolean isShow){
+        if (isShow){
+            mRightIv.setVisibility(View.VISIBLE);
+        }else {
+            mRightIv.setVisibility(View.GONE);
+        }
+
     }
 }

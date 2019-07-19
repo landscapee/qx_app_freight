@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.bean.response;
 
-import java.util.List;
-
 import lombok.Data;
 
 /**
@@ -22,4 +20,5 @@ public class ScooterInfoListBean {
     private long updateDate;
     private String updateUser;
     private String flightType;
+    private boolean noticeTransport;
 }

@@ -31,10 +31,15 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -43,21 +48,26 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 进港-交货页面
  * Created by swd
  */
-//TransportListContract.transportListContractView ,
-public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, TaskLockContract.taskLockView,  MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
     InPortDeliveryAdapter mAdapter;
-    List<TransportDataBase> mList; //adapter 绑定的条件list
-    List<TransportDataBase> list1; //原始list
+    List <TransportDataBase> mList; //adapter 绑定的条件list
+    List <TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
 
     private String searchString; //条件搜索关键字
 
-    private TaskFragment mTaskFragment;
-    private boolean isShow =false;
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
+    private boolean isShow = false;
+
+    /**
+     * 待办锁定 当前的任务bean
+     */
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -74,12 +84,27 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             EventBus.getDefault().register(this);
         }
         mTaskFragment = (TaskFragment) getParentFragment();
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入流水号", text -> {
-            searchString = text;
-            seachWithNum();
-        });
+        searchToolbar = mTaskFragment.getSearchView();
         initView();
+        setUserVisibleHint(true);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser) {
+            Log.e("111111", "setUserVisibleHint: " + "展示");
+            if (mTaskFragment != null) {
+                mTaskFragment.setTitleText(list1.size());
+            }
+            if (searchToolbar != null) {
+                searchToolbar.setHintAndListener("请输入流水号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+        }
     }
 
     private void seachWithNum() {
@@ -93,7 +118,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 }
             }
         }
-        mMfrvData.notifyForAdapter(mAdapter);
+        if (mMfrvData != null) {
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -108,40 +135,27 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mList = new ArrayList<>();
-        list1 = new ArrayList<>();
+        mList = new ArrayList <>();
+        list1 = new ArrayList <>();
         mAdapter = new InPortDeliveryAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            turnToDetailActivity(mList.get(position));
+
+            CURRENT_TASK_BEAN = mList.get(position);
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(mList.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(Constants.INPORTDELIVERY);
+
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
         mMfrvData.setAdapter(mAdapter);
     }
 
     private void loadData() {
-        /**
-         *
-         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
-
-         TransportDataBase tempBean = new TransportDataBase();
-         tempBean.setWaybillCode("");
-         tempBean.setTaskStartTime("");
-         tempBean.setTaskEndTime("");
-         tempBean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-         entity.setFilter(tempBean);
-
-         entity.setCurrent(pageCurrent);
-
-         entity.setSize(Constants.PAGE_SIZE);
-
-         entity.setUndoType("3");
-
-         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-
-         entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-
-         ((TransportListPresenter) mPresenter).transportListPresenter(entity);
-         */
         mPresenter = new GroupBoardToDoPresenter(this);
         GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
 
@@ -151,7 +165,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
         entity.setUndoType(3);
 
-        List<String> ascs = new ArrayList<>();
+        List <String> ascs = new ArrayList <>();
         ascs.add("flight_number");
         ascs.add("lastUpdate_time");
 
@@ -174,7 +188,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                .putExtra("num2", bean.getWaybillCount())
 //                .putExtra("taskId", bean.getTaskId())
 //                .putExtra("billId", bean.getSerialNumber())
-                .putExtra("DATA",bean));
+                .putExtra("DATA", bean));
     }
 
     /**
@@ -183,13 +197,14 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("22222", "提货代办流水号： " + daibanCode);
+
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");
-            List<String> strsToList= Arrays.asList(parts);
-            if (strsToList.size()>=4){
+            List <String> strsToList = Arrays.asList(parts);
+            if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(3));
+                Log.e("22222", "提货代办流水号： " + strsToList.get(2));
             }
 
         }
@@ -198,8 +213,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-
-            list1.addAll(mWebSocketResultBean.getChgData());
+            if ("DA_outbound".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                list1.addAll(mWebSocketResultBean.getChgData());
+                mTaskFragment.setTitleText(list1.size());
+            }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
 
             for (TransportDataBase mTransportListBean : mList) {
@@ -220,7 +237,19 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list1) {
             if (daibanCode.equals(item.getSerialNumber())) {
-                turnToDetailActivity(item);
+
+                CURRENT_TASK_BEAN = item;
+
+                mPresenter = new TaskLockPresenter(this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.INPORTDELIVERY);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
+
                 return;
             }
         }
@@ -231,6 +260,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     public void onRetry() {
         showProgessDialog("加载数据中……");
         new Handler().postDelayed(() -> {
+            pageCurrent = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -248,18 +278,6 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         loadData();
     }
 
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isShow = isVisibleToUser;
-        if (isVisibleToUser) {
-            if (mTaskFragment != null) {
-                mTaskFragment.setTitleText(list1.size());
-            }
-        }
-    }
-
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
@@ -272,36 +290,47 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     @Override
     public void showNetDialog() {
-
     }
 
     @Override
     public void dissMiss() {
-
     }
 
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
-        if (transportListBeans != null&&transportListBeans.size()>0) {
-            TaskFragment fragment = (TaskFragment) getParentFragment();
+    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
+        //没有分页
+        list1.clear();
+        if (pageCurrent == 1) {
 
-            //因为没有分页，不做分页判断
-            list1.clear();
-
-            if (pageCurrent == 1) {
-
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            list1.addAll(transportListBeans);
-            seachWithNum();
-            if (fragment != null) {
-                fragment.setTitleText(transportListBeans.size());
-            }
+            mMfrvData.finishRefresh();
         } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
+            mMfrvData.finishLoadMore();
+        }
+        if (transportListBeans != null && transportListBeans.size() > 0) {
+            list1.addAll(transportListBeans);
+        }
+        seachWithNum();
+        if (mTaskFragment != null) {
+            if (isShow) {
+                mTaskFragment.setTitleText(list1.size());
+            }
+        }
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    /**
+     * 待办锁定
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if(CURRENT_TASK_BEAN != null) {
+            turnToDetailActivity(CURRENT_TASK_BEAN);
         }
     }
 }

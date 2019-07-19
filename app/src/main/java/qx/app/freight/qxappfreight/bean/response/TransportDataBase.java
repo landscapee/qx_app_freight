@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import lombok.Data;
  * @description：
  */
 @Data
-public class TransportDataBase implements Serializable {
+public class TransportDataBase implements MultiItemEntity, Serializable {
 
     /**
      * taskId : 522660
@@ -89,9 +91,10 @@ public class TransportDataBase implements Serializable {
     private String consigneePostcode;
     private String consigneeAddress;
     private String specialCargoCode;
+    //存储类型
     private String coldStorage;
-    private String totalNumberPackages;
     private String billingWeight;
+    private String totalNumber;
     private String totalWeight;
     private String totalVolume;
     private String refrigeratedTemperature;
@@ -129,6 +132,7 @@ public class TransportDataBase implements Serializable {
     private Object associateAirport;
     private String spotFlag;
     private long etd;
+    private long ata;
     private List<DeclareItem> declareItem;
     private boolean isExpand = false; //是否展开
     private String freightName; //货代公司名字
@@ -162,5 +166,25 @@ public class TransportDataBase implements Serializable {
      * 提货人身份证
      * */
     private String receiverIdentityCard;
+
+    /**
+     * 复重代办新添加
+     * 航线   flightCourseByAndroid
+     * 机位号  seat
+     * 机尾号  aircraftNo
+     */
+    private List<String> flightCourseByAndroid;
+
+    private String seat;
+
+    private String aircraftNo;
+
+    @Override
+    public int getItemType() {
+        if (flightCourseByAndroid !=null)
+            return flightCourseByAndroid.size();
+        else
+            return 2;
+    }
 
 }
