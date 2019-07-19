@@ -14,7 +14,7 @@ public class DeclareApplyForRecords {
         /**
          * 0,1,2,3 自定义
          */
-        private int applyForType;
+        private Object applyForType;
 
         /**
          * 运单id
@@ -34,12 +34,12 @@ public class DeclareApplyForRecords {
         /**
          * 变更存储类型
          */
-        private int storage;
+        private String storage;
 
         /**
          * 原始存储类型
          */
-        private int orgStorage;
+        private String orgStorage;
 
         /**
          * 新存储温度
@@ -56,4 +56,6 @@ public class DeclareApplyForRecords {
         private String repName;
         private String repId;
         private String repPlaceNum;
+
+        private String storageTypeName;
 }

@@ -50,45 +50,19 @@
             tools:text="B2310"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp_14"/>
-
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/tv_start_place"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:id="@+id/ll_flight_info_container"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textColor="@color/black_3"
-            android:textSize="@dimen/sp_14"
-            android:text="PEK" />
-        <ImageView
-            android:id="@+id/iv_two_place"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/airlane"/>
-        <TextView
-            android:id="@+id/tv_middle_place"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableStart="@mipmap/airlane"
-            android:drawableEnd="@mipmap/airlane"
-            android:gravity="center_vertical"
-            android:textColor="@color/black_3"
-            android:textSize="@dimen/sp_14"
-            android:text="CTU" />
-
-        <TextView
-            android:id="@+id/tv_end_place"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/black_3"
-            android:textSize="@dimen/sp_14"
-            android:text="MXP" />
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:orientation="horizontal" />
     </LinearLayout>
 
     <LinearLayout

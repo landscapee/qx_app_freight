@@ -15,10 +15,10 @@ public class LoadingListSendEntity {
      * createUser : 查询到的装机单中的createUser
      */
 
-    private String flightId;
-    private long createDate;
+    private String flightInfoId;
+    private String flightNo;
+    private long createTime;
     private String createUser;
     private String loadingUser;
-    private String flightNo;
     private List<LoadingListBean.DataBean.ContentObjectBean> content;
 }

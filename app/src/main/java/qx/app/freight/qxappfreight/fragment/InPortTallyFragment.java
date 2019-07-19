@@ -31,18 +31,23 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 进港理货fragment
  */
-public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter {
+public class InPortTallyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, TaskLockContract.taskLockView, GroupBoardToDoContract.GroupBoardToDoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
@@ -50,10 +55,15 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private List<TransportDataBase> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
-    private String searchString = "";
-
-    private TaskFragment mTaskFragment;
+    private String searchString = "";//条件搜索关键字
+    private TaskFragment mTaskFragment; //父容器fragment
+    private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow =false;
+
+    /**
+     * 待办锁定 当前的任务bean
+     */
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -70,6 +80,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             EventBus.getDefault().register(this);
         }
         mTaskFragment = (TaskFragment) getParentFragment();
+        searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -77,7 +88,18 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mAdapter.setInportTallyListener(new InportTallyInterface() {
             @Override
             public void toDetail(TransportDataBase item) {
-                turnToDetailActivity(item);
+                CURRENT_TASK_BEAN = item;
+
+                mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.INPORTTALLY);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
+
             }
 
             @Override
@@ -86,16 +108,35 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         });
         mMfrvData.setAdapter(mAdapter);
-        mPresenter = new GroupBoardToDoPresenter(this);
-        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
-        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
-            @Override
-            public void onSearched(String text) {
-               searchString = text;
-               seachWithNum();
-            }
-        });
+
+//        SearchToolbar searchToolbar = ((TaskFragment)getParentFragment()).getSearchView();
+//        searchToolbar.setHintAndListener("请输入航班号", new SearchToolbar.OnTextSearchedListener() {
+//            @Override
+//            public void onSearched(String text) {
+//               searchString = text;
+//               seachWithNum();
+//            }
+//        });
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isShow = isVisibleToUser;
+        if (isVisibleToUser){
+            Log.e("111111", "setUserVisibleHint: "+ "展示");
+            if (mTaskFragment != null) {
+                mTaskFragment.setTitleText(mListTemp.size());
+            }
+            if (searchToolbar!=null){
+                searchToolbar.setHintAndListener("请输入流水号", text -> {
+                    searchString = text;
+                    seachWithNum();
+                });
+            }
+
+        }
     }
 
     private void seachWithNum() {
@@ -110,7 +151,9 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        if (mMfrvData!=null){
+            mMfrvData.notifyForAdapter(mAdapter);
+        }
     }
 
     private void initData() {
@@ -129,6 +172,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         ascs.add("ATA");
         ascs.add("STA");
         entity.setAscs(ascs);
+        mPresenter = new GroupBoardToDoPresenter(this);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
@@ -150,7 +194,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
@@ -163,7 +207,18 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : mList) {
             if (daibanCode.equals(item.getId())) {
-                turnToDetailActivity(item);
+
+                CURRENT_TASK_BEAN = item;
+
+                mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.INPORTTALLY);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
                 return;
             }
         }
@@ -199,7 +254,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            mListTemp.addAll(mWebSocketResultBean.getChgData());
+            if ("DA_tallyAndInStorage".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                mListTemp.addAll(mWebSocketResultBean.getChgData());
+                mTaskFragment.setTitleText(mListTemp.size());
+            }
+
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportDataBase mTransportListBean : mList) {
                 if (mWebSocketResultBean.getChgData().get(0).getId() != null) {
@@ -210,16 +269,6 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         }
         seachWithNum();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isShow = isVisibleToUser;
-        if (isVisibleToUser) {
-            if (mTaskFragment != null)
-                mTaskFragment.setTitleText(mListTemp.size());
-        }
     }
 
     @Override
@@ -257,5 +306,26 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
         }
         seachWithNum();
+        if (mTaskFragment != null) {
+            if (isShow) {
+                mTaskFragment.setTitleText(mListTemp.size());
+            }
+        }
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    /**
+     * 待办锁定
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if(CURRENT_TASK_BEAN != null) {
+            turnToDetailActivity(CURRENT_TASK_BEAN);
+        }
     }
 }

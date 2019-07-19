@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -29,8 +30,11 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.HeChaBean;
+import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
@@ -48,58 +52,36 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     RecyclerView mMfrvData;
     @BindView(R.id.tv_collect_require)
     TextView mTvCollectRequire;
+    @BindView(R.id.tv_wenjian)
+    TextView mTvWenjian;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
 
     private VerifyFileAdapter mAdapter;
     private List<AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList<>();
-    private String mTaskId;
     private String mFilePath;
-    private String mSpotFlag;
-    private String mFlightNumber;
     private int insCheck; //报检是否合格1合格 0不合格
-    private String mShipperCompanyId;
-    private String mAdditionTypeArr;
-    private String mId;
-    private String mWaybillId;
-    private String mTaskTypeCode;
-    private String mWaybillCode;
-    private String Tid;
     private int mSpotResult;
-
-    private String mJianYan;
-
+    private TransportDataBase mBean;
+    private DeclareWaybillBean mDecBean;
+    private TestInfoListBean mAcTestInfoListBean;
 
     public static void startActivity(Activity context,
-                                     String taskTypeCode,
-                                     String waybillId,
-                                     String id,
-                                     String additionTypeArr,
-                                     String taskId,
+                                     TransportDataBase mBean,
+                                     DeclareWaybillBean mDecBean,
                                      String filePath,
-                                     String spotFlag,
                                      int spotResult,
                                      int insCheck,
-                                     String flightNumber,
-                                     String shipperCompanyId,
-                                     String waybillCode,
-                                     String tid,
-                                     String mJianYan) {
+                                     TestInfoListBean mAcTestInfoListBean
+    ) {
         Intent intent = new Intent(context, VerifyFileActivity.class);
-//        intent.putExtra("DeclareWaybillAdditionBean", declareWaybillAdditionBean);
-        intent.putExtra("taskTypeCode", taskTypeCode);
-        intent.putExtra("waybillId", waybillId);
-        intent.putExtra("id", id);
-        intent.putExtra("additionTypeArr", additionTypeArr);
-        intent.putExtra("taskId", taskId);
+        intent.putExtra("mBean", mBean);
+        intent.putExtra("mDecBean", mDecBean);
         intent.putExtra("filePath", filePath);
-        intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("spotResult", spotResult);
         intent.putExtra("insCheck", insCheck);
-        intent.putExtra("flightNumber", flightNumber);
-        intent.putExtra("shipperCompanyId", shipperCompanyId);
-        intent.putExtra("waybillCode", waybillCode);
-        intent.putExtra("tid", tid);
-        intent.putExtra("mJianYan", mJianYan);
+        intent.putExtra("mAcTestInfoListBean", mAcTestInfoListBean);
         context.startActivityForResult(intent, 0);
     }
 
@@ -115,34 +97,53 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         toolbar.setMainTitle(Color.WHITE, "核查证明文件");
         initData();
         mPresenter = new AirlineRequirePresenter(this);
-        ((AirlineRequirePresenter) mPresenter).forwardInfo(mShipperCompanyId);
+        ((AirlineRequirePresenter) mPresenter).forwardInfo(mBean.getShipperCompanyId());
     }
 
     private void initData() {
-//        mDeclareData = (TransportListBean.DeclareWaybillAdditionBean) getIntent().getSerializableExtra("DeclareWaybillAdditionBean");
-        mWaybillId = getIntent().getStringExtra("waybillId");
-        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
-        mTaskId = getIntent().getStringExtra("taskId");
-        mId = getIntent().getStringExtra("id");
-        mAdditionTypeArr = getIntent().getStringExtra("additionTypeArr");
-        mJianYan = getIntent().getStringExtra("mJianYan");
+        mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         mFilePath = getIntent().getStringExtra("filePath");
-        mSpotFlag = getIntent().getStringExtra("spotFlag");
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
-        mFlightNumber = getIntent().getStringExtra("flightNumber");
-        mShipperCompanyId = getIntent().getStringExtra("shipperCompanyId");
-        mWaybillCode = getIntent().getStringExtra("waybillCode");
-        Tid = getIntent().getStringExtra("tid");
         insCheck = getIntent().getIntExtra("insCheck", 0);
-        if (!mAdditionTypeArr.equals("[]")) {
-            Gson mGson = new Gson();
-            AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mAdditionTypeArr, AddtionInvoicesBean.AddtionInvoices[].class);
-            List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
-            mList.clear();
-            mList.addAll(addtionInvoices1);
-            mMfrvData.setLayoutManager(new LinearLayoutManager(this));
-            mAdapter = new VerifyFileAdapter(mList);
-            mMfrvData.setAdapter(mAdapter);
+
+        if (null != mDecBean.getSpWaybillFile()) {
+
+            if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && "[]".equals(mDecBean.getAdditionTypeArr())) {
+                llContent.setVisibility(View.GONE);
+                mTvWenjian.setVisibility(View.VISIBLE);
+            } else {
+                llContent.setVisibility(View.VISIBLE);
+                mTvWenjian.setVisibility(View.GONE);
+            }
+
+            if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
+                Gson mGson = new Gson();
+                AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
+                List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
+                mList.clear();
+                mList.addAll(addtionInvoices1);
+                mMfrvData.setLayoutManager(new LinearLayoutManager(this));
+                mAdapter = new VerifyFileAdapter(mList);
+                mMfrvData.setAdapter(mAdapter);
+            } else if (!TextUtils.isEmpty(mDecBean.getAdditionTypeArr())) {
+                Gson mGson = new Gson();
+                HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), HeChaBean[].class);
+                List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
+                List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
+                for (int i = 0; i < heChaBeanList.size(); i++) {
+                    AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
+                    add.setFileTypeName(heChaBeanList.get(i).getFileTypeName());
+                    add.setFilePath(heChaBeanList.get(i).getFilePath());
+                    addList.add(add);
+                }
+                mList.addAll(addList);
+                mMfrvData.setLayoutManager(new LinearLayoutManager(this));
+                mAdapter = new VerifyFileAdapter(mList);
+                mMfrvData.setAdapter(mAdapter);
+            } else
+                ToastUtil.showToast("数据为空");
 
             mAdapter.setOnItemClickListener((adapter, view, position) -> {
                         List<String> array = new ArrayList<>();
@@ -150,67 +151,49 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
                     }
             );
-        } else if (!TextUtils.isEmpty(mJianYan)) {
-            Gson mGson = new Gson();
-            HeChaBean[] addtionInvoices = mGson.fromJson(mJianYan, HeChaBean[].class);
-            List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
-            List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
-            for (int i = 0; i < heChaBeanList.size(); i++) {
-                AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
-                add.setFileTypeName(heChaBeanList.get(i).getName());
-                addList.add(add);
-            }
-            mList.addAll(addList);
-            mMfrvData.setLayoutManager(new LinearLayoutManager(this));
-            mAdapter = new VerifyFileAdapter(mList);
-            mMfrvData.setAdapter(mAdapter);
-        } else
-            ToastUtil.showToast("数据为空");
-
-
+        }
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.agree_tv:
-                ToastUtil.showToast(this, "合格");
                 VerifyCargoActivity.startActivity(this,
-                        mTaskTypeCode,
-                        mWaybillId,
-                        mId,
+                        mBean,
+                        mDecBean,
                         mFilePath,//图片路径
                         insCheck,//报检是否合格0合格 1不合格
                         0,//资质是否合格0合格 1不合格
-                        mTaskId, //当前任务id
-                        mSpotFlag,
                         mSpotResult,
-                        UserInfoSingle.getInstance().getUserId(), //当前提交人id
-                        mFlightNumber,
-                        mWaybillCode,
-                        Tid
+                        UserInfoSingle.getInstance().getUserId(),
+                        mAcTestInfoListBean
                 );
                 break;
             case R.id.refuse_tv:
                 mPresenter = new SubmissionPresenter(this);
                 StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
-                mStorageCommitEntity.setWaybillId(Tid);
-                mStorageCommitEntity.setWaybillCode(mWaybillCode);
+                mStorageCommitEntity.setWaybillId(mBean.getId());
+                mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                 mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
                 mStorageCommitEntity.setInsFile(mFilePath);
                 mStorageCommitEntity.setInsCheck(1);
                 mStorageCommitEntity.setFileCheck(1);
-                mStorageCommitEntity.setTaskTypeCode(mTaskTypeCode);
+                mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
                 mStorageCommitEntity.setType(1);
-                mStorageCommitEntity.setTaskId(mSpotFlag);
-                mStorageCommitEntity.setUserId(mFlightNumber);
+                mStorageCommitEntity.setTaskId(mBean.getTaskId());
+                mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
                 //新加
-                mStorageCommitEntity.setInsUserName("");
-                mStorageCommitEntity.setInsDangerEnd(123);
-                mStorageCommitEntity.setInsDangerStart(123);
-                mStorageCommitEntity.setInsStartTime(123);
-                mStorageCommitEntity.setInsEndTime(123);
-                mStorageCommitEntity.setInsUserHead("");
+                if (null != mAcTestInfoListBean.getFreightInfo()) {
+                    mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+                    mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+                    mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+                    mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+                    mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+                }
+                if (null != mAcTestInfoListBean.getInsInfo()) {
+                    mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+                    mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+                }
                 ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
                 break;
         }
@@ -274,12 +257,12 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

@@ -61,7 +61,7 @@ public class WaybillsBean {
     private int flightId;
     private String mailType;
     private int documentDelivery;
-    private int totalNumberPackages;
+    private int totalNumber;
     private String totalWeight;
     private String specialCargoCode;
     private String commodityName;

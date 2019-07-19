@@ -6,35 +6,24 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qxkj.positionapp.GPSService;
-import com.qxkj.positionapp.GPSUtils;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
-import qx.app.freight.qxappfreight.fragment.TaskPutCargoFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -43,7 +32,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements LocationObservable{
+public class MainActivity extends BaseActivity implements LocationObservable {
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -72,7 +61,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
     private TaskFragment mTaskFragment;
     private DynamicFragment mDynamicFragment;
     private ClearStorageFragment mCSFragment;
-//    private TaskPutCargoFragment mTaskPutCargoFragment;
+    //    private TaskPutCargoFragment mTaskPutCargoFragment;
     private MineFragment mMineFragment;
     private Fragment nowFragment;
     private TestFragment testFragment;
@@ -105,31 +94,9 @@ public class MainActivity extends BaseActivity implements LocationObservable{
     private void initServices() {
         //开启定位服务
         GPSService.startGPSService(this);
-
-//        GetIdUtil.getSingleInstance().register(this);
-        //根据登录返回的
-        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
-        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
-            if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-                taskAssignType = 1;
-            } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-                taskAssignType = 3;
-            } else
-                taskAssignType = 2;
-            WebSocketService.startService(this, HttpConstant.WEBSOCKETURL
-                    + "userId=" + UserInfoSingle.getInstance().getUserId()
-                    + "&taskAssignType=" + taskAssignType
-                    + "&type=MT"
-                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-
-            Log.e("webSocketUrl=====",HttpConstant.WEBSOCKETURL
-                    + "userId=" + UserInfoSingle.getInstance().getUserId()
-                    + "&taskAssignType=" + taskAssignType
-                    + "&type=MT"
-                    + "&role=" + UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
-        }
-
+        WebSocketService.startService(this);
     }
+
 
     private void initFragment() {
 //        PagerAdapter pagerAdapter = new PagerAdapter(this, getSupportFragmentManager());
@@ -172,6 +139,7 @@ public class MainActivity extends BaseActivity implements LocationObservable{
 //        IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
 //        IMUtils.imLibLogin("lizhong", "李忠", "eyJhbGciOiJIUzI1NiJ9.eyJjcmVhdGVfdGltZSI6MTU1MzUwMTUwMDk1MCwidXNlcl9pbmZvIjoie1wiZGVwdENvZGVcIjpcImNzZ2xcIixcImRlcHRJZFwiOlwiN2IzMTZjYjhjMTgxNDhiOGFiYTUxNmRlODVmNzZlYWVcIixcImlkXCI6XCI2MjQwNjg4NzBjMGM0ZGNiOTUyYTRkNDAyZjdjZDg5N1wiLFwibG9naW5OYW1lXCI6XCJsaXpob25nXCIsXCJuYW1lXCI6XCLmnY7lv6BcIixcInJvbGVzXCI6W3tcImNvZGVcIjpcImdyb3VwX2xlYWRlclwiLFwiaWRcIjpcImYzZmEwNmM2ZmU3MDRhOTRiZWIxYzlmMDMxMjYyNDdhXCJ9LHtcImNvZGVcIjpcIlN5c3RlbU1hbmFnZXJcIixcImlkXCI6XCJTeXN0ZW1NYW5hZ2VyXCJ9LHtcImNvZGVcIjpcImFsbF9yZXBvcnRcIixcImlkXCI6XCI1ZWQ3OWUyY2NmMWQ0MWJhYTRhNTE3Nzg1MDdiMjFiN1wifSx7XCJjb2RlXCI6XCJBT0NfUkVBRFwiLFwiaWRcIjpcIjUyMmM3ODY5NjJkNzQzNGJhN2VhY2FmOTM2YjMzYzQ3XCJ9LHtcImNvZGVcIjpcIkFPQ19TRlwiLFwiaWRcIjpcIjExNDA5ZDhkODU1NjQ4NTRiZTk4ZTQxY2Y5MTAzZmY2XCJ9LHtcImNvZGVcIjpcIkFPQ19DWVwiLFwiaWRcIjpcIjg1ZmJiNjQ1NDA2OTQ4NzRiZGU3NDFjYjU3MjE2ODE5XCJ9LHtcImNvZGVcIjpcIkFPQ19XUklURVwiLFwiaWRcIjpcImY3NTdhYmQxNmExZDRkNzNhMTU2YmU0MjZmMmIzMmJlXCJ9LHtcImNvZGVcIjpcImRlcHRNYW5hZ2VyXCIsXCJpZFwiOlwiZGVwdE1hbmFnZXJcIn0se1wiY29kZVwiOlwiMVwiLFwiaWRcIjpcImFkODI4MjgwZDI4MzRjNzI4ODkxMmZjY2VlOTYyNTg0XCJ9LHtcImNvZGVcIjpcIkFQUEhUXCIsXCJpZFwiOlwiYjUwMTQ5NTEwODMxNDhlN2IzY2E3NjY5MjRjNzFiNTVcIn1dLFwic3RhdGVcIjpcIjFcIn0iLCJ1c2VyX25hbWUiOiLmnY7lv6AiLCJ1c2VyX2tleSI6IjQyODk5ODU0YmU2ZGRlYTA4OTVlNjMwNGYzMTE5OGQ2IiwidGltZW91dCI6Mjg4MDB9.uCx9MCGIfESaeKy5z4DnS70nfMz6fRWAGl52i2hJR5w");
     }
+
     //    public void setDeviceIdentify(String deviceIdentify) {
 //        if (deviceIdentify != null && !"null".equals(deviceIdentify) && !"".equals(deviceIdentify)) {
 //            ImLibConstants.IMLIB_DEVICE_IDENTIFY = deviceIdentify;
@@ -297,6 +265,6 @@ public class MainActivity extends BaseActivity implements LocationObservable{
     @Override
     public void receiveLocationUpdate(LocationEntity locationEntity) {
         if (locationEntity != null)
-            ToastUtil.showToast("经度:"+locationEntity.getLongitude()+"纬度:"+locationEntity.getLatitude());
+            ToastUtil.showToast("经度:" + locationEntity.getLongitude() + "纬度:" + locationEntity.getLatitude());
     }
 }

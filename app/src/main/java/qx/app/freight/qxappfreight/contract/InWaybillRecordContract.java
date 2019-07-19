@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.contract;
 
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
@@ -12,19 +13,23 @@ import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
  */
 public class InWaybillRecordContract {
 
-    public interface inWaybillRecordModel{
+    public interface inWaybillRecordModel {
         void getList(InWaybillRecordGetEntity entity, IResultLisenter lisenter);
 
         void submit(InWaybillRecordSubmitEntity entity, IResultLisenter lisenter);
 
         void deleteById(String id, IResultLisenter lisenter);
+
+        void allGoodsArrived(InWaybillRecord data, IResultLisenter lisenter);
     }
 
-    public interface inWaybillRecordView extends IBaseView{
+    public interface inWaybillRecordView extends IBaseView {
         void resultGetList(InWaybillRecordBean bean);
 
         void resultSubmit(Object o);
 
         void resultDeleteById(Object o);
+
+        void allGoodsArrivedResult(String o);
     }
 }

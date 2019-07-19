@@ -38,7 +38,7 @@ public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportDataBase, B
         //品名
         helper.setText(R.id.tv_goods_name, item.getCargoCn());
         //件数
-        helper.setText(R.id.tv_goods_number, StringUtil.formatStringDeleteDot(item.getTotalNumberPackages()));
+        helper.setText(R.id.tv_goods_number, StringUtil.formatStringDeleteDot(item.getTotalNumber()));
         //重量
         helper.setText(R.id.tv_weight, StringUtil.formatStringDeleteDot(item.getTotalWeight()));
         //体积

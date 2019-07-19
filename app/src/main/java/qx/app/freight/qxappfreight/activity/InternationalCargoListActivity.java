@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +26,19 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InternationalCargoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
+import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.presenter.InternationalCargoReportPresenter;
+import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -40,7 +48,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 国际货物提交界面
  */
-public class InternationalCargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView {
+public class InternationalCargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView, ScanScooterCheckUsedContract.ScanScooterCheckView {
 
     @BindView(R.id.flight_id)
     TextView flightId;
@@ -91,6 +99,7 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
 
     FlightLuggageBean flightBean;
     private int flag = 0;
+    private String mScooterCode;
 
     @Override
     public int getLayoutId() {
@@ -99,7 +108,7 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-
+        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         flightBean = (FlightLuggageBean) intent.getSerializableExtra("flightBean");
         setToolbarShow(View.VISIBLE);
@@ -110,7 +119,7 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
     }
 
     private void initView() {
-        mPresenter = new InternationalCargoReportPresenter(this);
+
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mList = new ArrayList<>();
         mAdapter = new InternationalCargoAdapter(mList);
@@ -190,6 +199,7 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         entity.setCurrent(1);
         entity.setSize(10);
         entity.setFilter(myAgentListBean);
+        mPresenter = new InternationalCargoReportPresenter(this);
         ((InternationalCargoReportPresenter) mPresenter).scooterInfoList(entity);
     }
 
@@ -203,7 +213,21 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         }
         Gson gson = new Gson();
         String json = gson.toJson(mList);
+        mPresenter = new InternationalCargoReportPresenter(this);
         ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(json);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScanDataBean result) {
+        if (result.getFunctionFlag().equals("InternationalCargoListActivity")) {
+            //板车号
+            mScooterCode = result.getData();
+            if (!"".equals(mScooterCode)) {
+                checkScooterCode(mScooterCode);
+            } else {
+                ToastUtil.showToast("扫码数据为空请重新扫码");
+            }
+        }
     }
 
     @Override
@@ -219,12 +243,12 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
             bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
             bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
 
-            bean.setTpFlightId(flightBean.getFlightId());
-            bean.setTpFlightNumber(flightBean.getFlightNo());
+            bean.setFlightId(flightBean.getFlightId());
+            bean.setFlightNo(flightBean.getFlightNo());
             bean.setTpFlightLocate(flightBean.getSeat());
             bean.setTpFlightTime(flightBean.getScheduleTime());
-            bean.setTpFlightBusId(flightBean.getId());
-            bean.setTpAsFlightId(flightBean.getSuccessionId());
+            bean.setFlightInfoId(flightBean.getId());
+            bean.setAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
             bean.setFlightIndicator("I");
 
@@ -255,11 +279,29 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Constants.SCAN_RESULT == resultCode) {
-            String mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            isIncludeScooterCode(mScooterCode);
+            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+            checkScooterCode(mScooterCode);
 
         } else {
             Log.e("resultCode", "收货页面不是200");
+        }
+    }
+
+    /**检测板车号是否可用
+     *
+     * @param scooterCode
+     */
+    private void checkScooterCode(String scooterCode){
+        mPresenter = new ScanScooterCheckUsedPresenter(this);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+    }
+
+    @Override
+    public void checkScooterCodeResult(BaseEntity<Object> result) {
+        if ("200".equals(result.getStatus())) {
+            isIncludeScooterCode(mScooterCode);
+        } else {
+            ToastUtil.showToast("操作不合法，不能重复扫描");
         }
     }
 }

@@ -1,7 +1,8 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -15,13 +16,13 @@ import qx.app.freight.qxappfreight.utils.ExceptionUtils;
 
 /**
  * 进港分拣 - 信息列表适配器
- *
+ * <p>
  * create by guohao - 2019/4/25
- *
  */
 public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseViewHolder> {
 
-    OnInWaybillRecordDeleteListener onInWaybillRecordDeleteListener;
+    private OnInWaybillRecordDeleteListener onInWaybillRecordDeleteListener;
+    private OnAllArriveNotifyListener onAllArriveNotifyListener;
 
     public SortingInfoAdapter(@Nullable List<InWaybillRecord> data) {
         super(R.layout.item_sorting_info, data);
@@ -49,15 +50,15 @@ public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseVi
         } else {
             helper.setText(R.id.tv_remark, "");//异常原因
         }
+        TextView tvAllArrive = helper.getView(R.id.tv_all_arrive);
+        if (item.getAllArrivedFlag() == 0) {
+            tvAllArrive.setTextColor(Color.BLACK);
+            tvAllArrive.setOnClickListener(v -> onAllArriveNotifyListener.onAllArrived(item,helper.getAdapterPosition()));
+        } else {
+            tvAllArrive.setTextColor(mContext.getResources().getColor(R.color.gray_888));
+        }
         //左滑菜单, 要删除的啦
-        helper.getView(R.id.rll_del).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onInWaybillRecordDeleteListener.onDeleteListener(helper.getAdapterPosition());
-            }
-        });
-
-
+        helper.getView(R.id.rll_del).setOnClickListener(v -> onInWaybillRecordDeleteListener.onDeleteListener(helper.getAdapterPosition()));
     }
 
     //删除监听事件
@@ -65,8 +66,15 @@ public class SortingInfoAdapter extends BaseQuickAdapter<InWaybillRecord, BaseVi
         this.onInWaybillRecordDeleteListener = onInWaybillRecordDeleteListener;
     }
 
+    public void setOnAllArriveNotifyListener(OnAllArriveNotifyListener onAllArriveNotifyListener) {
+        this.onAllArriveNotifyListener = onAllArriveNotifyListener;
+    }
+
     public interface OnInWaybillRecordDeleteListener {
         void onDeleteListener(int postion);
     }
 
+    public interface OnAllArriveNotifyListener {
+        void onAllArrived(InWaybillRecord item,int pos);
+    }
 }

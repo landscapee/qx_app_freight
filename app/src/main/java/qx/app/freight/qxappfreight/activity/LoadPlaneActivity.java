@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,38 +25,39 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
+import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomRecylerView;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
  * 理货装机页面
  */
-public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView {
+public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.rv_data)
     CustomRecylerView mRvData;
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;
     @BindView(R.id.tv_flight_craft)
     TextView mTvFlightType;
-    @BindView(R.id.tv_start_place)
-    TextView mTvStartPlace;
-    @BindView(R.id.iv_two_place)
-    ImageView mIvTwoPlace;
-    @BindView(R.id.tv_middle_place)
-    TextView mTvMiddlePlace;
-    @BindView(R.id.tv_target_place)
-    TextView mTvTargetPlace;
+    @BindView(R.id.ll_flight_info_container)
+    LinearLayout mLlInfoContainer;
     @BindView(R.id.tv_seat)
     TextView mTvSeat;
     @BindView(R.id.tv_start_time)
@@ -71,6 +72,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private String mCurrentTaskId;
     private String mCurrentFlightId;
     private WaitCallBackDialog mWaitCallBackDialog;
+    private LoadAndUnloadTodoBean data;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -108,61 +110,40 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             EventBus.getDefault().register(this);
         }
         mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
+        mWaitCallBackDialog.setCancelable(false);
+        mWaitCallBackDialog.setCanceledOnTouchOutside(false);
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        LoadAndUnloadTodoBean data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
-        mCurrentTaskId = data.getTaskId();
-        toolbar.setMainTitle(Color.WHITE, data.getFlightNo() + "  装机");
-        mTvPlaneInfo.setText(data.getFlightNo());
-        mTvFlightType.setText(data.getAircraftno());
-        String route = data.getRoute();
-        String start = "", middle = "", end = "";
-        if (route != null) {
-            String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
-            for (String str : placeArray) {
-                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
-                resultList.add(temp);
-            }
-            if (resultList.size() == 3) {
-                middle = resultList.get(1);
-            }
-            start = resultList.get(0);
-            end = resultList.get(resultList.size() - 1);
-        }
-        if (TextUtils.isEmpty(start)) {//起点都没有，说明没有航线信息，全部隐藏
-            mTvStartPlace.setVisibility(View.GONE);
-            mIvTwoPlace.setVisibility(View.GONE);
-            mTvMiddlePlace.setVisibility(View.GONE);
-            mTvTargetPlace.setVisibility(View.GONE);
+        data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        //是否是连班航班,连班航班的话所有关联操作都应该使用连班航班的数据
+        boolean mIsKeepOnTask = data.getMovement() == 4;
+        mCurrentTaskId = mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId();
+        toolbar.setMainTitle(Color.WHITE, (mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo()) + "  装机");
+        mTvPlaneInfo.setText(mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo());
+        mTvFlightType.setText(mIsKeepOnTask ? data.getRelateInfoObj().getAircraftno() : data.getAircraftno());
+        String route = mIsKeepOnTask ? data.getRelateInfoObj().getRoute() : data.getRoute();
+        FlightInfoLayout layout = new FlightInfoLayout(this, StringUtil.getFlightList(route));
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mLlInfoContainer.removeAllViews();
+        mLlInfoContainer.addView(layout, paramsMain);
+        mTvSeat.setText(mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());
+        String time;
+        if (!StringUtil.isTimeNull(String.valueOf(mIsKeepOnTask ? data.getRelateInfoObj().getAtd() : data.getAtd()))) {
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getAtd() : data.getAtd());
+        } else if (!StringUtil.isTimeNull(String.valueOf(mIsKeepOnTask ? data.getRelateInfoObj().getEtd() : data.getEtd()))) {
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getEtd() : data.getEtd());
         } else {
-            if (TextUtils.isEmpty(middle)) {//没有中转站信息
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mIvTwoPlace.setVisibility(View.VISIBLE);
-                mTvMiddlePlace.setVisibility(View.GONE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setText(end);
-            } else {
-                mTvStartPlace.setVisibility(View.VISIBLE);
-                mIvTwoPlace.setVisibility(View.GONE);
-                mTvMiddlePlace.setVisibility(View.VISIBLE);
-                mTvTargetPlace.setVisibility(View.VISIBLE);
-                mTvStartPlace.setText(start);
-                mTvMiddlePlace.setText(middle);
-                mTvTargetPlace.setText(end);
-            }
+            time = TimeUtils.getHMDay(mIsKeepOnTask ? data.getRelateInfoObj().getStd() : data.getStd());
         }
-        mTvSeat.setText(data.getSeat());
-        mTvStartTime.setText(TimeUtils.getHMDay(data.getScheduleTime()));
+        mTvStartTime.setText(time);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
-        mCurrentFlightId = data.getFlightId();
+        mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
         entity.setFlightId(mCurrentFlightId);
@@ -175,9 +156,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
-            intent.putExtra("flight_number", data.getFlightNo());//航班号
-            intent.putExtra("task_id", data.getTaskId());//任务id
-            intent.putExtra("flight_id", data.getFlightId());//Flight id
+            intent.putExtra("flight_number", mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo());//航班号
+            intent.putExtra("task_id", mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId());//任务id
+            intent.putExtra("flight_id", mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId());//Flight id
+            intent.putExtra("area_id", mIsKeepOnTask ? data.getRelateInfoObj().getSeat() : data.getSeat());//area_id
+            intent.putExtra("step_code", data.getOperationStepObj().get(getIntent().getIntExtra("position", -1)).getOperationCode());//step_code
             intent.putExtra("error_type", 1);
             LoadPlaneActivity.this.startActivity(intent);
         });
@@ -185,24 +168,27 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //            if (mLoadingList.size() == 0) {
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
-                boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-               /* for (LoadingListBean.DataBean entity1 : mLoadingList) {
+            boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
+            if (mLoadingList!=null&&mLoadingList.size()!=0) {
+                LoadingListBean.DataBean entity1 = mLoadingList.get(0);
+                if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
                         if (!entity2.isLocked()) {
                             doRight = false;
                             break;
                         }
                     }
-                }*/
-                if (doRight) {
-                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                    bean.setTpFlightId(data.getFlightId());
-                    bean.setTaskId(data.getId());
-                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-                } else {
-                    ToastUtil.showToast("有未锁定修改的数据，请检查！");
                 }
+            }
+            if (doRight) {
+                GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                bean.setTpFlightId(data.getFlightId());
+                bean.setTaskId(data.getId());
+                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+            } else {
+                ToastUtil.showToast("有未锁定修改的数据，请检查！");
+            }
 //            }
         });
     }
@@ -214,29 +200,47 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         } else {
             mLoadingList.clear();
             if (result.getData() == null || result.getData().size() == 0) return;
-            mLoadingList.addAll(result.getData());
+//            mLoadingList.addAll(result.getData());
+            mLoadingList.add(result.getData().get(0));
+            for (LoadingListBean.DataBean bean:mLoadingList){
+                bean.setShowDetail(true);
+            }
             Collections.reverse(mLoadingList);
             UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
             mRvData.setAdapter(adapter);
             adapter.setOnOverLoadListener(entity -> {
-                LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                requestModel.setCreateDate(entity.getCreateDate());
-                requestModel.setFlightNo(entity.getFlightNo());
-                requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
-                requestModel.setCreateUser(entity.getCreateUser());
-                requestModel.setFlightId(entity.getFlightId());
-                requestModel.setContent(entity.getContentObject());
-                ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
+                    LoadingListSendEntity requestModel = new LoadingListSendEntity();
+                    requestModel.setFlightNo(data.getFlightNo());
+                    requestModel.setCreateTime(entity.getCreateTime());
+                    requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
+                    requestModel.setCreateUser(entity.getCreateUser());
+                    requestModel.setFlightInfoId(entity.getFlightInfoId());
+                    requestModel.setContent(entity.getContentObject());
+                    ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                } else {
+                    ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
+                }
             });
         }
     }
 
     @Override
     public void flightDoneInstallResult(String result) {
-        ToastUtil.showToast("结束装机成功");
-        Log.e("tagNet", "result=====" + result);
-        EventBus.getDefault().post("InstallEquipFragment_refresh");
-        finish();
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(data.getId());
+        entity.setFlightId(Long.valueOf(data.getFlightId()));
+        entity.setFlightTaskId(data.getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode("FreightLoadFinish");
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(data.getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
@@ -258,5 +262,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    @Override
+    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+        ToastUtil.showToast("结束装机成功");
+        Log.e("tagNet", "result=====" + result);
+        EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
+        finish();
     }
 }

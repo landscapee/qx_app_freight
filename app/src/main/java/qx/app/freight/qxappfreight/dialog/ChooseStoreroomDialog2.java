@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.io.Serializable;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -99,12 +100,20 @@ public class ChooseStoreroomDialog2 extends DialogFragment {
         }
     }
 
-    public static class TestBean {
+    public static class TestBean implements Serializable {
         private int type;
         private int number;
 
         private String name;
         private boolean isChoose;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
 
         private String id;
 

@@ -27,6 +27,7 @@ public class FightScooterSubmitEntity {
     private String userId;
     private String taskId;
     private String flightId;
+    private String currentStep;
     private List<FtRuntimeFlightScooter> scooters; //板车列表
     private List<FtGroupScooter> withoutScootereRcInfos; //无板收运记录
     private List<FtGroupScooter> deleteRcInfos;//删除收运记录

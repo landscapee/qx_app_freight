@@ -81,16 +81,16 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        MyApplication.currentView = getClass().getSimpleName();
-        Log.e("========="+getClass().getSimpleName(),"onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("========="+getClass().getSimpleName(),"onPause");
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        MyApplication.currentView = getClass().getSimpleName();
+//        Log.e("========="+getClass().getSimpleName(),"onResume");
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Log.e("========="+getClass().getSimpleName(),"onPause");
+//    }
 }

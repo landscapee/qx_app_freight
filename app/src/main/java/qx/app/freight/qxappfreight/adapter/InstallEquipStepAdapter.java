@@ -71,6 +71,7 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                         } else if (pos == 4) {
                             Intent intent = new Intent(mContext, LoadPlaneActivity.class);
                             intent.putExtra("plane_info", mList.get(pos).getData());
+                            intent.putExtra("position",5);
                             mContext.startActivity(intent);
                         } else {
                             item.setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
@@ -90,6 +91,7 @@ public class InstallEquipStepAdapter extends BaseMultiItemQuickAdapter<MultiStep
                                 Intent intent;
                                 if (item.getLoadUnloadType() == 1) {
                                     intent = new Intent(mContext, LoadPlaneActivity.class);
+                                    intent.putExtra("position",3);
                                 } else {
                                     intent = new Intent(mContext, UnloadPlaneActivity.class);
                                     intent.putExtra("flight_type", mList.get(pos).getFlightType());

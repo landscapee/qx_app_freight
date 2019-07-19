@@ -28,11 +28,15 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
+import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -41,7 +45,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * <p>
  * 出港-配载-组板
  */
-public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, TaskLockContract.taskLockView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
@@ -51,6 +55,11 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 
     private int pageCurrent = 1;//页数
     private String mSearchText;
+
+    /**
+     * 待办锁定 当前的任务bean
+     */
+    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @Nullable
     @Override
@@ -66,8 +75,9 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
         initData();
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", text -> {
@@ -95,8 +105,18 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         adapter = new TaskStowageAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-//            ToastUtil.showToast(getContext(), list.get(position));
-            turnToDetailActivity(list.get(position));
+
+            CURRENT_TASK_BEAN = list.get(position);
+            mPresenter = new TaskLockPresenter(this);
+            TaskLockEntity entity = new TaskLockEntity();
+            List<String> taskIdList = new ArrayList<>();
+            taskIdList.add(list.get(position).getTaskId());
+            entity.setTaskId(taskIdList);
+            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+            entity.setRoleCode(Constants.BEFOREHAND);
+
+            ((TaskLockPresenter) mPresenter).taskLock(entity);
+
         });
         getData();
     }
@@ -150,7 +170,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
      * @param bean
      */
     private void turnToDetailActivity(TransportDataBase bean) {
-        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId());
+        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId(),bean.getTaskTypeCode());
     }
 
     /**
@@ -160,7 +180,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(daibanCode)) {
+        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
@@ -171,8 +191,9 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
             mCacheList.addAll(mWebSocketResultBean.getChgData());
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportDataBase mTransportListBean : list) {
-                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId()))
+                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {
                     mCacheList.remove(mTransportListBean);
+                }
             }
         }
         seachByText();
@@ -186,7 +207,17 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : mCacheList) {
             if (daibanCode.equals(item.getId())) {
-                turnToDetailActivity(item);
+
+                CURRENT_TASK_BEAN = item;
+                mPresenter = new TaskLockPresenter(this);
+                TaskLockEntity entity = new TaskLockEntity();
+                List<String> taskIdList = new ArrayList<>();
+                taskIdList.add(item.getTaskId());
+                entity.setTaskId(taskIdList);
+                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                entity.setRoleCode(Constants.BEFOREHAND);
+
+                ((TaskLockPresenter) mPresenter).taskLock(entity);
                 return;
             }
         }
@@ -215,8 +246,9 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         if (pageCurrent == 1) {
             mCacheList.clear();
             mMfrvData.finishRefresh();
-        } else
+        } else {
             mMfrvData.finishLoadMore();
+        }
     }
 
     @Override
@@ -242,11 +274,28 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
                 mMfrvData.finishLoadMore();
             }
             for (TransportDataBase mTransportListBean : transportListBeans) {
-                if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode()))
+                if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode())) {
                     mCacheList.add(mTransportListBean);
+                }
             }
         }
         seachByText();
         setTitleNum(mCacheList.size());
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    /**
+     * 待办锁定 - 回调
+     * @param result
+     */
+    @Override
+    public void taskLockResult(String result) {
+        if (CURRENT_TASK_BEAN != null) {
+            turnToDetailActivity(CURRENT_TASK_BEAN);
+        }
     }
 }

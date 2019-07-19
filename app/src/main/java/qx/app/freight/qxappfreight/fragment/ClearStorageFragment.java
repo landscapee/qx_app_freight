@@ -70,10 +70,12 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         int rw = 0;
-        for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
-            if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                rw = 1;
-                break;
+        if (UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()!=0) {
+            for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+                if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                    rw = 1;
+                    break;
+                }
             }
         }
         if (rw == 1) {

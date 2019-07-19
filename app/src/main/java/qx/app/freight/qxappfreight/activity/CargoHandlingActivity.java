@@ -16,13 +16,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,15 +34,11 @@ import qx.app.freight.qxappfreight.adapter.CabinAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoCabinAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoHandlingAdapter;
 import qx.app.freight.qxappfreight.adapter.CargoHandlingWaybillAdapter;
-import qx.app.freight.qxappfreight.adapter.GeneralSpinnerAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
-import qx.app.freight.qxappfreight.bean.request.GeneralSpinnerBean;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
-import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
-import qx.app.freight.qxappfreight.bean.response.ExistBean;
 import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
 import qx.app.freight.qxappfreight.bean.response.FtGroupScooter;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
@@ -54,7 +46,6 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.AddScooterContract;
 import qx.app.freight.qxappfreight.contract.GetScooterListInfoContract;
 import qx.app.freight.qxappfreight.contract.ScooterInfoListContract;
 import qx.app.freight.qxappfreight.contract.ScooterOperateContract;
@@ -66,7 +57,6 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
-import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
@@ -133,6 +123,8 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
     private String taskId = null;//待办任务ID
     private String flightId = null;//待办航班id
+    private String  taskTypeCode = null;
+
 
     private CommonPopupWindow window;
     RecyclerView dataRc;
@@ -145,10 +137,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     private CabinAdapter mSpProductAdapter;
 
 
-    public static void startActivity(Context context, String taskId, String flightId) {
+    public static void startActivity(Context context, String taskId, String flightId,String taskTypeCode) {
         Intent intent = new Intent(context, CargoHandlingActivity.class);
         intent.putExtra("taskId", taskId);
         intent.putExtra("flightId", flightId);
+        intent.putExtra("taskTypeCode", taskTypeCode);
         context.startActivity(intent);
     }
 
@@ -170,7 +163,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 
         taskId = getIntent().getStringExtra("taskId");
         flightId = getIntent().getStringExtra("flightId");
-
+        taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         mPresenter = new GetScooterListInfoPresenter(this);
         GetScooterListInfoEntity mGetScooterListInfoEntity = new GetScooterListInfoEntity();
         mGetScooterListInfoEntity.setFlightId(flightId);
@@ -320,7 +313,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
 
-        window = new CommonPopupWindow(this, R.layout.popup_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
+        window = new CommonPopupWindow(this, R.layout.popup_uld_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             @Override
             protected void initView() {
                 View view = getContentView();
@@ -382,7 +375,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenHeight = metrics.heightPixels;
 
-        window = new CommonPopupWindow(this, R.layout.popup_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
+        window = new CommonPopupWindow(this, R.layout.popup_uld_list, ViewGroup.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.7)) {
             @Override
             protected void initView() {
                 View view = getContentView();
@@ -514,6 +507,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         mFightScooterSubmitEntity.setDeleteRcInfos(listDeleteYes);
         mFightScooterSubmitEntity.setScooters(listHandcar_ORIGIN);
         mFightScooterSubmitEntity.setWithoutScootereRcInfos(listWaybill_ORIGIN);
+        mFightScooterSubmitEntity.setCurrentStep(taskTypeCode);
         ((GetScooterListInfoPresenter) mPresenter).freightInfo(mFightScooterSubmitEntity);
 
     }
@@ -733,6 +727,14 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         if (scooterListInfoBean != null) {
             //总数据源 赋值
             listHandcar_ORIGIN = scooterListInfoBean.getScooters();
+            //为无板运单增加 inFlight 默认值
+            for (FtGroupScooter mFtGroupScooter:scooterListInfoBean.getWithoutScootereRcInfos()){
+                if (mFtGroupScooter.getInFlight() == null)
+                    mFtGroupScooter.setInFlight((short)0);
+//                mFtGroupScooter.setNumber(5);
+//                mFtGroupScooter.setWeight(50d);
+//                mFtGroupScooter.setVolume(20d);
+            }
             listWaybill_ORIGIN = scooterListInfoBean.getWithoutScootereRcInfos();
             //航班信息 赋值
             flightInfo = scooterListInfoBean.getFlight();

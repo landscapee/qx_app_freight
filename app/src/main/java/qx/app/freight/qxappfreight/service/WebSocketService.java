@@ -1,228 +1,162 @@
 package qx.app.freight.qxappfreight.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.util.Log;
-import android.view.WindowManager;
 
-import com.google.gson.Gson;
 import com.qxkj.positionapp.GPSUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import qx.app.freight.qxappfreight.activity.LoginActivity;
-import qx.app.freight.qxappfreight.app.MyApplication;
-import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.listener.BeforehandClient;
+import qx.app.freight.qxappfreight.listener.CollectionClient;
+import qx.app.freight.qxappfreight.listener.DeliveryClient;
+import qx.app.freight.qxappfreight.listener.InstallEquipClient;
+import qx.app.freight.qxappfreight.listener.OffSiteEscortClient;
+import qx.app.freight.qxappfreight.listener.PreplanerClient;
+import qx.app.freight.qxappfreight.listener.ReceiveClient;
+import qx.app.freight.qxappfreight.listener.WeighterClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
-import qx.app.freight.qxappfreight.utils.ActManager;
-import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
-import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.StompHeader;
 
-public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView{
-    private static String uri;
+public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
     public Context mContext;
-    private static StompClient mStompClient;
-    private Timer mTimer;
+    //    private static StompClient mStompClient;
     public static final String TAG = "websocket";
-    private CompositeDisposable compositeDisposable;
-    private Gson mGson = new Gson();
-    private int flag = 0;
-
     private GpsInfoEntity gpsInfoEntity; // gps 上传实体
     private SaveGpsInfoPresenter saveGpsInfoPresenter;
+    private int taskAssignType = 0;
+    public static boolean isTopic = false;
+    public static List<StompClient> mStompClient;
+
+    private boolean isContinue = true; //线程控制
+    private Thread threadGps = null;
+
+    public static String ToList ="/taskTodo/taskTodoList" ;
+    public static String Message = "/MT/msMsg";
+    public static String Login = "/MT/message";
+    public static List<String> subList = new ArrayList <>();
+
     @Override
     public void onCreate() {
         super.onCreate();
-//        EventBus.getDefault().isRegistered(this);
-        mTimer = new Timer();
-        if (uri == null) {
-            Log.e(TAG, "推送服务url为null");
+        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+        mStompClient = new ArrayList<>();
+        if (null == UserInfoSingle.getInstance().getRoleRS())
             return;
+        for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+            if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
+                if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                    taskAssignType = 1;
+                } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                    taskAssignType = 3;
+                } else
+                    taskAssignType = 2;
+            }
+            //多角色 需要保持多个 web socket 链接
+
+            switch (UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode()) {
+                case "collection": //收运
+                    Collection(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=collection");
+                    break;
+                case "receive": //收验
+                    ReceiveClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=receive");
+                    break;
+                case "supervision":  //运输 -装卸机
+                    InstallEquipClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=supervision");
+                    break;
+                case "clipping":  //结载
+                    InstallEquipClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=clipping");
+                    break;
+                case "offSiteEscort":  //运输
+                    OffSiteEscortClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=offSiteEscort");
+                    break;
+                case "preplaner"://预配-组板
+                    PreplanerClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=preplaner");
+                    break;
+                case "weighter"://复重
+                    WeighterClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=weighter");
+                    break;
+                case "delivery_in"://进港提货
+                    DeliveryClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=delivery_in");
+                    break;
+                case "beforehand_in"://进港理货
+                    BeforehandClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=beforehand_in");
+                    break;
+
+            }
         }
-
-        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, uri);
-//        Log.e(TAG, uri);
-        //请求头
-        List<StompHeader> headers = new ArrayList<>();
-        headers.add(new StompHeader(TAG, "guest"));
-        headers.add(new StompHeader(TAG, "guest"));
-        //超时连接
-        mStompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
-        resetSubscriptions();
-        //创建连接
-        Disposable dispLifecycle = mStompClient.lifecycle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lifecycleEvent -> {
-                    switch (lifecycleEvent.getType()) {
-                        case OPENED:
-                            Log.e(TAG, "webSocket 打开");
-                            flag = 0;
-//                            createStompClient(flag);
-                            break;
-                        case ERROR:
-                            Log.e(TAG, "websocket 出错", lifecycleEvent.getException());
-                            flag = 1;
-//                            createStompClient(flag);
-                            break;
-                        case CLOSED:
-                            Log.e(TAG, "websocket 关闭");
-                            flag = 1;
-//                            createStompClient(flag);
-                            resetSubscriptions();
-                            break;
-                        case FAILED_SERVER_HEARTBEAT:
-                            Log.e(TAG, "Stomp failed server heartbeat");
-                            break;
-                    }
-                });
-        compositeDisposable.add(dispLifecycle);
-
-        //订阅  登录地址
-        Disposable dispTopic = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
-                    if (null != topicMessage.getPayload()) {
-//                        ToastUtil.showToast("你的账号在其他地方登陆，请重新登陆");
-//                        showdialog1();
-                        showDialog();
-                    }
-                }, throwable -> {
-                    Log.e(TAG, "订阅失败", throwable);
-                });
-
-        compositeDisposable.add(dispTopic);
-        //订阅  装机单变更推送
-        Disposable loadingListPush = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
-                    if (null != topicMessage.getPayload()) {
-                        sendLoadingListPush(topicMessage.getPayload());
-                    }
-                }, throwable -> {
-                    Log.e(TAG, "订阅失败", throwable);
-                });
-
-        compositeDisposable.add(loadingListPush);
-        //订阅   待办
-        Disposable dispTopic1 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "张硕订阅成功 " + topicMessage.getPayload());
-                    WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
-                    sendReshEventBus(mWebSocketBean);
-                }, throwable -> Log.e(TAG, "张硕订阅失败", throwable));
-
-        compositeDisposable.add(dispTopic1);
-
-        //订阅   消息中心地址
-        Disposable dispTopic2 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(TAG, "周弦订阅成功 " + topicMessage.getPayload());
-                    WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                    sendMessageEventBus(mWebSocketMessBean);
-                }, throwable -> Log.e(TAG, "周弦订阅失败", throwable));
-
-        compositeDisposable.add(dispTopic2);
-        //订阅   运输 装卸机
-        Disposable dispTopic3 = mStompClient.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/aiSchTask/outFileTask")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.e(TAG, topicMessage.getPayload());
-                    if (topicMessage.getPayload().contains("cancelFlag:true")) {//任务取消的推送
-                        if (topicMessage.getPayload().contains("taskType:1")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:2")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    } else {
-                        if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2")|| topicMessage.getPayload().contains("taskType:3")|| topicMessage.getPayload().contains("taskType:5")) {//装卸机
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
-                            CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }else {
-                            CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
-                            CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                            sendLoadUnLoadGroupBoard(data);
-                        }
-                    }
-                }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
-
-        compositeDisposable.add(dispTopic3);
-
-        mStompClient.connect(headers);
-
-
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
         //GPS 数据提交线程
-        Thread threadGps = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
+        isContinue = true;
+        if (threadGps == null) {
+            threadGps = new Thread(() -> {
+                while (isContinue) {
                     try {
                         sendGps();
                         Thread.sleep(30000);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.e("GPS while (true)", e.getMessage());
                     }
                 }
-            }
-        });
-        threadGps.start();
-
+            });
+        }
+        if (!threadGps.isAlive())
+            threadGps.start();
     }
 
     private void sendGps() {
-        Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude()+"");
-        if (GPSUtils.getInstance().getCurrentLocation().getLatitude()<=0.0){
+        Log.e("GPS位置：", GPSUtils.getInstance().getCurrentLocation().getLatitude() + "");
+        if (GPSUtils.getInstance().getCurrentLocation().getLatitude() <= 0.0) {
             Log.e("GPS位置：", "位置为0 不提交");
-        }
-        else {
+        } else {
             gpsInfoEntity = new GpsInfoEntity();
             gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
             gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
@@ -233,67 +167,10 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
             gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
             saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
         }
-
     }
 
-
-    private void sendLoadingListPush(String result) {
-        EventBus.getDefault().post(result);
-    }
-
-    public static void startService(Activity activtity, String url) {
-        uri = url;
+    public static void startService(Context activtity) {
         actionStart(activtity);
-    }
-
-    //强制登出
-    private void loginOut() {
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(MyApplication.getContext());
-        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-
-    }
-
-    //用于登录
-    public static void sendLoginEventBus(String str) {
-        EventBus.getDefault().post(str);
-    }
-
-    //用于代办刷新
-    public static void sendReshEventBus(WebSocketResultBean bean) {
-        EventBus.getDefault().post(bean);
-    }
-
-    //用于装卸机运输推送刷新弹窗
-    public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
-        EventBus.getDefault().post(bean);
-    }
-
-    //消息推送
-    public static void sendMessageEventBus(WebSocketMessageBean bean) {
-        EventBus.getDefault().post(bean);
-    }
-
-
-    //创建长连接，服务器端没有心跳机制的情况下，启动timer来检查长连接是否断开，如果断开就执行重连
-    private void createStompClient(int flag) {
-        if (1 == flag)
-            onCreate();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mStompClient.send("websocket 心跳包");
-                Log.e("websocket 心跳包", "发送中");
-            }
-        }, 5000, 5000);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     private static void actionStart(Context ctx) {
@@ -301,19 +178,53 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         ctx.startService(i);
     }
 
-    public static void actionStop(Context ctx) {
-        Intent i = new Intent(ctx, WebSocketService.class);
-        ctx.stopService(i);
+    public void Collection(String uri) {
+        new CollectionClient(uri, this);
+    }
+
+    public void InstallEquipClient(String uri) {
+        new InstallEquipClient(uri, this);
+    }
+
+    public void PreplanerClient(String uri) {
+        new PreplanerClient(uri, this);
+    }
+
+    public void WeighterClient(String uri) {
+        new WeighterClient(uri, this);
+    }
+
+    public void DeliveryClient(String uri) {
+        new DeliveryClient(uri, this);
+    }
+
+    public void BeforehandClient(String uri) {
+        new BeforehandClient(uri, this);
+    }
+
+    public void OffSiteEscortClient(String uri) {
+        new OffSiteEscortClient(uri, this);
+    }
+
+    public void ReceiveClient(String uri) {
+        new ReceiveClient(uri, this);
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isContinue = false;
+    }
+
+
+    @Override
     public void saveGpsInfoResult(String result) {
-        Log.e("GPS上传：",result);
+        Log.e("GPS上传：", result);
     }
 
     @Override
     public void toastView(String error) {
-        Log.e("GPS上传：",error);
+        Log.e("GPS上传：", error);
     }
 
     @Override
@@ -337,33 +248,41 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         return new WebSocketBinder();
     }
 
-    private void resetSubscriptions() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-        }
-        compositeDisposable = new CompositeDisposable();
-    }
-
-    //停止连接
+    //停止连接 并关闭服务
     public static void stopServer(Context context) {
-        if (mStompClient != null) {
-            mStompClient.disconnect();
-            mStompClient = null;
-        }
+        closeLink();
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
     }
-
-    private void showDialog() {
-        CommonDialog dialog = new CommonDialog(getApplicationContext());
-        dialog.setTitle("提示")
-                .setMessage("你的账号在其他地方登陆！请重新登陆")
-                .setNegativeButton("确定")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) -> loginOut());
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
+    //停止连接
+    public static void closeLink() {
+        subList.clear();
+        if (mStompClient.size() != 0) {
+            for (int i = 0; i < mStompClient.size(); i++) {
+                Log.e(TAG, "关闭了" + i + "个连接");
+                mStompClient.get(i).disconnect();
+            }
+        }
     }
+
+    public synchronized static void setIsTopic(boolean isTopic1){
+        isTopic = isTopic1;
+    }
+
+    /**
+     * 如果已经订阅 返回 false
+     * @param sub
+     * @return
+     */
+    public static boolean isExist(String sub){
+        boolean isExit = true;
+        for (String string :subList)
+        {
+            if (sub.equals(string)){
+                isExit = false;
+            }
+        }
+        return isExit;
+    }
+
 }

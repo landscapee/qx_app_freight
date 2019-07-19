@@ -37,117 +37,107 @@
             <View
                 style="@style/line_horizontal_979797" />
             <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="板车号"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_name_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="板车号"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_name_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="板车自重"
-                    style="@style/public_tv_16sp_2"/>
-                <TextView
-                    android:id="@+id/tv_deadweight_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="ULD"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_uld"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:textColor="#333333"
-                    style="@style/public_tv_16sp" />
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="板车自重"
+                        style="@style/public_tv_16sp_2"/>
+                    <TextView
+                        android:id="@+id/tv_deadweight_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
             </LinearLayout>
+
             <View
                 style="@style/line_horizontal_979797" />
 
             <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="ULD自重"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_uld_self"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="ULD"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_uld"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:textColor="#333333"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="ULD自重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_uld_self"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
             </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
 
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="收运净重"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_netweight_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
             <View
                 style="@style/line_horizontal_979797" />
 
@@ -172,7 +162,7 @@
                     android:gravity="center_vertical|end"
                     android:inputType="numberDecimal"
                     android:background="@null"
-                    android:hint="请点击取重"
+                    android:hint="请输入复磅值"
                     style="@style/public_tv_16sp_3"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,6 +173,7 @@
                     />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/btn_read"
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="27dp"
@@ -194,120 +185,188 @@
             <View
                 style="@style/line_horizontal_979797" />
             <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="复磅差值"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_dvalue_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="复磅差率"
-                    style="@style/public_tv_16sp_2" />
-                <TextView
-                    android:id="@+id/tv_gradient_front"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp" />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-            <LinearLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="人工干预值"
-                    style="@style/public_tv_16sp_2" />
-                <EditText
-                    android:id="@+id/tv_revise_front"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:hint="请输入重量"
-                    android:inputType="numberDecimal"
-                    android:background="@null"
-                    android:maxLength="15"
-                    style="@style/public_tv_16sp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:textSize="16sp"
-                    android:text="kg"
-                    />
-            </LinearLayout>
-            <View
-                style="@style/line_horizontal_979797" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="备注"
-                    style="@style/public_tv_16sp_2" />
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:id="@+id/ll_scan"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:layout_width="0dp"
-                    android:layout_height="50dp">
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
                     <TextView
-                        android:id="@+id/tv_scan"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:spinnerMode="dropdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="复磅差值"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:id="@+id/tv_dvalue_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
                         style="@style/public_tv_16sp" />
-                    <ImageView
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/dp_15"
-                        android:layout_marginLeft="@dimen/dp_15"
-                        android:src="@mipmap/drop_select"
-                        android:layout_width="@dimen/dp_15"
-                        android:layout_height="@dimen/dp_15" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="复磅差率"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:id="@+id/tv_gradient_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                style="@style/line_horizontal_979797" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="复重净重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_netweight_fz"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="收运净重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_netweight_front"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <View
+                style="@style/line_horizontal_979797" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="人工干预值"
+                        style="@style/public_tv_16sp_2" />
+                    <EditText
+                        android:id="@+id/tv_revise_front"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:hint="请输入"
+                        android:inputType="numberDecimal"
+                        android:background="@null"
+                        android:maxLength="15"
+                        style="@style/public_tv_16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:textSize="16sp"
+                        android:text="kg"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="备注"
+                        style="@style/public_tv_16sp_2" />
+                    <LinearLayout
+                        android:id="@+id/ll_scan"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp">
+                        <TextView
+                            android:id="@+id/tv_scan"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:spinnerMode="dropdown"
+                            style="@style/public_tv_16sp" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/dp_15"
+                            android:layout_marginLeft="@dimen/dp_15"
+                            android:src="@mipmap/drop_select"
+                            android:layout_width="@dimen/dp_15"
+                            android:layout_height="@dimen/dp_15" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -362,7 +421,9 @@
             android:background="@color/white"
             android:text="返回理货"
             android:textSize="18sp"
-            android:textColor="#bcbcbc" />
+            android:textColor="#bcbcbc"
+            android:visibility="gone"
+            />
         <Button
             android:id="@+id/btn_confirm"
             android:layout_weight="1"

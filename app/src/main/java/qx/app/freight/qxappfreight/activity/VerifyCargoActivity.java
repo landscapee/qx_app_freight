@@ -23,8 +23,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.beidouapp.et.client.domain.UserInfo;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -34,8 +32,10 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
-import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
+import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
+import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.presenter.FreightInfoPresenter;
@@ -74,37 +74,41 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     @BindView(R.id.ll_spot)
     LinearLayout mLlSpot;
 
-    private String waybillId; //运单id
     private String insFile;  //报检员资质路径
     private int insCheck; //报检是否合格1合格 0不合格
     private int fileCheck;//资质是否合格1合格 0不合格
-    private String taskId; //当前任务id
     private String userId; //当前提交人id
     private int isPack; //是否包装  1 包装 0 不包装
     private int isRequire; //是否满足航空公司要求1勾选 0不勾选
     private int isSpSpot;//是否通过;
-    private String id;
     private StorageCommitEntity mStorageCommitEntity;
     private PopupWindow popupWindow;
-    private String mSpotFlag, mFlightNumber, mTaskTypeCode, mWaybillCode, Tid;
     private int mSportResult;//抽验结果  0是通过 1是不通过
 
+    private TransportDataBase mBean;
+    private DeclareWaybillBean mDecBean;
+    private TestInfoListBean mAcTestInfoListBean;
 
-    public static void startActivity(Activity context, String taskTypeCode, String waybillId, String id, String insFile, int insCheck, int fileCheck, String taskId, String spotFlag, int spotResult, String userId, String flightNumber, String waybillCode, String tid) {
+
+    public static void startActivity(Activity context,
+                                     TransportDataBase mBean,
+                                     DeclareWaybillBean mDecBean,
+                                     String insFile,
+                                     int insCheck,
+                                     int fileCheck,
+                                     int spotResult,
+                                     String userId,
+                                     TestInfoListBean mAcTestInfoListBean
+    ) {
         Intent intent = new Intent(context, VerifyCargoActivity.class);
-        intent.putExtra("taskTypeCode", taskTypeCode);
-        intent.putExtra("waybillId", waybillId);
-        intent.putExtra("id", id);
+        intent.putExtra("mBean", mBean);
+        intent.putExtra("mDecBean", mDecBean);
         intent.putExtra("insFile", insFile);
         intent.putExtra("insCheck", insCheck);
         intent.putExtra("fileCheck", fileCheck);
-        intent.putExtra("taskId", taskId);
         intent.putExtra("userId", userId);
-        intent.putExtra("spotFlag", spotFlag);
         intent.putExtra("spotResult", spotResult);
-        intent.putExtra("flightNumber", flightNumber);
-        intent.putExtra("waybillCode", waybillCode);
-        intent.putExtra("tid", tid);
+        intent.putExtra("mAcTestInfoListBean", mAcTestInfoListBean);
         context.startActivityForResult(intent, 0);
     }
 
@@ -118,27 +122,21 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查货物");
-        waybillId = getIntent().getStringExtra("waybillId");
-        mTaskTypeCode = getIntent().getStringExtra("taskTypeCode");
-        id = getIntent().getStringExtra("id");
+        mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         insFile = getIntent().getStringExtra("insFile");
         insCheck = getIntent().getIntExtra("insCheck", 0);
         fileCheck = getIntent().getIntExtra("fileCheck", 0);
-        taskId = getIntent().getStringExtra("taskId");
         userId = getIntent().getStringExtra("userId");
-        mFlightNumber = getIntent().getStringExtra("flightNumber");
-        mWaybillCode = getIntent().getStringExtra("waybillCode");
-        Tid = getIntent().getStringExtra("tid");
-        //抽查结果 1不抽检， 0抽检
-        mSpotFlag = getIntent().getStringExtra("spotFlag");
         //抽查结果
         mSportResult = getIntent().getIntExtra("spotResult", -1);
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
-        ((FreightInfoPresenter) mPresenter).freightInfo(mFlightNumber.substring(0, 2));
+        ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightName());
 
-        Log.e("dime", "spotFlat=" + mSpotFlag + ", spotResult=" + mSportResult);
-        if(mSpotFlag.equals("0")){
+        Log.e("dime", "spotFlat=" + mDecBean.getSpotFlag() + ", spotResult=" + mSportResult);
+        if (mDecBean.getSpotFlag().equals("0")) {
             //抽查，显示抽查操作按钮
             mLlSpot.setVisibility(View.VISIBLE);
         }
@@ -189,8 +187,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             } else {
                 isRequire = 1;
             }
-            mStorageCommitEntity.setWaybillId(Tid);
-            mStorageCommitEntity.setWaybillCode(mWaybillCode);
+            mStorageCommitEntity.setWaybillId(mBean.getId());
+            mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
             mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
             mStorageCommitEntity.setInsFile(insFile);
             mStorageCommitEntity.setInsCheck(insCheck);
@@ -198,18 +196,23 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             mStorageCommitEntity.setFileCheck(isPack);
             mStorageCommitEntity.setRequire(isRequire);
             mStorageCommitEntity.setSpotResult(isSpSpot);
-            mStorageCommitEntity.setTaskTypeCode(mTaskTypeCode);
+            mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
             mStorageCommitEntity.setUnspotReson(etReason.getText().toString().trim());
             mStorageCommitEntity.setType(1);
-            mStorageCommitEntity.setTaskId(taskId);
+            mStorageCommitEntity.setTaskId(mBean.getTaskId());
             mStorageCommitEntity.setUserId(userId);
             //新加
-            mStorageCommitEntity.setInsUserName("");
-            mStorageCommitEntity.setInsDangerEnd(123);
-            mStorageCommitEntity.setInsDangerStart(123);
-            mStorageCommitEntity.setInsStartTime(123);
-            mStorageCommitEntity.setInsEndTime(123);
-            mStorageCommitEntity.setInsUserHead("");
+            if (null != mAcTestInfoListBean.getFreightInfo()) {
+                mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+                mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+                mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+                mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+                mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+            }
+            if (null != mAcTestInfoListBean.getInsInfo()) {
+                mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+                mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+            }
             ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
         });
 
@@ -264,12 +267,12 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("数据提交中……");
     }
 
     @Override
     public void dissMiss() {
-
+        dismissProgessDialog();
     }
 
     @Override

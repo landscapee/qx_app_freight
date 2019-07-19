@@ -43,7 +43,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.StoreTypeChangeActivity"></activity>
+        <activity android:name=".activity.AllocaaateHistoryActivity"></activity>
+        <activity android:name=".activity.AllocateScooterActivity" />
+        <activity android:name=".activity.StoreTypeChangeActivity" />
         <activity android:name=".activity.ClearStorageDetailActivity" />
         <activity
             android:name=".activity.InternationalCargoListActivity"
@@ -86,6 +88,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UnloadPlaneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UpdatePWDActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TPUnloadPlaneActivity"
@@ -145,7 +150,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddReceiveGoodActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activity.ShowMainListActivity"
             android:screenOrientation="portrait" />
@@ -160,8 +166,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AllocaaateScanActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SubPackageWaybillActivity"
             android:screenOrientation="portrait" />
@@ -227,6 +233,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" /> <!-- 注册服务 -->
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />
