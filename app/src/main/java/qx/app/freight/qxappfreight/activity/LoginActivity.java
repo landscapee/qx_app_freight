@@ -223,6 +223,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         return mLoginEntity;
     }
 
+    /**
+     * 获取登录智能调度请求体
+     * @return
+     */
     private LoginEntity getLoginQxAiEntity() {
         LoginEntity mLoginEntity = new LoginEntity();
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
