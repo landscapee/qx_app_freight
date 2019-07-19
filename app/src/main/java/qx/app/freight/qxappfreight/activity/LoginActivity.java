@@ -55,6 +55,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * 登录页面
  *  by -zyy
+ *
+ *  进攻机会
  */
 public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
