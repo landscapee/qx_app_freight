@@ -278,7 +278,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
             entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
-            entity.setFlightType("M");
+            entity.setFlightType(bean.getFlightType());
             entity.setId(bean.getId());
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());

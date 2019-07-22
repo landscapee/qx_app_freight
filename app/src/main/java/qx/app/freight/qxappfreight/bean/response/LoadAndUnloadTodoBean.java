@@ -46,6 +46,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private String deptId;
     private String flightId;
     private String flightNo;
+    private String flightType;
     private int movement;
     private String taskId;
     private int taskType;

@@ -103,7 +103,6 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 }
             } else {//新任务推送，筛选最新数据再添加进行展示
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-
                 //新任务列表 同 旧任务列表比对
                 for (LoadAndUnloadTodoBean bean : list) {
                     for (LoadAndUnloadTodoBean bean1 : mListCache) {
@@ -259,7 +258,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             entity.setFlightInfo(bean.getFlightNo());
             entity.setSeat(bean.getSeat());
             entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
-            entity.setFlightType("M");
+            entity.setFlightType(bean.getFlightType());
             entity.setId(bean.getId());
             entity.setFlightId(Long.valueOf(bean.getFlightId()));
             entity.setTaskId(bean.getTaskId());
@@ -271,9 +270,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
             entity.setLoadUnloadType(bean.getTaskType());
             List<MultiStepEntity> data = new ArrayList<>();
-            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;
+            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
             if (posNow > 0) {
-                entity.setAcceptTask(true);
+                entity.setAcceptTask(true);//已经领受过了设置acceptTask未true，设置该条item的背景为白色，否则为黄色警告颜色背景
             }
             for (int i = 0; i < 2; i++) {
                 MultiStepEntity entity1 = new MultiStepEntity();
@@ -281,9 +280,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 entity1.setLoadUnloadType(bean.getTaskType());
                 entity1.setStepName(mStepNames[i]);
                 int type;
-                if (i < posNow) {
+                if (i < posNow) {//在应该执行的步骤前，类型为已执行
                     type = 0;
-                } else {
+                } else {    //当前任务步骤
                     type = 1;
                 }
                 entity1.setItemType(type);
@@ -295,7 +294,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
                 codeList.add(bean.getOperationStepObj().get(i).getOperationCode());
             }
-            entity.setStepCodeList(codeList);
+            entity.setStepCodeList(codeList);//将当前item的回传服务器的任务code列表存下来
             entity.setList(data);
             mCacheList.add(entity);
         }
