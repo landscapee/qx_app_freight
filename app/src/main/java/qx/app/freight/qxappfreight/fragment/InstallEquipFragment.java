@@ -107,22 +107,15 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
             } else {//新任务推送，筛选最新数据再添加进行展示
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                List<String> pushTaskIds = new ArrayList<>();//将推送任务列表中所有的taskId保存起来存入pushTaskIds中
-                for (LoadAndUnloadTodoBean bean : mListCache) {
-                    pushTaskIds.add(bean.getTaskId());
-                }
-                List<String> removeTaskIds = new ArrayList<>();//将最新推送过来的数据的taskId保存起来
                 for (LoadAndUnloadTodoBean bean : list) {
-                    if (pushTaskIds.contains(bean.getTaskId())) {//如果已经存储过该taskId，则将对应的taskId记录下来以便删除重复数据
-                        removeTaskIds.add(bean.getTaskId());
+                    for (LoadAndUnloadTodoBean bean1 : mListCache) {
+                        if (bean.getTaskId().equals(bean1.getTaskId())){//如果新任务id==旧任务id就删除
+                            mListCache.remove(bean1);
+                        }
                     }
+                    mListCache.add(bean); //添加新任务到旧任务列表
                 }
-                for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (removeTaskIds.contains(bean.getTaskId())) {//删除重复的旧数据，更新新数据
-                        mListCache.remove(bean);
-                    }
-                }
-                mListCache.addAll(list);
+                //任务列表同 代办列表比对，如果待办列表含有同样的数据，则删除任务列表中对应数据
                 for (LoadAndUnloadTodoBean bean : mListCache) {
                     if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据，目的在于推送过来新任务弹窗提示时如果收到任务动态信息，需要将修改后的任务信息展示出来
                         mListCache.remove(bean);

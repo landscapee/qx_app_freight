@@ -14,7 +14,6 @@ public class MultiStepEntity implements MultiItemEntity {
     private int loadUnloadType;
     private String stepName;
     private String stepDoneDate;
-    private String planeInfo;
     private String flightType;
     private LoadAndUnloadTodoBean data;
 }
