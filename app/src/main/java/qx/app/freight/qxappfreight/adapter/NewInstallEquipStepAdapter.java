@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.adapter;
 
-import android.util.Log;
-
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 

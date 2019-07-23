@@ -30,15 +30,14 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.InstallEquipAdapter;
-import qx.app.freight.qxappfreight.adapter.InstallEquipStepAdapter;
+import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
+import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
-import qx.app.freight.qxappfreight.bean.MultiStepEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
@@ -56,18 +55,15 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 public class InstallEquipFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    private List<InstallEquipEntity> mList = new ArrayList<>();
-    private List<InstallEquipEntity> mCacheList = new ArrayList<>();
+    private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
+    private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
-    private static final String[] mStepNamesInstall = {"领受", "到位", "开启舱门", "装机", "关闭舱门"};
-    private static final String[] mStepNamesUninstall = {"领受", "到位", "开启舱门", "卸机", "关闭舱门"};
-    private static final String[] mStepNamesInstallUninstall = {"领受", "到位", "开启舱门", "卸机", "装机", "关闭舱门"};
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
-    private InstallEquipStepAdapter mSlideadapter;
+    private NewInstallEquipStepAdapter mSlideAdapter;
     private int mOperatePos;
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
-    private InstallEquipAdapter mAdapter;
+    private NewInstallEquipAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
     private TaskFragment mTaskFragment; //父容器fragment
@@ -109,7 +105,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 List<LoadAndUnloadTodoBean> list = result.getTaskData();
                 for (LoadAndUnloadTodoBean bean : list) {
                     for (LoadAndUnloadTodoBean bean1 : mListCache) {
-                        if (bean.getTaskId().equals(bean1.getTaskId())){//如果新任务id==旧任务id就删除
+                        if (bean.getTaskId().equals(bean1.getTaskId())) {//如果新任务id==旧任务id就删除
                             mListCache.remove(bean1);
                         }
                     }
@@ -170,7 +166,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadAndUnloadTodoPresenter(this);
-        mAdapter = new InstallEquipAdapter(mList);
+        mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         loadData();
     }
@@ -199,8 +195,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mCacheList);
         } else {
-            for (InstallEquipEntity item : mCacheList) {
-                if (item.getFlightInfo().toLowerCase().contains(searchString.toLowerCase())) {
+            for (LoadAndUnloadTodoBean item : mCacheList) {
+                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -261,25 +257,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
-            InstallEquipEntity entity = new InstallEquipEntity();
-            entity.setWidePlane(bean.getWidthAirFlag() == 0);
             if (mSpecialTaskId != null && mSpecialTaskId.equals(bean.getTaskId())) {//mSpecialTaskId不为空，则说明进去过装机卸机页面点击过结束装机或卸机，回到代办列表页面，该值对应的数据应该默认展开
-                entity.setShowDetail(true);
+                bean.setShowDetail(true);
                 mSpecialTaskId = null;
             }
-            entity.setAirCraftNo(bean.getAircraftno());
-            entity.setFlightInfo(bean.getFlightNo());
-            entity.setSeat(bean.getSeat());
-            entity.setTaskType(bean.getTaskType());//1，装机；2，卸机；5，装卸机
-            entity.setFlightType(bean.getFlightType());
-            entity.setId(bean.getId());
-            entity.setFlightId(Long.valueOf(bean.getFlightId()));
-            entity.setTaskId(bean.getTaskId());
-            entity.setWorkerName(bean.getWorkerName());
-            StringUtil.setTimeAndType(bean, entity);//设置对应的时间和时间图标显示
-            StringUtil.setFlightRoute(bean.getRoute(), entity);//设置航班航线信息
-            entity.setLoadUnloadType(bean.getTaskType());
-            List<MultiStepEntity> data = new ArrayList<>();
+            StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
+            StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
@@ -310,42 +293,43 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 }
             }
             if (posNow > 0) {
-                entity.setAcceptTask(true);//已经领受过任务
+                bean.setAcceptTask(true);//已经领受过任务
             } else {
-                entity.setAcceptTask(false);//没有领受过任务
+                bean.setAcceptTask(false);//没有领受过任务
             }
             checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
-            int size = (bean.getTaskType() == 1 || bean.getTaskType() == 2) ? 5 : 6;//如果是装机或卸机的话则总共步骤数为5，否则为6
-            for (int i = 0; i < size; i++) {
-                MultiStepEntity entity1 = new MultiStepEntity();
-                entity1.setFlightType(entity.getFlightType());
-                entity1.setLoadUnloadType(bean.getTaskType());
-                if (bean.getTaskType() == 1) {//装机
-                    entity1.setStepName(mStepNamesInstall[i]);
-                } else if (bean.getTaskType() == 2) {//卸机
-                    entity1.setStepName(mStepNamesUninstall[i]);
-                } else {
-                    entity1.setStepName(mStepNamesInstallUninstall[i]);
+            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
+                if (i == 5) continue;//下标为5时，需要跳过，进入下一轮循环，对应的操作code为FreightUnloadFinish
+                if (i == 7) break;  //下标为7时，需要退出循环，时间显示列表的总size为6
+                int index = i;
+                if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
+                    index++;//筛选卸机结束和装机结束的步骤项
                 }
+                LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(index);
+                entity1.setFlightType(bean.getFlightType());
                 int type;
                 if (i < posNow) {//在应该执行的步骤前，类型为已执行
-                    type = 0;
+                    type = Constants.TYPE_STEP_OVER;
                 } else if (i == posNow) {//是应该执行的步骤，类型为当前执行
-                    type = 1;
+                    type = Constants.TYPE_STEP_NOW;
                 } else {//否则是未执行
-                    type = 2;
+                    type = Constants.TYPE_STEP_NEXT;
                 }
                 entity1.setItemType(type);
-                entity1.setData(bean);
                 if (i == 3 || (bean.getTaskType() == 5 && i == 4)) {//只要位置是第四步，或者代办类型是装卸机一体并且位置是第五步，则需要根据服务器传回的时间显示成指定的格式
                     String[] timeArray = times.get(i).split(":");
                     String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));
                     String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
                     entity1.setStepDoneDate(start + "-" + end);
                 } else {
-                    entity1.setStepDoneDate("0".equals(times.get(i)) ? "" : sdf.format(new Date(Long.valueOf(times.get(i)))));
+                    int listIndex;
+                    if (i == 6) {//下标为6时，时间显示必须设置为第6个时间
+                        listIndex = 5;
+                    } else {
+                        listIndex = i;
+                    }
+                    entity1.setStepDoneDate("0".equals(times.get(listIndex)) ? "" : sdf.format(new Date(Long.valueOf(times.get(listIndex)))));
                 }
-                data.add(entity1);
             }
             List<String> codeList = new ArrayList<>();
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
@@ -354,9 +338,13 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     codeList.add(bean.getOperationStepObj().get(i).getOperationCode());
                 }
             }
-            entity.setStepCodeList(codeList);
-            entity.setList(data);
-            mCacheList.add(entity);
+            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
+                if (!codeList.contains(bean.getOperationStepObj().get(i).getOperationCode())) {
+                    bean.getOperationStepObj().remove(i);//用于显示的步骤项需要排除掉卸机结束和装机结束的步骤
+                }
+            }
+            bean.setStepCodeList(codeList);
+            mCacheList.add(bean);
         }
         seachByText();
         setSlideListener(checkedList);
@@ -378,8 +366,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
             } else {
                 mOperatePos = smallPos;
-                mSlideadapter = adapter;
-                if (smallPos == 3 && mList.get(bigPos).getList().get(smallPos).getData().getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
+                mSlideAdapter = adapter;
+                if (smallPos == 3 && mList.get(bigPos).getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
                     String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
                     for (String code : codes) {
                         go2SlideStep(bigPos, code);
@@ -402,7 +390,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(1);
         entity.setLoadUnloadDataId(mList.get(bigPos).getId());
-        entity.setFlightId(mList.get(bigPos).getFlightId());
+        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
         entity.setFlightTaskId(mList.get(bigPos).getTaskId());
         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
@@ -417,7 +405,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
-            mSlideadapter.notifyDataSetChanged();
+            mSlideAdapter.notifyDataSetChanged();
             if (mOperatePos == 4 || mOperatePos == 5) {
                 mCurrentPage = 1;
                 loadData();
