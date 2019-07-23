@@ -24,7 +24,6 @@ import java.util.Locale;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
 import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
-import qx.app.freight.qxappfreight.bean.MultiStepEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -33,10 +32,11 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
- * 使用服务器原始数据的适配器
+ * 使用服务器原始数据的装卸机代办适配器
  */
 public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
+
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
     }
@@ -49,7 +49,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         } else {
             helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-        boolean isWidePlane=item.getWidthAirFlag() == 0;
+        boolean isWidePlane = item.getWidthAirFlag() == 0;
         helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
         ImageView ivControl = helper.getView(R.id.iv_control);
         LinearLayout llBg = helper.getView(R.id.ll_bg);
@@ -99,25 +99,25 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                         } else {
                             if (!isWidePlane) {//窄体机卸机才到卸机页面
                                 Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
-                                intent.putExtra("flight_type",item.getFlightType());
+                                intent.putExtra("flight_type", item.getFlightType());
                                 intent.putExtra("plane_info", item);
                                 mContext.startActivity(intent);
                             } else {
                                 item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-                                item.getOperationStepObj().get(pos).setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                                item.getOperationStepObj().get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                                item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
                             }
                         }
                     } else if (pos == 4) {
                         Intent intent = new Intent(mContext, LoadPlaneActivity.class);
-                        intent.putExtra("plane_info",item);
-                        intent.putExtra("position",5);
+                        intent.putExtra("plane_info", item);
+                        intent.putExtra("position", 5);
                         mContext.startActivity(intent);
                     } else {
-                        item.getOperationStepObj().get(pos).setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
                         if (pos != 5) {//只要滑动的不是第六步，则下一个步骤item设置为应该操作的步骤样式
-                            item.getOperationStepObj().get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
                         }
                     }
                 } else {
@@ -125,13 +125,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
                         if (isWidePlane && item.getTaskType() == 2) {
                             item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-                            item.getOperationStepObj().get(pos).setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                            item.getOperationStepObj().get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
                         } else {
                             Intent intent;
                             if (item.getTaskType() == 1) {
                                 intent = new Intent(mContext, LoadPlaneActivity.class);
-                                intent.putExtra("position",3);
+                                intent.putExtra("position", 3);
                             } else {
                                 intent = new Intent(mContext, UnloadPlaneActivity.class);
                                 intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
@@ -140,11 +140,11 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                             mContext.startActivity(intent);
                         }
                     } else {
-                        item.getOperationStepObj().get(pos).setItemType(MultiStepEntity.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
                         if (item.getOperationStepObj().size() > 2) {
                             if (pos != 4) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
-                                item.getOperationStepObj().get(pos + 1).setItemType(MultiStepEntity.TYPE_STEP_NOW);
+                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
                             }
                         }
                     }
@@ -186,6 +186,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             }
         });
     }
+
     public interface OnSlideStepListener {
         void onSlideStep(int bigPos, NewInstallEquipStepAdapter adapter, int smallPos);
     }

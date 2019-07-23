@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 
@@ -117,7 +116,7 @@ public class StringUtil {
             builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             return builderText;
         } else {
-            List <Integer> indexes = getIndex(text, ":");
+            List<Integer> indexes = getIndex(text, ":");
             for (Integer index : indexes) {
                 boolean flag = text.substring(index + 1, index + 2).equals("Y");
                 TextAppearanceSpan textAppearanceSpan;
@@ -132,8 +131,8 @@ public class StringUtil {
         }
     }
 
-    private static List <Integer> getIndex(String strings, String str) {
-        List <Integer> list = new ArrayList <>();
+    private static List<Integer> getIndex(String strings, String str) {
+        List<Integer> list = new ArrayList<>();
         int flag = 0;
         while (strings.contains(str)) {
             //截取包含自身在内的前边部分
@@ -250,37 +249,16 @@ public class StringUtil {
     }
 
     /**
-     * 设置航线数据
-     *
-     * @param route  航线数据
-     * @param entity 需要设置航线数据的实体
-     */
-    public static void setFlightRoute(String route, InstallEquipEntity entity) {
-        if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setFlightInfoList(new ArrayList <>());
-        } else {
-            String[] placeArray = route.split(",");
-            List <String> resultList = new ArrayList <>();
-            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
-            for (String str : placeList) {
-                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
-                resultList.add(temp);
-            }
-            entity.setFlightInfoList(resultList);
-        }
-    }
-
-    /**
      * 解析航线数据，返回航站三字码列表
      *
      * @param route
      * @return
      */
-    public static List <String> getFlightList(String route) {
-        List <String> result = new ArrayList <>();
+    public static List<String> getFlightList(String route) {
+        List<String> result = new ArrayList<>();
         if (route != null) {
             String[] placeArray = route.split(",");
-            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 result.add(temp);
@@ -306,42 +284,7 @@ public class StringUtil {
     /**
      * 根据数据设置时间和时间显示类型
      *
-     * @param bean   服务器传回的数据
-     * @param entity 本地封装的数据model
-     */
-    public static void setTimeAndType(LoadAndUnloadTodoBean bean, InstallEquipEntity entity) {
-        String time;
-        int timeType;
-        if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
-            if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {//实际到达时间
-                time = TimeUtils.getHMDay(bean.getAta());
-                timeType = Constants.TIME_TYPE_AUTUAL;
-            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {//预计到达时间
-                time = TimeUtils.getHMDay(bean.getEta());
-                timeType = Constants.TIME_TYPE_EXCEPT;
-            } else {//计划到达时间
-                time = TimeUtils.getHMDay(bean.getSta());
-                timeType = Constants.TIME_TYPE_PLAN;
-            }
-        } else {//装机机任务显示时间
-            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
-                time = TimeUtils.getHMDay(bean.getAtd());
-                timeType = Constants.TIME_TYPE_AUTUAL;
-            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
-                time = TimeUtils.getHMDay(bean.getEtd());
-                timeType = Constants.TIME_TYPE_EXCEPT;
-            } else {//计划时间
-                time = TimeUtils.getHMDay(bean.getStd());
-                timeType = Constants.TIME_TYPE_PLAN;
-            }
-        }
-        entity.setTimeForShow(time);
-        entity.setTimeType(timeType);
-    }
-    /**
-     * 根据数据设置时间和时间显示类型
-     *
-     * @param bean   服务器传回的数据
+     * @param bean 服务器传回的数据
      */
     public static void setTimeAndType(LoadAndUnloadTodoBean bean) {
         String time;
@@ -372,6 +315,7 @@ public class StringUtil {
         bean.setTimeForShow(time);
         bean.setTimeType(timeType);
     }
+
     /**
      * 设置航线数据
      *
@@ -380,11 +324,11 @@ public class StringUtil {
      */
     public static void setFlightRoute(String route, LoadAndUnloadTodoBean entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setFlightInfoList(new ArrayList <>());
+            entity.setFlightInfoList(new ArrayList<>());
         } else {
             String[] placeArray = route.split(",");
-            List <String> resultList = new ArrayList <>();
-            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
+            List<String> resultList = new ArrayList<>();
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
