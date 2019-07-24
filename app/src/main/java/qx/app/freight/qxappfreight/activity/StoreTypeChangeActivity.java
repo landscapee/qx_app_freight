@@ -187,6 +187,8 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             for (int i = 0; i < resTypeList.size(); i++) {
                 if (result.getOrgStorage().equals(resTypeList.get(i))) {
                     mTvOldType.setText(storageList.get(i));
+                }
+                if (result.getStorage().equals(resTypeList.get(i))) {
                     mTvType.setText(storageList.get(i));
                 }
             }

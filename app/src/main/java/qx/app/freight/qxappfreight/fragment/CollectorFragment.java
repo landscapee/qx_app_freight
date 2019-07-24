@@ -310,7 +310,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             }
 
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入运单号", text -> {
                     seachString = text;
                     seachWith();
                 });

@@ -116,7 +116,7 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
         helper.setText(R.id.tv_weight_judge, Html.fromHtml(weight));
         helper.getView(R.id.tv_weight_judge).setVisibility(View.GONE);
         //航班号
-        helper.setText(R.id.tv_flight_number, item.getFlightNumber());
+        helper.setText(R.id.tv_flight_number, item.getFlightNo());
         //航班预计起飞时间
         helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getFlightDate()), TimeUtils.getDay(item.getFlightDate())));
         //航空公司-代理公司

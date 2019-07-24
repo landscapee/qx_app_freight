@@ -80,8 +80,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -93,6 +93,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
+        setUserVisibleHint(true);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             list.addAll(list1);
         } else {
             for (TransportDataBase item : list1) {
-                if (item.getFlightNumber().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }
