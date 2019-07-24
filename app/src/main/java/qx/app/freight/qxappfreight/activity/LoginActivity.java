@@ -54,7 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 登录页面
- *  by -郭浩
+ *   by 郭浩
  */
 public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
@@ -79,9 +79,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         toolbar.setMainTitle(Color.WHITE, "登录");
         tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
         checkVersion();
-        mEtPassWord.setText("");
+        mEtPassWord.setText("301721");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("");
+        mEtUserName.setText("wangli01");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });

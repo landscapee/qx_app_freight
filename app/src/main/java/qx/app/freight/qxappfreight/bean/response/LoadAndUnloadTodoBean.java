@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private String deptId;
     private String flightId;
     private String flightNo;
+    private String flightType;
     private int movement;
     private String taskId;
     private int taskType;
@@ -79,6 +82,15 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long atd;//实际离港时间
     private List<OperationStepObjBean> operationStepObj;
     private int widthAirFlag;//0是宽体机，1是窄体机
+    /**
+     * 添加的需要的数据
+     */
+    private boolean acceptTask = false;//是否已经领受任务
+    private String timeForShow;//时间：实际到达（离港）时间  >  预计到达（离港）时间  >  计划到达（离港）时间
+    private int timeType;//时间显示类型：3，实际时间；2，预计时间；1，计划时间
+    private List<String> flightInfoList;//航线信息列表
+    private List<String> stepCodeList;//航线信息列表
+    private boolean showDetail;
 
     @Data
     public static class RelateInfoObjBean implements Serializable {
@@ -159,13 +171,16 @@ public class LoadAndUnloadTodoBean implements Serializable {
     }
 
     @Data
-    public static class OperationStepObjBean implements Serializable {
+    public static class OperationStepObjBean implements Serializable, MultiItemEntity {
         /**
          * operationCode : FreightLoadReceived
          * operationName : 领受
          */
 
-        private String operationCode;
-        private String operationName;
+        private String operationCode;//操作code
+        private String operationName;//操作名称
+        private int itemType;        //步骤类型，未执行、即将执行、已执行
+        private String stepDoneDate; //步骤时间
+        private String flightType;   //航班类型，D，国内；I,国际；M，混合
     }
 }
