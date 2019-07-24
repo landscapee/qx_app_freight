@@ -255,14 +255,13 @@
                     <EditText
                         android:background="@null"
                         android:hint="请输入特货代码"
-                        android:inputType="number"
                         android:singleLine="true"
                         android:id="@+id/tv_goods_code"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical|end"
-                        tools:text="33"
+                        tools:text=""
                         style="@style/public_tv_16sp" />
                 </LinearLayout>
 
