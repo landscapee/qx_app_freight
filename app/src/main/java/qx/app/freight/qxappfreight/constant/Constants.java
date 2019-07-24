@@ -209,4 +209,8 @@ public class Constants {
     public static final String PSW_TYPE_OTHER = "2";
 
 
+    public static final int TYPE_STEP_OVER = 0;
+    public static final int TYPE_STEP_NOW = 1;
+    public static final int TYPE_STEP_NEXT = 2;
+
 }
