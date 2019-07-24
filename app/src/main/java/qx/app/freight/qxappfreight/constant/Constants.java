@@ -208,9 +208,12 @@ public class Constants {
     //密码过期;其他密码验证失败
     public static final String PSW_TYPE_OTHER = "2";
 
-
+    //滑动步骤类型，0，已操作；1，当前步骤；2，未执行操作
     public static final int TYPE_STEP_OVER = 0;
     public static final int TYPE_STEP_NOW = 1;
     public static final int TYPE_STEP_NEXT = 2;
-
+    //货物拉回状态值
+    public static final int TYPE_PULL_BACK_NORMAL = 0;
+    public static final int TYPE_PULL_BACK_SUCCESS = 1;
+    public static final int TYPE_PULL_BACK_FAILED = 2;
 }

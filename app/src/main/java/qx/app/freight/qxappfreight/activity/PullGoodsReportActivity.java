@@ -62,8 +62,12 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 public class PullGoodsReportActivity extends BaseActivity implements ScanScooterContract.scanScooterView, ScooterInfoListContract.scooterInfoListView, PullGoodsReportContract.pullGoodsView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetWayBillInfoByIdDataContract.getWayBillInfoByIdDataView {
     @BindView(R.id.tv_flight_info)
     TextView mTvFlightInfo;
+    @BindView(R.id.tv_seat)
+    TextView mTvSeat;
     @BindView(R.id.tv_date)
     TextView mTvDate;
+    @BindView(R.id.tv_fly_time)
+    TextView mTvFlyTime;
     @BindView(R.id.tablayout)
     TabLayout mTabLayout;
     @BindView(R.id.srv_goods_info)
@@ -77,6 +81,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private PullGoodsInfoAdapter mGoodsAdapter;
     private SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
     private int mDeletePos = -1;        //左滑删除时的下标标记值
+    private int mBindBoardPos = -1;      //运单去绑定板车的下标标记值
     private boolean mIsScanBill = false;//是否是扫描运单拉下，默认是扫板
     private String mCurrentTaskId;
     private List<String> mTpScooterCodeList = new ArrayList<>();
@@ -85,6 +90,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     private Map<String, GetWaybillInfoByIdDataBean.DataMainBean> mCodeMap = new HashMap<>();
     private LoadAndUnloadTodoBean mData;
     private String mMainFlightId;
+    private String mNowScooterCode;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -118,12 +124,15 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         boolean mIsKeepOnTask = mData.getMovement() == 4;
         mMainFlightId = mIsKeepOnTask ? mData.getRelateInfoObj().getFlightId() : mData.getFlightId();
         mPresenter = new ScanScooterPresenter(this);
-        String userId=UserInfoSingle.getInstance().getUserId();
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(userId, mMainFlightId);
+        String userId = UserInfoSingle.getInstance().getUserId();
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(userId, mMainFlightId);//进入拉货页面调接口，获取当前账号扫描过的板车
         mCurrentTaskId = mIsKeepOnTask ? mData.getRelateInfoObj().getTaskId() : mData.getTaskId();
-        mTvFlightInfo.setText(mIsKeepOnTask ? mData.getRelateInfoObj().getFlightNo() : mData.getFlightNo());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
-        mTvDate.setText(sdf.format(new Date()));
+        mTvFlightInfo.setText(mIsKeepOnTask ? "航班号：" + mData.getRelateInfoObj().getFlightNo() : "航班号：" + mData.getFlightNo());
+        mTvSeat.setText(mIsKeepOnTask ? "跑道：" + mData.getRelateInfoObj().getSeat() : "跑道：" + mData.getSeat());
+        SimpleDateFormat sdfYmd = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+        SimpleDateFormat sdfHm = new SimpleDateFormat("HH:mm", Locale.CHINESE);
+        mTvDate.setText("日期：" + sdfYmd.format(mIsKeepOnTask ? mData.getRelateInfoObj().getScheduleTime() : mData.getScheduleTime()));
+        mTvFlyTime.setText("计划时间：" + sdfHm.format(mIsKeepOnTask ? mData.getRelateInfoObj().getScheduleTime() : mData.getScheduleTime()));
         mLlAddScan.setOnClickListener(v -> {
             ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity");
         });
@@ -144,7 +153,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                     mGoodsAdapter = new PullGoodsInfoAdapter(mPullBillList);
                 }
                 mSrvGoods.setAdapter(mGoodsAdapter);
-                setDeleteListener();
+                setMoreListener();
             }
 
             @Override
@@ -155,7 +164,7 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        setDeleteListener();
+        setMoreListener();
         mBtnCommit.setOnClickListener(v -> {
             if (mPullBoardList.size() == 0 && mPullBillList.size() == 0) {//板车和运单列表数据都为空
                 ToastUtil.showToast("请扫描添加板车数据！");
@@ -197,26 +206,38 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
         });
     }
 
-    private void setDeleteListener() {
-        mGoodsAdapter.setOnDeleteClickListener((view, position) -> {
+    /**
+     * 设置对应的监听
+     */
+    private void setMoreListener() {
+        mGoodsAdapter.setOnDeleteClickListener((position) -> {
                     mDeletePos = position;
-                    if (!mIsScanBill) {
-                        TransportEndEntity transportEndEntity = new TransportEndEntity();
-                        transportEndEntity.setId(mPullBoardList.get(position).getId());
-                        ((PullGoodsReportPresenter) mPresenter).scanScooterDelete(transportEndEntity);
-                        mTpScooterCodeList.remove(mPullBoardList.get(position).getTpScooterCode());
+                    if (!mIsScanBill) {//扫描板车
+                        if (mPullBoardList.get(position).isRemoteData()) {
+                            ToastUtil.showToast("配载拉回不能删除");
+                        } else {
+                            TransportEndEntity transportEndEntity = new TransportEndEntity();
+                            transportEndEntity.setId(mPullBoardList.get(position).getId());
+                            ((PullGoodsReportPresenter) mPresenter).scanScooterDelete(transportEndEntity);
+                            mTpScooterCodeList.remove(mPullBoardList.get(position).getTpScooterCode());
+                        }
                     } else {
-                        //删除扫描的运单上拉数据
-                        scanScooterDeleteResult("");
-                        mTpScooterCodeList.remove(mPullBillList.get(position).getTpScooterCode());
+                        if (mPullBoardList.get(position).isRemoteData()) {
+                            ToastUtil.showToast("配载拉回不能删除");
+                        } else {
+                            scanScooterDeleteResult("");//删除扫描的运单上拉数据
+                            mTpScooterCodeList.remove(mPullBillList.get(position).getTpScooterCode());
+                        }
                     }
                 }
         );
         mGoodsAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
+        mGoodsAdapter.setOnBindBoardListener(position -> {
+            mBindBoardPos = position;
+            ScanManagerActivity.startActivity(PullGoodsReportActivity.this, "PullGoodsReportActivity_BindBoard", "当前航班：" + mData.getFlightNo());
+        });
     }
-
-    private String mNowScooterCode;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
@@ -226,10 +247,10 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 if (mIsScanBill) {
                     mNowScooterCode = result.getData();
                     mPresenter = new ScanScooterCheckUsedPresenter(this);
-                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);//检查板车号是否可以使用
                 } else {
                     mNowScooterCode = result.getData();
-                    addScooterInfo(result.getData());
+                    addScooterInfo(result.getData());//扫描完板车数据后，添加板车
                 }
             } else {
                 ToastUtil.showToast("操作不合法，不能重复扫描");
@@ -238,9 +259,18 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
             mPresenter = new GetWayBillInfoByIdDataPresenter(this);
             mWaybillCode = result.getData();
             ((GetWayBillInfoByIdDataPresenter) mPresenter).getWayBillInfoByCode(result.getData());
+        } else if ("PullGoodsReportActivity_BindBoard".equals(result.getFunctionFlag())) {
+            mPullBillList.get(mBindBoardPos).setTpScooterCode(result.getData());
+            mGoodsAdapter.notifyDataSetChanged();
         }
     }
 
+    /**
+     * 监装员手动扫描运单添加数据显示
+     *
+     * @param billCode 运单号
+     * @param bean     数据
+     */
     private void setBillDataList(String billCode, TransportTodoListBean bean) {
         bean.setBillCode(billCode);
         bean.setBillNumber(billCode);
@@ -319,9 +349,14 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
             }
         });
-        setDeleteListener();
+        setMoreListener();
     }
 
+    /**
+     * 添加板车信息，调取服务器数据
+     *
+     * @param scooterCode 板车code
+     */
     private void addScooterInfo(String scooterCode) {
         if (!TextUtils.isEmpty(scooterCode)) {
             if (mIsScanBill) {
@@ -355,45 +390,20 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     }
 
     @Override
-    public void scanLockScooterResult(String result) {
-
-    }
-
-    @Override
     public void scooterWithUserResult(List<TransportTodoListBean> result) {
         if (result != null) {
             for (TransportTodoListBean bean : result) {
                 mTpScooterCodeList.add(bean.getTpScooterCode());
                 bean.setMaxBillNumber(bean.getTpCargoNumber());
                 bean.setMaxBillWeight(bean.getTpCargoWeight());
+                bean.setRemoteData(false);
+                bean.setInfoStatus(Constants.TYPE_PULL_BACK_SUCCESS);
             }
             mPullBoardList.clear();
             mPullBoardList.addAll(result);
             mGoodsAdapter.notifyDataSetChanged();
         } else
             ToastUtil.showToast(this, "返回数据为空");
-    }
-
-    @Override
-    public void toastView(String error) {
-        ToastUtil.showToast(error);
-    }
-
-    @Override
-    public void showNetDialog() {
-        showProgessDialog("请求中......");
-    }
-
-    @Override
-    public void dissMiss() {
-        dismissProgessDialog();
-    }
-
-    @Override
-    public void pullGoodsReportResult(String result) {
-        Log.e("tag", "result=======" + result);
-        ToastUtil.showToast("拉货上报提交成功");
-        finish();
     }
 
     @Override
@@ -428,27 +438,19 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     }
 
     @Override
-    public void existResult(MyAgentListBean existBean) {
-
-    }
-
-    @Override
-    public void addInfoResult(MyAgentListBean result) {
-
-    }
-
-    @Override
     public void checkScooterCodeResult(BaseEntity<Object> result) {
         if ("200".equals(result.getStatus())) {
-            addScooterInfo(mNowScooterCode);
+            addScooterInfo(mNowScooterCode);//检查板车可以添加板车后添加板车
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
     }
 
+    /**
+     * @param addScooterBean
+     */
     @Override
     public void getWayBillInfoByCodeResult(GetWaybillInfoByIdDataBean addScooterBean) {
-        //异常处理有问题，不能走这里的判断
         if (addScooterBean.getStatus().equals("500")) {
             ToastUtil.showToast("运单号输入错误，请检查！");
         } else {
@@ -466,5 +468,39 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
                 }
             }
         }
+    }
+
+    @Override
+    public void existResult(MyAgentListBean existBean) {
+    }
+
+    @Override
+    public void addInfoResult(MyAgentListBean result) {
+    }
+
+    @Override
+    public void scanLockScooterResult(String result) {
+    }
+
+    @Override
+    public void toastView(String error) {
+        ToastUtil.showToast(error);
+    }
+
+    @Override
+    public void showNetDialog() {
+        showProgessDialog("请求中......");
+    }
+
+    @Override
+    public void dissMiss() {
+        dismissProgessDialog();
+    }
+
+    @Override
+    public void pullGoodsReportResult(String result) {
+        Log.e("tag", "result=======" + result);
+        ToastUtil.showToast("拉货上报提交成功");
+        finish();
     }
 }
