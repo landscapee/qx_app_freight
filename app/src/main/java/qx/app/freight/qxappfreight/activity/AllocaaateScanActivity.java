@@ -495,13 +495,15 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @Override
     public void saveScooterResult(String result) {
         ToastUtil.showToast("保存成功");
-        startActivity(new Intent(this,MainActivity.class));
+        finish();
+//        startActivity(new Intent(this,MainActivity.class));
     }
 
     @Override
     public void returnWeighingResult(String result) {
         ToastUtil.showToast("退回理货成功");
-        startActivity(new Intent(this,MainActivity.class));
+        finish();
+//        startActivity(new Intent(this,MainActivity.class));
     }
 
     @Override
