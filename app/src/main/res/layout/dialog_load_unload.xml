@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content_view"
     android:layout_width="match_parent"
     android:layout_height="447dp"
@@ -24,42 +23,32 @@
         android:layout_weight="1"
         android:background="#00000000" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="@dimen/dp_6"
         android:paddingTop="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_6"
-        android:paddingBottom="@dimen/dp_10">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/shape_rect_gray_eff2"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="向右滑动领取"
-                android:textColor="@color/gray_888" />
-
-            <qx.app.freight.qxappfreight.widget.SlideRightExecuteView
-                android:id="@+id/slide_right_start"
-                android:layout_width="match_parent"
-                android:layout_height="47dp"
-                android:gravity="center_vertical"
-                app:lock_drawable="@mipmap/swiperight"
-                app:lock_radius="47dp" />
-
-            <ImageView
-                android:id="@+id/iv_start_gif"
-                android:layout_width="wrap_content"
-                android:layout_height="47dp"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-    </RelativeLayout>
+        android:paddingBottom="@dimen/dp_10"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:text="领受"
+            android:gravity="center"
+            android:id="@+id/tv_accept"/>
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/gray"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:text="拒绝"
+            android:gravity="center"
+            android:id="@+id/tv_refuse"/>
+    </LinearLayout>
 </LinearLayout>

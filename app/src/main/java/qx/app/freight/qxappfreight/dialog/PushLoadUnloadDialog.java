@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -22,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -44,7 +41,6 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
-import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
  * 装卸机推送弹窗
@@ -55,8 +51,8 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     private View convertView;
     private OnDismissListener onDismissListener;
     private TextView mTvTitle;
-    private ImageView mIvGif;
-    private SlideRightExecuteView mSlideView;
+    private TextView mTvAccept;
+    private TextView mTvRefuse;
     private DialogLoadUnloadPushAdapter mAdapter;
 
     public void setData(Context context, List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
@@ -68,8 +64,8 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     private void initViews() {
         RecyclerView mRvData = convertView.findViewById(R.id.rv_load_unload_list);
         mTvTitle = convertView.findViewById(R.id.tv_title_new_task);
-        mIvGif = convertView.findViewById(R.id.iv_start_gif);
-        mSlideView = convertView.findViewById(R.id.slide_right_start);
+        mTvAccept = convertView.findViewById(R.id.tv_accept);
+        mTvRefuse = convertView.findViewById(R.id.tv_refuse);
         mRvData.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new DialogLoadUnloadPushAdapter(list);
         mRvData.setAdapter(mAdapter);
@@ -103,51 +99,44 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
 
     private void setListeners() {
         mTvTitle.setText(context.getString(R.string.format_new_task_push, list.size()));
-        Glide.with(context).load(R.mipmap.swiperight_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mIvGif);
-        mIvGif.setOnTouchListener((v, event) -> {
-            mIvGif.setVisibility(View.GONE);
-            return false;
-        });
-        mSlideView.setLockListener(new SlideRightExecuteView.OnLockListener() {
-            @Override
-            public void onOpenLockSuccess() {
-                LoadAndUnloadTodoPresenter mPresenter = new LoadAndUnloadTodoPresenter(PushLoadUnloadDialog.this);
-                Observable.just(list).all(loadAndUnloadTodoBeans -> {
-                    for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
-                        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-                        entity.setType(1);
-                        entity.setLoadUnloadDataId(bean.getId());
-                        entity.setFlightId(Long.valueOf(bean.getFlightId()));
-                        entity.setFlightTaskId(bean.getTaskId());
-                        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                        if (bean.getTaskType() == 1) {
-                            entity.setOperationCode("FreightLoadReceived");
-                        } else {
-                            entity.setOperationCode("FreightUnloadReceived");
-                        }
-                        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-                        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                        entity.setUserName(bean.getWorkerName());
-                        entity.setCreateTime(System.currentTimeMillis());
-                        mPresenter.slideTask(entity);
-                        Log.e("tagTest", "还在循环");
+        mTvAccept.setOnClickListener(v -> {
+            LoadAndUnloadTodoPresenter mPresenter = new LoadAndUnloadTodoPresenter(PushLoadUnloadDialog.this);
+            Observable.just(list).all(loadAndUnloadTodoBeans -> {
+                for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
+                    PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+                    entity.setType(1);
+                    entity.setLoadUnloadDataId(bean.getId());
+                    entity.setFlightId(Long.valueOf(bean.getFlightId()));
+                    entity.setFlightTaskId(bean.getTaskId());
+                    entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+                    entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                    if (bean.getTaskType() == 1) {
+                        entity.setOperationCode("FreightLoadReceived");
+                    } else {
+                        entity.setOperationCode("FreightUnloadReceived");
                     }
-                    return true;
-                }).subscribe(aBoolean -> {
-                    Log.e("tagTest", "循环结束，弹窗消失");
-                    dismiss();
-                    onDismissListener.refreshUI(true);
-                }, throwable -> {
-                    Log.e("tagTest", "循环结束，调接口出错了");
-                    dismiss();
-                    onDismissListener.refreshUI(false);
-                });
-            }
-
+                    entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+                    entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                    entity.setUserName(bean.getWorkerName());
+                    entity.setCreateTime(System.currentTimeMillis());
+                    mPresenter.slideTask(entity);
+                    Log.e("tagTest", "还在循环");
+                }
+                return true;
+            }).subscribe(aBoolean -> {
+                Log.e("tagTest", "循环结束，弹窗消失");
+                dismiss();
+                onDismissListener.refreshUI(true);
+            }, throwable -> {
+                Log.e("tagTest", "循环结束，调接口出错了");
+                dismiss();
+                onDismissListener.refreshUI(false);
+            });
+        });
+        mTvRefuse.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onOpenLockCancel() {
-                mIvGif.setVisibility(View.VISIBLE);
+            public void onClick(View v) {
+
             }
         });
     }
