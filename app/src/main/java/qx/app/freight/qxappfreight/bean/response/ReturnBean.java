@@ -27,4 +27,6 @@ public class ReturnBean {
         private String scooterCode;
 
 
+
+
 }
