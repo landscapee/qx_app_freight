@@ -431,6 +431,14 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
 
+    //装卸员小组长任务代办  6是装机  7是卸机  8装卸机
+    @GET("service-product-transport/tp-stevedores/selectAreaStaffs/{taskId}")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getLoadUnloadLeaderList(@Path("taskId") String taskId);
+
+    //装卸员小组长任务拒绝
+    @POST("service-product-transport/tp-stevedores/stevedoresTaskRefuse")
+    Observable<BaseEntity<Object>> refuseTask(@Body BaseFilterEntity model);
+
     //结载代办
     @POST("service-product-transport/tp-main-info/passengerLoadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getEndInstallTodo(@Body BaseFilterEntity model);

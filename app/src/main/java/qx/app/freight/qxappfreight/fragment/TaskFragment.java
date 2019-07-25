@@ -195,7 +195,7 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new InstallEquipFragment());
                 list_Title.add("装卸机");
             }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InstallEquipFragment());
+                fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment
                 list_Title.add("装卸机");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());

@@ -663,6 +663,22 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<LoadAndUnloadTodoBean>> loadAndUnloadTodo(BaseFilterEntity model) {
         return transform(getService().loadAndUnloadTodo(model));
     }
+    /****
+     * 装卸员小组长任务代办
+     * @param  taskId
+     * @return
+     */
+    public Observable<List<LoadAndUnloadTodoBean>> getLoadUnloadLeaderList(String taskId) {
+        return transform(getService().getLoadUnloadLeaderList(taskId));
+    }
+    /****
+     * 装卸员小组长任务代办
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<String> refuseTask(BaseFilterEntity baseFilterEntity) {
+        return nothingtransform(getService().refuseTask(baseFilterEntity));
+    }
 
     /****
      * 结载代办

@@ -182,5 +182,6 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private int itemType;        //步骤类型，未执行、即将执行、已执行
         private String stepDoneDate; //步骤时间
         private String flightType;   //航班类型，D，国内；I,国际；M，混合
+        private String taskId;
     }
 }
