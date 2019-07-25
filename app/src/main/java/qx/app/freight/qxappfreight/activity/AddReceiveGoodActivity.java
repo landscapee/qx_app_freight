@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
+import qx.app.freight.qxappfreight.bean.request.SearchULDEntity;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
@@ -144,7 +145,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private List<String> airlineTwo = new ArrayList<>();
     private LikePageBean mLikePageBean = null;//当前选中的uld
     private List<LikePageBean> LikePageBeans = new ArrayList<>();//uld数据源
-    private List<ListByTypeBean> uldTypeList = new ArrayList<>();//uld类型数据源
+    private List<ListByTypeBean.RecordsBean> uldTypeList = new ArrayList<>();//uld类型数据源
     private boolean isShowAddUld = false; //true 为已经展开 uld新增。
     private int uldCount = 0;//uld输入框的字数
     private int uldTypeCount = 0;//uld输入框的字数
@@ -233,7 +234,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                     showPopWindowUld();
                 else
                     ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
-            }else
+            } else
                 ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
         });
 
@@ -787,7 +788,14 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private void searchUldType(String uldType) {
         uldType = uldType.toUpperCase();
         mPresenter = new ListByTypePresenter(this);
-        ((ListByTypePresenter) mPresenter).listByType(uldType);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        SearchULDEntity mSearch = new SearchULDEntity();
+        mSearch.setName(uldType);
+        mSearch.setType("1");
+        entity.setFilter(mSearch);
+        entity.setSize(50);
+        entity.setCurrent(1);
+        ((ListByTypePresenter) mPresenter).listByType(entity);
     }
 
     @Override
@@ -809,9 +817,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     }
 
     @Override
-    public void listByTypeResult(List<ListByTypeBean> result) {
+    public void listByTypeResult(ListByTypeBean result) {
         if (uldTypeCount == 3) {//10位uld号已经输完，并且检测到了该uld号
-            if (result.size() < 1)
+            if (result.getRecords().size() < 1)
                 etUldType.setText("");
             uldTypes.clear();
             uldTypeList.clear();
@@ -819,8 +827,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         } else {
             uldTypes.clear();
             uldTypeList.clear();
-            uldTypeList.addAll(result);
-            for (ListByTypeBean mListByTypeBean : result) {
+            uldTypeList.addAll(result.getRecords());
+            for (ListByTypeBean.RecordsBean mListByTypeBean : result.getRecords()) {
                 uldTypes.add(mListByTypeBean.getName());
             }
             uldTypeAdapter.notifyDataSetChanged();

@@ -644,8 +644,8 @@ public interface HttpApi {
      *
      * @return
      */
-    @GET("service-bussiness-facility/baseParam/likeByType/{type}/{name}")
-    Observable<BaseEntity<List<ListByTypeBean>>> listByType(@Path("type") String type, @Path("name") String name);
+    @POST("service-bussiness-facility/baseParam/likeByType")
+    Observable<BaseEntity<ListByTypeBean>> listByType(@Body BaseFilterEntity entity);
 
     /**
      * 添加或保存ULD集装箱
