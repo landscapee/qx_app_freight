@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,9 +87,16 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
-        list.clear();
-        list.addAll(result);
-        adapter.notifyDataSetChanged();
+        if (result!= null){
+            if (result.size() == 0){
+                getActivity().finish();
+                return;
+            }
+            list.clear();
+            list.addAll(result);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override
@@ -103,11 +111,19 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("数据加载中……");
     }
 
     @Override
     public void dissMiss() {
+        dismissProgessDialog();
+    }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initData();
+        }
     }
 }
