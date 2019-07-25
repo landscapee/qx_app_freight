@@ -276,7 +276,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            return;
 //        }
         if (!TextUtils.isEmpty(tvGoodsCode.getText().toString().trim())) {
-            mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
+//            mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
+            mData.setSpecialCode(tvGoodsCode.getText().toString().trim());
         }
         try {
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
@@ -307,7 +308,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private void refreshView() {
         waybillId.setText(mData.getWaybillCode());
         declareType.setText(mData.getFreightName());
-        flightCode.setText(mData.getFlightNumber());
+        flightCode.setText(mData.getFlightNo());
         if (TextUtils.isEmpty(mData.getOriginatingStation())) {
             flightLineStart.setText("--");
         } else {
@@ -324,7 +325,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvTotalVolume.setText(String.valueOf(mData.getTotalVolume()));
 //        tvWeight.setText(String.valueOf(mData.getBillingWeight()));
 
-        tvGoodsCode.setText(mData.getSpecialCargoCode());
+        tvGoodsCode.setText(mData.getSpecialCode());
         if (mData.getBigFlag() == 1) {
             tvBaozhuang.setText("小件");
         } else if (mData.getBigFlag() == 2) {
