@@ -55,6 +55,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.only_recyle_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initDialog();
         return view;
     }
 
@@ -64,7 +65,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         flightId = getArguments().getString("flightInfoId");
         taskId = getArguments().getString("taskId");
         initView();
-        initData();
+//        initData();
     }
 
     private void initData() {
@@ -89,11 +90,11 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     @Override
     public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
         if (result!= null){
-            if (result.size() == 0){
-                getActivity().finish();
-                ToastUtil.showToast("该航班负重任务已完成");
-                return;
-            }
+//            if (result.size() == 0){
+//                getActivity().finish();
+//                ToastUtil.showToast("该航班负重任务已完成");
+//                return;
+//            }
             list.clear();
             list.addAll(result);
             adapter.notifyDataSetChanged();
@@ -113,19 +114,17 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("数据加载中……");
+//        showProgessDialog("数据加载中……");
     }
 
     @Override
     public void dissMiss() {
-        dismissProgessDialog();
+//        dismissProgessDialog();
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            initData();
-        }
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 }
