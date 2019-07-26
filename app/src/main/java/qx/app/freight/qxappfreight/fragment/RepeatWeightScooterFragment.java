@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**复重-板车列表
  * created by swd
@@ -90,6 +91,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         if (result!= null){
             if (result.size() == 0){
                 getActivity().finish();
+                ToastUtil.showToast("该航班负重任务已完成");
                 return;
             }
             list.clear();
