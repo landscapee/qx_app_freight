@@ -74,11 +74,6 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         setListeners();
     }
 
-    public void refreshData() {
-        mAdapter.notifyDataSetChanged();
-        setListeners();
-    }
-
     @Override
     public void show(FragmentManager manager, String tag) {
         try {

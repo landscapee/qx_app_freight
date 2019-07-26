@@ -37,6 +37,7 @@
             android:layout_height="@dimen/dp_40"
             android:layout_weight="1"
             android:text="领受"
+            android:textColor="@color/black"
             android:gravity="center"
             android:id="@+id/tv_accept"/>
         <TextView
@@ -48,6 +49,7 @@
             android:layout_height="@dimen/dp_40"
             android:layout_weight="1"
             android:text="拒绝"
+            android:textColor="@color/black"
             android:gravity="center"
             android:id="@+id/tv_refuse"/>
     </LinearLayout>

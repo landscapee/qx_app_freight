@@ -29,13 +29,17 @@ public class LeaderInstallEquipStepAdapter extends BaseMultiItemQuickAdapter<Loa
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean.OperationStepObjBean item) {
         helper.itemView.setOnClickListener(v -> {
+            boolean isJumped = false;
             if (helper.getAdapterPosition() == 0) {
                 if (onSlideListener != null) {//点击的时候会跳转两次页面，要改！！！！！！！！！！！！！！！
+                    isJumped = true;
                     onSlideListener.onSlide(0);
                 }
-                Intent intent = new Intent(mContext, AssignInstallEquipMemberActivity.class);
-                intent.putExtra("task_id", item.getTaskId());
-                mContext.startActivity(intent);
+                if (!isJumped) {
+                    Intent intent = new Intent(mContext, AssignInstallEquipMemberActivity.class);
+                    intent.putExtra("task_id", item.getTaskId());
+                    mContext.startActivity(intent);
+                }
             }
         });
         switch (helper.getItemViewType()) {
