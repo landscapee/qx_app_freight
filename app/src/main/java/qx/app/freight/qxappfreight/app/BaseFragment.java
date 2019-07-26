@@ -43,10 +43,10 @@ public class BaseFragment extends Fragment {
 
     public void initDialog() {
         mProgessbarDialog = new MaterialDialog(mContext);
-        if (mView == null) {
+//        if (mView == null) {
             mView = LayoutInflater.from(mContext).inflate(R.layout.dialog_progressbar, null);
             mTextView = mView.findViewById(R.id.progressbar_tv);
-        }
+//        }
         mProgessbarDialog.setCanceledOnTouchOutside(true);
         mProgessbarDialog.setContentView(mView);
     }

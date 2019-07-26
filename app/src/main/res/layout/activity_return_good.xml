@@ -95,16 +95,42 @@
         android:layout_marginTop="14dp"
         android:layout_weight="1" />
 
-    
-    <Button
-        android:id="@+id/bt_sure"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_dynamic_blue"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"
-        android:text="出库"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4">
+
+        <Button
+            android:id="@+id/btn_refuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="拒绝"
+            android:textColor="@color/black" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Button
+            android:id="@+id/bt_sure"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_blue"
+            android:text="接受"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
 
 </LinearLayout>

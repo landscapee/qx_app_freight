@@ -96,13 +96,13 @@
             android:textSize="@dimen/sp_16"
             android:gravity="center_vertical"
             android:drawablePadding="@dimen/dp_2"/>
-        <TextView
+
+        <Spinner
+            android:id="@+id/sp_return_info"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="#999999"
-            android:textSize="@dimen/sp_16"
-            android:gravity="center_vertical"
-            android:text="退货"
+            android:gravity="center_vertical|end"
+            android:spinnerMode="dropdown"
             android:layout_marginEnd="19dp"/>
     </LinearLayout>
     <TextView

@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.listener.ReceiveClient;
 import qx.app.freight.qxappfreight.listener.WeighterClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import ua.naiksoftware.stomp.StompClient;
 
 public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
@@ -224,7 +225,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     @Override
     public void toastView(String error) {
-        Log.e("GPS上传：", error);
+        if(!StringUtil.isEmpty(error))
+            Log.e("GPS上传：", error);
     }
 
     @Override
@@ -256,13 +258,17 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     }
     //停止连接
     public static void closeLink() {
-        subList.clear();
-        if (mStompClient.size() != 0) {
-            for (int i = 0; i < mStompClient.size(); i++) {
-                Log.e(TAG, "关闭了" + i + "个连接");
-                mStompClient.get(i).disconnect();
+        if (subList !=null)
+            subList.clear();
+        if (mStompClient!= null){
+            if (mStompClient.size() != 0) {
+                for (int i = 0; i < mStompClient.size(); i++) {
+                    Log.e(TAG, "关闭了" + i + "个连接");
+                    mStompClient.get(i).disconnect();
+                }
             }
         }
+
     }
 
     public synchronized static void setIsTopic(boolean isTopic1){
