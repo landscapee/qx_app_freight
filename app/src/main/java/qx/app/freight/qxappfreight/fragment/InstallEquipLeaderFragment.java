@@ -61,7 +61,8 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private LeaderInstallEquipStepAdapter mSlideAdapter;
     private int mOperatePos;
-    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
+    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();//推送的缓存任务
+    private List<LoadAndUnloadTodoBean> mListCacheUse = new ArrayList<>(); //领受拒绝任务显示使用
     private InstallEquipLeaderAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
@@ -122,40 +123,39 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                         mListCache.remove(bean);
                     }
                 }
-                if (mDialog == null) {
-                    mDialog = new PushLoadUnloadLeaderDialog();
-                }
-                mDialog.setData(getContext(), mListCache, success -> {
-                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-                        ToastUtil.showToast("领受装卸机新任务成功");
-                        Observable.timer(300, TimeUnit.MILLISECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> {
-                                    loadData();
-                                });
-                        mListCache.clear();
-                    } else {//领受失败后，清空未领受列表缓存
-                        Log.e("tagPush", "推送出错了");
-                        mListCache.clear();
-                    }
-                });
-                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-                    if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
-                        loadData();
-                        mListCache.clear();
-                    } else {
-                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
-                    }
-                } else {//刷新任务弹出框中的数据显示
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(aLong -> {
-                                mDialog.refreshData();
-                            });
-                }
+                showDialogTask();
+
             }
+        }
+    }
+
+    /**
+     * mListCache 为0 就不展示
+     */
+    private void showDialogTask(){
+        if (mDialog!=null&&!mDialog.isAdded()||mListCache.size()< 1)
+            return;
+        mListCacheUse.add(mListCache.get(0));
+        mListCache.remove(0);
+        mDialog = new PushLoadUnloadLeaderDialog();
+        mDialog.setData(getContext(), mListCacheUse, success -> {
+            if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+//                ToastUtil.showToast("领受装卸机新任务成功");
+                Observable.timer(300, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aLong -> {
+                            loadData();
+                        });
+                mListCacheUse.clear();
+                showDialogTask();
+            } else {//领受失败后，清空未领受列表缓存
+                Log.e("tagPush", "推送出错了");
+                mListCacheUse.clear();
+            }
+        });
+        if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+                mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
         }
     }
 

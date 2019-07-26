@@ -142,6 +142,7 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
             entity.setTaskId(list.get(0).getTaskId());
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter.refuseTask(entity);
+
         });
     }
 
@@ -180,6 +181,8 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
     @Override
     public void refuseTaskResult(String result) {
         ToastUtil.showToast("拒绝任务操作成功");
+        dismiss();
+        onDismissListener.refreshUI(true);
     }
 
     @Override
