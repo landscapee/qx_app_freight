@@ -30,6 +30,9 @@ public class LeaderInstallEquipStepAdapter extends BaseMultiItemQuickAdapter<Loa
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean.OperationStepObjBean item) {
         helper.itemView.setOnClickListener(v -> {
             if (helper.getAdapterPosition() == 0) {
+                if (onSlideListener != null) {//点击的时候会跳转两次页面，要改！！！！！！！！！！！！！！！
+                    onSlideListener.onSlide(0);
+                }
                 Intent intent = new Intent(mContext, AssignInstallEquipMemberActivity.class);
                 intent.putExtra("task_id", item.getTaskId());
                 mContext.startActivity(intent);
