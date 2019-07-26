@@ -23,9 +23,9 @@ public class RepeatWeightManifestAdapter extends BaseQuickAdapter<WaybillsBean, 
     protected void convert(BaseViewHolder helper, WaybillsBean item) {
         helper.setText(R.id.waybill_code,item.getWaybillCode())
                 .setText(R.id.tv_name, StringUtil.toText(item.getCargoCn()))
-                .setText(R.id.tv_num, item.getTotalnum()+"")
-                .setText(R.id.tv_weight ,item.getTotalweight()+"")
-                .setText(R.id.tv_volume,item.getTotalVolume()+"")
+                .setText(R.id.tv_num, item.getInflightnum()+"")
+                .setText(R.id.tv_weight ,item.getInflightweight()+"")
+                .setText(R.id.tv_volume,item.getInFlightVolume()+"")
                 .setText(R.id.tv_code,StringUtil.toText(item.getSpecialCode()))
                 .setText(R.id.tv_mark,item.getRemark());
     }
