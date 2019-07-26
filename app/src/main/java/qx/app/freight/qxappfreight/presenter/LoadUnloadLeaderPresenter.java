@@ -1,18 +1,14 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderContract;
-import qx.app.freight.qxappfreight.model.LoadAndUnloadTodoModel;
 import qx.app.freight.qxappfreight.model.LoadUnloadLeaderModel;
+
 /**
- * 装卸员小组长任务列表Presenter
+ * 装卸员小组长接收新任务Presenter
  */
 public class LoadUnloadLeaderPresenter extends BasePresenter {
 
@@ -37,22 +33,7 @@ public class LoadUnloadLeaderPresenter extends BasePresenter {
             }
         });
     }
-    public void getLoadUnloadLeaderList(String taskId) {
-        mRequestView.showNetDialog();
-        ((LoadUnloadLeaderModel) mRequestModel).getLoadUnloadLeaderList(taskId, new IResultLisenter<List<LoadAndUnloadTodoBean>>() {
-            @Override
-            public void onSuccess(List<LoadAndUnloadTodoBean> result) {
-                ((LoadUnloadLeaderContract.LoadUnloadLeaderView) mRequestView).getLoadUnloadLeaderListResult(result);
-                mRequestView.dissMiss();
-            }
 
-            @Override
-            public void onFail(String error) {
-                mRequestView.toastView(error);
-                mRequestView.dissMiss();
-            }
-        });
-    }
     public void slideTask(PerformTaskStepsEntity entity) {
         mRequestView.showNetDialog();
         ((LoadUnloadLeaderModel) mRequestModel).slideTask(entity, new IResultLisenter<String>() {

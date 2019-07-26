@@ -35,9 +35,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderContract;
-import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -47,7 +45,7 @@ import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
- *  * 装卸员小组长任务推送弹窗
+ * * 装卸员小组长任务推送弹窗
  */
 public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUnloadLeaderContract.LoadUnloadLeaderView {
     private List<LoadAndUnloadTodoBean> list;
@@ -164,11 +162,6 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         dialog.setCancelable(false);
         initViews();
         return dialog;
-    }
-
-    @Override
-    public void getLoadUnloadLeaderListResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-
     }
 
     @Override

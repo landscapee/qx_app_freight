@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,9 +38,9 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadLeaderDialog;
-import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -49,9 +50,9 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
- * 装卸机小组长fragment
+ * 装卸机小组长代办fragment
  */
-public class InstallEquipLeaderFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipLeaderFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadUnloadLeaderToDoContract.LoadUnloadLeaderToDoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -132,8 +133,8 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     /**
      * mListCache 为0 就不展示
      */
-    private void showDialogTask(){
-        if (mDialog!=null&&!mDialog.isAdded()||mListCache.size()< 1)
+    private void showDialogTask() {
+        if (mDialog != null && !mDialog.isAdded() || mListCache.size() < 1)
             return;
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
@@ -155,7 +156,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
         });
         if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-                mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+            mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
         }
     }
 
@@ -170,7 +171,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadUnloadToDoLeaderPresenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         loadData();
@@ -225,7 +226,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
-        ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
+        ((LoadUnloadToDoLeaderPresenter) mPresenter).getLoadUnloadLeaderToDo(entity);
     }
 
     @Override
@@ -249,7 +250,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void getLoadUnloadLeaderToDoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -353,7 +354,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mList.get(bigPos).getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
-        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+        ((LoadUnloadToDoLeaderPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
@@ -386,4 +387,5 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     public void dissMiss() {
         dismissProgessDialog();
     }
+
 }

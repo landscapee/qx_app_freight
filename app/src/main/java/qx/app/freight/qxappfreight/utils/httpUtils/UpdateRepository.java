@@ -10,6 +10,7 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -95,6 +96,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 
@@ -668,16 +670,32 @@ public class UpdateRepository extends BaseRepository {
      * @param  taskId
      * @return
      */
-    public Observable<List<LoadAndUnloadTodoBean>> getLoadUnloadLeaderList(String taskId) {
+    public Observable<List<SelectTaskMemberEntity>> getLoadUnloadLeaderList(String taskId) {
         return transform(getService().getLoadUnloadLeaderList(taskId));
     }
     /****
-     * 装卸员小组长任务代办
+     * 装卸员小组长选择任务人员
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<String> selectMember(BaseFilterEntity baseFilterEntity) {
+        return nothingtransform(getService().selectMember(baseFilterEntity));
+    }
+    /****
+     * 装卸员小组长接收新任务拒绝任务
      * @param  baseFilterEntity
      * @return
      */
     public Observable<String> refuseTask(BaseFilterEntity baseFilterEntity) {
         return nothingtransform(getService().refuseTask(baseFilterEntity));
+    }
+    /****
+     * 装卸员小组长任务代办列表
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<List<LoadAndUnloadTodoBean>> getLoadUnloadLeaderToDo(BaseFilterEntity baseFilterEntity) {
+        return transform(getService().getLoadUnloadLeaderToDo(baseFilterEntity));
     }
 
     /****

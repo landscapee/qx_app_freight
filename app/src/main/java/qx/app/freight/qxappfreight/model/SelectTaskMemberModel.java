@@ -6,18 +6,16 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
-import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
-import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderContract;
+import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
-/**
- * 装卸员小组长接收新任务Model
- */
-public class LoadUnloadLeaderModel extends BaseModel implements LoadUnloadLeaderContract.LoadUnloadLeaderModel {
 
+/**
+ * 装卸员小组长选择任务人员Model
+ */
+public class SelectTaskMemberModel extends BaseModel implements SelectTaskMemberContract.SelectTaskMemberModel {
     @Override
-    public void slideTask(PerformTaskStepsEntity baseFilterEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().performTaskSteps(baseFilterEntity)
+    public void getLoadUnloadLeaderList(String taskId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getLoadUnloadLeaderList(taskId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
@@ -27,8 +25,8 @@ public class LoadUnloadLeaderModel extends BaseModel implements LoadUnloadLeader
     }
 
     @Override
-    public void refuseTask(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().refuseTask(baseFilterEntity)
+    public void selectMember(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().selectMember(baseFilterEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

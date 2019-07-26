@@ -9,6 +9,7 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -431,9 +432,17 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
 
-    //装卸员小组长任务代办  6是装机  7是卸机  8装卸机
+    //装卸员小组长获取可选择人员 6是装机  7是卸机  8装卸机
     @GET("service-product-transport/tp-stevedores/selectAreaStaffs/{taskId}")
-    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getLoadUnloadLeaderList(@Path("taskId") String taskId);
+    Observable<BaseEntity<List<SelectTaskMemberEntity>>> getLoadUnloadLeaderList(@Path("taskId") String taskId);
+
+    //装卸员小组长任务代办获取  6是装机  7是卸机  8装卸机
+    @POST("service-product-transport/tp-stevedores/stevedoresTaskTodo")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getLoadUnloadLeaderToDo(@Body BaseFilterEntity model);
+
+    //装卸员小组长选择任务人员  6是装机  7是卸机  8装卸机
+    @POST("service-product-transport/tp-stevedores/stevedoresStaffSelect")
+    Observable<BaseEntity<Object>> selectMember(@Body BaseFilterEntity model);
 
     //装卸员小组长任务拒绝
     @POST("service-product-transport/tp-stevedores/stevedoresTaskRefuse")

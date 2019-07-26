@@ -8,16 +8,19 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 
-public class LoadAndUnloadTodoContract {
+/**
+ * 装卸员小组长任务代办列表Contract
+ */
+public class LoadUnloadLeaderToDoContract {
 
-    public interface loadAndUnloadTodoModel {
-        void loadAndUnloadTodo(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+    public interface LoadUnloadLeaderToDoModel {
+        void getLoadUnloadLeaderToDo(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
 
         void slideTask(PerformTaskStepsEntity baseFilterEntity, IResultLisenter lisenter);
     }
 
-    public interface loadAndUnloadTodoView extends IBaseView {
-        void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean);
+    public interface LoadUnloadLeaderToDoView extends IBaseView {
+        void getLoadUnloadLeaderToDoResult(List<LoadAndUnloadTodoBean> result);
 
         void slideTaskResult(String result);
     }
