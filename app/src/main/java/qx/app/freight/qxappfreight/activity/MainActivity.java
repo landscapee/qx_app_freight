@@ -187,9 +187,9 @@ public class MainActivity extends BaseActivity implements LocationObservable {
 
         nowFragment = fragment; //替换当前fragment
         if (isJunctionLoad){
-            mIvTest.setImageResource(R.mipmap.dynamics_normal);
+            mIvTest.setImageResource(R.mipmap.mainfest);
             mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
-            mIvSearch.setImageResource(R.mipmap.clear_normal);
+            mIvSearch.setImageResource(R.mipmap.load_list);
             mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
         }
         else {
@@ -210,21 +210,21 @@ public class MainActivity extends BaseActivity implements LocationObservable {
                 mTvTask.setTextColor(getResources().getColor(R.color.main_tv_press));
                 break;
             case 1:
+                mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
                 if (isJunctionLoad){
-
+                    mIvTest.setImageResource(R.mipmap.mainfest_press);
                 }
                 else {
                     mIvTest.setImageResource(R.mipmap.dynamics_selected);
-                    mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
                 }
                 break;
             case 2:
+                mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
                 if (isJunctionLoad){
-
+                    mIvSearch.setImageResource(R.mipmap.load_list_press);
                 }
                 else {
                     mIvSearch.setImageResource(R.mipmap.clear_selected);
-                    mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
                 }
                 break;
             case 3:
