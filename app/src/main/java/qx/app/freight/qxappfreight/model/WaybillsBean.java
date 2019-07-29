@@ -52,7 +52,7 @@ public class WaybillsBean {
     private Object scooterId;
     private int scooterType;
     private String scooterCode;
-    private int scooterWeight;
+    private double scooterWeight;
     private Object repPlaceId;
     private Object repName;
     private Object repPlaceNum;
@@ -65,10 +65,10 @@ public class WaybillsBean {
     private Object cargoType;
     private int inflightnum;
     private int totalnum;
-    private int inflightweight;
-    private int totalweight;
-    private int inFlightVolume;
-    private int totalVolume;
+    private double inflightweight;
+    private double totalweight;
+    private double inFlightVolume;
+    private double totalVolume;
     private String remark;
     private String specialCode;
     private Object updateWeight;

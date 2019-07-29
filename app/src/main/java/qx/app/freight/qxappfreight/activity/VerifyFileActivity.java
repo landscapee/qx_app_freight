@@ -181,7 +181,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
                 mStorageCommitEntity.setType(1);
                 mStorageCommitEntity.setTaskId(mBean.getTaskId());
-                mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
+                mStorageCommitEntity.setUserId(mDecBean.getFlightNo());
                 //新加
                 if (null != mAcTestInfoListBean.getFreightInfo()) {
                     mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());

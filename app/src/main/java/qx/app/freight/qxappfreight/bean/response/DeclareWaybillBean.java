@@ -27,7 +27,8 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 航班号
      */
-    private String flightNumber;
+//    private String flightNumber;
+    private String flightNo;
 
     /**
      * 航班日期
@@ -67,7 +68,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 特货代码
      */
-    private String specialCargoCode;
+    private String specialCode;
 
     /**
      * 货物类别  1：贵重  2：危险 3：活体 4：冷藏 0：普货

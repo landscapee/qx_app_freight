@@ -1126,11 +1126,11 @@ public class UpdateRepository extends BaseRepository {
 
     /**
      * ULD根据字段过滤
-     * @param type
+     * @param entity
      * @return
      */
-    public Observable<List<ListByTypeBean>> listByType(String type, String name){
-        return transform(getService().listByType(type,name));
+    public Observable<ListByTypeBean> listByType(BaseFilterEntity entity){
+        return transform(getService().listByType(entity));
     }
 
     public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity){

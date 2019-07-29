@@ -152,7 +152,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
                     mStorageCommitEntity.setType(1);
                     mStorageCommitEntity.setTaskId(mBean.getTaskId());
-                    mStorageCommitEntity.setUserId(mDecBean.getFlightNumber());
+                    mStorageCommitEntity.setUserId(mDecBean.getFlightNo());
                     ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");

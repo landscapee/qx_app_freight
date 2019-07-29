@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
+import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 
 /**
  * TODO : xxx
@@ -25,6 +26,14 @@ public class TransportListCommitEntity {
     private String userName;
     private List<MyAgentListBean> rcInfos;
     private List<SecurityCheckResult> securityResultList;
+    private int judge;
+
+    /**
+     * 退货信息
+     */
+    private List<ReturnBean> returnInfoVO;
+
+
 
 //    @Data
 //    public static class RcInfosEntity {

@@ -159,7 +159,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     //完成
     private void deliveryComplet(){
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCounterbillId(bean.getSerialNumber());
+        entity.setBillId(bean.getSerialNumber());
         entity.setTaskId(bean.getTaskId());
         entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
         ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);

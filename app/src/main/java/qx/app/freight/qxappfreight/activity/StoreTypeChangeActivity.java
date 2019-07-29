@@ -192,10 +192,11 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
                     mTvType.setText(storageList.get(i));
                 }
             }
-            if (result.getOrgStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
+            if (result.getStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
                 llBaseTemperature.setVisibility(View.VISIBLE);
+                mTvLengCang.setText(result.getRefrigeratedTemperature());
             }
-            getShowStorage(result.getOrgStorage());
+            getShowStorage(result.getStorage());
         }
     }
 
