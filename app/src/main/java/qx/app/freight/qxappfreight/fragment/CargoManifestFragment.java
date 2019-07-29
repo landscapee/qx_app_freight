@@ -68,6 +68,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
     private String mSearchText;
     private String nowRoleCode; //当前角色code
     private String seachString = "";
+    private boolean isShow = false;
 
 
     /**
@@ -103,8 +104,10 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
             InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-
+        });
+        mSearchBar.setHintAndListener("请输入运单号", text -> {
+            seachString = text;
+            seachWith();
         });
         return view;
     }
@@ -120,11 +123,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             EventBus.getDefault().register(this);
         }
         initData();
-//        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
-//        searchToolbar.setHintAndListener("请输入航班号", text -> {
-//            mSearchText = text;
-//            seachByText();
-//        });
+
     }
 
     private void gotoScan() {
@@ -135,6 +134,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         ScanManagerActivity.startActivity(getContext(),"MainActivity");
 
     }
+
 
 
 
@@ -156,7 +156,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             list.addAll(list1);
         } else {
             for (TransportDataBase team : list1) {
-                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
@@ -166,7 +166,6 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             mMfrvData.notifyForAdapter(adapter);
         }
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
