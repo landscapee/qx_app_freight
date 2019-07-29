@@ -19,9 +19,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
+import qx.app.freight.qxappfreight.fragment.LnstallationFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
@@ -58,16 +61,24 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     TextView mTvMine;
 
 
-    private TaskFragment mTaskFragment;
-    private DynamicFragment mDynamicFragment;
-    private ClearStorageFragment mCSFragment;
-    //    private TaskPutCargoFragment mTaskPutCargoFragment;
-    private MineFragment mMineFragment;
+    private Fragment mTaskFragment;
+    private Fragment mDynamicFragment;
+    private Fragment mCSFragment;
+    private Fragment mMineFragment;
     private Fragment nowFragment;
-    private TestFragment testFragment;
-
+    private Fragment testFragment;
+    private Fragment lnstallationFragment;
+    private Fragment cargoManifestFragment;
     private int taskAssignType = 0;
+    private Fragment fragment1;
+    private Fragment fragment2;
+    private Fragment fragment3;
+    private Fragment fragment4;
+    private Fragment fragment5;
+
     private MessageReciver mMessageReciver;//聊天消息广播接收器
+
+    private boolean isJunctionLoad = false;//是否是结载角色
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -87,7 +98,30 @@ public class MainActivity extends BaseActivity implements LocationObservable {
         mMessageReciver = new MessageReciver(this);
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
+        mTaskFragment = new TaskFragment();
+        mDynamicFragment = new DynamicFragment();
+        mCSFragment = new ClearStorageFragment();
+        testFragment = new TestFragment();
+        mMineFragment = new MineFragment();
+        //结载角色修改 底部tab 第二和第三项 货邮舱单 装机单
+        isJunctionLoad = Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        if(isJunctionLoad){
+            fragment1 =  new TaskFragment();
+            fragment2 =  new LnstallationFragment();
+            fragment3 = new CargoManifestFragment();
+            fragment4 = new TestFragment();
+            fragment5 = new MineFragment();
+        }
+        else
+        {
+            fragment1 =  new TaskFragment();
+            fragment2 =  new DynamicFragment();
+            fragment3 = new ClearStorageFragment();
+            fragment4 = new TestFragment();
+            fragment5 = new MineFragment();
+        }
         initFragment();
+
     }
 
 
@@ -118,20 +152,13 @@ public class MainActivity extends BaseActivity implements LocationObservable {
 //        });
 //        mViewPager.setCurrentItem(0);
 //        switchFragment(mViewPager.getCurrentItem());
-
-        mTaskFragment = new TaskFragment();
-        mDynamicFragment = new DynamicFragment();
-        mCSFragment = new ClearStorageFragment();
-        testFragment = new TestFragment();
-        mMineFragment = new MineFragment();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.content, mTaskFragment)
-                .add(R.id.content, mDynamicFragment)
-                .add(R.id.content, mCSFragment)
-                .add(R.id.content, testFragment)
-//                .add(R.id.content, mTaskPutCargoFragment)
-                .add(R.id.content, mMineFragment)
+                .add(R.id.content, fragment1)
+                .add(R.id.content, fragment2)
+                .add(R.id.content, fragment3)
+                .add(R.id.content, fragment4)
+                .add(R.id.content, fragment5)
                 .commit();
         nowFragment = mTaskFragment;
 
@@ -151,21 +178,28 @@ public class MainActivity extends BaseActivity implements LocationObservable {
 
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .hide(mTaskFragment)
-                .hide(mDynamicFragment)
-                .hide(mCSFragment)
-                .hide(testFragment)
-//                .hide(mTaskPutCargoFragment)
-                .hide(mMineFragment);
+                .hide(fragment1)
+                .hide(fragment2)
+                .hide(fragment3)
+                .hide(fragment4)
+                .hide(fragment5);
+
 
         nowFragment = fragment; //替换当前fragment
-
+        if (isJunctionLoad){
+            mIvTest.setImageResource(R.mipmap.dynamics_normal);
+            mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mIvSearch.setImageResource(R.mipmap.clear_normal);
+            mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
+        }
+        else {
+            mIvTest.setImageResource(R.mipmap.dynamics_normal);
+            mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mIvSearch.setImageResource(R.mipmap.clear_normal);
+            mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
+        }
         mIvTask.setImageResource(R.mipmap.backlog_normal);
         mTvTask.setTextColor(getResources().getColor(R.color.main_tv_normal));
-        mIvTest.setImageResource(R.mipmap.dynamics_normal);
-        mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
-        mIvSearch.setImageResource(R.mipmap.clear_normal);
-        mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
         mIvMessgae.setImageResource(R.mipmap.news_normal);
         mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
         mIvMine.setImageResource(R.mipmap.my_normal);
@@ -176,12 +210,22 @@ public class MainActivity extends BaseActivity implements LocationObservable {
                 mTvTask.setTextColor(getResources().getColor(R.color.main_tv_press));
                 break;
             case 1:
-                mIvTest.setImageResource(R.mipmap.dynamics_selected);
-                mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
+                if (isJunctionLoad){
+
+                }
+                else {
+                    mIvTest.setImageResource(R.mipmap.dynamics_selected);
+                    mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
+                }
                 break;
             case 2:
-                mIvSearch.setImageResource(R.mipmap.clear_selected);
-                mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
+                if (isJunctionLoad){
+
+                }
+                else {
+                    mIvSearch.setImageResource(R.mipmap.clear_selected);
+                    mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
+                }
                 break;
             case 3:
                 mIvMessgae.setImageResource(R.mipmap.news_selected);
