@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -144,7 +146,9 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
+            Intent intent=new Intent(getContext(), CargoManifestInfoActivity.class);
+            intent.putExtra("data",list.get(position));
+            getContext().startActivity(intent);
         });
         getData();
 

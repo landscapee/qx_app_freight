@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_flight_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="EU2448"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_plane_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="B-2310"
+            android:textSize="@dimen/sp_12" />
+
+        <LinearLayout
+            android:id="@+id/ll_flight_info_container"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:src="@mipmap/placement" />
+
+        <TextView
+            android:id="@+id/tv_seat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="132"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="8:45"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/dp_10"
+            android:id="@+id/tv_time_take_off"
+            android:drawableStart="@mipmap/take_off"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="8:45"
+            android:gravity="center_vertical"
+            android:drawablePadding="@dimen/dp_10"
+            android:id="@+id/tv_time_fall_down"
+            android:drawableStart="@mipmap/landfall"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="2018-11-24"
+            android:gravity="center_vertical"
+            android:id="@+id/tv_date"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:text="货邮舱单"
+        android:textSize="@dimen/sp_12"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:drawableStart="@mipmap/news_normal"
+        android:drawablePadding="@dimen/dp_10"
+        android:background="@color/gray_8f"
+        android:textColor="@color/grassgreen"/>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </HorizontalScrollView>
+
+</LinearLayout>
