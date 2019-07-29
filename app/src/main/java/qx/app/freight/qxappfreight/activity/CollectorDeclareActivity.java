@@ -231,19 +231,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvStorageType.setText(storageList.get(options1));
-//                storageOption = options1;
+                storageOption = storageList.get(options1);
                 if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
                 } else {
                     llBaseTemperature.setVisibility(View.GONE);
                     tvTemperature.setText("");
                 }
-
-//                if (options1 == 4) {
-//                    llBaseTemperature.setVisibility(View.VISIBLE);
-//                } else {
-//                    llBaseTemperature.setVisibility(View.GONE);
-//                }
             }
         }).build();
         pickerView.setPicker(storageList);
@@ -306,9 +300,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            mData.setBillingWeight(jifeiWeight);
             mData.setStorageType(storageOption);
             mData.setBigFlag(baozhuangOption);
-            if (storageOption == "CTU_GARGO_STORAGE_TYPE_004") {
+            if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")||storageOption.equals("冷藏")) {
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
-            }
+            }else
+                mData.setRefrigeratedTemperature("");
 
             turnToReceiveGoodsActivity();
         } catch (Exception e) {
@@ -369,11 +364,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             llBaseTemperature.setVisibility(View.VISIBLE);
             tvTemperature.setText(mData.getRefrigeratedTemperature());
         }
+        else
+            tvTemperature.setText("");
 
 
         tvStorageType.setText(mData.getStorageTypeName());
-        tvTemperature.setText(mData.getRefrigeratedTemperature());
-
         tvName.setText(mData.getCargoCn());
         tvNumber.setText(String.valueOf(mData.getTotalNumber()));
         tvWeight.setText(String.valueOf(mData.getTotalWeight()));
