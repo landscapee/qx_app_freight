@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements LocationObservable {
                 .add(R.id.content, fragment4)
                 .add(R.id.content, fragment5)
                 .commit();
-        nowFragment = mTaskFragment;
+        nowFragment = fragment1;
 
         switchFragment(0, mTaskFragment);
 //        IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
@@ -189,14 +189,18 @@ public class MainActivity extends BaseActivity implements LocationObservable {
         if (isJunctionLoad){
             mIvTest.setImageResource(R.mipmap.mainfest);
             mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvTest.setText("货邮舱单");
             mIvSearch.setImageResource(R.mipmap.load_list);
             mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvSearch.setText("装机单");
         }
         else {
             mIvTest.setImageResource(R.mipmap.dynamics_normal);
             mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvTest.setText("航班动态");
             mIvSearch.setImageResource(R.mipmap.clear_normal);
             mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvSearch.setText("清库");
         }
         mIvTask.setImageResource(R.mipmap.backlog_normal);
         mTvTask.setTextColor(getResources().getColor(R.color.main_tv_normal));
@@ -244,19 +248,19 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_task:
-                switchFragment(0, mTaskFragment);
+                switchFragment(0, fragment1);
                 break;
             case R.id.ll_flight:
-                switchFragment(1, mDynamicFragment);
+                switchFragment(1, fragment2);
                 break;
             case R.id.ll_search:
-                switchFragment(2, mCSFragment);
+                switchFragment(2, fragment3);
                 break;
             case R.id.ll_message:
-                switchFragment(3, testFragment);
+                switchFragment(3, fragment4);
                 break;
             case R.id.ll_mine:
-                switchFragment(4, mMineFragment);
+                switchFragment(4, fragment5);
                 break;
         }
 
