@@ -20,6 +20,9 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 
+/**
+ * 航班动态
+ */
 public class DynamicFragment extends BaseFragment {
     @BindView(R.id.tb_title)
     RadioGroup mRgTitle;
