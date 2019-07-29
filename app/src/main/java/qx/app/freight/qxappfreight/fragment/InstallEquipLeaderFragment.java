@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InstallEquipLeaderAdapter;
 import qx.app.freight.qxappfreight.adapter.LeaderInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
@@ -87,6 +88,46 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     public void onResume() {
         super.onResume();
         loadData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoadUnLoadTaskPushBean result) {
+        if (result != null) {
+            List<LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean> list = result.getTaskData().getStaffList();
+            StringBuilder addMembers = new StringBuilder();
+            StringBuilder removeMembers = new StringBuilder();
+            int addNumber = 0, removeNumber = 0;
+            if (list != null) {
+                for (LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean data : list) {
+                    if (data.getOperationType() == 1) {
+                        addMembers.append(data.getStaffName());
+                        addMembers.append("、");
+                        addNumber += 1;
+                    }
+                    if (data.getOperationType() == 2) {
+                        removeMembers.append(data.getStaffName());
+                        removeMembers.append("、");
+                        removeNumber += 1;
+                    }
+                }
+            }
+            String toast="";
+            if (addNumber != 0 && removeNumber != 0) {
+                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
+                        "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")," + "移除了" + removeNumber + "个成员(" +
+                        removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
+            }
+            if (addNumber == 0 && removeNumber != 0) {
+                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务移除了" + removeNumber + "个成员(" +
+                        removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
+            }
+            if (addNumber != 0 && removeNumber == 0) {
+                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
+                        "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")";
+            }
+            Log.e("tagTest","toast==="+toast);
+            ToastUtil.showToast(toast);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

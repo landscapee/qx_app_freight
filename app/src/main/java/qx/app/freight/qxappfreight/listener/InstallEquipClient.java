@@ -26,6 +26,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -132,7 +133,7 @@ public class InstallEquipClient extends StompClient {
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         } else {
-                            if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5")|| topicMessage.getPayload().contains("\"taskType\":6")|| topicMessage.getPayload().contains("\"taskType\":7")|| topicMessage.getPayload().contains("\"taskType\":8")) {//装卸机
+                            if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5") || topicMessage.getPayload().contains("\"taskType\":6") || topicMessage.getPayload().contains("\"taskType\":7") || topicMessage.getPayload().contains("\"taskType\":8")) {//装卸机
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
@@ -140,6 +141,10 @@ public class InstallEquipClient extends StompClient {
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
+                            } else if (topicMessage.getPayload().contains("\"stevedoresStaffChange\":true")) {//装卸员任务变换
+                                Gson gson = new Gson();
+                                LoadUnLoadTaskPushBean data = gson.fromJson(topicMessage.getPayload(), LoadUnLoadTaskPushBean.class);
+                                pushLoadUnLoadTask(data);
                             } else {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
@@ -150,7 +155,7 @@ public class InstallEquipClient extends StompClient {
 
             compositeDisposable.add(dispTopic3);
             //订阅  装机单变更推送
-            Log.e("tagPush","userid====="+UserInfoSingle.getInstance().getUserId());
+            Log.e("tagPush", "userid=====" + UserInfoSingle.getInstance().getUserId());
             Disposable loadingListPush = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -207,7 +212,7 @@ public class InstallEquipClient extends StompClient {
 
     public void reConnect(String uri) {
         WebSocketService.subList.clear();
-        if (mTimerReConnect!=null)
+        if (mTimerReConnect != null)
             mTimerReConnect.cancel();
         mTimerReConnect = new Timer();
         mTimerTaskReConnect = new TimerTask() {
@@ -255,13 +260,20 @@ public class InstallEquipClient extends StompClient {
         EventBus.getDefault().post(bean);
     }
 
+    //用于装卸员任务人变换通知
+    public static void pushLoadUnLoadTask(LoadUnLoadTaskPushBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
+
     private void sendLoadingListPush(String result) {
         EventBus.getDefault().post(result);
     }
+
     private void showDialog() {
         CommonDialog dialog = new CommonDialog(mContext);
         dialog.setTitle("提示")
