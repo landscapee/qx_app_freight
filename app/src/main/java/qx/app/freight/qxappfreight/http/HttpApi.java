@@ -67,6 +67,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -671,6 +672,11 @@ public interface HttpApi {
      */
     @POST("service-bussiness-facility/uld/saveOrUpdate")
     Observable<BaseEntity<Object>> saveOrUpdate(@Body SaveOrUpdateEntity entity);
+
+
+
+    @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
+    Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
 
     /**
      * 获取基础参数类型

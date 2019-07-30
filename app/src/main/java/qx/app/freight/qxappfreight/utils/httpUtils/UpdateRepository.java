@@ -69,6 +69,7 @@ import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -1131,6 +1132,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<ListByTypeBean> listByType(BaseFilterEntity entity){
         return transform(getService().listByType(entity));
+    }
+    /**
+     * ULD根据字段过滤
+     * @param entity
+     * @return
+     */
+    public Observable<LastReportInfoListBean> getLastReportInfo(BaseFilterEntity entity){
+        return transform(getService().getLastReportInfo(entity));
     }
 
     public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity){
