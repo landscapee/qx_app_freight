@@ -171,6 +171,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     }
 
     private void initData() {
+
         mPresenter = new ChangeStorageListPresenter(this);
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
