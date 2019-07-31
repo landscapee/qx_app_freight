@@ -1148,5 +1148,9 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<FindAirlineAllBean>> findAirlineAll(){
         return transform(getService().findAirlineAll());
     }
+
+    public Observable<String> synchronousLoading(BaseFilterEntity entity){
+        return nothingtransform(getService().synchronousLoading(entity));
+    }
 }
 
