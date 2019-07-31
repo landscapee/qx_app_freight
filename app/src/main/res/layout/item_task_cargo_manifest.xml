@@ -28,14 +28,13 @@
                 <TextView
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:background="@drawable/shape_rect_blue_b3d1fb"
+                    android:background="@drawable/shape_rect_black"
                     android:id="@+id/flight_id"
                     android:layout_width="wrap_content"
                     android:layout_height="33dp"
                     android:gravity="center_vertical"
-                    android:textColor="#136bef"
+                    android:textColor="@color/white"
                     android:drawablePadding="5dp"
-                    android:drawableLeft="@mipmap/flight"
                     android:textStyle="bold"
                     android:textSize="15sp" />
 
@@ -44,6 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
+                    android:drawableLeft="@mipmap/flight"
                     android:text=""
                     android:textColor="@color/black_3" />
 

@@ -18,9 +18,9 @@ public class LnstallationAdapter extends BaseQuickAdapter<TransportDataBase, Bas
     @Override
     protected void convert(BaseViewHolder helper, TransportDataBase item) {
         helper.setText(R.id.flight_id, item.getFlightNo());
-        helper.setText(R.id.tv_flight_type, item.getAircraftNo());
-        helper.setText(R.id.tv_flight_type, item.getVersion());
-        helper.setText(R.id.tv_flight_task_type, item.getSeat());
+        helper.setText(R.id.tv_flight_type, item.getSeat());
+//        helper.setText(R.id.tv_flight_type, item.getVersion());
+        helper.setText(R.id.tv_flight_task_type, item.getVersion());
         helper.setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getEtd()), TimeUtils.getDay((item.getEtd()))));
         helper.setText(R.id.tv_flight_1, item.getFlightCourseByAndroid().get(0))
                 .setText(R.id.tv_flight_2, item.getFlightCourseByAndroid().get(1));

@@ -233,7 +233,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setRoleCode(Constants.JUNCTION_LOAD);
         //舱单传
-        entity.setUndoType(1);
+        entity.setUndoType(2);
         List<String> ascs = new ArrayList<>();
         ascs.add("ETD");
         entity.setAscs(ascs);

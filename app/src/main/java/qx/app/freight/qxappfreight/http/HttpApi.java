@@ -685,4 +685,11 @@ public interface HttpApi {
      */
     @GET("service-base-flight/f-flight/configCenterData/findAirlineAll")
     Observable<BaseEntity<List<FindAirlineAllBean>>> findAirlineAll();
+    /**
+     * 通知录入
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
+    Observable<BaseEntity<Object>> synchronousLoading(BaseFilterEntity entity);
 }
