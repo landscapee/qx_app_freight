@@ -126,7 +126,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         title.setTotal("件数");
         title.setSpecialNumber("特货代码");
         mList.add(0,title);
-        ManifestScooterListAdapter adapter=new ManifestScooterListAdapter(mList,false);
+        ManifestScooterListAdapter adapter=new ManifestScooterListAdapter(mList);
         mRvData.setAdapter(adapter);
     }
 

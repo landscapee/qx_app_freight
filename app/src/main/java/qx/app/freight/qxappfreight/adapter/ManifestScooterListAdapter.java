@@ -14,22 +14,14 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
-import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 /**
  * 货邮舱单列表数据适配器
  */
 public class ManifestScooterListAdapter extends BaseQuickAdapter<ManifestScooterListBean, BaseViewHolder> {
-    private boolean mCanCommit;
 
-    private ManifestScooterListAdapter(@Nullable List<ManifestScooterListBean> list) {
+    public ManifestScooterListAdapter(@Nullable List<ManifestScooterListBean> list) {
         super(R.layout.item_manifest_scooter, list);
-    }
-
-    public ManifestScooterListAdapter(@Nullable List<ManifestScooterListBean> list, boolean canCommit) {
-        this(list);
-        mCanCommit = canCommit;
     }
 
     @Override
@@ -68,12 +60,8 @@ public class ManifestScooterListAdapter extends BaseQuickAdapter<ManifestScooter
                 tv.setTextColor(Color.parseColor("#000000"));
             }
         }
-        if (mCanCommit) {
-            helper.getView(R.id.sp_berth).setVisibility(View.VISIBLE);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getManifestList());
-            ((Spinner) helper.getView(R.id.sp_berth)).setAdapter(spinnerAdapter);
-        } else {
-            helper.getView(R.id.sp_berth).setVisibility(View.GONE);
-        }
+        helper.getView(R.id.sp_berth).setVisibility(View.VISIBLE);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getManifestList());
+        ((Spinner) helper.getView(R.id.sp_berth)).setAdapter(spinnerAdapter);
     }
 }
