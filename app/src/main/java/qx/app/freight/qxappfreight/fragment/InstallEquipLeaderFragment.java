@@ -166,7 +166,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     }
                 }
                 showDialogTask();
-
             }
         }
     }
@@ -180,9 +179,10 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
         mDialog = new PushLoadUnloadLeaderDialog();
+        Log.e("tagTest","mData======"+mListCacheUse.size());
         mDialog.setData(getContext(), mListCacheUse, success -> {
             if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-//                ToastUtil.showToast("领受装卸机新任务成功");
+                ToastUtil.showToast("领受新装卸任务成功");
                 Observable.timer(300, TimeUnit.MILLISECONDS)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -190,7 +190,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                             loadData();
                         });
                 mListCacheUse.clear();
-                showDialogTask();
             } else {//领受失败后，清空未领受列表缓存
                 Log.e("tagPush", "推送出错了");
                 mListCacheUse.clear();
@@ -357,8 +356,19 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
             mCacheList.add(bean);
         }
-        seachByText();
-        setSlideListener();
+        mListCache.clear();
+        for (LoadAndUnloadTodoBean bean:mCacheList){
+            if (!bean.isAcceptTask()){
+                mListCache.add(bean);
+            }
+        }
+        if (mListCache.size()!=0){
+            mCacheList.removeAll(mListCache);
+            showDialogTask();
+        }else {
+            seachByText();
+            setSlideListener();
+        }
         if (mTaskFragment != null) {
             if (isShow)
                 mTaskFragment.setTitleText(mCacheList.size());

@@ -28,6 +28,10 @@ public class MultiFunctionRecylerView extends LinearLayout {
         initView();
     }
 
+    public void setRefreshStyle(boolean loadMore) {
+        mRefreshView.setCanLoadMore(loadMore);
+    }
+
     public MultiFunctionRecylerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;

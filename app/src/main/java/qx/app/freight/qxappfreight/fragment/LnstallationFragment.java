@@ -27,22 +27,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
-import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.LnstallationAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -53,8 +48,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 装机单页面
  */
-public class LnstallationFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView ,MultiFunctionRecylerView.OnRefreshListener,EmptyLayout.OnRetryLisenter {
-
+public class LnstallationFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
 
 
     @BindView(R.id.mfrv_data)
@@ -98,7 +92,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         });
 
         mSearchBar.setVisibility(View.GONE);
-        mSearchBar.getCloseView().setOnClickListener(v->{
+        mSearchBar.getCloseView().setOnClickListener(v -> {
             mSearchBar.getSearchView().setText("");
 
             mToolBar.setVisibility(View.VISIBLE);
@@ -119,7 +113,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 
 
     @Override
-    public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
@@ -132,19 +126,16 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
     }
 
     private void gotoScan() {
-        if (TextUtils.isEmpty(nowRoleCode)){
+        if (TextUtils.isEmpty(nowRoleCode)) {
             return;
         }
 
-        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+        ScanManagerActivity.startActivity(getContext(), "MainActivity");
 
     }
 
 
-
-
-
-    private void initData(){
+    private void initData() {
         adapter = new LnstallationAdapter(list);
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
@@ -187,7 +178,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
@@ -234,12 +225,12 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
     private void getData() {
 
         mPresenter = new GroupBoardToDoPresenter(this);
-        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
         entity.setRoleCode(Constants.JUNCTION_LOAD);
         //装机单传2
         entity.setUndoType(2);
-        List<String> ascs=new ArrayList<>();
+        List<String> ascs = new ArrayList<>();
         ascs.add("ETD");
         entity.setAscs(ascs);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
@@ -264,7 +255,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 
     /**
      * 待办锁定 - 回调
-     //     * @param result
+     * //     * @param result
      */
 //    @Override
 //    public void taskLockResult(String result) {
@@ -272,9 +263,6 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 ////            turnToDetailActivity(CURRENT_TASK_BEAN);
 //        }
 //    }
-
-
-
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
 
