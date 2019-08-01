@@ -2,9 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -13,35 +10,45 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 
 /**
  * 货邮舱单列表数据适配器
  */
-public class LnstallationListAdapter extends BaseQuickAdapter<ManifestScooterListBean, BaseViewHolder> {
+public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBean.ScootersBean, BaseViewHolder> {
 
-    public LnstallationListAdapter(@Nullable List<ManifestScooterListBean> list) {
+    public LnstallationListAdapter(@Nullable List<LnstallationInfoBean.ScootersBean> list) {
         super(R.layout.item_manifest_scooter, list);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ManifestScooterListBean item) {
+    protected void convert(BaseViewHolder helper, LnstallationInfoBean.ScootersBean item) {
         String type = "邮件";
-        if ("C".equals(item.getMailType())) {
+        if ("C".equals(item.getType())) {
             type = "货物";
-        } else if ("BY".equals(item.getMailType())) {
+        } else if ("M".equals(item.getType())) {
+            type = "邮件";
+        } else if ("B".equals(item.getType())) {
             type = "行李";
-        } else if ("类型".equals(item.getMailType())) {
-            type = "类型";
+        } else if ("T".equals(item.getType())) {
+            type = "转港行李";
+        } else if ("BY".equals(item.getType())) {
+            type = "仓行李";
+        } else if ("BT".equals(item.getType())) {
+            type = "过站行李";
+        } else if ("CT".equals(item.getType())) {
+            type = "过站货物";
+        } else if ("X".equals(item.getType())) {
+            type = "空集装箱";
         }
         helper.setText(R.id.tv_manifest, item.getSuggestRepository())
                 .setText(R.id.tv_goods_position, item.getGoodsPosition())
-                .setText(R.id.tv_scooter_number, item.getScooterCode())
-                .setText(R.id.tv_uld_number, item.getUldCode())
-                .setText(R.id.tv_to_city, item.getToCity())
-                .setText(R.id.tv_type, type)
-                .setText(R.id.tv_weight, String.valueOf(item.getWeight()))
-                .setText(R.id.tv_total, String.valueOf(item.getTotal()))
+                .setText(R.id.tv_scooter_number, item.getSerialInd() == null ? "- -" : item.getSerialInd())
+                .setText(R.id.tv_uld_number, item.getUldCode() == null ? "- -" : item.getUldCode())
+                .setText(R.id.tv_to_city, item.getDest() == null ? "- -" : item.getDest())
+                .setText(R.id.tv_type, type == null ? "- -" : type)
+                .setText(R.id.tv_weight, item.getActWgt() == null ? "- -" : item.getActWgt())
+                .setText(R.id.tv_total, item.getRestrictedCargo() == null ? "-  -" : item.getRestrictedCargo())
                 .setText(R.id.tv_special_number, item.getSpecialNumber());
 
         TextView tv1 = helper.getView(R.id.tv_manifest);

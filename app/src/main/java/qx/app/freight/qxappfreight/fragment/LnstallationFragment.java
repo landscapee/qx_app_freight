@@ -121,6 +121,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
+        mMfrvData.setRefreshStyle(false);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -309,7 +310,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
-        getData();
+//        pageCurrent++;
+//        getData();
     }
 }
