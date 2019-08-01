@@ -691,5 +691,12 @@ public interface HttpApi {
      * @return
      */
     @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
-    Observable<BaseEntity<Object>> synchronousLoading(BaseFilterEntity entity);
+    Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
+    /**
+     * 释放
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/auditManifest")
+    Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
 }

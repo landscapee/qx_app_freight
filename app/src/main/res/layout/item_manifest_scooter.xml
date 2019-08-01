@@ -11,13 +11,14 @@
         android:textColor="@color/white"
         android:id="@+id/tv_manifest"
         android:gravity="center"/>
-    <Spinner
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:id="@+id/sp_berth"
-        android:gravity="center_vertical|end"
-        android:spinnerMode="dropdown"
-        />
+    <!--<Spinner-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/sp_berth"-->
+        <!--android:gravity="center_vertical|end"-->
+        <!--android:spinnerMode="dropdown"-->
+        <!--/>-->
+
     <TextView
         android:layout_width="60dp"
         android:layout_height="match_parent"

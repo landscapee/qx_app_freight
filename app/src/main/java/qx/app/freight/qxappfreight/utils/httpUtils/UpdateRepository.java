@@ -1152,5 +1152,9 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> synchronousLoading(BaseFilterEntity entity){
         return nothingtransform(getService().synchronousLoading(entity));
     }
+
+    public Observable<String> auditManifest(BaseFilterEntity entity){
+        return nothingtransform(getService().auditManifest(entity));
+    }
 }
 

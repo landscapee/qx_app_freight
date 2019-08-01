@@ -57,5 +57,6 @@ public class BaseFilterEntity<T> {
     private String  flightInfoId;
     private String staffId;
     private String staffIds;
+    private String operationUser;
     private int documentType;
 }

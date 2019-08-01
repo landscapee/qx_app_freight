@@ -166,6 +166,9 @@
             android:name=".activity.ReturnGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.LnstallationInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.CargoManifestInfoActivity"
             android:screenOrientation="portrait" />
         <activity
