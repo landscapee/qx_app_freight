@@ -37,7 +37,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  *
  * create by swd
  */
-public class InternationalCargoFragment extends BaseFragment implements GetAllInternationalAndMixedFlightContract.getAllInternationalAndMixedFlightView, MultiFunctionRecylerView.OnRefreshListener , EmptyLayout.OnRetryLisenter {
+public class CargoFragment extends BaseFragment implements GetAllInternationalAndMixedFlightContract.getAllInternationalAndMixedFlightView, MultiFunctionRecylerView.OnRefreshListener , EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
