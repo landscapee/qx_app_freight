@@ -49,7 +49,7 @@
         <activity android:name=".activity.StoreTypeChangeActivity" />
         <activity android:name=".activity.ClearStorageDetailActivity" />
         <activity
-            android:name=".activity.InternationalCargoListActivity"
+            android:name=".activity.CargoListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BaggageListConfirmActivity"
