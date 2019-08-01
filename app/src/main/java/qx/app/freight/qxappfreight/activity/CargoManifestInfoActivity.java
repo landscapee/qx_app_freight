@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,12 +23,16 @@ import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
+import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -35,7 +40,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 /****
  * 货邮舱单详情页面
  */
-public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView {
+public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView, AuditManifestContract.auditManifestView {
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -52,8 +57,14 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     TextView mTvDate;//日期
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mRvData;//货邮舱单信息列表
+    @BindView(R.id.bt_shifang)
+    Button mBtShifang;    //释放
+    @BindView(R.id.btn_refuse)
+    Button mBtRefuse;    //释放
     private TransportDataBase mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
+
+    private String mId;
 
     @Override
     public int getLayoutId() {
@@ -83,18 +94,35 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mRvData.setOnRetryLisenter(this);
         mRvData.setRefreshStyle(false);
         loadData();
+        //释放
+        mBtShifang.setOnClickListener(v -> {
+            mPresenter = new AuditManifestPresenter(this);
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setReportInfoId(mId);
+            entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+            entity.setAuditType("2");
+            entity.setTaskId(mBaseData.getTaskId());
+            entity.setReturnReason("手持端退回请求");
+            ((AuditManifestPresenter) mPresenter).auditManifest(entity);
+
+        });
+        mBtRefuse.setOnClickListener(v -> {
+
+        });
     }
 
     private void loadData() {
         mPresenter = new GetLastReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightInfoId(mBaseData.getFlightId());
+        //货邮舱单
         entity.setDocumentType(1);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
     }
 
     @Override
     public void getLastReportInfoResult(LastReportInfoListBean result) {
+        mId = result.getId();
         mRvData.finishRefresh();
         mList.clear();
         Gson mGson = new Gson();
@@ -148,5 +176,11 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void onLoadMore() {
+    }
+
+    @Override
+    public void auditManifestResult(String result) {
+        ToastUtil.showToast(result);
+        finish();
     }
 }

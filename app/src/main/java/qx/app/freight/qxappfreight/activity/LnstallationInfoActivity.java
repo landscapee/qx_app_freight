@@ -107,7 +107,8 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         mPresenter = new GetLastReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightInfoId(mBaseData.getFlightId());
-        entity.setDocumentType(1);
+        //装机单
+        entity.setDocumentType(2);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
     }
 

@@ -59,4 +59,11 @@ public class BaseFilterEntity<T> {
     private String staffIds;
     private String operationUser;
     private int documentType;
+    //报载记录ID
+    private String reportInfoId;
+    //操作类型
+    private String auditType;
+    //退回报载原因
+    private String returnReason;
+
 }

@@ -35,7 +35,7 @@
         android:id="@+id/tv_goods_name"
         android:gravity="center"/>
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:textColor="@color/white"
         android:text="体积"

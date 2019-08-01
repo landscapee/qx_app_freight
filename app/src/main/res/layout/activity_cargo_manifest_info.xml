@@ -53,56 +53,118 @@
             android:text="132"
             android:textSize="@dimen/sp_12" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:orientation="horizontal"
         android:padding="@dimen/dp_10">
+
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="8:45"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/dp_10"
             android:id="@+id/tv_time_take_off"
-            android:drawableStart="@mipmap/take_off"/>
-        <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="8:45"
-            android:gravity="center_vertical"
+            android:drawableStart="@mipmap/take_off"
             android:drawablePadding="@dimen/dp_10"
-            android:id="@+id/tv_time_fall_down"
-            android:drawableStart="@mipmap/landfall"/>
+            android:gravity="center_vertical"
+            android:text="8:45" />
+
         <TextView
+            android:id="@+id/tv_time_fall_down"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@mipmap/landfall"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:text="8:45" />
+
+        <TextView
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="2018-11-24"
             android:gravity="center_vertical"
-            android:id="@+id/tv_date"
-            />
+            android:text="2018-11-24" />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:text="货邮舱单"
-        android:textSize="@dimen/sp_12"
-        android:gravity="center_vertical"
-        android:padding="@dimen/dp_10"
-        android:drawableStart="@mipmap/news_normal"
-        android:drawablePadding="@dimen/dp_10"
-        android:background="@color/gray_8f"
-        android:textColor="@color/grassgreen"/>
-    <HorizontalScrollView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
-        <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
-            android:id="@+id/mfrv_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </HorizontalScrollView>
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/gray_8f"
+            android:drawableStart="@mipmap/news_normal"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp_10"
+            android:text="货邮舱单"
+            android:textColor="@color/grassgreen"
+            android:textSize="@dimen/sp_12" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+                android:id="@+id/mfrv_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.01" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4">
+
+
+        <Button
+            android:id="@+id/bt_shifang"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_blue"
+            android:text="释放"
+            android:textColor="@color/white" />
+
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Button
+            android:id="@+id/btn_refuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="打印"
+            android:textColor="@color/black" />
+
+
+    </LinearLayout>
 
 </LinearLayout>
