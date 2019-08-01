@@ -96,7 +96,7 @@ public class ManifestScooterListBean {
         private boolean addAndOnceAgainBtnIsShow;
         private String runTimeScooterId;
         private int scooterType;
-        private int number;
+        private String number;
         private int inflightnum;
         private String updateWeight;
         private boolean changeAndOnceAgainBtnIsShow;
@@ -108,11 +108,11 @@ public class ManifestScooterListBean {
         private String weightDisplay;
         private int groupScooterStatus;
         private String numberDisplay;
-        private int weight;
+        private String weight;
         private int inFlight;
         private String realWeight;
         private int scooterWeight;
-        private int volume;
+        private String volume;
         private int receivecargoNumber;
         private String mailType;
         private boolean onceAgainBtnIsShow;

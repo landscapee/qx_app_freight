@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -20,7 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ManifestScooterListAdapter;
+import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
@@ -30,7 +28,6 @@ import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -38,7 +35,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 /****
  * 货邮舱单详情页面
  */
-public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter,GetLastReportInfoContract.getLastReportInfoView {
+public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView {
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -56,7 +53,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mRvData;//货邮舱单信息列表
     private TransportDataBase mBaseData;
-    private List<ManifestScooterListBean> mList=new ArrayList<>();
+    private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_cargo_manifest_info;
@@ -69,7 +67,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "舱单详情");
-        mBaseData= (TransportDataBase) getIntent().getSerializableExtra("data");
+        mBaseData = (TransportDataBase) getIntent().getSerializableExtra("data");
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftNo());
         FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightCourseByAndroid());
@@ -77,18 +75,19 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mLlContainer.removeAllViews();
         mLlContainer.addView(layout, paramsMain);
         mTvSeat.setText(mBaseData.getSeat());
-        mTvTakeOff.setText(StringUtil.getTimeTextByRegix(mBaseData.getEtd(),"HH:mm"));
-        mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(),"HH:mm"));
-        mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(),"yyyy-MM-dd"));
+        mTvTakeOff.setText(StringUtil.getTimeTextByRegix(mBaseData.getEtd(), "HH:mm"));
+        mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(), "HH:mm"));
+        mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(), "yyyy-MM-dd"));
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mRvData.setRefreshListener(this);
         mRvData.setOnRetryLisenter(this);
         mRvData.setRefreshStyle(false);
         loadData();
     }
-    private void loadData(){
-        mPresenter=new GetLastReportInfoPresenter(this);
-        BaseFilterEntity entity=new BaseFilterEntity();
+
+    private void loadData() {
+        mPresenter = new GetLastReportInfoPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightInfoId(mBaseData.getFlightId());
         entity.setDocumentType(1);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
@@ -100,33 +99,21 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mList.clear();
         Gson mGson = new Gson();
         ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
-//        List<String> manifest=new ArrayList<>();
-        for (ManifestMainBean data:datas){
-            List<ManifestMainBean.CargosBean> list1 = data.getCargos();
-            for (ManifestMainBean.CargosBean bean:list1){
-                for (ManifestScooterListBean data1:bean.getScooters()){
-                    data1.setToCity(data.getToCity());
-                    data1.setMailType(data1.getWaybillList().get(0).getMailType());
-//                    manifest.add(data1.getSuggestRepository());
+        for (ManifestMainBean data : datas) {
+            for (ManifestMainBean.CargosBean bean : data.getCargos()) {
+                for (ManifestScooterListBean data1 : bean.getScooters()) {
+                    mList.addAll(data1.getWaybillList());
                 }
-                mList.addAll(bean.getScooters());
             }
         }
-//        for (ManifestScooterListBean data:mList){
-//            data.setManifestList(manifest);
-//        }
-        ManifestScooterListBean title=new ManifestScooterListBean();
-        title.setSuggestRepository("舱位");
-        title.setGoodsPosition("货位");
-        title.setScooterCode("板车号");
-        title.setUldCode("ULD号");
-        title.setToCity("目的站");
-        title.setMailType("类型");
+        ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
+        title.setWaybillCode("运单号");
         title.setWeight("重量");
-        title.setTotal("件数");
-        title.setSpecialNumber("特货代码");
-        mList.add(0,title);
-        ManifestScooterListAdapter adapter=new ManifestScooterListAdapter(mList);
+        title.setNumber("件数");
+        title.setCargoCn("货物名称");
+        title.setVolume("体积");
+        mList.add(0, title);
+        ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
         mRvData.setAdapter(adapter);
     }
 
@@ -144,6 +131,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     public void dissMiss() {
         dismissProgessDialog();
     }
+
     @Override
     public void onRetry() {
         showProgessDialog("正在加载数据……");
