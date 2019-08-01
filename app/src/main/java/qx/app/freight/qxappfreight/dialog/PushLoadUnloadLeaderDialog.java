@@ -71,6 +71,12 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         mRvData.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new DialogLoadUnloadPushAdapter(list);
         mRvData.setAdapter(mAdapter);
+        TextView tvGoods=convertView.findViewById(R.id.tv_goods_weight);
+        TextView tvMail=convertView.findViewById(R.id.tv_mail_weight);
+        TextView tvBaggage=convertView.findViewById(R.id.tv_baggage_weight);
+        tvGoods.setText("货物:"+list.get(0).getCargoWeight());
+        tvMail.setText("邮件:"+list.get(0).getMailWeight());
+        tvBaggage.setText("行李:"+list.get(0).getBaggageWeight());
         setListeners();
     }
 
@@ -135,7 +141,6 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
             entity.setTaskId(list.get(0).getTaskId());
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter.refuseTask(entity);
-
         });
     }
 

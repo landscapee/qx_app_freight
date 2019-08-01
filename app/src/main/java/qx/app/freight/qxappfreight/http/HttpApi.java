@@ -6,6 +6,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -616,7 +617,7 @@ public interface HttpApi {
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
-    Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
+    Observable<BaseEntity<Object>> internationalCargoReport(@Body CargoUploadBean model);
 
     //版本更新检测
     @POST("app/scheduling/findVersionUpdate")

@@ -15,7 +15,37 @@
         android:text="@string/format_new_task_push"
         android:textColor="@color/white"
         android:textSize="18sp" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_margin="@dimen/dp_10"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:text="货物"
+            android:textColor="@color/mywork_item_txt"
+            android:gravity="center"
+            android:id="@+id/tv_goods_weight"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:text="行李"
+            android:textColor="@color/mywork_item_txt"
+            android:gravity="center"
+            android:id="@+id/tv_baggage_weight"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:text="邮件"
+            android:textColor="@color/mywork_item_txt"
+            android:gravity="center"
+            android:id="@+id/tv_mail_weight"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_load_unload_list"
         android:layout_width="match_parent"

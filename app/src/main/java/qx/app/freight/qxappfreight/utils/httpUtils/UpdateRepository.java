@@ -7,6 +7,7 @@ import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -1089,10 +1090,8 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<String> internationalCargoReport(String str) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                str);
-        return nothingtransform(getService().internationalCargoReport(requestBody));
+    public Observable<String> internationalCargoReport(CargoUploadBean entity) {
+        return nothingtransform(getService().internationalCargoReport(entity));
     }
 
     public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode) {

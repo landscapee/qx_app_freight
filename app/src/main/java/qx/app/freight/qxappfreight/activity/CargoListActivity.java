@@ -26,18 +26,23 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InternationalCargoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
 import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
+import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.InternationalCargoReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -49,7 +54,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 货物提交界面
  */
-public class CargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView, ScanScooterCheckUsedContract.ScanScooterCheckView {
+public class CargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView {
     @BindView(R.id.flight_id)
     TextView flightId;
     @BindView(R.id.tv_flight_type)
@@ -97,6 +102,9 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
     private CustomToolbar toolbar;
     private FlightLuggageBean flightBean;
     private String mScooterCode;
+    private double mBaggageWeight;//行李重量
+    private double mGoodsWeight;//货物重量
+    private double mMailWeight;//邮件重量
 
     @Override
     public int getLayoutId() {
@@ -111,6 +119,11 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "货物上报");
+        mPresenter = new GetFlightCargoResPresenter(this);
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(flightBean.getFlightId());
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         initView();
     }
 
@@ -195,15 +208,28 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
 
     //提交数据
     private void submitScooter() {
-        for (TransportTodoListBean item : mList) {
-            item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
-            item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
-            item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        if (mList.size() == 0) {
+            ToastUtil.showToast("请扫描板车");
+        } else {
+            for (TransportTodoListBean item : mList) {
+                item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
+                item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
+                item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+            }
+            CargoUploadBean entity = new CargoUploadBean();
+//        entity.setBaggageWeight(mBaggageWeight);
+//        entity.setMailWeight(mMailWeight);
+//        entity.setCargoWeight(mGoodsWeight);
+            entity.setBaggageWeight(1.11);
+            entity.setMailWeight(2.22);
+            entity.setCargoWeight(3.33);
+            entity.setData(mList);
+            entity.setMovement(flightBean.getFlightIndicator());
+            entity.setFlightId(Long.valueOf(flightBean.getFlightId()));
+            entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+            mPresenter = new InternationalCargoReportPresenter(this);
+            ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(entity);
         }
-        Gson gson = new Gson();
-        String json = gson.toJson(mList);
-        mPresenter = new InternationalCargoReportPresenter(this);
-        ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(json);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -314,5 +340,41 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
+    }
+
+    @Override
+    public void getLoadingListResult(LoadingListBean result) {
+        mGoodsWeight = 0;
+        mMailWeight = 0;
+        mBaggageWeight = 0;
+        if (result.getData() == null || result.getData().size() == 0) return;
+        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
+            switch (dataBean.getType()) {
+                case "C":
+                case "CT":
+                    mGoodsWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+                case "M":
+                    mMailWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+                case "B":
+                case "T":
+                case "BY":
+                case "BT":
+                    mBaggageWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+            }
+        }
+        Log.e("tagTest", "" + mGoodsWeight + mMailWeight + mBaggageWeight);
+    }
+
+    @Override
+    public void flightDoneInstallResult(String result) {
+
+    }
+
+    @Override
+    public void overLoadResult(String result) {
+
     }
 }
