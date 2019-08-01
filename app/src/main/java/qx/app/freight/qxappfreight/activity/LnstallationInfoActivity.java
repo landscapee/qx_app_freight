@@ -20,11 +20,11 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.LnstallationListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
@@ -63,7 +63,7 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
 
 
     private TransportDataBase mBaseData;
-    private List<ManifestScooterListBean> mList = new ArrayList<>();
+    private List<LnstallationInfoBean.ScootersBean> mList = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -88,13 +88,13 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         mTvTakeOff.setText(StringUtil.getTimeTextByRegix(mBaseData.getEtd(), "HH:mm"));
         mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(), "HH:mm"));
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(), "yyyy-MM-dd"));
-        mTvVersion.setText(mBaseData.getVersion() == null ?  "版本号：- -":"版本号：" + mBaseData.getVersion() );
+        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mRvData.setRefreshListener(this);
         mRvData.setOnRetryLisenter(this);
         mRvData.setRefreshStyle(false);
         loadData();
-        mBtSure.setOnClickListener(v->{
+        mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightInfoId(mBaseData.getFlightId());
@@ -117,31 +117,22 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         mRvData.finishRefresh();
         mList.clear();
         Gson mGson = new Gson();
-        ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
-        List<String> manifest = new ArrayList<>();
-        for (ManifestMainBean data : datas) {
-            List<ManifestMainBean.CargosBean> list1 = data.getCargos();
-            for (ManifestMainBean.CargosBean bean : list1) {
-                for (ManifestScooterListBean data1 : bean.getScooters()) {
-                    data1.setToCity(data.getToCity());
-                    data1.setMailType(data1.getWaybillList().get(0).getMailType());
-                    manifest.add(data1.getSuggestRepository());
-                }
-                mList.addAll(bean.getScooters());
+        LnstallationInfoBean[] datas = mGson.fromJson(result.getContent(), LnstallationInfoBean[].class);
+        for (LnstallationInfoBean data : datas) {
+            for (LnstallationInfoBean.ScootersBean data1 :data.getScooters()){
+                mList.add(data1);
             }
+
         }
-        for (ManifestScooterListBean data : mList) {
-            data.setManifestList(manifest);
-        }
-        ManifestScooterListBean title = new ManifestScooterListBean();
+        LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setSuggestRepository("舱位");
         title.setGoodsPosition("货位");
-        title.setScooterCode("板车号");
+        title.setSerialInd("板车号");
         title.setUldCode("ULD号");
-        title.setToCity("目的站");
-        title.setMailType("类型");
-        title.setWeight("重量");
-        title.setTotal("件数");
+        title.setDest("目的站");
+        title.setType("类型");
+        title.setActWgt("重量");
+        title.setRestrictedCargo("件数");
         title.setSpecialNumber("特货代码");
         mList.add(0, title);
         LnstallationListAdapter adapter = new LnstallationListAdapter(mList);

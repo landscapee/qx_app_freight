@@ -120,6 +120,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
+        mMfrvData.setRefreshStyle(false);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -308,7 +309,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
-        getData();
+//        pageCurrent++;
+//        getData();
     }
 }
