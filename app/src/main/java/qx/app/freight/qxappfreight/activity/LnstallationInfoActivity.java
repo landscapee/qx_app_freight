@@ -20,7 +20,6 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.LnstallationListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
@@ -119,7 +118,7 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         Gson mGson = new Gson();
         LnstallationInfoBean[] datas = mGson.fromJson(result.getContent(), LnstallationInfoBean[].class);
         for (LnstallationInfoBean data : datas) {
-            for (LnstallationInfoBean.ScootersBean data1 :data.getScooters()){
+            for (LnstallationInfoBean.ScootersBean data1 : data.getScooters()) {
                 mList.add(data1);
             }
 

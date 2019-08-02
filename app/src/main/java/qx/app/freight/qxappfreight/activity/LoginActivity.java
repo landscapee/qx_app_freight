@@ -54,7 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 登录页面
- * by 郭浩
+ *   by 郭浩
  */
 public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
@@ -80,12 +80,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
         checkVersion();
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-//        mEtPassWord.setText("09262X");
-//        mEtUserName.setText("wuyu");
+        mEtPassWord.setText("241922");
+        mEtUserName.setText("jialin");
 //        mEtPassWord.setText("111111");
-//        mEtUserName.setText("guoji");
-//        mEtPassWord.setText("111111");
-//        mEtUserName.setText("wuguiquan");
+//        mEtUserName.setText("wangsan");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });
@@ -230,7 +228,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 获取登录智能调度请求体
-     *
      * @return
      */
     private LoginEntity getLoginQxAiEntity() {
