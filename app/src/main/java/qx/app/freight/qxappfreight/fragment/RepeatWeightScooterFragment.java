@@ -73,6 +73,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         TodoScootersEntity entity = new TodoScootersEntity();
         entity.setFlightInfoId(flightId);
         entity.setTaskId(taskId);
+        entity.setFacility("1");
         ((TodoScootersPresenter) mPresenter).todoScooters(entity);
     }
 

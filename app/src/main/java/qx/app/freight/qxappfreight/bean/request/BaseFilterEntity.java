@@ -55,4 +55,5 @@ public class BaseFilterEntity<T> {
     private int outboundNumber;
     private String  waybillId;
     private String  flightInfoId;
+    private String facility;
 }
