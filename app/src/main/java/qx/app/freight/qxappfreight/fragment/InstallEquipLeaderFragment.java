@@ -196,10 +196,10 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     mListCacheUse.clear();
                     break;
             }
-            Tools.closeVibrator(getActivity());
+            Tools.closeVibrator(getActivity().getApplicationContext());
         });
         if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-            Tools.startVibrator(getActivity(),true,R.raw.ring);
+            Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
             mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
         }
     }
