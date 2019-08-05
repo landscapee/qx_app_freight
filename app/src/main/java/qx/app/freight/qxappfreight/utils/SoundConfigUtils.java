@@ -159,7 +159,7 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
      * (4)play
      */
     private SoundPool sp;
-    private Map<Integer, Integer> sources = null;
+    private Map <Integer, Integer> sources = null;
     private int streamId = 0;
 
     /**
@@ -168,7 +168,7 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
     @SuppressLint("UseSparseArrays")
     private void initSoundPool() {
         sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 100);  //(最多同时播放的音乐,音频的类型,品质)
-        sources = new HashMap<Integer, Integer>();
+        sources = new HashMap <Integer, Integer>();
         //sources.put(0, sp.load(context, R.raw.tip_01, 1)); //sp.load(上下文,资源,优先级);  加载资源需要充足的时间,可使线程休眠,加载铃声
         //sources.put(1, sp.load(context, R.raw.tip_02, 1)); //sp.load(上下文,资源,优先级);
         try {
@@ -196,7 +196,7 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
             //播放速率(0.5f-2.0f,1.0f表示正常,2.0f表示两倍速率)
             //返回值为streamId可作为之后的pause,stop的参数
         } catch (Exception e) {
-            Log.e("tagSound","音频播放失败");
+            Log.e("SoundConfigUtils","音频播放失败");
         }
     }
 
