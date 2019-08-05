@@ -131,6 +131,10 @@ public class InstallEquipClient extends StompClient {
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 data.setConfirmTask(false);//航班不保障了
                                 sendLoadUnLoadGroupBoard(data);
+                            }else if (topicMessage.getPayload().contains("\"taskFlag:4\"")){//装卸机任务超时自动完成
+                                CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
+                                CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
+                                sendLoadUnLoadGroupBoard(data);
                             }
                         } else {
                             if (topicMessage.getPayload().contains("taskType:1") || topicMessage.getPayload().contains("taskType:2") || topicMessage.getPayload().contains("taskType:3") || topicMessage.getPayload().contains("taskType:5") || topicMessage.getPayload().contains("\"taskType\":6") || topicMessage.getPayload().contains("\"taskType\":7") || topicMessage.getPayload().contains("\"taskType\":8")) {//装卸机
