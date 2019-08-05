@@ -33,11 +33,20 @@
             android:layout_marginLeft="13dp"
             >
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/tv_task_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="任务单号： YY12345672289123"
+                android:textColor="@color/black_3"
+                android:singleLine="true"
+                android:visibility="gone"
+                />-->
+            <TextView
+                android:id="@+id/tv_flight_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="航班号： CZ3456"
                 android:textColor="@color/black_3"
                 android:singleLine="true"
                 />

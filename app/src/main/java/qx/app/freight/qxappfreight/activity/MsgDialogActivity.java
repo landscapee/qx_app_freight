@@ -22,6 +22,9 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.RecLockAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
+import qx.app.freight.qxappfreight.utils.SoundConfigUtils;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.VibrationUtils;
 import qx.app.freight.qxappfreight.widget.CustomDividerItemDecoration;
 
 public class MsgDialogActivity extends BaseActivity {
@@ -64,14 +67,13 @@ public class MsgDialogActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SoundConfigUtils.getInstance(getApplicationContext()).playMediaPlayer(0, true, R.raw.ring);
-        VibrationUtils.openVibrator(mContext, true);
+        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        SoundConfigUtils.getInstance(getApplicationContext()).stopMediaPlayer();
+        Tools.closeVibrator(getApplicationContext());
         VibrationUtils.cancel(mContext);
     }
 
