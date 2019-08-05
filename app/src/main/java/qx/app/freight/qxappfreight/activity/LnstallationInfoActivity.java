@@ -3,7 +3,9 @@ package qx.app.freight.qxappfreight.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,7 +37,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
-public class LnstallationInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView, SynchronousLoadingContract.synchronousLoadingView {
+public class LnstallationInfoActivity extends BaseActivity implements  EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView, SynchronousLoadingContract.synchronousLoadingView {
 
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
@@ -54,11 +56,13 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
     @BindView(R.id.tv_version)
     TextView mTvVersion;//版本号
     @BindView(R.id.mfrv_data)
-    MultiFunctionRecylerView mRvData;//货邮舱单信息列表
+    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_sure)
     Button mBtSure;//通知录入
     @BindView(R.id.btn_refuse)
     Button mBtRefuse;//打印
+    @BindView(R.id.sr_refush)
+    SwipeRefreshLayout mSrRefush;
 
 
     private TransportDataBase mBaseData;
@@ -89,9 +93,11 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(), "yyyy-MM-dd"));
         mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
-        mRvData.setRefreshListener(this);
-        mRvData.setOnRetryLisenter(this);
-        mRvData.setRefreshStyle(false);
+//        mRvData.setRefreshListener(this);
+//        mRvData.setOnRetryLisenter(this);
+//        mRvData.setRefreshStyle(false);
+//        mRvData.ser
+
         loadData();
         mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
@@ -100,6 +106,7 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
             entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
+        mSrRefush.setOnRefreshListener(() -> loadData());
     }
 
     private void loadData() {
@@ -113,15 +120,17 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
 
     @Override
     public void getLastReportInfoResult(LastReportInfoListBean result) {
-        mRvData.finishRefresh();
+        mSrRefush.setRefreshing(false);
         mList.clear();
         Gson mGson = new Gson();
-        LnstallationInfoBean[] datas = mGson.fromJson(result.getContent(), LnstallationInfoBean[].class);
-        for (LnstallationInfoBean data : datas) {
-            for (LnstallationInfoBean.ScootersBean data1 : data.getScooters()) {
-                mList.add(data1);
-            }
+        if (result != null && result.getContent() != null) {
+            LnstallationInfoBean[] datas = mGson.fromJson(result.getContent(), LnstallationInfoBean[].class);
+            for (LnstallationInfoBean data : datas) {
+                for (LnstallationInfoBean.ScootersBean data1 : data.getScooters()) {
+                    mList.add(data1);
+                }
 
+            }
         }
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setSuggestRepository("舱位");
@@ -140,7 +149,21 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
 
     @Override
     public void toastView(String error) {
-        mRvData.finishRefresh();
+        mSrRefush.setRefreshing(false);
+//        LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
+//        title.setSuggestRepository("舱位");
+//        title.setGoodsPosition("货位");
+//        title.setSerialInd("板车号");
+//        title.setUldCode("ULD号");
+//        title.setDest("目的站");
+//        title.setType("类型");
+//        title.setActWgt("重量");
+//        title.setRestrictedCargo("件数");
+//        title.setSpecialNumber("特货代码");
+//        mList.add(0, title);
+//        LnstallationListAdapter adapter = new LnstallationListAdapter(mList);
+//        mRvData.setAdapter(adapter);
+//        mRvData.finishRefresh();
     }
 
     @Override
@@ -162,14 +185,14 @@ public class LnstallationInfoActivity extends BaseActivity implements MultiFunct
         }, 2000);
     }
 
-    @Override
-    public void onRefresh() {
-        loadData();
-    }
-
-    @Override
-    public void onLoadMore() {
-    }
+//    @Override
+//    public void onRefresh() {
+//        loadData();
+//    }
+//
+//    @Override
+//    public void onLoadMore() {
+//    }
 
     @Override
     public void synchronousLoadingResult(String result) {

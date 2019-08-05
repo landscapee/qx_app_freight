@@ -4,7 +4,9 @@ package qx.app.freight.qxappfreight.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -56,11 +58,16 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     @BindView(R.id.tv_date)
     TextView mTvDate;//日期
     @BindView(R.id.mfrv_data)
-    MultiFunctionRecylerView mRvData;//货邮舱单信息列表
+    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
     Button mBtShifang;    //释放
     @BindView(R.id.btn_refuse)
     Button mBtRefuse;    //释放
+
+    @BindView(R.id.sr_refush)
+    SwipeRefreshLayout mSrRefush;
+
+
     private TransportDataBase mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
 
@@ -90,9 +97,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(), "HH:mm"));
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(), "yyyy-MM-dd"));
         mRvData.setLayoutManager(new LinearLayoutManager(this));
-        mRvData.setRefreshListener(this);
-        mRvData.setOnRetryLisenter(this);
-        mRvData.setRefreshStyle(false);
+//        mRvData.setRefreshListener(this);
+//        mRvData.setOnRetryLisenter(this);
+//        mRvData.setRefreshStyle(false);
         loadData();
         //释放
         mBtShifang.setOnClickListener(v -> {
@@ -109,6 +116,12 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mBtRefuse.setOnClickListener(v -> {
 
         });
+        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
     }
 
     private void loadData() {
@@ -123,7 +136,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     @Override
     public void getLastReportInfoResult(LastReportInfoListBean result) {
         mId = result.getId();
-        mRvData.finishRefresh();
+//        mRvData.finishRefresh();
+        mSrRefush.setRefreshing(false);
         mList.clear();
         Gson mGson = new Gson();
         ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
@@ -147,7 +161,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void toastView(String error) {
-        mRvData.finishRefresh();
+        mSrRefush.setRefreshing(false);
+//        mRvData.finishRefresh();
     }
 
     @Override

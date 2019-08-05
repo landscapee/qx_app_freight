@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -90,43 +92,56 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_40"
-            android:background="@color/gray_8f"
-            android:drawableStart="@mipmap/news_normal"
-            android:drawablePadding="@dimen/dp_10"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_10"
-            android:text="装机单"
-            android:textColor="@color/grassgreen"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_version"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:background="@color/gray_8f"
-            android:drawablePadding="@dimen/dp_10"
-            android:gravity="center_vertical|right"
-            android:padding="@dimen/dp_10"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:background="@color/gray_8f"
+                android:drawableStart="@mipmap/news_normal"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_10"
+                android:text="装机单"
+                android:textColor="@color/grassgreen"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:background="@color/gray_8f"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|right"
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:id="@+id/sr_refush"
+            android:layout_height="match_parent">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mfrv_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </HorizontalScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
-
-        <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
-            android:id="@+id/mfrv_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </HorizontalScrollView>
 
     <Space
         android:layout_width="0dp"

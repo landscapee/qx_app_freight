@@ -106,18 +106,22 @@
             android:textColor="@color/grassgreen"
             android:textSize="@dimen/sp_12" />
 
-        <HorizontalScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scrollbars="none">
+            android:id="@+id/sr_refush"
+            android:layout_height="match_parent">
 
-            <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
-                android:id="@+id/mfrv_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
-        </HorizontalScrollView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mfrv_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </HorizontalScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
     <Space
