@@ -125,7 +125,7 @@ public class OffSiteEscortClient extends StompClient {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("taskType:0")) {//运输
+                            } else if (topicMessage.getPayload().contains("\"taskType:0\"")) {//运输
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);

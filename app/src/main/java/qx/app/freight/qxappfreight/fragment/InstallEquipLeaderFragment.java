@@ -188,6 +188,10 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                 case 1://拒绝任务后清除taskId记录
                     mDialog.dismiss();
                     mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
+                    if (isShow) {
+                        mTaskFragment.setTitleText(mTaskIdList.size());
+                        mMfrvData.notifyForAdapter(mAdapter);
+                    }
                     showDialogTask();
                     break;
                 case -1://领受失败后，清空未领受列表缓存
