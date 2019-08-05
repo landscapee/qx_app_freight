@@ -107,8 +107,6 @@ public class MainActivity extends BaseActivity implements LocationObservable {
         isJunctionLoad = Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
         if(isJunctionLoad){
             fragment1 =  new TaskFragment();
-            fragment2 =  new LnstallationFragment();
-            fragment3 = new CargoManifestFragment();
             fragment2 = new CargoManifestFragment();
             fragment3 =  new LnstallationFragment();
             fragment4 = new TestFragment();
