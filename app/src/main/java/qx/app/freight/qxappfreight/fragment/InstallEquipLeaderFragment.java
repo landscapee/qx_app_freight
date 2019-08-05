@@ -84,11 +84,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
@@ -111,21 +106,21 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     }
                 }
             }
-            String toast="";
+            String toast = "";
             if (addNumber != 0 && removeNumber != 0) {
-                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
+                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
                         "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")," + "移除了" + removeNumber + "个成员(" +
                         removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
             }
             if (addNumber == 0 && removeNumber != 0) {
-                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务移除了" + removeNumber + "个成员(" +
+                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务移除了" + removeNumber + "个成员(" +
                         removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
             }
             if (addNumber != 0 && removeNumber == 0) {
-                toast=result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
+                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
                         "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")";
             }
-            Log.e("tagTest","toast==="+toast);
+            Log.e("tagTest", "toast===" + toast);
             ToastUtil.showToast(toast);
         }
     }
@@ -174,25 +169,32 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
      * mListCache 为0 就不展示
      */
     private void showDialogTask() {
-        if (mDialog != null && !mDialog.isAdded() || mListCache.size() < 1)
+        if ((mDialog != null && mDialog.isAdded()) || mListCache.size() == 0)
             return;
+        mListCacheUse.clear();
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
         mDialog = new PushLoadUnloadLeaderDialog();
-        Log.e("tagTest","mData======"+mListCacheUse.size());
-        mDialog.setData(getContext(), mListCacheUse, success -> {
-            if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-                ToastUtil.showToast("领受新装卸任务成功");
-                Observable.timer(300, TimeUnit.MILLISECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(aLong -> {
-                            loadData();
-                        });
-                mListCacheUse.clear();
-            } else {//领受失败后，清空未领受列表缓存
-                Log.e("tagPush", "推送出错了");
-                mListCacheUse.clear();
+        Log.e("tagTest", "mData======" + mListCacheUse.size());
+        mDialog.setData(getContext(), mListCacheUse, status -> {
+            switch (status) {
+                case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
+                    mDialog.dismiss();
+                    ToastUtil.showToast("领受新装卸任务成功");
+                    mListCacheUse.clear();
+                    loadData();
+                    showDialogTask();
+                    break;
+                case 1://拒绝任务后清除taskId记录
+                    mDialog.dismiss();
+                    mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
+                    showDialogTask();
+                    break;
+                case -1://领受失败后，清空未领受列表缓存
+                    Log.e("tagPush", "推送出错了");
+                    mDialog.dismiss();
+                    mListCacheUse.clear();
+                    break;
             }
         });
         if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
@@ -249,15 +251,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         }
         if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(mAdapter);
-        }
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(String result) {
-        if (result.contains("InstallEquipFragment_refresh")) {
-            mSpecialTaskId = result.split("@")[1];
-            loadData();
         }
     }
 
@@ -357,15 +350,16 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mCacheList.add(bean);
         }
         mListCache.clear();
-        for (LoadAndUnloadTodoBean bean:mCacheList){
-            if (!bean.isAcceptTask()){
+        for (LoadAndUnloadTodoBean bean : mCacheList) {
+            if (!bean.isAcceptTask()) {
                 mListCache.add(bean);
             }
         }
-        if (mListCache.size()!=0){
-            mCacheList.removeAll(mListCache);
+        if (mListCache.size() != 0) {
+//            mCacheList.removeAll(mListCache);
+            Log.e("tagTest", "弹框。。。。。");
             showDialogTask();
-        }else {
+        } else {
             seachByText();
             setSlideListener();
         }

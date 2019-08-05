@@ -128,12 +128,9 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
                 return true;
             }).subscribe(aBoolean -> {
                 Log.e("tagTest", "循环结束，弹窗消失");
-                dismiss();
-                onDismissListener.refreshUI(true);
             }, throwable -> {
                 Log.e("tagTest", "循环结束，调接口出错了");
-                dismiss();
-                onDismissListener.refreshUI(false);
+                onDismissListener.refreshUI(-1);
             });
         });
         mTvRefuse.setOnClickListener(v -> {
@@ -167,15 +164,14 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
     @Override
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
-            Log.e("tagPush", "循环调取领受接口正确");
+            onDismissListener.refreshUI(0);
         }
     }
 
     @Override
     public void refuseTaskResult(String result) {
         ToastUtil.showToast("拒绝任务操作成功");
-        dismiss();
-        onDismissListener.refreshUI(true);
+        onDismissListener.refreshUI(1);
     }
 
     @Override
@@ -194,7 +190,7 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
     }
 
     public interface OnDismissListener {
-        void refreshUI(boolean success);
+        void refreshUI(int status);//1拒绝成功，0，领受成功，-1，调接口出错
     }
 
     private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {

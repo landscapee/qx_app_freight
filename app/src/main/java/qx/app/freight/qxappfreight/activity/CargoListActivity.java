@@ -217,12 +217,12 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
                 item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
             }
             CargoUploadBean entity = new CargoUploadBean();
-//        entity.setBaggageWeight(mBaggageWeight);
-//        entity.setMailWeight(mMailWeight);
-//        entity.setCargoWeight(mGoodsWeight);
-            entity.setBaggageWeight(1.11);
-            entity.setMailWeight(2.22);
-            entity.setCargoWeight(3.33);
+            entity.setBaggageWeight(mBaggageWeight);
+            entity.setMailWeight(mMailWeight);
+            entity.setCargoWeight(mGoodsWeight);
+//            entity.setBaggageWeight(1.11);
+//            entity.setMailWeight(2.22);
+//            entity.setCargoWeight(3.33);
             entity.setData(mList);
             entity.setMovement(flightBean.getFlightIndicator());
             entity.setFlightId(Long.valueOf(flightBean.getFlightId()));
