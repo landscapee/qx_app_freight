@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,8 +22,6 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.RecLockAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
-import qx.app.freight.qxappfreight.utils.SoundConfigUtils;
-import qx.app.freight.qxappfreight.utils.VibrationUtils;
 import qx.app.freight.qxappfreight.widget.CustomDividerItemDecoration;
 
 public class MsgDialogActivity extends BaseActivity {

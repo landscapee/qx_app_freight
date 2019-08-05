@@ -35,7 +35,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 /*****
  * 清库功能
  */
-public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView {
+public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView{
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
     @BindView(R.id.mfrv_data)
@@ -232,5 +232,4 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     public void dissMiss() {
 
     }
-
 }
