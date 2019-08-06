@@ -65,7 +65,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView , LoadAndUnloadTodoContract.loadAndUnloadTodoView{
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -86,6 +86,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     SlideRecyclerView mSlideRvGoods;//航班货物信息列表
     @BindView(R.id.ll_add_scan_goods)
     LinearLayout mLlScanGoods;//扫描货物数据
+    @BindView(R.id.ll_scan)
+    LinearLayout mLlScan;//扫板容器控件
     @BindView(R.id.tv_scan_goods)
     TextView mTvScanGoods;//扫描货物控件文字
     @BindView(R.id.tv_board_pac_number)
@@ -133,6 +135,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        if (mData.getWidthAirFlag() == 0) {
+            mLlScan.setVisibility(View.GONE);
+        } else {
+            mLlScan.setVisibility(View.VISIBLE);
+        }
         mCurrentTaskId = mData.getTaskId();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo() + "  卸机");
         mTvPlaneInfo.setText(mData.getFlightNo());
@@ -473,7 +480,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mData.getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 

@@ -222,7 +222,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
         if (result.getTaskId() != null && (result.isCancelFlag() || result.isChangeWorkerUser())) {
             canCelTask(result.getTaskId());
-        } else {
+        } else if (result.isTransportTaskAutoDone()){
+            getData();
+        }else {
             List<AcceptTerminalTodoBean> list = result.getTaskData();
             if (list != null)
                 listCache.addAll(list);

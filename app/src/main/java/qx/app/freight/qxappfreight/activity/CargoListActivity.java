@@ -26,17 +26,23 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InternationalCargoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
+import qx.app.freight.qxappfreight.dialog.ChoseFlightTypeDialog;
+import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.InternationalCargoReportPresenter;
 import qx.app.freight.qxappfreight.presenter.ScanScooterCheckUsedPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -46,10 +52,9 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
- * 国际货物提交界面
+ * 货物提交界面
  */
-public class InternationalCargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView, ScanScooterCheckUsedContract.ScanScooterCheckView {
-
+public class CargoListActivity extends BaseActivity implements InternationalCargoReportContract.internationalCargoReportView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView {
     @BindView(R.id.flight_id)
     TextView flightId;
     @BindView(R.id.tv_flight_type)
@@ -92,14 +97,14 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
     LinearLayout llAdd;
     @BindView(R.id.btn_next)
     Button btnNext;
-
     private InternationalCargoAdapter mAdapter;
     private List<TransportTodoListBean> mList;
     private CustomToolbar toolbar;
-
-    FlightLuggageBean flightBean;
-    private int flag = 0;
+    private FlightLuggageBean flightBean;
     private String mScooterCode;
+    private double mBaggageWeight;//行李重量
+    private double mGoodsWeight;//货物重量
+    private double mMailWeight;//邮件重量
 
     @Override
     public int getLayoutId() {
@@ -113,56 +118,54 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         flightBean = (FlightLuggageBean) intent.getSerializableExtra("flightBean");
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
-        toolbar.setMainTitle(Color.WHITE, "国际货物上报");
-
+        toolbar.setMainTitle(Color.WHITE, "货物上报");
+        mPresenter = new GetFlightCargoResPresenter(this);
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(flightBean.getFlightId());
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         initView();
     }
 
     private void initView() {
-
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mList = new ArrayList<>();
         mAdapter = new InternationalCargoAdapter(mList);
-        mAdapter.setOnDeleteClickListener(new InternationalCargoAdapter.OnDeleteClickLister() {
-            @Override
-            public void onDeleteClick(View view, int position) {
-                mSlideRV.closeMenu();
-                mList.remove(position);
-                mAdapter.notifyDataSetChanged();
-            }
+        mAdapter.setOnDeleteClickListener((view, position) -> {
+            mSlideRV.closeMenu();
+            mList.remove(position);
+            mAdapter.notifyDataSetChanged();
         });
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRV.setAdapter(mAdapter);
-
         //初始化ui界面
         flightId.setText(flightBean.getFlightNo());
         tvFlightType.setText(flightBean.getAircraftNo());
         tvFlightPlace.setText(flightBean.getSeat());
         tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getScheduleTime()), TimeUtils.getDay((flightBean.getScheduleTime()))));
         //显示航线，2条 3条 4条
-        if (flightBean.getFlightCourseByAndroid() !=null && flightBean.getFlightCourseByAndroid().size()>1)
-        switch (flightBean.getItemType()) {
-            case 2:
-                llFlight2.setVisibility(View.VISIBLE);
-                tvFlight21.setText(flightBean.getFlightCourseByAndroid().get(0));
-                tvFlight22.setText(flightBean.getFlightCourseByAndroid().get(1));
-
-                break;
-            case 3:
-                llFlight3.setVisibility(View.VISIBLE);
-                tvFlight31.setText(flightBean.getFlightCourseByAndroid().get(0));
-                tvFlight32.setText(flightBean.getFlightCourseByAndroid().get(1));
-                tvFlight33.setText(flightBean.getFlightCourseByAndroid().get(2));
-                break;
-            case 4:
-                llFlight4.setVisibility(View.VISIBLE);
-                tvFlight41.setText(flightBean.getFlightCourseByAndroid().get(0));
-                tvFlight42.setText(flightBean.getFlightCourseByAndroid().get(1));
-                tvFlight43.setText(flightBean.getFlightCourseByAndroid().get(2));
-                tvFlight44.setText(flightBean.getFlightCourseByAndroid().get(3));
-                break;
-        }
+        if (flightBean.getFlightCourseByAndroid() != null && flightBean.getFlightCourseByAndroid().size() > 1)
+            switch (flightBean.getItemType()) {
+                case 2:
+                    llFlight2.setVisibility(View.VISIBLE);
+                    tvFlight21.setText(flightBean.getFlightCourseByAndroid().get(0));
+                    tvFlight22.setText(flightBean.getFlightCourseByAndroid().get(1));
+                    break;
+                case 3:
+                    llFlight3.setVisibility(View.VISIBLE);
+                    tvFlight31.setText(flightBean.getFlightCourseByAndroid().get(0));
+                    tvFlight32.setText(flightBean.getFlightCourseByAndroid().get(1));
+                    tvFlight33.setText(flightBean.getFlightCourseByAndroid().get(2));
+                    break;
+                case 4:
+                    llFlight4.setVisibility(View.VISIBLE);
+                    tvFlight41.setText(flightBean.getFlightCourseByAndroid().get(0));
+                    tvFlight42.setText(flightBean.getFlightCourseByAndroid().get(1));
+                    tvFlight43.setText(flightBean.getFlightCourseByAndroid().get(2));
+                    tvFlight44.setText(flightBean.getFlightCourseByAndroid().get(3));
+                    break;
+            }
     }
 
     @OnClick({R.id.ll_add, R.id.btn_next})
@@ -205,21 +208,33 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
 
     //提交数据
     private void submitScooter() {
-
-        for (TransportTodoListBean item : mList) {
-            item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
-            item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
-            item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+        if (mList.size() == 0) {
+            ToastUtil.showToast("请扫描板车");
+        } else {
+            for (TransportTodoListBean item : mList) {
+                item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
+                item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
+                item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+            }
+            CargoUploadBean entity = new CargoUploadBean();
+            entity.setBaggageWeight(mBaggageWeight);
+            entity.setMailWeight(mMailWeight);
+            entity.setCargoWeight(mGoodsWeight);
+//            entity.setBaggageWeight(1.11);
+//            entity.setMailWeight(2.22);
+//            entity.setCargoWeight(3.33);
+            entity.setData(mList);
+            entity.setMovement(flightBean.getFlightIndicator());
+            entity.setFlightId(Long.valueOf(flightBean.getFlightId()));
+            entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+            mPresenter = new InternationalCargoReportPresenter(this);
+            ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(entity);
         }
-        Gson gson = new Gson();
-        String json = gson.toJson(mList);
-        mPresenter = new InternationalCargoReportPresenter(this);
-        ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(json);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("InternationalCargoListActivity")) {
+        if (result.getFunctionFlag().equals("CargoListActivity")) {
             //板车号
             mScooterCode = result.getData();
             if (!"".equals(mScooterCode)) {
@@ -239,30 +254,52 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
-            TransportTodoListBean bean = new TransportTodoListBean();
-            bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
-            bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
-
-            bean.setFlightId(flightBean.getFlightId());
-            bean.setFlightNo(flightBean.getFlightNo());
-            bean.setTpFlightLocate(flightBean.getSeat());
-            bean.setTpFlightTime(flightBean.getScheduleTime());
-            bean.setFlightInfoId(flightBean.getId());
-            bean.setAsFlightId(flightBean.getSuccessionId());
-            bean.setTpFlightType(flightBean.getTpFlightType());
-            bean.setFlightIndicator("I");
-
-            mList.add(bean);
-            mAdapter.notifyDataSetChanged();
-
+            String flightType = flightBean.getFlightIndicator();
+            if ("D".equals(flightType) || "I".equals(flightType)) {
+                for (ScooterInfoListBean bean : scooterInfoListBeans) {
+                    bean.setFlightType(flightType);
+                }
+                showBoardInfos(scooterInfoListBeans);
+            } else {
+                ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+                dialog.setData(this, isLocal -> {
+                    if (isLocal) {
+                        for (ScooterInfoListBean bean : scooterInfoListBeans) {
+                            bean.setFlightType("D");
+                        }
+                    } else {
+                        for (ScooterInfoListBean bean : scooterInfoListBeans) {
+                            bean.setFlightType("I");
+                        }
+                    }
+                    showBoardInfos(scooterInfoListBeans);
+                });
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "111");
+            }
         } else {
             ToastUtil.showToast("无该板信息");
         }
     }
 
+    private void showBoardInfos(List<ScooterInfoListBean> scooterInfoListBeans) {
+        TransportTodoListBean bean = new TransportTodoListBean();
+        bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
+        bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+        bean.setFlightId(flightBean.getFlightId());
+        bean.setFlightNo(flightBean.getFlightNo());
+        bean.setTpFlightLocate(flightBean.getSeat());
+        bean.setTpFlightTime(flightBean.getScheduleTime());
+        bean.setFlightInfoId(flightBean.getId());
+        bean.setAsFlightId(flightBean.getSuccessionId());
+        bean.setTpFlightType(flightBean.getTpFlightType());
+        bean.setFlightIndicator("I");
+        mList.add(bean);
+        mAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void toastView(String error) {
-
     }
 
     @Override
@@ -281,17 +318,17 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
             checkScooterCode(mScooterCode);
-
         } else {
             Log.e("resultCode", "收货页面不是200");
         }
     }
 
-    /**检测板车号是否可用
+    /**
+     * 检测板车号是否可用
      *
      * @param scooterCode
      */
-    private void checkScooterCode(String scooterCode){
+    private void checkScooterCode(String scooterCode) {
         mPresenter = new ScanScooterCheckUsedPresenter(this);
         ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
     }
@@ -303,5 +340,41 @@ public class InternationalCargoListActivity extends BaseActivity implements Inte
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
+    }
+
+    @Override
+    public void getLoadingListResult(LoadingListBean result) {
+        mGoodsWeight = 0;
+        mMailWeight = 0;
+        mBaggageWeight = 0;
+        if (result.getData() == null || result.getData().size() == 0) return;
+        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
+            switch (dataBean.getType()) {
+                case "C":
+                case "CT":
+                    mGoodsWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+                case "M":
+                    mMailWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+                case "B":
+                case "T":
+                case "BY":
+                case "BT":
+                    mBaggageWeight += Double.valueOf(dataBean.getActWgt());
+                    break;
+            }
+        }
+        Log.e("tagTest", "" + mGoodsWeight + mMailWeight + mBaggageWeight);
+    }
+
+    @Override
+    public void flightDoneInstallResult(String result) {
+
+    }
+
+    @Override
+    public void overLoadResult(String result) {
+
     }
 }

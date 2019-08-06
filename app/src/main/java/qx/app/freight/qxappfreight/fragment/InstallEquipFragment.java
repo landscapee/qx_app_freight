@@ -134,12 +134,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         Log.e("tagPush", "推送出错了");
                         mListCache.clear();
                     }
+                    Tools.closeVibrator(getActivity().getApplicationContext());
                 });
                 if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
                     if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
                         loadData();
                         mListCache.clear();
                     } else {
+                        Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
                         mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示

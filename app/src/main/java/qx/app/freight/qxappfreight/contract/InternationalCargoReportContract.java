@@ -4,12 +4,13 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 
 public class InternationalCargoReportContract {
     public interface internationalCargoReportModel {
-        void internationalCargoReport(String str,IResultLisenter lisenter);
+        void internationalCargoReport(CargoUploadBean entity, IResultLisenter lisenter);
 
         void scooterInfoList(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
     }

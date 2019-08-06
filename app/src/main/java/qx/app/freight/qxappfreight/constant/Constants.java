@@ -58,6 +58,10 @@ public class Constants {
      * 装卸机
      */
     public static String INSTALL_UNLOAD_EQUIP = "supervision";
+    /**
+     * 装卸员小组长
+     */
+    public static String INSTALL_EQUIP_LEADER = "stevedores";
 
     /**
      * 结载

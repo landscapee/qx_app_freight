@@ -88,6 +88,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=supervision");
                     break;
+                case "stevedores":  //装卸员小组长任务推送
+                    InstallEquipClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=supervision");
+                    break;
                 case "clipping":  //结载
                     InstallEquipClient(HttpConstant.WEBSOCKETURL
                             + "userId=" + UserInfoSingle.getInstance().getUserId()

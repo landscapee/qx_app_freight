@@ -152,6 +152,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private String consignee;
     private String consigneePhone;
     private String consigneeIdentityCard;
+    private String version;
     /**
      * 提货人名
      * */

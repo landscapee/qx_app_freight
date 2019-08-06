@@ -61,7 +61,7 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
         if (r == null) {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             //Uri uri = Uri.parse("android.resource://wisesoft.ctu.ags/raw/ring.mp3");
-            Uri uri = Uri.parse("android.resource://wisesoft.ctu.ags/" + R.raw.ring);
+            Uri uri = Uri.parse("android.resource://qx.app.freight.qxappfreight/" + R.raw.ring);
             r = RingtoneManager.getRingtone(context, uri);
         }
         r.play();
