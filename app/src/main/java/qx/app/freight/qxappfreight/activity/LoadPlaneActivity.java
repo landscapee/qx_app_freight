@@ -96,6 +96,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (mWaitCallBackDialog != null) {
             mWaitCallBackDialog.dismiss();
         }
+        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
         updatePushDialog.show();
     }
 
@@ -195,6 +196,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void getLoadingListResult(LoadingListBean result) {
+        Tools.closeVibrator(getApplicationContext());
         if ("318".equals(result.getStatus())) {
             mWaitCallBackDialog.show();
         } else {

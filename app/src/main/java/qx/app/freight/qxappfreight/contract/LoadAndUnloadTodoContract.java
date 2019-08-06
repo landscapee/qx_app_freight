@@ -12,11 +12,13 @@ public class LoadAndUnloadTodoContract {
 
     public interface loadAndUnloadTodoModel {
         void loadAndUnloadTodo(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+
         void slideTask(PerformTaskStepsEntity baseFilterEntity, IResultLisenter lisenter);
     }
 
     public interface loadAndUnloadTodoView extends IBaseView {
         void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean);
+
         void slideTaskResult(String result);
     }
 }

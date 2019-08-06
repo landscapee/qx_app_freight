@@ -6,9 +6,11 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -66,6 +68,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -431,6 +434,22 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
 
+    //装卸员小组长获取可选择人员 6是装机  7是卸机  8装卸机
+    @GET("service-product-transport/tp-stevedores/selectAreaStaffs/{taskId}")
+    Observable<BaseEntity<List<SelectTaskMemberEntity>>> getLoadUnloadLeaderList(@Path("taskId") String taskId);
+
+    //装卸员小组长任务代办获取  6是装机  7是卸机  8装卸机
+    @POST("service-product-transport/tp-stevedores/stevedoresTaskTodo")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getLoadUnloadLeaderToDo(@Body BaseFilterEntity model);
+
+    //装卸员小组长选择任务人员  6是装机  7是卸机  8装卸机
+    @POST("service-product-transport/tp-stevedores/stevedoresStaffSelect")
+    Observable<BaseEntity<Object>> selectMember(@Body BaseFilterEntity model);
+
+    //装卸员小组长任务拒绝
+    @POST("service-product-transport/tp-stevedores/stevedoresTaskRefuse")
+    Observable<BaseEntity<Object>> refuseTask(@Body BaseFilterEntity model);
+
     //结载代办
     @POST("service-product-transport/tp-main-info/passengerLoadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> getEndInstallTodo(@Body BaseFilterEntity model);
@@ -598,7 +617,7 @@ public interface HttpApi {
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
-    Observable<BaseEntity<Object>> internationalCargoReport(@Body RequestBody model);
+    Observable<BaseEntity<Object>> internationalCargoReport(@Body CargoUploadBean model);
 
     //版本更新检测
     @POST("app/scheduling/findVersionUpdate")
@@ -655,6 +674,11 @@ public interface HttpApi {
     @POST("service-bussiness-facility/uld/saveOrUpdate")
     Observable<BaseEntity<Object>> saveOrUpdate(@Body SaveOrUpdateEntity entity);
 
+
+
+    @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
+    Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
+
     /**
      * 获取基础参数类型
      *
@@ -662,4 +686,18 @@ public interface HttpApi {
      */
     @GET("service-base-flight/f-flight/configCenterData/findAirlineAll")
     Observable<BaseEntity<List<FindAirlineAllBean>>> findAirlineAll();
+    /**
+     * 通知录入
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
+    Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
+    /**
+     * 释放
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/auditManifest")
+    Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
 }

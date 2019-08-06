@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/gray_eff"
+    >
+
+    <qx.app.freight.qxappfreight.widget.CustomToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <qx.app.freight.qxappfreight.widget.SearchToolbar
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+        android:id="@+id/mfrv_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="7dp"
+        android:paddingLeft="7dp"/>
+</LinearLayout>

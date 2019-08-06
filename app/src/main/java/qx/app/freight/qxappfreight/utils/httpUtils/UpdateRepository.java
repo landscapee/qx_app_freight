@@ -7,9 +7,11 @@ import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
@@ -68,6 +70,7 @@ import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
+import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -95,6 +98,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 
@@ -663,6 +667,38 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<LoadAndUnloadTodoBean>> loadAndUnloadTodo(BaseFilterEntity model) {
         return transform(getService().loadAndUnloadTodo(model));
     }
+    /****
+     * 装卸员小组长任务代办
+     * @param  taskId
+     * @return
+     */
+    public Observable<List<SelectTaskMemberEntity>> getLoadUnloadLeaderList(String taskId) {
+        return transform(getService().getLoadUnloadLeaderList(taskId));
+    }
+    /****
+     * 装卸员小组长选择任务人员
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<String> selectMember(BaseFilterEntity baseFilterEntity) {
+        return nothingtransform(getService().selectMember(baseFilterEntity));
+    }
+    /****
+     * 装卸员小组长接收新任务拒绝任务
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<String> refuseTask(BaseFilterEntity baseFilterEntity) {
+        return nothingtransform(getService().refuseTask(baseFilterEntity));
+    }
+    /****
+     * 装卸员小组长任务代办列表
+     * @param  baseFilterEntity
+     * @return
+     */
+    public Observable<List<LoadAndUnloadTodoBean>> getLoadUnloadLeaderToDo(BaseFilterEntity baseFilterEntity) {
+        return transform(getService().getLoadUnloadLeaderToDo(baseFilterEntity));
+    }
 
     /****
      * 结载代办
@@ -1054,10 +1090,8 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<String> internationalCargoReport(String str) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                str);
-        return nothingtransform(getService().internationalCargoReport(requestBody));
+    public Observable<String> internationalCargoReport(CargoUploadBean entity) {
+        return nothingtransform(getService().internationalCargoReport(entity));
     }
 
     public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode) {
@@ -1098,12 +1132,28 @@ public class UpdateRepository extends BaseRepository {
     public Observable<ListByTypeBean> listByType(BaseFilterEntity entity){
         return transform(getService().listByType(entity));
     }
+    /**
+     * ULD根据字段过滤
+     * @param entity
+     * @return
+     */
+    public Observable<LastReportInfoListBean> getLastReportInfo(BaseFilterEntity entity){
+        return transform(getService().getLastReportInfo(entity));
+    }
 
     public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity){
         return nothingtransform(getService().saveOrUpdate(entity));
     }
     public Observable<List<FindAirlineAllBean>> findAirlineAll(){
         return transform(getService().findAirlineAll());
+    }
+
+    public Observable<String> synchronousLoading(BaseFilterEntity entity){
+        return nothingtransform(getService().synchronousLoading(entity));
+    }
+
+    public Observable<String> auditManifest(BaseFilterEntity entity){
+        return nothingtransform(getService().auditManifest(entity));
     }
 }
 

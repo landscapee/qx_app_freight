@@ -1,11 +1,9 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.contract.InternationalCargoReportContract;
 import qx.app.freight.qxappfreight.model.InternationalCargoReportModel;
@@ -16,9 +14,9 @@ public class InternationalCargoReportPresenter extends BasePresenter {
         mRequestModel = new InternationalCargoReportModel();
     }
 
-    public void internationalCargoReport(String str) {
+    public void internationalCargoReport(CargoUploadBean entity) {
         mRequestView.showNetDialog();
-        ((InternationalCargoReportModel) mRequestModel).internationalCargoReport(str, new IResultLisenter<String>() {
+        ((InternationalCargoReportModel) mRequestModel).internationalCargoReport(entity, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String result) {
                 ((InternationalCargoReportContract.internationalCargoReportView) mRequestView).internationalCargoReportResult(result);
