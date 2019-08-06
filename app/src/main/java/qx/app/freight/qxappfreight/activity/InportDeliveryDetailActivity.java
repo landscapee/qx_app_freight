@@ -101,7 +101,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
 //        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE,"提货");
-        mPresenter = new ArrivalDeliveryInfoPresenter(this);
+
         rView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         mAdapter = new DeliveryDetailAdapter(mList);
@@ -158,8 +158,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
     //完成
     private void deliveryComplet(){
+        mPresenter = new ArrivalDeliveryInfoPresenter(this);
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCounterbillId(bean.getSerialNumber());
+        entity.setBillId(bean.getSerialNumber());
         entity.setTaskId(bean.getTaskId());
         entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
         ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);

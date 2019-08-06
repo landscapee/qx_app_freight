@@ -171,6 +171,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
     }
 
     private void initData() {
+
         mPresenter = new ChangeStorageListPresenter(this);
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
@@ -187,13 +188,16 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             for (int i = 0; i < resTypeList.size(); i++) {
                 if (result.getOrgStorage().equals(resTypeList.get(i))) {
                     mTvOldType.setText(storageList.get(i));
+                }
+                if (result.getStorage().equals(resTypeList.get(i))) {
                     mTvType.setText(storageList.get(i));
                 }
             }
-            if (result.getOrgStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
+            if (result.getStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
                 llBaseTemperature.setVisibility(View.VISIBLE);
+                mTvLengCang.setText(result.getRefrigeratedTemperature());
             }
-            getShowStorage(result.getOrgStorage());
+            getShowStorage(result.getStorage());
         }
     }
 

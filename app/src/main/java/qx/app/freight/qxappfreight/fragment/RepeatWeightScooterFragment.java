@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**复重-板车列表
  * created by swd
@@ -53,6 +55,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.only_recyle_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initDialog();
         return view;
     }
 
@@ -62,7 +65,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         flightId = getArguments().getString("flightInfoId");
         taskId = getArguments().getString("taskId");
         initView();
-        initData();
+//        initData();
     }
 
     private void initData() {
@@ -86,9 +89,17 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
-        list.clear();
-        list.addAll(result);
-        adapter.notifyDataSetChanged();
+        if (result!= null){
+//            if (result.size() == 0){
+//                getActivity().finish();
+//                ToastUtil.showToast("该航班负重任务已完成");
+//                return;
+//            }
+            list.clear();
+            list.addAll(result);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override
@@ -103,11 +114,17 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void showNetDialog() {
-
+//        showProgessDialog("数据加载中……");
     }
 
     @Override
     public void dissMiss() {
+//        dismissProgessDialog();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 }

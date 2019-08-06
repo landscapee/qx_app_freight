@@ -140,7 +140,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         //旧订单号
         oldWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_origin), declareWaybillBean.getWaybillCode()));
         //航班号
-        flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNumber());
+        flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNo());
         if(declareWaybillBean.getFlightDate() == null){
             flightDataTv.setText("航班日期: -");
         }else{
@@ -156,7 +156,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         postalTv.setText(declareWaybillBean.getConsigneePostcode());
         addrTv.setText(declareWaybillBean.getConsigneeAddress());
         //货物信息
-        goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCargoCode());
+        goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCode());
         String bigSize = "";
         if(declareWaybillBean.getBigFlag() == 1)
             bigSize = "小件";

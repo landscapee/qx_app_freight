@@ -302,4 +302,22 @@ public class Tools {
         }, 0);
     }
 
+    /**
+     * 关闭震动/铃音
+     */
+    public static void closeVibrator(Context context) {
+        VibrationUtils.cancel(context);
+        SoundConfigUtils.getInstance(context).stopMediaPlayer();
+    }
+
+    /**
+     * 开启震动/铃音
+     * 是否一直循环提醒
+     * 指定铃音的资源id
+     */
+    public static void startVibrator(Context context,boolean isforcedispose, int rawId) {
+        SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
+        VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
+    }
+
 }
