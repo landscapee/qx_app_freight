@@ -122,7 +122,16 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
-            deliveryComplet();
+            //未完全出库 不能完成 提货任务
+            boolean isAllOut = true;
+            for (WaybillsBean mWaybillsBean : mList){
+                if (mWaybillsBean.getWaybillStatus() != 6){
+                    isAllOut = false;
+                    break;
+                }
+            }
+            if (isAllOut)
+                deliveryComplet();
         });
     }
     //根据流水单号获取列表
