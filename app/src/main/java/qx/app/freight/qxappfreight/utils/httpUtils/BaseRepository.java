@@ -4,7 +4,9 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.exception.DefaultException;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
@@ -30,7 +32,6 @@ public abstract class BaseRepository {
                     }
                 });
     }
-
 
     /*******
      * 沒有Data，直接返回Massage
@@ -75,7 +76,24 @@ public abstract class BaseRepository {
                     }
                 });
     }
-
+    /*******
+     *登录一期智能调度使用
+     * @param observable
+     * @param <T>
+     * @return
+     */
+    protected static <T> Observable<RespLoginBean> nothingDatatransformForOneDisP(Observable<RespLoginBean> observable) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(baseEntity -> {
+                    if (null != baseEntity) {
+                        return baseEntity;
+                    } else {
+                        throw new DefaultException("服务器数据异常");
+                    }
+                });
+    }
     protected static <T> Observable<String> notingflightTransform(Observable<BaseEntity<Object>> observable) {
         return observable
                 .subscribeOn(Schedulers.io())

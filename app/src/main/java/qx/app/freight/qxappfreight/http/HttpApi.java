@@ -85,6 +85,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
@@ -122,9 +123,9 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> updatePWD(@Body UpdatePwdEntity model);
 
     //登录一期智能调度 获取im使用 token
-    @POST("app/appLogin")
+    @POST("userLogin")
     @FormUrlEncoded
-    Observable<BaseEntity<LoginBean>> loginQxAi(@FieldMap Map<String, String> map);
+    Observable<RespLoginBean> loginQxAi(@FieldMap Map<String, String> masp);
 
     /***********收验****************************/
     //获取货代公司资质

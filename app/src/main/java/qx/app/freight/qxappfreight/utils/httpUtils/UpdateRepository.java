@@ -87,6 +87,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
@@ -160,8 +161,8 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<LoginBean> loginQxAi(Map<String, String> map) {
-        return transform(getServiceQxAi().loginQxAi(map));
+    public Observable<RespLoginBean> loginQxAi(Map<String, String> map) {
+        return nothingDatatransformForOneDisP(getServiceQxAi().loginQxAi(map));
     }
 
     /*****

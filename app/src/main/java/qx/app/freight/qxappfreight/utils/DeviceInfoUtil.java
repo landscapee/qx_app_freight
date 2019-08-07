@@ -59,4 +59,8 @@ public class DeviceInfoUtil {
     public static String getPhoneDevice() {
         return android.os.Build.DEVICE;
     }
+    public static String getPhoneNumber(Context ctx) {
+        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getLine1Number();
+    }
 }

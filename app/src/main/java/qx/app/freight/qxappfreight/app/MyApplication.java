@@ -38,7 +38,7 @@ public class MyApplication extends Application {
 
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
 
-//        initIM();//初始化IM服务配置
+        initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

@@ -50,7 +50,7 @@ public class ToastUtil {
             toast =Toast.makeText(context, s, Toast.LENGTH_SHORT);
             toast.show();
             oneTime=System.currentTimeMillis();
-            Log.e("toast==null",s);
+//            Log.e("toast==null",s);
         }else{
             twoTime=System.currentTimeMillis();
             if(s.equals(oldMsg)){
