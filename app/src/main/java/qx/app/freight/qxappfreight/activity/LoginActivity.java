@@ -367,11 +367,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     private void showAppUpdateDialog() {
         UpDateVersionDialog dialog = new UpDateVersionDialog(this);
 
+
         dialog.setTitle("版本更新")
                 .setMessage("更新版本：" + mVersionBean.getData().getVersionCode() + "\n更新内容：" + mVersionBean.getData().getUpdateMsg())
                 .setNegativeButton("立即更新")
                 .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
+                .isCanceled(false)
                 .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {

@@ -6,4 +6,6 @@ import lombok.Data;
 public class TodoScootersEntity {
     public String flightInfoId;
     private String taskId;
+    private String facility;
+
 }

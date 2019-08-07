@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -27,8 +28,10 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -39,6 +42,7 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 
 /**
  * 复重扫一扫页面
@@ -81,6 +85,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     Button btnReturn;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
+    @BindView(R.id.recycler_view)
+    SlideRecyclerView recyclerView;
 
     private List<String> mRemarksList; //库区
     private String chenNum; //秤号
@@ -93,6 +99,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private int selectorOption = 10;
     private GetInfosByFlightIdBean mData;
     private CustomToolbar toolbar;
+    //运单列表相关
+    private List<WeightWayBillBean> wayBillBeanList;
+
+    private WeightWayBillBeanAdapter madapter;
 
     @Override
     public int getLayoutId() {
@@ -121,6 +131,12 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             ToastUtil.showToast("无该板车信息");
             finish();
             return;
+        }
+        wayBillBeanList = mData.getGroupScooters();
+        if (wayBillBeanList!=null){
+            madapter = new WeightWayBillBeanAdapter(wayBillBeanList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(madapter);
         }
         switch (mData.getReWeightFinish()){
             case 0:
