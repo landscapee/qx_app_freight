@@ -302,35 +302,42 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
                 if (i == 5) continue;//下标为5时，需要跳过，进入下一轮循环，对应的操作code为FreightUnloadFinish
-                if (i == 7) break;  //下标为7时，需要退出循环，时间显示列表的总size为6
-                int index = i;
-                if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
-                    index++;//筛选卸机结束和装机结束的步骤项
-                }
-                LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(index);
-                entity1.setFlightType(bean.getFlightType());
-                int type;
-                if (i < posNow) {//在应该执行的步骤前，类型为已执行
-                    type = Constants.TYPE_STEP_OVER;
-                } else if (i == posNow) {//是应该执行的步骤，类型为当前执行
-                    type = Constants.TYPE_STEP_NOW;
-                } else {//否则是未执行
-                    type = Constants.TYPE_STEP_NEXT;
-                }
-                entity1.setItemType(type);
-                if (i == 3 || (bean.getTaskType() == 5 && i == 4)) {//只要位置是第四步，或者代办类型是装卸机一体并且位置是第五步，则需要根据服务器传回的时间显示成指定的格式
-                    String[] timeArray = times.get(i).split(":");
-                    String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));
-                    String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
-                    entity1.setStepDoneDate(start + "-" + end);
-                } else {
-                    int listIndex;
-                    if (i == 6) {//下标为6时，时间显示必须设置为第6个时间
-                        listIndex = 5;
-                    } else {
-                        listIndex = i;
+                if (i == 7) {//下标为7时，特殊处理
+                    LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
+                    entity1.setFlightType(bean.getFlightType());
+                    if (posNow==5){
+                        entity1.setItemType(Constants.TYPE_STEP_NOW);
                     }
-                    entity1.setStepDoneDate("0".equals(times.get(listIndex)) ? "" : sdf.format(new Date(Long.valueOf(times.get(listIndex)))));
+                }  else {
+                    int index = i;
+                    if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
+                        index++;//筛选卸机结束和装机结束的步骤项
+                    }
+                    LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(index);
+                    entity1.setFlightType(bean.getFlightType());
+                    int type;
+                    if (i < posNow) {//在应该执行的步骤前，类型为已执行
+                        type = Constants.TYPE_STEP_OVER;
+                    } else if (i == posNow) {//是应该执行的步骤，类型为当前执行
+                        type = Constants.TYPE_STEP_NOW;
+                    } else {//否则是未执行
+                        type = Constants.TYPE_STEP_NEXT;
+                    }
+                    entity1.setItemType(type);
+                    if (i == 3 || (bean.getTaskType() == 5 && i == 4)) {//只要位置是第四步，或者代办类型是装卸机一体并且位置是第五步，则需要根据服务器传回的时间显示成指定的格式
+                        String[] timeArray = times.get(i).split(":");
+                        String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));
+                        String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
+                        entity1.setStepDoneDate(start + "-" + end);
+                    } else {
+                        int listIndex;
+                        if (i == 6) {//下标为6时，时间显示必须设置为第6个时间
+                            listIndex = 5;
+                        } else {
+                            listIndex = i;
+                        }
+                        entity1.setStepDoneDate("0".equals(times.get(listIndex)) ? "" : sdf.format(new Date(Long.valueOf(times.get(listIndex)))));
+                    }
                 }
             }
             List<String> codeList = new ArrayList<>();

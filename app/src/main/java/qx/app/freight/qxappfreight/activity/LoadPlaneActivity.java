@@ -47,7 +47,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
- * 理货装机页面
+ * 装机页面
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.rv_data)
