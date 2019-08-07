@@ -33,11 +33,11 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 /**
  * 运输adapter
  */
-public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBean, BaseViewHolder> {
+public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBean, BaseViewHolder> {
 
     private OnStepListener mOnStepListener;
 
-    public DriverOutTaskAdapter(List <AcceptTerminalTodoBean> mDatas) {
+    public DriverOutTaskAdapter(List<AcceptTerminalTodoBean> mDatas) {
         super(R.layout.item_driver_out_task, mDatas);
     }
 
@@ -47,7 +47,15 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBe
 
 //        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
         helper.setText(R.id.tv_task_id, item.getTaskNumber());
-        helper.setText(R.id.tv_task_num, "任务单号:" + item.getTaskId());
+//        helper.setText(R.id.tv_task_num, "任务单号:" + item.getTaskId());
+        StringBuilder sb = new StringBuilder();
+        if (item.getTasks() != null && item.getTasks().size() != 0) {
+            for (OutFieldTaskBean task : item.getTasks()) {
+                sb.append(task.getFlightNo());
+                sb.append("&");
+            }
+        }
+        helper.setText(R.id.tv_flight_number, "航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
         helper.setText(R.id.tv_task_type, item.getProjectName());
         helper.setText(R.id.tv_task_status, "#执行中#");
         //列表设置
@@ -55,7 +63,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter <AcceptTerminalTodoBe
         RecyclerView mRecyclerView = helper.getView(R.id.rv_step);
         mRecyclerView.setLayoutManager(manager);
 
-        List <List <OutFieldTaskBean>> list1 = new ArrayList <>();
+        List<List<OutFieldTaskBean>> list1 = new ArrayList<>();
         list1.addAll(item.getUseTasks());
         TaskStepAdapter mTaskStepAdapter = new TaskStepAdapter(list1);
         mRecyclerView.setAdapter(mTaskStepAdapter);

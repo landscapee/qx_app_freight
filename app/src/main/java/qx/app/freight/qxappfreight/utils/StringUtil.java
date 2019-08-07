@@ -9,9 +9,12 @@ import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -335,5 +338,17 @@ public class StringUtil {
             }
             entity.setFlightInfoList(resultList);
         }
+    }
+
+    /**
+     * 根据格式字符串生成对应的时间字符串
+     * @param timeMillions  时间毫秒值
+     * @param regix         格式字符串
+     * @return  结果
+     */
+    public static String getTimeTextByRegix(long timeMillions,String regix){
+        SimpleDateFormat sdf=new SimpleDateFormat(regix, Locale.CHINESE);
+        Date date=new Date(timeMillions);
+        return sdf.format(date);
     }
 }

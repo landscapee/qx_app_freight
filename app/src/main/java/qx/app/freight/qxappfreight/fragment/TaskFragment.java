@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,11 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
-import qx.app.freight.qxappfreight.activity.ChooseWeighScanActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -166,6 +163,7 @@ public class TaskFragment extends BaseFragment {
             return;
         }
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+            String code=UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode();
             if (Constants.RECEIVE.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskCollectVerifyFragment());
                 list_Title.add("收验");
@@ -193,8 +191,9 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InstallEquipFragment());
                 list_Title.add("装卸机");
-//                fragmentList.add(new InPortTallyFragment());
-//                list_Title.add("进港理货");
+            }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment
+                list_Title.add("装卸机");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
@@ -208,8 +207,8 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new JunctionLoadFragment());
                 list_Title.add("结载");
             }else if(Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new InternationalCargoFragment());
-                list_Title.add("国际货物");
+                fragmentList.add(new CargoFragment());
+                list_Title.add("货物");
             }
 
         }

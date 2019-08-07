@@ -101,7 +101,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
 //        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE,"提货");
-        mPresenter = new ArrivalDeliveryInfoPresenter(this);
+
         rView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
         mAdapter = new DeliveryDetailAdapter(mList);
@@ -122,7 +122,16 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
-            deliveryComplet();
+            //未完全出库 不能完成 提货任务
+            boolean isAllOut = true;
+            for (WaybillsBean mWaybillsBean : mList){
+                if (mWaybillsBean.getWaybillStatus() != 6){
+                    isAllOut = false;
+                    break;
+                }
+            }
+            if (isAllOut)
+                deliveryComplet();
         });
     }
     //根据流水单号获取列表
@@ -158,6 +167,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
     //完成
     private void deliveryComplet(){
+        mPresenter = new ArrivalDeliveryInfoPresenter(this);
         BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
         entity.setBillId(bean.getSerialNumber());
         entity.setTaskId(bean.getTaskId());

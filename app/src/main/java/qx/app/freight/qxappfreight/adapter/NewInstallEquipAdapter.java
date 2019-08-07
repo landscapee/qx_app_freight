@@ -97,16 +97,16 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                         if (TextUtils.isEmpty(item.getSeat())) {
                             ToastUtil.showToast("当前航班未分配机位，不能进行卸机操作");
                         } else {
-                            if (!isWidePlane) {//窄体机卸机才到卸机页面
-                                Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
-                                intent.putExtra("flight_type", item.getFlightType());
-                                intent.putExtra("plane_info", item);
-                                mContext.startActivity(intent);
-                            } else {
-                                item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-                                item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
-                            }
+//                            if (!isWidePlane) {//窄体机卸机才到卸机页面
+                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+                            intent.putExtra("flight_type", item.getFlightType());
+                            intent.putExtra("plane_info", item);
+                            mContext.startActivity(intent);
+//                            } else {
+//                                item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+//                                item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+//                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+//                            }
                         }
                     } else if (pos == 4) {
                         Intent intent = new Intent(mContext, LoadPlaneActivity.class);
@@ -123,22 +123,22 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                 } else {
                     if (pos == 3) {
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
-                        if (isWidePlane && item.getTaskType() == 2) {
-                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+//                        if (isWidePlane && item.getTaskType() == 2) {
+//                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+//                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+//                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+//                        } else {
+                        Intent intent;
+                        if (item.getTaskType() == 1) {
+                            intent = new Intent(mContext, LoadPlaneActivity.class);
+                            intent.putExtra("position", 3);
                         } else {
-                            Intent intent;
-                            if (item.getTaskType() == 1) {
-                                intent = new Intent(mContext, LoadPlaneActivity.class);
-                                intent.putExtra("position", 3);
-                            } else {
-                                intent = new Intent(mContext, UnloadPlaneActivity.class);
-                                intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
-                            }
-                            intent.putExtra("plane_info", item);
-                            mContext.startActivity(intent);
+                            intent = new Intent(mContext, UnloadPlaneActivity.class);
+                            intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
                         }
+                        intent.putExtra("plane_info", item);
+                        mContext.startActivity(intent);
+//                        }
                     } else {
                         item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
