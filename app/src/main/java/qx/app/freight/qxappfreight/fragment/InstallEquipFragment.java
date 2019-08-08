@@ -173,7 +173,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(position -> {
 //            mList.get(position).getMovement() == 4; //连班
-            IMUtils.chatToGroup(mContext,"12607028");
+            IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
         });
         loadData();
     }
