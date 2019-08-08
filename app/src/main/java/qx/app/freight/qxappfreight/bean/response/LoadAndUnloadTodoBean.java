@@ -180,6 +180,12 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private long std;//计划离港时间
         private long etd;//预计离港时间
         private long atd;//实际离港时间
+
+        private String timeForShow;//时间：实际到达（离港）时间  >  预计到达（离港）时间  >  计划到达（离港）时间
+        private int timeType;//时间显示类型：3，实际时间；2，预计时间；1，计划时间
+        private List<String> flightInfoList;//航线信息列表
+        private List<String> stepCodeList;//航线信息列表
+        private boolean showDetail;
     }
 
     @Data

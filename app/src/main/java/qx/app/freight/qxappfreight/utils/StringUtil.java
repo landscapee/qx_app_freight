@@ -318,7 +318,61 @@ public class StringUtil {
         bean.setTimeForShow(time);
         bean.setTimeType(timeType);
     }
+    /**
+     * 根据数据设置时间和时间显示类型
+     *
+     * @param bean 服务器传回的数据
+     */
+    public static void setTimeAndType(LoadAndUnloadTodoBean.RelateInfoObjBean bean) {
+        String time;
+        int timeType;
+//        if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
+//            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际到达时间
+//                time = TimeUtils.getHMDay(bean.getAta());
+//                timeType = Constants.TIME_TYPE_AUTUAL;
+//            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计到达时间
+//                time = TimeUtils.getHMDay(bean.getEta());
+//                timeType = Constants.TIME_TYPE_EXCEPT;
+//            } else {//计划到达时间
+//                time = TimeUtils.getHMDay(bean.getStd());
+//                timeType = Constants.TIME_TYPE_PLAN;
+//            }
+//        } else {//装机机任务显示时间
+            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
+                time = TimeUtils.getHMDay(bean.getAtd());
+                timeType = Constants.TIME_TYPE_AUTUAL;
+            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
+                time = TimeUtils.getHMDay(bean.getEtd());
+                timeType = Constants.TIME_TYPE_EXCEPT;
+            } else {//计划时间
+                time = TimeUtils.getHMDay(bean.getStd());
+                timeType = Constants.TIME_TYPE_PLAN;
+            }
+//        }
+        bean.setTimeForShow(time);
+        bean.setTimeType(timeType);
+    }
 
+    /**
+     * 设置航线数据
+     *
+     * @param route  航线数据
+     * @param entity 需要设置航线数据的实体
+     */
+    public static void setFlightRoute(String route, LoadAndUnloadTodoBean.RelateInfoObjBean entity) {
+        if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
+            entity.setFlightInfoList(new ArrayList<>());
+        } else {
+            String[] placeArray = route.split(",");
+            List<String> resultList = new ArrayList<>();
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str : placeList) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                resultList.add(temp);
+            }
+            entity.setFlightInfoList(resultList);
+        }
+    }
     /**
      * 设置航线数据
      *
