@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +37,8 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
  */
 public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
+    private OnFlightSafeguardListenner onFlightSafeguardListenner;
+
 
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
@@ -55,6 +58,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
+        Button btnFS = helper.getView(R.id.btn_flight_safeguard);
+        btnFS.setOnClickListener(v -> {
+            onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
+        });
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
         if (item.getTaskType() == 1) {//装机
@@ -193,5 +200,12 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
+    }
+    public interface OnFlightSafeguardListenner {
+        void onFlightSafeguardClick(int position);
+    }
+
+    public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {
+        this.onFlightSafeguardListenner = onFlightSafeguardListenner;
     }
 }

@@ -121,6 +121,21 @@
             android:scaleType="center"
             android:src="@mipmap/down" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        >
+        <Button
+            android:id="@+id/btn_flight_safeguard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#136BEF"
+            android:text="航班保障组"
+            />
+
+    </LinearLayout>
 
     <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
         android:id="@+id/coll_listview"

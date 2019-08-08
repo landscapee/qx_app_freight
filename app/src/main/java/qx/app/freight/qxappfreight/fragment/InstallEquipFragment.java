@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -170,6 +171,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
+        mAdapter.setOnFlightSafeguardListenner(position -> {
+//            mList.get(position).getMovement() == 4; //连班
+            IMUtils.chatToGroup(mContext,"12607028");
+        });
         loadData();
     }
 
