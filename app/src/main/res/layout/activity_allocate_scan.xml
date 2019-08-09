@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
@@ -404,8 +404,66 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_marginLeft="1px"
+                    android:background="@color/gray_576"
+                    android:gravity="center"
+                    android:padding="9dp"
+                    android:text="运单号"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="1.5"
+                    android:background="@color/gray_576"
+                    android:gravity="center"
+                    android:padding="9dp"
+                    android:text="品名"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="1"
+                    android:background="@color/gray_576"
+                    android:gravity="center"
+                    android:padding="9dp"
+                    android:text="件数"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="1"
+                    android:background="@color/gray_576"
+                    android:gravity="center"
+                    android:padding="9dp"
+                    android:text="重量"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <qx.app.freight.qxappfreight.widget.SlideRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
     <View
         android:background="#e3e3e3"
         android:layout_width="match_parent"

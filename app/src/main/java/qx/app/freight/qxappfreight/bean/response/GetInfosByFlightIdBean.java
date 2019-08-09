@@ -2,8 +2,10 @@ package qx.app.freight.qxappfreight.bean.response;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 
 @Data
 public class GetInfosByFlightIdBean implements Serializable {
@@ -101,6 +103,15 @@ public class GetInfosByFlightIdBean implements Serializable {
          * 复重称重完成时间
          */
         private long reWeighedTime;
+
+        /**
+         *包含的运单数据
+         */
+        private List<WeightWayBillBean> groupScooters;
+
+
+
+
 
 
 }

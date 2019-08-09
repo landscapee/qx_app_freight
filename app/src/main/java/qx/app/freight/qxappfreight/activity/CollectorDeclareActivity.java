@@ -231,7 +231,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvStorageType.setText(storageList.get(options1));
-                storageOption = storageList.get(options1);
+                storageOption = resTypeList.get(options1);
                 if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
                 } else {
@@ -299,6 +299,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
             mData.setStorageType(storageOption);
+            mData.setStorageTypeName(tvStorageType.getText().toString());
             mData.setBigFlag(baozhuangOption);
             if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")||storageOption.equals("冷藏")) {
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());

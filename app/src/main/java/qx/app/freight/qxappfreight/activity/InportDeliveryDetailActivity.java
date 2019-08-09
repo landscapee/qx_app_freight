@@ -59,7 +59,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //    private int num2;
 
     TransportDataBase bean = null;
-
+    private  boolean isAllOut = true;
     private List<WaybillsBean> mList ;
 
     private HashMap<String,String> areas = new HashMap <>();
@@ -122,7 +122,10 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
-            deliveryComplet();
+            //未完全出库 不能完成 提货任务
+
+            if (isAllOut)
+                deliveryComplet();
         });
     }
     //根据流水单号获取列表
@@ -180,7 +183,26 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             if (mWaybillsBean.getWaybillStatus() == 6)
                 already++;
         }
+        isAllOut = true;
+        for (WaybillsBean mWaybillsBean : mList){
+            if (mWaybillsBean.getWaybillStatus() != 6){
+                isAllOut = false;
+                break;
+            }
+        }
+        setBtnSuerState(isAllOut);
+
         toolbar.setMainTitle(Color.WHITE,"提货("+already+"/"+mList.size()+")");
+
+    }
+
+    private void setBtnSuerState(boolean isAllOut) {
+        if (isAllOut){
+            btnConfirm.setEnabled(true);
+        }
+        else {
+            btnConfirm.setEnabled(false);
+        }
 
     }
 
