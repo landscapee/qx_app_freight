@@ -60,8 +60,8 @@ public class WeightWayBillBean implements Serializable {
     private String waybillId;
     private String waybillCode;
     private int number;
-    private int weight;
-    private int volume;
+    private double weight;
+    private double volume;
     private String runTimeScooterId;
     private String scooterId;
     private int scooterType;

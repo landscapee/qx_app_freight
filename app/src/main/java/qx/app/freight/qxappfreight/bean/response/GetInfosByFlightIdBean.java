@@ -109,4 +109,9 @@ public class GetInfosByFlightIdBean implements Serializable {
          */
         private List<WeightWayBillBean> groupScooters;
 
+
+
+
+
+
 }
