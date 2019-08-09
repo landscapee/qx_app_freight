@@ -85,6 +85,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @BindView(R.id.tv_tp_status)
     TextView tvTpStatus;
+    @BindView(R.id.tv_can_pull_scooter)
+    TextView tvCanPullScooter; //可拉板车
+
 
     private List <FlightOfScooterBean> list;
     private List <TransportTodoListBean> listScooter;
@@ -699,6 +702,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mDriverOutTaskDoingAdapter.setCheckBoxEnable(true);
             mDriverOutTaskDoingAdapter.setIsmIsSlide(false);
             tvTpStatus.setVisibility(View.VISIBLE);
+            tvCanPullScooter.setVisibility(View.GONE);
             llcbAll.setVisibility(View.VISIBLE);
         } else {
             if (getMaxHandcarNum() == 0) {
@@ -707,6 +711,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 mDriverOutTaskDoingAdapter.setCheckBoxEnable(false);
                 mDriverOutTaskDoingAdapter.setIsmIsSlide(true);
                 tvTpStatus.setVisibility(View.GONE);
+                tvCanPullScooter.setVisibility(View.VISIBLE);
                 llcbAll.setVisibility(View.GONE);
                 ivErrorEnd.setVisibility(View.GONE);
             }
@@ -802,6 +807,25 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             else
                 setTpStatus(1);
         }
+
+    }
+
+    /**
+     * 可拉板车
+     * @param result
+     */
+    @Override
+    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+        String canPullStr = "可拉板车:";
+        if (result != null && result.size()>0){
+            for (TransportTodoListBean mTransportTodoListBean:result){
+                canPullStr = canPullStr + mTransportTodoListBean.getTpScooterCode()+"、";
+            }
+            tvCanPullScooter.setVisibility(View.VISIBLE);
+            tvCanPullScooter.setText(canPullStr);
+        }
+        else
+            tvCanPullScooter.setVisibility(View.GONE);
 
     }
 

@@ -365,6 +365,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
 //        loginIm(null);
 //        MainActivity.startActivity(this);
+        dismissProgessDialog();
         ToastUtil.showToast(error);
     }
 

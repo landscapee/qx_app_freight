@@ -25,13 +25,17 @@ import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.activity.NoticeActivity;
 import qx.app.freight.qxappfreight.activity.UpdatePWDActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.contract.NoReadCountContract;
 import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -177,12 +181,16 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
-                            UserInfoSingle.setUserNil();
-                            ActManager.getAppManager().finishAllActivity();
-                            WebSocketService.stopServer(getContext());
-                            Intent intent = new Intent(getContext(), LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            if (MyApplication.isNeedIm&& Tools.isProduct())
+                                ((NoReadCountPresenter) mPresenter).loginOut(new UserBean(UserInfoSingle.getInstance().getUserId()));
+                            else {
+                                UserInfoSingle.setUserNil();
+                                ActManager.getAppManager().finishAllActivity();
+                                WebSocketService.stopServer(getContext());
+                                Intent intent = new Intent(getContext(), LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
                         } else {
 //                            ToastUtil.showToast("点击了右边的按钮");
                         }
@@ -225,6 +233,22 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
             tvNoticeNum.setText("");
             ivNoticePoint.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void loginOutResult(RespBean respBean) {
+        if (respBean.isSucc()){
+            ToastUtil.showToast("签退成功");
+        }
+        else {
+            ToastUtil.showToast("签退失败");
+        }
+        UserInfoSingle.setUserNil();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(getContext());
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

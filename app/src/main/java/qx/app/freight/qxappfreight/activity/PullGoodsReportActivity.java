@@ -375,6 +375,11 @@ public class PullGoodsReportActivity extends BaseActivity implements ScanScooter
     }
 
     @Override
+    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+
+    }
+
+    @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
     }

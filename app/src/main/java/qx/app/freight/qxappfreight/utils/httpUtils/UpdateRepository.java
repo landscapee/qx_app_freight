@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -87,6 +88,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
@@ -164,6 +166,15 @@ public class UpdateRepository extends BaseRepository {
     public Observable<RespLoginBean> loginQxAi(Map<String, String> map) {
         return nothingDatatransformForOneDisP(getServiceQxAi().loginQxAi(map));
     }
+    /****
+     * 登出智能调度一期
+     * @param
+     * @return
+     */
+    public Observable<RespBean> loginOutQxAi(Map<String, String> map) {
+        return nothingDatatransformForOneDisPOut(getServiceQxAi().loginOutQxAi(map));
+    }
+
 
     /*****
      * @param
@@ -542,6 +553,14 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId) {
         return transform(getService().scooterWithUser(model, flightId));
+    }
+    /****
+     * 扫描板车查询
+     * @param taskId
+     * @return
+     */
+    public Observable<List<TransportTodoListBean>> scooterWithUserTask(String taskId) {
+        return transform(getService().scooterWithUserForTask(taskId));
     }
 
     /*****

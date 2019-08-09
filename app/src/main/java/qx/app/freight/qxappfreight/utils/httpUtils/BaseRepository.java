@@ -6,6 +6,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.exception.DefaultException;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -83,6 +84,24 @@ public abstract class BaseRepository {
      * @return
      */
     protected static <T> Observable<RespLoginBean> nothingDatatransformForOneDisP(Observable<RespLoginBean> observable) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(baseEntity -> {
+                    if (null != baseEntity) {
+                        return baseEntity;
+                    } else {
+                        throw new DefaultException("服务器数据异常");
+                    }
+                });
+    }
+    /*******
+     *登录一期智能调度使用
+     * @param observable
+     * @param <T>
+     * @return
+     */
+    protected static <T> Observable<RespBean> nothingDatatransformForOneDisPOut(Observable<RespBean> observable) {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -523,6 +523,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     @Override
+    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+
+    }
+
+    @Override
     public void getUnLoadingListResult(UnLoadListBillBean result) {
         if (result != null) {
             if (result.getData() != null) {

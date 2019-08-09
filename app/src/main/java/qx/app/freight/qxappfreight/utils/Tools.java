@@ -321,6 +321,13 @@ public class Tools {
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
     }
     /**
+     * 开启短震动
+     */
+    public static void startShortVibrator(Context context) {
+        VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，长时间震动和短时间震动
+    }
+
+    /**
      * 是否在一秒类 连续点击 ，规避误操作
      *
      * @return

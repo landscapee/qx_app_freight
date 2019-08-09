@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -85,6 +86,7 @@ import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
@@ -126,6 +128,10 @@ public interface HttpApi {
     @POST("userLogin")
     @FormUrlEncoded
     Observable<RespLoginBean> loginQxAi(@FieldMap Map<String, String> masp);
+    //登出一期智能调度
+    @POST("userLoginOut")
+    @FormUrlEncoded
+    Observable<RespBean> loginOutQxAi(@FieldMap Map<String, String> masp);
 
     /***********收验****************************/
     //获取货代公司资质
@@ -367,6 +373,10 @@ public interface HttpApi {
     //扫描板车查询
     @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}")
     Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId);
+
+    //进入运输任务 获取该任务下的列表
+    @GET("service-product-transport/tp-main-info/scooterWithTask/{taskId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUserForTask(@Path("taskId") String taskId);
 
 
     //查询出待运输
