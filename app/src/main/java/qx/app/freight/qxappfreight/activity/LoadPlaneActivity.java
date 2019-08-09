@@ -274,7 +274,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void slideTaskResult(String result) {
         ToastUtil.showToast("结束装机成功");
-        Log.e("tagNet", "result=====" + result);
         EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }

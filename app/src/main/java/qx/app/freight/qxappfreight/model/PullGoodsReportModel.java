@@ -5,11 +5,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
-import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
-import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
+import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
-import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**
@@ -18,8 +15,8 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
  */
 public class PullGoodsReportModel extends BaseModel implements PullGoodsReportContract.pullGoodsModel {
     @Override
-    public void pullGoodsReport(ExceptionReportEntity storageCommitEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().pullGoodsReport(storageCommitEntity)
+    public void getPullGoodsInfo(String flightInfoId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getPullGoodsInfo(flightInfoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {
@@ -29,8 +26,8 @@ public class PullGoodsReportModel extends BaseModel implements PullGoodsReportCo
     }
 
     @Override
-    public void scanScooterDelete(TransportEndEntity transportEndEntity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().scanScooterDelete(transportEndEntity)
+    public void pullGoodsInfoCommit(PullGoodsInfoBean entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().pullGoodsInfoCommit(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

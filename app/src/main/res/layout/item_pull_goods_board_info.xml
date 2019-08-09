@@ -38,15 +38,6 @@
                     android:textStyle="bold"
                     tools:text="大板0009" />
 
-                <TextView
-                    android:id="@+id/tv_cangwei_info"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp_15"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="1号舱位" />
-
                 <qx.app.freight.qxappfreight.widget.RoundCheckBox
                     android:id="@+id/cb_select"
                     android:layout_width="wrap_content"
@@ -62,6 +53,11 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black_3"
                 tools:text="@string/format_goods_info" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_bill_info"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView
@@ -70,18 +66,5 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_pei" />
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_delete"
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="match_parent"
-        android:background="@color/red"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/delete_white" />
-    </LinearLayout>
 
 </LinearLayout>
