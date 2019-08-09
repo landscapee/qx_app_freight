@@ -25,6 +25,7 @@ public class MyApplication extends Application {
 
     public static String currentView; //当前顶层View的类名
 
+    public static boolean isNeedIm = false;
     @Override
     public void onCreate() {
         super.onCreate();

@@ -28,6 +28,7 @@ import java.util.UUID;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -319,5 +320,15 @@ public class Tools {
         SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
     }
-
+    /**
+     * 是否在一秒类 连续点击 ，规避误操作
+     *
+     * @return
+     */
+    public  static boolean isProduct() {
+        if (BuildConfig.Model.equals("product"))
+            return true;
+        else
+            return false;
+    }
 }

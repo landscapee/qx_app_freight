@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
@@ -34,6 +35,7 @@ import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 主页面
@@ -120,7 +122,10 @@ public class MainActivity extends BaseActivity implements LocationObservable {
             fragment1 =  new TaskFragment();
             fragment2 =  new DynamicFragment();
             fragment3 = new ClearStorageFragment();
-            fragment4 = new ImLibSpecialHomeFragment();
+            if (MyApplication.isNeedIm && Tools.isProduct())
+                fragment4 = new ImLibSpecialHomeFragment();
+            else
+                fragment4 = new TestFragment();
             fragment5 = new MineFragment();
         }
         initFragment();

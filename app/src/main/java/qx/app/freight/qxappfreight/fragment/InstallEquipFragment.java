@@ -430,6 +430,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         } else {
             mMfrvData.finishLoadMore();
         }
+        mMfrvData.notifyForAdapter(mAdapter);
     }
 
     @Override

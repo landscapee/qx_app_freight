@@ -59,6 +59,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static qx.app.freight.qxappfreight.app.MyApplication.isNeedIm;
+
 /**
  * 登录页面
  *   by 郭浩
@@ -73,8 +75,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @BindView(R.id.tv_copyright_version)
     TextView tvCopyVersion;
     private UpdateVersionBean2 mVersionBean;
-
-    private boolean isNeedIm = false;
 
     @Override
     public int getLayoutId() {
@@ -189,6 +189,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         if (TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())) {
             ToastUtil.showToast("账号或者密码不能为空");
         } else {
+            showProgessDialog("正在登录……");
             mPresenter = new LoginPresenter(this);
             ((LoginPresenter) mPresenter).login(getLoginEntity());
         }
@@ -261,6 +262,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
                 if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())) {
                     ToastUtil.showToast(this, "组板只能使用PAD登录");
+                    dismissProgessDialog();
                     return;
                 }
                 if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
@@ -270,20 +272,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
                 }
             }
-            if (isNeedIm){
+
+            if (isNeedIm&& Tools.isProduct()){
                 UserInfoSingle.setUser(loginBean);
                 loginIm(loginBean);
             }
             else {
                 UserInfoSingle.setUser(loginBean);
-                toMainAct();
                 loginTpPC(loginBean);
                 if (Constants.PSW_TYPE_NO.equals(loginBean.getCode())) {
+                    dismissProgessDialog();
                     UpdatePWDActivity.startActivity(this);
                 }
+                toMainAct();
             }
-
-
         } else {
             ToastUtil.showToast(this, "数据错误");
         }
@@ -317,6 +319,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * 登录成功 跳转到主页
      */
     private void toMainAct() {
+        dismissProgessDialog();
         MainActivity.startActivity(this);
         finish();
     }
@@ -367,12 +370,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("正在登录……");
+
     }
 
     @Override
     public void dissMiss() {
-        dismissProgessDialog();
+
     }
 
     @Override
