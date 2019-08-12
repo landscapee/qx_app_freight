@@ -135,8 +135,6 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
                     return true;
                 }).subscribe(aBoolean -> {
                     Log.e("tagTest", "循环结束，弹窗消失");
-                    dismiss();
-                    onDismissListener.refreshUI(true);
                 }, throwable -> {
                     Log.e("tagTest", "循环结束，调接口出错了");
                     dismiss();
@@ -179,7 +177,8 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     @Override
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
-            Log.e("tagPush", "循环调取领受接口正确");
+            dismiss();
+            onDismissListener.refreshUI(true);
         }
     }
 
