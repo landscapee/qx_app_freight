@@ -33,6 +33,9 @@ import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
+/**
+ * 提货详情
+ */
 public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView , ListReservoirInfoContract.listReservoirInfoView{
 
     @BindView(R.id.r_view)
@@ -123,7 +126,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
         btnConfirm.setOnClickListener(v -> {
             //未完全出库 不能完成 提货任务
-
             if (isAllOut)
                 deliveryComplet();
         });

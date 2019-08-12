@@ -451,8 +451,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
      */
     @Override
     public void startClearTaskResult(String result) {
-        if (result !=null)
-            ToastUtil.showToast(result);
+            ToastUtil.showToast("操作成功");
     }
 
     @Override

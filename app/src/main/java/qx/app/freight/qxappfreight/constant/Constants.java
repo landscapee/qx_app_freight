@@ -161,6 +161,8 @@ public class Constants {
 
     public static final String TP_TYPE_BAGGAAGE = "baggage";//行李任务
 
+    public static final String TP_TYPE_CLEAR = "clear";//清场任务
+
     /**
      * 装卸机 运输 结载 步骤操作code
      */
