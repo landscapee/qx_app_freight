@@ -552,4 +552,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
+
+    @Override
+    public void startClearTaskResult(String result) {
+
+    }
 }

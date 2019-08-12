@@ -66,6 +66,12 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         btnFS.setOnClickListener(v -> {
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
         });
+        Button btnClear = helper.getView(R.id.btn_seat_clear);
+        btnClear.setOnClickListener(v -> {
+            onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
+        });
+
+
         tvTime.setText(item.getTimeForShow());
 
         Drawable drawableLeft = null;
@@ -235,6 +241,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
     }
     public interface OnFlightSafeguardListenner {
         void onFlightSafeguardClick(int position);
+        void onClearClick(int position);
     }
 
     public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {

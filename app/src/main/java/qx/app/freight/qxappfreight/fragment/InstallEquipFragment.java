@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
@@ -171,11 +172,32 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-        mAdapter.setOnFlightSafeguardListenner(position -> {
-//            mList.get(position).getMovement() == 4; //连班
-            IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+        //  mList.get(position).getMovement() == 4; //连班
+        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+            }
+
+            @Override
+            public void onClearClick(int position) {
+                startClearTask(position);
+            }
         });
+
         loadData();
+    }
+
+    /**
+     * 发起清场任务
+     */
+    private void startClearTask(int position) {
+        TaskClearEntity entity = new TaskClearEntity();
+        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
+        entity.setSeat(mList.get(position).getSeat());
+        entity.setType("clear");
+        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
     @Override
@@ -421,6 +443,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mOperatePos = 0;
             }
         }
+    }
+
+    /**
+     * 清场任务 发起返回
+     * @param result
+     */
+    @Override
+    public void startClearTaskResult(String result) {
+        if (result !=null)
+            ToastUtil.showToast(result);
     }
 
     @Override

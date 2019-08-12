@@ -258,11 +258,22 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/btn_seat_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="发起清场"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_blue_press"
+            />
+        <Button
             android:id="@+id/btn_flight_safeguard"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:text="航班保障组"
-            android:textColor="#136BEF" />
+            android:textColor="@color/white"
+            android:background="@drawable/btn_blue_press"
+            android:layout_marginLeft="10dp"
+            />
     </LinearLayout>
 
     <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout

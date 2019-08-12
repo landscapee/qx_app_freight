@@ -278,4 +278,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }
+
+    @Override
+    public void startClearTaskResult(String result) {
+
+    }
 }

@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
@@ -624,7 +625,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> arrivalDataSave(TransportEndEntity transportEndEntity) {
         return nothingtransform(getService().arrivalDataSave(transportEndEntity));
     }
-
+    /****
+     * 发起清场任务
+     * @param taskClearEntity
+     * @return
+     */
+    public Observable<String> startClearTask(TaskClearEntity taskClearEntity) {
+        return nothingtransform(getService().startClearTask(taskClearEntity));
+    }
     /****
      * 拉货上报
      * @param transportEndEntity
