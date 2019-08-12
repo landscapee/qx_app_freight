@@ -117,42 +117,44 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         mListCache.remove(bean);
                     }
                 }
-                if (mDialog == null) {
-                    mDialog = new PushLoadUnloadDialog();
-                }
-                mDialog.setData(getContext(), mListCache, success -> {
-                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-                        ToastUtil.showToast("领受装卸机新任务成功");
-                        Observable.timer(300, TimeUnit.MILLISECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> {
-                                    loadData();
-                                });
-                        mListCache.clear();
-                    } else {//领受失败后，清空未领受列表缓存
-                        Log.e("tagPush", "推送出错了");
-                        mListCache.clear();
-                    }
-                    Tools.closeVibrator(getActivity().getApplicationContext());
-                });
-                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-                    if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
-                        loadData();
-                        mListCache.clear();
-                    } else {
-                        Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
-                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
-                    }
-                } else {//刷新任务弹出框中的数据显示
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(aLong -> {
-                                mDialog.refreshData();
-                            });
-                }
+                showTaskDialog();
             }
+        }
+    }
+
+    private void showTaskDialog() {
+        if ((mDialog != null && mDialog.isAdded()) || mListCache.size() == 0)
+            return;
+        if (mDialog == null) {
+            mDialog = new PushLoadUnloadDialog();
+        }
+        mDialog.setData(getContext(), mListCache, success -> {
+            if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                ToastUtil.showToast("领受装卸机新任务成功");
+                mDialog.dismiss();
+                loadData();
+                mListCache.clear();
+            } else {//领受失败后，清空未领受列表缓存
+                Log.e("tagPush", "推送出错了");
+                mListCache.clear();
+            }
+            Tools.closeVibrator(getActivity().getApplicationContext());
+        });
+        if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+            if (mTaskIdList.contains(mListCache.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
+                loadData();
+                mListCache.clear();
+            } else {
+                Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
+                mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+            }
+        } else {//刷新任务弹出框中的数据显示
+            Observable.timer(300, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(aLong -> {
+                        mDialog.refreshData();
+                    });
         }
     }
 
@@ -305,10 +307,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (i == 7) {//下标为7时，特殊处理
                     LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
                     entity1.setFlightType(bean.getFlightType());
-                    if (posNow==5){
+                    if (posNow == 5) {
                         entity1.setItemType(Constants.TYPE_STEP_NOW);
                     }
-                }  else {
+                } else {
                     int index = i;
                     if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
                         index++;//筛选卸机结束和装机结束的步骤项
