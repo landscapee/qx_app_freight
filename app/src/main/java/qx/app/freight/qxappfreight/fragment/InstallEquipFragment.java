@@ -92,12 +92,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     List<LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
-                            .subscribe(aLong -> {
-                                loadData();
-                            });
+                    loadData();
                 } else {//取消任务，刷新代办列表
                     loadData();
                 }
@@ -149,12 +144,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
             }
         } else {//刷新任务弹出框中的数据显示
-            Observable.timer(300, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(aLong -> {
-                        mDialog.refreshData();
-                    });
+            mDialog.refreshData();
         }
     }
 
@@ -385,12 +375,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 } else {
                     go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
-                    if (smallPos == 0) {//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
-                        Observable.timer(1, TimeUnit.SECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread()) // 延迟1秒去调接口获取代办数据，否则数据仍然为未领受
-                                .subscribe(aLong -> loadData());
-                    }
                 }
             }
         });
@@ -417,7 +401,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideAdapter.notifyDataSetChanged();
-            if (mOperatePos == 4 || mOperatePos == 5) {
+            //如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
+            //单独装机或卸机任务滑动的是第4步，需要刷新数据关闭舱门；装卸机连班航班任务滑动第5步，同理
+            if (mOperatePos==0||mOperatePos == 4 || mOperatePos == 5) {
                 mCurrentPage = 1;
                 loadData();
                 mOperatePos = 0;
