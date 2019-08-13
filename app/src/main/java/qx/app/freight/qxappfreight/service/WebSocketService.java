@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.listener.BeforehandClient;
 import qx.app.freight.qxappfreight.listener.CollectionClient;
 import qx.app.freight.qxappfreight.listener.DeliveryClient;
 import qx.app.freight.qxappfreight.listener.InstallEquipClient;
+import qx.app.freight.qxappfreight.listener.NewspaperClient;
 import qx.app.freight.qxappfreight.listener.OffSiteEscortClient;
 import qx.app.freight.qxappfreight.listener.PreplanerClient;
 import qx.app.freight.qxappfreight.listener.ReceiveClient;
@@ -43,10 +44,10 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     private boolean isContinue = true; //线程控制
     private Thread threadGps = null;
 
-    public static String ToList ="/taskTodo/taskTodoList" ;
+    public static String ToList = "/taskTodo/taskTodoList";
     public static String Message = "/MT/msMsg";
     public static String Login = "/MT/message";
-    public static List<String> subList = new ArrayList <>();
+    public static List<String> subList = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -137,6 +138,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=beforehand_in");
                     break;
+                case "report"://报载
+                    NewspaperClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=report");
+                    break;
 
             }
         }
@@ -218,6 +226,10 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         new ReceiveClient(uri, this);
     }
 
+    public void NewspaperClient(String uri) {
+        new NewspaperClient(uri, this);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -232,7 +244,7 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     @Override
     public void toastView(String error) {
-        if(!StringUtil.isEmpty(error))
+        if (!StringUtil.isEmpty(error))
             Log.e("GPS上传：", error);
     }
 
@@ -263,11 +275,12 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
     }
+
     //停止连接
     public static void closeLink() {
-        if (subList !=null)
+        if (subList != null)
             subList.clear();
-        if (mStompClient!= null){
+        if (mStompClient != null) {
             if (mStompClient.size() != 0) {
                 for (int i = 0; i < mStompClient.size(); i++) {
                     Log.e(TAG, "关闭了" + i + "个连接");
@@ -278,20 +291,20 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     }
 
-    public synchronized static void setIsTopic(boolean isTopic1){
+    public synchronized static void setIsTopic(boolean isTopic1) {
         isTopic = isTopic1;
     }
 
     /**
      * 如果已经订阅 返回 false
+     *
      * @param sub
      * @return
      */
-    public static boolean isExist(String sub){
+    public static boolean isExist(String sub) {
         boolean isExit = true;
-        for (String string :subList)
-        {
-            if (sub.equals(string)){
+        for (String string : subList) {
+            if (sub.equals(string)) {
                 isExit = false;
             }
         }
