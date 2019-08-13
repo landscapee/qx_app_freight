@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
@@ -57,12 +61,14 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     TextView mTvFallDown;//降落时间
     @BindView(R.id.tv_date)
     TextView mTvDate;//日期
+    @BindView(R.id.tv_version)
+    TextView mTvVersion;//版本号
     @BindView(R.id.mfrv_data)
     RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
     Button mBtShifang;    //释放
-    @BindView(R.id.btn_refuse)
-    Button mBtRefuse;    //释放
+    @BindView(R.id.btn_print)
+    Button mBtPrint;    //打印
 
     @BindView(R.id.sr_refush)
     SwipeRefreshLayout mSrRefush;
@@ -77,14 +83,22 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     public int getLayoutId() {
         return R.layout.activity_cargo_manifest_info;
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+            List<TransportDataBase> datas = mWebSocketResultBean.getChgData();
+            mBaseData=datas.get(0);
+            ToastUtil.showToast("当前航班的货邮舱单详情被修改，正在刷新数据");
+            loadData();
+        }
+    }
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
-        toolbar.setMainTitle(Color.WHITE, "舱单详情");
+        toolbar.setMainTitle(Color.WHITE, "货邮舱单详情");
         mBaseData = (TransportDataBase) getIntent().getSerializableExtra("data");
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftNo());
@@ -113,8 +127,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             ((AuditManifestPresenter) mPresenter).auditManifest(entity);
 
         });
-        mBtRefuse.setOnClickListener(v -> {
-
+        mBtPrint.setOnClickListener(v -> {
+            ToastUtil.showToast("该功能正处于研发过程中，敬请期待!");
         });
         mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -135,28 +149,31 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void getLastReportInfoResult(LastReportInfoListBean result) {
-        mId = result.getId();
+        if (result!=null){
+            mId = result.getId();
+            mTvVersion.setText("版本号"+result.getVersion());
 //        mRvData.finishRefresh();
-        mSrRefush.setRefreshing(false);
-        mList.clear();
-        Gson mGson = new Gson();
-        ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
-        for (ManifestMainBean data : datas) {
-            for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-                for (ManifestScooterListBean data1 : bean.getScooters()) {
-                    mList.addAll(data1.getWaybillList());
+            mSrRefush.setRefreshing(false);
+            mList.clear();
+            Gson mGson = new Gson();
+            ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
+            for (ManifestMainBean data : datas) {
+                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
+                    for (ManifestScooterListBean data1 : bean.getScooters()) {
+                        mList.addAll(data1.getWaybillList());
+                    }
                 }
             }
+            ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
+            title.setWaybillCode("运单号");
+            title.setWeight("重量");
+            title.setNumber("件数");
+            title.setCargoCn("货物名称");
+            title.setVolume("体积");
+            mList.add(0, title);
+            ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
+            mRvData.setAdapter(adapter);
         }
-        ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-        title.setWaybillCode("运单号");
-        title.setWeight("重量");
-        title.setNumber("件数");
-        title.setCargoCn("货物名称");
-        title.setVolume("体积");
-        mList.add(0, title);
-        ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
-        mRvData.setAdapter(adapter);
     }
 
     @Override

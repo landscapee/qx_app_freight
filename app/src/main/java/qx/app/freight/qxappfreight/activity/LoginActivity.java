@@ -91,8 +91,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
 //        mEtPassWord.setText("241922");
 //        mEtUserName.setText("jialin");
-        mEtPassWord.setText("");
-        mEtUserName.setText("");
+        mEtPassWord.setText("18043X");
+        mEtUserName.setText("chenchuan");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });

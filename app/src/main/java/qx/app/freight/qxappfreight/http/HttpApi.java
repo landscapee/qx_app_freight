@@ -416,8 +416,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
 
     //拉货上报
-    @POST("service-product-returngoods/pullGoods/getPullInfo/{flightInfoId}")
-    Observable<BaseEntity<PullGoodsInfoBean>> getPullGoodsInfo(String flightInfoId);
+    @GET("service-product-returngoods/pullGoods/getPullInfo/{flightInfoId}")
+    Observable<BaseEntity<PullGoodsInfoBean>> getPullGoodsInfo(@Path("flightInfoId") String flightInfoId);
 
     //拉货上报提交
     @POST("service-product-returngoods/pullGoods/pullReport")
