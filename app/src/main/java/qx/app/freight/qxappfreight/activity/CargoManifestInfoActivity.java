@@ -16,9 +16,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,6 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
@@ -83,15 +79,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     public int getLayoutId() {
         return R.layout.activity_cargo_manifest_info;
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            List<TransportDataBase> datas = mWebSocketResultBean.getChgData();
-            mBaseData=datas.get(0);
-            ToastUtil.showToast("当前航班的货邮舱单详情被修改，正在刷新数据");
-            loadData();
-        }
-    }
+
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         CustomToolbar toolbar = getToolbar();
@@ -149,9 +137,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void getLastReportInfoResult(LastReportInfoListBean result) {
-        if (result!=null){
+        if (result != null) {
             mId = result.getId();
-            mTvVersion.setText("版本号"+result.getVersion());
+            mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
             mSrRefush.setRefreshing(false);
             mList.clear();
