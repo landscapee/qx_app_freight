@@ -4,21 +4,30 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -82,12 +91,12 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result != null && result.equals(mCurrentFlightId)) {
-            showCargoResUpdate(mCurrentFlightId);
+            showCargoResUpdate();
         }
     }
 
-    private void showCargoResUpdate(String flightId) {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, flightId, s -> {
+    private void showCargoResUpdate() {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,"预装机单已更新，请查看！", null, data -> {
             LoadingListRequestEntity entity = new LoadingListRequestEntity();
             entity.setDocumentType(2);
             entity.setFlightId(mCurrentFlightId);
@@ -193,7 +202,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //            }
         });
     }
-
     @Override
     public void getLoadingListResult(LoadingListBean result) {
         Tools.closeVibrator(getApplicationContext());
@@ -207,23 +215,33 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             for (LoadingListBean.DataBean bean:mLoadingList){
                 bean.setShowDetail(true);
             }
-            Collections.reverse(mLoadingList);
-            UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
-            mRvData.setAdapter(adapter);
-            adapter.setOnOverLoadListener(entity -> {
-                if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
-                    LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                    requestModel.setFlightNo(data.getFlightNo());
-                    requestModel.setCreateTime(entity.getCreateTime());
-                    requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
-                    requestModel.setCreateUser(entity.getCreateUser());
-                    requestModel.setFlightInfoId(entity.getFlightInfoId());
-                    requestModel.setContent(entity.getContentObject());
-                    ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
-                } else {
-                    ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
-                }
-            });
+            if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
+                Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function<String, ObservableSource<List<LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
+                    Gson mGson = new Gson();
+                    LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
+                    return Observable.just(new ArrayList<>(Arrays.asList(datas)));
+                }).subscribe(boardMultiBeans -> {
+                    result.getData().get(0).setContentObject(boardMultiBeans);
+                    Collections.reverse(mLoadingList);
+                    UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
+                    mRvData.setAdapter(adapter);
+                    adapter.setOnOverLoadListener(entity -> {
+                        if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
+                            LoadingListSendEntity requestModel = new LoadingListSendEntity();
+                            requestModel.setFlightNo(data.getFlightNo());
+                            requestModel.setCreateTime(entity.getCreateTime());
+                            requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
+                            requestModel.setCreateUser(entity.getCreateUser());
+                            requestModel.setFlightInfoId(entity.getFlightInfoId());
+//                    requestModel.setContent(entity.getContentObject());
+                            ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+                        } else {
+                            ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
+                        }
+                    });
+                });
+                Log.e("tagTest","string===="+subscription.toString());
+            }
         }
     }
 
