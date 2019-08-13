@@ -9,6 +9,7 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -415,8 +416,12 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
 
     //拉货上报
-    @POST("service-product-transport/tp-main-info/saveLoadPullIn")
-    Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
+    @POST("service-product-returngoods/pullGoods/getPullInfo/{flightInfoId}")
+    Observable<BaseEntity<PullGoodsInfoBean>> getPullGoodsInfo(String flightInfoId);
+
+    //拉货上报提交
+    @POST("service-product-returngoods/pullGoods/pullReport")
+    Observable<BaseEntity<String>> pullGoodsInfoCommit(@Body PullGoodsInfoBean entity);
 
     //获取运单信息
     @GET("service-product-waybill/declare-waybill/getWayBillInfoByCode/{waybillCode}")
@@ -691,7 +696,6 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> saveOrUpdate(@Body SaveOrUpdateEntity entity);
 
 
-
     @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
     Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
 
@@ -702,6 +706,7 @@ public interface HttpApi {
      */
     @GET("service-base-flight/f-flight/configCenterData/findAirlineAll")
     Observable<BaseEntity<List<FindAirlineAllBean>>> findAirlineAll();
+
     /**
      * 通知录入
      *
@@ -709,6 +714,7 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
     Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
+
     /**
      * 释放
      *

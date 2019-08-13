@@ -12,7 +12,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class TransportTodoListBean implements MultiItemEntity , Serializable {
+public class TransportTodoListBean implements MultiItemEntity, Serializable {
     /**
      * id : aec574f5254c20c7fa9c04685293e581
      * tpScooterId : 123
@@ -130,6 +130,9 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String billNumber;
     //是板车下拉还是运单下拉type值
     private int infoType;
+    private boolean remoteData;//控制显示“配”和“监”
+    private int infoStatus = 0;//控制背景显示：0，默认；1，拉回成功；2、拉回失败
+    private boolean selected2Commit = true;//控制默认选择拉回
     private int maxBillNumber;
     private double maxBillWeight;
     private String billCode;

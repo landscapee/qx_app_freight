@@ -47,7 +47,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
- * 理货装机页面
+ * 装机页面
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.rv_data)
@@ -274,7 +274,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void slideTaskResult(String result) {
         ToastUtil.showToast("结束装机成功");
-        Log.e("tagNet", "result=====" + result);
         EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
     }

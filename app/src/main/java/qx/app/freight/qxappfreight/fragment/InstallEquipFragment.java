@@ -36,7 +36,6 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
-import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
@@ -44,7 +43,6 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
-import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -119,44 +117,42 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         mListCache.remove(bean);
                     }
                 }
-                showTaskDialog();
+                if (mDialog == null) {
+                    mDialog = new PushLoadUnloadDialog();
+                }
+                mDialog.setData(getContext(), mListCache, success -> {
+                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                        ToastUtil.showToast("领受装卸机新任务成功");
+                        Observable.timer(300, TimeUnit.MILLISECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(aLong -> {
+                                    loadData();
+                                });
+                        mListCache.clear();
+                    } else {//领受失败后，清空未领受列表缓存
+                        Log.e("tagPush", "推送出错了");
+                        mListCache.clear();
+                    }
+                    Tools.closeVibrator(getActivity().getApplicationContext());
+                });
+                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+                    if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
+                        loadData();
+                        mListCache.clear();
+                    } else {
+                        Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
+                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+                    }
+                } else {//刷新任务弹出框中的数据显示
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(aLong -> {
+                                mDialog.refreshData();
+                            });
+                }
             }
-        }
-    }
-
-    private void showTaskDialog() {
-        if ((mDialog != null && mDialog.isAdded()) || mListCache.size() == 0)
-            return;
-        if (mDialog == null) {
-            mDialog = new PushLoadUnloadDialog();
-        }
-        mDialog.setData(getContext(), mListCache, success -> {
-            if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-                ToastUtil.showToast("领受装卸机新任务成功");
-                mDialog.dismiss();
-                loadData();
-                mListCache.clear();
-            } else {//领受失败后，清空未领受列表缓存
-                Log.e("tagPush", "推送出错了");
-                mListCache.clear();
-            }
-            Tools.closeVibrator(getActivity().getApplicationContext());
-        });
-        if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-            if (mTaskIdList.contains(mListCache.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
-                loadData();
-                mListCache.clear();
-            } else {
-                Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
-                mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
-            }
-        } else {//刷新任务弹出框中的数据显示
-            Observable.timer(300, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(aLong -> {
-                        mDialog.refreshData();
-                    });
         }
     }
 
@@ -174,32 +170,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-        //  mList.get(position).getMovement() == 4; //连班
-        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
-            @Override
-            public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
-            }
-
-            @Override
-            public void onClearClick(int position) {
-                startClearTask(position);
-            }
-        });
-
         loadData();
-    }
-
-    /**
-     * 发起清场任务
-     */
-    private void startClearTask(int position) {
-        TaskClearEntity entity = new TaskClearEntity();
-        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
-        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
-        entity.setSeat(mList.get(position).getSeat());
-        entity.setType("clear");
-        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
     @Override
@@ -293,9 +264,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mSpecialTaskId = null;
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
-            StringUtil.setTimeAndType(bean.getRelateInfoObj());
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            StringUtil.setFlightRoute(bean.getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
@@ -336,10 +305,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (i == 7) {//下标为7时，特殊处理
                     LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
                     entity1.setFlightType(bean.getFlightType());
-                    if (posNow == 5) {
+                    if (posNow==5){
                         entity1.setItemType(Constants.TYPE_STEP_NOW);
                     }
-                } else {
+                }  else {
                     int index = i;
                     if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
                         index++;//筛选卸机结束和装机结束的步骤项
@@ -454,15 +423,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         }
     }
 
-    /**
-     * 清场任务 发起返回
-     * @param result
-     */
-    @Override
-    public void startClearTaskResult(String result) {
-            ToastUtil.showToast("操作成功");
-    }
-
     @Override
     public void toastView(String error) {
         if (mCurrentPage == 1) {
@@ -470,7 +430,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         } else {
             mMfrvData.finishLoadMore();
         }
-        mMfrvData.notifyForAdapter(mAdapter);
     }
 
     @Override

@@ -49,14 +49,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
+
             <LinearLayout
                 android:id="@+id/ll_flight_info_container"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
+                android:gravity="center_vertical"
                 android:orientation="horizontal" />
         </LinearLayout>
 
@@ -112,16 +113,28 @@
         android:paddingEnd="@dimen/dp_7"
         android:paddingBottom="@dimen/dp_4">
 
-        <TextView
-            android:id="@+id/tv_pull_goods_report"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/shape_rect_gray_888"
-            android:gravity="center"
-            android:text="拉货上报"
-            android:textColor="@color/gray_888"
-            android:textSize="@dimen/sp_18" />
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_pull_goods_report"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_rect_gray_888"
+                android:gravity="center"
+                android:text="拉货确认"
+                android:textColor="@color/gray_888"
+                android:textSize="@dimen/sp_18" />
+
+            <ImageView
+                android:id="@+id/iv_pull_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shape_red_point"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_error_report"
