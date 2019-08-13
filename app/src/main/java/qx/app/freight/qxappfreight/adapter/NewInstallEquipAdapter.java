@@ -52,9 +52,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         } else {
             helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-        boolean isWidePlane = item.getWidthAirFlag() == 0;
-        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
-
+//        boolean isWidePlane = item.getWidthAirFlag() == 0;
+//        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
+        helper.setText(R.id.tv_plane_type, item.getAircraftType());
 
         LinearLayout llBg = helper.getView(R.id.ll_bg);
 
@@ -102,7 +102,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         if(item.getMovement() == 4&&item.getRelateInfoObj()!=null){
             llLink.setVisibility(View.VISIBLE);
             ImageView ivTypeLink = helper.getView(R.id.iv_operate_type_link);
-            helper.setText(R.id.tv_plane_type_link, isWidePlane ? "宽体机" : "窄体机");
+            helper.setText(R.id.tv_plane_type_link, item.getAircraftType());
             TextView tvTimeLink = helper.getView(R.id.tv_time_link);
             helper.setText(R.id.tv_plane_info_link, StringUtil.toText(item.getRelateInfoObj().getFlightNo()));
             helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
