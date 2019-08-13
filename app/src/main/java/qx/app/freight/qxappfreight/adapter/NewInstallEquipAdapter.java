@@ -128,10 +128,12 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
             tvTimeLink.setCompoundDrawablePadding(5);
             LinearLayout containerLink = helper.getView(R.id.ll_flight_info_container_link);
-            FlightInfoLayout layoutLink = new FlightInfoLayout(mContext, item.getRelateInfoObj().getFlightInfoList());
-            LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            containerLink.removeAllViews();
-            containerLink.addView(layoutLink, paramsMain);
+            if (item.getRelateInfoObj().getFlightInfoList() != null){
+                FlightInfoLayout layoutLink = new FlightInfoLayout(mContext, item.getRelateInfoObj().getFlightInfoList());
+                LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                containerLink.removeAllViews();
+                containerLink.addView(layoutLink, paramsMain);
+            }
         }
         else
             llLink.setVisibility(View.GONE);

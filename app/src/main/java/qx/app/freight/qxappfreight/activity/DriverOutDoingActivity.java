@@ -215,7 +215,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         upDataBtnStatus();
         getData();
-
+        getCanPullScooter();
     }
 
     /**
@@ -233,6 +233,12 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
         ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),mAcceptTerminalTodoBean.get(0).getFlightId());
+
+    }
+    private void getCanPullScooter() {
+        mPresenter = new ScanScooterPresenter(this);
+        ((ScanScooterPresenter) mPresenter).scooterWithUserTask(mAcceptTerminalTodoBean.get(0).getTaskId());
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

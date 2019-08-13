@@ -89,10 +89,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
         checkVersion();
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-//        mEtPassWord.setText("241922");
-//        mEtUserName.setText("jialin");
-        mEtPassWord.setText("18043X");
-        mEtUserName.setText("chenchuan");
+
+        mEtPassWord.setText("");
+        mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });

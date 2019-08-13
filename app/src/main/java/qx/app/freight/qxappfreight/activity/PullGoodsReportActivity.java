@@ -26,6 +26,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -159,11 +160,6 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
                 ToastUtil.showToast("操作不合法，不能重复扫描");
             }
         }
-    }
-
-    @Override
-    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
-
     }
 
     @Override

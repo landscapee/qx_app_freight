@@ -176,16 +176,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
-                android:layout_marginEnd="@dimen/dp_25"
                 android:gravity="center_vertical"
                 android:textColor="@color/black_3"
                 android:textSize="@dimen/sp_14"
                 tools:text="B2310" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
             <LinearLayout
                 android:id="@+id/ll_flight_info_container_link"
