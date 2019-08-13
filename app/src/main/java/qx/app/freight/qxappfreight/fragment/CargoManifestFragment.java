@@ -196,7 +196,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             List<TransportDataBase> datas = mWebSocketResultBean.getChgData();
             list.addAll(datas);
-            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog,datas.get(0).getAircraftNo()+"收到新的货邮舱单，请查看！", datas.get(0), data -> {
+            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, datas.get(0).getAircraftNo() + "收到新的货邮舱单，请查看！", () -> {
                 Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
                 intent.putExtra("data", datas.get(0));
                 getContext().startActivity(intent);

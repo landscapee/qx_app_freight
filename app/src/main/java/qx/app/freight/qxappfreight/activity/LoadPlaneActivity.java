@@ -26,7 +26,6 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
@@ -96,7 +95,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     private void showCargoResUpdate() {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,"预装机单已更新，请查看！", null, data -> {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, "预装机单已更新，请查看！", () -> {
             LoadingListRequestEntity entity = new LoadingListRequestEntity();
             entity.setDocumentType(2);
             entity.setFlightId(mCurrentFlightId);
@@ -105,7 +104,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (mWaitCallBackDialog != null) {
             mWaitCallBackDialog.dismiss();
         }
-        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
+        Tools.startVibrator(getApplicationContext(), true, R.raw.ring);
         updatePushDialog.show();
     }
 
@@ -179,7 +178,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
             boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-            if (mLoadingList!=null&&mLoadingList.size()!=0) {
+            if (mLoadingList != null && mLoadingList.size() != 0) {
                 LoadingListBean.DataBean entity1 = mLoadingList.get(0);
                 if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
@@ -202,6 +201,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //            }
         });
     }
+
     @Override
     public void getLoadingListResult(LoadingListBean result) {
         Tools.closeVibrator(getApplicationContext());
@@ -212,7 +212,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             if (result.getData() == null || result.getData().size() == 0) return;
 //            mLoadingList.addAll(result.getData());
             mLoadingList.add(result.getData().get(0));
-            for (LoadingListBean.DataBean bean:mLoadingList){
+            for (LoadingListBean.DataBean bean : mLoadingList) {
                 bean.setShowDetail(true);
             }
             if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
@@ -240,7 +240,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
                     });
                 });
-                Log.e("tagTest","string===="+subscription.toString());
+                Log.e("tagTest", "string====" + subscription.toString());
             }
         }
     }
