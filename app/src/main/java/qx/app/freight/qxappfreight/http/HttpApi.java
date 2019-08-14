@@ -55,6 +55,7 @@ import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -706,4 +707,12 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/auditManifest")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+
+    /**
+     * 释放
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
+    Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
 }
