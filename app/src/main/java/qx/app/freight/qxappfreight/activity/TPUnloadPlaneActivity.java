@@ -548,6 +548,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     }
 
     @Override
+    public void startClearTaskResult(String result) {
+
+    }
+
+    @Override
     public void scanScooterResult(String result) {
 
     }
@@ -559,6 +564,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Override
     public void scooterWithUserResult(List<TransportTodoListBean> result) {
+
+    }
+
+    @Override
+    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
 
     }
 

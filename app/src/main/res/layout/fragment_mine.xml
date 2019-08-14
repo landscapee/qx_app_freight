@@ -230,7 +230,46 @@
                 android:layout_marginRight="17dp"
                 android:background="@mipmap/mind_info" />
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_today_done"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
 
+            android:background="@drawable/shape_mind_gray">
+
+            <LinearLayout
+                android:id="@+id/ll_today_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/changepsd" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="41dp"
+                android:text="今日已办"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"
+                android:background="@mipmap/mind_info" />
+        </RelativeLayout>
     </LinearLayout>
 
     <View

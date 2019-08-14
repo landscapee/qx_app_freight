@@ -38,12 +38,14 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -82,11 +84,14 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
@@ -159,9 +164,18 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<LoginBean> loginQxAi(Map<String, String> map) {
-        return transform(getServiceQxAi().loginQxAi(map));
+    public Observable<RespLoginBean> loginQxAi(Map<String, String> map) {
+        return nothingDatatransformForOneDisP(getServiceQxAi().loginQxAi(map));
     }
+    /****
+     * 登出智能调度一期
+     * @param
+     * @return
+     */
+    public Observable<RespBean> loginOutQxAi(Map<String, String> map) {
+        return nothingDatatransformForOneDisPOut(getServiceQxAi().loginOutQxAi(map));
+    }
+
 
     /*****
      * @param
@@ -545,6 +559,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId) {
         return transform(getService().scooterWithUser(model, flightId));
     }
+    /****
+     * 扫描板车查询
+     * @param taskId
+     * @return
+     */
+    public Observable<List<TransportTodoListBean>> scooterWithUserTask(String taskId) {
+        return transform(getService().scooterWithUserForTask(taskId));
+    }
 
     /*****
      * 查询出待运输的
@@ -607,7 +629,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> arrivalDataSave(TransportEndEntity transportEndEntity) {
         return nothingtransform(getService().arrivalDataSave(transportEndEntity));
     }
-
+    /****
+     * 发起清场任务
+     * @param taskClearEntity
+     * @return
+     */
+    public Observable<String> startClearTask(TaskClearEntity taskClearEntity) {
+        return nothingtransform(getService().startClearTask(taskClearEntity));
+    }
     /****
      * 拉货上报获取需要拉回的板车和运单数据
      * @param flightInfoId
@@ -852,7 +881,30 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
-
+    /****
+     * 进港-查询出库运单超重
+     * @param model
+     * @return
+     */
+    public Observable<List<OverweightBean>> getOverweight(BaseFilterEntity model) {
+        return transform(getService().getWaybillOverWeight(model));
+    }
+    /****
+     * 进港-添加超重记录
+     * @param model
+     * @return
+     */
+    public Observable<String> addOverweight(OverweightBean model) {
+        return nothingtransform(getService().addWaybillOverWeight(model));
+    }
+    /****
+     * 进港-删除超重记录
+     * @param model
+     * @return
+     */
+    public Observable<String> deleteOverweight(OverweightBean model) {
+        return nothingtransform(getService().deleteWaybillOverWeight(model));
+    }
     /***
      * 出港-完成
      * @param model

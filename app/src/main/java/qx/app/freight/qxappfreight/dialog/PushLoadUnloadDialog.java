@@ -183,6 +183,11 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     }
 
     @Override
+    public void startClearTaskResult(String result) {
+
+    }
+
+    @Override
     public void toastView(String error) {
 
     }

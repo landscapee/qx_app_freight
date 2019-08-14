@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +37,8 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
  */
 public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
+    private OnFlightSafeguardListenner onFlightSafeguardListenner;
+
 
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
@@ -49,19 +52,35 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         } else {
             helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-        boolean isWidePlane = item.getWidthAirFlag() == 0;
-        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
-        ImageView ivControl = helper.getView(R.id.iv_control);
+//        boolean isWidePlane = item.getWidthAirFlag() == 0;
+//        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
+        helper.setText(R.id.tv_plane_type, item.getAircraftType());
+
         LinearLayout llBg = helper.getView(R.id.ll_bg);
+
         ImageView ivType = helper.getView(R.id.iv_operate_type);
+
         TextView tvTime = helper.getView(R.id.tv_time);
+
+        Button btnFS = helper.getView(R.id.btn_flight_safeguard);
+        btnFS.setOnClickListener(v -> {
+            onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
+        });
+        Button btnClear = helper.getView(R.id.btn_seat_clear);
+        btnClear.setOnClickListener(v -> {
+            onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
+        });
+
+
         tvTime.setText(item.getTimeForShow());
+
         Drawable drawableLeft = null;
         if (item.getTaskType() == 1) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
         }
+
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
                 drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
@@ -77,12 +96,56 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         tvTime.setCompoundDrawablePadding(5);
         helper.setText(R.id.tv_plane_info, StringUtil.toText(item.getFlightNo()));
         helper.setText(R.id.tv_craft_number, StringUtil.toText(item.getAircraftno()));
+
+        LinearLayout llLink = helper.getView(R.id.ll_link);
+        //连班航班
+        if(item.getMovement() == 4&&item.getRelateInfoObj()!=null){
+            llLink.setVisibility(View.VISIBLE);
+            ImageView ivTypeLink = helper.getView(R.id.iv_operate_type_link);
+            helper.setText(R.id.tv_plane_type_link, item.getAircraftType());
+            TextView tvTimeLink = helper.getView(R.id.tv_time_link);
+            helper.setText(R.id.tv_plane_info_link, StringUtil.toText(item.getRelateInfoObj().getFlightNo()));
+            helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
+            helper.setText(R.id.tv_seat_link, StringUtil.toText(item.getRelateInfoObj().getSeat()));
+            tvTimeLink.setText(item.getRelateInfoObj().getTimeForShow());
+            if (item.getRelateInfoObj().getTaskType() == 1) {//装机
+                ivTypeLink.setImageResource(R.mipmap.li);
+            } else {
+                ivTypeLink.setImageResource(R.mipmap.jin);//应该显示  ===进
+            }
+            Drawable drawableLeftLink = null;
+            switch (item.getRelateInfoObj().getTimeType()) {
+                case Constants.TIME_TYPE_AUTUAL:
+                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.shi);
+                    break;
+                case Constants.TIME_TYPE_EXCEPT:
+                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.yu);
+                    break;
+                case Constants.TIME_TYPE_PLAN:
+                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.ji);
+                    break;
+            }
+            tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
+            tvTimeLink.setCompoundDrawablePadding(5);
+            LinearLayout containerLink = helper.getView(R.id.ll_flight_info_container_link);
+            if (item.getRelateInfoObj().getFlightInfoList() != null){
+                FlightInfoLayout layoutLink = new FlightInfoLayout(mContext, item.getRelateInfoObj().getFlightInfoList());
+                LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                containerLink.removeAllViews();
+                containerLink.addView(layoutLink, paramsMain);
+            }
+        }
+        else
+            llLink.setVisibility(View.GONE);
+
+
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         container.removeAllViews();
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
+
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         NewInstallEquipStepAdapter adapter = new NewInstallEquipStepAdapter(item.getOperationStepObj());
@@ -154,34 +217,18 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
         if (item.isShowDetail()) {
             rvStep.setVisibility(View.VISIBLE);
-            ivControl.setImageResource(R.mipmap.up);
             collView.expand();
         } else {
             rvStep.setVisibility(View.GONE);
-            ivControl.setImageResource(R.mipmap.down);
             collView.collapse();
         }
-        ivControl.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
-            if (item.isShowDetail()) {
-                rvStep.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.up);
-                collView.expand();
-            } else {
-                rvStep.setVisibility(View.GONE);
-                ivControl.setImageResource(R.mipmap.down);
-                collView.collapse();
-            }
-        });
         llBg.setOnClickListener(v -> {
             item.setShowDetail(!item.isShowDetail());
             if (item.isShowDetail()) {
                 rvStep.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.up);
                 collView.expand();
             } else {
                 rvStep.setVisibility(View.GONE);
-                ivControl.setImageResource(R.mipmap.down);
                 collView.collapse();
             }
         });
@@ -193,5 +240,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
+    }
+    public interface OnFlightSafeguardListenner {
+        void onFlightSafeguardClick(int position);
+        void onClearClick(int position);
+    }
+
+    public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {
+        this.onFlightSafeguardListenner = onFlightSafeguardListenner;
     }
 }

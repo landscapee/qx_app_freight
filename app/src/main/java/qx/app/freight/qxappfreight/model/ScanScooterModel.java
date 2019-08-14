@@ -49,4 +49,14 @@ public class ScanScooterModel extends BaseModel implements ScanScooterContract.s
                 });
         mDisposableList.add(subscription);
     }
+    @Override
+    public void scooterWithUserTask(String taskId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scooterWithUserTask(taskId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

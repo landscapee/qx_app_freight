@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
@@ -43,6 +44,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -92,7 +94,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     List<LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
-                    loadData();
+                    Observable.timer(300, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
+                            .subscribe(aLong -> {
+                                loadData();
+                            });
                 } else {//取消任务，刷新代办列表
                     loadData();
                 }
@@ -162,9 +169,30 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
+        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+            }
+
+            @Override
+            public void onClearClick(int position) {
+                startClearTask(position);
+            }
+        });
         loadData();
     }
-
+    /**
+     * 发起清场任务
+     */
+    private void startClearTask(int position) {
+        TaskClearEntity entity = new TaskClearEntity();
+        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
+        entity.setSeat(mList.get(position).getSeat());
+        entity.setType("clear");
+        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
+    }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -221,6 +249,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
+            mCurrentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -257,6 +286,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+            StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
+            StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
@@ -409,6 +440,15 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mOperatePos = 0;
             }
         }
+    }
+
+    /**
+     * 清场任务 发起返回
+     * @param result
+     */
+    @Override
+    public void startClearTaskResult(String result) {
+        ToastUtil.showToast("操作成功");
     }
 
     @Override

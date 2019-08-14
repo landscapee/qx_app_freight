@@ -523,6 +523,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     @Override
+    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+
+    }
+
+    @Override
     public void getUnLoadingListResult(UnLoadListBillBean result) {
         if (result != null) {
             if (result.getData() != null) {
@@ -546,5 +551,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         ToastUtil.showToast("结束卸机成功");
         EventBus.getDefault().post("InstallEquipFragment_refresh" + "@" + mCurrentTaskId);
         finish();
+    }
+
+    @Override
+    public void startClearTaskResult(String result) {
+
     }
 }
