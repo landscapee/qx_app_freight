@@ -424,6 +424,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<ScooterInfoListDataBean> scooterInfoList(BaseFilterEntity baseFilterEntity) {
         return transform(getService().scooterInfoList(baseFilterEntity));
     }
+    /****
+     * 板车信息查询 (收运专用)
+     * @param baseFilterEntity
+     * @return
+     */
+    public Observable<ScooterInfoListDataBean> scooterInfoListForReceive(BaseFilterEntity baseFilterEntity) {
+        return transform(getService().scooterInfoListForReceive(baseFilterEntity));
+    }
 
     /***
      * uld号查询
@@ -894,7 +902,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> addOverweight(OverweightBean model) {
+    public Observable<String> addOverweight(List<OverweightBean> model) {
         return nothingtransform(getService().addWaybillOverWeight(model));
     }
     /****

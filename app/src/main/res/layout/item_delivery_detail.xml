@@ -122,6 +122,15 @@
                 android:textSize="14sp"
                 android:text="200件 / 20kg"
                 />
+            <TextView
+                android:id="@+id/tv_overweight_money"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                android:text="超重费用:50元"
+                android:layout_marginLeft="18dp"
+                />
         </LinearLayout>
         <!--<TextView-->
             <!--android:layout_width="match_parent"-->
@@ -181,7 +190,7 @@
         <Button
             android:visibility="gone"
             android:id="@+id/btn_overweight"
-            android:layout_width="@dimen/dp_50"
+            android:layout_width="60dp"
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/selector_green_05b"

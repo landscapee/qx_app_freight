@@ -135,14 +135,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="33dp"
-                android:layout_height="match_parent"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/btn_blue_press"
                 android:gravity="center"
                 android:text="连"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

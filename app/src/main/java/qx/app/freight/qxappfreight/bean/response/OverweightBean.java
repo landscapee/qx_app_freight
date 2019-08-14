@@ -1,11 +1,15 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OverweightBean {
+public class OverweightBean implements MultiItemEntity, Serializable {
 
     /**
      * id : e55bca4a2d5b3445d4c041a40881ff68
@@ -29,4 +33,12 @@ public class OverweightBean {
 
     private String overweightInfoId;
 
+    @Override
+    public int getItemType() {
+        if (delFlag==1){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 }

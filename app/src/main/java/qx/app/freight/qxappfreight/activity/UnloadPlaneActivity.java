@@ -417,6 +417,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
     }
 
+    @Override
+    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
+
+    }
+
     /**
      * 显示最后生成的板车信息列表
      *

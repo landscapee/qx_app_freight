@@ -55,7 +55,7 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
-        if (item.getTaskType() == 1) {//装机
+        if (item.getTaskType() == 1) {//装机  bug！！如何判断 装机还是卸机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进

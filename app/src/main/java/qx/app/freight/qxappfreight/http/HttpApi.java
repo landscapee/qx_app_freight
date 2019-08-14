@@ -253,13 +253,13 @@ public interface HttpApi {
     @POST("service-bussiness-warehouse/reservoir/list")
     Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
-//    //板车列表信息
-//    @POST("service-bussiness-facility/bd/list")
-//    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
-
     //板车列表信息
-    @POST(" /service-product-cargotallying/base-scooter/getUsableScooters")
+    @POST("service-bussiness-facility/bd/list")
     Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
+
+    //板车列表信息(收银专用)
+    @POST(" /service-product-cargotallying/base-scooter/getUsableScooters")
+    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoListForReceive(@Body BaseFilterEntity model);
 
     //ULD号查询
     @POST("service-base-sysmanage/uld/list")
@@ -511,7 +511,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
     //添加运单超重记录
     @POST("service-product-delivery/delivery/addOverweightInfo")
-    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body OverweightBean model);
+    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body List<OverweightBean> model);
     //删除运单超重记录
     @POST("service-product-delivery/delivery/deleteOverweightById")
     Observable<BaseEntity<Object>> deleteWaybillOverWeight(@Body OverweightBean model);

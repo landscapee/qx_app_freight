@@ -111,6 +111,10 @@ public class WaybillsBean {
      */
     private int amountOfMoney;
     /**
+     * 超重费用
+     */
+    private double overweightCharge;
+    /**
      * 超重数量
      */
     private int overWieghtCount;

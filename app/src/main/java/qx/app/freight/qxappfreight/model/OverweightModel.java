@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -30,12 +32,24 @@ public class OverweightModel extends BaseModel implements OverweightContract.Ove
     }
 
     @Override
-    public void addOverWeight(OverweightBean entity, IResultLisenter lisenter) {
-
+    public void addOverWeight(List <OverweightBean> entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().addOverweight(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
     }
 
     @Override
     public void deleteOverWeight(OverweightBean entity, IResultLisenter lisenter) {
-
+        Disposable subscription = UpdateRepository.getInstance().deleteOverweight(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
     }
 }

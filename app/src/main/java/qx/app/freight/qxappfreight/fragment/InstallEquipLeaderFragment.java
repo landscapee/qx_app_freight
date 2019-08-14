@@ -307,8 +307,10 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
-            StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
+            if (bean.getRelateInfoObj() !=null){
+                StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
+                StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
+            }
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));

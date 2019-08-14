@@ -89,7 +89,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
                 break;
         }
         //控制按钮显示
-        if (bean.getWaybillStatus() ==6){
+        if (bean.getWaybillStatus() ==6||bean.getWaybillStatus() ==7){
 //            holder.setVisible(R.id.tv_put_num,false);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
@@ -100,6 +100,14 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             holder.setVisible(R.id.btn_overweight,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
+
+        if (bean.getOverweightCharge() > 0){
+            holder.setVisible(R.id.tv_overweight_money,true);
+            holder.setText(R.id.tv_overweight_money,"超重费用:"+bean.getOverweightCharge()+"元");
+        }
+        else
+            holder.setGone(R.id.tv_overweight_money,false);
+
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->
                 listener.outStorage(holder.getAdapterPosition(),bean.getId(),bean.getOutStorageUser())
