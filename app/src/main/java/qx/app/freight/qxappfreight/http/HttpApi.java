@@ -83,6 +83,7 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
@@ -504,6 +505,16 @@ public interface HttpApi {
     //根据收费记录ID(流水号) 查询收费记录对应的进港运单记录
     @POST("service-product-delivery/delivery/selectInwaybillByCounterBillId")
     Observable<BaseEntity<ArrivalDeliveryInfoBean>> arrivalDeliveryInfo(@Body BaseFilterEntity model);
+
+    //查询运单超重记录
+    @POST("service-product-delivery/delivery/getOverweightByWaybillId")
+    Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
+    //添加运单超重记录
+    @POST("service-product-delivery/delivery/addOverweightInfo")
+    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body OverweightBean model);
+    //删除运单超重记录
+    @POST("service-product-delivery/delivery/deleteOverweightById")
+    Observable<BaseEntity<Object>> deleteWaybillOverWeight(@Body OverweightBean model);
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")

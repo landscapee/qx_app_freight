@@ -84,6 +84,7 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
@@ -880,7 +881,30 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
-
+    /****
+     * 进港-查询出库运单超重
+     * @param model
+     * @return
+     */
+    public Observable<List<OverweightBean>> getOverweight(BaseFilterEntity model) {
+        return transform(getService().getWaybillOverWeight(model));
+    }
+    /****
+     * 进港-添加超重记录
+     * @param model
+     * @return
+     */
+    public Observable<String> addOverweight(OverweightBean model) {
+        return nothingtransform(getService().addWaybillOverWeight(model));
+    }
+    /****
+     * 进港-删除超重记录
+     * @param model
+     * @return
+     */
+    public Observable<String> deleteOverweight(OverweightBean model) {
+        return nothingtransform(getService().deleteWaybillOverWeight(model));
+    }
     /***
      * 出港-完成
      * @param model

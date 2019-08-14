@@ -71,6 +71,9 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     LinearLayout llNotice;
     @BindView(R.id.rl_message_change)
     RelativeLayout llPsd;
+    @BindView(R.id.rl_today_done)
+    RelativeLayout llTodayDone;
+
     @BindView(R.id.tv_notice_num)
     TextView tvNoticeNum;
     @BindView(R.id.rl_notice)
@@ -165,6 +168,9 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
             case R.id.rl_message_change:
                 //密码修改
                 UpdatePWDActivity.startActivity(getActivity());
+                break;
+            case R.id.rl_today_done:
+                //今日已办
                 break;
         }
     }
