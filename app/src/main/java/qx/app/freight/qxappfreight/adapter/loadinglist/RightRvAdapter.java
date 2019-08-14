@@ -30,32 +30,37 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
         TextView tvTarget = helper.getView(R.id.tv_target_name);
         TextView tvWeight = helper.getView(R.id.tv_weight);
         TextView tvType = helper.getView(R.id.tv_type);
-        TextView tvNumber = helper.getView(R.id.tv_number);
-        TextView[] tvList = {tvBoardNumber, tvUldNumber, tvTarget, tvType, tvWeight, tvNumber};
-        ImageView ivPullDown = helper.getView(R.id.iv_pull_down);
+        TextView[] tvList = {tvBoardNumber, tvUldNumber, tvTarget, tvType, tvWeight};
+        TextView tvPullDownTitle = helper.getView(R.id.tv_pull_title);
+        TextView tvPullDown = helper.getView(R.id.tv_pull);
         helper.setText(R.id.tv_board_number, StringUtil.toText(String.valueOf(item.getBoardNumber()))).setText(R.id.tv_uld_number, StringUtil.toText(item.getUldNumber()))
-                .setText(R.id.tv_target_name, StringUtil.toText(item.getTarget())).setText(R.id.tv_weight, StringUtil.toText(String.valueOf(item.getWeight()))).setText(R.id.tv_type, StringUtil.toText(item.getType())).setText(R.id.tv_number, StringUtil.toText(String.valueOf(item.getNumber())));
-        tvNumber.setVisibility(View.GONE);
-        if (helper.getAdapterPosition() == 0) {
+                .setText(R.id.tv_target_name, StringUtil.toText(item.getTarget())).setText(R.id.tv_weight, StringUtil.toText(String.valueOf(item.getWeight()))).setText(R.id.tv_type, StringUtil.toText(item.getType()));
+        if (helper.getAdapterPosition() == 0) {//title栏显示拉下文字，
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#e5e5e5"));
                 tv.setBackgroundColor(Color.parseColor("#7b8a9b"));
             }
-            ivPullDown.setVisibility(View.GONE);
+            tvPullDownTitle.setVisibility(View.VISIBLE);
+            tvPullDown.setVisibility(View.GONE);
         } else {
-            if (item.isShowPull()) {
-                ivPullDown.setVisibility(View.VISIBLE);
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#ee3f8e"));
-                    tv.setBackgroundColor(Color.parseColor("#ffffff"));
-                }
-            } else {
-                ivPullDown.setVisibility(View.GONE);
+            tvPullDownTitle.setVisibility(View.GONE);
+            tvPullDown.setVisibility(View.VISIBLE);
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#666666"));
                     tv.setBackgroundColor(Color.parseColor("#ffffff"));
-                }
             }
+                tvPullDown.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       if (item.isPull()){
+                           item.setPull(false);
+                           tvPullDown.setTextColor(Color.parseColor("#666"));
+                       }else {
+                           item.setPull(true);
+                           tvPullDown.setTextColor(Color.parseColor("#ee3f8e"));
+                       }
+                    }
+                });
         }
     }
 }

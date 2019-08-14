@@ -81,8 +81,6 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 }
                 right.setType(type);
                 right.setWeight(String.valueOf(entity.getActWgt()));
-                right.setNumber(String.valueOf(entity.getNumber()));
-                right.setShowPull(entity.isShowPullDown());
                 rightData.add(right);
             }
         }
@@ -106,7 +104,6 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         titleRight.setTarget("目的地");
         titleRight.setType("类别");
         titleRight.setWeight("重量");
-//        titleRight.setNumber("件数");
         rightData.add(0, titleRight);
         for (RegularEntity left : leftData) {
             left.setBerthList(berthList);

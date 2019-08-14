@@ -102,6 +102,10 @@ public class LoadingListBean implements Serializable {
             private String restrictedCargo;
             private List<WaybillListBean> waybillList;
             /**
+             * 拉货标记 0:正常   1: 拉货
+             */
+            private int exceptionFlag;
+            /**
              * 缺少的数据
              */
             private boolean showPullDown = false;

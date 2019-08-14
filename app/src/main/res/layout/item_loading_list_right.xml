@@ -84,28 +84,23 @@
             android:layout_height="match_parent"
             android:background="#e5e5e5" />
 
-        <FrameLayout
-            android:layout_width="63dp"
-            android:visibility="gone"
-            android:layout_height="match_parent">
-
             <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_pull_title"
+                android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:gravity="center"
-                android:text="9999"
+                android:text="拉下"
+                android:textColor="#666" />
+            <TextView
+                android:id="@+id/tv_pull"
+                android:layout_width="43dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_rect_gray_979797"
+                android:gravity="center"
+                android:text="拉下"
                 android:textColor="#666" />
 
-            <ImageView
-                android:id="@+id/iv_pull_down"
-                android:layout_width="@dimen/dp_25"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:src="@mipmap/icon_pull_down"
-                 />
-        </FrameLayout>
 
         <TextView
             android:layout_width="1px"
