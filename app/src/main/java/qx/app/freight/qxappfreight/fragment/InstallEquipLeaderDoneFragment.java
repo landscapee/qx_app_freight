@@ -40,8 +40,10 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
+import qx.app.freight.qxappfreight.contract.StevedoresTaskHisContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadLeaderDialog;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
+import qx.app.freight.qxappfreight.presenter.StevedoresTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -53,7 +55,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 装卸机小组长代办fragment 已办
  */
-public class InstallEquipLeaderDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadUnloadLeaderToDoContract.LoadUnloadLeaderToDoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipLeaderDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, StevedoresTaskHisContract.stevedoresTaskHisView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -87,82 +89,11 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
-        if (result != null) {
-            List<LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean> list = result.getTaskData().getStaffList();
-            StringBuilder addMembers = new StringBuilder();
-            StringBuilder removeMembers = new StringBuilder();
-            int addNumber = 0, removeNumber = 0;
-            if (list != null) {
-                for (LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean data : list) {
-                    if (data.getOperationType() == 1) {
-                        addMembers.append(data.getStaffName());
-                        addMembers.append("、");
-                        addNumber += 1;
-                    }
-                    if (data.getOperationType() == 2) {
-                        removeMembers.append(data.getStaffName());
-                        removeMembers.append("、");
-                        removeNumber += 1;
-                    }
-                }
-            }
-            String toast = "";
-            if (addNumber != 0 && removeNumber != 0) {
-                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
-                        "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")," + "移除了" + removeNumber + "个成员(" +
-                        removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
-            }
-            if (addNumber == 0 && removeNumber != 0) {
-                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务移除了" + removeNumber + "个成员(" +
-                        removeMembers.toString().substring(0, removeMembers.toString().length() - 1) + ")";
-            }
-            if (addNumber != 0 && removeNumber == 0) {
-                toast = result.getTaskData().getSeat() + "机位" + result.getTaskData().getFlightNo() + "航班装卸任务新增了" + addNumber +
-                        "个成员(" + addMembers.toString().substring(0, addMembers.toString().length() - 1) + ")";
-            }
-            Log.e("tagTest", "toast===" + toast);
-            ToastUtil.showToast(toast);
-        }
+        //已办不需要推送
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            if (result.isChangeWorkerUser() || result.isSplitTask()) {//换人或拆分任务直接刷新代办列表
-                loadData();
-            } else if (result.isCancelFlag()) {
-                if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
-                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                    String flightName = list.get(0).getFlightNo();
-                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
-                            .subscribe(aLong -> {
-                                loadData();
-                            });
-                } else {//取消任务，刷新代办列表
-                    loadData();
-                }
-            } else {//新任务推送，筛选最新数据再添加进行展示
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                for (LoadAndUnloadTodoBean bean : list) {
-                    for (LoadAndUnloadTodoBean bean1 : mListCache) {
-                        if (bean.getTaskId().equals(bean1.getTaskId())) {//如果新任务id==旧任务id就删除
-                            mListCache.remove(bean1);
-                        }
-                    }
-                    mListCache.add(bean); //添加新任务到旧任务列表
-                }
-                //任务列表同 代办列表比对，如果待办列表含有同样的数据，则删除任务列表中对应数据
-                for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据，目的在于推送过来新任务弹窗提示时如果收到任务动态信息，需要将修改后的任务信息展示出来
-                        mListCache.remove(bean);
-                    }
-                }
-                showDialogTask();
-            }
-        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
@@ -172,48 +103,6 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         }
     }
 
-    /**
-     * mListCache 为0 就不展示
-     */
-    private void showDialogTask() {
-        if ((mDialog != null && mDialog.isAdded()) || mListCache.size() == 0)
-            return;
-        mListCacheUse.clear();
-        mListCacheUse.add(mListCache.get(0));
-        mListCache.remove(0);
-        mDialog = new PushLoadUnloadLeaderDialog();
-        Log.e("tagTest", "mData======" + mListCacheUse.size());
-        mDialog.setData(getContext(), mListCacheUse, status -> {
-            switch (status) {
-                case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
-                    mDialog.dismiss();
-                    ToastUtil.showToast("领受新装卸任务成功");
-                    mListCacheUse.clear();
-                    loadData();
-                    showDialogTask();
-                    break;
-                case 1://拒绝任务后清除taskId记录
-                    mDialog.dismiss();
-                    mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
-                    if (isShow) {
-                        mTaskFragment.setTitleText(mTaskIdList.size());
-                        mMfrvData.notifyForAdapter(mAdapter);
-                    }
-                    showDialogTask();
-                    break;
-                case -1://领受失败后，清空未领受列表缓存
-                    Log.e("tagPush", "推送出错了");
-                    mDialog.dismiss();
-                    mListCacheUse.clear();
-                    break;
-            }
-            Tools.closeVibrator(getActivity().getApplicationContext());
-        });
-        if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-            Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
-            mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
-        }
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -226,7 +115,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new LoadUnloadToDoLeaderPresenter(this);
+        mPresenter = new StevedoresTaskHisPresenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         loadData();
@@ -268,11 +157,11 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     }
 
     private void loadData() {
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-        entity.setCurrent(mCurrentPage);
-        entity.setSize(mCurrentSize);
-        ((LoadUnloadToDoLeaderPresenter) mPresenter).getLoadUnloadLeaderToDo(entity);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+//        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+//        entity.setCurrent(mCurrentPage);
+//        entity.setSize(mCurrentSize);
+        ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(UserInfoSingle.getInstance().getUserId());
     }
 
     @Override
@@ -297,7 +186,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     }
 
     @Override
-    public void getLoadUnloadLeaderToDoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void stevedoresTaskHisResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -333,7 +222,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
                 times.add(String.valueOf(bean.getStartLoadTime()));
                 times.add(String.valueOf(bean.getEndLoadTime()));
             }
-            int posNow = 0;//判断当前代办任务应该进行哪一步的int值
+            int posNow = 10;//判断当前代办任务应该进行哪一步的int值
             for (int i = 0; i < times.size(); i++) {
                 String timeNow = times.get(i);
                 if ("0".equals(timeNow)) {
@@ -376,10 +265,8 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         if (mListCache.size() != 0) {
 //            mCacheList.removeAll(mListCache);
             Log.e("tagTest", "弹框。。。。。");
-            showDialogTask();
         } else {
             seachByText();
-            setSlideListener();
         }
         if (mTaskFragment != null) {
             if (isShow)
@@ -387,50 +274,6 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         }
     }
 
-    /**
-     * 设置滑动监听
-     */
-    private void setSlideListener() {
-        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
-            mOperatePos = smallPos;
-            mSlideAdapter = adapter;
-            go2SlideStep(bigPos, mList.get(bigPos).getOperationStepObj().get(smallPos).getOperationCode());
-        });
-    }
-
-    /**
-     * 去滑动操作
-     *
-     * @param bigPos 代办列表中的位置下标
-     * @param code   操作码
-     */
-    private void go2SlideStep(int bigPos, String code) {
-        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-        entity.setType(1);
-        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
-        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
-        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-        entity.setOperationCode(code);
-        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mList.get(bigPos).getWorkerName());
-        entity.setCreateTime(System.currentTimeMillis());
-        ((LoadUnloadToDoLeaderPresenter) mPresenter).slideTask(entity);
-    }
-
-    @Override
-    public void slideTaskResult(String result) {
-        if ("正确".equals(result)) {
-            mSlideAdapter.notifyDataSetChanged();
-            if (mOperatePos == 3) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-            }
-        }
-    }
 
     @Override
     public void toastView(String error) {

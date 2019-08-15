@@ -40,8 +40,10 @@ import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadUnloadTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
@@ -54,7 +56,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 装机fragment 已办
  */
-public class InstallEquipDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, LoadUnloadTaskHisContract.loadUnloadTaskHisView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -86,42 +88,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            if (result.isChangeWorkerUser() || result.isSplitTask()) {//换人或拆分任务直接刷新代办列表
-                loadData();
-            } else if (result.isCancelFlag()) {
-                if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
-                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                    String flightName = list.get(0).getFlightNo();
-                    ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
-                            .subscribe(aLong -> {
-                                loadData();
-                            });
-                } else {//取消任务，刷新代办列表
-                    loadData();
-                }
-            } else {//新任务推送，筛选最新数据再添加进行展示
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
-                for (LoadAndUnloadTodoBean bean : list) {
-                    for (LoadAndUnloadTodoBean bean1 : mListCache) {
-                        if (bean.getTaskId().equals(bean1.getTaskId())) {//如果新任务id==旧任务id就删除
-                            mListCache.remove(bean1);
-                        }
-                    }
-                    mListCache.add(bean); //添加新任务到旧任务列表
-                }
-                //任务列表同 代办列表比对，如果待办列表含有同样的数据，则删除任务列表中对应数据
-                for (LoadAndUnloadTodoBean bean : mListCache) {
-                    if (mTaskIdList.contains(bean.getTaskId())) {//删除代办列表中已经展示的数据，目的在于推送过来新任务弹窗提示时如果收到任务动态信息，需要将修改后的任务信息展示出来
-                        mListCache.remove(bean);
-                    }
-                }
-                showTaskDialog();
-            }
-        }
+
     }
 
     private void showTaskDialog() {
@@ -166,7 +133,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadUnloadTaskHisPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
@@ -177,21 +144,9 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
             @Override
             public void onClearClick(int position) {
-                startClearTask(position);
             }
         });
         loadData();
-    }
-    /**
-     * 发起清场任务
-     */
-    private void startClearTask(int position) {
-        TaskClearEntity entity = new TaskClearEntity();
-        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
-        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
-        entity.setSeat(mList.get(position).getSeat());
-        entity.setType("clear");
-        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -238,11 +193,11 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
     }
 
     private void loadData() {
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-        entity.setCurrent(mCurrentPage);
-        entity.setSize(mCurrentSize);
-        ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+//        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+//        entity.setCurrent(mCurrentPage);
+//        entity.setSize(mCurrentSize);
+        ((LoadUnloadTaskHisPresenter) mPresenter).loadUnloadTaskHis(UserInfoSingle.getInstance().getUserId());
     }
 
     @Override
@@ -266,8 +221,69 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         loadData();
     }
 
+    /**
+     * 设置滑动监听
+     *
+     * @param checkedList 是否滑动过当前步骤  列表
+     */
+    private void setSlideListener(List<Boolean> checkedList) {
+        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
+            //滑动步骤去调接口，以及跳转页面
+            if ((smallPos == 3 || smallPos == 4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
+                Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
+            } else {
+                mOperatePos = smallPos;
+                mSlideAdapter = adapter;
+                if (smallPos == 3 && mList.get(bigPos).getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
+                    String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
+                    for (String code : codes) {
+                        go2SlideStep(bigPos, code);
+                    }
+                } else {
+                    go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
+                }
+            }
+        });
+    }
+
+
+    private void go2SlideStep(int bigPos, String code) {
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
+        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
+        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode(code);
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(mList.get(bigPos).getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+    }
+
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void toastView(String error) {
+        if (mCurrentPage == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
+    }
+
+    @Override
+    public void showNetDialog() {
+        showProgessDialog("请求中......");
+    }
+
+    @Override
+    public void dissMiss() {
+        dismissProgessDialog();
+    }
+
+    @Override
+    public void loadUnloadTaskHisResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
         List<Boolean> checkedList = new ArrayList<>();
         mCacheList.clear();
@@ -305,7 +321,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
                 times.add(bean.getStartLoadTime() + ":" + bean.getEndLoadTime());
             }
             times.add(String.valueOf(bean.getCloseDoorTime()));
-            int posNow = 0;//判断当前代办任务应该进行哪一步的int值
+            int posNow = 10;//判断当前代办任务应该进行哪一步的int值
             boolean hasChecked = false;
             for (int i = 0; i < times.size(); i++) {
                 String timeNow = times.get(i);
@@ -387,89 +403,5 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             if (isShow)
                 mTaskFragment.setTitleText(mCacheList.size());
         }
-    }
-
-    /**
-     * 设置滑动监听
-     *
-     * @param checkedList 是否滑动过当前步骤  列表
-     */
-    private void setSlideListener(List<Boolean> checkedList) {
-        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
-            //滑动步骤去调接口，以及跳转页面
-            if ((smallPos == 3 || smallPos == 4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
-                Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
-            } else {
-                mOperatePos = smallPos;
-                mSlideAdapter = adapter;
-                if (smallPos == 3 && mList.get(bigPos).getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
-                    String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
-                    for (String code : codes) {
-                        go2SlideStep(bigPos, code);
-                    }
-                } else {
-                    go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
-                }
-            }
-        });
-    }
-
-
-    private void go2SlideStep(int bigPos, String code) {
-        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-        entity.setType(1);
-        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
-        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
-        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-        entity.setOperationCode(code);
-        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mList.get(bigPos).getWorkerName());
-        entity.setCreateTime(System.currentTimeMillis());
-        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
-    }
-
-    @Override
-    public void slideTaskResult(String result) {
-        if ("正确".equals(result)) {
-            mSlideAdapter.notifyDataSetChanged();
-            //如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
-            //单独装机或卸机任务滑动的是第4步，需要刷新数据关闭舱门；装卸机连班航班任务滑动第5步，同理
-            if (mOperatePos==0||mOperatePos == 4 || mOperatePos == 5) {
-                mCurrentPage = 1;
-                loadData();
-                mOperatePos = 0;
-            }
-        }
-    }
-
-    /**
-     * 清场任务 发起返回
-     * @param result
-     */
-    @Override
-    public void startClearTaskResult(String result) {
-        ToastUtil.showToast("操作成功");
-    }
-
-    @Override
-    public void toastView(String error) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
-    }
-
-    @Override
-    public void showNetDialog() {
-        showProgessDialog("请求中......");
-    }
-
-    @Override
-    public void dissMiss() {
-        dismissProgessDialog();
     }
 }

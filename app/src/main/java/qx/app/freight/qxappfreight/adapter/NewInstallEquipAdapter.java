@@ -149,9 +149,15 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
         if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size()-1).getStepDoneDate())){
             ivDone.setVisibility(View.VISIBLE);
+            btnFS.setVisibility(View.GONE);
+            btnClear.setVisibility(View.GONE);
         }
-        else
+        else{
             ivDone.setVisibility(View.GONE);
+            btnFS.setVisibility(View.VISIBLE);
+            btnClear.setVisibility(View.VISIBLE);
+        }
+
 
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));

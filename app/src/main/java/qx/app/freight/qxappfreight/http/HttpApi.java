@@ -761,7 +761,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> stevedoresTaskHis(@Path("operatorId") String operatorId);
 
     //监装监卸已办
-    @GET("service-product-transport/p-task-his/loadUnloadTaskHis/{operatorId}")
+    @GET("service-product-transport/tp-task-his/loadUnloadTaskHis/{operatorId}")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadUnloadTaskHis(@Path("operatorId") String operatorId);
 
 

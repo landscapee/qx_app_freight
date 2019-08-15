@@ -115,7 +115,7 @@ public class TaskDoneFragment extends BaseFragment {
      * @param size 待办数
      */
     public void setTitleText(int size) {
-        mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
+        mToolBar.setMainTitle(Color.WHITE, "我的已办（" + size + "）");
     }
 
     public void goneTitle() {
