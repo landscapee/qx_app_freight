@@ -3,7 +3,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e5e5e5" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -84,22 +87,24 @@
             android:layout_height="match_parent"
             android:background="#e5e5e5" />
 
-            <TextView
-                android:id="@+id/tv_pull_title"
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:text="拉下"
-                android:textColor="#666" />
-            <TextView
-                android:id="@+id/tv_pull"
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/shape_rect_gray_979797"
-                android:gravity="center"
-                android:text="拉下"
-                android:textColor="#666" />
+        <TextView
+            android:id="@+id/tv_pull_title"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="拉下"
+            android:textColor="#666" />
+
+        <TextView
+            android:id="@+id/tv_pull"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_rect_gray_979797"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="拉下"
+            android:textColor="#666" />
 
 
         <TextView
@@ -112,4 +117,10 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e5e5e5" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_all_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
 </LinearLayout>

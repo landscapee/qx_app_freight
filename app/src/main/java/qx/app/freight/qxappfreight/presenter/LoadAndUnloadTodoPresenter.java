@@ -55,7 +55,7 @@ public class LoadAndUnloadTodoPresenter extends BasePresenter {
         ((LoadAndUnloadTodoModel) mRequestModel).startClearTask(entity, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String result) {
-                ((LoadAndUnloadTodoContract.loadAndUnloadTodoView) mRequestView).slideTaskResult(result);
+                ((LoadAndUnloadTodoContract.loadAndUnloadTodoView) mRequestView).startClearTaskResult(result);
                 mRequestView.dissMiss();
             }
 

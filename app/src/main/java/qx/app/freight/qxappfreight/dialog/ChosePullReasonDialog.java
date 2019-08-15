@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -45,10 +46,13 @@ public class ChosePullReasonDialog extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false); // 外部点击取消
         // 设置宽度为屏宽, 靠近屏幕底部。
         Window window = dialog.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.CENTER; // 紧贴底部
-        window.setAttributes(lp);
+        window.setGravity(Gravity.CENTER);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
+        window.getDecorView().setPadding(30, 30, 30, 30);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
         ImageView ivClose = dialog.findViewById(R.id.iv_close_dialog);
         ivClose.setOnClickListener(v -> {
             onChoseListener.onChosed("", "");

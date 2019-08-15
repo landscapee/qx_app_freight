@@ -586,6 +586,13 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> performTaskSteps(PerformTaskStepsEntity performTaskStepsEntity) {
         return nothingtransform(getService().performTaskSteps(performTaskStepsEntity));
     }
+    /****
+     * 装卸机人员确认装机单版本建议
+     * @return
+     */
+    public Observable<String> confirmLoadPlan(BaseFilterEntity entity) {
+        return nothingtransform(getService().confirmLoadPlan(entity));
+    }
 
     /*****
      * GPs

@@ -132,6 +132,7 @@ public interface HttpApi {
     @POST("userLogin")
     @FormUrlEncoded
     Observable<RespLoginBean> loginQxAi(@FieldMap Map<String, String> masp);
+
     //登出一期智能调度
     @POST("userLoginOut")
     @FormUrlEncoded
@@ -391,6 +392,10 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/performTaskSteps")
     Observable<BaseEntity<Object>> performTaskSteps(@Body PerformTaskStepsEntity model);
 
+    //装卸机确认版本
+    @POST("service-product-finishloading/stowage-report-info/installedSingleConfirm")
+    Observable<BaseEntity<Object>> confirmLoadPlan(@Body BaseFilterEntity model);
+
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
     Observable<BaseEntity<Object>> saveGpsInfo(@Body GpsInfoEntity model);
@@ -510,9 +515,11 @@ public interface HttpApi {
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")
     Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
+
     //添加运单超重记录
     @POST("service-product-delivery/delivery/addOverweightInfo")
     Observable<BaseEntity<Object>> addWaybillOverWeight(@Body OverweightBean model);
+
     //删除运单超重记录
     @POST("service-product-delivery/delivery/deleteOverweightById")
     Observable<BaseEntity<Object>> deleteWaybillOverWeight(@Body OverweightBean model);

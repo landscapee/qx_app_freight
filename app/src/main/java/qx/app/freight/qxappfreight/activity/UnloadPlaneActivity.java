@@ -65,7 +65,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 理货卸机页面
  */
-public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, GetFlightCargoResContract.getFlightCargoResView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
+public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoListContract.scooterInfoListView, ArrivalDataSaveContract.arrivalDataSaveView, ScanScooterCheckUsedContract.ScanScooterCheckView, ScanScooterContract.scanScooterView, GetUnLoadListBillContract.IView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//航班号
     @BindView(R.id.tv_flight_type)
@@ -212,6 +212,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             UnLoadRequestEntity entity = new UnLoadRequestEntity();
             entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
             entity.setFlightId(mData.getFlightId());
+            String userName = UserInfoSingle.getInstance().getUsername();
+            entity.setOperationUserName((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
             ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
         });
         mIvControl1.setOnClickListener(v -> {
@@ -494,20 +496,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     @Override
-    public void getLoadingListResult(LoadingListBean result) {
-    }
-
-    @Override
-    public void flightDoneInstallResult(String result) {
-
-    }
-
-    @Override
-    public void overLoadResult(String result) {
-
-    }
-
-    @Override
     public void scanScooterResult(String result) {
 
     }
@@ -557,4 +545,5 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     public void startClearTaskResult(String result) {
 
     }
+
 }

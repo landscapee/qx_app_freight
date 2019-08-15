@@ -115,6 +115,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             entity.setFlightInfoId(mBaseData.getFlightId());
             entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
             entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+            String userName = UserInfoSingle.getInstance().getUsername();
+            entity.setOperationUserName((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());

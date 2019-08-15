@@ -59,7 +59,6 @@ public class BaseFilterEntity<T> {
     private String staffId;
     private String staffIds;
     private String operationUser;
-    private String operationUserName;
     private int documentType;
     //报载记录ID
     private String reportInfoId;
@@ -67,6 +66,8 @@ public class BaseFilterEntity<T> {
     private String auditType;
     //退回报载原因
     private String returnReason;
+    private String installedSingleConfirmUser;
+    private String operationUserName;
 
     private int sort;
 }

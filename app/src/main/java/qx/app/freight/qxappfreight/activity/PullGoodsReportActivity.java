@@ -53,26 +53,13 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
     @BindView(R.id.btn_commit)
     Button mBtnCommit;
     private PullGoodsInfoAdapter mGoodsAdapter;
-    private SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
-    private boolean mIsScanBill = false;//是否是扫描运单拉下，默认是扫板
     private String mCurrentTaskId;
-    private List<String> mTpScooterCodeList = new ArrayList<>();
-    private LoadAndUnloadTodoBean mData;
-    private String mMainFlightId;
-    private String mNowScooterCode;
     private PullGoodsInfoBean mPullBean = new PullGoodsInfoBean();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         PushDataUtil.handlePushInfo(result, mCurrentTaskId, this);
     }
-//
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventMainThread(String result) {
-//        if (result != null && result.equals(mData.getFlightId())) {
-//            finish();
-//        }
-//    }
 
     @Override
     public int getLayoutId() {
@@ -89,10 +76,9 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "拉货上报");
-        mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+        LoadAndUnloadTodoBean mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         //是否是连班航班
         boolean mIsKeepOnTask = mData.getMovement() == 4;
-        mMainFlightId = mIsKeepOnTask ? mData.getRelateInfoObj().getFlightId() : mData.getFlightId();
         mCurrentTaskId = mIsKeepOnTask ? mData.getRelateInfoObj().getTaskId() : mData.getTaskId();
         mTvFlightInfo.setText(mIsKeepOnTask ? "航班号：" + mData.getRelateInfoObj().getFlightNo() : "航班号：" + mData.getFlightNo());
         mTvSeat.setText(mIsKeepOnTask ? "跑道：" + mData.getRelateInfoObj().getSeat() : "跑道：" + mData.getSeat());
@@ -101,25 +87,19 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
         mTvDate.setText("日期：" + sdfYmd.format(mIsKeepOnTask ? mData.getRelateInfoObj().getScheduleTime() : mData.getScheduleTime()));
         mTvFlyTime.setText("计划时间：" + sdfHm.format(mIsKeepOnTask ? mData.getRelateInfoObj().getScheduleTime() : mData.getScheduleTime()));
         mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
-        ((PullGoodsReportPresenter) mPresenter).getPullGoodsInfo(mData.getFlightId());
+        ((PullGoodsReportPresenter) mPresenter).getPullGoodsInfo(getIntent().getStringExtra("flight_info_id"));
         mBtnCommit.setClickable(false);
-        mRvGoods.setLayoutManager(new LinearLayoutManager(this));
-        mGoodsAdapter = new PullGoodsInfoAdapter(mPullBean.getPullScooters());
-        mRvGoods.setAdapter(mGoodsAdapter);
         mTabLayout.addTab(mTabLayout.newTab().setText("板车拉下"));
         mTabLayout.addTab(mTabLayout.newTab().setText("运单拉下"));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {//选中板车下拉
-                    mIsScanBill = false;
                     mGoodsAdapter = new PullGoodsInfoAdapter(mPullBean.getPullScooters());
                 } else {//选中运单下拉
-                    mIsScanBill = true;
                     mGoodsAdapter = new PullGoodsInfoAdapter(mPullBean.getPullWaybills());
                 }
                 mRvGoods.setAdapter(mGoodsAdapter);
-                setMoreListener();
             }
 
             @Override
@@ -130,36 +110,45 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        setMoreListener();
         mBtnCommit.setOnClickListener(v -> {
             boolean infoFull = true;
+            for (PullGoodsInfoBean.PullScootersBean  scootersBean:mPullBean.getPullScooters()){
+                if (!scootersBean.isChecked()){
+                    infoFull=false;
+                    break;
+                }
+            }
+            for (PullGoodsInfoBean.PullWaybillsBean  bill:mPullBean.getPullWaybills()){
+                if (!bill.isChecked()){
+                    infoFull=false;
+                    break;
+                }
+            }
+            boolean canCommit=false;
+            for (PullGoodsInfoBean.PullScootersBean  scootersBean:mPullBean.getPullScooters()){
+                if (scootersBean.getStatus()==0){
+                    canCommit=true;
+                    break;
+                }
+            }
+            for (PullGoodsInfoBean.PullWaybillsBean  bill:mPullBean.getPullWaybills()){
+                if (bill.getStatus()==0){
+                    canCommit=true;
+                    break;
+                }
+            }
             //判断所有数据都打勾
-            if (infoFull) {
-                mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
-                ((PullGoodsReportPresenter) mPresenter).pullGoodsInfoCommit(mPullBean);
-            } else {
-                ToastUtil.showToast("信息输入不完整，请检查");
+            if (canCommit) {
+                if (infoFull) {
+                    mPresenter = new PullGoodsReportPresenter(PullGoodsReportActivity.this);
+                    ((PullGoodsReportPresenter) mPresenter).pullGoodsInfoCommit(mPullBean);
+                } else {
+                    ToastUtil.showToast("数据选择不完整，请检查");
+                }
+            }else {
+                ToastUtil.showToast("所有数据都已经提交，不能重复提交");
             }
         });
-    }
-
-    /**
-     * 设置对应的监听
-     */
-    private void setMoreListener() {
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(ScanDataBean result) {
-        if ("PullGoodsReportActivity".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (!mTpScooterCodeList.contains(result.getData())) {
-
-
-            } else {
-                ToastUtil.showToast("操作不合法，不能重复扫描");
-            }
-        }
     }
 
     @Override
@@ -180,6 +169,9 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
     @Override
     public void getPullGoodsInfoResult(PullGoodsInfoBean result) {
         mPullBean = result;
+        mRvGoods.setLayoutManager(new LinearLayoutManager(this));
+        mGoodsAdapter = new PullGoodsInfoAdapter(mPullBean.getPullScooters());
+        mRvGoods.setAdapter(mGoodsAdapter);
     }
 
     @Override
