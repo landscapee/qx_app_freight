@@ -58,6 +58,7 @@ import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -1203,6 +1204,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<ListByTypeBean> listByType(BaseFilterEntity entity) {
         return transform(getService().listByType(entity));
+    }
+    /**
+     * ULD根据字段过滤
+     *
+     * @param entity
+     * @return
+     */
+    public Observable<List<FlightAllReportInfo>> getFlightAllReportInfo(BaseFilterEntity entity) {
+        return transform(getService().getFlightAllReportInfo(entity));
     }
 
     /**

@@ -97,7 +97,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mTvSeat.setText(mBaseData.getSeat());
         mTvTakeOff.setText(StringUtil.getTimeTextByRegix(mBaseData.getEtd(), "HH:mm"));
         mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(), "HH:mm"));
-        mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getFlightDate(), "yyyy-MM-dd"));
+        mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getScheduleTime(), "yyyy-MM-dd"));
         mRvData.setLayoutManager(new LinearLayoutManager(this));
 //        mRvData.setRefreshListener(this);
 //        mRvData.setOnRetryLisenter(this);
