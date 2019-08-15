@@ -131,6 +131,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             public void inputOverWeight(int position) {
                 try {
                     SortingReturnGoodsDialogForNet dialog = new SortingReturnGoodsDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    dialog.setOnClickListener(text -> {
+                        getData();
+                    });
                     dialog.show();
 
                 } catch (Exception e) {

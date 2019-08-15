@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
@@ -330,12 +331,14 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(String result) {
+    public void onEventMainThread(SeatChangeEntity result) {
+        if (result.getRemark().contains("机位变更")){
+            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,result.getRemark(),null, s -> {
+                EventBus.getDefault().post("refresh_data_update");
+            });
+            updatePushDialog.show();
+        }
 
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,"",null, s -> {
-
-        });
-        updatePushDialog.show();
     }
 }
 

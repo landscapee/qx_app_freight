@@ -154,6 +154,13 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             }
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if ("refresh_data_update".equals(result)){
+            mCurrentPage = 1;
+            loadData();
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -223,6 +230,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
+            mCurrentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);

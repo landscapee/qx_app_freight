@@ -75,7 +75,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         tvTime.setText(item.getTimeForShow());
 
         Drawable drawableLeft = null;
-        if (item.getTaskType() == 1) {//装机
+        if (item.getMovement() == 2||item.getMovement() == 8) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
@@ -108,7 +108,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
             helper.setText(R.id.tv_seat_link, StringUtil.toText(item.getRelateInfoObj().getSeat()));
             tvTimeLink.setText(item.getRelateInfoObj().getTimeForShow());
-            if (item.getRelateInfoObj().getTaskType() == 1) {//装机
+            if (item.getRelateInfoObj().getMovement() == 2||item.getRelateInfoObj().getMovement() == 8) {//装机
                 ivTypeLink.setImageResource(R.mipmap.li);
             } else {
                 ivTypeLink.setImageResource(R.mipmap.jin);//应该显示  ===进

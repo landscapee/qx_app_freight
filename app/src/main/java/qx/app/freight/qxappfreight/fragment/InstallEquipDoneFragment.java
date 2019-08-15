@@ -54,7 +54,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 装机fragment
  */
-public class InstallEquipFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -68,7 +68,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private NewInstallEquipAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
-    private TaskFragment mTaskFragment; //父容器fragment
+    private TaskDoneFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
 
@@ -161,7 +161,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        mTaskFragment = (TaskFragment) getParentFragment();
+        mTaskFragment = (TaskDoneFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);

@@ -23,6 +23,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.activity.NoticeActivity;
+import qx.app.freight.qxappfreight.activity.TaskDoneActivity;
 import qx.app.freight.qxappfreight.activity.UpdatePWDActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.app.MyApplication;
@@ -149,7 +150,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         ((NoReadCountPresenter) mPresenter).noReadNoticeCount(UserInfoSingle.getInstance().getUserId());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change,R.id.rl_today_done})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
@@ -171,6 +172,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 break;
             case R.id.rl_today_done:
                 //今日已办
+                startActivity(new Intent(getActivity(), TaskDoneActivity.class));
                 break;
         }
     }

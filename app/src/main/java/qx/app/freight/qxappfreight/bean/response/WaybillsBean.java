@@ -107,7 +107,7 @@ public class WaybillsBean {
      */
     private Integer outboundNumber;
     /**
-     * 逾期费用
+     * 预期费用
      */
     private int amountOfMoney;
     /**

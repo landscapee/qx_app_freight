@@ -32,7 +32,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
-public class TaskFragment extends BaseFragment {
+public class TaskDoneFragment extends BaseFragment {
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
     @BindView(R.id.toolbar)
@@ -51,7 +51,7 @@ public class TaskFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> getActivity().finish());
         mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
             mToolBar.setVisibility(View.GONE);
             mSearchBar.setVisibility(View.VISIBLE);
@@ -188,7 +188,7 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new TaskDriverOutFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InstallEquipFragment());
+                fragmentList.add(new InstallEquipDoneFragment());
                 list_Title.add("装卸机");
             }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment

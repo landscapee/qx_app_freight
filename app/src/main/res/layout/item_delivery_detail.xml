@@ -188,7 +188,6 @@
             android:textSize="14sp"
             />
         <Button
-            android:visibility="gone"
             android:id="@+id/btn_overweight"
             android:layout_width="60dp"
             android:layout_height="27dp"

@@ -44,7 +44,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
 
         //分拣件数 - 重量
 //        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
-        //逾期费用
+        //预期费用
         holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
         holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getRqName(),"-"));
@@ -91,13 +91,17 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         //控制按钮显示
         if (bean.getWaybillStatus() ==6||bean.getWaybillStatus() ==7){
 //            holder.setVisible(R.id.tv_put_num,false);
+            if (bean.getWaybillStatus() ==7){
+                holder.setText(R.id.tv_outStorage,"");
+            }
+            else
+                holder.setText(R.id.tv_outStorage,"已出库");
+
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
-            holder.setGone(R.id.btn_overweight,false);
         }else {
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
-            holder.setVisible(R.id.btn_overweight,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
 
