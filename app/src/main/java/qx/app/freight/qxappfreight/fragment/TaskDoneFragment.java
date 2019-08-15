@@ -191,7 +191,7 @@ public class TaskDoneFragment extends BaseFragment {
                 fragmentList.add(new InstallEquipDoneFragment());
                 list_Title.add("装卸机");
             }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment
+                fragmentList.add(new InstallEquipLeaderDoneFragment());// 装卸员小组长任务列表Fragment
                 list_Title.add("装卸机");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());

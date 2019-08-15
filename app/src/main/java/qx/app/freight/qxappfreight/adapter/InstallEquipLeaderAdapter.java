@@ -124,6 +124,12 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
 
+        ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
+        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size()-1).getStepDoneDate())){
+            ivDone.setVisibility(View.VISIBLE);
+        }
+        else
+            ivDone.setVisibility(View.GONE);
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         LeaderInstallEquipStepAdapter adapter = new LeaderInstallEquipStepAdapter(item.getOperationStepObj());
