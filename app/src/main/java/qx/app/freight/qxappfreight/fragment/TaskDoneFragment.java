@@ -185,7 +185,7 @@ public class TaskDoneFragment extends BaseFragment {
                 list_Title.add("内场司机");
                 goneTitle();
             } else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new TaskDriverOutFragment());
+                fragmentList.add(new TaskDriverOutDoneFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InstallEquipDoneFragment());
@@ -200,13 +200,13 @@ public class TaskDoneFragment extends BaseFragment {
                 fragmentList.add(new InPortTallyFragment());
                 list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new FlightListBaggerFragment());
+                fragmentList.add(new FlightListBaggerDoneFragment());
                 list_Title.add("行李");
             } else if(Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new JunctionLoadFragment());
+                fragmentList.add(new JunctionLoadDoneFragment());
                 list_Title.add("结载");
             }else if(Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new CargoFragment());
+                fragmentList.add(new CargoDoneFragment());
                 list_Title.add("货物");
             }
 
