@@ -398,6 +398,10 @@ public interface HttpApi {
     @POST("service-product-finishloading/stowage-report-info/installedSingleConfirm")
     Observable<BaseEntity<Object>> confirmLoadPlan(@Body BaseFilterEntity model);
 
+    //装机判断红点状态
+    @POST("service-product-returngoods/pullGoods/hasUnReport")
+    Observable<BaseEntity<String>> getPullStatus(@Body BaseFilterEntity model);
+
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
     Observable<BaseEntity<Object>> saveGpsInfo(@Body GpsInfoEntity model);
@@ -430,7 +434,7 @@ public interface HttpApi {
 
     //拉货上报提交
     @POST("service-product-returngoods/pullGoods/pullReport")
-    Observable<BaseEntity<String>> pullGoodsInfoCommit(@Body PullGoodsInfoBean entity);
+    Observable<BaseEntity<Object>> pullGoodsInfoCommit(@Body PullGoodsInfoBean entity);
 
     //获取运单信息
     @GET("service-product-waybill/declare-waybill/getWayBillInfoByCode/{waybillCode}")

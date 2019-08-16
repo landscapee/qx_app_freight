@@ -57,4 +57,15 @@ public class GetFlightCargoResModel extends BaseModel implements GetFlightCargoR
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void getPullStatus(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getPullStatus(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

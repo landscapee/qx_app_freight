@@ -93,7 +93,7 @@ public class PullGoodsInfoBean {
         private int createUserType;//0，配载；1，监装人员
         private int status;//0，未提交；1，提交过了
         private List<String> scooterCodes;//原定的板车
-        private List<String> pushScooterCodes=new ArrayList<>();//新增扫描的板车
+        private List<String> pushScooterCodes = new ArrayList<>();//新增扫描的板车
         private String remark;//备注
         private String pullReason;//拉货原因
         private boolean checked;
