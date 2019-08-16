@@ -384,4 +384,9 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
     public void confirmLoadPlanResult(String result) {
 
     }
+
+    @Override
+    public void getPullStatusResult(BaseEntity<String> result) {
+
+    }
 }

@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,10 +42,10 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
@@ -83,6 +85,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvErrorReport;
     @BindView(R.id.tv_send_over)
     TextView mTvSendOver;
+    @BindView(R.id.iv_pull_hint)
+    ImageView mIvHint;
     @BindView(R.id.tv_confirm_cargo)
     TextView mTvConfirmCargo;
     @BindView(R.id.tv_end_install_equip)
@@ -97,6 +101,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @SuppressLint("UseSparseArrays")
     private Map<Integer, List<CompareInfoBean>> mNewIdMap = new HashMap<>();
     private ArrayList<LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
+    private int mOperateErrorStatus = -1;
+    private boolean mConfirmPlan = false;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -174,6 +180,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightId(mCurrentFlightId);
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         mTvSendOver.setOnClickListener(v -> {
+            mConfirmPlan=false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
             requestModel.setFlightNo(data.getFlightNo());
             requestModel.setCreateTime(mLoadingList.get(0).getCreateTime());
@@ -184,17 +191,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
-            BaseFilterEntity entity1=new BaseFilterEntity();
+            BaseFilterEntity entity1 = new BaseFilterEntity();
             entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
             String userName = UserInfoSingle.getInstance().getUsername();
-            entity1.setInstalledSingleConfirmUser((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
-            mPresenter=new GetFlightCargoResPresenter(this);
+            entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+            mPresenter = new GetFlightCargoResPresenter(this);
             ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
         });
         mTvPullGoodsReport.setOnClickListener(v -> {
-            if (mLoadingList.size()==0){
+            if (mLoadingList.size() == 0) {
                 ToastUtil.showToast("当前航班无装机单数据，无法进行拉货");
-            }else {
+            } else {
                 Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
                 intent.putExtra("plane_info", data);
                 intent.putExtra("flight_info_id", mBaseContent.get(0).getScooters().get(0).getFlightInfoId());
@@ -213,11 +220,21 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             LoadPlaneActivity.this.startActivity(intent);
         });
         mTvEndInstall.setOnClickListener(v -> {
-//            if (mLoadingList.size() == 0) {
-//                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
-//            } else {
-            boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-            if (mLoadingList != null && mLoadingList.size() != 0) {
+            if (mLoadingList.size() == 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoadPlaneActivity.this);
+                builder.setTitle("未收到装机单，是否结束装机?");
+                builder.setMessage("");
+                builder.setPositiveButton("确定", (dialog, which) -> {
+                    dialog.dismiss();
+                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                    bean.setTpFlightId(data.getFlightId());
+                    bean.setTaskId(data.getId());
+                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+                });
+                builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+            } else {
+                boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
                 LoadingListBean.DataBean entity1 = mLoadingList.get(0);
                 if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
@@ -229,19 +246,41 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
                     }
                 }
+                boolean hasPullTask = mIvHint.getVisibility() == View.VISIBLE;
+                if (hasPullTask) {//还有拉货任务，优先级最高
+                    mOperateErrorStatus = 1;
+                } else {
+                    if (!mConfirmPlan) {//未进行装机单确认，优先级其次
+                        mOperateErrorStatus = 2;
+                    } else {
+                        if (!doRight) {
+                            mOperateErrorStatus = 3;//信息未锁定修改
+                        }
+                    }
+                }
+                if (mOperateErrorStatus == -1) {
+                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                    bean.setTpFlightId(data.getFlightId());
+                    bean.setTaskId(data.getId());
+                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+                } else {
+                    switch (mOperateErrorStatus) {
+                        case 1:
+                            ToastUtil.showToast("当前航班还有拉货任务，请检查！");
+                            break;
+                        case 2:
+                            ToastUtil.showToast("未进行装机单确认操作，请检查！");
+                            break;
+                        case 3:
+                            ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
+                            break;
+                    }
+                }
             }
-            if (doRight) {
-                GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                bean.setTpFlightId(data.getFlightId());
-                bean.setTaskId(data.getId());
-                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-            } else {
-                ToastUtil.showToast("有未锁定修改的数据，请检查！");
-            }
-//            }
         });
     }
+
     @Override
     public void getLoadingListResult(LoadingListBean result) {
         Tools.closeVibrator(getApplicationContext());
@@ -252,8 +291,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             if (result.getData() == null || result.getData().size() == 0) {
                 mTvSendOver.setEnabled(false);
                 mTvConfirmCargo.setEnabled(true);
+                mTvSendOver.setTextColor(Color.parseColor("#888888"));
+                mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
             } else {
                 mLoadingList.add(result.getData().get(0));
+                mPresenter = new GetFlightCargoResPresenter(this);
+                BaseFilterEntity<Object> entity = new BaseFilterEntity<>();
+                entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
+                ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
                 for (LoadingListBean.DataBean bean : mLoadingList) {
                     bean.setShowDetail(true);
                 }
@@ -270,7 +315,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List<CompareInfoBean> idList = new ArrayList<>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
-                            CompareInfoBean bean=new CompareInfoBean();
+                            CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());
                             bean.setPullStatus(scooterBean.getExceptionFlag());
                             idList.add(bean);
@@ -300,7 +345,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                             for (int i = 0; i < boardMultiBeans.size(); i++) {
                                 List<CompareInfoBean> idList = new ArrayList<>();
                                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
-                                    CompareInfoBean bean=new CompareInfoBean();
+                                    CompareInfoBean bean = new CompareInfoBean();
                                     bean.setId(scooterBean.getId());
                                     bean.setPullStatus(scooterBean.getExceptionFlag());
                                     idList.add(bean);
@@ -346,6 +391,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mLoadingList != null && mLoadingList.size() != 0) {
+            mPresenter = new GetFlightCargoResPresenter(this);
+            BaseFilterEntity<Object> entity = new BaseFilterEntity<>();
+            entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
+            ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
+        }
+    }
+
+    @Override
     public void flightDoneInstallResult(String result) {
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(1);
@@ -371,6 +427,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void toastView(String error) {
+        Log.e("tagTest", "error===" + error);
         ToastUtil.showToast(error);
     }
 
@@ -403,7 +460,19 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void confirmLoadPlanResult(String result) {
+        mConfirmPlan = true;
         ToastUtil.showToast("装机单版本信息确认成功");
+        mTvConfirmCargo.setEnabled(false);
+        mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
+    }
+
+    @Override
+    public void getPullStatusResult(BaseEntity<String> result) {
+        if (Integer.valueOf(result.getData()) != 0) {
+            mIvHint.setVisibility(View.VISIBLE);
+        } else {
+            mIvHint.setVisibility(View.GONE);
+        }
     }
 
 }

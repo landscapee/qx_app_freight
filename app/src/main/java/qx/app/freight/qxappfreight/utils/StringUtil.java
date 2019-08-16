@@ -292,7 +292,7 @@ public class StringUtil {
     public static void setTimeAndType(LoadAndUnloadTodoBean bean) {
         String time;
         int timeType;
-        if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
+        if (bean.getMovement()==1||bean.getMovement()==4){//单进或连进任务
             if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {//实际到达时间
                 time = TimeUtils.getHMDay(bean.getAta());
                 timeType = Constants.TIME_TYPE_AUTUAL;
@@ -303,7 +303,7 @@ public class StringUtil {
                 time = TimeUtils.getHMDay(bean.getSta());
                 timeType = Constants.TIME_TYPE_PLAN;
             }
-        } else {//装机机任务显示时间
+        }else {
             if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
                 time = TimeUtils.getHMDay(bean.getAtd());
                 timeType = Constants.TIME_TYPE_AUTUAL;

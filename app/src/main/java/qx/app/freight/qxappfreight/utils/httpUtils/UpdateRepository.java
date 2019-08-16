@@ -593,6 +593,13 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> confirmLoadPlan(BaseFilterEntity entity) {
         return nothingtransform(getService().confirmLoadPlan(entity));
     }
+    /****
+     * 装机页面判断红点
+     * @return
+     */
+    public Observable<BaseEntity<String>> getPullStatus(BaseFilterEntity entity) {
+        return getService().getPullStatus(entity);
+    }
 
     /*****
      * GPs
@@ -660,7 +667,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
     public Observable<String> pullGoodsInfoCommit(PullGoodsInfoBean entity) {
-        return transform(getService().pullGoodsInfoCommit(entity));
+        return nothingtransform(getService().pullGoodsInfoCommit(entity));
     }
 
     /****
