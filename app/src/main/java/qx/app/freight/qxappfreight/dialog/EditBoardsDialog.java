@@ -51,17 +51,20 @@ public class EditBoardsDialog extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false); // 外部点击取消
         // 设置宽度为屏宽, 靠近屏幕底部。
         Window window = dialog.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.CENTER; // 紧贴底部
-        window.setAttributes(lp);
+        window.setGravity(Gravity.CENTER);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
+        window.getDecorView().setPadding(30, 30, 30, 30);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
         ImageView ivClose = dialog.findViewById(R.id.iv_close_dialog);
         ivClose.setOnClickListener(v -> {
             onChoseListener.onChosed(chosedBoards);
             dismiss();
         });
         RecyclerView rvBoards = dialog.findViewById(R.id.rv_boards);
-        TextView tvCommit = dialog.findViewById(R.id.tv_commit);
+        TextView tvCommit = dialog.findViewById(R.id.tv_confirm);
         List<BoardChoseBean> boards = new ArrayList<>();
         if (chosedBoards.contains(",")) {
             String[] text = chosedBoards.split(",");
@@ -87,6 +90,7 @@ public class EditBoardsDialog extends DialogFragment {
                 }
             }
             onChoseListener.onChosed(TextUtils.isEmpty(sb.toString()) ? "" : (sb.toString().substring(0, sb.toString().length() - 1)));
+            ToastUtil.showToast("操作成功");
             dismiss();
         });
         return dialog;

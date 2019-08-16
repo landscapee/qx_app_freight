@@ -172,7 +172,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
             }
 
             @Override
@@ -182,6 +182,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         });
         loadData();
     }
+
     /**
      * 发起清场任务
      */
@@ -193,6 +194,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setType("clear");
         ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -437,7 +439,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mSlideAdapter.notifyDataSetChanged();
             //如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
             //单独装机或卸机任务滑动的是第4步，需要刷新数据关闭舱门；装卸机连班航班任务滑动第5步，同理
-            if (mOperatePos==0||mOperatePos == 4 || mOperatePos == 5) {
+            if (mOperatePos == 0 || mOperatePos == 4 || mOperatePos == 5) {
                 mCurrentPage = 1;
                 loadData();
                 mOperatePos = 0;
@@ -447,6 +449,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     /**
      * 清场任务 发起返回
+     *
      * @param result
      */
     @Override

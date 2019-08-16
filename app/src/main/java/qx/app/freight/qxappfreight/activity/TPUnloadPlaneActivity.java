@@ -557,6 +557,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     }
 
+
     @Override
     public void scanScooterResult(String result) {
 

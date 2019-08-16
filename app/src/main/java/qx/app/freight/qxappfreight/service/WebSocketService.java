@@ -138,13 +138,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=beforehand_in");
                     break;
-                case "report"://报载
-                    NewspaperClient(HttpConstant.WEBSOCKETURL
-                            + "userId=" + UserInfoSingle.getInstance().getUserId()
-                            + "&taskAssignType=" + taskAssignType
-                            + "&type=MT"
-                            + "&role=report");
-                    break;
+//                case "report"://报载
+//                    NewspaperClient(HttpConstant.WEBSOCKETURL
+//                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+//                            + "&taskAssignType=" + taskAssignType
+//                            + "&type=MT"
+//                            + "&role=report");
+//                    break;
 
             }
         }

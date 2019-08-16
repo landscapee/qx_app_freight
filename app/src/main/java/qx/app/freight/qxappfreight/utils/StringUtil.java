@@ -318,6 +318,7 @@ public class StringUtil {
         bean.setTimeForShow(time);
         bean.setTimeType(timeType);
     }
+
     /**
      * 根据数据设置时间和时间显示类型
      *
@@ -326,29 +327,16 @@ public class StringUtil {
     public static void setTimeAndType(LoadAndUnloadTodoBean.RelateInfoObjBean bean) {
         String time;
         int timeType;
-//        if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {//卸机或装卸机任务显示时间
-//            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际到达时间
-//                time = TimeUtils.getHMDay(bean.getAta());
-//                timeType = Constants.TIME_TYPE_AUTUAL;
-//            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计到达时间
-//                time = TimeUtils.getHMDay(bean.getEta());
-//                timeType = Constants.TIME_TYPE_EXCEPT;
-//            } else {//计划到达时间
-//                time = TimeUtils.getHMDay(bean.getStd());
-//                timeType = Constants.TIME_TYPE_PLAN;
-//            }
-//        } else {//装机机任务显示时间
-            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
-                time = TimeUtils.getHMDay(bean.getAtd());
-                timeType = Constants.TIME_TYPE_AUTUAL;
-            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
-                time = TimeUtils.getHMDay(bean.getEtd());
-                timeType = Constants.TIME_TYPE_EXCEPT;
-            } else {//计划时间
-                time = TimeUtils.getHMDay(bean.getStd());
-                timeType = Constants.TIME_TYPE_PLAN;
-            }
-//        }
+        if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
+            time = TimeUtils.getHMDay(bean.getAtd());
+            timeType = Constants.TIME_TYPE_AUTUAL;
+        } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
+            time = TimeUtils.getHMDay(bean.getEtd());
+            timeType = Constants.TIME_TYPE_EXCEPT;
+        } else {//计划时间
+            time = TimeUtils.getHMDay(bean.getStd());
+            timeType = Constants.TIME_TYPE_PLAN;
+        }
         bean.setTimeForShow(time);
         bean.setTimeType(timeType);
     }
@@ -373,6 +361,7 @@ public class StringUtil {
             entity.setFlightInfoList(resultList);
         }
     }
+
     /**
      * 设置航线数据
      *
@@ -396,13 +385,14 @@ public class StringUtil {
 
     /**
      * 根据格式字符串生成对应的时间字符串
-     * @param timeMillions  时间毫秒值
-     * @param regix         格式字符串
-     * @return  结果
+     *
+     * @param timeMillions 时间毫秒值
+     * @param regix        格式字符串
+     * @return 结果
      */
-    public static String getTimeTextByRegix(long timeMillions,String regix){
-        SimpleDateFormat sdf=new SimpleDateFormat(regix, Locale.CHINESE);
-        Date date=new Date(timeMillions);
+    public static String getTimeTextByRegix(long timeMillions, String regix) {
+        SimpleDateFormat sdf = new SimpleDateFormat(regix, Locale.CHINESE);
+        Date date = new Date(timeMillions);
         return sdf.format(date);
     }
 }

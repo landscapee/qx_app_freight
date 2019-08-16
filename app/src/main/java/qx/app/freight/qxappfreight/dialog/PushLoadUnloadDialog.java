@@ -187,6 +187,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
 
     }
 
+
     @Override
     public void toastView(String error) {
 

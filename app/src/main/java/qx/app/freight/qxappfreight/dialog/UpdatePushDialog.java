@@ -21,7 +21,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
@@ -36,11 +35,10 @@ public class UpdatePushDialog extends Dialog {
     SlideRightExecuteView mSlideRightExecuteView;
     @BindView(R.id.iv_start_gif)
     ImageView ivStartGif;
-    private TransportDataBase data;
     private String title;
     private OnTpPushListener mOnTpPushListener;
 
-    public UpdatePushDialog(@NonNull Context context, int themeResId, String title, TransportDataBase data, OnTpPushListener mOnTpPushListener) {
+    public UpdatePushDialog(@NonNull Context context, int themeResId, String title, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
@@ -50,7 +48,6 @@ public class UpdatePushDialog extends Dialog {
         setContentView(convertView);
         ButterKnife.bind(this, convertView);
         this.title = title;
-        this.data = data;
         initViews();
     }
 
@@ -80,7 +77,7 @@ public class UpdatePushDialog extends Dialog {
         mSlideRightExecuteView.setLockListener(new SlideRightExecuteView.OnLockListener() {
             @Override
             public void onOpenLockSuccess() {
-                mOnTpPushListener.onSureBtnCallBack(data);
+                mOnTpPushListener.onSureBtnCallBack();
                 dismiss();
             }
 
@@ -92,6 +89,6 @@ public class UpdatePushDialog extends Dialog {
     }
 
     public interface OnTpPushListener {
-        void onSureBtnCallBack(TransportDataBase s);
+        void onSureBtnCallBack();
     }
 }

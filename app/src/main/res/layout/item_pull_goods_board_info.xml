@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_fff"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,7 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_container"
+                android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +40,10 @@
                     android:textColor="@color/blue_093"
                     android:textStyle="bold"
                     tools:text="大板0009" />
-
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
                 <qx.app.freight.qxappfreight.widget.RoundCheckBox
                     android:id="@+id/cb_select"
                     android:layout_width="wrap_content"
@@ -53,6 +59,7 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black_3"
                 tools:text="@string/format_goods_info" />
+            </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,5 +73,8 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_pei" />
     </FrameLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#eff2f3" />
 </LinearLayout>

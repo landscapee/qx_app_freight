@@ -66,5 +66,8 @@ public class BaseFilterEntity<T> {
     private String auditType;
     //退回报载原因
     private String returnReason;
+    private String installedSingleConfirmUser;
+    private String operationUserName;
 
+    private int sort;
 }

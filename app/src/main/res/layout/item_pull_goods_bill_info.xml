@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_fff"
     android:orientation="vertical">
 
     <FrameLayout
@@ -68,6 +67,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/ll_bind_board"
                 android:orientation="horizontal">
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_5"
                     android:singleLine="true"
-                    android:text="拉回板车号：" />
+                    android:text="新绑板车号：" />
 
                 <Space
                     android:layout_width="0dp"

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+
+        <TextView
+            android:id="@+id/tv_bill_number"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="运单号"
+            android:textColor="#666"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_bill_total"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="件数"
+            android:textColor="#666"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_bill_weight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="重量"
+            android:textColor="#666"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_bill_special_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="特货代码"
+            android:textColor="#666"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e5e5e5" />
+</LinearLayout>

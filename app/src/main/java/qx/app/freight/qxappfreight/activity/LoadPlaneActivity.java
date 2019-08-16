@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,25 +20,30 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.CompareInfoBean;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
@@ -75,6 +81,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvPullGoodsReport;
     @BindView(R.id.tv_error_report)
     TextView mTvErrorReport;
+    @BindView(R.id.tv_send_over)
+    TextView mTvSendOver;
+    @BindView(R.id.tv_confirm_cargo)
+    TextView mTvConfirmCargo;
     @BindView(R.id.tv_end_install_equip)
     TextView mTvEndInstall;
     private List<LoadingListBean.DataBean> mLoadingList = new ArrayList<>();
@@ -82,6 +92,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private String mCurrentFlightId;
     private WaitCallBackDialog mWaitCallBackDialog;
     private LoadAndUnloadTodoBean data;
+    @SuppressLint("UseSparseArrays")
+    private Map<Integer, List<CompareInfoBean>> mBaseIdMap = new HashMap<>();
+    @SuppressLint("UseSparseArrays")
+    private Map<Integer, List<CompareInfoBean>> mNewIdMap = new HashMap<>();
+    private ArrayList<LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -96,7 +111,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     private void showCargoResUpdate() {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,"预装机单已更新，请查看！", null, data -> {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, "预装机单已更新，请查看！", () -> {
             LoadingListRequestEntity entity = new LoadingListRequestEntity();
             entity.setDocumentType(2);
             entity.setFlightId(mCurrentFlightId);
@@ -105,7 +120,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (mWaitCallBackDialog != null) {
             mWaitCallBackDialog.dismiss();
         }
-        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
+        Tools.startVibrator(getApplicationContext(), true, R.raw.ring);
         updatePushDialog.show();
     }
 
@@ -158,11 +173,34 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setDocumentType(2);
         entity.setFlightId(mCurrentFlightId);
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+        mTvSendOver.setOnClickListener(v -> {
+            LoadingListSendEntity requestModel = new LoadingListSendEntity();
+            requestModel.setFlightNo(data.getFlightNo());
+            requestModel.setCreateTime(mLoadingList.get(0).getCreateTime());
+            requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
+            requestModel.setCreateUser(mLoadingList.get(0).getCreateUser());
+            requestModel.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
+            requestModel.setContent(mLoadingList.get(0).getContentObject());
+            ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
+        });
+        mTvConfirmCargo.setOnClickListener(v -> {
+            BaseFilterEntity entity1=new BaseFilterEntity();
+            entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
+            String userName = UserInfoSingle.getInstance().getUsername();
+            entity1.setInstalledSingleConfirmUser((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
+            mPresenter=new GetFlightCargoResPresenter(this);
+            ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+        });
         mTvPullGoodsReport.setOnClickListener(v -> {
-            Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
-            intent.putExtra("plane_info", data);
-            intent.putExtra("id", data.getId());
-            LoadPlaneActivity.this.startActivity(intent);
+            if (mLoadingList.size()==0){
+                ToastUtil.showToast("当前航班无装机单数据，无法进行拉货");
+            }else {
+                Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
+                intent.putExtra("plane_info", data);
+                intent.putExtra("flight_info_id", mBaseContent.get(0).getScooters().get(0).getFlightInfoId());
+                intent.putExtra("id", data.getId());
+                LoadPlaneActivity.this.startActivity(intent);
+            }
         });
         mTvErrorReport.setOnClickListener(v -> {
             Intent intent = new Intent(LoadPlaneActivity.this, ErrorReportActivity.class);
@@ -179,13 +217,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //                ToastUtil.showToast("当前航班无装机单数据，暂时无法进行下一步操作");
 //            } else {
             boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-            if (mLoadingList!=null&&mLoadingList.size()!=0) {
+            if (mLoadingList != null && mLoadingList.size() != 0) {
                 LoadingListBean.DataBean entity1 = mLoadingList.get(0);
                 if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
                     for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
-                        if (!entity2.isLocked()) {
-                            doRight = false;
-                            break;
+                        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : entity2.getScooters()) {
+                            if (!scooterBean.isLocked()) {
+                                doRight = false;
+                                break;
+                            }
                         }
                     }
                 }
@@ -209,38 +249,98 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             mWaitCallBackDialog.show();
         } else {
             mLoadingList.clear();
-            if (result.getData() == null || result.getData().size() == 0) return;
-//            mLoadingList.addAll(result.getData());
-            mLoadingList.add(result.getData().get(0));
-            for (LoadingListBean.DataBean bean:mLoadingList){
-                bean.setShowDetail(true);
-            }
-            if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
-                Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function<String, ObservableSource<List<LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
+            if (result.getData() == null || result.getData().size() == 0) {
+                mTvSendOver.setEnabled(false);
+                mTvConfirmCargo.setEnabled(true);
+            } else {
+                mLoadingList.add(result.getData().get(0));
+                for (LoadingListBean.DataBean bean : mLoadingList) {
+                    bean.setShowDetail(true);
+                }
+                if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
                     Gson mGson = new Gson();
-                    LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
-                    return Observable.just(new ArrayList<>(Arrays.asList(datas)));
-                }).subscribe(boardMultiBeans -> {
-                    result.getData().get(0).setContentObject(boardMultiBeans);
-                    Collections.reverse(mLoadingList);
-                    UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
-                    mRvData.setAdapter(adapter);
-                    adapter.setOnOverLoadListener(entity -> {
-                        if (entity.getContentObject() != null && entity.getContentObject().size() != 0) {
-                            LoadingListSendEntity requestModel = new LoadingListSendEntity();
-                            requestModel.setFlightNo(data.getFlightNo());
-                            requestModel.setCreateTime(entity.getCreateTime());
-                            requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
-                            requestModel.setCreateUser(entity.getCreateUser());
-                            requestModel.setFlightInfoId(entity.getFlightInfoId());
-//                    requestModel.setContent(entity.getContentObject());
-                            ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
-                        } else {
-                            ToastUtil.showToast("获取装机单内容失败，无法通知录入装机");
+                    mTvSendOver.setEnabled(false);
+                    mTvConfirmCargo.setEnabled(true);
+                    mTvSendOver.setTextColor(Color.parseColor("#888888"));
+                    mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
+                    LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
+                    //舱位集合
+                    mBaseContent = new ArrayList<>(Arrays.asList(datas));
+                    mBaseIdMap.clear();
+                    for (int i = 0; i < mBaseContent.size(); i++) {
+                        List<CompareInfoBean> idList = new ArrayList<>();
+                        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
+                            CompareInfoBean bean=new CompareInfoBean();
+                            bean.setId(scooterBean.getId());
+                            bean.setPullStatus(scooterBean.getExceptionFlag());
+                            idList.add(bean);
                         }
+                        mBaseIdMap.put(i, idList);
+                    }
+                    Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function<String, ObservableSource<List<LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
+                        LoadingListBean.DataBean.ContentObjectBean[] datasNew = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
+                        return Observable.just(new ArrayList<>(Arrays.asList(datasNew)));
+                    }).subscribe(boardMultiBeans -> {
+                        result.getData().get(0).setContentObject(boardMultiBeans);
+                        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
+                        mRvData.setAdapter(adapter);
+                        adapter.setOnDataCheckListener(() -> {
+                            for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : boardMultiBeans) {
+                                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
+                                    Iterator iterator = scooterBean.getWaybillList().iterator();
+                                    while (iterator.hasNext()) {
+                                        LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill = (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean) iterator.next();
+                                        if (bill.isTitle()) {
+                                            iterator.remove();
+                                        }
+                                    }
+                                }
+                            }
+                            mNewIdMap.clear();
+                            for (int i = 0; i < boardMultiBeans.size(); i++) {
+                                List<CompareInfoBean> idList = new ArrayList<>();
+                                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
+                                    CompareInfoBean bean=new CompareInfoBean();
+                                    bean.setId(scooterBean.getId());
+                                    bean.setPullStatus(scooterBean.getExceptionFlag());
+                                    idList.add(bean);
+                                }
+                                mNewIdMap.put(i, idList);
+                            }
+                            boolean modified = false;
+                            for (Integer set : mBaseIdMap.keySet()) {
+                                List<CompareInfoBean> ids = mBaseIdMap.get(set);
+                                List<CompareInfoBean> idNews = mNewIdMap.get(set);
+                                for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
+                                    if (!Objects.requireNonNull(ids).contains(s)) {
+                                        modified = true;
+                                    }
+                                }
+                            }
+                            for (Integer set : mNewIdMap.keySet()) {
+                                List<CompareInfoBean> ids = mNewIdMap.get(set);
+                                List<CompareInfoBean> idNews = mBaseIdMap.get(set);
+                                for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
+                                    if (!Objects.requireNonNull(ids).contains(s)) {
+                                        modified = true;
+                                    }
+                                }
+                            }
+                            if (modified) {
+                                mTvSendOver.setEnabled(true);
+                                mTvConfirmCargo.setEnabled(false);
+                                mTvSendOver.setTextColor(Color.parseColor("#009EB5"));
+                                mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
+                            } else {
+                                mTvSendOver.setEnabled(false);
+                                mTvConfirmCargo.setEnabled(true);
+                                mTvSendOver.setTextColor(Color.parseColor("#888888"));
+                                mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
+                            }
+                        });
                     });
-                });
-                Log.e("tagTest","string===="+subscription.toString());
+                    Log.e("tagTest", "string====" + subscription.toString());
+                }
             }
         }
     }
@@ -300,4 +400,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     public void startClearTaskResult(String result) {
 
     }
+
+    @Override
+    public void confirmLoadPlanResult(String result) {
+        ToastUtil.showToast("装机单版本信息确认成功");
+    }
+
 }

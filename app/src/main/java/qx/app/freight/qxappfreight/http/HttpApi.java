@@ -58,6 +58,7 @@ import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -133,6 +134,7 @@ public interface HttpApi {
     @POST("userLogin")
     @FormUrlEncoded
     Observable<RespLoginBean> loginQxAi(@FieldMap Map<String, String> masp);
+
     //登出一期智能调度
     @POST("userLoginOut")
     @FormUrlEncoded
@@ -392,6 +394,10 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/performTaskSteps")
     Observable<BaseEntity<Object>> performTaskSteps(@Body PerformTaskStepsEntity model);
 
+    //装卸机确认版本
+    @POST("service-product-finishloading/stowage-report-info/installedSingleConfirm")
+    Observable<BaseEntity<Object>> confirmLoadPlan(@Body BaseFilterEntity model);
+
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
     Observable<BaseEntity<Object>> saveGpsInfo(@Body GpsInfoEntity model);
@@ -511,6 +517,7 @@ public interface HttpApi {
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")
     Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
+
     //添加运单超重记录
     @POST("service-product-delivery/delivery/addOverweightInfo")
     Observable<BaseEntity<Object>> addWaybillOverWeight(@Body List<OverweightBean> model);
@@ -735,6 +742,14 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/auditManifest")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+
+    /**
+     * 释放
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
+    Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
 
 
 

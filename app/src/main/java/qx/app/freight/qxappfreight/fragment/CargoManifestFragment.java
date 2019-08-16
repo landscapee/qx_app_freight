@@ -34,7 +34,6 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
@@ -42,7 +41,6 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
-import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -196,7 +194,7 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             List<TransportDataBase> datas = mWebSocketResultBean.getChgData();
             list.addAll(datas);
-            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog,datas.get(0).getAircraftNo()+"收到新的货邮舱单，请查看！", datas.get(0), data -> {
+            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, datas.get(0).getAircraftNo() + "收到新的货邮舱单，请查看！", () -> {
                 Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
                 intent.putExtra("data", datas.get(0));
                 getContext().startActivity(intent);

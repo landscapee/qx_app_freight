@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -164,6 +165,21 @@ public class InstallEquipClient extends StompClient {
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
+
+            //订阅   待办
+            Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.ToList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
+                        WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+                        sendReshEventBus(mWebSocketBean);
+                    }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
+            compositeDisposable.add(dispTopic1);
+            WebSocketService.subList.add(WebSocketService.ToList);
+            Log.e(TAG, "websocket-->结载代办地址：" + "/user/" + UserInfoSingle.getInstance().getUserId() + "/taskTodo/taskTodoList");
+            compositeDisposable.add(dispTopic1);
+
             //订阅  装机单变更推送
             Log.e("tagPush", "userid=====" + UserInfoSingle.getInstance().getUserId());
             Disposable loadingListPush = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/preloadedCargo")
@@ -218,6 +234,12 @@ public class InstallEquipClient extends StompClient {
             }
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
+    }
+
+
+    //用于代办刷新
+    public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
     }
 
     public void reConnect(String uri) {
