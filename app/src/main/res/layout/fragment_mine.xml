@@ -235,7 +235,9 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="3dp"
-            android:background="@drawable/shape_mind_gray">
+            android:background="@drawable/shape_mind_gray"
+            android:visibility="gone"
+            >
 
             <LinearLayout
                 android:id="@+id/ll_today_done"
@@ -248,7 +250,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/changepsd" />
+                    android:background="@mipmap/icon_done_small" />
 
 
             </LinearLayout>
