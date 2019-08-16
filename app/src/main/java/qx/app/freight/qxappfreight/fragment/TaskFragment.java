@@ -163,7 +163,6 @@ public class TaskFragment extends BaseFragment {
             return;
         }
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
-            String code=UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode();
             if (Constants.RECEIVE.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskCollectVerifyFragment());
                 list_Title.add("收验");

@@ -18,12 +18,14 @@ import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 public class ScooterInfoListContract {
     public interface scooterInfoListModel {
         void scooterInfoList(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+        void scooterInfoListForReceive(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
         void exist(String scooterId, IResultLisenter lisenter);
         void addInfo(MyAgentListBean myAgentListBean, IResultLisenter lisenter);
     }
 
     public interface scooterInfoListView extends IBaseView {
         void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans);
+        void scooterInfoListForReceiveResult(List<ScooterInfoListBean> scooterInfoListBeans);
         void existResult(MyAgentListBean existBean);
         void addInfoResult(MyAgentListBean result);
     }

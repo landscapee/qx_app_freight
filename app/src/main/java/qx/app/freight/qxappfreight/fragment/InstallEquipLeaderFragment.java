@@ -164,6 +164,13 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if ("refresh_data_update".equals(result)) {
+            mCurrentPage = 1;
+            loadData();
+        }
+    }
 
     /**
      * mListCache 为0 就不展示
@@ -272,6 +279,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
+            mCurrentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -307,7 +315,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            if (bean.getRelateInfoObj()!=null) {
+            if (bean.getRelateInfoObj() !=null){
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             }

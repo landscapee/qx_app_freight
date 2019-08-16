@@ -27,6 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
@@ -133,7 +134,12 @@ public class OffSiteEscortClient extends StompClient {
                                 CommonJson4List<AcceptTerminalTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
-                            }else {
+                            }else if (topicMessage.getPayload().contains("\"loadUnloadStatusChg\":true")) {//机位变更
+                                Gson gson = new Gson();
+                                SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
+                                pushFlightInfo(data);
+                            }
+                            else {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
@@ -230,6 +236,10 @@ public class OffSiteEscortClient extends StompClient {
 
     //用于装卸机运输推送刷新弹窗
     public static void sendLoadUnLoadGroupBoard(CommonJson4List bean) {
+        EventBus.getDefault().post(bean);
+    }
+    //信息变更
+    public static void pushFlightInfo(SeatChangeEntity bean) {
         EventBus.getDefault().post(bean);
     }
 

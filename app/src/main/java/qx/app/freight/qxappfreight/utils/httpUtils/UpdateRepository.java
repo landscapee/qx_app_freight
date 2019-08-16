@@ -45,7 +45,6 @@ import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
-import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -54,6 +53,7 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
+import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
@@ -78,13 +78,13 @@ import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
-import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
@@ -168,6 +168,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<RespLoginBean> loginQxAi(Map<String, String> map) {
         return nothingDatatransformForOneDisP(getServiceQxAi().loginQxAi(map));
     }
+
     /****
      * 登出智能调度一期
      * @param
@@ -426,6 +427,15 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().scooterInfoList(baseFilterEntity));
     }
 
+    /****
+     * 板车信息查询 (收运专用)
+     * @param baseFilterEntity
+     * @return
+     */
+    public Observable<ScooterInfoListDataBean> scooterInfoListForReceive(BaseFilterEntity baseFilterEntity) {
+        return transform(getService().scooterInfoListForReceive(baseFilterEntity));
+    }
+
     /***
      * uld号查询
      * @param baseFilterEntity
@@ -560,6 +570,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId) {
         return transform(getService().scooterWithUser(model, flightId));
     }
+
     /****
      * 扫描板车查询
      * @param taskId
@@ -644,6 +655,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> arrivalDataSave(TransportEndEntity transportEndEntity) {
         return nothingtransform(getService().arrivalDataSave(transportEndEntity));
     }
+
     /****
      * 发起清场任务
      * @param taskClearEntity
@@ -652,6 +664,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> startClearTask(TaskClearEntity taskClearEntity) {
         return nothingtransform(getService().startClearTask(taskClearEntity));
     }
+
     /****
      * 拉货上报获取需要拉回的板车和运单数据
      * @param flightInfoId
@@ -896,6 +909,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
+
     /****
      * 进港-查询出库运单超重
      * @param model
@@ -904,14 +918,16 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<OverweightBean>> getOverweight(BaseFilterEntity model) {
         return transform(getService().getWaybillOverWeight(model));
     }
+
     /****
      * 进港-添加超重记录
      * @param model
      * @return
      */
-    public Observable<String> addOverweight(OverweightBean model) {
+    public Observable<String> addOverweight(List<OverweightBean> model) {
         return nothingtransform(getService().addWaybillOverWeight(model));
     }
+
     /****
      * 进港-删除超重记录
      * @param model
@@ -920,6 +936,7 @@ public class UpdateRepository extends BaseRepository {
     public Observable<String> deleteOverweight(OverweightBean model) {
         return nothingtransform(getService().deleteWaybillOverWeight(model));
     }
+
     /***
      * 出港-完成
      * @param model
@@ -1253,6 +1270,31 @@ public class UpdateRepository extends BaseRepository {
 
     public Observable<String> auditManifest(BaseFilterEntity entity) {
         return nothingtransform(getService().auditManifest(entity));
+    }
+
+
+    public Observable<List<TransportTodoListBean>> cargoReportHis(String operatorId) {
+        return transform(getService().cargoReportHis(operatorId));
+    }
+
+    public Observable<List<TransportTodoListBean>> baggageSubHis(String operatorId) {
+        return transform(getService().baggageSubHis(operatorId));
+    }
+
+    public Observable<List<LoadAndUnloadTodoBean>> reportTaskHis(String operatorId) {
+        return transform(getService().reportTaskHis(operatorId));
+    }
+
+    public Observable<List<OutFieldTaskBean>> transportTaskHis(String operatorId) {
+        return transform(getService().transportTaskHis(operatorId));
+    }
+
+    public Observable<List<LoadAndUnloadTodoBean>> stevedoresTaskHis(String operatorId) {
+        return transform(getService().stevedoresTaskHis(operatorId));
+    }
+
+    public Observable<List<LoadAndUnloadTodoBean>> loadUnloadTaskHis(String operatorId) {
+        return transform(getService().loadUnloadTaskHis(operatorId));
     }
 }
 

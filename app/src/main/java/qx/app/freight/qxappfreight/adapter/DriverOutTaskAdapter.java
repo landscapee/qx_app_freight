@@ -157,6 +157,11 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         break;
                 }
             }
+
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                mOnStepListener.onFlightSafeguardClick(helper.getAdapterPosition(), position);
+            }
         });
     }
 
@@ -174,7 +179,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
     public interface OnStepListener {
 
         void onStepListener(int step, int parentPosition, int position);
-
+        void onFlightSafeguardClick(int parentPosition, int position);
     }
 
     public void setmOnStepListener(OnStepListener onStepListener) {

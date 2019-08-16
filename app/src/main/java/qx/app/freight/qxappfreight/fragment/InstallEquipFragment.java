@@ -233,7 +233,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.contains("InstallEquipFragment_refresh")) {
+        if (result.contains("InstallEquipFragment_refresh")||"refresh_data_update".equals(result)) {
             mSpecialTaskId = result.split("@")[1];
             loadData();
         }
@@ -288,7 +288,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            if (bean.getRelateInfoObj()!=null) {
+
+            if (bean.getRelateInfoObj() != null){
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             }

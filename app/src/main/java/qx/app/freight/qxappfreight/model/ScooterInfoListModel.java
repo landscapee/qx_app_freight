@@ -28,6 +28,16 @@ public class ScooterInfoListModel extends BaseModel implements ScooterInfoListCo
                 });
         mDisposableList.add(subscription);
     }
+    @Override
+    public void scooterInfoListForReceive(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scooterInfoListForReceive(baseFilterEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 
     @Override
     public void exist(String scooterId, IResultLisenter lisenter) {

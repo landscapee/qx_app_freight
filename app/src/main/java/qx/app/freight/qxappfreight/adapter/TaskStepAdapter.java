@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +57,10 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         TextView tvStart = helper.getView(R.id.tv_step_time_start);
         TextView tvEnd = helper.getView(R.id.tv_step_time_end);
 
+        Button btnFS = helper.getView(R.id.btn_flight_safeguard);
+        btnFS.setOnClickListener(v -> {
+            listener.onFlightSafeguardClick(helper.getAdapterPosition());
+        });
 
         /**
          *  领受是否可以滑动 （任务有了领受时间 就不能再次滑动领受了）
@@ -176,6 +181,7 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
 
         void onSlideExecuteListener(int step,int position);
         void onClickListener(int step,int position);
+        void onFlightSafeguardClick(int position);
 
     }
 

@@ -90,8 +90,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkVersion();
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
 
-        mEtPassWord.setText("111111");
-        mEtUserName.setText("huangtao");
+        mEtPassWord.setText("");
+        mEtUserName.setText("");
         mBtnLogin.setOnClickListener(v -> {
             login();
         });
@@ -264,7 +264,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     dismissProgessDialog();
                     return;
                 }
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
+                        Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
+                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())) {
 //                    loginBean.setUserId(loginBean.getLoginid());
                     isNeedIm = true;
                     break;

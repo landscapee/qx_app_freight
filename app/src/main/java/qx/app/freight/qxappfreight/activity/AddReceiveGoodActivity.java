@@ -384,7 +384,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         baseFilterEntity.setCurrent(1);
         myAgentListBean.setScooterCode(mScooterCode);
         baseFilterEntity.setFilter(myAgentListBean);
-        ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
+        ((ScooterInfoListPresenter) mPresenter).ScooterInfoListForReceicve(baseFilterEntity);
     }
 
     private void getAirlineData() {
@@ -408,6 +408,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     //根据扫一扫获取到的板车号查询获得数据
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
+
+    }
+
+    @Override
+    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
             scooterInfo = scooterInfoListBeans.get(0);
             scooterId = scooterInfoListBeans.get(0).getId();

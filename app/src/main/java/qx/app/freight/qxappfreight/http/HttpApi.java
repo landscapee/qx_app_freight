@@ -53,6 +53,7 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
+import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
@@ -84,6 +85,7 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
@@ -255,13 +257,13 @@ public interface HttpApi {
     @POST("service-bussiness-warehouse/reservoir/list")
     Observable<BaseEntity<ReservoirBean>> reservoir(@Body BaseFilterEntity model);
 
-//    //板车列表信息
-//    @POST("service-bussiness-facility/bd/list")
-//    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
-
     //板车列表信息
-    @POST(" /service-product-cargotallying/base-scooter/getUsableScooters")
+    @POST("service-bussiness-facility/bd/list")
     Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoList(@Body BaseFilterEntity model);
+
+    //板车列表信息(收银专用)
+    @POST(" /service-product-cargotallying/base-scooter/getUsableScooters")
+    Observable<BaseEntity<ScooterInfoListDataBean>> scooterInfoListForReceive(@Body BaseFilterEntity model);
 
     //ULD号查询
     @POST("service-base-sysmanage/uld/list")
@@ -522,8 +524,7 @@ public interface HttpApi {
 
     //添加运单超重记录
     @POST("service-product-delivery/delivery/addOverweightInfo")
-    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body OverweightBean model);
-
+    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body List<OverweightBean> model);
     //删除运单超重记录
     @POST("service-product-delivery/delivery/deleteOverweightById")
     Observable<BaseEntity<Object>> deleteWaybillOverWeight(@Body OverweightBean model);
@@ -690,7 +691,7 @@ public interface HttpApi {
      * @param entity
      * @return
      */
-    @POST("/service-base-taskassign/taskHandler/taskLock")
+    @POST("service-base-taskassign/taskHandler/taskLock")
     Observable<BaseEntity<Object>> taskLock(@Body TaskLockEntity entity);
 
     /**
@@ -753,4 +754,38 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
     Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
+
+
+
+    /****************************已办***********************************/
+
+    //货物上报已办
+    @GET("service-product-transport/tp-task-his/cargoReportHis/{operatorId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> cargoReportHis(@Path("operatorId") String operatorId);
+
+    //行李上报已办
+    @GET("service-product-transport/tp-task-his/baggageSubHis/{operatorId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> baggageSubHis(@Path("operatorId") String operatorId);
+
+    //截载已办
+    @GET("service-product-transport/tp-task-his/reportTaskHis/{operatorId}")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> reportTaskHis(@Path("operatorId") String operatorId);
+
+    //运输已办
+    @GET("service-product-transport/tp-task-his/transportTaskHis/{operatorId}")
+    Observable<BaseEntity<List<OutFieldTaskBean>>> transportTaskHis(@Path("operatorId") String operatorId);
+
+
+    //装卸员已办
+    @GET("service-product-transport/tp-task-his/stevedoresTaskHis/{operatorId}")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> stevedoresTaskHis(@Path("operatorId") String operatorId);
+
+    //监装监卸已办
+    @GET("service-product-transport/tp-task-his/loadUnloadTaskHis/{operatorId}")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadUnloadTaskHis(@Path("operatorId") String operatorId);
+
+
+
+
+
 }

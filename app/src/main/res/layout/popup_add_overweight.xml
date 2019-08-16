@@ -107,6 +107,7 @@
             android:layout_marginTop="27dp"
             android:orientation="horizontal"
             android:background="@drawable/shape_white_stroke_grey"
+            android:layout_marginBottom="24dp"
             >
 
             <EditText
@@ -182,6 +183,7 @@
                     android:src="@mipmap/nike"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
+
         </LinearLayout>
         <Button
             android:id="@+id/btn_sure"
@@ -191,7 +193,6 @@
              android:textSize="14sp"
             android:textColor="@color/white"
             android:background="@drawable/background_submit_press"
-            android:layout_marginTop="27dp"
             android:layout_marginBottom="24dp"
             />
 

@@ -55,7 +55,7 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
-        if (item.getTaskType() == 1) {//装机
+        if (item.getMovement() == 2||item.getMovement() == 8) {//装机
             ivType.setImageResource(R.mipmap.li);
         } else {
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
@@ -89,7 +89,7 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
             helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
             helper.setText(R.id.tv_seat_link, StringUtil.toText(item.getRelateInfoObj().getSeat()));
             tvTimeLink.setText(item.getRelateInfoObj().getTimeForShow());
-            if (item.getRelateInfoObj().getTaskType() == 1) {//装机
+            if (item.getRelateInfoObj().getMovement() == 2||item.getRelateInfoObj().getMovement() == 8) {//装机
                 ivTypeLink.setImageResource(R.mipmap.li);
             } else {
                 ivTypeLink.setImageResource(R.mipmap.jin);//应该显示  ===进
@@ -124,6 +124,12 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
 
+        ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
+        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size()-1).getStepDoneDate())){
+            ivDone.setVisibility(View.VISIBLE);
+        }
+        else
+            ivDone.setVisibility(View.GONE);
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         LeaderInstallEquipStepAdapter adapter = new LeaderInstallEquipStepAdapter(item.getOperationStepObj());
