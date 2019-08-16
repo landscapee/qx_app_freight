@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -180,6 +181,17 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         searchToolbar.setHintAndListener("请输入航班号", text -> {
             mSearchText = text;
             seachByText();
+        });
+        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+            }
+
+            @Override
+            public void onClearClick(int position) {
+                ToastUtil.showToast("结载不能发起清场任务");
+            }
         });
         loadData();
     }

@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -106,19 +107,26 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             }
 
         });
-        adapter.setmOnStepListener((step, parentPosition, position) -> {
-            /**
-             * 同时开启多个航班
-             */
-            max = list.get(parentPosition).getUseTasks().get(position).size();
+        adapter.setmOnStepListener(new DriverOutTaskAdapter.OnStepListener() {
+            @Override
+            public void onStepListener(int step1, int parentPosition, int position) {
+                /**
+                 * 同时开启多个航班
+                 */
+                max = list.get(parentPosition).getUseTasks().get(position).size();
 
-            for (int i = 0; i < list.get(parentPosition).getUseTasks().get(position).size(); i++) {
-                slidePosition = parentPosition;
-                slidePositionChild = position;
-                this.step = step;
-                submitStep(list.get(parentPosition).getUseTasks().get(position).get(i), step);
+                for (int i = 0; i < list.get(parentPosition).getUseTasks().get(position).size(); i++) {
+                    slidePosition = parentPosition;
+                    slidePositionChild = position;
+                    step = step1;
+                    submitStep(list.get(parentPosition).getUseTasks().get(position).get(i), step);
+                }
             }
 
+            @Override
+            public void onFlightSafeguardClick(int parentPosition, int position) {
+                IMUtils.chatToGroup(getActivity(),list.get(parentPosition).getUseTasks().get(position).get(0).getFlightId());
+            }
         });
         getData();
     }

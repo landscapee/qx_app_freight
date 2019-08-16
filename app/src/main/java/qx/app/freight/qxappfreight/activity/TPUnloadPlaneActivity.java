@@ -380,7 +380,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if ("UnloadPlaneActivity".equals(result.getFunctionFlag())) {
+        if ("TPUnloadPlaneActivity".equals(result.getFunctionFlag())) {
             //根据扫一扫获取的板车信息查找板车内容
             if (!mTpScooterCodeList.contains(result.getData())) {
                 mNowScooterCode = result.getData();

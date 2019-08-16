@@ -2,15 +2,10 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -18,25 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.TestActivity;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.SlideLeftExecuteView;
 
-public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, BaseViewHolder> {
+public class TaskTpDoneAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseViewHolder> {
 
     private  onSlideExecuteListener listener;
 
-    public TaskStepAdapter(List<List<OutFieldTaskBean>> list) {
+    public TaskTpDoneAdapter(List<OutFieldTaskBean> list) {
         super(R.layout.item_slide_left_execute, list);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, List<OutFieldTaskBean> item) {
+    protected void convert(BaseViewHolder helper, OutFieldTaskBean item) {
 
         helper.setText(R.id.tv_step_accept, "领受");
         helper.setText(R.id.tv_step_start, "开始");
@@ -57,17 +47,13 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         TextView tvStart = helper.getView(R.id.tv_step_time_start);
         TextView tvEnd = helper.getView(R.id.tv_step_time_end);
 
-        Button btnFS = helper.getView(R.id.btn_flight_safeguard);
-        btnFS.setOnClickListener(v -> {
-            listener.onFlightSafeguardClick(helper.getAdapterPosition());
-        });
 
         /**
          *  领受是否可以滑动 （任务有了领受时间 就不能再次滑动领受了）
          */
-        if(item.get(0).getAcceptTime() > 0){
+        if(item.getAcceptTime() > 0){
             rlAccept.setBackgroundResource(R.drawable.shape_rect_green_light);
-            tvAccept.setText(TimeUtils.date2Tasktime3(item.get(0).getAcceptTime()));
+            tvAccept.setText(TimeUtils.date2Tasktime3(item.getAcceptTime()));
             mSlideLeftExecuteViewA.setVisibility(View.GONE);
             tvAccept.setVisibility(View.VISIBLE);
         }
@@ -79,12 +65,12 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         /**
          *  开始是否可以滑动 （任务有了领受时间 并且 没有 开始时间 才能滑动开始）
          */
-        if(item.get(0).getTaskBeginTime() > 0){
+        if(item.getTaskBeginTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_green_light);
-            tvStart.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskBeginTime()));
+            tvStart.setText(TimeUtils.date2Tasktime3(item.getTaskBeginTime()));
             mSlideLeftExecuteViewS.setVisibility(View.GONE);
             tvStart.setVisibility(View.VISIBLE);
-        } else if (item.get(0).getAcceptTime() > 0){
+        } else if (item.getAcceptTime() > 0){
             rlStart.setBackgroundResource(R.drawable.shape_rect_gray_dark);
             mSlideLeftExecuteViewS.setVisibility(View.VISIBLE);
             tvStart.setVisibility(View.GONE);
@@ -97,13 +83,13 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         /**
          *  结束是否可以滑动 （任务有了开始时间 并且 没有 结束时间 才能滑动结束）
          */
-        if(item.get(0).getTaskEndTime() > 0){
+        if(item.getTaskEndTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_green_light);
-            tvEnd.setText(TimeUtils.date2Tasktime3(item.get(0).getTaskEndTime()));
+            tvEnd.setText(TimeUtils.date2Tasktime3(item.getTaskEndTime()));
             mSlideLeftExecuteViewE.setVisibility(View.GONE);
             tvEnd.setVisibility(View.VISIBLE);
         }
-        else if (item.get(0).getTaskBeginTime() > 0){
+        else if (item.getTaskBeginTime() > 0){
             rlEnd.setBackgroundResource(R.drawable.shape_rect_gray_dark);
             mSlideLeftExecuteViewE.setVisibility(View.VISIBLE);
             tvEnd.setVisibility(View.GONE);
@@ -120,7 +106,7 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
         mRecyclerViewFlight.setLayoutManager(manager);
 
         List<OutFieldTaskBean> list1 = new ArrayList<>();
-        list1.addAll(item);
+        list1.add(item);
         TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list1);
         mRecyclerViewFlight.setAdapter(mTaskFlightAdapter);
 
@@ -146,15 +132,15 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
 //                return false;
 //            }
 //        });
-        mSlideLeftExecuteViewA.setLockListener(() -> {
-            listener.onSlideExecuteListener(2,helper.getAdapterPosition());
-        });
-        mSlideLeftExecuteViewS.setLockListener(() -> {
-            listener.onSlideExecuteListener(0,helper.getAdapterPosition());
-        });
-        mSlideLeftExecuteViewE.setLockListener(() -> {
-            listener.onSlideExecuteListener(1,helper.getAdapterPosition());
-        });
+//        mSlideLeftExecuteViewA.setLockListener(() -> {
+//            listener.onSlideExecuteListener(2,helper.getAdapterPosition());
+//        });
+//        mSlideLeftExecuteViewS.setLockListener(() -> {
+//            listener.onSlideExecuteListener(0,helper.getAdapterPosition());
+//        });
+//        mSlideLeftExecuteViewE.setLockListener(() -> {
+//            listener.onSlideExecuteListener(1,helper.getAdapterPosition());
+//        });
         //滑动取消 显示gif
         mSlideLeftExecuteViewS.setLockCancelListener(() ->{
 //            ivLeftGif.setVisibility(View.VISIBLE);
@@ -165,11 +151,11 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
 //            mSlideLeftExecuteViewE.setVisibility(View.GONE);
         });
         rlStart.setOnClickListener(v ->{
-            if(item.get(0).getTaskBeginTime() > 0)
+            if(item.getTaskBeginTime() > 0)
                 listener.onClickListener(0,helper.getAdapterPosition());
         });
         rlEnd.setOnClickListener(v ->{
-            if(item.get(0).getTaskEndTime() > 0)
+            if(item.getTaskEndTime() > 0)
                 listener.onClickListener(1,helper.getAdapterPosition());
         });
 
@@ -179,9 +165,8 @@ public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, Ba
 
     public interface onSlideExecuteListener{
 
-        void onSlideExecuteListener(int step,int position);
-        void onClickListener(int step,int position);
-        void onFlightSafeguardClick(int position);
+        void onSlideExecuteListener(int step, int position);
+        void onClickListener(int step, int position);
 
     }
 

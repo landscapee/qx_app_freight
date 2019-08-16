@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 
 public class TransportTaskHisContract {
@@ -12,6 +13,6 @@ public class TransportTaskHisContract {
     }
 
     public interface transportTaskHisView extends IBaseView {
-        void transportTaskHisResult(List<TransportTodoListBean> transportTodoListBeans);
+        void transportTaskHisResult(List<OutFieldTaskBean> transportTodoListBeans);
     }
 }

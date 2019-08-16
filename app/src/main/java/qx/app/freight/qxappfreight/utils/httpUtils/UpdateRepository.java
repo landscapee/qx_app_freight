@@ -83,6 +83,7 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
@@ -1260,7 +1261,7 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().reportTaskHis(operatorId));
     }
 
-    public Observable<List<TransportTodoListBean>> transportTaskHis(String operatorId) {
+    public Observable<List<OutFieldTaskBean>> transportTaskHis(String operatorId) {
         return transform(getService().transportTaskHis(operatorId));
     }
 

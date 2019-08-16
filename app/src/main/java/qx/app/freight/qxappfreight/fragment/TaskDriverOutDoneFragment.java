@@ -27,6 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DriverOutTaskAdapter;
+import qx.app.freight.qxappfreight.adapter.TaskStepAdapter;
+import qx.app.freight.qxappfreight.adapter.TaskTpDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -35,12 +37,15 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.StepBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AcceptTerminalTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.contract.TransportTaskHisContract;
 import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
+import qx.app.freight.qxappfreight.presenter.TransportTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -52,15 +57,15 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 外场运输已办
  */
-public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, AcceptTerminalTodoContract.acceptTerminalTodoView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
+public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, TransportTaskHisContract.transportTaskHisView, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
     List<AcceptTerminalTodoBean> listCache;
 
-    private List<AcceptTerminalTodoBean> list;
+    private List<OutFieldTaskBean> list;
     private int slidePosition, slidePositionChild, step;
-    private DriverOutTaskAdapter adapter;
+    private TaskTpDoneAdapter adapter;
     private int currentPage = 1;
 
     private TaskDoneFragment mTaskFragment; //父容器fragment
@@ -97,7 +102,7 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
     private void initData() {
         listCache = new ArrayList<>();
         list = new ArrayList<>();
-        adapter = new DriverOutTaskAdapter(list);
+        adapter = new TaskTpDoneAdapter(list);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (!nowDoTaskId.equals(list.get(position).getTaskId())) {
@@ -106,30 +111,16 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
             }
 
         });
-        adapter.setmOnStepListener((step, parentPosition, position) -> {
-            /**
-             * 同时开启多个航班
-             */
-            max = list.get(parentPosition).getUseTasks().get(position).size();
-
-            for (int i = 0; i < list.get(parentPosition).getUseTasks().get(position).size(); i++) {
-                slidePosition = parentPosition;
-                slidePositionChild = position;
-                this.step = step;
-                submitStep(list.get(parentPosition).getUseTasks().get(position).get(i), step);
-            }
-
-        });
         getData();
     }
 
     private void getData() {
-        mPresenter = new AcceptTerminalTodoPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setCurrent(currentPage);
-        entity.setSize(Constants.PAGE_SIZE);
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        ((AcceptTerminalTodoPresenter) mPresenter).acceptTerminalTodo(entity);
+        mPresenter = new TransportTaskHisPresenter(this);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+//        entity.setCurrent(currentPage);
+//        entity.setSize(Constants.PAGE_SIZE);
+//        entity.setUserId();
+        ((TransportTaskHisPresenter) mPresenter).transportTaskHis(UserInfoSingle.getInstance().getUserId());
     }
 
     @Override
@@ -221,60 +212,9 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
 
-        if (result.getTaskId() != null && (result.isCancelFlag() || result.isChangeWorkerUser())) {
-            canCelTask(result.getTaskId());
-        } else if (result.isTransportTaskAutoDone()){
-            getData();
-        }else {
-            List<AcceptTerminalTodoBean> list = result.getTaskData();
-            if (list != null)
-                listCache.addAll(list);
-            showTpNewTaskDialog();
-        }
-
-//        if (result.equals("TaskDriverOutFragment_refresh")) {
-//
-//            getData();
-//        }
-    }
-
-    /**
-     * 取消任务
-     *
-     * @param taskId
-     */
-    private void canCelTask(String taskId) {
-
-        for (AcceptTerminalTodoBean mAcceptTerminalTodoBean : list) {
-            if (taskId.equals(mAcceptTerminalTodoBean.getTaskId())) {
-                list.remove(mAcceptTerminalTodoBean);
-                break;
-            }
-        }
-        adapter.notifyDataSetChanged();
-        Log.e("TaskDriverOutFragment", "取消任务");
 
     }
 
-    /**
-     * 弹出领受任务dialog
-     */
-    private void showTpNewTaskDialog() {
-
-        if (listCache.size() > 0) {
-            TpPushDialog tpPushDialog = new TpPushDialog(getContext(), R.style.custom_dialog, listCache.get(0), OutFieldTaskBeans -> {
-
-                max = OutFieldTaskBeans.size();
-                for (int i = 0; i < OutFieldTaskBeans.size(); i++) {
-                    submitStep(OutFieldTaskBeans.get(i), 2);
-                }
-                //检测 listCache 是否还有任务未领受
-                showTpNewTaskDialog();
-            });
-            tpPushDialog.show();
-            listCache.remove(0);
-        }
-    }
 
     /**
      * 拉取运输任务返回列表
@@ -282,7 +222,7 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
      * @param acceptTerminalTodoBeanList
      */
     @Override
-    public void acceptTerminalTodoResult(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
+    public void transportTaskHisResult(List<OutFieldTaskBean> acceptTerminalTodoBeanList) {
         if (acceptTerminalTodoBeanList != null) {
 
             if (currentPage == 1) {
@@ -292,25 +232,9 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
             }
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
-            //把运输的板车类型 赋值大 子任务
-            for (AcceptTerminalTodoBean mAcceptTerminalTodoBean : acceptTerminalTodoBeanList) {
-                for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean.getTasks()) {
-                    mOutFieldTaskBean.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
-                }
-            }
-            //根据BeginAreaId分类 21 以下 用 else
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
-                    acceptTerminalTodoBean.setUseTasks(new ArrayList<List<OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
-                });
-            } else {
-                for (AcceptTerminalTodoBean mAcceptTerminalTodoBean : acceptTerminalTodoBeanList) {
-                    mAcceptTerminalTodoBean.setUseTasks(getUseTasks(mAcceptTerminalTodoBean));
-                }
-            }
+
             list.addAll(acceptTerminalTodoBeanList);
             mMfrvData.notifyForAdapter(adapter);
-            setListStatus();
             if (mTaskFragment != null) {
                 if (isShow)
                     mTaskFragment.setTitleText(list.size());
@@ -321,21 +245,6 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
         }
     }
 
-    /**
-     * 滚动到指定位置
-     */
-    private void setListStatus() {
-        for (int i = 0; i < list.size(); i++) {
-            if (nowDoTaskId.equals(list.get(i).getTaskId())) {
-
-                mMfrvData.setVerticalScrollbarPosition(i);
-                list.get(i).setExpand(true);
-                adapter.notifyDataSetChanged();
-            }
-        }
-
-
-    }
 
     /**
      * 根据 开始位置和运输类型 组合列表
@@ -404,30 +313,5 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
     }
 
-    /**
-     * 更新步骤状态
-     *
-     * @param stepBean
-     */
-    private void upDateStepStatus(StepBean stepBean) {
-        for (OutFieldTaskBean taskBeans : list.get(slidePosition).getUseTasks().get(slidePositionChild)) {
 
-            if (taskBeans.getFlightId().equals(stepBean.getData().getFlightId() + "")) {
-                switch (step) {
-                    case 0:
-                        taskBeans.setAcceptTime(stepBean.getData().getCreateTime());
-                        break;
-                    case 1:
-                        taskBeans.setTaskBeginTime(stepBean.getData().getCreateTime());
-                        break;
-                    case 2:
-                        taskBeans.setTaskEndTime(stepBean.getData().getCreateTime());
-                        break;
-                }
-            }
-
-        }
-        adapter.notifyDataSetChanged();
-
-    }
 }

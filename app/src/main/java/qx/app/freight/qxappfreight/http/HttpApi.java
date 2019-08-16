@@ -84,6 +84,7 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
@@ -753,7 +754,7 @@ public interface HttpApi {
 
     //运输已办
     @GET("service-product-transport/tp-task-his/transportTaskHis/{operatorId}")
-    Observable<BaseEntity<List<TransportTodoListBean>>> transportTaskHis(@Path("operatorId") String operatorId);
+    Observable<BaseEntity<List<OutFieldTaskBean>>> transportTaskHis(@Path("operatorId") String operatorId);
 
 
     //装卸员已办
