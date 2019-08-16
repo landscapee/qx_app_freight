@@ -398,6 +398,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 //        upDateStepStatus(stepBean);
     }
 
+    @Override
+    public void startClearTaskResult(String result) {
+
+    }
+
     /**
      * 更新步骤状态
      *

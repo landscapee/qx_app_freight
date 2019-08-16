@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -191,7 +192,14 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            list.addAll(mWebSocketResultBean.getChgData());
+            List<TransportDataBase> datas = mWebSocketResultBean.getChgData();
+            list.addAll(datas);
+            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, datas.get(0).getAircraftNo() + "收到新的货邮舱单，请查看！", () -> {
+                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+                intent.putExtra("data", datas.get(0));
+                getContext().startActivity(intent);
+            });
+            pushDialog.show();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportDataBase mTransportListBean : list) {
                 if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {

@@ -28,6 +28,12 @@ public class VibrationUtils {
         else
             vibrate(context, new long[]{1000, 3000}, -1);
     }
+    /**
+     * 开启震动
+     */
+    public static void openShortVibrator(Context context) {
+            vibrate(context, new long[]{0, 500}, -1);
+    }
 
     /**
      * 震动

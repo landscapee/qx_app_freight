@@ -35,10 +35,10 @@ public class ManifestScooterListBean {
      * 缺的数据
      */
     private String toCity;
-    private String uldCode="- -";
+    private String uldCode = "- -";
     private String mailType;
-    private String goodsPosition="- -";
-    private String specialNumber="- -";
+    private String goodsPosition = "- -";
+    private String specialNumber = "- -";
     private List<String> manifestList;
 
     private int scooterType;
@@ -60,7 +60,8 @@ public class ManifestScooterListBean {
     private String scooterCode;
     private int reDifference;
     private List<WaybillListBean> waybillList;
-@Data
+
+    @Data
     public static class WaybillListBean {
         /**
          * cargoCn : 仁川包量(25-35吨)
@@ -117,5 +118,7 @@ public class ManifestScooterListBean {
         private String mailType;
         private boolean onceAgainBtnIsShow;
         private String waybillCode;
+        private boolean liveBody;//是否是活体
+        private String specialCode;
     }
 }

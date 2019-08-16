@@ -18,27 +18,31 @@
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_10"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="航班号" />
-
             <TextView
                 android:id="@+id/tv_flight_info"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                tools:text="UFO" />
+                android:gravity="center_vertical"
+                tools:text="航班号:EU3229" />
+            <TextView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/item_title_2" />
+            <TextView
+                android:id="@+id/tv_seat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                tools:text="跑道:101" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginStart="@dimen/dp_10"
             android:background="@color/item_title_2" />
 
         <LinearLayout
@@ -48,19 +52,25 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="日期" />
-
-            <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                tools:text="2019-03-04" />
+                android:gravity="center_vertical"
+                tools:text="日期：2019-03-04" />
+            <TextView
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/item_title_2" />
+            <TextView
+                android:id="@+id/tv_fly_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                tools:text="计划时间：13:14" />
         </LinearLayout>
 
         <android.support.design.widget.TabLayout
@@ -83,33 +93,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <qx.app.freight.qxappfreight.widget.SlideRecyclerView
-                    android:id="@+id/srv_goods_info"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <LinearLayout
-                    android:id="@+id/ll_add_scan"
-                    android:layout_width="match_parent"
-                    android:layout_height="74dp"
-                    android:layout_margin="@dimen/dp_10"
-                    android:background="@drawable/shape_rect_gray_dark"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal|bottom"
-                        android:text="+" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal|top"
-                        android:text="请扫描添加板车" />
-                </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>

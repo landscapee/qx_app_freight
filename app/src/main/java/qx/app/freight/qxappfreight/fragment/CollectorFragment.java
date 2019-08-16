@@ -45,6 +45,7 @@ import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -218,6 +219,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
+        Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");

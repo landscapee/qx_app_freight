@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
@@ -43,6 +44,7 @@ import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -149,12 +151,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
             }
         } else {//刷新任务弹出框中的数据显示
-            Observable.timer(300, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(aLong -> {
-                        mDialog.refreshData();
-                    });
+            mDialog.refreshData();
         }
     }
 
@@ -172,7 +169,30 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
+        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
+            }
+
+            @Override
+            public void onClearClick(int position) {
+                startClearTask(position);
+            }
+        });
         loadData();
+    }
+
+    /**
+     * 发起清场任务
+     */
+    private void startClearTask(int position) {
+        TaskClearEntity entity = new TaskClearEntity();
+        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
+        entity.setSeat(mList.get(position).getSeat());
+        entity.setType("clear");
+        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
     @Override
@@ -231,6 +251,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
+            mCurrentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -267,6 +288,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+            if (bean.getRelateInfoObj()!=null) {
+                StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
+                StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
+            }
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
@@ -385,12 +410,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 } else {
                     go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
-                    if (smallPos == 0) {//如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
-                        Observable.timer(1, TimeUnit.SECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread()) // 延迟1秒去调接口获取代办数据，否则数据仍然为未领受
-                                .subscribe(aLong -> loadData());
-                    }
                 }
             }
         });
@@ -417,12 +436,24 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideAdapter.notifyDataSetChanged();
-            if (mOperatePos == 4 || mOperatePos == 5) {
+            //如果是滑动的第一步，则代表任务由未领受变成了领受，则需要刷新整个页面，将该item的背景由黄色改为白色
+            //单独装机或卸机任务滑动的是第4步，需要刷新数据关闭舱门；装卸机连班航班任务滑动第5步，同理
+            if (mOperatePos == 0 || mOperatePos == 4 || mOperatePos == 5) {
                 mCurrentPage = 1;
                 loadData();
                 mOperatePos = 0;
             }
         }
+    }
+
+    /**
+     * 清场任务 发起返回
+     *
+     * @param result
+     */
+    @Override
+    public void startClearTaskResult(String result) {
+        ToastUtil.showToast("操作成功");
     }
 
     @Override

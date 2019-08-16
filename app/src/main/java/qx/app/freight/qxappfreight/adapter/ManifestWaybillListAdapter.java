@@ -2,9 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -42,9 +39,16 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
                 tv.setTextColor(Color.parseColor("#ffffff"));
             }
         } else {
-            helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-            for (TextView tv : tvList) {
-                tv.setTextColor(Color.parseColor("#000000"));
+            if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
+                helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(Color.parseColor("#000000"));
+                }
+            } else {
+                helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(Color.parseColor("#000000"));
+                }
             }
         }
     }

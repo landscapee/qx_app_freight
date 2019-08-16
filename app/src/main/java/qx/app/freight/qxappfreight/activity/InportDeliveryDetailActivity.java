@@ -16,6 +16,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryDetailAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -28,11 +29,16 @@ import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
+import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
+/**
+ * 提货详情
+ */
 public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView , ListReservoirInfoContract.listReservoirInfoView{
 
     @BindView(R.id.r_view)
@@ -63,6 +69,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private List<WaybillsBean> mList ;
 
     private HashMap<String,String> areas = new HashMap <>();
+
+    List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
+    List<RcInfoOverweight> rcTempInfoOverweight; // 超重记录列表备份（用于dialog）
 
     @Override
     public int getLayoutId() {
@@ -117,13 +126,32 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
                         mList.get(position).getOverWieghtCount());
             }
 
+            @Override
+            public void inputOverWeight(int position) {
+                try {
+
+                    SortingReturnGoodsDialog dialog = new SortingReturnGoodsDialog(InportDeliveryDetailActivity.this);
+                    rcTempInfoOverweight = Tools.deepCopy((ArrayList<RcInfoOverweight>) rcInfoOverweight);
+                    dialog.setData(rcTempInfoOverweight)
+                            .setOnClickListener(new SortingReturnGoodsDialog.OnClickListener() {
+                                @Override
+                                public void onClick(String text) {
+                                    rcInfoOverweight.clear();
+                                    rcInfoOverweight.addAll(rcTempInfoOverweight);
+                                }
+                            })
+                            .show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         rView.setAdapter(mAdapter);
 
         btnConfirm.setOnClickListener(v -> {
             //未完全出库 不能完成 提货任务
-
             if (isAllOut)
                 deliveryComplet();
         });
@@ -177,6 +205,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         for (WaybillsBean mWaybillsBean:mList){
             mWaybillsBean.setRqName(areas.get(mWaybillsBean.getWarehouseArea()));
         }
+        rcInfoOverweight = new ArrayList <>();
         mAdapter.notifyDataSetChanged();
         int already = 0;
         for (WaybillsBean mWaybillsBean:mList){

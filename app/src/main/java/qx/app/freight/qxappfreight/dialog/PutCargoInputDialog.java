@@ -29,8 +29,8 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
-/**行李上报，输入行李信息的弹窗
- *
+/**
+ *提货出库 弹窗
  * create by swd
  */
 public class PutCargoInputDialog extends DialogFragment {

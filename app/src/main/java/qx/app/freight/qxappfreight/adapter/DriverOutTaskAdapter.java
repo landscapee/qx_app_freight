@@ -104,7 +104,8 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
             public void onSlideExecuteListener(int step, int position) {
                 switch (step) {
                     case 0:
-                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
+                            ||Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//宽体机卸机保障
                         {
@@ -114,7 +115,8 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 1:
-                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                        if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
+                            ||Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());

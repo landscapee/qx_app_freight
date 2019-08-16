@@ -9,6 +9,7 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -36,12 +37,14 @@ import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -54,6 +57,7 @@ import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
@@ -80,11 +84,14 @@ import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
@@ -122,9 +129,14 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> updatePWD(@Body UpdatePwdEntity model);
 
     //登录一期智能调度 获取im使用 token
-    @POST("app/appLogin")
+    @POST("userLogin")
     @FormUrlEncoded
-    Observable<BaseEntity<LoginBean>> loginQxAi(@FieldMap Map<String, String> map);
+    Observable<RespLoginBean> loginQxAi(@FieldMap Map<String, String> masp);
+
+    //登出一期智能调度
+    @POST("userLoginOut")
+    @FormUrlEncoded
+    Observable<RespBean> loginOutQxAi(@FieldMap Map<String, String> masp);
 
     /***********收验****************************/
     //获取货代公司资质
@@ -367,6 +379,10 @@ public interface HttpApi {
     @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}")
     Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId);
 
+    //进入运输任务 获取该任务下可拉板车的列表
+    @GET("service-product-transport/tp-main-info/scooterWithTask/{taskId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUserForTask(@Path("taskId") String taskId);
+
 
     //查询出待运输
     @GET("service-product-transport/tp-main-info/transportTodoList")
@@ -375,6 +391,10 @@ public interface HttpApi {
     //领受、运输
     @POST("service-product-transport/tp-main-info/performTaskSteps")
     Observable<BaseEntity<Object>> performTaskSteps(@Body PerformTaskStepsEntity model);
+
+    //装卸机确认版本
+    @POST("service-product-finishloading/stowage-report-info/installedSingleConfirm")
+    Observable<BaseEntity<Object>> confirmLoadPlan(@Body BaseFilterEntity model);
 
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
@@ -390,6 +410,10 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> exceptionTpEnd(@Body ExceptionReportEntity exceptionReportEntity);
 
     /***********************装卸机*****************************/
+    //发起清场任务
+    @POST("service-product-transport/tp-main-info/taskAssist")
+    Observable<BaseEntity<Object>> startClearTask(@Body TaskClearEntity model);
+
     //出港装机 -异常上报
     @POST("service-product-transport/tp-exception-report/exceptionReport")
     Observable<BaseEntity<Object>> exceptionReport(@Body ExceptionReportEntity exceptionReportEntity);
@@ -399,8 +423,12 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> arrivalDataSave(@Body TransportEndEntity model);
 
     //拉货上报
-    @POST("service-product-transport/tp-main-info/saveLoadPullIn")
-    Observable<BaseEntity<Object>> pullGoodsReport(@Body ExceptionReportEntity model);
+    @GET("service-product-returngoods/pullGoods/getPullInfo/{flightInfoId}")
+    Observable<BaseEntity<PullGoodsInfoBean>> getPullGoodsInfo(@Path("flightInfoId") String flightInfoId);
+
+    //拉货上报提交
+    @POST("service-product-returngoods/pullGoods/pullReport")
+    Observable<BaseEntity<String>> pullGoodsInfoCommit(@Body PullGoodsInfoBean entity);
 
     //获取运单信息
     @GET("service-product-waybill/declare-waybill/getWayBillInfoByCode/{waybillCode}")
@@ -483,6 +511,18 @@ public interface HttpApi {
     //根据收费记录ID(流水号) 查询收费记录对应的进港运单记录
     @POST("service-product-delivery/delivery/selectInwaybillByCounterBillId")
     Observable<BaseEntity<ArrivalDeliveryInfoBean>> arrivalDeliveryInfo(@Body BaseFilterEntity model);
+
+    //查询运单超重记录
+    @POST("service-product-delivery/delivery/getOverweightByWaybillId")
+    Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
+
+    //添加运单超重记录
+    @POST("service-product-delivery/delivery/addOverweightInfo")
+    Observable<BaseEntity<Object>> addWaybillOverWeight(@Body OverweightBean model);
+
+    //删除运单超重记录
+    @POST("service-product-delivery/delivery/deleteOverweightById")
+    Observable<BaseEntity<Object>> deleteWaybillOverWeight(@Body OverweightBean model);
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")
@@ -675,7 +715,6 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> saveOrUpdate(@Body SaveOrUpdateEntity entity);
 
 
-
     @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
     Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
 
@@ -686,6 +725,7 @@ public interface HttpApi {
      */
     @GET("service-base-flight/f-flight/configCenterData/findAirlineAll")
     Observable<BaseEntity<List<FindAirlineAllBean>>> findAirlineAll();
+
     /**
      * 通知录入
      *
@@ -693,6 +733,7 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
     Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
+
     /**
      * 释放
      *
@@ -700,4 +741,12 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/auditManifest")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+
+    /**
+     * 释放
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
+    Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
 }

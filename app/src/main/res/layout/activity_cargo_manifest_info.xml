@@ -93,11 +93,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
-            android:background="@color/gray_8f"
+            android:orientation="horizontal"
+            android:background="@color/gray_8f">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:drawableStart="@mipmap/news_normal"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
@@ -105,7 +109,16 @@
             android:text="货邮舱单"
             android:textColor="@color/grassgreen"
             android:textSize="@dimen/sp_12" />
-
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp_10"
+            android:text="版本号5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+        </LinearLayout>
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:id="@+id/sr_refush"
@@ -158,7 +171,7 @@
             android:layout_weight="0.01" />
 
         <Button
-            android:id="@+id/btn_refuse"
+            android:id="@+id/btn_print"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"

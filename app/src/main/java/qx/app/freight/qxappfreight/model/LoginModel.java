@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
+import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
@@ -27,7 +28,7 @@ public class LoginModel extends BaseModel implements LoginContract.loginModel {
     }
 
     @Override
-    public void loginQxAi(LoginEntity loginEntity, final IResultLisenter lisenter) {
+    public void loginQxAi(ReqLoginBean loginEntity, final IResultLisenter lisenter) {
         Gson gson = new Gson();
         Map<String, String> map = new HashMap<>();
         String str = gson.toJson(loginEntity);
