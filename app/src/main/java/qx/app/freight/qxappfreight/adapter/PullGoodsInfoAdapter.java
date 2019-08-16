@@ -68,16 +68,18 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                 if (!rcbBox.isChecked()) {//未选中
                     rcbBox.setOnClickListener(v -> {
                         ChosePullReasonDialog dialog = new ChosePullReasonDialog();
-                        dialog.setData((pullReasonType, remark) -> {
-                            ((PullGoodsInfoBean.PullScootersBean) item).setPullReason(pullReasonType);
-                            ((PullGoodsInfoBean.PullScootersBean) item).setRemark(remark);
-                            if (TextUtils.isEmpty(pullReasonType)) {
-                                rcbBox.setChecked(false);
-                                ((PullGoodsInfoBean.PullScootersBean) item).setChecked(false);
-                            } else {
-                                rcbBox.setChecked(true);
-                                ToastUtil.showToast("操作成功");
-                                ((PullGoodsInfoBean.PullScootersBean) item).setChecked(true);
+                        dialog.setData((pullReasonType, remark,cancel) -> {
+                            if (!cancel) {
+                                ((PullGoodsInfoBean.PullScootersBean) item).setPullReason(pullReasonType);
+                                ((PullGoodsInfoBean.PullScootersBean) item).setRemark(remark);
+                                if (TextUtils.isEmpty(pullReasonType)) {
+                                    rcbBox.setChecked(false);
+                                    ((PullGoodsInfoBean.PullScootersBean) item).setChecked(false);
+                                } else {
+                                    rcbBox.setChecked(true);
+                                    ToastUtil.showToast("操作成功");
+                                    ((PullGoodsInfoBean.PullScootersBean) item).setChecked(true);
+                                }
                             }
                         }, mContext);
                         dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "333");
@@ -168,16 +170,18 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                 if (!rcbBox.isChecked()) {//未选中
                     rcbBox.setOnClickListener(v -> {
                         ChosePullReasonDialog dialog = new ChosePullReasonDialog();
-                        dialog.setData((pullReasonType, remark) -> {
-                            ((PullGoodsInfoBean.PullWaybillsBean) item).setPullReason(pullReasonType);
-                            ((PullGoodsInfoBean.PullWaybillsBean) item).setRemark(remark);
-                            if (TextUtils.isEmpty(pullReasonType)) {
-                                rcbBox.setChecked(false);
-                                ((PullGoodsInfoBean.PullWaybillsBean) item).setChecked(false);
-                            } else {
-                                ToastUtil.showToast("操作成功");
-                                rcbBox.setChecked(true);
-                                ((PullGoodsInfoBean.PullWaybillsBean) item).setChecked(true);
+                        dialog.setData((pullReasonType, remark,cancel) -> {
+                            if (!cancel) {
+                                ((PullGoodsInfoBean.PullWaybillsBean) item).setPullReason(pullReasonType);
+                                ((PullGoodsInfoBean.PullWaybillsBean) item).setRemark(remark);
+                                if (TextUtils.isEmpty(pullReasonType)) {
+                                    rcbBox.setChecked(false);
+                                    ((PullGoodsInfoBean.PullWaybillsBean) item).setChecked(false);
+                                } else {
+                                    ToastUtil.showToast("操作成功");
+                                    rcbBox.setChecked(true);
+                                    ((PullGoodsInfoBean.PullWaybillsBean) item).setChecked(true);
+                                }
                             }
                         }, mContext);
                         dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "333");

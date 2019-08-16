@@ -15,8 +15,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -24,9 +22,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.PullGoodsInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
-import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
 import qx.app.freight.qxappfreight.presenter.PullGoodsReportPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -112,28 +108,32 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
         });
         mBtnCommit.setOnClickListener(v -> {
             boolean infoFull = true;
-            for (PullGoodsInfoBean.PullScootersBean  scootersBean:mPullBean.getPullScooters()){
-                if (!scootersBean.isChecked()){
-                    infoFull=false;
+            for (PullGoodsInfoBean.PullScootersBean scootersBean : mPullBean.getPullScooters()) {
+                if (scootersBean.getStatus() == 0) {//如果信息没有提交过并且未被选中则信息提示不齐
+                    if (!scootersBean.isChecked()) {
+                        infoFull = false;
+                        break;
+                    }
+                }
+            }
+            for (PullGoodsInfoBean.PullWaybillsBean bill : mPullBean.getPullWaybills()) {
+                if (bill.getStatus() == 0) {//如果信息没有提交过并且未被选中则信息提示不齐
+                    if (!bill.isChecked()) {
+                        infoFull = false;
+                        break;
+                    }
+                }
+            }
+            boolean canCommit = false;
+            for (PullGoodsInfoBean.PullScootersBean scootersBean : mPullBean.getPullScooters()) {
+                if (scootersBean.getStatus() == 0) {
+                    canCommit = true;
                     break;
                 }
             }
-            for (PullGoodsInfoBean.PullWaybillsBean  bill:mPullBean.getPullWaybills()){
-                if (!bill.isChecked()){
-                    infoFull=false;
-                    break;
-                }
-            }
-            boolean canCommit=false;
-            for (PullGoodsInfoBean.PullScootersBean  scootersBean:mPullBean.getPullScooters()){
-                if (scootersBean.getStatus()==0){
-                    canCommit=true;
-                    break;
-                }
-            }
-            for (PullGoodsInfoBean.PullWaybillsBean  bill:mPullBean.getPullWaybills()){
-                if (bill.getStatus()==0){
-                    canCommit=true;
+            for (PullGoodsInfoBean.PullWaybillsBean bill : mPullBean.getPullWaybills()) {
+                if (bill.getStatus() == 0) {
+                    canCommit = true;
                     break;
                 }
             }
@@ -145,7 +145,7 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
                 } else {
                     ToastUtil.showToast("数据选择不完整，请检查");
                 }
-            }else {
+            } else {
                 ToastUtil.showToast("所有数据都已经提交，不能重复提交");
             }
         });
@@ -176,7 +176,7 @@ public class PullGoodsReportActivity extends BaseActivity implements PullGoodsRe
 
     @Override
     public void pullGoodsInfoCommitResult(String result) {
-        Log.e("tag", "result=======" + result);
+        Log.e("tag", "error===2====" + result);
         ToastUtil.showToast("拉货上报提交成功");
         finish();
     }

@@ -55,7 +55,7 @@ public class ChosePullReasonDialog extends DialogFragment {
         window.setAttributes(lp);
         ImageView ivClose = dialog.findViewById(R.id.iv_close_dialog);
         ivClose.setOnClickListener(v -> {
-            onChoseListener.onChosed("", "");
+            onChoseListener.onChosed("", "",true);
             dismiss();
         });
         Spinner spPullReason = dialog.findViewById(R.id.sp_pull_reason);
@@ -84,7 +84,7 @@ public class ChosePullReasonDialog extends DialogFragment {
         });
         tvCommit.setOnClickListener(v -> {
             if (selectPos != 0) {
-                onChoseListener.onChosed(billTexts.get(selectPos), etRemark.getText().toString());
+                onChoseListener.onChosed(billTexts.get(selectPos), etRemark.getText().toString(),false);
                 dismiss();
             } else {
                 ToastUtil.showToast("请选择拉货原因再进行提交");
@@ -94,6 +94,6 @@ public class ChosePullReasonDialog extends DialogFragment {
     }
 
     public interface OnChoseListener {
-        void onChosed(String pullReasonType, String remark);
+        void onChosed(String pullReasonType, String remark,boolean cancel);
     }
 }

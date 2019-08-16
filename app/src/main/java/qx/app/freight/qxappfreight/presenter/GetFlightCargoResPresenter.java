@@ -5,6 +5,7 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
@@ -74,6 +75,23 @@ public class GetFlightCargoResPresenter extends BasePresenter {
             @Override
             public void onSuccess(String result) {
                 ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).confirmLoadPlanResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+
+    public void getPullStatus(BaseFilterEntity entity) {
+        mRequestView.showNetDialog();
+        ((GetFlightCargoResModel) mRequestModel).getPullStatus(entity, new IResultLisenter<BaseEntity<String>>() {
+            @Override
+            public void onSuccess(BaseEntity<String>  result) {
+                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).getPullStatusResult(result);
                 mRequestView.dissMiss();
             }
 
