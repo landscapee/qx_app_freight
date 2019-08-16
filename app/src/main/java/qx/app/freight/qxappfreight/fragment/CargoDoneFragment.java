@@ -19,13 +19,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CargoListActivity;
-import qx.app.freight.qxappfreight.adapter.FlightListAdapter;
+import qx.app.freight.qxappfreight.activity.CargoDoneListActivity;
+import qx.app.freight.qxappfreight.adapter.FlightListCargoDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
-import qx.app.freight.qxappfreight.contract.LookLUggageScannigFlightContract;
-import qx.app.freight.qxappfreight.presenter.LookLUggageScannigFlightPresenter;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.contract.CargoReportHisContract;
+import qx.app.freight.qxappfreight.presenter.CargoReportHisPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -35,12 +35,12 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * <p>
  * create by swd
  */
-public class CargoDoneFragment extends BaseFragment implements LookLUggageScannigFlightContract.lookLUggageScannigFlightView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class CargoDoneFragment extends BaseFragment implements CargoReportHisContract.cargoReportHisView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    private FlightListAdapter mAdapter;
-    private List<FlightLuggageBean> mList;  //筛选过后的数据
-    private List<FlightLuggageBean> mListTemp; //原始数据
+    private FlightListCargoDoneAdapter mAdapter;
+    private List<TransportTodoListBean> mList;  //筛选过后的数据
+    private List<TransportTodoListBean> mListTemp; //原始数据
     private int pageCurrent = 1;
     private String searchString = "";//条件搜索关键字
     private TaskDoneFragment mTaskFragment; //父容器fragment
@@ -68,23 +68,23 @@ public class CargoDoneFragment extends BaseFragment implements LookLUggageScanni
      * 初始化控件
      */
     private void initView() {
-        mPresenter = new LookLUggageScannigFlightPresenter(this);
+        mPresenter = new CargoReportHisPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
-        mAdapter = new FlightListAdapter(mList);
+        mAdapter = new FlightListCargoDoneAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            startActivity(new Intent(getContext(), CargoListActivity.class).putExtra("flightBean", mList.get(position)));
+            startActivity(new Intent(getContext(), CargoDoneListActivity.class).putExtra("flightBean", mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
     }
 
     private void loadData() {
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setMinutes("120");
-        ((LookLUggageScannigFlightPresenter) mPresenter).getDepartureFlightByAndroid(entity);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+//        entity.setMinutes("120");
+        ((CargoReportHisPresenter) mPresenter).cargoReportHis(UserInfoSingle.getInstance().getUserId());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class CargoDoneFragment extends BaseFragment implements LookLUggageScanni
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mListTemp);
         } else {
-            for (FlightLuggageBean itemData : mListTemp) {
+            for (TransportTodoListBean itemData : mListTemp) {
                 if (itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(itemData);
                 }
@@ -169,8 +169,25 @@ public class CargoDoneFragment extends BaseFragment implements LookLUggageScanni
         loadData();
     }
 
+//    @Override
+//    public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
+//        //因为没有分页，不做分页判断
+//        mListTemp.clear();
+//        if (pageCurrent == 1) {
+//            mMfrvData.finishRefresh();
+//        } else {
+//            mMfrvData.finishLoadMore();
+//        }
+//        mListTemp.addAll(flightLuggageBeans);
+//        if (mTaskFragment != null) {
+//            if (isShow)
+//                mTaskFragment.setTitleText(mListTemp.size());
+//        }
+//        seachWithNum();
+//    }
+
     @Override
-    public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
+    public void cargoReportHisResult(List<TransportTodoListBean> cargoReportHisBeans) {
         //因为没有分页，不做分页判断
         mListTemp.clear();
         if (pageCurrent == 1) {
@@ -178,7 +195,8 @@ public class CargoDoneFragment extends BaseFragment implements LookLUggageScanni
         } else {
             mMfrvData.finishLoadMore();
         }
-        mListTemp.addAll(flightLuggageBeans);
+            mListTemp.addAll(cargoReportHisBeans);
+
         if (mTaskFragment != null) {
             if (isShow)
                 mTaskFragment.setTitleText(mListTemp.size());

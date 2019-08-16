@@ -5,6 +5,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.BaggageSubHisContract;
 import qx.app.freight.qxappfreight.model.BaggageSubHisModel;
 
@@ -16,9 +17,9 @@ public class BaggageSubHisPresenter extends BasePresenter {
 
     public void baggageSubHis(String operatorId) {
         mRequestView.showNetDialog();
-        ((BaggageSubHisModel) mRequestModel).baggageSubHis(operatorId, new IResultLisenter<List<CargoReportHisBean>>() {
+        ((BaggageSubHisModel) mRequestModel).baggageSubHis(operatorId, new IResultLisenter<List<TransportTodoListBean>>() {
             @Override
-            public void onSuccess(List<CargoReportHisBean> result) {
+            public void onSuccess(List<TransportTodoListBean> result) {
                 ((BaggageSubHisContract.baggageSubHisView) mRequestView).baggageSubHisResult(result);
                 mRequestView.dissMiss();
             }

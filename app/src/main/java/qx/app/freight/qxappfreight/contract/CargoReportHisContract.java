@@ -5,6 +5,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 
 public class CargoReportHisContract {
     public interface cargoReportHisModel {
@@ -12,6 +13,6 @@ public class CargoReportHisContract {
     }
 
     public interface cargoReportHisView extends IBaseView {
-        void cargoReportHisResult(List<CargoReportHisBean> cargoReportHisBeans);
+        void cargoReportHisResult(List<TransportTodoListBean> cargoReportHisBeans);
     }
 }

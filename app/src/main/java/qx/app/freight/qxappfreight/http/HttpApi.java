@@ -757,11 +757,11 @@ public interface HttpApi {
 
     //货物上报已办
     @GET("service-product-transport/tp-task-his/cargoReportHis/{operatorId}")
-    Observable<BaseEntity<List<CargoReportHisBean>>> cargoReportHis(@Path("operatorId") String operatorId);
+    Observable<BaseEntity<List<TransportTodoListBean>>> cargoReportHis(@Path("operatorId") String operatorId);
 
     //行李上报已办
     @GET("service-product-transport/tp-task-his/baggageSubHis/{operatorId}")
-    Observable<BaseEntity<List<CargoReportHisBean>>> baggageSubHis(@Path("operatorId") String operatorId);
+    Observable<BaseEntity<List<TransportTodoListBean>>> baggageSubHis(@Path("operatorId") String operatorId);
 
     //截载已办
     @GET("service-product-transport/tp-task-his/reportTaskHis/{operatorId}")

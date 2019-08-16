@@ -1266,11 +1266,11 @@ public class UpdateRepository extends BaseRepository {
     }
 
 
-    public Observable<List<CargoReportHisBean>> cargoReportHis(String operatorId) {
+    public Observable<List<TransportTodoListBean>> cargoReportHis(String operatorId) {
         return transform(getService().cargoReportHis(operatorId));
     }
 
-    public Observable<List<CargoReportHisBean>> baggageSubHis(String operatorId) {
+    public Observable<List<TransportTodoListBean>> baggageSubHis(String operatorId) {
         return transform(getService().baggageSubHis(operatorId));
     }
 

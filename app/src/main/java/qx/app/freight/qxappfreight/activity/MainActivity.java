@@ -333,10 +333,10 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SeatChangeEntity result) {
         if (result.getRemark().contains("机位变更")){
-            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,result.getRemark(),null, s -> {
-                EventBus.getDefault().post("refresh_data_update");
-            });
-            updatePushDialog.show();
+//            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog,result.getRemark(),null, s -> {
+//                EventBus.getDefault().post("refresh_data_update");
+//            });
+//            updatePushDialog.show();
         }
 
     }

@@ -155,6 +155,12 @@
             android:name=".activity.VerifyCargoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.CargoDoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BaggageDoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ReceiveGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
