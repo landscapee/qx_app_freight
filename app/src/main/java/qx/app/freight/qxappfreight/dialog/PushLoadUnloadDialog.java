@@ -183,6 +183,12 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
     }
 
     @Override
+    public void startClearTaskResult(String result) {
+
+    }
+
+
+    @Override
     public void toastView(String error) {
 
     }
@@ -213,10 +219,10 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
             ImageView ivType = helper.getView(R.id.iv_task_type);
             TextView tvTime = helper.getView(R.id.tv_time);
             Drawable drawableLeft = null;
-            if (item.getTaskType() == 1) {
-                ivType.setImageResource(R.mipmap.li);
-            } else {//2或5都默认显示进港卸机
+            if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
                 ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
+            } else {
+                ivType.setImageResource(R.mipmap.li);
             }
             String time;
             int timeType;

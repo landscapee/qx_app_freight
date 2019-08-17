@@ -1,16 +1,10 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
-import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.contract.PullGoodsReportContract;
-import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.model.PullGoodsReportModel;
-import qx.app.freight.qxappfreight.model.ScanScooterModel;
 
 public class PullGoodsReportPresenter extends BasePresenter {
 
@@ -19,12 +13,12 @@ public class PullGoodsReportPresenter extends BasePresenter {
         mRequestModel = new PullGoodsReportModel();
     }
 
-    public void pullGoodsReport(ExceptionReportEntity entity) {
+    public void getPullGoodsInfo(String flightInfoId) {
         mRequestView.showNetDialog();
-        ((PullGoodsReportModel) mRequestModel).pullGoodsReport(entity, new IResultLisenter<String>() {
+        ((PullGoodsReportModel) mRequestModel).getPullGoodsInfo(flightInfoId, new IResultLisenter<PullGoodsInfoBean>() {
             @Override
-            public void onSuccess(String result) {
-                ((PullGoodsReportContract.pullGoodsView) mRequestView).pullGoodsReportResult(result);
+            public void onSuccess(PullGoodsInfoBean result) {
+                ((PullGoodsReportContract.pullGoodsView) mRequestView).getPullGoodsInfoResult(result);
                 mRequestView.dissMiss();
             }
 
@@ -35,12 +29,13 @@ public class PullGoodsReportPresenter extends BasePresenter {
             }
         });
     }
-    public void scanScooterDelete(TransportEndEntity endEntity) {
+
+    public void pullGoodsInfoCommit(PullGoodsInfoBean entity) {
         mRequestView.showNetDialog();
-        ((PullGoodsReportModel) mRequestModel).scanScooterDelete(endEntity, new IResultLisenter<String>() {
+        ((PullGoodsReportModel) mRequestModel).pullGoodsInfoCommit(entity, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String result) {
-                ((PullGoodsReportContract.pullGoodsView) mRequestView).scanScooterDeleteResult(result);
+                ((PullGoodsReportContract.pullGoodsView) mRequestView).pullGoodsInfoCommitResult(result);
                 mRequestView.dissMiss();
             }
 

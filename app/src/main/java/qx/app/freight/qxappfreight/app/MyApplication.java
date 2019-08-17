@@ -25,6 +25,7 @@ public class MyApplication extends Application {
 
     public static String currentView; //当前顶层View的类名
 
+    public static boolean isNeedIm = false;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,7 +39,7 @@ public class MyApplication extends Application {
 
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
 
-//        initIM();//初始化IM服务配置
+        initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

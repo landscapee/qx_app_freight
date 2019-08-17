@@ -56,9 +56,11 @@ public class LnstallationInfoBean {
         private String pos;
         private String pri;
         private String restrictedCargo;
+        private String loadingAdvice;
         private String tailer;
         private String type;
         private String serialInd;
+
 
 
     }

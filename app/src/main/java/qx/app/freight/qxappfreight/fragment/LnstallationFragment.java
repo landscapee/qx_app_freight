@@ -41,6 +41,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -169,13 +170,13 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(String result) {
-        if (result.equals("CargoHandlingActivity_refresh")) {
-            pageCurrent = 1;
-            getData();
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventMainThread(String result) {
+//        if (result.equals("CargoHandlingActivity_refresh")) {
+//            pageCurrent = 1;
+//            getData();
+//        }
+//    }
 
     /**
      * 激光扫码回调
@@ -193,6 +194,12 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
             list.addAll(mWebSocketResultBean.getChgData());
+            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, mWebSocketResultBean.getChgData().get(0).getAircraftNo() + "收到新的装机单建议，请查看！", () -> {
+                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+                intent.putExtra("data", mWebSocketResultBean.getChgData().get(0));
+                getContext().startActivity(intent);
+            });
+            pushDialog.show();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             for (TransportDataBase mTransportListBean : list) {
                 if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {

@@ -93,20 +93,25 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
 //            holder.setVisible(R.id.tv_put_num,false);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
+            holder.setGone(R.id.btn_overweight,false);
         }else {
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
+            holder.setVisible(R.id.btn_overweight,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->
                 listener.outStorage(holder.getAdapterPosition(),bean.getId(),bean.getOutStorageUser())
         );
-
+        Button btnOverweight = holder.getView(R.id.btn_overweight);
+        btnOverweight.setOnClickListener(v ->
+                listener.inputOverWeight(holder.getAdapterPosition())
+        );
     }
 
     public interface DeliveryDetailInterface{
         void outStorage(int position,String id,String outStorageUser);
-
+        void inputOverWeight(int position);
     }
 }

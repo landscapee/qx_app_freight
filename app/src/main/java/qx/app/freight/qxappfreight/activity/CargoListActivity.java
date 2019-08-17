@@ -348,21 +348,23 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         mMailWeight = 0;
         mBaggageWeight = 0;
         if (result.getData() == null || result.getData().size() == 0) return;
-        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
-            switch (dataBean.getType()) {
-                case "C":
-                case "CT":
-                    mGoodsWeight += Double.valueOf(dataBean.getActWgt());
-                    break;
-                case "M":
-                    mMailWeight += Double.valueOf(dataBean.getActWgt());
-                    break;
-                case "B":
-                case "T":
-                case "BY":
-                case "BT":
-                    mBaggageWeight += Double.valueOf(dataBean.getActWgt());
-                    break;
+        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()){
+            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:dataBean.getScooters()){
+                switch (scooterBean.getType()) {
+                    case "C":
+                    case "CT":
+                        mGoodsWeight += scooterBean.getWeight();
+                        break;
+                    case "M":
+                        mMailWeight += scooterBean.getWeight();
+                        break;
+                    case "B":
+                    case "T":
+                    case "BY":
+                    case "BT":
+                        mBaggageWeight += scooterBean.getWeight();
+                        break;
+                }
             }
         }
         Log.e("tagTest", "" + mGoodsWeight + mMailWeight + mBaggageWeight);
@@ -375,6 +377,16 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
 
     @Override
     public void overLoadResult(String result) {
+
+    }
+
+    @Override
+    public void confirmLoadPlanResult(String result) {
+
+    }
+
+    @Override
+    public void getPullStatusResult(BaseEntity<String> result) {
 
     }
 }

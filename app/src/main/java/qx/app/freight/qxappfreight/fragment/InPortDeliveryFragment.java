@@ -41,6 +41,7 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -196,8 +197,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        String daibanCode = result.getData();
 
+        Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
+        String daibanCode = result.getData();
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
         if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
             String[] parts = daibanCode.split("\\/");

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="@dimen/dp_40"
+    android:padding="@dimen/dp_3"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_rect_gray_979797"
+    android:layout_marginEnd="@dimen/dp_10"
+    >
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:text="01234"
+      android:textSize="@dimen/sp_11"
+      android:textColor="@color/black"
+      android:gravity="center_vertical"
+      android:id="@+id/tv_board_name"/>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <qx.app.freight.qxappfreight.widget.RoundCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:checked="true"
+        android:id="@+id/rcb_board"/>
+</LinearLayout>

@@ -2,6 +2,8 @@ package qx.app.freight.qxappfreight.adapter.loadinglist;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,15 +14,25 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.OnBoardBillsAdapter;
+import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 装机单位置右边的适配器
  */
 public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolder> {
+    private OnPullCheckListener onPullCheckListener;
+    private UnloadPlaneAdapter.OnDataCheckListener onDataCheckListener;
+
     public RightRvAdapter(@Nullable List<ScrollEntity> data) {
         super(R.layout.item_loading_list_right, data);
+    }
+    public RightRvAdapter(@Nullable List<ScrollEntity> data,UnloadPlaneAdapter.OnDataCheckListener onDataCheckListener) {
+        this(data);
+        this.onDataCheckListener=onDataCheckListener;
     }
 
     @Override
@@ -30,32 +42,57 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
         TextView tvTarget = helper.getView(R.id.tv_target_name);
         TextView tvWeight = helper.getView(R.id.tv_weight);
         TextView tvType = helper.getView(R.id.tv_type);
-        TextView tvNumber = helper.getView(R.id.tv_number);
-        TextView[] tvList = {tvBoardNumber, tvUldNumber, tvTarget, tvType, tvWeight, tvNumber};
-        ImageView ivPullDown = helper.getView(R.id.iv_pull_down);
+        TextView[] tvList = {tvBoardNumber, tvUldNumber, tvTarget, tvType, tvWeight};
+        TextView tvPullDownTitle = helper.getView(R.id.tv_pull_title);
+        TextView tvPullDown = helper.getView(R.id.tv_pull);
         helper.setText(R.id.tv_board_number, StringUtil.toText(String.valueOf(item.getBoardNumber()))).setText(R.id.tv_uld_number, StringUtil.toText(item.getUldNumber()))
-                .setText(R.id.tv_target_name, StringUtil.toText(item.getTarget())).setText(R.id.tv_weight, StringUtil.toText(String.valueOf(item.getWeight()))).setText(R.id.tv_type, StringUtil.toText(item.getType())).setText(R.id.tv_number, StringUtil.toText(String.valueOf(item.getNumber())));
-        tvNumber.setVisibility(View.GONE);
-        if (helper.getAdapterPosition() == 0) {
+                .setText(R.id.tv_target_name, StringUtil.toText(item.getTarget())).setText(R.id.tv_weight, StringUtil.toText(String.valueOf(item.getWeight()))).setText(R.id.tv_type, StringUtil.toText(item.getType()));
+        if (helper.getAdapterPosition() == 0) {//title栏显示拉下文字，
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#e5e5e5"));
                 tv.setBackgroundColor(Color.parseColor("#7b8a9b"));
             }
-            ivPullDown.setVisibility(View.GONE);
+            tvPullDownTitle.setVisibility(View.VISIBLE);
+            tvPullDownTitle.setBackgroundColor(Color.parseColor("#7b8a9b"));
+            tvPullDownTitle.setTextColor(Color.parseColor("#e5e5e5"));
+            tvPullDown.setVisibility(View.GONE);
         } else {
-            if (item.isShowPull()) {
-                ivPullDown.setVisibility(View.VISIBLE);
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#ee3f8e"));
-                    tv.setBackgroundColor(Color.parseColor("#ffffff"));
-                }
-            } else {
-                ivPullDown.setVisibility(View.GONE);
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#666666"));
-                    tv.setBackgroundColor(Color.parseColor("#ffffff"));
-                }
+            RecyclerView rvBill=helper.getView(R.id.rv_all_bill);
+            List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> data=item.getData();
+            if (data!=null&&data.size()!=0){
+                LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean title = new LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean();
+                title.setTitle(true);
+                data.add(0,title);
+                rvBill.setLayoutManager(new LinearLayoutManager(mContext));
+                rvBill.setAdapter(new OnBoardBillsAdapter(data));
             }
+            if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
+                helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
+            }
+            tvPullDownTitle.setVisibility(View.GONE);
+            tvPullDown.setVisibility(View.VISIBLE);
+            for (TextView tv : tvList) {
+                tv.setTextColor(Color.parseColor("#666666"));
+                tv.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
+            tvPullDown.setOnClickListener(v -> {
+                if (item.isPull()) {
+                    item.setPull(false);
+                    tvPullDown.setTextColor(Color.parseColor("#666666"));
+                } else {
+                    item.setPull(true);
+                    tvPullDown.setTextColor(Color.parseColor("#FFFF00"));
+                }
+                onPullCheckListener.onPullChecked(helper.getAdapterPosition(),item.isPull());
+                onDataCheckListener.onDataChecked();
+            });
         }
+    }
+    public interface OnPullCheckListener{
+        void onPullChecked(int pos,boolean checked);
+    }
+
+    public void setOnPullCheckListener(OnPullCheckListener onPullCheckListener) {
+        this.onPullCheckListener = onPullCheckListener;
     }
 }

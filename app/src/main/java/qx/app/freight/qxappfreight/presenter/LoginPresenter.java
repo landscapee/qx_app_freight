@@ -3,10 +3,13 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
+import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.model.LoginModel;
+import qx.app.freight.qxappfreight.utils.GsonUtil;
 
 public class LoginPresenter extends BasePresenter {
 
@@ -32,12 +35,15 @@ public class LoginPresenter extends BasePresenter {
         });
     }
 
-    public void loginQxAi(LoginEntity loginEntity) {
+    public void loginQxAi(ReqLoginBean loginEntity) {
         mRequestView.showNetDialog();
-        ((LoginModel) mRequestModel).loginQxAi(loginEntity, new IResultLisenter<LoginBean>() {
+        ((LoginModel) mRequestModel).loginQxAi(loginEntity, new IResultLisenter<RespLoginBean>() {
             @Override
-            public void onSuccess(LoginBean loginBean) {
-                ((LoginContract.loginView) mRequestView).loginQxAiResult(loginBean);
+            public void onSuccess(RespLoginBean loginBean) {
+                if (loginBean.isSucc())
+                    ((LoginContract.loginView) mRequestView).loginQxAiResult(loginBean);
+                else
+                    mRequestView.toastView(loginBean.getMsg());
                 mRequestView.dissMiss();
             }
 

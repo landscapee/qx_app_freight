@@ -161,6 +161,8 @@ public class Constants {
 
     public static final String TP_TYPE_BAGGAAGE = "baggage";//行李任务
 
+    public static final String TP_TYPE_CLEAR = "clear";//清场任务
+
     /**
      * 装卸机 运输 结载 步骤操作code
      */
@@ -212,9 +214,12 @@ public class Constants {
     //密码过期;其他密码验证失败
     public static final String PSW_TYPE_OTHER = "2";
 
-
+    //滑动步骤类型，0，已操作；1，当前步骤；2，未执行操作
     public static final int TYPE_STEP_OVER = 0;
     public static final int TYPE_STEP_NOW = 1;
     public static final int TYPE_STEP_NEXT = 2;
-
+    //货物拉回状态值
+    public static final int TYPE_PULL_BACK_NORMAL = 0;
+    public static final int TYPE_PULL_BACK_SUCCESS = 1;
+    public static final int TYPE_PULL_BACK_FAILED = 2;
 }

@@ -2,8 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/ll_container"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e5e5e5" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -15,7 +19,7 @@
             android:background="#e5e5e5" />
         <TextView
             android:id="@+id/tv_lock"
-            android:layout_width="55dp"
+            android:layout_width="@dimen/dp_40"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
@@ -24,7 +28,7 @@
             android:textColor="#666"/>
         <ImageView
             android:id="@+id/iv_lock_status"
-            android:layout_width="55dp"
+            android:layout_width="@dimen/dp_40"
             android:layout_height="match_parent"
             android:src="@mipmap/icon_lock_data"
             android:scaleType="center"/>
@@ -34,14 +38,14 @@
             android:background="#e5e5e5" />
         <TextView
             android:id="@+id/tv_berth"
-            android:layout_width="55dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
             android:text="1H"
             android:textColor="#666" />
         <Spinner
-            android:layout_width="55dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:id="@+id/sp_berth"
             android:gravity="center_vertical|end"
@@ -55,14 +59,14 @@
 
         <TextView
             android:id="@+id/tv_goods_position"
-            android:layout_width="64dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
             android:text="55R"
             android:textColor="#666" />
         <Spinner
-            android:layout_width="64dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:id="@+id/sp_goods_position"
             android:gravity="center_vertical|end"
