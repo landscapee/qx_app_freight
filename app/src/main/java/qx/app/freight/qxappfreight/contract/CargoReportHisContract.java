@@ -13,6 +13,6 @@ public class CargoReportHisContract {
     }
 
     public interface cargoReportHisView extends IBaseView {
-        void cargoReportHisResult(List<TransportTodoListBean> cargoReportHisBeans);
+        void cargoReportHisResult(List<CargoReportHisBean> cargoReportHisBeans);
     }
 }
