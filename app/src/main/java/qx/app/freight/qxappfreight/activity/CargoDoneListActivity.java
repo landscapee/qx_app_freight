@@ -96,9 +96,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
     @BindView(R.id.btn_next)
     Button btnNext;
     private InternationalCargoAdapter mAdapter;
-    private InternationalCargoAdapter mAdapter1;
     private List<TransportTodoListBean> mList = new ArrayList<>();
-    private List<TransportTodoListBean> mList1 = new ArrayList<>();
     private CustomToolbar toolbar;
     private List<TransportTodoListBean> flightBean;
     private CargoReportHisBean mData;
