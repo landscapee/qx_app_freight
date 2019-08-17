@@ -205,10 +205,10 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
             ImageView ivType = helper.getView(R.id.iv_task_type);
             TextView tvTime = helper.getView(R.id.tv_time);
             Drawable drawableLeft = null;
-            if (item.getTaskType() == 1) {
-                ivType.setImageResource(R.mipmap.li);
-            } else {//2或5都默认显示进港卸机
+            if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
                 ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
+            } else {
+                ivType.setImageResource(R.mipmap.li);
             }
             String time;
             int timeType;

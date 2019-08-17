@@ -38,12 +38,9 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
     private OnFlightSafeguardListenner onFlightSafeguardListenner;
-
-
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
     }
-
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
         helper.setIsRecyclable(false);
@@ -55,13 +52,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 //        boolean isWidePlane = item.getWidthAirFlag() == 0;
 //        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
         helper.setText(R.id.tv_plane_type, item.getAircraftType());
-
         LinearLayout llBg = helper.getView(R.id.ll_bg);
-
         ImageView ivType = helper.getView(R.id.iv_operate_type);
-
         TextView tvTime = helper.getView(R.id.tv_time);
-
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         btnFS.setOnClickListener(v -> {
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
@@ -70,17 +63,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         btnClear.setOnClickListener(v -> {
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
-
-
         tvTime.setText(item.getTimeForShow());
-
         Drawable drawableLeft = null;
-        if (item.getTaskType() == 1) {//装机
-            ivType.setImageResource(R.mipmap.li);
-        } else {
+        if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
+        } else {
+            ivType.setImageResource(R.mipmap.li);
         }
-
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
                 drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
@@ -99,7 +88,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
         LinearLayout llLink = helper.getView(R.id.ll_link);
         //连班航班
-        if(item.getMovement() == 4&&item.getRelateInfoObj()!=null){
+        if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
             llLink.setVisibility(View.VISIBLE);
             ImageView ivTypeLink = helper.getView(R.id.iv_operate_type_link);
             helper.setText(R.id.tv_plane_type_link, item.getAircraftType());
@@ -108,10 +97,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
             helper.setText(R.id.tv_seat_link, StringUtil.toText(item.getRelateInfoObj().getSeat()));
             tvTimeLink.setText(item.getRelateInfoObj().getTimeForShow());
-            if (item.getRelateInfoObj().getTaskType() == 1) {//装机
-                ivTypeLink.setImageResource(R.mipmap.li);
-            } else {
+            if (item.getRelateInfoObj().getMovement() == 1||item.getRelateInfoObj().getMovement()==4) {//装机
                 ivTypeLink.setImageResource(R.mipmap.jin);//应该显示  ===进
+            } else {
+                ivTypeLink.setImageResource(R.mipmap.li);
             }
             Drawable drawableLeftLink = null;
             switch (item.getRelateInfoObj().getTimeType()) {
@@ -128,14 +117,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
             tvTimeLink.setCompoundDrawablePadding(5);
             LinearLayout containerLink = helper.getView(R.id.ll_flight_info_container_link);
-            if (item.getRelateInfoObj().getFlightInfoList() != null){
+            if (item.getRelateInfoObj().getFlightInfoList() != null) {
                 FlightInfoLayout layoutLink = new FlightInfoLayout(mContext, item.getRelateInfoObj().getFlightInfoList());
                 LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 containerLink.removeAllViews();
                 containerLink.addView(layoutLink, paramsMain);
             }
-        }
-        else
+        } else
             llLink.setVisibility(View.GONE);
 
 
@@ -241,8 +229,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
     }
+
     public interface OnFlightSafeguardListenner {
         void onFlightSafeguardClick(int position);
+
         void onClearClick(int position);
     }
 

@@ -75,6 +75,10 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     TextView mTvFlightType;//航班类型
     @BindView(R.id.ll_flight_info_container)
     LinearLayout mLlInfo;//航班信息容器
+    @BindView(R.id.ll_scan_goods)
+    LinearLayout mLlScanGoodsContainer;//扫描货物总的容器
+    @BindView(R.id.ll_scan_baggage)
+    LinearLayout mLlScanBaggageContainer;//扫描行李总的容器
     TextView mTvTargetPlace;//航班终点
     @BindView(R.id.tv_seat)
     TextView mTvSeat;//航班机位数
@@ -150,6 +154,13 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         mOutFieldTaskBean = (OutFieldTaskBean) getIntent().getSerializableExtra("plane_info");
+        if ("cargo".equals(mOutFieldTaskBean.getCargoType())){
+            mLlScanGoodsContainer.setVisibility(View.VISIBLE);
+            mLlScanBaggageContainer.setVisibility(View.GONE);
+        }else {
+            mLlScanGoodsContainer.setVisibility(View.GONE);
+            mLlScanBaggageContainer.setVisibility(View.VISIBLE);
+        }
         mCurrentTaskId = mOutFieldTaskBean.getTaskId();
         toolbar.setMainTitle(Color.WHITE, mOutFieldTaskBean.getFlights().getFlightNo() + "  卸机");
         mTvPlaneInfo.setText(mOutFieldTaskBean.getFlights().getFlightNo());
@@ -380,14 +391,18 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if ("UnloadPlaneActivity".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (!mTpScooterCodeList.contains(result.getData())) {
-                mNowScooterCode = result.getData();
-                mPresenter = new ScanScooterCheckUsedPresenter(this);
-                ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
-            } else {
-                ToastUtil.showToast("操作不合法，不能重复扫描");
+        if ("TPUnloadPlaneActivity".equals(result.getFunctionFlag())) {
+            if (result.getData().length()==5) {
+                //根据扫一扫获取的板车信息查找板车内容
+                if (!mTpScooterCodeList.contains(result.getData())) {
+                    mNowScooterCode = result.getData();
+                    mPresenter = new ScanScooterCheckUsedPresenter(this);
+                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                } else {
+                    ToastUtil.showToast("操作不合法，不能重复扫描");
+                }
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
             }
         }
     }

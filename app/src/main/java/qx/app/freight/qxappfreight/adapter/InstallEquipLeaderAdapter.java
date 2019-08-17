@@ -55,10 +55,10 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
-        if (item.getTaskType() == 1) {//装机
-            ivType.setImageResource(R.mipmap.li);
-        } else {
+        if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
             ivType.setImageResource(R.mipmap.jin);//应该显示  ===进
+        } else {
+            ivType.setImageResource(R.mipmap.li);
         }
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
@@ -89,10 +89,10 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
             helper.setText(R.id.tv_craft_number_link, StringUtil.toText(item.getRelateInfoObj().getAircraftno()));
             helper.setText(R.id.tv_seat_link, StringUtil.toText(item.getRelateInfoObj().getSeat()));
             tvTimeLink.setText(item.getRelateInfoObj().getTimeForShow());
-            if (item.getRelateInfoObj().getTaskType() == 1) {//装机
-                ivTypeLink.setImageResource(R.mipmap.li);
-            } else {
+            if (item.getRelateInfoObj().getMovement() == 1 || item.getRelateInfoObj().getMovement() == 4) {//装机
                 ivTypeLink.setImageResource(R.mipmap.jin);//应该显示  ===进
+            } else {
+                ivTypeLink.setImageResource(R.mipmap.li);
             }
             Drawable drawableLeftLink = null;
             switch (item.getRelateInfoObj().getTimeType()) {

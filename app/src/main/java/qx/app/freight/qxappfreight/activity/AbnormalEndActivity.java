@@ -191,6 +191,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(AbnormalEndActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
+                    model.setTaskPk(mTransportEndEntity.getId());
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setDeptId(UserInfoSingle.getInstance().getDepId());

@@ -115,7 +115,6 @@
             android:layout_height="@dimen/dp_40"
             android:gravity="center_vertical"
             android:padding="@dimen/dp_10"
-            android:text="版本号5"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12" />
         </LinearLayout>

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -16,18 +15,10 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DriverOutDoingActivity;
-import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
 import qx.app.freight.qxappfreight.activity.TPUnloadPlaneActivity;
-import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoMyBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.utils.MapValue;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
@@ -105,7 +96,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                 switch (step) {
                     case 0:
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
-                            ||Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                                || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//宽体机卸机保障
                         {
@@ -116,7 +107,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         break;
                     case 1:
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
-                            ||Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                                || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());

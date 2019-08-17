@@ -191,12 +191,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
-            BaseFilterEntity entity1 = new BaseFilterEntity();
-            entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
-            String userName = UserInfoSingle.getInstance().getUsername();
-            entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
-            mPresenter = new GetFlightCargoResPresenter(this);
-            ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+            if(mLoadingList.size()==0){
+                ToastUtil.showToast("当前航班任务无装机单数据，不能进行装机单确认操作");
+            }else {
+                BaseFilterEntity entity1 = new BaseFilterEntity();
+                entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
+                String userName = UserInfoSingle.getInstance().getUsername();
+                entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+                mPresenter = new GetFlightCargoResPresenter(this);
+                ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+            }
         });
         mTvPullGoodsReport.setOnClickListener(v -> {
             if (mLoadingList.size() == 0) {
@@ -222,8 +226,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvEndInstall.setOnClickListener(v -> {
             if (mLoadingList.size() == 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoadPlaneActivity.this);
-                builder.setTitle("未收到装机单，是否结束装机?");
-                builder.setMessage("");
+                builder.setTitle("提示");
+                builder.setMessage("未收到装机单，是否结束装机?");
                 builder.setPositiveButton("确定", (dialog, which) -> {
                     dialog.dismiss();
                     GetFlightCargoResBean bean = new GetFlightCargoResBean();
@@ -233,6 +237,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
                 });
                 builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+                builder.show();
             } else {
                 boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
                 LoadingListBean.DataBean entity1 = mLoadingList.get(0);
