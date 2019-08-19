@@ -122,14 +122,14 @@ public class SortingReturnGoodsDialogForNet extends Dialog implements Overweight
 //            else {
 //                ToastUtil.showToast("请填写完整的超重记录");
 //            }
-            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())&&!StringUtil.isEmpty(etVolume.getText().toString())&&!StringUtil.isEmpty(etOverweight.getText().toString())){
+            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())){
 
                 List<OverweightBean> overweightBeans = new ArrayList <>();
                 OverweightBean overweightBean = new OverweightBean();
                 overweightBean.setCount(Integer.valueOf(etNum.getText().toString()));
                 overweightBean.setWeight(Integer.valueOf(etWeight.getText().toString()));
-                overweightBean.setVolume(Integer.valueOf(etVolume.getText().toString()));
-                overweightBean.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
+//                overweightBean.setVolume(Integer.valueOf(etVolume.getText().toString()));
+//                overweightBean.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
                 overweightBean.setInWaybillRecordId(waybillId);
                 overweightBeans.add(overweightBean);
                 addOverweight(overweightBeans);
