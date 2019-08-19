@@ -41,7 +41,6 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
 
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
-        helper.setIsRecyclable(false);
         if (!item.isAcceptTask()) {
             helper.itemView.setBackgroundColor(Color.parseColor("#FFAC00"));
         } else {

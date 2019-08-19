@@ -130,11 +130,19 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         rvLeft.setLayoutManager(new LinearLayoutManager(mContext));
         rvLeft.setAdapter(leftRvAdapter);
         leftRvAdapter.setOnLockClickListener(itemPos -> {
+            boolean lockStatus=false;
             for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
                     if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
+                        lockStatus=!scooter.isLocked();
                         scooter.setLocked(!scooter.isLocked());
+                        break;
                     }
+                }
+            }
+            for (ScrollEntity entity:rightData){
+                if (leftData.get(itemPos).getScooterId().equals(entity.getScooterId())){
+                    entity.setLocked(lockStatus);
                 }
             }
         });

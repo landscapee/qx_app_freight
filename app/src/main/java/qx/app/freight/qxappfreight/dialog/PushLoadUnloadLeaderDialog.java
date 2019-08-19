@@ -212,25 +212,25 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
             }
             String time;
             int timeType;
-            if (item.getTaskType() == 2 || item.getTaskType() == 5) {//是卸机
-                if (!StringUtil.isTimeNull(String.valueOf(item.getAta()))) {
+            if (item.getMovement()==1||item.getMovement()==4){//单进或连进任务
+                if (!StringUtil.isTimeNull(String.valueOf(item.getAta()))) {//实际到达时间
                     time = TimeUtils.getHMDay(item.getAta());
                     timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEta()))) {
+                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEta()))) {//预计到达时间
                     time = TimeUtils.getHMDay(item.getEta());
                     timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
+                } else {//计划到达时间
                     time = TimeUtils.getHMDay(item.getSta());
                     timeType = Constants.TIME_TYPE_PLAN;
                 }
-            } else {
-                if (!StringUtil.isTimeNull(String.valueOf(item.getAtd()))) {
+            }else {
+                if (!StringUtil.isTimeNull(String.valueOf(item.getAtd()))) {//实际出港时间
                     time = TimeUtils.getHMDay(item.getAtd());
                     timeType = Constants.TIME_TYPE_AUTUAL;
-                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEtd()))) {
+                } else if (!StringUtil.isTimeNull(String.valueOf(item.getEtd()))) {//预计出港时间
                     time = TimeUtils.getHMDay(item.getEtd());
                     timeType = Constants.TIME_TYPE_EXCEPT;
-                } else {
+                } else {//计划时间
                     time = TimeUtils.getHMDay(item.getStd());
                     timeType = Constants.TIME_TYPE_PLAN;
                 }

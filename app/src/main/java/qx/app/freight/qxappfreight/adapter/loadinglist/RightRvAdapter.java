@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 装机单位置右边的适配器
@@ -76,15 +77,19 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 tv.setBackgroundColor(Color.parseColor("#ffffff"));
             }
             tvPullDown.setOnClickListener(v -> {
-                if (item.isPull()) {
-                    item.setPull(false);
-                    tvPullDown.setTextColor(Color.parseColor("#666666"));
-                } else {
-                    item.setPull(true);
-                    tvPullDown.setTextColor(Color.parseColor("#FFFF00"));
+                if (!item.isLocked()) {
+                    if (item.isPull()) {
+                        item.setPull(false);
+                        tvPullDown.setTextColor(Color.parseColor("#666666"));
+                    } else {
+                        item.setPull(true);
+                        tvPullDown.setTextColor(Color.parseColor("#FFFF00"));
+                    }
+                    onPullCheckListener.onPullChecked(helper.getAdapterPosition(), item.isPull());
+                    onDataCheckListener.onDataChecked();
+                }else {
+                    ToastUtil.showToast("数据已锁定修改，请检查");
                 }
-                onPullCheckListener.onPullChecked(helper.getAdapterPosition(),item.isPull());
-                onDataCheckListener.onDataChecked();
             });
         }
     }

@@ -112,7 +112,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         Intent starter = new Intent(context, DriverOutDoingActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("acceptTerminalTodoBean", (Serializable) mTasksBean);
-        starter.putExtra("transfortType", transfortType);
+        starter.putExtra("task_type", transfortType);
         starter.putExtras(mBundle);
         ((Activity) context).startActivityForResult(starter, 0);
     }
@@ -132,8 +132,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         listScooter = new ArrayList <>();
         //从待办传递过来的任务列表类型
         mAcceptTerminalTodoBean = (List <OutFieldTaskBean>) getIntent().getSerializableExtra("acceptTerminalTodoBean");
-        transfortType = getIntent().getStringExtra("transfortType");
-        if (transfortType.equals("load")||transfortType.equals("unload")||transfortType.equals("device")){//装机保障、卸机保障、设备保障隐藏异常结束按钮
+        transfortType = getIntent().getStringExtra("task_type");
+        if (transfortType==null||transfortType.equals("load")||transfortType.equals("unload")||transfortType.equals("device")){//装机保障、卸机保障、设备保障隐藏异常结束按钮
             ivErrorEnd.setVisibility(View.GONE);
         }else {
             ivErrorEnd.setVisibility(View.VISIBLE);

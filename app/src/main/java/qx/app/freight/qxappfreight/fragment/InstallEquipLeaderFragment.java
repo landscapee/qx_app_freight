@@ -84,6 +84,11 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
