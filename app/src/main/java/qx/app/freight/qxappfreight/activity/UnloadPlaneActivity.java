@@ -362,13 +362,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("UnloadPlaneActivity".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (!mTpScooterCodeList.contains(result.getData())) {
-                mNowScooterCode = result.getData();
-                mPresenter = new ScanScooterCheckUsedPresenter(this);
-                ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
-            } else {
-                ToastUtil.showToast("操作不合法，不能重复扫描");
+            if (result.getData().length()==5) {
+                //根据扫一扫获取的板车信息查找板车内容
+                if (!mTpScooterCodeList.contains(result.getData())) {
+                    mNowScooterCode = result.getData();
+                    mPresenter = new ScanScooterCheckUsedPresenter(this);
+                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                } else {
+                    ToastUtil.showToast("操作不合法，不能重复扫描");
+                }
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
             }
         }
     }

@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +67,7 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                 if (!rcbBox.isChecked()) {//未选中
                     rcbBox.setOnClickListener(v -> {
                         ChosePullReasonDialog dialog = new ChosePullReasonDialog();
-                        dialog.setData((pullReasonType, remark,cancel) -> {
+                        dialog.setData((pullReasonType, remark, cancel) -> {
                             if (!cancel) {
                                 ((PullGoodsInfoBean.PullScootersBean) item).setPullReason(pullReasonType);
                                 ((PullGoodsInfoBean.PullScootersBean) item).setRemark(remark);
@@ -170,7 +169,7 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                 if (!rcbBox.isChecked()) {//未选中
                     rcbBox.setOnClickListener(v -> {
                         ChosePullReasonDialog dialog = new ChosePullReasonDialog();
-                        dialog.setData((pullReasonType, remark,cancel) -> {
+                        dialog.setData((pullReasonType, remark, cancel) -> {
                             if (!cancel) {
                                 ((PullGoodsInfoBean.PullWaybillsBean) item).setPullReason(pullReasonType);
                                 ((PullGoodsInfoBean.PullWaybillsBean) item).setRemark(remark);
@@ -194,12 +193,16 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("PullGoodsInfoAdapter_Scan".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (!entity.getPushScooterCodes().contains(result.getData())) {
-                entity.getPushScooterCodes().add(result.getData());
-                notifyDataSetChanged();
+            if (result.getData().length() == 5) {
+                //根据扫一扫获取的板车信息查找板车内容
+                if (!entity.getPushScooterCodes().contains(result.getData())) {
+                    entity.getPushScooterCodes().add(result.getData());
+                    notifyDataSetChanged();
+                } else {
+                    ToastUtil.showToast("操作不合法，同一运单不能重复扫描同一板车");
+                }
             } else {
-                ToastUtil.showToast("操作不合法，同一运单不能重复扫描同一板车");
+                ToastUtil.showToast("板车号错误，请检查");
             }
         }
     }

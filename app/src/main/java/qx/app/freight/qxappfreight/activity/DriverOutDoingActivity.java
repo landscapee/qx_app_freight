@@ -250,26 +250,30 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (mCanScanCodes.contains(result.getData())) {
-            if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) && "baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType()) && tpStatus == 0) {
-                isSureEndLoc(result.getData());
-            } else {
-                if (tpStatus == 0) {
-                    ToastUtil.showToast("运输已经开始，无法再次扫版");
-                    return;
-                }
-                if (listScooter.size() >= tpNum && !Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
+        if (result.getData().length()==5) {
+            if (mCanScanCodes.contains(result.getData())) {
+                if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) && "baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType()) && tpStatus == 0) {
+                    isSureEndLoc(result.getData());
+                } else {
+                    if (tpStatus == 0) {
+                        ToastUtil.showToast("运输已经开始，无法再次扫版");
+                        return;
+                    }
+                    if (listScooter.size() >= tpNum && !Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
 
-                    ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
-                    return;
+                        ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
+                        return;
+                    }
+                    if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
+                        //根据扫一扫获取的板车信息查找板车内容
+                        addScooterInfo(result.getData());
+                    }
                 }
-                if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
-                    //根据扫一扫获取的板车信息查找板车内容
-                    addScooterInfo(result.getData());
-                }
+            } else {
+                ToastUtil.showToast("当前扫描的板车不是该航班的可拉板车");
             }
         }else {
-            ToastUtil.showToast("当前扫描的板车不是该航班的可拉板车");
+            ToastUtil.showToast("板车号错误，请检查");
         }
     }
 

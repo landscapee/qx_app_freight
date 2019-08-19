@@ -127,7 +127,11 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     public void onEventMainThread(ScanDataBean result) {
         if ("DriverInFragment".equals(result.getFunctionFlag())) {
             //根据扫一扫获取的板车信息查找板车内容
-            addScooterInfo(result.getData());
+            if (result.getData().length()==5) {
+                addScooterInfo(result.getData());
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
+            }
         }
     }
 

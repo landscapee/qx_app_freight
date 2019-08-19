@@ -281,11 +281,15 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("AddReceiveGoodActivity")) {
-            //板车号
-            mScooterCode = result.getData();
-            if (!TextUtils.isEmpty(mScooterCode)) {
+            if (result.getData().length()==5) {
                 //板车号
-                getNumberInfo(mScooterCode);
+                mScooterCode = result.getData();
+                if (!TextUtils.isEmpty(mScooterCode)) {
+                    //板车号
+                    getNumberInfo(mScooterCode);
+                }
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
             }
         }
     }

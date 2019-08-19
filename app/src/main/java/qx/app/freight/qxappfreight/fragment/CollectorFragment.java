@@ -34,7 +34,6 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
@@ -163,6 +162,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 break;
         }
     }
+
     //获取数据
     private void loadData() {
         mPresenter = new TransportListPresenter(this);
@@ -227,9 +227,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             if (strsToList.size() >= 4) {
                 chooseCode(strsToList.get(3));
             }
-
         }
     }
+
     //收运接受到推送增加或者删除数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {

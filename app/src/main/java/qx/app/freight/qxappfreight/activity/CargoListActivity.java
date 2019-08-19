@@ -234,14 +234,18 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("CargoListActivity")) {
-            //板车号
-            mScooterCode = result.getData();
-            if (!"".equals(mScooterCode)) {
-                checkScooterCode(mScooterCode);
-            } else {
-                ToastUtil.showToast("扫码数据为空请重新扫码");
-            }
+            if (result.getFunctionFlag().equals("CargoListActivity")) {
+                if (result.getData().length()==5) {
+                //板车号
+                mScooterCode = result.getData();
+                if (!"".equals(mScooterCode)) {
+                    checkScooterCode(mScooterCode);
+                } else {
+                    ToastUtil.showToast("扫码数据为空请重新扫码");
+                }
+            }else {
+                    ToastUtil.showToast("板车号错误，请检查");
+                }
         }
     }
 
