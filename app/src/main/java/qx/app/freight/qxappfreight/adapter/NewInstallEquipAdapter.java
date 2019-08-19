@@ -66,10 +66,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         btnFS.setOnClickListener(v -> {
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
         });
-        Button btnClear = helper.getView(R.id.btn_seat_clear);
-        btnClear.setOnClickListener(v -> {
-            onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
-        });
+//        Button btnClear = helper.getView(R.id.btn_seat_clear);
+//        btnClear.setOnClickListener(v -> {
+//            onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
+//        });
 
 
         tvTime.setText(item.getTimeForShow());
@@ -150,12 +150,12 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size()-1).getStepDoneDate())){
             ivDone.setVisibility(View.VISIBLE);
             btnFS.setVisibility(View.GONE);
-            btnClear.setVisibility(View.GONE);
+//            btnClear.setVisibility(View.GONE);
         }
         else{
             ivDone.setVisibility(View.GONE);
             btnFS.setVisibility(View.VISIBLE);
-            btnClear.setVisibility(View.VISIBLE);
+//            btnClear.setVisibility(View.VISIBLE);
         }
 
 

@@ -382,4 +382,9 @@ public class CargoDoneListActivity extends BaseActivity implements International
     public void confirmLoadPlanResult(String result) {
 
     }
+
+    @Override
+    public void getPullStatusResult(BaseEntity <String> result) {
+
+    }
 }

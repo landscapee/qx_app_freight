@@ -176,7 +176,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         mPresenter = new EndInstallTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
-        SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
+        SearchToolbar searchToolbar = ((TaskDoneFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", text -> {
             mSearchText = text;
             seachByText();
@@ -263,9 +263,12 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
-            times.add("0");
+            if (bean.getActualArriveTime() > 0)
+                times.add(String.valueOf(bean.getActualArriveTime()));
+            else
+                times.add("0");
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
+            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 :2;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
             if (posNow > 0) {
                 bean.setAcceptTask(true);//已经领受过了设置acceptTask未true，设置该条item的背景为白色，否则为黄色警告颜色背景
             }

@@ -222,9 +222,11 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private void setBtnSuerState(boolean isAllOut) {
         if (isAllOut){
             btnConfirm.setEnabled(true);
+            btnConfirm.setBackground(getDrawable(R.drawable.background_submit_press));
         }
         else {
             btnConfirm.setEnabled(false);
+            btnConfirm.setBackgroundResource(R.color.gray_8f);
         }
 
     }

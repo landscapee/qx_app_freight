@@ -62,6 +62,7 @@ public class TpPushDialog extends Dialog {
         this.mAcceptTerminalTodoBean = mAcceptTerminalTodoBean;
         Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         convertView = getLayoutInflater().inflate(R.layout.popup_new_tp_task, null);
+        setCancelable(false);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
         ButterKnife.bind(this,convertView);
