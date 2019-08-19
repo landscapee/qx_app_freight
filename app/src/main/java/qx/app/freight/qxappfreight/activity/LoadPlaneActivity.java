@@ -191,12 +191,19 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
-            BaseFilterEntity entity1 = new BaseFilterEntity();
-            entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
-            String userName = UserInfoSingle.getInstance().getUsername();
-            entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
-            mPresenter = new GetFlightCargoResPresenter(this);
-            ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+            if (mLoadingList.size() > 0&&mLoadingList.get(0).getContentObject()!=null&&mLoadingList.get(0).getContentObject().size()> 0
+                &&mLoadingList.get(0).getContentObject().get(0).getScooters()!=null &&mLoadingList.get(0).getContentObject().get(0).getScooters().size()> 0){
+
+                BaseFilterEntity entity1 = new BaseFilterEntity();
+                entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
+                String userName = UserInfoSingle.getInstance().getUsername();
+                entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+                mPresenter = new GetFlightCargoResPresenter(this);
+                ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+            }
+            else
+                ToastUtil.showToast("当前航班无装机单数据,操作无效");
+
         });
         mTvPullGoodsReport.setOnClickListener(v -> {
             if (mLoadingList.size() == 0) {
