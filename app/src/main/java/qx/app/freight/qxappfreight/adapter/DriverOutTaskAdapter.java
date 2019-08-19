@@ -104,6 +104,10 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
                                 || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType()))
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
+                        else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
+                            mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
+                            toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
+                        }
                         else
                             DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTaskType());
                         break;
@@ -140,6 +144,11 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         break;
                 }
             }
+
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                mOnStepListener.onFlightSafeguardClick(helper.getAdapterPosition(), position);
+            }
         });
     }
 
@@ -156,6 +165,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 
     public interface OnStepListener {
         void onStepListener(int step, int parentPosition, int position);
+        void onFlightSafeguardClick(int parentPosition, int position);
     }
 
     public void setmOnStepListener(OnStepListener onStepListener) {
