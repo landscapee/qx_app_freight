@@ -125,6 +125,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
         entity.setFlightId(mData.getFlightId());
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         initView();
+
     }
 
     private void initView() {
