@@ -43,6 +43,7 @@
                     android:textColor="@color/white"
                     android:drawablePadding="5dp"
                     android:textStyle="bold"
+
                     android:textSize="15sp" />
 
                 <TextView
