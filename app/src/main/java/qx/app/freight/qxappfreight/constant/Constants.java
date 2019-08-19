@@ -222,4 +222,8 @@ public class Constants {
     public static final int TYPE_PULL_BACK_NORMAL = 0;
     public static final int TYPE_PULL_BACK_SUCCESS = 1;
     public static final int TYPE_PULL_BACK_FAILED = 2;
+
+
+    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";  //已到板车数量变化字段
+
 }

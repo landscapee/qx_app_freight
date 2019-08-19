@@ -228,7 +228,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             initData();
             dismissProgessDialog();

@@ -98,7 +98,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                         } else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTaskType());
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 1:
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
@@ -109,7 +109,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                         }
                         else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTaskType());
+                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 2:
                         mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
@@ -127,7 +127,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
                                 toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                             } else
-                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTaskType());
+                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
 
                         break;
                     case 1:
@@ -137,7 +137,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                             if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
                                 toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                             } else
-                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTaskType());
+                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
                         break;
                     case 2:
                         mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);

@@ -71,9 +71,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     private HashMap<String,String> areas = new HashMap <>();
 
-    List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
-    List<RcInfoOverweight> rcTempInfoOverweight; // 超重记录列表备份（用于dialog）
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_inport_delivery_detail;
@@ -199,7 +196,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         for (WaybillsBean mWaybillsBean:mList){
             mWaybillsBean.setRqName(areas.get(mWaybillsBean.getWarehouseArea()));
         }
-        rcInfoOverweight = new ArrayList <>();
         mAdapter.notifyDataSetChanged();
         int already = 0;
         for (WaybillsBean mWaybillsBean:mList){

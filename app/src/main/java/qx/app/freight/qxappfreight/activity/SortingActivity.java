@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterArriveNumChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
@@ -535,6 +536,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             turnToAddActivity(newCode);
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScooterArriveNumChangeEntity result) {
+      if (result !=null && result.getFlightInfoId().equals(transportListBean.getFlightId())){
+           handCarNumTv.setText(result.getArriveWarehouseNum()+"");
+            handCarTotalTv.setText("/"+result.getTotalScooterNum());
+      }
+    }
+
 
     /**
      * 跳转到新增界面
