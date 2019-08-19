@@ -735,6 +735,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             llcbAll.setVisibility(View.GONE);
         }
         upDataBtnStatus();
+        upDataBtnStatusEnd();
     }
 
     @Override

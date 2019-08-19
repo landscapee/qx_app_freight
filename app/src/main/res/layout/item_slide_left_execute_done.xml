@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="13dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_flight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"></android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_seat_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/btn_blue_press"
+                    android:text="发起清场"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_flight_safeguard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/btn_blue_press"
+                    android:text="航班保障组"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_back_accept"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/shape_rect_gray_dark"
+                android:paddingRight="@dimen/dp_10">
+
+                <TextView
+                    android:id="@+id/tv_step_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:gravity="center"
+                    android:text="领受"
+                    android:textSize="16sp" />
+
+                <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView
+                    android:id="@+id/slide_left_accept"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:lock_drawable="@mipmap/slide_do" />
+
+                <TextView
+                    android:id="@+id/tv_step_time_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableEnd="@mipmap/qualifled"
+                    android:drawablePadding="11dp"
+                    android:gravity="center_vertical"
+                    android:text="19:10"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_back_start"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/shape_rect_gray_dark"
+                android:paddingRight="@dimen/dp_10">
+
+                <TextView
+                    android:id="@+id/tv_step_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:gravity="center"
+                    android:text="开始"
+                    android:textSize="16sp" />
+
+                <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView
+                    android:id="@+id/slide_left_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    app:lock_drawable="@mipmap/slide_do" />
+
+                <ImageView
+                    android:id="@+id/iv_left_gif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/slide_do_gif"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_step_time_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableEnd="@mipmap/qualifled"
+                    android:drawablePadding="11dp"
+                    android:gravity="center_vertical"
+                    android:text="19:10"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_back_end"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/shape_rect_gray_dark"
+                android:paddingRight="@dimen/dp_10">
+
+                <TextView
+                    android:id="@+id/tv_step_name_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:gravity="center"
+                    android:text="结束"
+                    android:textSize="16sp" />
+
+                <qx.app.freight.qxappfreight.widget.SlideLeftExecuteView
+                    android:id="@+id/slide_left_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    app:lock_drawable="@mipmap/slide_do" />
+
+                <ImageView
+                    android:id="@+id/iv_left_gif_e"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/slide_do_gif"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_step_time_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableEnd="@mipmap/qualifled"
+                    android:drawablePadding="11dp"
+                    android:gravity="center_vertical"
+                    android:text="19:10"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/shape_gray_gap_line_ff9"
+            android:layerType="software"></View>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_done"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/icon_done"
+        android:layout_alignParentRight="true"
+        android:visibility="visible"
+        />
+</RelativeLayout>
