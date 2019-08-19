@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
  */
 public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
+    private OnClearSeatListener onClearSeatListener;
 
     public InstallEquipLeaderAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
@@ -164,7 +165,8 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         Button btnClear = helper.getView(R.id.btn_seat_clear);
         btnFS.setVisibility(View.GONE);
-        btnClear.setVisibility(View.GONE);
+        btnClear.setVisibility(View.VISIBLE);
+        btnClear.setOnClickListener(v-> onClearSeatListener.onClearClicked(helper.getAdapterPosition()));
     }
 
     public interface OnSlideStepListener {
@@ -173,5 +175,12 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
 
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
+    }
+    public interface OnClearSeatListener{
+        void onClearClicked(int position);
+    }
+
+    public void setOnClearSeatListener(OnClearSeatListener onClearSeatListener) {
+        this.onClearSeatListener = onClearSeatListener;
     }
 }
