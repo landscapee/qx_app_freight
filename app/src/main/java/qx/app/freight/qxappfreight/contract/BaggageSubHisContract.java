@@ -13,6 +13,6 @@ public class BaggageSubHisContract {
     }
 
     public interface baggageSubHisView extends IBaseView {
-        void baggageSubHisResult(List<TransportTodoListBean> cargoReportHisBeans);
+        void baggageSubHisResult(List<CargoReportHisBean> cargoReportHisBeans);
     }
 }

@@ -17,9 +17,9 @@ public class BaggageSubHisPresenter extends BasePresenter {
 
     public void baggageSubHis(String operatorId) {
         mRequestView.showNetDialog();
-        ((BaggageSubHisModel) mRequestModel).baggageSubHis(operatorId, new IResultLisenter<List<TransportTodoListBean>>() {
+        ((BaggageSubHisModel) mRequestModel).baggageSubHis(operatorId, new IResultLisenter<List<CargoReportHisBean>>() {
             @Override
-            public void onSuccess(List<TransportTodoListBean> result) {
+            public void onSuccess(List<CargoReportHisBean> result) {
                 ((BaggageSubHisContract.baggageSubHisView) mRequestView).baggageSubHisResult(result);
                 mRequestView.dissMiss();
             }

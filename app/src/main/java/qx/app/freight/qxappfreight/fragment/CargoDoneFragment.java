@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import qx.app.freight.qxappfreight.activity.CargoDoneListActivity;
 import qx.app.freight.qxappfreight.adapter.FlightListCargoDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.CargoReportHisContract;
 import qx.app.freight.qxappfreight.presenter.CargoReportHisPresenter;
@@ -39,8 +42,8 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private FlightListCargoDoneAdapter mAdapter;
-    private List<TransportTodoListBean> mList;  //筛选过后的数据
-    private List<TransportTodoListBean> mListTemp; //原始数据
+    private List<CargoReportHisBean> mList;  //筛选过后的数据
+    private List<CargoReportHisBean> mListTemp; //原始数据
     private int pageCurrent = 1;
     private String searchString = "";//条件搜索关键字
     private TaskDoneFragment mTaskFragment; //父容器fragment
@@ -76,7 +79,7 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
         mListTemp = new ArrayList<>();
         mAdapter = new FlightListCargoDoneAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            startActivity(new Intent(getContext(), CargoDoneListActivity.class).putExtra("flightBean", mList.get(position)));
+            startActivity(new Intent(getContext(), CargoDoneListActivity.class).putExtra("flightBean",  mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
     }
@@ -111,7 +114,7 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mListTemp);
         } else {
-            for (TransportTodoListBean itemData : mListTemp) {
+            for (CargoReportHisBean itemData : mListTemp) {
                 if (itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(itemData);
                 }
@@ -169,25 +172,9 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
         loadData();
     }
 
-//    @Override
-//    public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-//        //因为没有分页，不做分页判断
-//        mListTemp.clear();
-//        if (pageCurrent == 1) {
-//            mMfrvData.finishRefresh();
-//        } else {
-//            mMfrvData.finishLoadMore();
-//        }
-//        mListTemp.addAll(flightLuggageBeans);
-//        if (mTaskFragment != null) {
-//            if (isShow)
-//                mTaskFragment.setTitleText(mListTemp.size());
-//        }
-//        seachWithNum();
-//    }
 
     @Override
-    public void cargoReportHisResult(List<TransportTodoListBean> cargoReportHisBeans) {
+    public void cargoReportHisResult(List<CargoReportHisBean> cargoReportHisBeans) {
         //因为没有分页，不做分页判断
         mListTemp.clear();
         if (pageCurrent == 1) {
@@ -195,7 +182,9 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
         } else {
             mMfrvData.finishLoadMore();
         }
+//        for (int i = 0; i < cargoReportHisBeans.size(); i++) {
             mListTemp.addAll(cargoReportHisBeans);
+//        }
 
         if (mTaskFragment != null) {
             if (isShow)

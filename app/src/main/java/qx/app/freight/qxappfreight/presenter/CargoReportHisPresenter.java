@@ -18,9 +18,9 @@ public class CargoReportHisPresenter extends BasePresenter {
 
     public void cargoReportHis(String operatorId) {
         mRequestView.showNetDialog();
-        ((CargoReportHisModel) mRequestModel).cargoReportHis(operatorId, new IResultLisenter<List<TransportTodoListBean>>() {
+        ((CargoReportHisModel) mRequestModel).cargoReportHis(operatorId, new IResultLisenter<List<CargoReportHisBean>>() {
             @Override
-            public void onSuccess(List<TransportTodoListBean> result) {
+            public void onSuccess(List<CargoReportHisBean> result) {
                 ((CargoReportHisContract.cargoReportHisView) mRequestView).cargoReportHisResult(result);
                 mRequestView.dissMiss();
             }

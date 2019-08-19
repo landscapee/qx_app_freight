@@ -84,22 +84,22 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/li"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    />
-                <TextView
-                    android:id="@+id/tv_flight_place"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:drawableLeft="@mipmap/placement"
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/li"-->
+                    <!--android:layout_marginLeft="@dimen/dp_5"-->
+                    <!--/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_flight_place"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:drawableLeft="@mipmap/placement"-->
 
-                    android:textColor="@color/black_3"
-                    android:layout_weight="1"
-                    />
+                    <!--android:textColor="@color/black_3"-->
+                    <!--android:layout_weight="1"-->
+                    <!--/>-->
 
                 <TextView
                     android:id="@+id/tv_arrive_time"
