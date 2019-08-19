@@ -17,7 +17,7 @@ public class OverweightContract {
 
     public interface OverweightModel {
         void getOverWeight(BaseFilterEntity entity, IResultLisenter lisenter);
-        void addOverWeight(OverweightBean entity, IResultLisenter lisenter);
+        void addOverWeight(List<OverweightBean> entity, IResultLisenter lisenter);
         void deleteOverWeight(OverweightBean entity, IResultLisenter lisenter);
     }
 

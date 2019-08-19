@@ -69,6 +69,7 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         mTvTitle = convertView.findViewById(R.id.tv_title_new_task);
         mIvGif = convertView.findViewById(R.id.iv_start_gif);
         mSlideView = convertView.findViewById(R.id.slide_right_start);
+        setCancelable(false);
         mRvData.setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new DialogLoadUnloadPushAdapter(list);
         mRvData.setAdapter(mAdapter);

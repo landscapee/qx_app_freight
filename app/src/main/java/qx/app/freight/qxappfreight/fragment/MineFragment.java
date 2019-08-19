@@ -23,6 +23,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.activity.NoticeActivity;
+import qx.app.freight.qxappfreight.activity.TaskDoneActivity;
 import qx.app.freight.qxappfreight.activity.UpdatePWDActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.app.MyApplication;
@@ -30,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.RespBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.NoReadCountContract;
 import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -99,6 +101,13 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         mPresenter = new NoReadCountPresenter(this);
         userName.setText(UserInfoSingle.getInstance().getLoginName());
         userRole.setText(UserInfoSingle.getInstance().getUsername());
+        if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
+                Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
+                Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
+                Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
+                Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+            llTodayDone.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -149,7 +158,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         ((NoReadCountPresenter) mPresenter).noReadNoticeCount(UserInfoSingle.getInstance().getUserId());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change,R.id.rl_today_done})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
@@ -171,6 +180,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 break;
             case R.id.rl_today_done:
                 //今日已办
+                startActivity(new Intent(getActivity(), TaskDoneActivity.class));
                 break;
         }
     }

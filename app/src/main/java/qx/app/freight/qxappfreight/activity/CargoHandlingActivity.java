@@ -817,6 +817,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     }
 
     @Override
+    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
+
+    }
+
+    @Override
     public void existResult(MyAgentListBean existBean) {
 
     }

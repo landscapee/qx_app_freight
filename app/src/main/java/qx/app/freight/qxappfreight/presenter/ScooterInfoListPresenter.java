@@ -37,6 +37,22 @@ public class ScooterInfoListPresenter extends BasePresenter {
             }
         });
     }
+    public void ScooterInfoListForReceicve(BaseFilterEntity model) {
+        mRequestView.showNetDialog();
+        ((ScooterInfoListModel) mRequestModel).scooterInfoListForReceive(model, new IResultLisenter<ScooterInfoListDataBean>() {
+            @Override
+            public void onSuccess(ScooterInfoListDataBean scooterInfoListBeans) {
+                ((ScooterInfoListContract.scooterInfoListView) mRequestView).scooterInfoListForReceiveResult(scooterInfoListBeans.getRecords());
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
 
     public void exist(String scooterid) {
         mRequestView.showNetDialog();

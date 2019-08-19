@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
@@ -150,7 +151,12 @@ public class InstallEquipClient extends StompClient {
                                 Gson gson = new Gson();
                                 LoadUnLoadTaskPushBean data = gson.fromJson(topicMessage.getPayload(), LoadUnLoadTaskPushBean.class);
                                 pushLoadUnLoadTask(data);
-                            } else {
+                            }else if (topicMessage.getPayload().contains("\"loadUnloadStatusChg\":true")) {//机位变更
+                                Gson gson = new Gson();
+                                SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
+                                pushFlightInfo(data);
+                            }
+                            else {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
@@ -288,6 +294,10 @@ public class InstallEquipClient extends StompClient {
 
     //用于装卸员任务人变换通知
     public static void pushLoadUnLoadTask(LoadUnLoadTaskPushBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+    //信息变更
+    public static void pushFlightInfo(SeatChangeEntity bean) {
         EventBus.getDefault().post(bean);
     }
 

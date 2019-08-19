@@ -17,13 +17,19 @@ import com.qxkj.positionapp.GPSService;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
@@ -98,6 +104,9 @@ public class MainActivity extends BaseActivity implements LocationObservable {
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         initServices();
         setToolbarShow(View.GONE);
         mMessageReciver = new MessageReciver(this);
@@ -319,6 +328,15 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     public void receiveLocationUpdate(LocationEntity locationEntity) {
         if (locationEntity != null)
             ToastUtil.showToast("经度:" + locationEntity.getLongitude() + "纬度:" + locationEntity.getLatitude());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(SeatChangeEntity result) {
+        if (result.getRemark().contains("机位变更")){
+            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
+            updatePushDialog.show();
+        }
+
     }
 }
 

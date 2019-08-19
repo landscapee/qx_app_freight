@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
+import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -129,18 +130,11 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             @Override
             public void inputOverWeight(int position) {
                 try {
-
-                    SortingReturnGoodsDialog dialog = new SortingReturnGoodsDialog(InportDeliveryDetailActivity.this);
-                    rcTempInfoOverweight = Tools.deepCopy((ArrayList<RcInfoOverweight>) rcInfoOverweight);
-                    dialog.setData(rcTempInfoOverweight)
-                            .setOnClickListener(new SortingReturnGoodsDialog.OnClickListener() {
-                                @Override
-                                public void onClick(String text) {
-                                    rcInfoOverweight.clear();
-                                    rcInfoOverweight.addAll(rcTempInfoOverweight);
-                                }
-                            })
-                            .show();
+                    SortingReturnGoodsDialogForNet dialog = new SortingReturnGoodsDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    dialog.setOnClickListener(text -> {
+                        getData();
+                    });
+                    dialog.show();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -228,9 +222,11 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private void setBtnSuerState(boolean isAllOut) {
         if (isAllOut){
             btnConfirm.setEnabled(true);
+            btnConfirm.setBackground(getDrawable(R.drawable.background_submit_press));
         }
         else {
             btnConfirm.setEnabled(false);
+            btnConfirm.setBackgroundResource(R.color.gray_8f);
         }
 
     }

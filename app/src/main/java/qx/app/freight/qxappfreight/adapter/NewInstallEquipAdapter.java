@@ -134,6 +134,19 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
 
+        ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
+        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size()-1).getStepDoneDate())){
+            ivDone.setVisibility(View.VISIBLE);
+            btnFS.setVisibility(View.GONE);
+//            btnClear.setVisibility(View.GONE);
+        }
+        else{
+            ivDone.setVisibility(View.GONE);
+            btnFS.setVisibility(View.VISIBLE);
+//            btnClear.setVisibility(View.VISIBLE);
+        }
+
+
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         NewInstallEquipStepAdapter adapter = new NewInstallEquipStepAdapter(item.getOperationStepObj());
@@ -229,10 +242,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
     }
-
     public interface OnFlightSafeguardListenner {
         void onFlightSafeguardClick(int position);
-
         void onClearClick(int position);
     }
 

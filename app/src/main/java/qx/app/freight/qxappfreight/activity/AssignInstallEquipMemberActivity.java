@@ -65,15 +65,20 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
                     sb.append(",");
                 }
             }
-            String members = sb.toString().substring(0, sb.toString().length() - 1);
-            if (TextUtils.isEmpty(members)) {
-                ToastUtil.showToast("至少得选择一个任务人");
-            } else {
-                BaseFilterEntity entity = new BaseFilterEntity();
-                entity.setTaskId(mTaskId);
-                entity.setStaffIds(members);
-                ((SelectTaskMemberPresenter) mPresenter).selectMember(entity);
+            if (sb.toString().length() > 0){
+                String members = sb.toString().substring(0, sb.toString().length() - 1);
+                if (TextUtils.isEmpty(members)) {
+                    ToastUtil.showToast("至少得选择一个任务人");
+                } else {
+                    BaseFilterEntity entity = new BaseFilterEntity();
+                    entity.setTaskId(mTaskId);
+                    entity.setStaffIds(members);
+                    ((SelectTaskMemberPresenter) mPresenter).selectMember(entity);
+                }
             }
+            else
+                ToastUtil.showToast("至少得选择一个任务人");
+
         }
     }
 
