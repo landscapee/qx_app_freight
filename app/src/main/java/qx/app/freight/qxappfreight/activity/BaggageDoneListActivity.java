@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
@@ -65,6 +66,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
     private List<String> mAbnormalList; //行李区列表
 
     TransportTodoListBean flightBean;
+    CargoReportHisBean mData;
     private int flag = 0;
     private String mScooterCode;
 
@@ -76,12 +78,13 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         Intent intent =  getIntent();
-        flightBean =(TransportTodoListBean)intent.getSerializableExtra("flightBean");
+        mData =(CargoReportHisBean)intent.getSerializableExtra("flightBean");
         mAbnormalList = new ArrayList<>();
         EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, flightBean.getFlightNo());
+        mList = mData.getMainInfos();
 
         initView();
     }

@@ -23,7 +23,7 @@ public class CargoReportHisBean  implements MultiItemEntity, Serializable {
 
     private String flightIndicator;
 
-    private List<TransportTodoListBean> data;
+    private List<TransportTodoListBean> mainInfos;
 
     /**
      * 上报类型,1行李上报,2国内货物上报,3国际货物上报

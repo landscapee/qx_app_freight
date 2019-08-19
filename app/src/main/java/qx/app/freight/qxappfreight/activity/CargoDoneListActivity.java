@@ -30,7 +30,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
-import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
+import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
@@ -96,9 +96,10 @@ public class CargoDoneListActivity extends BaseActivity implements International
     @BindView(R.id.btn_next)
     Button btnNext;
     private InternationalCargoAdapter mAdapter;
-    private List<TransportTodoListBean> mList;
+    private List<TransportTodoListBean> mList = new ArrayList<>();
     private CustomToolbar toolbar;
-    private TransportTodoListBean flightBean;
+    private List<TransportTodoListBean> flightBean;
+    private CargoReportHisBean mData;
     private String mScooterCode;
     private double mBaggageWeight;//行李重量
     private double mGoodsWeight;//货物重量
@@ -113,35 +114,43 @@ public class CargoDoneListActivity extends BaseActivity implements International
     public void businessLogic(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
         Intent intent = getIntent();
-        flightBean = (TransportTodoListBean) intent.getSerializableExtra("flightBean");
+        mData = (CargoReportHisBean) intent.getSerializableExtra("flightBean");
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "货物上报");
+        flightBean = mData.getMainInfos();
         mPresenter = new GetFlightCargoResPresenter(this);
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
-        entity.setFlightId(flightBean.getFlightId());
+        entity.setFlightId(mData.getFlightId());
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         initView();
+
     }
 
     private void initView() {
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mList = new ArrayList<>();
         mAdapter = new InternationalCargoAdapter(mList);
         mAdapter.setOnDeleteClickListener((view, position) -> {
             mSlideRV.closeMenu();
             mList.remove(position);
             mAdapter.notifyDataSetChanged();
         });
+        //传过来的板车如果有数据就显示
+        if (flightBean.size() > 0) {
+            mList.addAll(flightBean);
+//            mAdapter1 = new InternationalCargoAdapter(mList1);
+//            mAdapter1.notifyDataSetChanged();
+//            mSlideRV.setAdapter(mAdapter1);
+        }
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRV.setAdapter(mAdapter);
         //初始化ui界面
-        flightId.setText(flightBean.getFlightNo());
-        tvFlightType.setText(flightBean.getTpFlightType()+"");
+        flightId.setText(mData.getFlightNo());
+//        tvFlightType.setText(mData.getTpFlightType()+"");
 //        tvFlightPlace.setText(flightBean.gett());
-        tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getTpFlightTime()), TimeUtils.getDay((flightBean.getTpFlightTime()))));
+        tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(mData.getCreateTime()), TimeUtils.getDay((mData.getCreateTime()))));
         //显示航线，2条 3条 4条
 //        if (flightBean.getFlightCourseByAndroid() != null && flightBean.getFlightCourseByAndroid().size() > 1)
 //            switch (flightBean.getItemType()) {
@@ -206,6 +215,12 @@ public class CargoDoneListActivity extends BaseActivity implements International
 
     //提交数据
     private void submitScooter() {
+        for (int i = 0; i < mList.size(); i++) {
+            for (int j = 0; j < mData.getMainInfos().size(); j++) {
+                if (mList.get(i).equals(mData.getMainInfos().get(j)))
+                    mList.remove(i);
+            }
+        }
         if (mList.size() == 0) {
             ToastUtil.showToast("请扫描板车");
         } else {
@@ -222,8 +237,8 @@ public class CargoDoneListActivity extends BaseActivity implements International
 //            entity.setMailWeight(2.22);
 //            entity.setCargoWeight(3.33);
             entity.setData(mList);
-            entity.setMovement(flightBean.getFlightIndicator());
-            entity.setFlightId(Long.valueOf(flightBean.getFlightId()));
+            entity.setMovement(flightBean.get(0).getFlightIndicator());
+            entity.setFlightId(Long.valueOf(flightBean.get(0).getFlightId()));
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter = new InternationalCargoReportPresenter(this);
             ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(entity);
@@ -252,7 +267,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
-            String flightType = flightBean.getFlightIndicator();
+            String flightType = flightBean.get(0).getFlightIndicator();
             if ("D".equals(flightType) || "I".equals(flightType)) {
                 for (ScooterInfoListBean bean : scooterInfoListBeans) {
                     bean.setFlightType(flightType);
@@ -284,13 +299,13 @@ public class CargoDoneListActivity extends BaseActivity implements International
         TransportTodoListBean bean = new TransportTodoListBean();
         bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
         bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
-        bean.setFlightId(flightBean.getFlightId());
-        bean.setFlightNo(flightBean.getFlightNo());
-        bean.setTpFlightLocate(flightBean.getTpFlightLocate());
-        bean.setTpFlightTime(flightBean.getTpFlightTime());
-        bean.setFlightInfoId(flightBean.getId());
-        bean.setAsFlightId(flightBean.getAsFlightId());
-        bean.setTpFlightType(flightBean.getTpFlightType());
+        bean.setFlightId(flightBean.get(0).getFlightId());
+        bean.setFlightNo(flightBean.get(0).getFlightNo());
+        bean.setTpFlightLocate(flightBean.get(0).getTpFlightLocate());
+        bean.setTpFlightTime(flightBean.get(0).getTpFlightTime());
+        bean.setFlightInfoId(flightBean.get(0).getId());
+        bean.setAsFlightId(flightBean.get(0).getAsFlightId());
+        bean.setTpFlightType(flightBean.get(0).getTpFlightType());
         bean.setFlightIndicator("I");
         mList.add(bean);
         mAdapter.notifyDataSetChanged();
@@ -346,8 +361,8 @@ public class CargoDoneListActivity extends BaseActivity implements International
         mMailWeight = 0;
         mBaggageWeight = 0;
         if (result.getData() == null || result.getData().size() == 0) return;
-        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()){
-            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:dataBean.getScooters()){
+        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
+            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : dataBean.getScooters()) {
                 switch (scooterBean.getType()) {
                     case "C":
                     case "CT":
@@ -384,7 +399,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
     }
 
     @Override
-    public void getPullStatusResult(BaseEntity <String> result) {
+    public void getPullStatusResult(BaseEntity<String> result) {
 
     }
 }
