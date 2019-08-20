@@ -162,10 +162,19 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
                 collView.collapse();
             }
         });
+
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         Button btnClear = helper.getView(R.id.btn_seat_clear);
         btnFS.setVisibility(View.GONE);
         btnClear.setVisibility(View.VISIBLE);
+        ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
+        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
+            btnFS.setVisibility(View.GONE);
+            ivDone.setVisibility(View.VISIBLE);
+        } else {
+            ivDone.setVisibility(View.GONE);
+            btnFS.setVisibility(View.VISIBLE);
+        }
         btnClear.setOnClickListener(v-> onClearSeatListener.onClearClicked(helper.getAdapterPosition()));
     }
 
