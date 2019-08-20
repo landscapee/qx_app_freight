@@ -157,7 +157,7 @@ public class Constants {
 
     public static final String TP_TYPE_UNLOAD_K = "unload";//宽体机 卸机保障
 
-    public static final String TP_TYPE_SINGLE = "first_baggage";//单板行李任务
+    public static final String TP_TYPE_SINGLE = "first_baggage";//首件行李任务
 
     public static final String TP_TYPE_BAGGAAGE = "baggage";//行李任务
 

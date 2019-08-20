@@ -218,7 +218,10 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         upDataBtnStatus();
         getData();
-        getCanPullScooter();
+        //首件行李任务 不显示可拉板车
+        if (!Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+            getCanPullScooter();
+        }
     }
 
     /**
