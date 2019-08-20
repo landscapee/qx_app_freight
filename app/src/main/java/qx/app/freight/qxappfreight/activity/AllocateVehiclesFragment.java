@@ -161,7 +161,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         adapter.setOnItemClickListener((adapter, view, position) -> {
             CURRENT_TASK_BEAN = list.get(position);
             startActivity(new Intent(getActivity(), AllocateScooterActivity.class)
-                    .putExtra("flightId", list.get(position).getFlightId())
+                    .putExtra("flightInfoId", list.get(position).getFlightInfoId())
                     .putExtra("taskId", list.get(position).getTaskId()));
         });
 //        mPresenter = new GetInfosByFlightIdPresenter(this);

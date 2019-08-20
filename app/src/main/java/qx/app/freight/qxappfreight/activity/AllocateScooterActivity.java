@@ -34,7 +34,7 @@ public class AllocateScooterActivity extends BaseActivity {
     private List<Fragment> fragmentList;
     private List<String> list_Title;
 
-    private String flightId;
+    private String flightInfoId;
     private String taskId;
 
     @Override
@@ -44,7 +44,7 @@ public class AllocateScooterActivity extends BaseActivity {
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        flightId = getIntent().getStringExtra("flightId");
+        flightInfoId = getIntent().getStringExtra("flightInfoId");
         taskId = getIntent().getStringExtra("taskId");
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "查看详情");
@@ -58,8 +58,8 @@ public class AllocateScooterActivity extends BaseActivity {
         list_Title.add("板车");
         list_Title.add("舱单");
 
-        fragmentList.add(RepeatWeightScooterFragment.getInstance(flightId,taskId));
-        fragmentList.add(RepeatWeightManifestFragment.getInstance(flightId));
+        fragmentList.add(RepeatWeightScooterFragment.getInstance(flightInfoId,taskId));
+        fragmentList.add(RepeatWeightManifestFragment.getInstance(flightInfoId));
 
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), this, fragmentList, list_Title));
