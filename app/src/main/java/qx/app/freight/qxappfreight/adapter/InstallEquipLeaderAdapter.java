@@ -42,15 +42,15 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
 
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
+        LinearLayout llBg = helper.getView(R.id.ll_bg);
         if (!item.isAcceptTask()) {
-            helper.itemView.setBackgroundColor(Color.parseColor("#FFAC00"));
+            llBg.setBackgroundColor(Color.parseColor("#ffac00"));
         } else {
-            helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+            llBg.setBackgroundColor(Color.parseColor("#ffffff"));
         }
 //        boolean isWidePlane = item.getWidthAirFlag() == 0;
 //        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
         helper.setText(R.id.tv_plane_type, item.getAircraftType());
-        LinearLayout llBg = helper.getView(R.id.ll_bg);
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
         tvTime.setText(item.getTimeForShow());
