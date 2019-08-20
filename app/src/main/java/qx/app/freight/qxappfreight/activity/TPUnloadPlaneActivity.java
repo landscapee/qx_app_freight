@@ -154,13 +154,6 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         mOutFieldTaskBean = (OutFieldTaskBean) getIntent().getSerializableExtra("plane_info");
-        if ("cargo".equals(mOutFieldTaskBean.getCargoType())){
-            mLlScanGoodsContainer.setVisibility(View.VISIBLE);
-            mLlScanBaggageContainer.setVisibility(View.GONE);
-        }else {
-            mLlScanGoodsContainer.setVisibility(View.GONE);
-            mLlScanBaggageContainer.setVisibility(View.VISIBLE);
-        }
         mCurrentTaskId = mOutFieldTaskBean.getTaskId();
         toolbar.setMainTitle(Color.WHITE, mOutFieldTaskBean.getFlights().getFlightNo() + "  卸机");
         mTvPlaneInfo.setText(mOutFieldTaskBean.getFlights().getFlightNo());
