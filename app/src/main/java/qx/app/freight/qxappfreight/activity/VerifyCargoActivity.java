@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.presenter.FreightInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.SubmissionPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -69,6 +70,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     TextView mTvCollectRequire;
     @BindView(R.id.ll_baozhuang)
     LinearLayout mLlBaoZhuang;
+    @BindView(R.id.ll_collect_require)
+    LinearLayout llCollectRequire;
     @BindView(R.id.ll_yaoqiu)
     LinearLayout mLlYaoQiu;
     @BindView(R.id.ll_spot)
@@ -133,7 +136,13 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mSportResult = getIntent().getIntExtra("spotResult", -1);
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
-        ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightName());
+        if (!StringUtil.isEmpty(mDecBean.getFlightName())){
+            ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightName());
+            llCollectRequire.setVisibility(View.VISIBLE);
+        }
+        else {
+            llCollectRequire.setVisibility(View.GONE);
+        }
 
         Log.e("dime", "spotFlat=" + mDecBean.getSpotFlag() + ", spotResult=" + mSportResult);
         if (mDecBean.getSpotFlag().equals("0")) {

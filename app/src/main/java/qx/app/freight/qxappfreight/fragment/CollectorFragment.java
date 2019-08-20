@@ -137,7 +137,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            case "changeApply": //换单审核
 //                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
 //                break;
-            case "borrowCollection"://出港收货
+            case "borrowCollection"://借货收运
             case "collection"://出港收货
                 Log.e("tagTest", "出港收货===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)

@@ -75,6 +75,7 @@
         <View style="@style/line_horizontal" />
 
         <LinearLayout
+            android:id="@+id/ll_collect_require"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
