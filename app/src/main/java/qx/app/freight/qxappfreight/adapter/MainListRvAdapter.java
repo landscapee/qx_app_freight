@@ -59,30 +59,33 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
 //                break;
             case "collection":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
-                tvStatusName.setText("出港收货");
                 break;
             case "reCollection":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
-                tvStatusName.setText("补单收运");
                 break;
             case "RR_collectReturn":
                 ivFlag.setVisibility(View.VISIBLE);
                 ivFlag.setImageResource(R.mipmap.collect_wait);
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.orange_D67));
-                tvStatusName.setText("出港退货");
                 break;
             case "receive":
-                helper.getView(R.id.ll_collection).setVisibility(View.GONE);
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 break;
             case "reReceive":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                tvStatusName.setText("补单收验");
                 break;
             case "changeCollection":
                 tvStatusName.setTextColor(mContext.getResources().getColor(R.color.red));
-                tvStatusName.setText("存储变更");
                 break;
+            case "borrowReceive":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                break;
+            case "borrowCollection":
+                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                break;
+
         }
+        tvStatusName.setText(item.getTaskType());
 
 
         String coldStr = "";

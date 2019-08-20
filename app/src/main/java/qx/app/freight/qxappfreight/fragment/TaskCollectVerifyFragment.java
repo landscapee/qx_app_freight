@@ -248,8 +248,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()) ||
-                    "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 transportListList1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow) {
                     mTaskFragment.setTitleText(transportListList1.size());

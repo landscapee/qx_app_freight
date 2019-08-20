@@ -137,6 +137,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            case "changeApply": //换单审核
 //                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
 //                break;
+            case "borrowCollection"://出港收货
             case "collection"://出港收货
                 Log.e("tagTest", "出港收货===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
@@ -237,7 +238,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             //非换单审核的全部都加
             if ("changeCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
                     || "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
-                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "borrowCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
