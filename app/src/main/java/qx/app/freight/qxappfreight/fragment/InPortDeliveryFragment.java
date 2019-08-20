@@ -197,18 +197,16 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-
         Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
         //   /QR/1a7d0a00541bed0e06a935a998efe038/201905241162/QR/
         if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
-            String[] parts = daibanCode.split("\\/");
-            List <String> strsToList = Arrays.asList(parts);
-            if (strsToList.size() >= 4) {
-                chooseCode(strsToList.get(3));
-                Log.e("22222", "提货代办流水号： " + strsToList.get(2));
-            }
-
+                String[] parts = daibanCode.split("\\/");
+                List<String> strsToList = Arrays.asList(parts);
+                if (strsToList.size() >= 4) {
+                    chooseCode(strsToList.get(3));
+                    Log.e("22222", "提货代办流水号： " + strsToList.get(2));
+                }
         }
     }
 

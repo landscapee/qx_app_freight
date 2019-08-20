@@ -145,12 +145,12 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 //            entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
 //        }
 //        entity.setUndoType("2");
-        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
         entity.setRoleCode(Constants.PREPLANER);
         entity.setUndoType(2);
-        List<String> ascs=new ArrayList<>();
+        List<String> ascs = new ArrayList<>();
         ascs.add("ETD");
         entity.setAscs(ascs);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
@@ -170,7 +170,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
      * @param bean
      */
     private void turnToDetailActivity(TransportDataBase bean) {
-        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId(),bean.getTaskTypeCode());
+        CargoHandlingActivity.startActivity(mContext, bean.getTaskId(), bean.getFlightId(), bean.getTaskTypeCode());
     }
 
     /**
@@ -180,7 +180,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
@@ -290,6 +290,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 
     /**
      * 待办锁定 - 回调
+     *
      * @param result
      */
     @Override

@@ -157,7 +157,7 @@ public class Constants {
 
     public static final String TP_TYPE_UNLOAD_K = "unload";//宽体机 卸机保障
 
-    public static final String TP_TYPE_SINGLE = "first_baggage";//单板行李任务
+    public static final String TP_TYPE_SINGLE = "first_baggage";//首件行李任务
 
     public static final String TP_TYPE_BAGGAAGE = "baggage";//行李任务
 
@@ -222,4 +222,8 @@ public class Constants {
     public static final int TYPE_PULL_BACK_NORMAL = 0;
     public static final int TYPE_PULL_BACK_SUCCESS = 1;
     public static final int TYPE_PULL_BACK_FAILED = 2;
+
+
+    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";  //已到板车数量变化字段
+
 }

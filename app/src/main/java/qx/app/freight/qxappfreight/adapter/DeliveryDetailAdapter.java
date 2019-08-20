@@ -89,9 +89,14 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
                 break;
         }
         //控制按钮显示
-        if (bean.getWaybillStatus() ==6||bean.getWaybillStatus() ==7){
+        if (bean.getWaybillStatus() ==6||bean.getOverweightCharge() > 0||bean.getDefermentCharge() > 0){
 //            holder.setVisible(R.id.tv_put_num,false);
-            if (bean.getWaybillStatus() ==7){
+            if (bean.getOverweightCharge() > 0){
+                holder.setText(R.id.tv_status,"超重待补费");
+                holder.setText(R.id.tv_outStorage,"");
+            }
+            else if (bean.getDefermentCharge() > 0){
+                holder.setText(R.id.tv_status,"逾期待补费");
                 holder.setText(R.id.tv_outStorage,"");
             }
             else
@@ -99,9 +104,12 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
 
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
+            holder.setGone(R.id.btn_overweight,false);
+
         }else {
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
+            holder.setGone(R.id.btn_overweight,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
 

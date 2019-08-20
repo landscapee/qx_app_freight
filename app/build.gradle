@@ -42,6 +42,7 @@ android {
         }
     }
 
+    //配置签名文件
     if (RELEASE_PROPERTIES_EXIST) {
         signProperties.load(new FileInputStream(signFilePath))
         signingConfigs {
@@ -56,10 +57,11 @@ android {
     }
 
     buildTypes {
-        debugRelease.initWith(buildTypes.debug)
-        debugProduct.initWith(buildTypes.debug)
-        //测试环境(可调试)
-        debugRelease {
+
+        release.initWith(buildTypes.debug)
+        product.initWith(buildTypes.debug)
+
+        release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //设置ip
@@ -68,7 +70,23 @@ android {
             for (String key : keys) {
                 buildConfigField("String", key, "\"" + properties.get(key) + "\"")
             }
+            //配置打包签名的信息
+            if (RELEASE_PROPERTIES_EXIST) {
+                signingConfig signingConfigs.release
+            }
         }
+        //测试环境(可调试)
+//        debugRelease {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            //设置ip
+//            properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "release.properties"))
+//            Set<String> keys = properties.keySet()
+//            for (String key : keys) {
+//                buildConfigField("String", key, "\"" + properties.get(key) + "\"")
+//            }
+//        }
+        //测试环境
         //生产环境
         product {
             minifyEnabled false
@@ -84,18 +102,6 @@ android {
                 signingConfig signingConfigs.release
             }
         }
-        //生产环境(可调试)
-        debugProduct {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //设置ip
-            properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "product.properties"))
-            Set<String> keys = properties.keySet()
-            for (String key : keys) {
-                buildConfigField("String", key, "\"" + properties.get(key) + "\"")
-            }
-        }
-
         //开发环境
         debug {
             minifyEnabled false
@@ -106,27 +112,24 @@ android {
             for (String key : keys) {
                 buildConfigField("String", key, "\"" + properties.get(key) + "\"")
             }
-            //配置打包签名的信息
+        }
+
+//        //生产环境(可调试)
+//        debugProduct {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            //设置ip
+//            properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "product.properties"))
+//            Set<String> keys = properties.keySet()
+//            for (String key : keys) {
+//                buildConfigField("String", key, "\"" + properties.get(key) + "\"")
+//            }
+//            //配置打包签名的信息
 //            if (RELEASE_PROPERTIES_EXIST) {
 //                signingConfig signingConfigs.release
 //            }
-        }
+//        }
 
-        //测试环境
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //设置ip
-            properties.load(new FileInputStream(getRootProject().getProjectDir().absolutePath + File.separator + "release.properties"))
-            Set<String> keys = properties.keySet()
-            for (String key : keys) {
-                buildConfigField("String", key, "\"" + properties.get(key) + "\"")
-            }
-            //配置打包签名的信息
-            if (RELEASE_PROPERTIES_EXIST) {
-                signingConfig signingConfigs.release
-            }
-        }
     }
     repositories {
         flatDir {

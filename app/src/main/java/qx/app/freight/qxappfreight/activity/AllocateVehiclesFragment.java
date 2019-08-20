@@ -135,7 +135,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
         if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if (null!=mWebSocketResultBean.getChgData().get(0).getTaskTypeCode()&& mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 seachWithNum();
             }
@@ -161,7 +161,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         adapter.setOnItemClickListener((adapter, view, position) -> {
             CURRENT_TASK_BEAN = list.get(position);
             startActivity(new Intent(getActivity(), AllocateScooterActivity.class)
-                    .putExtra("flightId", list.get(position).getFlightId())
+                    .putExtra("flightInfoId", list.get(position).getFlightInfoId())
                     .putExtra("taskId", list.get(position).getTaskId()));
         });
 //        mPresenter = new GetInfosByFlightIdPresenter(this);
@@ -244,8 +244,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
-            String daibanCode = result.getData();
-            getScooterByScooterCode(daibanCode);
+                String daibanCode = result.getData();
+                getScooterByScooterCode(daibanCode);
         }
 
     }

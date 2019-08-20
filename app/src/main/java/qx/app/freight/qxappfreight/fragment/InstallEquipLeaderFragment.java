@@ -37,10 +37,13 @@ import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadLeaderDialog;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -53,7 +56,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 装卸机小组长代办fragment
  */
-public class InstallEquipLeaderFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadUnloadLeaderToDoContract.LoadUnloadLeaderToDoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipLeaderFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadUnloadLeaderToDoContract.LoadUnloadLeaderToDoView, EmptyLayout.OnRetryLisenter, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -83,7 +86,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
@@ -164,6 +166,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if ("refresh_data_update".equals(result)) {
@@ -171,6 +174,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             loadData();
         }
     }
+
 
     /**
      * mListCache 为0 就不展示
@@ -210,7 +214,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             Tools.closeVibrator(getActivity().getApplicationContext());
         });
         if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
-            Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
+            Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
             mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
         }
     }
@@ -315,7 +319,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            if (bean.getRelateInfoObj() !=null){
+            if (bean.getRelateInfoObj() != null) {
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             }
@@ -368,18 +372,16 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mCacheList.add(bean);
         }
         mListCache.clear();
-        for (LoadAndUnloadTodoBean bean : mCacheList) {
-            if (!bean.isAcceptTask()) {
-                mListCache.add(bean);
-            }
-        }
+        //过滤掉已经重复展示的 dialog
+        filtDialog();
+
         if (mListCache.size() != 0) {
 //            mCacheList.removeAll(mListCache);
             Log.e("tagTest", "弹框。。。。。");
             showDialogTask();
         } else {
             seachByText();
-            setSlideListener();
+            setMoreListener();
         }
         if (mTaskFragment != null) {
             if (isShow)
@@ -388,14 +390,47 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     }
 
     /**
+     * //过滤掉已经重复展示的 dialog
+     */
+    private synchronized void filtDialog() {
+        for (LoadAndUnloadTodoBean bean : mCacheList) {
+            if (!bean.isAcceptTask()) {
+                boolean isInclude = false;
+                for (LoadAndUnloadTodoBean loadAndUnloadTodoBean1:mListCache){
+                    if (loadAndUnloadTodoBean1.getTaskId().equals(bean.getTaskId())){
+                        isInclude =true;
+                    }
+                }
+                if (!isInclude){
+                    mListCache.add(bean);
+                }
+            }
+        }
+    }
+
+    /**
      * 设置滑动监听
      */
-    private void setSlideListener() {
+    private void setMoreListener() {
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             mOperatePos = smallPos;
             mSlideAdapter = adapter;
             go2SlideStep(bigPos, mList.get(bigPos).getOperationStepObj().get(smallPos).getOperationCode());
         });
+        mAdapter.setOnClearSeatListener(position -> startClearTask(position));
+    }
+
+    /**
+     * 发起清场任务
+     */
+    private void startClearTask(int position) {
+        TaskClearEntity entity = new TaskClearEntity();
+        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
+        entity.setSeat(mList.get(position).getSeat());
+        entity.setType("clear");
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
     /**
@@ -421,6 +456,11 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     }
 
     @Override
+    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             mSlideAdapter.notifyDataSetChanged();
@@ -430,6 +470,11 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                 mOperatePos = 0;
             }
         }
+    }
+
+    @Override
+    public void startClearTaskResult(String result) {
+        ToastUtil.showToast("操作成功");
     }
 
     @Override

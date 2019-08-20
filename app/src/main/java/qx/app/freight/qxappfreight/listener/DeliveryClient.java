@@ -27,8 +27,10 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.ScooterArriveNumChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.NetworkUtils;
@@ -143,7 +145,13 @@ public class DeliveryClient extends StompClient {
                         .subscribe(topicMessage -> {
                             Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
                             WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                            sendMessageEventBus(mWebSocketMessBean);
+                            //已到库板车推送
+                            if (mWebSocketMessBean.getSpecialFlag() == 2 && Constants.SCOOTER_ARRIVE_NUM_PUSH.equals(mWebSocketMessBean.getMessageName())){
+                                ScooterArriveNumChangeEntity scooterArriveNumChangeEntity = mGson.fromJson(mWebSocketMessBean.getContent(), ScooterArriveNumChangeEntity.class);
+                                sendScooterChangeEventBus(scooterArriveNumChangeEntity);
+                            }
+                            else
+                                sendMessageEventBus(mWebSocketMessBean);
                         }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
                 compositeDisposable.add(dispTopic2);
                 WebSocketService.subList.add(WebSocketService.Message);
@@ -241,6 +249,10 @@ public class DeliveryClient extends StompClient {
 
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+    //消息推送
+    public void sendScooterChangeEventBus(ScooterArriveNumChangeEntity bean) {
         EventBus.getDefault().post(bean);
     }
 }

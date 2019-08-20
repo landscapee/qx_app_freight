@@ -324,7 +324,7 @@ public class Tools {
      * 开启短震动
      */
     public static void startShortVibrator(Context context) {
-        VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，长时间震动和短时间震动
+        VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，短时间震动
     }
 
     /**

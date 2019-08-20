@@ -124,6 +124,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private String virtualFlag;
     private String otherFlag;
     private String flightId;
+    private String flightInfoId;
     private TransportListBean.DeclareWaybillAdditionBean declareWaybillAddition;
     private String flightNo;
     private int outboundNumber;

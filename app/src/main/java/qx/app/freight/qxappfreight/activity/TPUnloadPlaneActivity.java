@@ -75,6 +75,10 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     TextView mTvFlightType;//航班类型
     @BindView(R.id.ll_flight_info_container)
     LinearLayout mLlInfo;//航班信息容器
+    @BindView(R.id.ll_scan_goods)
+    LinearLayout mLlScanGoodsContainer;//扫描货物总的容器
+    @BindView(R.id.ll_scan_baggage)
+    LinearLayout mLlScanBaggageContainer;//扫描行李总的容器
     TextView mTvTargetPlace;//航班终点
     @BindView(R.id.tv_seat)
     TextView mTvSeat;//航班机位数
@@ -381,13 +385,17 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("TPUnloadPlaneActivity".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (!mTpScooterCodeList.contains(result.getData())) {
-                mNowScooterCode = result.getData();
-                mPresenter = new ScanScooterCheckUsedPresenter(this);
-                ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
-            } else {
-                ToastUtil.showToast("操作不合法，不能重复扫描");
+            if (result.getData().length()==5) {
+                //根据扫一扫获取的板车信息查找板车内容
+                if (!mTpScooterCodeList.contains(result.getData())) {
+                    mNowScooterCode = result.getData();
+                    mPresenter = new ScanScooterCheckUsedPresenter(this);
+                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                } else {
+                    ToastUtil.showToast("操作不合法，不能重复扫描");
+                }
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
             }
         }
     }

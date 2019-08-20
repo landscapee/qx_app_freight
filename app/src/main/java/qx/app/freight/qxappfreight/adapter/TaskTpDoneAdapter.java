@@ -22,7 +22,7 @@ public class TaskTpDoneAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
     private  onSlideExecuteListener listener;
 
     public TaskTpDoneAdapter(List<OutFieldTaskBean> list) {
-        super(R.layout.item_slide_left_execute, list);
+        super(R.layout.item_slide_left_execute_done, list);
     }
 
     @Override
@@ -151,12 +151,12 @@ public class TaskTpDoneAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
 //            mSlideLeftExecuteViewE.setVisibility(View.GONE);
         });
         rlStart.setOnClickListener(v ->{
-            if(item.getTaskBeginTime() > 0)
-                listener.onClickListener(0,helper.getAdapterPosition());
+//            if(item.getTaskBeginTime() > 0)
+//                listener.onClickListener(0,helper.getAdapterPosition());
         });
         rlEnd.setOnClickListener(v ->{
-            if(item.getTaskEndTime() > 0)
-                listener.onClickListener(1,helper.getAdapterPosition());
+//            if(item.getTaskEndTime() > 0)
+//                listener.onClickListener(1,helper.getAdapterPosition());
         });
 
     }

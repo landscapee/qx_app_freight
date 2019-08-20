@@ -74,7 +74,6 @@ public class MsgDialogActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         Tools.closeVibrator(getApplicationContext());
-        VibrationUtils.cancel(mContext);
     }
 
     private void initView() {

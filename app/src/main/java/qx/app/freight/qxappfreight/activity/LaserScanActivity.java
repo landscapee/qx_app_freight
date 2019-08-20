@@ -176,9 +176,13 @@ public class LaserScanActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (!TextUtils.isEmpty(result.getData())) {
-            //板车号
-            mScooterCode = result.getData();
-            getBackMessage(mScooterCode);
+            if (result.getData().length() == 5) {
+                //板车号
+                mScooterCode = result.getData();
+                getBackMessage(mScooterCode);
+            }else {
+                ToastUtil.showToast("板车号错误，请检查");
+            }
         }
     }
 

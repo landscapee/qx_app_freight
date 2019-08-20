@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterArriveNumChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
@@ -260,7 +261,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mPresenter = new InWaybillRecordPresenter(this);
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setTaskFlag(0);
-        entity.setFlightInfoId(transportListBean.getFlightId());
+        entity.setFlightInfoId(transportListBean.getFlightInfoId());
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
 
@@ -363,7 +364,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         }
 
         //初始化提交实体类
-        submitEntity.setFlightInfoId(transportListBean.getFlightId());
+        submitEntity.setFlightInfoId(transportListBean.getFlightInfoId());
         submitEntity.setFlightId(transportListBean.getFlightYLId());
         submitEntity.setFlightNo(transportListBean.getFlightNo());
         submitEntity.setTaskId(transportListBean.getTaskId());
@@ -415,7 +416,7 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mAdapter.setOnAllArriveNotifyListener((item, pos) -> {
             mConfirmPos=pos;
             mPresenter = new InWaybillRecordPresenter(SortingActivity.this);
-            item.setFlightInfoId(transportListBean.getFlightId());
+            item.setFlightInfoId(transportListBean.getFlightInfoId());
             item.setCreateUserName(UserInfoSingle.getInstance().getUsername());
             ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(item);
         });
@@ -535,6 +536,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             turnToAddActivity(newCode);
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScooterArriveNumChangeEntity result) {
+      if (result !=null && result.getFlightInfoId().equals(transportListBean.getFlightInfoId())){
+           handCarNumTv.setText(result.getArriveWarehouseNum()+"");
+            handCarTotalTv.setText("/"+result.getTotalScooterNum());
+      }
+    }
+
 
     /**
      * 跳转到新增界面

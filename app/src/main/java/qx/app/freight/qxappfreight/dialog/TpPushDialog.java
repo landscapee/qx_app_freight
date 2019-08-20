@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 外场运输待办推送
@@ -55,7 +56,19 @@ public class TpPushDialog extends Dialog {
 
     }
 
-    public TpPushDialog(@NonNull Context context, int themeResId,AcceptTerminalTodoBean mAcceptTerminalTodoBean,OnTpPushListener mOnTpPushListener) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
+    }
+
+    public TpPushDialog(@NonNull Context context, int themeResId, AcceptTerminalTodoBean mAcceptTerminalTodoBean, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
