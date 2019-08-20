@@ -18,6 +18,9 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
 import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
@@ -116,7 +120,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
             entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
             String userName = UserInfoSingle.getInstance().getUsername();
-            entity.setOperationUserName((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
+            entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
@@ -171,6 +175,22 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+        if ("N".equals(mWebSocketResultBean.getFlag())) {
+            loadData();
+        }
+//        else if ("D".equals(mWebSocketResultBean.getFlag())) {
+//            for (TransportDataBase mTransportListBean : list) {
+//                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {
+//                    list.remove(mTransportListBean);
+//                }
+//            }
+//    }
+
+    }
+
     private void showStoragePickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
@@ -204,7 +224,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         title.setUldCode("ULD号");
         title.setDest("目的站");
         title.setType("类型");
-        title.setActWgt("重量");
+        title.setWeight("重量");
         title.setRestrictedCargo("件数");
         title.setSpecialNumber("特货代码");
 
