@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +98,7 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
     @Override
     public void selectMemberResult(String result) {
         ToastUtil.showToast("任务分配成功");
+        EventBus.getDefault().post("refresh_data_update");
         finish();
     }
 

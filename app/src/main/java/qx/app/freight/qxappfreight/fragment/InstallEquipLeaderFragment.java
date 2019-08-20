@@ -87,12 +87,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
         if (result != null) {
@@ -180,6 +174,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             loadData();
         }
     }
+
 
     /**
      * mListCache 为0 就不展示
@@ -377,11 +372,9 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mCacheList.add(bean);
         }
         mListCache.clear();
-        for (LoadAndUnloadTodoBean bean : mCacheList) {
-            if (!bean.isAcceptTask()) {
-                mListCache.add(bean);
-            }
-        }
+        //过滤掉已经重复展示的 dialog
+        filtDialog();
+
         if (mListCache.size() != 0) {
 //            mCacheList.removeAll(mListCache);
             Log.e("tagTest", "弹框。。。。。");
@@ -393,6 +386,25 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         if (mTaskFragment != null) {
             if (isShow)
                 mTaskFragment.setTitleText(mCacheList.size());
+        }
+    }
+
+    /**
+     * //过滤掉已经重复展示的 dialog
+     */
+    private synchronized void filtDialog() {
+        for (LoadAndUnloadTodoBean bean : mCacheList) {
+            if (!bean.isAcceptTask()) {
+                boolean isInclude = false;
+                for (LoadAndUnloadTodoBean loadAndUnloadTodoBean1:mListCache){
+                    if (loadAndUnloadTodoBean1.getTaskId().equals(bean.getTaskId())){
+                        isInclude =true;
+                    }
+                }
+                if (!isInclude){
+                    mListCache.add(bean);
+                }
+            }
         }
     }
 

@@ -135,7 +135,8 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         });
         mTvRefuse.setOnClickListener(v -> {
             BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setTaskId(list.get(0).getTaskId());
+            if (list!=null &&list.size()> 0)
+                entity.setTaskId(list.get(0).getTaskId());
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter.refuseTask(entity);
         });
