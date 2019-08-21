@@ -73,11 +73,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getData();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        getData();
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-        setUserVisibleHint(true);
+//        setUserVisibleHint(true);
     }
 
     @Override
@@ -138,6 +138,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 seachWithNum();
+                if (isShow) {
+                    mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
@@ -146,7 +149,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                     ToastUtil.showToast("任务已完成");
                 }
             }
-            getData();
+            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+                getData();
+            }
+
         }
 
     }
@@ -165,7 +171,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                     .putExtra("taskId", list.get(position).getTaskId()));
         });
 //        mPresenter = new GetInfosByFlightIdPresenter(this);
-//        getData();
+        getData();
     }
 
     /**

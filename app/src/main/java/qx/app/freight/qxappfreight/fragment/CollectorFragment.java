@@ -91,7 +91,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
         loadData();
-        setUserVisibleHint(true);
+//        setUserVisibleHint(true);
     }
 
     private void seachWith() {
@@ -245,6 +245,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                     mTaskFragment.setTitleText(list1.size());
                 }
             }
+            seachWith();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
@@ -252,9 +253,14 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                     ToastUtil.showToast("当前收运任务已完成");
                 }
             }
-            loadData();
+            if ("changeCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "borrowCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                loadData();
+            }
         }
-        seachWith();
+
     }
 
     /**

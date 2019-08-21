@@ -256,6 +256,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     mTaskFragment.setTitleText(transportListList1.size());
                 }
             }
+            seachWith();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
@@ -263,9 +264,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     ToastUtil.showToast("当前收验任务已完成");
                 }
             }
-            getData();
+            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                getData();
+            }
         }
-        seachWith();
+
     }
 
 
