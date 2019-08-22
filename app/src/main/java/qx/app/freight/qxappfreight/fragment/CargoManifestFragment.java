@@ -182,15 +182,11 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getData().length()==5) {
             String daibanCode = result.getData();
             Log.e("22222", "daibanCode" + daibanCode);
             if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
                 chooseCode(daibanCode);
             }
-        }else {
-            ToastUtil.showToast("板车号错误，请检查");
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

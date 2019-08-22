@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements LocationObservable {
                 .add(R.id.content, fragment3)
                 .add(R.id.content, fragment4)
                 .add(R.id.content, fragment5)
-                .commit();
+                .commitAllowingStateLoss();
         nowFragment = fragment1;
         switchFragment(0, fragment1);
     }

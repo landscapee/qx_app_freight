@@ -182,15 +182,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
-            if (result.getData().length() == 5) {
                 String[] parts = daibanCode.split("\\/");
                 List<String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
                     chooseCode(strsToList.get(3));
                 }
-            } else {
-                ToastUtil.showToast("板车号错误，请检查");
-            }
         }
     }
 

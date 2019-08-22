@@ -117,6 +117,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         setToolbarShow(View.VISIBLE);
 //        toolbar.setMainTitle(Color.WHITE, chenNum);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
+        toolbar.setMainTitle(Color.WHITE, "板车负重");
         mPresenter = new GetScooterByScooterCodePresenter(this);
 
         initData();
