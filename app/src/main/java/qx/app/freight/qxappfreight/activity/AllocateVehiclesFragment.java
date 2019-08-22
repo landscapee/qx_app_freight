@@ -249,7 +249,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
                 String daibanCode = result.getData();
                 getScooterByScooterCode(daibanCode);
         }
