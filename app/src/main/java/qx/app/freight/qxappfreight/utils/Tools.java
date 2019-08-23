@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -69,18 +70,18 @@ public class Tools {
     }
 
 
-    public static void setLoginUserBean(LoginResponseBean userBean) {
+    public static void setLoginUserBean(RespLoginBean userBean) {
         // token
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.token, userBean.getToken());
         // userId
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.userId, userBean.getUserId());//
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getUsername());
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDepId());
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getCnname());
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDeptcode());
 
         //当前登录的账号
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, userBean.getLoginName());
         //当前登录账号的密码
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.getPwd());
+//        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.get);
     }
 
 
