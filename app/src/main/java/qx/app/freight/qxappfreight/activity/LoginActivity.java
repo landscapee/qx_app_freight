@@ -256,6 +256,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void loginResult(LoginResponseBean loginBean) {
+        Log.e("isNeedIm","isNeedIm:"+isNeedIm);
         if (loginBean != null) {
             isNeedIm = false;
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
