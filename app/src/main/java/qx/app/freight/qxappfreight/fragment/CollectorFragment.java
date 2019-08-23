@@ -314,11 +314,14 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser) {
+        if (isShow) {
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+            }
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
+                searchToolbar = mTaskFragment.getSearchView();
             }
-
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
                     seachString = text;

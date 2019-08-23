@@ -1,4 +1,4 @@
-package qx.app.freight.qxappfreight.activity;
+package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +25,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AllocaaateHistoryActivity;
+import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
+import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -102,8 +105,14 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+
+            }
+            if (mTaskFragment != null){
                 mTaskFragment.setTitleText(list1.size());
+                searchToolbar = mTaskFragment.getSearchView();
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;

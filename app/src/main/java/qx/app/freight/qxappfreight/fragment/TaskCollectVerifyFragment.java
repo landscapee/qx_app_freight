@@ -99,8 +99,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+
+            }
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(transportListList1.size());
+                searchToolbar = mTaskFragment.getSearchView();
             }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
