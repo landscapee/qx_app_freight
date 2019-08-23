@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MessageActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_storage_user"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="多角色选择" />
+
+
+        <TextView
+            android:id="@+id/tv_storage_user"
+            style="@style/public_tv_16sp"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_15"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/drop_select" />
+    </LinearLayout>
+
     <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_message"
         android:layout_width="match_parent"
