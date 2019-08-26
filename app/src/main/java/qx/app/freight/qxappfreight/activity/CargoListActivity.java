@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -234,8 +232,8 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-            if (result.getFunctionFlag().equals("CargoListActivity")) {
-                if (result.getData().length()==5) {
+        if (result.getFunctionFlag().equals("CargoListActivity")) {
+            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {
@@ -243,9 +241,9 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
                 } else {
                     ToastUtil.showToast("扫码数据为空请重新扫码");
                 }
-            }else {
-                    ToastUtil.showToast("板车号错误，请检查");
-                }
+            } else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
+            }
         }
     }
 
@@ -352,8 +350,8 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         mMailWeight = 0;
         mBaggageWeight = 0;
         if (result.getData() == null || result.getData().size() == 0) return;
-        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()){
-            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:dataBean.getScooters()){
+        for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
+            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : dataBean.getScooters()) {
                 switch (scooterBean.getType()) {
                     case "C":
                     case "CT":

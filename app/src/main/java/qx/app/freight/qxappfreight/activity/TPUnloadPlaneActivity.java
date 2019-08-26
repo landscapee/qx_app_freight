@@ -385,7 +385,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("TPUnloadPlaneActivity".equals(result.getFunctionFlag())) {
-            if (result.getData().length()==5) {
+            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //根据扫一扫获取的板车信息查找板车内容
                 if (!mTpScooterCodeList.contains(result.getData())) {
                     mNowScooterCode = result.getData();
@@ -394,8 +394,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 } else {
                     ToastUtil.showToast("操作不合法，不能重复扫描");
                 }
-            }else {
-                ToastUtil.showToast("板车号错误，请检查");
+            } else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
     }
@@ -448,7 +448,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     }
 
     @Override
-    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
+    public void scooterInfoListForReceiveResult(List<ScooterInfoListBean> scooterInfoListBeans) {
 
     }
 
@@ -582,7 +582,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     }
 
     @Override
-    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+    public void scooterWithUserTaskResult(List<TransportTodoListBean> result) {
 
     }
 
