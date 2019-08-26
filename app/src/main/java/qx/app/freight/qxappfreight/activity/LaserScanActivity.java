@@ -23,6 +23,8 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -44,7 +46,7 @@ public class LaserScanActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         initTitle();
         flag = getIntent().getStringExtra("flag");
-        laserAndZxing = getIntent().getBooleanExtra("laserAndZxing", false);
+        laserAndZxing = getIntent().getBooleanExtra("laserAndZxing",false);
 
         LinearLayout llZxing = findViewById(R.id.ll_zxing);
         LinearLayout llInput = findViewById(R.id.ll_input);
@@ -52,10 +54,10 @@ public class LaserScanActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //如果laserAndZxing 是true 就是从二维码扫码跳转过来的，就直接关闭 回到二维码扫码界面
-                if (laserAndZxing) {
+                if (laserAndZxing){
                     finish();
-                } else {
-                    ScanManagerActivity.startActivityFromLaser(LaserScanActivity.this, flag);
+                }else {
+                    ScanManagerActivity.startActivityFromLaser(LaserScanActivity.this,flag);
                 }
 
             }
@@ -68,7 +70,6 @@ public class LaserScanActivity extends BaseActivity {
         });
 
     }
-
     /**
      * 普通启动
      */
@@ -87,12 +88,12 @@ public class LaserScanActivity extends BaseActivity {
     }
 
     /**
-     * 从二维码扫码界面跳转过来
+     *从二维码扫码界面跳转过来
      */
-    public static void startActivityFromZxing(Context mContext, String flag) {
+    public static void startActivityFromZxing(Context mContext, String flag){
         Intent starter = new Intent(mContext, LaserScanActivity.class);
         starter.putExtra("flag", flag)
-                .putExtra("laserAndZxing", true);
+                .putExtra("laserAndZxing",true);
         mContext.startActivity(starter);
     }
 
@@ -113,9 +114,9 @@ public class LaserScanActivity extends BaseActivity {
                         if (confirm) {
 
                         } else {
-                            if (TextUtils.isEmpty(dialog1.getMessage())) {
+                            if (TextUtils.isEmpty(dialog1.getMessage())){
                                 ToastUtil.showToast("输入为空");
-                            } else {
+                            }else {
                                 getBackMessage(dialog1.getMessage());
                             }
 
@@ -136,13 +137,12 @@ public class LaserScanActivity extends BaseActivity {
 
     /**
      * 获取回调的扫码信息
-     *
      * @param result
      */
-    private void getBackMessage(String result) {
-        if (laserAndZxing) {
-            EventBus.getDefault().post(new LaserAndZxingBean(result, "scan"));
-        } else {
+    private void getBackMessage(String result){
+        if (laserAndZxing){
+            EventBus.getDefault().post(new LaserAndZxingBean(result,"scan"));
+        }else {
             if (flag == null) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.SACN_DATA, result);
@@ -153,6 +153,7 @@ public class LaserScanActivity extends BaseActivity {
                 dataBean.setData(result);
                 EventBus.getDefault().post(dataBean);
             }
+            Tools.startShortVibrator(this);// 扫码成功 短暂震动
         }
 
         finish();
@@ -174,22 +175,17 @@ public class LaserScanActivity extends BaseActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
-            //板车号
-            mScooterCode = result.getData();
-            getBackMessage(mScooterCode);
-        } else {
-            ToastUtil.showToast("请扫描或输入正确的板车号");
+        if (!TextUtils.isEmpty(result.getData())) {
+                mScooterCode = result.getData();
+                getBackMessage(mScooterCode);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
         if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("laser")) {
-            //板车号
             mScooterCode = result.getData();
             getBackMessage(mScooterCode);
         }
-//        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
 }

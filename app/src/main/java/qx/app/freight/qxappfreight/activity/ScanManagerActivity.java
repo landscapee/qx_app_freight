@@ -27,6 +27,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -251,8 +252,8 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
                 dataBean.setData(result);
                 EventBus.getDefault().post(dataBean);
             }
+            Tools.startShortVibrator(this);// 扫码成功 短暂   震动
         }
-
         finish();
     }
 

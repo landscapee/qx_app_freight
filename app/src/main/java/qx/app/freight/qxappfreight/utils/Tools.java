@@ -3,6 +3,10 @@ package qx.app.freight.qxappfreight.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -326,6 +330,21 @@ public class Tools {
      */
     public static void startShortVibrator(Context context) {
         VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，短时间震动
+        startShortSound(context);
+    }
+    /**
+     * 短暂提示音
+     */
+    public static void startShortSound(Context context) {
+//        try {
+//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+//            r.play();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
     }
 
     /**

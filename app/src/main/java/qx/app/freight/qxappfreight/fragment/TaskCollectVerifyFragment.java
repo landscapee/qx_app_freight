@@ -184,7 +184,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
                 String[] parts = daibanCode.split("\\/");
