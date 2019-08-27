@@ -279,8 +279,8 @@ public class CargoDoneListActivity extends BaseActivity implements International
                 showBoardInfos(scooterInfoListBeans);
             } else {
                 ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                dialog.setData(this, isLocal -> {
-                    if (isLocal) {
+                dialog.setData(this,"请选择国际或国内","国际","国内", isCheckRight -> {
+                    if (isCheckRight) {
                         for (ScooterInfoListBean bean : scooterInfoListBeans) {
                             bean.setFlightType("D");
                         }

@@ -159,8 +159,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 mAdapter.notifyDataSetChanged();
             } else {
                 ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                dialog.setData(this, isLocal -> {
-                    if (isLocal) {
+                dialog.setData(this, "请选择国际或国内","国际","国内", isCheckRight -> {
+                    if (isCheckRight) {
                         bean.setFlightIndicator("D");
                     } else {
                         bean.setFlightIndicator("I");
