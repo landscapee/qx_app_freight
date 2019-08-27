@@ -74,7 +74,7 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
         mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
-        mAdapter = new FlightListAdapter(mList);
+        mAdapter = new FlightListAdapter(mList,getContext());
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             startActivity(new Intent(getContext(), CargoListActivity.class).putExtra("flightBean", mList.get(position)));
         });

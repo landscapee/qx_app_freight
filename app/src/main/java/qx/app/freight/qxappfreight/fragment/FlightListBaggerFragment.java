@@ -82,7 +82,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList<>();
         mListTemp = new ArrayList<>();
-        mAdapter = new FlightListAdapter(mList);
+        mAdapter = new FlightListAdapter(mList,getContext());
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             startActivity(new Intent(getContext(), BaggageListActivity.class).putExtra("flightBean",mList.get(position)));
         });
