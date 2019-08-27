@@ -12,6 +12,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.ScanLaserData;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 扫码数据接受器
@@ -30,6 +31,7 @@ public class ScanReceiver extends BroadcastReceiver {
             scanLaserData.setFunctionFlag(MyApplication.currentView);
             scanLaserData.setData(str);
             EventBus.getDefault().post(scanLaserData);
+            Tools.startShortVibrator(context.getApplicationContext());
         }
 
     }

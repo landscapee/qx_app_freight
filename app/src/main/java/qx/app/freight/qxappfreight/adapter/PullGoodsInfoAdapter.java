@@ -193,7 +193,7 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("PullGoodsInfoAdapter_Scan".equals(result.getFunctionFlag())) {
-            if (result.getData().length() == 5) {
+            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //根据扫一扫获取的板车信息查找板车内容
                 if (!entity.getPushScooterCodes().contains(result.getData())) {
                     entity.getPushScooterCodes().add(result.getData());
@@ -202,7 +202,7 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                     ToastUtil.showToast("操作不合法，同一运单不能重复扫描同一板车");
                 }
             } else {
-                ToastUtil.showToast("板车号错误，请检查");
+                ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
     }

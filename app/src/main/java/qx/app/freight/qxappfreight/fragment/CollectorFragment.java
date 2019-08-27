@@ -91,7 +91,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
         loadData();
-        setUserVisibleHint(true);
+//        setUserVisibleHint(true);
     }
 
     private void seachWith() {
@@ -137,7 +137,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            case "changeApply": //换单审核
 //                DeliveryVerifyActivity.startActivity(getContext(), bean.getId(), bean.getTaskId());
 //                break;
-            case "borrowCollection"://出港收货
+            case "borrowCollection"://借货收运
             case "collection"://出港收货
                 Log.e("tagTest", "出港收货===id====" + bean.getId());
                 startActivity(new Intent(getContext(), CollectorDeclareActivity.class)
@@ -220,9 +220,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
             String[] parts = daibanCode.split("\\/");
             List<String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
@@ -245,6 +244,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                     mTaskFragment.setTitleText(list1.size());
                 }
             }
+            seachWith();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
@@ -252,9 +252,14 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                     ToastUtil.showToast("当前收运任务已完成");
                 }
             }
-            loadData();
+            if ("changeCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "collection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "RR_collectReturn".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "borrowCollection".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                loadData();
+            }
         }
-        seachWith();
+
     }
 
     /**
@@ -308,11 +313,14 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser) {
+        if (isShow) {
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+            }
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
+                searchToolbar = mTaskFragment.getSearchView();
             }
-
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
                     seachString = text;

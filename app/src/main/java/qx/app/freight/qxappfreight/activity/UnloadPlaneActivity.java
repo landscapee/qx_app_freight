@@ -31,13 +31,12 @@ import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDataSaveContract;
-import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.GetUnLoadListBillContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
@@ -213,7 +212,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
             entity.setFlightId(mData.getFlightId());
             String userName = UserInfoSingle.getInstance().getUsername();
-            entity.setOperationUserName((userName.contains("-"))?userName.substring(0,userName.indexOf("-")):userName);
+            entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
             ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
         });
         mIvControl1.setOnClickListener(v -> {
@@ -362,7 +361,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("UnloadPlaneActivity".equals(result.getFunctionFlag())) {
-            if (result.getData().length()==5) {
+            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //根据扫一扫获取的板车信息查找板车内容
                 if (!mTpScooterCodeList.contains(result.getData())) {
                     mNowScooterCode = result.getData();
@@ -371,8 +370,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                 } else {
                     ToastUtil.showToast("操作不合法，不能重复扫描");
                 }
-            }else {
-                ToastUtil.showToast("板车号错误，请检查");
+            } else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
     }
@@ -424,7 +423,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     @Override
-    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
+    public void scooterInfoListForReceiveResult(List<ScooterInfoListBean> scooterInfoListBeans) {
 
     }
 
@@ -520,7 +519,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     }
 
     @Override
-    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+    public void scooterWithUserTaskResult(List<TransportTodoListBean> result) {
 
     }
 

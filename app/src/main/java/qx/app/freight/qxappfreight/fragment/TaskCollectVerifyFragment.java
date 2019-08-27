@@ -99,8 +99,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+
+            }
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(transportListList1.size());
+                searchToolbar = mTaskFragment.getSearchView();
             }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {
@@ -179,18 +184,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        Tools.startShortVibrator(getActivity());// 扫码成功 短暂震动
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
-            if (result.getData().length() == 5) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
                 String[] parts = daibanCode.split("\\/");
                 List<String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
                     chooseCode(strsToList.get(3));
                 }
-            } else {
-                ToastUtil.showToast("板车号错误，请检查");
-            }
         }
     }
 
@@ -256,6 +256,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     mTaskFragment.setTitleText(transportListList1.size());
                 }
             }
+            seachWith();
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
                 if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
@@ -263,9 +264,13 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     ToastUtil.showToast("当前收验任务已完成");
                 }
             }
-            getData();
+            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+                getData();
+            }
         }
-        seachWith();
+
     }
 
 

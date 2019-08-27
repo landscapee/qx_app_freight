@@ -256,8 +256,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void loginResult(LoginResponseBean loginBean) {
+        Log.e("isNeedIm","isNeedIm:"+isNeedIm);
         if (loginBean != null) {
-            Tools.setLoginUserBean(loginBean);
+            isNeedIm = false;
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
                 if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())) {
                     ToastUtil.showToast(this, "组板只能使用PAD登录");
@@ -334,7 +335,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void loginQxAiResult(RespLoginBean loginBean) {
-
+        Tools.setLoginUserBean(loginBean);
         IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
         IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getCnname(), loginBean.getToken());
         MainActivity.startActivity(this);

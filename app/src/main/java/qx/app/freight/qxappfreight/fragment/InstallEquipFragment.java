@@ -166,7 +166,6 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new LoadAndUnloadTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
@@ -192,6 +191,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
         entity.setSeat(mList.get(position).getSeat());
         entity.setType("clear");
+        mPresenter=new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
@@ -244,6 +244,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
+        mPresenter=new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
     }
 
@@ -430,6 +431,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mList.get(bigPos).getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
+        mPresenter=new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 

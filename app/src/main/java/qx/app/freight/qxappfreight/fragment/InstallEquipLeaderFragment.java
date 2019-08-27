@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadLeaderDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
+import qx.app.freight.qxappfreight.presenter.LoadUnloadLeaderPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -230,7 +231,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new LoadUnloadToDoLeaderPresenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         loadData();
@@ -276,6 +276,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
+        mPresenter=new LoadUnloadToDoLeaderPresenter(this);
         ((LoadUnloadToDoLeaderPresenter) mPresenter).getLoadUnloadLeaderToDo(entity);
     }
 
@@ -452,6 +453,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mList.get(bigPos).getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
+        mPresenter=new LoadUnloadToDoLeaderPresenter(this);
         ((LoadUnloadToDoLeaderPresenter) mPresenter).slideTask(entity);
     }
 

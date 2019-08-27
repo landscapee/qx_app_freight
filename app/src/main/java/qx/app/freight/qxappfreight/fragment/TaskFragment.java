@@ -23,7 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -228,6 +227,7 @@ public class TaskFragment extends BaseFragment {
         else
             mTabLayout.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
+        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 
     }

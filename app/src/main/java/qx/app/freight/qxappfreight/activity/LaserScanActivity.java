@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,10 +20,10 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.LaserAndZxingBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
-import qx.app.freight.qxappfreight.bean.ScanLaserData;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -154,6 +153,7 @@ public class LaserScanActivity extends BaseActivity {
                 dataBean.setData(result);
                 EventBus.getDefault().post(dataBean);
             }
+            Tools.startShortVibrator(this);// 扫码成功 短暂震动
         }
 
         finish();
@@ -176,23 +176,16 @@ public class LaserScanActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (!TextUtils.isEmpty(result.getData())) {
-            if (result.getData().length() == 5) {
-                //板车号
                 mScooterCode = result.getData();
                 getBackMessage(mScooterCode);
-            }else {
-                ToastUtil.showToast("板车号错误，请检查");
-            }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData())&&result.getTypeName().equals("laser")) {
-            //板车号
+        if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("laser")) {
             mScooterCode = result.getData();
             getBackMessage(mScooterCode);
         }
-//        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
 }

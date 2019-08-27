@@ -1,4 +1,4 @@
-package qx.app.freight.qxappfreight.activity;
+package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +25,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AllocaaateHistoryActivity;
+import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
+import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -73,11 +76,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getData();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        getData();
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -93,7 +96,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-        setUserVisibleHint(true);
+//        setUserVisibleHint(true);
     }
 
     @Override
@@ -102,8 +105,14 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+
+            }
+            if (mTaskFragment != null){
                 mTaskFragment.setTitleText(list1.size());
+                searchToolbar = mTaskFragment.getSearchView();
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -138,6 +147,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
                 list1.addAll(mWebSocketResultBean.getChgData());
                 seachWithNum();
+                if (isShow) {
+                    mTaskFragment.setTitleText(list1.size());
+                }
             }
         } else if ("D".equals(mWebSocketResultBean.getFlag())) {
             if (null != CURRENT_TASK_BEAN) {
@@ -146,7 +158,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                     ToastUtil.showToast("任务已完成");
                 }
             }
-            getData();
+            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+                getData();
+            }
+
         }
 
     }
@@ -165,7 +180,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                     .putExtra("taskId", list.get(position).getTaskId()));
         });
 //        mPresenter = new GetInfosByFlightIdPresenter(this);
-//        getData();
+        getData();
     }
 
     /**
@@ -243,7 +258,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
                 String daibanCode = result.getData();
                 getScooterByScooterCode(daibanCode);
         }

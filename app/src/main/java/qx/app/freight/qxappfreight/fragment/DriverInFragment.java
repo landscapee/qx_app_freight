@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,18 +29,17 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DriverInBacklogActivity;
 import qx.app.freight.qxappfreight.activity.ErrorReportActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
-import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.adapter.HandcarBacklogTPAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScanScooterContract;
 import qx.app.freight.qxappfreight.contract.TransportBeginContract;
 import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportBeginPresenter;
-import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -65,7 +63,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     @BindView(R.id.ll_btn)
     LinearLayout llBtn;
 
-    private List <TransportTodoListBean> list;
+    private List<TransportTodoListBean> list;
     private HandcarBacklogTPAdapter mHandcarBacklogTPAdapterDoing;
     private int tpStatus = 1; // 0 运输中 1 运输结束
 
@@ -91,7 +89,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
         });
         doingSlideRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        list = new ArrayList <>();
+        list = new ArrayList<>();
         mHandcarBacklogTPAdapterDoing = new HandcarBacklogTPAdapter(list);
         doingSlideRecyclerView.setAdapter(mHandcarBacklogTPAdapterDoing);
 //        mHandcarBacklogTPAdapterDoing.setOnDeleteClickListener((view, position) ->
@@ -126,11 +124,10 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if ("DriverInFragment".equals(result.getFunctionFlag())) {
-            //根据扫一扫获取的板车信息查找板车内容
-            if (result.getData().length()==5) {
+            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 addScooterInfo(result.getData());
-            }else {
-                ToastUtil.showToast("板车号错误，请检查");
+            } else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
     }
@@ -150,8 +147,9 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(),"flightId");
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(), "flightId");
     }
+
     /**
      * 开始按钮是否可以点击
      */
@@ -191,7 +189,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     private void doStart() {
         mPresenter = new TransportBeginPresenter(this);
         TransportEndEntity transportEndEntity = new TransportEndEntity();
-        for (TransportTodoListBean mTransportTodoListBean:list){
+        for (TransportTodoListBean mTransportTodoListBean : list) {
             mTransportTodoListBean.setBeginAreaType(mTransportTodoListBean.getTpStartLocate());
             mTransportTodoListBean.setEndAreaType(mTransportTodoListBean.getTpDestinationLocate());
         }
@@ -202,11 +200,11 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     private void doEnd() {
         mPresenter = new TransportBeginPresenter(this);
         TransportEndEntity transportEndEntity = new TransportEndEntity();
-        for (TransportTodoListBean mTransportTodoListBean:list){
+        for (TransportTodoListBean mTransportTodoListBean : list) {
             mTransportTodoListBean.setBeginAreaType(mTransportTodoListBean.getTpStartLocate());
             mTransportTodoListBean.setEndAreaType(mTransportTodoListBean.getTpDestinationLocate());
             //库区出来的板车 放到待运区时 默认 EndAreaId 为D1
-            if ("warehouse".equals(mTransportTodoListBean.getTpStartLocate())){
+            if ("warehouse".equals(mTransportTodoListBean.getTpStartLocate())) {
                 mTransportTodoListBean.setEndAreaId("D1");
             }
         }
@@ -228,14 +226,13 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     }
 
     @Override
-    public void scooterWithUserResult(List <TransportTodoListBean> result) {
+    public void scooterWithUserResult(List<TransportTodoListBean> result) {
         if (result != null) {
             list.clear();
             list.addAll(result);
             mHandcarBacklogTPAdapterDoing.notifyDataSetChanged();
-            for (TransportTodoListBean mTransportTodoListBean:result)
-            {
-                if (mTransportTodoListBean.getTpState() == 2){
+            for (TransportTodoListBean mTransportTodoListBean : result) {
+                if (mTransportTodoListBean.getTpState() == 2) {
                     setTpStatus(0);
                     break;
                 }
@@ -243,9 +240,8 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
             if (list.size() >= 5) {
                 ToastUtil.showToast(getContext(), "最多一次拉5板货");
                 llAdd.setVisibility(View.GONE);
-            }
-            else {
-                if (tpStatus != 0){
+            } else {
+                if (tpStatus != 0) {
                     llAdd.setVisibility(View.VISIBLE);
                 }
 
@@ -256,7 +252,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
     }
 
     @Override
-    public void scooterWithUserTaskResult(List <TransportTodoListBean> result) {
+    public void scooterWithUserTaskResult(List<TransportTodoListBean> result) {
 
     }
 
@@ -284,16 +280,16 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
         } else
             Log.e("结束失败", "结束失败");
     }
+
     private void setTpStatus(int flag) {
         tpStatus = flag;
-        if (flag == 0){
+        if (flag == 0) {
             btnBeginEnd.setText("结束");
             llAdd.setVisibility(View.GONE);
             doingSlideRecyclerView.closeMenu();
             doingSlideRecyclerView.setIsmIsSlide(false);
             tvTpStatus.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             btnBeginEnd.setText("开始");
             mPresenter = new TransportBeginPresenter(this);
             doingSlideRecyclerView.setIsmIsSlide(true);
@@ -307,7 +303,7 @@ public class DriverInFragment extends BaseFragment implements TransportBeginCont
 
     @Override
     public void toastView(String error) {
-        Log.e("DriverInFragment",error);
+        Log.e("DriverInFragment", error);
     }
 
     @Override

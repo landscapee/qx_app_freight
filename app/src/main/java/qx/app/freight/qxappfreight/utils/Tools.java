@@ -3,6 +3,10 @@ package qx.app.freight.qxappfreight.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -32,6 +36,7 @@ import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -69,18 +74,18 @@ public class Tools {
     }
 
 
-    public static void setLoginUserBean(LoginResponseBean userBean) {
+    public static void setLoginUserBean(RespLoginBean userBean) {
         // token
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.token, userBean.getToken());
         // userId
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.userId, userBean.getUserId());//
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getUsername());
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDepId());
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getCnname());
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDeptcode());
 
         //当前登录的账号
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, userBean.getLoginName());
         //当前登录账号的密码
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.getPwd());
+//        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.get);
     }
 
 
@@ -325,6 +330,21 @@ public class Tools {
      */
     public static void startShortVibrator(Context context) {
         VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，短时间震动
+        startShortSound(context);
+    }
+    /**
+     * 短暂提示音
+     */
+    public static void startShortSound(Context context) {
+//        try {
+//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+//            r.play();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
     }
 
     /**

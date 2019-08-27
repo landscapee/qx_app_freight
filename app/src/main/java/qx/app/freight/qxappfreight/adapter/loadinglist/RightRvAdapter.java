@@ -71,7 +71,11 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
             }
             tvPullDownTitle.setVisibility(View.GONE);
-            tvPullDown.setVisibility(View.VISIBLE);
+            if ("行李".equals(item.getType())){
+                tvPullDown.setVisibility(View.INVISIBLE);
+            }else {
+                tvPullDown.setVisibility(View.VISIBLE);
+            }
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#666666"));
                 tv.setBackgroundColor(Color.parseColor("#ffffff"));

@@ -139,6 +139,8 @@ public class Constants {
     public static final int PAGE_SIZE = 100;//列表分页获取的单页最大的数量
 
 
+    public static final int SCOOTER_NO_LENGTH = 5;//板车号长度
+
     //im加的字段常量
     public final static int NOTIFY_ID_PUSH_QUIET = 0x07;//静音通知id
     public final static int NOTIFY_ID_CHAT = 0x04;//聊天通知id

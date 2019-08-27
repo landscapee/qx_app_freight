@@ -81,6 +81,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     @BindView(R.id.rl_notice)
     RelativeLayout rlNotice;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

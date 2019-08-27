@@ -180,7 +180,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightId(mCurrentFlightId);
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         mTvSendOver.setOnClickListener(v -> {
-            mConfirmPlan=false;
+            mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
             requestModel.setFlightNo(data.getFlightNo());
             requestModel.setCreateTime(mLoadingList.get(0).getCreateTime());
@@ -191,26 +191,34 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
-            if(mLoadingList.size()==0){
-                ToastUtil.showToast("当前航班任务无装机单数据，不能进行装机单确认操作");
-            }else {
+            if (mLoadingList.size() > 0 && mLoadingList.get(0).getContentObject() != null && mLoadingList.get(0).getContentObject().size() > 0
+                    && mLoadingList.get(0).getContentObject().get(0).getScooters() != null && mLoadingList.get(0).getContentObject().get(0).getScooters().size() > 0) {
                 BaseFilterEntity entity1 = new BaseFilterEntity();
                 entity1.setReportInfoId(mLoadingList.get(0).getContentObject().get(0).getScooters().get(0).getReportInfoId());
                 String userName = UserInfoSingle.getInstance().getUsername();
                 entity1.setInstalledSingleConfirmUser((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
                 mPresenter = new GetFlightCargoResPresenter(this);
                 ((GetFlightCargoResPresenter) mPresenter).confirmLoadPlan(entity1);
+            } else {
+
+                ToastUtil.showToast("当前航班任务无装机单数据，不能进行装机单确认操作");
             }
         });
         mTvPullGoodsReport.setOnClickListener(v -> {
-            if (mLoadingList.size() == 0) {
-                ToastUtil.showToast("当前航班无装机单数据，无法进行拉货");
+            if (mLoadingList.size() > 0 && mLoadingList.get(0).getContentObject() != null && mLoadingList.get(0).getContentObject().size() > 0
+                    && mLoadingList.get(0).getContentObject().get(0).getScooters() != null && mLoadingList.get(0).getContentObject().get(0).getScooters().size() > 0) {
+                if (mBaseContent != null && mBaseContent.size() > 0 && mBaseContent.get(0) != null && mBaseContent.get(0).getScooters() != null
+                        && mBaseContent.get(0).getScooters().size() > 0 && mBaseContent.get(0).getScooters().get(0) != null) {
+                    Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
+                    intent.putExtra("plane_info", data);
+                    intent.putExtra("flight_info_id", mBaseContent.get(0).getScooters().get(0).getFlightInfoId());
+                    intent.putExtra("id", data.getId());
+                    LoadPlaneActivity.this.startActivity(intent);
+                } else
+                    ToastUtil.showToast("当前航班舱位集合，无法进行拉货");
+
             } else {
-                Intent intent = new Intent(LoadPlaneActivity.this, PullGoodsReportActivity.class);
-                intent.putExtra("plane_info", data);
-                intent.putExtra("flight_info_id", mBaseContent.get(0).getScooters().get(0).getFlightInfoId());
-                intent.putExtra("id", data.getId());
-                LoadPlaneActivity.this.startActivity(intent);
+                ToastUtil.showToast("当前航班无装机单数据，无法进行拉货");
             }
         });
         mTvErrorReport.setOnClickListener(v -> {
@@ -260,27 +268,28 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     } else {
                         if (!doRight) {
                             mOperateErrorStatus = 3;//信息未锁定修改
+                        } else {
+                            mOperateErrorStatus = -1;//所有操作都正确
                         }
                     }
                 }
-                if (mOperateErrorStatus == -1) {
-                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                    bean.setTpFlightId(data.getFlightId());
-                    bean.setTaskId(data.getId());
-                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-                } else {
-                    switch (mOperateErrorStatus) {
-                        case 1:
-                            ToastUtil.showToast("当前航班还有拉货任务，请检查！");
-                            break;
-                        case 2:
-                            ToastUtil.showToast("未进行装机单确认操作，请检查！");
-                            break;
-                        case 3:
-                            ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
-                            break;
-                    }
+                switch (mOperateErrorStatus) {
+                    case 1:
+                        ToastUtil.showToast("当前航班还有拉货任务，请检查！");
+                        break;
+                    case 2:
+                        ToastUtil.showToast("未进行装机单确认操作，请检查！");
+                        break;
+                    case 3:
+                        ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
+                        break;
+                    case -1:
+                        GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                        bean.setTpFlightId(data.getFlightId());
+                        bean.setTaskId(data.getId());
+                        bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                        ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+                        break;
                 }
             }
         });
