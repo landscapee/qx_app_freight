@@ -82,7 +82,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
-        toolbar.setMainTitle(Color.WHITE, flightBean.getFlightNo());
+        toolbar.setMainTitle(Color.WHITE, mData.getFlightNo());
         mList = mData.getMainInfos();
 
         initView();
