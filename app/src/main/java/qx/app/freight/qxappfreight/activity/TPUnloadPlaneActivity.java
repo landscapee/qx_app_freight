@@ -112,7 +112,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     ImageView ivNoticeTp;
     @BindView(R.id.tv_look_unload_bill_info)
     TextView mTvUnloadBillInfo;//显示卸机单数据
-    private int mScanType = -1;
+
+    private boolean mIsScanGoods = true;
     private List<ScooterInfoListBean> mListGoods = new ArrayList<>();
     private List<ScooterInfoListBean> mListPac = new ArrayList<>();
     private TpScanInfoAdapter mScanGoodsAdapter;//扫描货物适配器
@@ -303,11 +304,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             }
         });
         mLlScanGoods.setOnClickListener(v -> {
-            mScanType = 0;
+            mIsScanGoods = true;
             ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mLlScanPac.setOnClickListener(v -> {
-            mScanType = 1;
+            mIsScanGoods = false;
             ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mTvErrorReport.setOnClickListener(
@@ -387,14 +388,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //根据扫一扫获取的板车信息查找板车内容
                 if (!mTpScooterCodeList.contains(result.getData())) {
-                    if (mScanType == -1) {
+                    boolean isLaser=result.isLaser();
+                    if (isLaser) {
                         ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
                         dialog.setData(this, "请选择货物或行李", "货物", "行李", isCheckRight -> {
-                            if (isCheckRight) {
-                                mScanType = 1;
-                            } else {
-                                mScanType = 0;
-                            }
+                            mIsScanGoods= !isCheckRight;
                             mNowScooterCode = result.getData();
                             mPresenter = new ScanScooterCheckUsedPresenter(this);
                             ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
@@ -476,22 +474,20 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         for (ScooterInfoListBean entity : result) {
             mTpScooterCodeList.add(entity.getScooterCode());
         }
-        if (mScanType == 0) {
+        if (mIsScanGoods) {
             mSlideRvGoods.setVisibility(View.VISIBLE);
             mListGoods.addAll(result);
             mIvControl1.setImageResource(R.mipmap.up);
             mTvGoodsNumber.setText(String.valueOf(mListGoods.size()));
             mScanGoodsAdapter.notifyDataSetChanged();
-        } else if (mScanType == 1) {
+        } else {
             mSlideRvPac.setVisibility(View.VISIBLE);
             mListPac.addAll(result);
             mIvControl2.setImageResource(R.mipmap.up);
             mTvPacNumber.setText(String.valueOf(mListPac.size()));
             mScanPacAdapter.notifyDataSetChanged();
         }
-        mScanType = -1;
     }
-
 
     /**
      * x循环执行 步骤任务。最后一条 再去拉去 列表
@@ -558,7 +554,6 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
     @Override
     public void checkScooterCodeResult(BaseEntity<Object> result) {
         if ("200".equals(result.getStatus())) {
-            mScanType = -1;
             addScooterInfo(mNowScooterCode);
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");

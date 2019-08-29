@@ -124,12 +124,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
         Button btnReOpen=findViewById(R.id.btn_reopen_task);
-        btnReOpen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter = new GetFlightAllReportInfoPresenter(LnstallationInfoActivity.this);
-                BaseFilterEntity entity = new BaseFilterEntity();
-            }
+        btnReOpen.setOnClickListener(v -> {
+            mPresenter = new GetFlightAllReportInfoPresenter(LnstallationInfoActivity.this);
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setId(mBaseData.getId());
+            entity.setFlightId(mBaseData.getFlightId());
+            entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+            ((GetFlightAllReportInfoPresenter)mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
@@ -185,7 +186,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     @Override
     public void reOpenLoadTaskResult(String result) {
-
+        ToastUtil.showToast(result);
     }
 
 
