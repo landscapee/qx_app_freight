@@ -72,7 +72,6 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initView();
-//        loadData();
     }
 
     private void initView() {

@@ -43,7 +43,6 @@ import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -53,37 +52,23 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  */
 
 public class CargoManifestFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
-
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
     @BindView(R.id.search_toolbar)
     SearchToolbar mSearchBar;
-
-
     private CargoManifestAdapter adapter;
     private List<TransportDataBase> list1 = new ArrayList<>();
     private List<TransportDataBase> list = new ArrayList<>();
-
     private int pageCurrent = 1;//页数
-    private String mSearchText;
-    private String nowRoleCode; //当前角色code
     private String seachString = "";
-    private boolean isShow = false;
-
-
-    /**
-     * 待办锁定 当前的任务bean
-     */
-    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cargomanifest, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
         mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
             mToolBar.setVisibility(View.GONE);
@@ -93,11 +78,9 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             // 向右边移出
             mToolBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), true));
         });
-
         mSearchBar.setVisibility(View.GONE);
         mSearchBar.getCloseView().setOnClickListener(v -> {
             mSearchBar.getSearchView().setText("");
-
             mToolBar.setVisibility(View.VISIBLE);
             mSearchBar.setVisibility(View.GONE);
             // 向左边移入
@@ -107,13 +90,8 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });
-        mSearchBar.setHintAndListener("请输入运单号", text -> {
-            seachString = text;
-            seachWith();
-        });
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -126,18 +104,21 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             EventBus.getDefault().register(this);
         }
         initData();
-
+        setUserVisibleHint(true);
     }
-
-    private void gotoScan() {
-        if (TextUtils.isEmpty(nowRoleCode)) {
-            return;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mSearchBar.setHintAndListener("请输入运单号", text -> {
+                seachString = text;
+                seachWith();
+            });
         }
-
-        ScanManagerActivity.startActivity(getContext(), "MainActivity");
-
     }
-
+    private void gotoScan() {
+        ScanManagerActivity.startActivity(getContext(), "MainActivity");
+    }
 
     private void initData() {
         adapter = new CargoManifestAdapter(list);
@@ -149,7 +130,6 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
             getContext().startActivity(intent);
         });
         getData();
-
     }
 
     private void seachWith() {
@@ -163,7 +143,6 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
                 }
             }
         }
-
         if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(adapter);
         }
@@ -182,11 +161,11 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-            String daibanCode = result.getData();
-            Log.e("22222", "daibanCode" + daibanCode);
-            if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
-                chooseCode(daibanCode);
-            }
+        String daibanCode = result.getData();
+        Log.e("22222", "daibanCode" + daibanCode);
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+            chooseCode(daibanCode);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -218,25 +197,23 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
     private void chooseCode(String daibanCode) {
         for (TransportDataBase item : list) {
             if (daibanCode.equals(item.getId())) {
-
-                CURRENT_TASK_BEAN = item;
-//                mPresenter = new TaskLockPresenter(this);
+                /**
+                 * 待办锁定 当前的任务bean
+                 */
+                //                mPresenter = new TaskLockPresenter(this);
                 TaskLockEntity entity = new TaskLockEntity();
                 List<String> taskIdList = new ArrayList<>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
                 entity.setRoleCode(Constants.BEFOREHAND);
-
                 ((TaskLockPresenter) mPresenter).taskLock(entity);
                 return;
             }
         }
     }
 
-
     private void getData() {
-
         mPresenter = new GroupBoardToDoPresenter(this);
         GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
@@ -252,18 +229,14 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
     @Override
     public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + transportListBeans.size() + "）");
-        if (transportListBeans != null) {
-            if (pageCurrent == 1) {
-                list1.clear();
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            list1.addAll(transportListBeans);
-            seachWith();
+        if (pageCurrent == 1) {
+            list1.clear();
+            mMfrvData.finishRefresh();
         } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
+            mMfrvData.finishLoadMore();
         }
+        list1.addAll(transportListBeans);
+        seachWith();
     }
 
     /**
@@ -278,7 +251,6 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
 //    }
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-
     }
 
     @Override
@@ -305,14 +277,12 @@ public class CargoManifestFragment extends BaseFragment implements GroupBoardToD
     public void onRetry() {
         pageCurrent = 1;
         getData();
-
     }
 
     @Override
     public void onRefresh() {
         pageCurrent = 1;
         getData();
-
     }
 
     @Override

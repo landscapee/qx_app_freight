@@ -200,7 +200,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     TransportEndEntity endEntity = new TransportEndEntity();
                     endEntity.setTaskId(mCurrentTaskId);
                     model.setTransportAppDto(endEntity);
-                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+//                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {
                     pressImage(getNoAddPictureList());
                 }

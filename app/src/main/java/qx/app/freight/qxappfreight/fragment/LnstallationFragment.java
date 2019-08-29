@@ -127,7 +127,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
             EventBus.getDefault().register(this);
         }
         initData();
-
+        setUserVisibleHint(true);
     }
 
     private void gotoScan() {

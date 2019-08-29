@@ -44,8 +44,10 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
+/**
+ * 装机单详情页面
+ */
 public class LnstallationInfoActivity extends BaseActivity implements EmptyLayout.OnRetryLisenter, GetFlightAllReportInfoContract.getFlightAllReportInfoView, SynchronousLoadingContract.synchronousLoadingView {
-
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -76,12 +78,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     SwipeRefreshLayout mSrRefush;
     @BindView(R.id.ll_storage_version)
     LinearLayout LlStorageVersion;
-
-
     private TransportDataBase mBaseData;
-    private List<LnstallationInfoBean.ScootersBean> mList = new ArrayList<>();
     private List<String> mListVerson = new ArrayList<>();
-
     private HashMap<Integer, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
@@ -111,7 +109,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getScheduleTime(), "yyyy-MM-dd"));
 //        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
-
         loadData();
         mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
@@ -123,14 +120,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
-        Button btnReOpen=findViewById(R.id.btn_reopen_task);
+        Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
             mPresenter = new GetFlightAllReportInfoPresenter(LnstallationInfoActivity.this);
             BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setId(mBaseData.getId());
             entity.setFlightId(mBaseData.getFlightId());
             entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-            ((GetFlightAllReportInfoPresenter)mPresenter).reOpenLoadTask(entity);
+            ((GetFlightAllReportInfoPresenter) mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
@@ -155,7 +151,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mapPresen.clear();
         mapDate.clear();
         mTvVersion.setText("版本号:" + flightAllReportInfos.get(0).getVersion());
-        if (null != flightAllReportInfos && flightAllReportInfos.size() > 0) {
+        if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
                 if (flightAllReportInfos.get(i).getContent() != null) {
@@ -165,20 +161,16 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         list.addAll(data.getScooters());
                     }
                     map.put(i, list);
-
                 }
                 if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
                     mListVerson.add("监装确认(版本" + flightAllReportInfos.get(i).getVersion() + ")");
                     mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
                     mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-DD HH:mm"));
-
                 } else {
                     mListVerson.add("版本号:" + flightAllReportInfos.get(i).getVersion());
                     mapPresen.put(i, "");
                     mapDate.put(i, "");
-
                 }
-
             }
             screenData(0);
         }
@@ -188,7 +180,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     public void reOpenLoadTaskResult(String result) {
         ToastUtil.showToast(result);
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
@@ -202,7 +193,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //                }
 //            }
 //    }
-
     }
 
     private void showStoragePickView() {
@@ -215,7 +205,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         mTvConfirmDate.setVisibility(View.VISIBLE);
                         mTvConfirm.setText("监装员:" + mapPresen.get(options1));
                         mTvConfirmDate.setText("发送时间:" + mapDate.get(options1));
-
                     } else {
                         mTvConfirm.setVisibility(View.GONE);
                         mTvConfirmDate.setVisibility(View.GONE);
@@ -241,7 +230,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         title.setWeight("重量");
         title.setTotal("件数");
         title.setSpecialNumber("特货代码");
-
 //        mList.add(0, title);
         List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
         mList1.add(title);
@@ -274,12 +262,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }, 2000);
     }
 
-
     @Override
     public void synchronousLoadingResult(String result) {
         ToastUtil.showToast(result);
         finish();
     }
-
-
 }

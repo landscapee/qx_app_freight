@@ -67,9 +67,8 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
         mTaskFragment = (TaskDoneFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initView();
-//        loadData();
+        setUserVisibleHint(true);
     }
-
     private void initView() {
         mPresenter = new BaggageSubHisPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -98,7 +97,6 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
                     seachWithNum();
                 });
             }
-
         }
     }
 

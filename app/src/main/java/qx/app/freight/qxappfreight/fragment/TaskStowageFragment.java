@@ -68,7 +68,11 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

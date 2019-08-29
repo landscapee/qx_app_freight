@@ -81,7 +81,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //        super.onResume();
 //        getData();
 //    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -96,7 +95,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-//        setUserVisibleHint(true);
+        setUserVisibleHint(true);
     }
 
     @Override

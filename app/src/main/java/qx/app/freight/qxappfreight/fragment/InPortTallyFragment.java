@@ -176,7 +176,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mPresenter = new GroupBoardToDoPresenter(this);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
     /**
      * 跳转到代办详情
      *

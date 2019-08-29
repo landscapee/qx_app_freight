@@ -95,7 +95,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         initData();
         setUserVisibleHint(true);
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
     private void initData() {
         listCache = new ArrayList<>();
         list = new ArrayList<>();

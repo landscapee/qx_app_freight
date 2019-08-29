@@ -183,6 +183,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         setUserVisibleHint(true);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
+
     /**
      * 发起清场任务
      */
