@@ -78,6 +78,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_install_equip, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setUserVisibleHint(true);
         return view;
     }
 
@@ -205,7 +206,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     mSearchText = text;
                     seachByText();
                 });

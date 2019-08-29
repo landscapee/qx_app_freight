@@ -61,6 +61,7 @@ public class TaskFragment extends BaseFragment {
         });
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
+
                 mSearchBar.getSearchView().setText("");
 
                     mToolBar.setVisibility(View.VISIBLE);
@@ -227,7 +228,7 @@ public class TaskFragment extends BaseFragment {
         else
             mTabLayout.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
-        mViewPager.setOffscreenPageLimit(3);
+//        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 
     }

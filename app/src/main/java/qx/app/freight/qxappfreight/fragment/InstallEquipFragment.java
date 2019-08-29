@@ -180,6 +180,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
         });
         loadData();
+        setUserVisibleHint(true);
     }
 
     /**
@@ -203,7 +204,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachByText();
                 });

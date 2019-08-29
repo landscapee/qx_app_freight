@@ -93,6 +93,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         initData();
+        setUserVisibleHint(true);
     }
 
     private void initData() {

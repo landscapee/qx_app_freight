@@ -44,7 +44,6 @@ import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -91,7 +90,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
         loadData();
-//        setUserVisibleHint(true);
+        setUserVisibleHint(true);
     }
 
     private void seachWith() {
@@ -314,21 +313,26 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isShow) {
-            if (mTaskFragment == null){
-                mTaskFragment = (TaskFragment) getParentFragment();
-            }
-            if (mTaskFragment != null) {
-                mTaskFragment.setTitleText(list1.size());
-                searchToolbar = mTaskFragment.getSearchView();
-            }
-            if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入运单号", text -> {
-                    seachString = text;
-                    seachWith();
-                });
-            }
+            setSearchToolbar();
         }
     }
+
+    public void setSearchToolbar(){
+        if (mTaskFragment == null){
+            mTaskFragment = (TaskFragment) getParentFragment();
+        }
+        if (mTaskFragment != null) {
+            mTaskFragment.setTitleText(list1.size());
+            searchToolbar = mTaskFragment.getSearchView();
+        }
+        if (searchToolbar != null) {
+            searchToolbar.setHintAndListener("请输入运单号", text -> {
+                seachString = text;
+                seachWith();
+            });
+        }
+    }
+
 
     @Override
     public void toastView(String error) {
