@@ -22,46 +22,22 @@ public class LnstallationInfoBean {
 
     @Data
     public static class ScootersBean {
-        /**
-         * actWgt : 54
-         * cargoStatus : 0
-         * dest : CGQ
-         * dst :
-         * estWgt : 54
-         * pos :
-         * pri : 1
-         * restrictedCargo :
-         * tailer :
-         * type : BY
-         */
-
-        private String suggestRepository="- -";
-        private String goodsPosition="- -";
-        private String toCity;
-        private String uldCode="- -";
-        private String specialNumber="- -";
-        private String scooterCode;
-        private String mailType;
-        private String volume;
-        private String total;
-        private String weight;
-
-
-
-        private String actWgt;
-        private int cargoStatus;
-        private String dest;
-        private String dst;
-        private String estWgt;
-        private String pos;
-        private String pri;
-        private String restrictedCargo;
-        private String loadingAdvice;
-        private String tailer;
-        private String type;
-        private String serialInd;
-
-
-
+        private String goodsPosition = "- -";//
+        private String uldCode = "- -";//
+        private String specialNumber = "- -";//
+        private String cargoName = "- -";//舱位
+        private long createTime;
+        private String createUser;//创建人
+        private String destinationStation;//目的站
+        private int exceptionFlag;//1表示建议拉下
+        private String flightInfoId;
+        private String id;
+        private String reportInfoId;
+        private String scooterCode;//板车号
+        private String total;//总数量
+        private String type;//类型
+        private int version;//版本号
+        private List<?> waybillList;
+        private String weight;//重量
     }
 }

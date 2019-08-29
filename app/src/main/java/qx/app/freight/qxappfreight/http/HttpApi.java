@@ -746,12 +746,19 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
 
     /**
-     * 释放
+     * 获取装机单或货邮舱单数据
      *
      * @return
      */
     @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
     Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
+    /**
+     * 重新开启装机任务
+     *
+     * @return
+     */
+    @POST("service-product-transport/tp-main-info/restartUnloadTask")
+    Observable<BaseEntity<Object>> reOpenLoadTask(@Body BaseFilterEntity entity);
 
 
 

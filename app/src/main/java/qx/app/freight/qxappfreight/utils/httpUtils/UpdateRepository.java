@@ -1245,6 +1245,15 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<FlightAllReportInfo>> getFlightAllReportInfo(BaseFilterEntity entity) {
         return transform(getService().getFlightAllReportInfo(entity));
     }
+    /**
+     * 结载人员重新打开任务开始装机
+     *
+     * @param entity
+     * @return
+     */
+    public Observable<String> reOpenLoadTask(BaseFilterEntity entity) {
+        return nothingtransform(getService().reOpenLoadTask(entity));
+    }
 
     /**
      * ULD根据字段过滤

@@ -116,12 +116,20 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightInfoId(mBaseData.getFlightId());
+            entity.setFlightInfoId(mBaseData.getFlightInfoId());
             entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
             entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
             String userName = UserInfoSingle.getInstance().getUsername();
             entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
             ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
+        });
+        Button btnReOpen=findViewById(R.id.btn_reopen_task);
+        btnReOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter = new GetFlightAllReportInfoPresenter(LnstallationInfoActivity.this);
+                BaseFilterEntity entity = new BaseFilterEntity();
+            }
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
@@ -130,7 +138,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void loadData() {
         mPresenter = new GetFlightAllReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightInfoId(mBaseData.getFlightId());
+        entity.setFlightInfoId(mBaseData.getFlightInfoId());
         //装机单
         entity.setDocumentType(2);
         //1:倒序 2:正序
@@ -173,6 +181,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             }
             screenData(0);
         }
+    }
+
+    @Override
+    public void reOpenLoadTaskResult(String result) {
+
     }
 
 
@@ -218,14 +231,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     private void screenData(int verson) {
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
-        title.setSuggestRepository("舱位");
+        title.setCargoName("舱位");
         title.setGoodsPosition("货位");
-        title.setSerialInd("板车号");
+        title.setScooterCode("板车号");
         title.setUldCode("ULD号");
-        title.setDest("目的站");
+        title.setDestinationStation("目的站");
         title.setType("类型");
         title.setWeight("重量");
-        title.setRestrictedCargo("件数");
+        title.setTotal("件数");
         title.setSpecialNumber("特货代码");
 
 //        mList.add(0, title);

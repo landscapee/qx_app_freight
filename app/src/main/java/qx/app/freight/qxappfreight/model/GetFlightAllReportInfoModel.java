@@ -20,4 +20,15 @@ public class GetFlightAllReportInfoModel extends BaseModel implements GetFlightA
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void reOpenLoadTask(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().reOpenLoadTask(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

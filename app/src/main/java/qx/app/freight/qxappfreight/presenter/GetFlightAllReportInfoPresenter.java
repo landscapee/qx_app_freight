@@ -32,4 +32,21 @@ public class GetFlightAllReportInfoPresenter extends BasePresenter {
 
         });
     }
+    public void reOpenLoadTask(BaseFilterEntity entity) {
+        mRequestView.showNetDialog();
+        ((GetFlightAllReportInfoModel) mRequestModel).reOpenLoadTask(entity, new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((GetFlightAllReportInfoContract.getFlightAllReportInfoView) mRequestView).reOpenLoadTaskResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+
+        });
+    }
 }

@@ -129,7 +129,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     private void loadData() {
         mPresenter = new GetLastReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightInfoId(mBaseData.getFlightId());
+        entity.setFlightInfoId(mBaseData.getFlightInfoId());
         //货邮舱单
         entity.setDocumentType(1);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);

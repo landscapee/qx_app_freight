@@ -236,12 +236,27 @@
             android:id="@+id/btn_refuse"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_marginRight="@dimen/dp_5"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_black"
             android:text="打印"
             android:textColor="@color/black" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Button
+            android:id="@+id/btn_reopen_task"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="重新开启装机"
+            android:textColor="@color/red" />
 
 
     </LinearLayout>
