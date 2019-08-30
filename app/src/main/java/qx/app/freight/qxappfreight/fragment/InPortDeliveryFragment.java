@@ -89,6 +89,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         searchToolbar = mTaskFragment.getSearchView();
         initView();
         setUserVisibleHint(true);
+
     }
 
     @Override
