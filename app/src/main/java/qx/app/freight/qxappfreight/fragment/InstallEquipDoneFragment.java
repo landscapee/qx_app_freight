@@ -96,11 +96,13 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             }
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUserVisibleHint(true);
     }
+
     /**
      * 根据搜索框输入检索对应的结果项
      */
@@ -207,10 +209,10 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
                         String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
                         entity1.setStepDoneDate(start + "-" + end);
                     } else if (i == 4) {
-                        break;
+                        continue;
                     } else {
                         entity1.setOperationName(entity1.getOperationName());
-                        entity1.setStepDoneDate(sdf.format(new Date(Long.valueOf(times.get(i)))));
+                        entity1.setStepDoneDate(sdf.format(new Date(Long.valueOf(times.get((i == 5) ? 4 : i)))));//步骤为6，时间选用第5个
                     }
                 } else {//装卸机一体任务
                     if (i == 3) {
@@ -220,19 +222,16 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
                         String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
                         entity1.setStepDoneDate(start + "-" + end);
                     } else if (i == 4 || i == 6) {
-                        break;
+                        continue;
                     } else if (i == 5) {
                         entity1.setOperationName(entity1.getOperationName());
                         String[] timeArray = times.get(4).split(":");
                         String start = ("0".equals(timeArray[0])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[0])));
                         String end = ("0".equals(timeArray[1])) ? "" : sdf.format(new Date(Long.valueOf(timeArray[1])));
                         entity1.setStepDoneDate(start + "-" + end);
-                    } else if (i == 7) {
-                        entity1.setOperationName(entity1.getOperationName());
-                        entity1.setStepDoneDate(sdf.format(new Date(Long.valueOf(times.get(5)))));
                     } else {
                         entity1.setOperationName(entity1.getOperationName());
-                        entity1.setStepDoneDate(sdf.format(new Date(Long.valueOf(times.get(i)))));
+                        entity1.setStepDoneDate(sdf.format(new Date(Long.valueOf(times.get((i == 7) ? 5 : i)))));//步骤为7，时间选用第6个
                     }
                 }
             }

@@ -46,6 +46,11 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "选择任务人员");
         initView();
+        setIsBack(true, () -> {//点击返回键或toolbar上面的返回按钮时的监听
+            ToastUtil.showToast("操作取消");
+            EventBus.getDefault().post("refresh_data_update");
+            finish();
+        });
     }
 
     private void initView() {
@@ -67,7 +72,7 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
                     sb.append(",");
                 }
             }
-            if (sb.toString().length() > 0){
+            if (sb.toString().length() > 0) {
                 String members = sb.toString().substring(0, sb.toString().length() - 1);
                 if (TextUtils.isEmpty(members)) {
                     ToastUtil.showToast("至少得选择一个任务人");
@@ -77,10 +82,8 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
                     entity.setStaffIds(members);
                     ((SelectTaskMemberPresenter) mPresenter).selectMember(entity);
                 }
-            }
-            else
+            } else
                 ToastUtil.showToast("至少得选择一个任务人");
-
         }
     }
 

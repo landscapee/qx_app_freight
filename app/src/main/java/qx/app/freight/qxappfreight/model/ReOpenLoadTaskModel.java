@@ -6,16 +6,17 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
+import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**
- * 结载人员获取装机单model
+ * 重新开启装机任务model
  */
-public class GetFlightAllReportInfoModel extends BaseModel implements GetFlightAllReportInfoContract.getFlightAllReportInfoModel {
+public class ReOpenLoadTaskModel extends BaseModel implements ReOpenLoadTaskContract.ReOpenLoadTaskModel {
+
     @Override
-    public void getFlightAllReportInfo(BaseFilterEntity entity, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().getFlightAllReportInfo(entity)
+    public void reOpenLoadTask(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().reOpenLoadTask(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

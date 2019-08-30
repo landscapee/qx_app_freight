@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -198,7 +199,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
         entity.setSeat(mList.get(position).getSeat());
         entity.setType("clear");
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
@@ -240,7 +241,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.contains("InstallEquipFragment_refresh")||"refresh_data_update".equals(result)) {
+        if (result.contains("InstallEquipFragment_refresh") || "refresh_data_update".equals(result)) {
             mSpecialTaskId = result.split("@")[1];
             loadData();
         }
@@ -251,7 +252,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).LoadAndUnloadTodo(entity);
     }
 
@@ -296,8 +297,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-
-            if (bean.getRelateInfoObj() != null){
+            if (bean.getRelateInfoObj() != null) {
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             }
@@ -380,12 +380,14 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
                 String code = bean.getOperationStepObj().get(i).getOperationCode();
                 if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {//排除了装机结束和卸机结束的code，宽体机滑动开始卸机时会自动调取步骤接口生成卸机开始和卸机结束时间
-                    codeList.add(bean.getOperationStepObj().get(i).getOperationCode());
+                    codeList.add(code);
                 }
             }
-            for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
-                if (!codeList.contains(bean.getOperationStepObj().get(i).getOperationCode())) {
-                    bean.getOperationStepObj().remove(i);//用于显示的步骤项需要排除掉卸机结束和装机结束的步骤
+            Iterator iterator = bean.getOperationStepObj().iterator();//使用迭代器删除不需要的数据
+            while (iterator.hasNext()) {
+                LoadAndUnloadTodoBean.OperationStepObjBean codeBean = (LoadAndUnloadTodoBean.OperationStepObjBean) iterator.next();
+                if (!codeList.contains(codeBean.getOperationCode())) {
+                    iterator.remove();
                 }
             }
             bean.setStepCodeList(codeList);
@@ -438,7 +440,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mList.get(bigPos).getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
-        mPresenter=new LoadAndUnloadTodoPresenter(this);
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 

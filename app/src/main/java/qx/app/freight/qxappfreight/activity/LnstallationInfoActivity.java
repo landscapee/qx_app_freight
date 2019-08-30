@@ -36,8 +36,10 @@ import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
+import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
 import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.SynchronousLoadingPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -47,7 +49,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * 装机单详情页面
  */
-public class LnstallationInfoActivity extends BaseActivity implements EmptyLayout.OnRetryLisenter, GetFlightAllReportInfoContract.getFlightAllReportInfoView, SynchronousLoadingContract.synchronousLoadingView {
+public class LnstallationInfoActivity extends BaseActivity implements EmptyLayout.OnRetryLisenter, GetFlightAllReportInfoContract.getFlightAllReportInfoView, SynchronousLoadingContract.synchronousLoadingView, ReOpenLoadTaskContract.ReOpenLoadTaskView {
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -122,11 +124,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
-            mPresenter = new GetFlightAllReportInfoPresenter(LnstallationInfoActivity.this);
+            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
             entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-            ((GetFlightAllReportInfoPresenter) mPresenter).reOpenLoadTask(entity);
+            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
