@@ -215,9 +215,9 @@ public class TaskFragment extends BaseFragment {
         if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
             //如果第一个是外场运输就把搜索框隐藏
-            if (list_Title.get(0).equals("外场运输")){
-                mToolBar.setRightIconViewVisiable(false);
-            }
+//            if (list_Title.get(0).equals("外场运输")){
+//                mToolBar.setRightIconViewVisiable(false);
+//            }
         }
         else
             ToastUtil.showToast("该用户没有被分配角色");
