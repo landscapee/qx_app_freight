@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.utils.httpUtils;
 
 import android.util.Log;
 
+import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -31,9 +32,10 @@ class RetrofitFactory {
             Request originalRequest = chain.request();
             Request authorised = originalRequest.newBuilder()
 //                    .header("token", Tools.getToken())
+
+                    .addHeader("userName", UserInfoSingle.getInstance().getUsername()!= null?URLEncoder.encode(UserInfoSingle.getInstance().getUsername()):"")
+                    .addHeader("userId", UserInfoSingle.getInstance().getUserId()!= null?UserInfoSingle.getInstance().getUserId().trim():"")
                     .header("Content-Type", "application/json")
-//                    .header("userName", UserInfoSingle.getInstance().getUsername()!= null?UserInfoSingle.getInstance().getUsername():"")
-//                    .header("userId", UserInfoSingle.getInstance().getUserId()!= null?UserInfoSingle.getInstance().getUserId():"")
                     .method(originalRequest.method(), originalRequest.body())
                     .build();
             return chain.proceed(authorised);
