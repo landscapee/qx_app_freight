@@ -105,6 +105,8 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -517,6 +519,11 @@ public interface HttpApi {
     //根据收费记录ID(流水号) 查询收费记录对应的进港运单记录
     @POST("service-product-delivery/delivery/selectInwaybillByCounterBillId")
     Observable<BaseEntity<ArrivalDeliveryInfoBean>> arrivalDeliveryInfo(@Body BaseFilterEntity model);
+
+
+    //查询提货管理列表
+    @POST("service-product-inwaybill/arrival-waybill/searchWaybillByWaybillCode")
+    Observable<BaseEntity<WaybillsListBean>> searchWaybillByWaybillCode(@Body BaseFilterEntity model);
 
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")

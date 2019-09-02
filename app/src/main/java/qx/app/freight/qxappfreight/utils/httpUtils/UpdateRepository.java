@@ -103,6 +103,8 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
@@ -901,6 +903,14 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().arrivalDeliveryInfo(model));
     }
 
+    /****
+     * 复重/获取板车信息
+     * @param model
+     * @return
+     */
+    public Observable<WaybillsListBean> searchWaybillByWaybillCode(BaseFilterEntity model) {
+        return transform(getService().searchWaybillByWaybillCode(model));
+    }
     /****
      * 进港-出库
      * @param model

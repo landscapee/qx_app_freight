@@ -70,4 +70,5 @@ public class BaseFilterEntity<T> {
     private String operationUserName;
 
     private int sort;
+
 }

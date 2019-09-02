@@ -37,4 +37,16 @@ public class GroupBoardToDoListModel extends BaseModel implements GroupBoardToDo
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void searchWaybillByWaybillCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter) {
+
+        Disposable subscription = UpdateRepository.getInstance().searchWaybillByWaybillCode(baseFilterEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

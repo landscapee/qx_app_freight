@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
@@ -287,5 +288,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         if (getInfosByFlightIdBean != null) {
             startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
         }
+    }
+
+    @Override
+    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
+
     }
 }

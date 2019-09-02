@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,17 +23,21 @@ import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
+import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -40,7 +46,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**
  * 提货详情
  */
-public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView , ListReservoirInfoContract.listReservoirInfoView{
+public class InportDeliveryDetailActivity extends BaseActivity implements ArrivalDeliveryInfoContract.arrivalDeliveryInfoView , ListReservoirInfoContract.listReservoirInfoView, GroupBoardToDoContract.GroupBoardToDoView{
 
     @BindView(R.id.r_view)
     RecyclerView rView;
@@ -65,7 +71,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //    private int num1;
 //    private int num2;
 
-    TransportDataBase bean = null;
+    WaybillsBean bean = null;
     private  boolean isAllOut = true;
     private List<WaybillsBean> mList ;
 
@@ -81,7 +87,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         initView();
-        getAreaType();
+//        getAreaType();
     }
 
     private void getAreaType() {
@@ -95,22 +101,23 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //        num1 = getIntent().getIntExtra("num1",0);
 //        num2 = getIntent().getIntExtra("num2",0);
 
-        bean = (TransportDataBase) getIntent().getSerializableExtra("DATA");
+        bean = (WaybillsBean) getIntent().getSerializableExtra("DATA");
 
         if (bean == null){
 
             finish();
         }
-        serialNumber.setText(bean.getSerialNumber());
+//        serialNumber.setText(bean.getSerialNumber());
         tvPickUpName.setText(bean.getConsignee());
         tvPickUpPhone.setText(bean.getConsigneePhone());
-        tvPickUpCard.setText(bean.getConsigneeIdentityCard());
+//        tvPickUpCard.setText(bean.getConsigneeIdentityCard());
 
 //        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE,"提货");
-
         rView.setLayoutManager(new LinearLayoutManager(this));
+
         mList = new ArrayList<>();
+        mList.add(bean);
         mAdapter = new DeliveryDetailAdapter(mList);
         mAdapter.setDeliveryDetailInterface(new DeliveryDetailAdapter.DeliveryDetailInterface() {
             @Override
@@ -141,18 +148,30 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
         rView.setAdapter(mAdapter);
 
-        btnConfirm.setOnClickListener(v -> {
-            //未完全出库 不能完成 提货任务
-            if (isAllOut)
-                deliveryComplet();
-        });
+//        btnConfirm.setOnClickListener(v -> {
+//            //未完全出库 不能完成 提货任务
+//            if (isAllOut)
+//                deliveryComplet();
+//        });
     }
-    //根据流水单号获取列表
+//    //根据流水单号获取列表
+//    private void getData() {
+//        mPresenter = new ArrivalDeliveryInfoPresenter(this);
+//        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+//        entity.setBillId(bean.getSerialNumber());
+//        ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
+//    }
+
     private void getData() {
-        mPresenter = new ArrivalDeliveryInfoPresenter(this);
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setBillId(bean.getSerialNumber());
-        ((ArrivalDeliveryInfoPresenter)mPresenter).arrivalDataSave(entity);
+        mPresenter = new GroupBoardToDoPresenter(this);
+        BaseFilterEntity<WaybillsBean> entity = new BaseFilterEntity();
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setCurrent(1);
+        WaybillsBean waybillsBean = new WaybillsBean();
+        waybillsBean.setWaybillStatus(5);
+        waybillsBean.setWaybillCode(bean.getWaybillCode());
+        entity.setFilter(waybillsBean);
+        ((GroupBoardToDoPresenter) mPresenter).searchWaybillByWaybillCode(entity);
     }
     //出库
     private void deliveryInWaybill(int position,String id, String outStorageUser,int waitPutCargo,double overWeight,int overWeightCount){
@@ -163,6 +182,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             @Override
             public void onConfirm(int data,int carNum) {
                 nowPosition = position;
+                mPresenter = new  ArrivalDeliveryInfoPresenter (InportDeliveryDetailActivity.this);
                 BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
                 entity.setCreateUser(outStorageUser);
                 entity.setWaybillId(id);
@@ -178,15 +198,15 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
 
     }
-    //完成
-    private void deliveryComplet(){
-        mPresenter = new ArrivalDeliveryInfoPresenter(this);
-        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setBillId(bean.getSerialNumber());
-        entity.setTaskId(bean.getTaskId());
-        entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
-        ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);
-    }
+//    //完成
+//    private void deliveryComplet(){
+//        mPresenter = new ArrivalDeliveryInfoPresenter(this);
+//        BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+//        entity.setBillId(bean.getSerialNumber());
+//        entity.setTaskId(bean.getTaskId());
+//        entity.setCompleteUser(UserInfoSingle.getInstance().getUserId());
+//        ((ArrivalDeliveryInfoPresenter)mPresenter).completDelivery(entity);
+//    }
 
     @Override
     public void arrivalDeliveryInfoResult(ArrivalDeliveryInfoBean result) {
@@ -246,7 +266,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //            mList.set(j,result);
 //        }
 //        mAdapter.notifyDataSetChanged();
-        getData();
+//        getData();
+
+        finish();
     }
 
     @Override
@@ -272,10 +294,27 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     @Override
     public void listReservoirInfoResult(List <ReservoirArea> mReservoirAreas) {
-        areas.clear();
-        for (ReservoirArea mReservoirArea:mReservoirAreas){
-            areas.put(mReservoirArea.getId(),mReservoirArea.getReservoirName());
-        }
-        getData();
+//        areas.clear();
+//        for (ReservoirArea mReservoirArea:mReservoirAreas){
+//            areas.put(mReservoirArea.getId(),mReservoirArea.getReservoirName());
+//        }
+//        getData();
+    }
+
+    @Override
+    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
+
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    @Override
+    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
+        mList.clear();
+        mList.addAll(waybillsBeans);
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -299,12 +299,18 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            if (!"".equals(mScooterCode)) {
-                //板车号
-                getNumberInfo(mScooterCode);
-            } else {
-                ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+            if (mScooterCode != null && mScooterCode.length() == Constants.SCOOTER_NO_LENGTH) {
+                if (!"".equals(mScooterCode)) {
+                    //板车号
+                    getNumberInfo(mScooterCode);
+                } else {
+                    ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+                }
             }
+            else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
+            }
+
         }
     }
 

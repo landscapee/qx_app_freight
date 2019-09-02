@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class WaybillsBean {
+public class WaybillsBean implements Serializable {
     /**
      * id : a2c4963e2e646e9e8660c03511282661
      * waybillCode : 082-90987876
@@ -90,7 +92,7 @@ public class WaybillsBean {
     private String outStorageUser;
     private Integer tallyingTotal;
     private String tallyingWeight;
-    private int waybillStatus;
+    private int waybillStatus;//运单状态 必填 5 待提货 6 已经提货 必须填
     private String waybillCodeScanUrl;
     private String commodityScanUrl;
     private String waybillScanUrl;
