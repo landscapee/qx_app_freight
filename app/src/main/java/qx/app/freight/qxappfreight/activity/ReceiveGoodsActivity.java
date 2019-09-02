@@ -309,6 +309,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         if (!"".equals(result)) {
             EventBus.getDefault().post("collector_refresh");
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 

@@ -75,18 +75,18 @@ public class ReturnGoodsDialog extends Dialog {
 
         rlAdd.setOnClickListener((v) -> {
             RcInfoOverweight mRcInfoOverweight = new RcInfoOverweight();
-            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())&&!StringUtil.isEmpty(etVolume.getText().toString())&&!StringUtil.isEmpty(etOverweight.getText().toString())){
+            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())){
 
                 mRcInfoOverweight.setCount(Integer.valueOf(etNum.getText().toString()));
                 mRcInfoOverweight.setWeight(Integer.valueOf(etWeight.getText().toString()));
-                mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
-                mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
+//                mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
+//                mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
                 rcInfoOverweight.add(mRcInfoOverweight);
                 overweightRecordAdapter.notifyDataSetChanged();
                 etNum.setText("");
                 etWeight.setText("");
-                etVolume.setText("");
-                etOverweight.setText("");
+//                etVolume.setText("");
+//                etOverweight.setText("");
                 etNum.setFocusable(true);
 
             }
@@ -99,7 +99,7 @@ public class ReturnGoodsDialog extends Dialog {
         btnSure.setOnClickListener((v) -> {
             int overweight = 0;
             for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
-                overweight += mRcInfoOverweight.getOverWeight();
+                overweight += mRcInfoOverweight.getWeight();
 
             }
             if (listener != null) {
