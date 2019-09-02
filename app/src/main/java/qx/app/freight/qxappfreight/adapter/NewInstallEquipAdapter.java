@@ -38,9 +38,16 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
     private OnFlightSafeguardListenner onFlightSafeguardListenner;
+    private OnReOpenLoadTaskListener onReOpenLoadTaskListener;
+    private boolean showReOpenBtn;
 
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
+    }
+
+    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
+        this(data);
+        this.showReOpenBtn = showReOpenBtn;
     }
 
     @Override
@@ -57,6 +64,17 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         helper.setText(R.id.tv_plane_type, item.getAircraftType());
         ImageView ivType = helper.getView(R.id.iv_operate_type);
         TextView tvTime = helper.getView(R.id.tv_time);
+        Button btnReopen = helper.getView(R.id.btn_reopen_load_task);
+        if (showReOpenBtn) {//显示重新开启装机任务按钮，只有装机已办页面中有使用
+            btnReopen.setVisibility(View.VISIBLE);
+            btnReopen.setOnClickListener(v -> {
+                if (onReOpenLoadTaskListener != null) {
+                    onReOpenLoadTaskListener.onReOpenLoadTask(helper.getAdapterPosition());
+                }
+            });
+        } else {
+            btnReopen.setVisibility(View.GONE);
+        }
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         btnFS.setOnClickListener(v -> {
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
@@ -245,5 +263,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {
         this.onFlightSafeguardListenner = onFlightSafeguardListenner;
+    }
+
+    public interface OnReOpenLoadTaskListener {
+        void onReOpenLoadTask(int pos);
+    }
+
+    public void setOnReOpenLoadTaskListener(OnReOpenLoadTaskListener onReOpenLoadTaskListener) {
+        this.onReOpenLoadTaskListener = onReOpenLoadTaskListener;
     }
 }

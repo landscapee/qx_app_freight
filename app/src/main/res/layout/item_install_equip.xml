@@ -5,6 +5,14 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_10">
 
+    <ImageView
+        android:id="@+id/iv_done"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/icon_done"
+        android:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/ll_bg"
         android:layout_width="match_parent"
@@ -49,6 +57,21 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_flight_info_container"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/tv_craft_number"
                 android:layout_width="wrap_content"
@@ -59,21 +82,6 @@
                 android:textColor="@color/black_3"
                 android:textSize="@dimen/sp_14"
                 tools:text="B2310" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:id="@+id/ll_flight_info_container"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dp_5"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" />
         </LinearLayout>
 
         <LinearLayout
@@ -139,16 +147,6 @@
                 android:layout_height="33dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/btn_blue_press"
-                    android:gravity="center"
-                    android:text="连"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -176,6 +174,16 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/ll_flight_info_container_link"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
                 <TextView
                     android:id="@+id/tv_craft_number_link"
                     android:layout_width="wrap_content"
@@ -186,15 +194,15 @@
                     android:textSize="@dimen/sp_14"
                     tools:text="B2310" />
 
-                <LinearLayout
-                    android:id="@+id/ll_flight_info_container_link"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp_5"
-                    android:layout_marginEnd="@dimen/dp_5"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal" />
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/btn_blue_press"
+                    android:gravity="center"
+                    android:text="连"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -266,6 +274,16 @@
                 android:textColor="@color/white" />
 
             <Button
+                android:id="@+id/btn_reopen_load_task"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="重新开启装机"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/btn_flight_safeguard"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -289,12 +307,4 @@
                 android:visibility="gone" />
         </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/iv_done"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@mipmap/icon_done"
-        android:layout_alignParentRight="true"
-        android:visibility="visible"
-        />
 </RelativeLayout>

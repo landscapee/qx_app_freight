@@ -24,19 +24,23 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
+import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadTaskHisPresenter;
+import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 装机fragment 已办
  */
-public class InstallEquipDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, LoadUnloadTaskHisContract.loadUnloadTaskHisView {
+public class InstallEquipDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, LoadUnloadTaskHisContract.loadUnloadTaskHisView, ReOpenLoadTaskContract.ReOpenLoadTaskView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -66,7 +70,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadUnloadTaskHisPresenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList);
+        mAdapter = new NewInstallEquipAdapter(mList, true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
@@ -77,6 +81,13 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             @Override
             public void onClearClick(int position) {
             }
+        });
+        mAdapter.setOnReOpenLoadTaskListener(pos -> {
+            mPresenter = new ReOpenLoadTaskPresenter(this);
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setFlightId(mList.get(pos).getFlightId());
+            entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
         loadData();
     }
@@ -248,5 +259,10 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             if (isShow)
                 mTaskFragment.setTitleText(mCacheList.size());
         }
+    }
+
+    @Override
+    public void reOpenLoadTaskResult(String result) {
+        ToastUtil.showToast(result);
     }
 }
