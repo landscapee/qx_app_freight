@@ -374,7 +374,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setScooterCode(mTvScooter.getText().toString().trim());
 
 
-        mMyAgentListBean.setRcInfoOverweight(rcInfoOverweight);
+        mMyAgentListBean.setSpOverweight(rcInfoOverweight);
         mPresenter = new ScooterInfoListPresenter(this);
         ((ScooterInfoListPresenter) mPresenter).addInfo(mMyAgentListBean);
     }
@@ -449,7 +449,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //            mEdtDeadWeight.setText(deadWeight + "");
     }
 
-    //提交
+    /**
+     * 添加单条收运记录返回对象
+     * @param result
+     */
     @Override
     public void addInfoResult(MyAgentListBean result) {
         if (null != result) {
