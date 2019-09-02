@@ -181,6 +181,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     @Override
     public void reOpenLoadTaskResult(String result) {
         ToastUtil.showToast(result);
+        finish();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
