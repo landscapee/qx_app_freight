@@ -239,11 +239,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private void chooseCode(String daibanCode) {
         for (WaybillsBean item : list1) {
             if (daibanCode.equals(item.getWaybillCode())) {
-
-
                 turnToDetailActivity(item);
 //                CURRENT_TASK_BEAN = item;
-//
 //                mPresenter = new TaskLockPresenter(this);
 //                TaskLockEntity entity = new TaskLockEntity();
 //                List<String> taskIdList = new ArrayList<>();
@@ -251,13 +248,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                entity.setTaskId(taskIdList);
 //                entity.setUserId(UserInfoSingle.getInstance().getUserId());
 //                entity.setRoleCode(Constants.INPORTDELIVERY);
-//
 //                ((TaskLockPresenter) mPresenter).taskLock(entity);
 
                 return;
             }
         }
-        ToastUtil.showToast("该流水号无效");
+        ToastUtil.showToast("该运单号无效");
     }
 
     @Override

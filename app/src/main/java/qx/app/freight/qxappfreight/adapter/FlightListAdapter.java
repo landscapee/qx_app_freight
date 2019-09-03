@@ -22,7 +22,7 @@ public class FlightListAdapter extends BaseQuickAdapter<FlightLuggageBean, BaseV
     private Context mContext;
 
     public FlightListAdapter(@Nullable List<FlightLuggageBean> data, Context context) {
-        super(R.layout.item_flight_list_bagger_2, data);
+        super(R.layout.item_flight_list, data);
         mContext = context;
     }
 
