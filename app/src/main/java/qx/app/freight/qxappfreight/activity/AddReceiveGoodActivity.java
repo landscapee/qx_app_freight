@@ -151,7 +151,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private int uldTypeCount = 0;//uld输入框的字数
     private int airlineCount = 0;//uld输入框的字数
     private List<FindAirlineAllBean> findAirlineAllBeans = new ArrayList<>(); //所有航司数据
-    //当前航段三字码
+
     private boolean isPopWindow = false;
 
     private PopupWindow windowAll;
@@ -271,6 +271,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
         rcInfoOverweight = new ArrayList<>();
+        if(mList.getSpOverweight()!=null && mList.getSpOverweight().size()>0)
+            rcInfoOverweight.addAll(mList.getSpOverweight());
+
         llOverweight.setOnClickListener(v -> {
             showPopWindowList();
         });

@@ -209,6 +209,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      * 根据板车号获取板车信息
      */
     public void getScooterByScooterCode(String scooterCode) {
+        mPresenter = new GroupBoardToDoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setScooterCode(scooterCode);
         ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);

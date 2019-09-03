@@ -134,6 +134,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
     }
 
     private void loadData() {
+        mPresenter = new LoadUnloadTaskHisPresenter(this);
         ((LoadUnloadTaskHisPresenter) mPresenter).loadUnloadTaskHis(UserInfoSingle.getInstance().getUserId());
     }
 
@@ -264,5 +265,6 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
     @Override
     public void reOpenLoadTaskResult(String result) {
         ToastUtil.showToast(result);
+        loadData();
     }
 }

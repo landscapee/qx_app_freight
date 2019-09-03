@@ -25,18 +25,23 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InstallEquipLeaderAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.contract.StevedoresTaskHisContract;
+import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StevedoresTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
  * 装卸机小组长代办fragment 已办
  */
-public class InstallEquipLeaderDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, StevedoresTaskHisContract.stevedoresTaskHisView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipLeaderDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, StevedoresTaskHisContract.stevedoresTaskHisView, EmptyLayout.OnRetryLisenter, LoadAndUnloadTodoContract.loadAndUnloadTodoView  {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -72,8 +77,10 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new StevedoresTaskHisPresenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
+        mAdapter.setOnClearSeatListener(position -> {
+            startClearTask(position);
+        });
         mMfrvData.setAdapter(mAdapter);
         loadData();
         setUserVisibleHint(true);
@@ -115,7 +122,20 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     }
 
     private void loadData() {
+        mPresenter = new StevedoresTaskHisPresenter(this);
         ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(UserInfoSingle.getInstance().getUserId());
+    }
+    /**
+     * 发起清场任务
+     */
+    private void startClearTask(int position) {
+        TaskClearEntity entity = new TaskClearEntity();
+        entity.setStaffId(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(Long.valueOf(mList.get(position).getFlightId()));
+        entity.setSeat(mList.get(position).getSeat());
+        entity.setType("clear");
+        mPresenter = new LoadAndUnloadTodoPresenter(this);
+        ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
 
     @Override
@@ -217,4 +237,19 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         dismissProgessDialog();
     }
 
+    @Override
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+
+    }
+
+    @Override
+    public void startClearTaskResult(String result) {
+        if (result !=null)
+            ToastUtil.showToast(result);
+    }
 }

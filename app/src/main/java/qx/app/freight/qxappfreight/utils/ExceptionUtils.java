@@ -20,7 +20,8 @@ public class ExceptionUtils {
             new TestBean("2、破损", false),
             new TestBean("3、腐烂", false),
             new TestBean("4、泄漏", false),
-            new TestBean("5、无标签", false)
+            new TestBean("5、无标签", false),
+            new TestBean("6、受潮", false)
 //            new TestBean("1、更名类不正常", false),
 //            new TestBean("2、死亡", false),
 //            new TestBean("3、确已装机", false),

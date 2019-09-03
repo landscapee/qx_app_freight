@@ -12,14 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 public class ReturnGoodsDialog extends Dialog {
     private Context mContext;
