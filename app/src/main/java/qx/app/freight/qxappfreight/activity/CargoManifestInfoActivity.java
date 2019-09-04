@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
@@ -70,7 +71,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     SwipeRefreshLayout mSrRefush;
 
 
-    private TransportDataBase mBaseData;
+    private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
 
     private String mId;
@@ -87,10 +88,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "货邮舱单详情");
-        mBaseData = (TransportDataBase) getIntent().getSerializableExtra("data");
+        mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
         mTvFlightNumber.setText(mBaseData.getFlightNo());
-        mTvPlaneInfo.setText(mBaseData.getAircraftNo());
-        FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightCourseByAndroid());
+        mTvPlaneInfo.setText(mBaseData.getAircraftno());
+        FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mLlContainer.removeAllViews();
         mLlContainer.addView(layout, paramsMain);
@@ -116,7 +117,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
         });
         mBtPrint.setOnClickListener(v -> {
-            ToastUtil.showToast("该功能正处于研发过程中，敬请期待!");
+            ToastUtil.showToast("该功能正处于研发过程中……");
         });
         mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -129,9 +130,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     private void loadData() {
         mPresenter = new GetLastReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightInfoId(mBaseData.getFlightInfoId());
+        entity.setFlightId(mBaseData.getFlightId());
         //货邮舱单
         entity.setDocumentType(1);
+        entity.setSort(1);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
     }
 

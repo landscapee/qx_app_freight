@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
+import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadTaskHisPresenter;
 import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.utils.IMUtils;
@@ -83,13 +85,42 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             }
         });
         mAdapter.setOnReOpenLoadTaskListener(pos -> {
-            mPresenter = new ReOpenLoadTaskPresenter(this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightId(mList.get(pos).getFlightId());
-            entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
+            showDialog(pos);
         });
         loadData();
+    }
+
+    private void reOpenLoadTask(int pos,String remark){
+        mPresenter = new ReOpenLoadTaskPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mList.get(pos).getFlightId());
+        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+        entity.setRemark(remark);
+        ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
+    }
+
+    /**
+     * CommonDialog 的用法
+     */
+    private void showDialog(final int pos) {
+        InputDialog dialog1 = new InputDialog(getActivity());
+        dialog1.setTitle("输入部门")
+                .setHint("请输入......")
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new InputDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+
+                        } else {
+                            reOpenLoadTask(pos,dialog1.getMessage());
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override

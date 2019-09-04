@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
@@ -80,7 +81,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     SwipeRefreshLayout mSrRefush;
     @BindView(R.id.ll_storage_version)
     LinearLayout LlStorageVersion;
-    private TransportDataBase mBaseData;
+    private LoadAndUnloadTodoBean mBaseData;
     private List<String> mListVerson = new ArrayList<>();
     private HashMap<Integer, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
@@ -98,10 +99,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "装机单详情");
-        mBaseData = (TransportDataBase) getIntent().getSerializableExtra("data");
+        mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
         mTvFlightNumber.setText(mBaseData.getFlightNo());
-        mTvPlaneInfo.setText(mBaseData.getAircraftNo());
-        FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightCourseByAndroid());
+        mTvPlaneInfo.setText(mBaseData.getAircraftno());
+        FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mLlContainer.removeAllViews();
         mLlContainer.addView(layout, paramsMain);
@@ -115,7 +116,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightInfoId(mBaseData.getFlightInfoId());
+            entity.setFlightId(mBaseData.getFlightId());
             entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
             entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
             String userName = UserInfoSingle.getInstance().getUsername();
@@ -128,6 +129,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
             entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+            entity.setRemark("");
             ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
@@ -137,7 +139,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void loadData() {
         mPresenter = new GetFlightAllReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightInfoId(mBaseData.getFlightInfoId());
+        entity.setFlightId(mBaseData.getFlightId());
         //装机单
         entity.setDocumentType(2);
         //1:倒序 2:正序
@@ -219,7 +221,12 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }).build();
         pickerView.setPicker(mListVerson);
         pickerView.setTitleText("版本号");
-        pickerView.show();
+        if (!map.isEmpty())
+            pickerView.show();
+        else
+        {
+            ToastUtil.showToast("还没有装机单！");
+        }
     }
 
     private void screenData(int verson) {

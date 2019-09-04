@@ -741,7 +741,7 @@ public interface HttpApi {
      *
      * @return
      */
-    @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
+    @POST("service-product-finishloading/stowage-report-info/synchronousLoadingByFlightId")
     Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
 
     /**
@@ -757,7 +757,7 @@ public interface HttpApi {
      *
      * @return
      */
-    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
+    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfoByAndroid")
     Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
     /**
      * 重新开启装机任务

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -17,16 +19,15 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
+import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
-public class AllocateVehiclesAdapter extends BaseMultiItemQuickAdapter<TransportDataBase, BaseViewHolder> {
+public class AllocateVehiclesAdapter extends BaseQuickAdapter<TransportDataBase, BaseViewHolder> {
     private Context context;
     public AllocateVehiclesAdapter(List<TransportDataBase> data, Context context) {
-        super(data);
+        super(R.layout.item_flight_list_bagger_2, data);
         this.context = context;
-        addItemType(2, R.layout.item_flight_list_bagger_2);
-        addItemType(3, R.layout.item_flight_list_bagger_3);
-        addItemType(4, R.layout.item_flight_list_bagger_4);
     }
 
     @SuppressLint("StringFormatMatches")
@@ -41,26 +42,30 @@ public class AllocateVehiclesAdapter extends BaseMultiItemQuickAdapter<Transport
 //        Drawable img =context.getResources().getDrawable(R.mipmap.yu);
 //        img.setBounds(0, 0, img.getMinimumWidth(), img.getMinimumHeight());
 //        arriveTime.setCompoundDrawables(null, null, img, null);
-
-        if (item.getFlightCourseByAndroid() != null && item.getFlightCourseByAndroid().size() >1 ){
-            switch (helper.getItemViewType()){
-                case 2:
-                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1));
-                    break;
-                case 3:
-                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
-                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2));
-                    break;
-                case 4:
-                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
-                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
-                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2))
-                            .setText(R.id.tv_flight_4,item.getFlightCourseByAndroid().get(3));
-                    break;
-            }
-        }
+        LinearLayout container = helper.getView(R.id.ll_flight_info_container);
+        FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightCourseByAndroid());
+        LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container.removeAllViews();
+        container.addView(layout, paramsMain);
+//        if (item.getFlightCourseByAndroid() != null && item.getFlightCourseByAndroid().size() >1 ){
+//            switch (helper.getItemViewType()){
+//                case 2:
+//                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+//                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1));
+//                    break;
+//                case 3:
+//                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+//                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
+//                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2));
+//                    break;
+//                case 4:
+//                    helper.setText(R.id.tv_flight_1,item.getFlightCourseByAndroid().get(0))
+//                            .setText(R.id.tv_flight_2,item.getFlightCourseByAndroid().get(1))
+//                            .setText(R.id.tv_flight_3,item.getFlightCourseByAndroid().get(2))
+//                            .setText(R.id.tv_flight_4,item.getFlightCourseByAndroid().get(3));
+//                    break;
+//            }
+//        }
     }
 
 }
