@@ -90,7 +90,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
         loadData();
-        setUserVisibleHint(true);
+//        setUserVisibleHint(true);
+        setSearchToolbar();
     }
 
     private void seachWith() {
@@ -318,20 +319,22 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     }
 
     public void setSearchToolbar(){
-        if (mTaskFragment == null){
-            mTaskFragment = (TaskFragment) getParentFragment();
-        }
-        if (mTaskFragment != null) {
-            mTaskFragment.setTitleText(list1.size());
-            searchToolbar = mTaskFragment.getSearchView();
-        }
-        if (searchToolbar != null) {
-            searchToolbar.setHintAndListener("请输入运单号", text -> {
-                seachString = text;
-                seachWith();
-            });
-        }
+            if (mTaskFragment == null){
+                mTaskFragment = (TaskFragment) getParentFragment();
+            }
+            if (mTaskFragment != null) {
+                mTaskFragment.setTitleText(list1.size());
+                searchToolbar = mTaskFragment.getSearchView();
+            }
+            if (searchToolbar != null) {
+                searchToolbar.setHintAndListener("请输入运单号", text -> {
+                    seachString = text;
+                    seachWith();
+                });
+            }
+
     }
+
 
 
     @Override

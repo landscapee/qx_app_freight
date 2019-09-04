@@ -81,7 +81,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUserVisibleHint(true);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -95,6 +94,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             EventBus.getDefault().register(this);
         }
         initData();
+        initTitle();
     }
 
     @Override
@@ -103,6 +103,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+            initTitle();
+        }
+    }
+
+    private void initTitle(){
             if (mTaskFragment == null){
                 mTaskFragment = (TaskFragment) getParentFragment();
 
@@ -117,7 +122,6 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     seachWith();
                 });
             }
-        }
     }
 
     public void seachWith() {

@@ -96,7 +96,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-        setUserVisibleHint(true);
+        initTitle();
+//        setUserVisibleHint(true);
     }
 
     @Override
@@ -105,6 +106,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+            initTitle();
+        }
+    }
+
+    private void initTitle(){
             if (mTaskFragment == null){
                 mTaskFragment = (TaskFragment) getParentFragment();
 
@@ -120,7 +126,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                 });
             }
 
-        }
     }
 
     //根据条件筛选数据

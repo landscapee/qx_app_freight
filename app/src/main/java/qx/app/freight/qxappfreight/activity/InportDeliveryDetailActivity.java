@@ -108,9 +108,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             finish();
         }
 //        serialNumber.setText(bean.getSerialNumber());
-        tvPickUpName.setText(bean.getConsignee());
-        tvPickUpPhone.setText(bean.getConsigneePhone());
-//        tvPickUpCard.setText(bean.getConsigneeIdentityCard());
+        tvPickUpName.setText(bean.getPickUpGoodsUser());
+        tvPickUpPhone.setText(bean.getPickUpGoodsUserPhone());
+        tvPickUpCard.setText(bean.getPickUpGoodsUserCardId());
 
 //        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE,"提货");

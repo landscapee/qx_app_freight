@@ -129,4 +129,23 @@ public class WaybillsBean implements Serializable {
      * 超重重量
      */
     private double overWieght;
+
+    /**
+     * 提货人姓名
+     */
+    private String pickUpGoodsUser;
+
+    /**
+     * 提货人电话
+     *
+     * @date 2019/5/9 11:02 AM
+     */
+    private String pickUpGoodsUserPhone;
+
+    /**
+     * 提货人身份证号码
+     *
+     * @date 2019/5/9 11:09 AM
+     */
+    private String pickUpGoodsUserCardId;
 }
