@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
@@ -81,7 +82,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //        super.onResume();
 //        getData();
 //    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -96,7 +96,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-//        setUserVisibleHint(true);
+        setUserVisibleHint(true);
     }
 
     @Override
@@ -209,6 +209,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      * 根据板车号获取板车信息
      */
     public void getScooterByScooterCode(String scooterCode) {
+        mPresenter = new GroupBoardToDoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setScooterCode(scooterCode);
         ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
@@ -288,5 +289,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         if (getInfosByFlightIdBean != null) {
             startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
         }
+    }
+
+    @Override
+    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
+
     }
 }

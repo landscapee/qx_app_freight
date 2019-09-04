@@ -8,6 +8,8 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.model.GetScooterByScooterCodeModel;
@@ -57,4 +59,22 @@ public class GroupBoardToDoPresenter extends BasePresenter {
             }
         });
     }
+    public void searchWaybillByWaybillCode(BaseFilterEntity airLineId) {
+        mRequestView.showNetDialog();
+        ((GroupBoardToDoListModel) mRequestModel).searchWaybillByWaybillCode(airLineId, new IResultLisenter<WaybillsListBean>() {
+            @Override
+            public void onSuccess(WaybillsListBean waybillsBeans) {
+                ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).searchWaybillByWaybillCodeResult(waybillsBeans.getRecords());
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+
+
 }

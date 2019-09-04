@@ -15,26 +15,34 @@ import android.widget.TextView;
 import qx.app.freight.qxappfreight.R;
 
 /**
- * 装卸机推送弹窗
+ * 选择国际国内类型或选择行李货物类型的dialog
  */
 public class ChoseFlightTypeDialog extends DialogFragment{
     private Context context;
     private View convertView;
     private OnDismissListener onDismissListener;
+    private String title,left,right;
 
-    public void setData(Context context, OnDismissListener onDismissListener) {
+    public void setData(Context context,String title,String left,String right, OnDismissListener onDismissListener) {
         this.context = context;
         this.onDismissListener = onDismissListener;
+        this.title=title;
+        this.left=left;
+        this.right=right;
     }
 
     private void initViews() {
-        TextView tvInter = convertView.findViewById(R.id.tv_inter_type);
-        TextView tvInland = convertView.findViewById(R.id.tv_inland_type);
-        tvInter.setOnClickListener(v->{
+        TextView tvTitle = convertView.findViewById(R.id.tv_title);
+        TextView tvLeft = convertView.findViewById(R.id.tv_left_type);
+        TextView tvRight = convertView.findViewById(R.id.tv_right_type);
+        tvTitle.setText(title);
+        tvLeft.setText(left);
+        tvRight.setText(right);
+        tvLeft.setOnClickListener(v->{
             super.dismiss();
             onDismissListener.refreshUI(false);
         });
-        tvInland.setOnClickListener(v->{
+        tvRight.setOnClickListener(v->{
             super.dismiss();
             onDismissListener.refreshUI(true);
         });
@@ -60,6 +68,6 @@ public class ChoseFlightTypeDialog extends DialogFragment{
     }
 
     public interface OnDismissListener {
-        void refreshUI(boolean isLocal);
+        void refreshUI(boolean isCheckRight);
     }
 }

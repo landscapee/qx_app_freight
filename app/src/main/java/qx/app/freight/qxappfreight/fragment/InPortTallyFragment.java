@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
@@ -176,7 +177,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
         mPresenter = new GroupBoardToDoPresenter(this);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
     /**
      * 跳转到代办详情
      *
@@ -316,6 +321,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    @Override
+    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
 
     }
 

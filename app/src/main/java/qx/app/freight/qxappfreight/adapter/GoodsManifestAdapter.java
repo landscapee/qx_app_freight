@@ -35,17 +35,17 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * 使用服务器原始数据的装卸机代办适配器
  */
-public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
+public class GoodsManifestAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
     private OnFlightSafeguardListenner onFlightSafeguardListenner;
     private OnReOpenLoadTaskListener onReOpenLoadTaskListener;
     private boolean showReOpenBtn;
 
-    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
-        super(R.layout.item_install_equip, data);
+    public GoodsManifestAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
+        super(R.layout.item_goods_manifest, data);
     }
 
-    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
+    public GoodsManifestAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
         this(data);
         this.showReOpenBtn = showReOpenBtn;
     }
@@ -53,12 +53,12 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
         helper.setIsRecyclable(false);
-        LinearLayout llBg = helper.getView(R.id.ll_bg);
-        if (!item.isAcceptTask()) {
-            llBg.setBackgroundColor(Color.parseColor("#ffac00"));
-        } else {
-            llBg.setBackgroundColor(Color.parseColor("#ffffff"));
-        }
+//        LinearLayout llBg = helper.getView(R.id.ll_bg);
+//        if (!item.isAcceptTask()) {
+//            llBg.setBackgroundColor(Color.parseColor("#ffac00"));
+//        } else {
+//            llBg.setBackgroundColor(Color.parseColor("#ffffff"));
+//        }
 //        boolean isWidePlane = item.getWidthAirFlag() == 0;
 //        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
         helper.setText(R.id.tv_plane_type, item.getAircraftType());
@@ -159,92 +159,6 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             ivDone.setVisibility(View.GONE);
             btnFS.setVisibility(View.VISIBLE);
         }
-        RecyclerView rvStep = helper.getView(R.id.rv_step);
-        rvStep.setLayoutManager(new LinearLayoutManager(mContext));
-        NewInstallEquipStepAdapter adapter = new NewInstallEquipStepAdapter(item.getOperationStepObj());
-        rvStep.setAdapter(adapter);
-        adapter.setOnSlideListener(pos -> {
-            if (onSlideStepListener != null) {
-                onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
-                if (item.getTaskType() == 5) {//装卸机2合1代办单独处理
-                    item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
-                    if (pos == 3) {
-                        if (TextUtils.isEmpty(item.getSeat())) {
-                            ToastUtil.showToast("当前航班未分配机位，不能进行卸机操作");
-                        } else {
-//                            if (!isWidePlane) {//窄体机卸机才到卸机页面
-                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type", item.getFlightType());
-                            intent.putExtra("plane_info", item);
-                            mContext.startActivity(intent);
-//                            } else {
-//                                item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-//                                item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-//                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
-//                            }
-                        }
-                    } else if (pos == 4) {
-                        Intent intent = new Intent(mContext, LoadPlaneActivity.class);
-                        intent.putExtra("plane_info", item);
-                        intent.putExtra("position", 5);
-                        mContext.startActivity(intent);
-                    } else {
-                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
-                        if (pos != 5) {//只要滑动的不是第六步，则下一个步骤item设置为应该操作的步骤样式
-                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
-                        }
-                    }
-                } else {
-                    if (pos == 3) {
-                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
-//                        if (isWidePlane && item.getTaskType() == 2) {
-//                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-//                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-//                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
-//                        } else {
-                        Intent intent;
-                        if (item.getTaskType() == 1) {
-                            intent = new Intent(mContext, LoadPlaneActivity.class);
-                            intent.putExtra("position", 3);
-                        } else {
-                            intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
-                        }
-                        intent.putExtra("plane_info", item);
-                        mContext.startActivity(intent);
-//                        }
-                    } else {
-                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
-                        if (item.getOperationStepObj().size() > 2) {
-                            if (pos != 4) {//只要滑动的不是第五步，则下一个步骤item设置为应该操作的步骤样式
-                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
-        if (item.isShowDetail()) {
-            rvStep.setVisibility(View.VISIBLE);
-            collView.expand();
-        } else {
-            rvStep.setVisibility(View.GONE);
-            collView.collapse();
-        }
-        llBg.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
-            if (item.isShowDetail()) {
-                rvStep.setVisibility(View.VISIBLE);
-                collView.expand();
-            } else {
-                rvStep.setVisibility(View.GONE);
-                collView.collapse();
-            }
-        });
     }
 
     public interface OnSlideStepListener {

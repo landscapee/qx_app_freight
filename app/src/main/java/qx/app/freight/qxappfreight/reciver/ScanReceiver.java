@@ -30,6 +30,7 @@ public class ScanReceiver extends BroadcastReceiver {
             //当前view
             scanLaserData.setFunctionFlag(MyApplication.currentView);
             scanLaserData.setData(str);
+            scanLaserData.setLaser(true);
             EventBus.getDefault().post(scanLaserData);
             Tools.startShortVibrator(context.getApplicationContext());
         }

@@ -26,22 +26,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.InportDeliveryDetailActivity;
-import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
+import qx.app.freight.qxappfreight.adapter.DeliveryDetailIndexAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
-import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -53,9 +49,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
-    InPortDeliveryAdapter mAdapter;
-    List <TransportDataBase> mList; //adapter 绑定的条件list
-    List <TransportDataBase> list1; //原始list
+    DeliveryDetailIndexAdapter mAdapter;
+    List <WaybillsBean> mList; //adapter 绑定的条件list
+    List <WaybillsBean> list1; //原始list
 
     private int pageCurrent = 1;
 
@@ -75,6 +71,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inport_delivery, container, false);
         unbinder = ButterKnife.bind(this, view);
+
         return view;
     }
 
@@ -88,6 +85,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         searchToolbar = mTaskFragment.getSearchView();
         initView();
         setUserVisibleHint(true);
+
     }
 
     @Override
@@ -100,7 +98,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 mTaskFragment.setTitleText(list1.size());
             }
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入流水号", text -> {
+                searchToolbar.setHintAndListener("请输入运单", text -> {
                     searchString = text;
                     seachWithNum();
                 });
@@ -113,8 +111,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         if (TextUtils.isEmpty(searchString)) {
             mList.addAll(list1);
         } else {
-            for (TransportDataBase item : list1) {
-                if (item.getSerialNumber().toLowerCase().contains(searchString.toLowerCase())) {
+            for (WaybillsBean item : list1) {
+                if (item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -138,19 +136,20 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mMfrvData.setOnRetryLisenter(this);
         mList = new ArrayList <>();
         list1 = new ArrayList <>();
-        mAdapter = new InPortDeliveryAdapter(mList);
+        mAdapter = new DeliveryDetailIndexAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
-            CURRENT_TASK_BEAN = mList.get(position);
-            mPresenter = new TaskLockPresenter(this);
-            TaskLockEntity entity = new TaskLockEntity();
-            List<String> taskIdList = new ArrayList<>();
-            taskIdList.add(mList.get(position).getTaskId());
-            entity.setTaskId(taskIdList);
-            entity.setUserId(UserInfoSingle.getInstance().getUserId());
-            entity.setRoleCode(Constants.INPORTDELIVERY);
-
-            ((TaskLockPresenter) mPresenter).taskLock(entity);
+            turnToDetailActivity(mList.get(position));
+//            CURRENT_TASK_BEAN = mList.get(position);
+//            mPresenter = new TaskLockPresenter(this);
+//            TaskLockEntity entity = new TaskLockEntity();
+//            List<String> taskIdList = new ArrayList<>();
+//            taskIdList.add(mList.get(position).getTaskId());
+//            entity.setTaskId(taskIdList);
+//            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//            entity.setRoleCode(Constants.INPORTDELIVERY);
+//
+//            ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
         mMfrvData.setAdapter(mAdapter);
@@ -158,21 +157,26 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     private void loadData() {
         mPresenter = new GroupBoardToDoPresenter(this);
-        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
-
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-
-        entity.setRoleCode("delivery_in");
-
-        entity.setUndoType(3);
-
-        List <String> ascs = new ArrayList <>();
-        ascs.add("flight_number");
-        ascs.add("lastUpdate_time");
-
-        entity.setAscs(ascs);
-
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+//        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
+//
+//        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//
+//        entity.setRoleCode("delivery_in");
+//
+//        entity.setUndoType(3);
+//
+//        List <String> ascs = new ArrayList <>();
+//        ascs.add("flight_number");
+//        ascs.add("lastUpdate_time");
+//
+//        entity.setAscs(ascs);
+        BaseFilterEntity<WaybillsBean> entity = new BaseFilterEntity();
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setCurrent(pageCurrent);
+        WaybillsBean waybillsBean = new WaybillsBean();
+        waybillsBean.setWaybillStatus(5);
+        entity.setFilter(waybillsBean);
+        ((GroupBoardToDoPresenter) mPresenter).searchWaybillByWaybillCode(entity);
 
 
     }
@@ -182,7 +186,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      *
      * @param bean
      */
-    private void turnToDetailActivity(TransportDataBase bean) {
+    private void turnToDetailActivity(WaybillsBean bean) {
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
 //                .putExtra("num1", bean.getOutboundNumber())
@@ -204,28 +208,27 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 List<String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
                     chooseCode(strsToList.get(3));
-                    Log.e("22222", "提货代办流水号： " + strsToList.get(2));
                 }
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("DA_outbound".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
-                list1.addAll(mWebSocketResultBean.getChgData());
-                mTaskFragment.setTitleText(list1.size());
-            }
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-
-            for (TransportDataBase mTransportListBean : mList) {
-                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
-                    list1.remove(mTransportListBean);
-                }
-            }
-        }
-        seachWithNum();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
+//        if ("N".equals(mWebSocketResultBean.getFlag())) {
+//            if ("DA_outbound".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+//                list1.addAll(mWebSocketResultBean.getChgData());
+//                mTaskFragment.setTitleText(list1.size());
+//            }
+//        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+//
+//            for (TransportDataBase mTransportListBean : mList) {
+//                if (mWebSocketResultBean.getChgData().get(0).getId().equals(mTransportListBean.getId())) {
+//                    list1.remove(mTransportListBean);
+//                }
+//            }
+//        }
+//        seachWithNum();
+//    }
 
 
     /**
@@ -234,25 +237,23 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
-        for (TransportDataBase item : list1) {
-            if (daibanCode.equals(item.getSerialNumber())) {
-
-                CURRENT_TASK_BEAN = item;
-
-                mPresenter = new TaskLockPresenter(this);
-                TaskLockEntity entity = new TaskLockEntity();
-                List<String> taskIdList = new ArrayList<>();
-                taskIdList.add(item.getTaskId());
-                entity.setTaskId(taskIdList);
-                entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                entity.setRoleCode(Constants.INPORTDELIVERY);
-
-                ((TaskLockPresenter) mPresenter).taskLock(entity);
+        for (WaybillsBean item : list1) {
+            if (daibanCode.equals(item.getWaybillCode())) {
+                turnToDetailActivity(item);
+//                CURRENT_TASK_BEAN = item;
+//                mPresenter = new TaskLockPresenter(this);
+//                TaskLockEntity entity = new TaskLockEntity();
+//                List<String> taskIdList = new ArrayList<>();
+//                taskIdList.add(item.getTaskId());
+//                entity.setTaskId(taskIdList);
+//                entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//                entity.setRoleCode(Constants.INPORTDELIVERY);
+//                ((TaskLockPresenter) mPresenter).taskLock(entity);
 
                 return;
             }
         }
-        ToastUtil.showToast("该流水号无效");
+        ToastUtil.showToast("该运单号无效");
     }
 
     @Override
@@ -298,16 +299,41 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
     @Override
     public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
-        //没有分页
-        list1.clear();
-        if (pageCurrent == 1) {
+//        //没有分页
+//        list1.clear();
+//        if (pageCurrent == 1) {
+//
+//            mMfrvData.finishRefresh();
+//        } else {
+//            mMfrvData.finishLoadMore();
+//        }
+//        if (transportListBeans != null && transportListBeans.size() > 0) {
+//            list1.addAll(transportListBeans);
+//        }
+//        seachWithNum();
+//        if (mTaskFragment != null) {
+//            if (isShow) {
+//                mTaskFragment.setTitleText(list1.size());
+//            }
+//        }
+    }
 
+    @Override
+    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+
+    }
+
+    @Override
+    public void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans) {
+
+        if (pageCurrent == 1) {
+            list1.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
         }
-        if (transportListBeans != null && transportListBeans.size() > 0) {
-            list1.addAll(transportListBeans);
+        if (waybillsBeans != null && waybillsBeans.size() > 0) {
+            list1.addAll(waybillsBeans);
         }
         seachWithNum();
         if (mTaskFragment != null) {
@@ -317,19 +343,14 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         }
     }
 
-    @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-
-    }
-
     /**
      * 待办锁定
      * @param result
      */
     @Override
     public void taskLockResult(String result) {
-        if(CURRENT_TASK_BEAN != null) {
-            turnToDetailActivity(CURRENT_TASK_BEAN);
-        }
+//        if(CURRENT_TASK_BEAN != null) {
+//            turnToDetailActivity(CURRENT_TASK_BEAN);
+//        }
     }
 }

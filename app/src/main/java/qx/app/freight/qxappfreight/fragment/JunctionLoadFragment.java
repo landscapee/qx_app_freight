@@ -57,13 +57,13 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 public class JunctionLoadFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EndInstallToDoContract.IView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
-    private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> mList = new ArrayList <>();
+    private List <LoadAndUnloadTodoBean> mCacheList = new ArrayList <>();
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private NewInstallEquipStepAdapter mSlideadapter;
-    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> mListCache = new ArrayList <>();
     private String mSearchText;
     private NewInstallEquipAdapter mAdapter;
     private TaskFragment mTaskFragment; //父容器fragment
@@ -71,13 +71,14 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     private boolean isShow = false;
 
     private PushLoadUnloadDialog mDialog = null;
-    private List<String> mTaskIdList = new ArrayList<>();
+    private List <String> mTaskIdList = new ArrayList <>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_install_equip, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setUserVisibleHint(true);
         return view;
     }
 
@@ -88,7 +89,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else if (result.isCancelFlag()) {
                 if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
-                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    List <LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
                     Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -101,7 +102,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     loadData();
                 }
             } else {//新任务推送，筛选最新数据再添加进行展示
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                List <LoadAndUnloadTodoBean> list = result.getTaskData();
                 //新任务列表 同 旧任务列表比对
                 for (LoadAndUnloadTodoBean bean : list) {
                     for (LoadAndUnloadTodoBean bean1 : mListCache) {
@@ -141,7 +142,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                         loadData();
                         mListCache.clear();
                     } else {
-                        Tools.startVibrator(getActivity().getApplicationContext(),true,R.raw.ring);
+                        Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
                         mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示
@@ -155,12 +156,19 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             }
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if ("refresh_data_update".equals(result)){
+        if ("refresh_data_update".equals(result)) {
             mCurrentPage = 1;
             loadData();
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
     }
 
     @Override
@@ -185,7 +193,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext,mList.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
             }
 
             @Override
@@ -205,7 +213,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     mSearchText = text;
                     seachByText();
                 });
@@ -231,6 +239,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     }
 
     private void loadData() {
+        mPresenter = new EndInstallTodoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
@@ -260,7 +269,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     }
 
     @Override
-    public void getEndInstallTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void getEndInstallTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -273,7 +282,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
-            List<String> times = new ArrayList<>();
+            List <String> times = new ArrayList <>();
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add("0");
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
@@ -287,8 +296,10 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                 int type;
                 if (i < posNow) {//在应该执行的步骤前，类型为已执行
                     type = Constants.TYPE_STEP_OVER;
-                } else {    //当前任务步骤
+                } else if (i == posNow) {    //当前任务步骤
                     type = Constants.TYPE_STEP_NOW;
+                } else {//否则是未执行
+                    type = Constants.TYPE_STEP_NEXT;
                 }
                 entity1.setItemType(type);
                 entity1.setStepDoneDate("0".equals(times.get(i)) ? "" : sdf.format(new Date(Long.valueOf(times.get(i)))));

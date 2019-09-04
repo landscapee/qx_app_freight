@@ -388,9 +388,22 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //根据扫一扫获取的板车信息查找板车内容
                 if (!mTpScooterCodeList.contains(result.getData())) {
-                    mNowScooterCode = result.getData();
-                    mPresenter = new ScanScooterCheckUsedPresenter(this);
-                    ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                    boolean isLaser=result.isLaser();
+                    if (isLaser) {
+                        ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
+                        dialog.setData(this, "请选择货物或行李", "货物", "行李", isCheckRight -> {
+                            mIsScanGoods= !isCheckRight;
+                            mNowScooterCode = result.getData();
+                            mPresenter = new ScanScooterCheckUsedPresenter(this);
+                            ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                        });
+                        dialog.setCancelable(false);
+                        dialog.show(getSupportFragmentManager(), "222");
+                    } else {
+                        mNowScooterCode = result.getData();
+                        mPresenter = new ScanScooterCheckUsedPresenter(this);
+                        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                    }
                 } else {
                     ToastUtil.showToast("操作不合法，不能重复扫描");
                 }
@@ -428,8 +441,8 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 showBoardInfos(result);
             } else {
                 ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                dialog.setData(this, isLocal -> {
-                    if (isLocal) {
+                dialog.setData(this, "请选择国际或国内", "国际", "国内", isCheckRight -> {
+                    if (isCheckRight) {
                         for (ScooterInfoListBean bean : result) {
                             bean.setFlightType("D");
                         }
@@ -475,7 +488,6 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             mScanPacAdapter.notifyDataSetChanged();
         }
     }
-
 
     /**
      * x循环执行 步骤任务。最后一条 再去拉去 列表

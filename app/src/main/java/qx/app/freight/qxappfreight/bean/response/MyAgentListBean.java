@@ -78,7 +78,7 @@ public class MyAgentListBean implements Serializable {
     private String repPlaceStatus;
     private String reservoirName;
     private List<String> packagingType;
-    private  List<RcInfoOverweight> rcInfoOverweight;
+    private  List<RcInfoOverweight> spOverweight;
     private String taskTypeCode;
     private String addOrderId;
 }

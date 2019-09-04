@@ -189,18 +189,18 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setReType(getIntent().getIntExtra("error_type", 1));
                     String deptCode = UserInfoSingle.getInstance().getDeptCode();
-                    String deptId = "";
-                    if (deptCode != null) {
-                        deptId = (deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode);
-                    }
-                    model.setDeptId(deptId);
+//                    String deptId = "";
+//                    if (deptCode != null) {
+//                        deptId = (deptCode.contains("-") ? deptCode.substring(0, deptCode.indexOf("-")) : deptCode);
+//                    }
+                    model.setDeptId(deptCode);
                     model.setArea(getIntent().getStringExtra("area_id"));
                     model.setExceptionCode(getIntent().getStringExtra("step_code"));
                     model.setFiles(null);
                     TransportEndEntity endEntity = new TransportEndEntity();
                     endEntity.setTaskId(mCurrentTaskId);
                     model.setTransportAppDto(endEntity);
-                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+//                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {
                     pressImage(getNoAddPictureList());
                 }

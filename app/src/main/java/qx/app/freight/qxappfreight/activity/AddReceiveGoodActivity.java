@@ -151,7 +151,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private int uldTypeCount = 0;//uld输入框的字数
     private int airlineCount = 0;//uld输入框的字数
     private List<FindAirlineAllBean> findAirlineAllBeans = new ArrayList<>(); //所有航司数据
-    //当前航段三字码
+
     private boolean isPopWindow = false;
 
     private PopupWindow windowAll;
@@ -271,6 +271,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
         rcInfoOverweight = new ArrayList<>();
+        if(mList.getSpOverweight()!=null && mList.getSpOverweight().size()>0)
+            rcInfoOverweight.addAll(mList.getSpOverweight());
+
         llOverweight.setOnClickListener(v -> {
             showPopWindowList();
         });
@@ -299,12 +302,18 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            if (!"".equals(mScooterCode)) {
-                //板车号
-                getNumberInfo(mScooterCode);
-            } else {
-                ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+            if (mScooterCode != null && mScooterCode.length() == Constants.SCOOTER_NO_LENGTH) {
+                if (!"".equals(mScooterCode)) {
+                    //板车号
+                    getNumberInfo(mScooterCode);
+                } else {
+                    ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+                }
             }
+            else {
+                ToastUtil.showToast("请扫描或输入正确的板车号");
+            }
+
         }
     }
 
@@ -374,7 +383,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         mMyAgentListBean.setScooterCode(mTvScooter.getText().toString().trim());
 
 
-        mMyAgentListBean.setRcInfoOverweight(rcInfoOverweight);
+        mMyAgentListBean.setSpOverweight(rcInfoOverweight);
         mPresenter = new ScooterInfoListPresenter(this);
         ((ScooterInfoListPresenter) mPresenter).addInfo(mMyAgentListBean);
     }
@@ -449,7 +458,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //            mEdtDeadWeight.setText(deadWeight + "");
     }
 
-    //提交
+    /**
+     * 添加单条收运记录返回对象
+     * @param result
+     */
     @Override
     public void addInfoResult(MyAgentListBean result) {
         if (null != result) {

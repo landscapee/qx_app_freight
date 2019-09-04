@@ -234,6 +234,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mAdapter = new InstallEquipLeaderAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         loadData();
+        setUserVisibleHint(true);
     }
 
     @Override
@@ -244,7 +245,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachByText();
                 });

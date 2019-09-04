@@ -106,7 +106,8 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
                 Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
                 Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
+                Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
+                Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
             llTodayDone.setVisibility(View.VISIBLE);
         }
     }

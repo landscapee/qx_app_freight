@@ -34,11 +34,13 @@
                     android:drawablePadding="5dp"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    tools:text="000-999999999" />
+                    tools:text="000-999999999"
+                    android:visibility="gone"/>
                 <View
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp_1"/>
+                    android:layout_height="@dimen/dp_1"
+                    android:visibility="gone"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,7 +113,8 @@
                     android:drawablePadding="5dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:text="身份证：" />
+                    android:text="身份证："
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/consignee_card"
@@ -120,7 +123,8 @@
                     android:drawablePadding="5dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    tools:text="511289199899121234" />
+                    tools:text="511289199899121234"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -137,7 +141,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
 
         <Button
             android:id="@+id/btn_confirm"

@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Build;
@@ -83,6 +84,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        //防止 重新点击app 图标 重启这个activity
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");

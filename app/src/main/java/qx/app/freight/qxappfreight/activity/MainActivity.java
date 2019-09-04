@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beidouapp.imlibapi.IMLIBContext;
@@ -70,17 +71,12 @@ public class MainActivity extends BaseActivity implements LocationObservable {
     TextView mTvMessge;
     @BindView(R.id.tv_mine)
     TextView mTvMine;
+    @BindView(R.id.ll_search)
+    LinearLayout llSearch;//第三个tab
 
 
-    private Fragment mTaskFragment;
-    private Fragment mDynamicFragment;
-    private Fragment mCSFragment;
-    private Fragment mMineFragment;
+
     private Fragment nowFragment;
-    private Fragment testFragment;
-    private Fragment lnstallationFragment;
-    private Fragment cargoManifestFragment;
-    private int taskAssignType = 0;
     private Fragment fragment1;
     private Fragment fragment2;
     private Fragment fragment3;
@@ -209,6 +205,21 @@ public class MainActivity extends BaseActivity implements LocationObservable {
             mTvSearch.setText("装机单");
         }
         else {
+            //判断 是否需要显示 清库 tab
+            int rw = 0;
+            if (UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()!=0) {
+                for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+                    if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                        rw = 1;
+                        break;
+                    }
+                }
+            }
+            if (rw == 1) {
+                llSearch.setVisibility(View.VISIBLE);
+            } else {
+                llSearch.setVisibility(View.GONE);
+            }
             mIvTest.setImageResource(R.mipmap.dynamics_normal);
             mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvTest.setText("航班动态");

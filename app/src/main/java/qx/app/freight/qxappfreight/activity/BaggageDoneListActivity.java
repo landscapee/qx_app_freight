@@ -82,7 +82,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
-        toolbar.setMainTitle(Color.WHITE, flightBean.getFlightNo());
+        toolbar.setMainTitle(Color.WHITE, mData.getFlightNo());
         mList = mData.getMainInfos();
 
         initView();
@@ -159,8 +159,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 mAdapter.notifyDataSetChanged();
             } else {
                 ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                dialog.setData(this, isLocal -> {
-                    if (isLocal) {
+                dialog.setData(this, "请选择国际或国内","国际","国内", isCheckRight -> {
+                    if (isCheckRight) {
                         bean.setFlightIndicator("D");
                     } else {
                         bean.setFlightIndicator("I");

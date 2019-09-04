@@ -31,7 +31,7 @@ public class FlightInfoLayout extends LinearLayout {
         this(context);
         this.context = context;
         this.flghtInfo = flghtInfo;
-        if (flghtInfo.size() != 0) {
+        if (flghtInfo !=null && flghtInfo.size() > 0) {
             initViewAndListener();
         }
     }

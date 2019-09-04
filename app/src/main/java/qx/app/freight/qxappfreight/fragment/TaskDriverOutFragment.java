@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +61,17 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     List<AcceptTerminalTodoBean> listCache;
 
     private List<AcceptTerminalTodoBean> list;
+    private List<AcceptTerminalTodoBean> listSearch;
     private int slidePosition, slidePositionChild, step;
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
 
+    private String searchString = "";//条件搜索关键字
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private CustomToolbar mToolBar;//父容器标题
     private boolean isShow = false;
+
 
     private int max = 0, index = 0; //用于执行多个子任务的领受操作
 
@@ -93,12 +97,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         initData();
+        setUserVisibleHint(true);
     }
-
     private void initData() {
         listCache = new ArrayList<>();
+        listSearch = new ArrayList<>();
         list = new ArrayList<>();
-        adapter = new DriverOutTaskAdapter(list);
+        adapter = new DriverOutTaskAdapter(listSearch);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (!nowDoTaskId.equals(list.get(position).getTaskId())) {
@@ -149,13 +154,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(list.size());
             if (mToolBar != null) {
-                mToolBar.setRightIconViewVisiable(false);
+//                mToolBar.setRightIconViewVisiable(false);
+                    searchToolbar.setHintAndListener("请输入航班号", text -> {
+                    searchString = text;
+                    seachByText();
+                });
             }
 
-        } else {
-            if (mToolBar != null) {
-                mToolBar.setRightIconViewVisiable(true);
-            }
         }
     }
 
@@ -317,7 +322,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                 }
             }
             list.addAll(acceptTerminalTodoBeanList);
-            mMfrvData.notifyForAdapter(adapter);
+            seachByText();
             setListStatus();
             if (mTaskFragment != null) {
                 if (isShow)
@@ -343,6 +348,25 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         }
 
 
+    }
+
+    /**
+     * 根据搜索框输入检索对应的结果项
+     */
+    private void seachByText() {
+        listSearch.clear();
+        if (TextUtils.isEmpty(searchString)) {
+            listSearch.addAll(list);
+        } else {
+            for (AcceptTerminalTodoBean item : list) {
+                if (item.getTasks().get(0).getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                    listSearch.add(item);
+                }
+            }
+        }
+        if (mMfrvData != null) {
+            mMfrvData.notifyForAdapter(adapter);
+        }
     }
 
     /**

@@ -13,4 +13,6 @@ public class ScanDataBean {
     private String functionFlag;
 
     private String data;
+
+    private boolean isLaser;//true 激光扫码  默认 为false 普通扫码
 }

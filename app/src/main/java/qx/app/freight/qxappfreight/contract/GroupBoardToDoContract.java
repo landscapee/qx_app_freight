@@ -8,6 +8,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 
 /**
  */
@@ -15,10 +16,13 @@ public class GroupBoardToDoContract {
     public interface GroupBoardToDoModel {
         void getGroupBoardToDo(GroupBoardRequestEntity model, IResultLisenter lisenter);
         void getScooterByScooterCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+        void searchWaybillByWaybillCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
     }
 
     public interface GroupBoardToDoView extends IBaseView {
         void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans);
         void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean);
+        void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans);
+
     }
 }

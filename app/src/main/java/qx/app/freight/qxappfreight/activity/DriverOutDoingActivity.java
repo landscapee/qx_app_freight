@@ -900,8 +900,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 updataScooter(transportTodoListBeans, mainIfos, nowScooterCode);
             } else {
                 ChoseFlightTypeDialog dialog = new ChoseFlightTypeDialog();
-                dialog.setData(this, isLocal -> {
-                    if (isLocal) {
+                dialog.setData(this, "请选择国际或国内","国际","国内", isCheckRight -> {
+                    if (isCheckRight) {
                         mainIfos.setFlightIndicator("D");
                     } else {
                         mainIfos.setFlightIndicator("I");

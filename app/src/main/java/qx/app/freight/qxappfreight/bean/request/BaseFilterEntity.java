@@ -58,7 +58,7 @@ public class BaseFilterEntity<T> {
     private String facility;
     private String staffId;
     private String staffIds;
-    private String operationUser;
+
     private int documentType;
     //报载记录ID
     private String reportInfoId;
@@ -67,7 +67,12 @@ public class BaseFilterEntity<T> {
     //退回报载原因
     private String returnReason;
     private String installedSingleConfirmUser;
+    private String operationUser;
     private String operationUserName;
-
     private int sort;
+    private boolean filterAtd;//true 货邮舱单 装机单 待办 false 结载待办
+    /**
+     * 备注
+     */
+    private String remark;
 }

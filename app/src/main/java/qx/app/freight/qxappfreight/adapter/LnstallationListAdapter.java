@@ -33,7 +33,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
         } else if ("T".equals(item.getType())) {
             type = "转港行李";
         } else if ("BY".equals(item.getType())) {
-            type = "仓行李";
+            type = "Y舱行李";
         } else if ("BT".equals(item.getType())) {
             type = "过站行李";
         } else if ("CT".equals(item.getType())) {
@@ -41,14 +41,14 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
         } else if ("X".equals(item.getType())) {
             type = "空集装箱";
         }
-        helper.setText(R.id.tv_manifest, item.getSuggestRepository())
+        helper.setText(R.id.tv_manifest, item.getCargoName())
                 .setText(R.id.tv_goods_position, item.getGoodsPosition())
-                .setText(R.id.tv_scooter_number, item.getSerialInd() == null ? "- -" : item.getSerialInd())
+                .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
                 .setText(R.id.tv_uld_number, item.getUldCode() == null ? "- -" : item.getUldCode())
-                .setText(R.id.tv_to_city, item.getDest() == null ? "- -" : item.getDest())
-                .setText(R.id.tv_type, type == null ? "- -" : type)
+                .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
+                .setText(R.id.tv_type,type)
                 .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
-                .setText(R.id.tv_total, item.getRestrictedCargo() == null ? "-  -" : item.getRestrictedCargo())
+                .setText(R.id.tv_total, item.getTotal() == null ? "-  -" : item.getTotal())
                 .setText(R.id.tv_special_number, item.getSpecialNumber());
 
         TextView tv1 = helper.getView(R.id.tv_manifest);

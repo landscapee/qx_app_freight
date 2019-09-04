@@ -9,6 +9,9 @@ import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.model.GetFlightAllReportInfoModel;
 
+/**
+ * 结载人员获取装机单presenter
+ */
 public class GetFlightAllReportInfoPresenter extends BasePresenter {
     public GetFlightAllReportInfoPresenter(GetFlightAllReportInfoContract.getFlightAllReportInfoView getFlightAllReportInfoView) {
         mRequestView = getFlightAllReportInfoView;
@@ -29,7 +32,6 @@ public class GetFlightAllReportInfoPresenter extends BasePresenter {
                 mRequestView.toastView(error);
                 mRequestView.dissMiss();
             }
-
         });
     }
 }

@@ -30,20 +30,30 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.LnstallationInfoActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
+import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.LnstallationAdapter;
+import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
+import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
+import qx.app.freight.qxappfreight.utils.CommonJson4List;
+import qx.app.freight.qxappfreight.utils.IMUtils;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -52,7 +62,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 装机单页面
  */
-public class LnstallationFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class LnstallationFragment extends BaseFragment implements EndInstallToDoContract.IView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
 
 
     @BindView(R.id.mfrv_data)
@@ -62,22 +72,19 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
     @BindView(R.id.search_toolbar)
     SearchToolbar mSearchBar;
 
+    private int mCurrentPage = 1;
+    private int mCurrentSize = 10;
 
-    private LnstallationAdapter adapter;
-    private List<TransportDataBase> list1 = new ArrayList<>();
-    private List<TransportDataBase> list = new ArrayList<>();
+    private GoodsManifestAdapter adapter;
+    private List<LoadAndUnloadTodoBean> list1 = new ArrayList<>();
+    private List<LoadAndUnloadTodoBean> list = new ArrayList<>();
 
-    private int pageCurrent = 1;//页数
     private String mSearchText;
     private String nowRoleCode; //当前角色code
     private String seachString = "";
     private boolean isShow = false;
 
 
-    /**
-     * 待办锁定 当前的任务bean
-     */
-    private TransportDataBase CURRENT_TASK_BEAN = null;
 
     @NonNull
     @Override
@@ -85,7 +92,9 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         View view = inflater.inflate(R.layout.fragment_lnstallation, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+//        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+        mToolBar.setLeftIconView(View.GONE);
+
         mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
             mToolBar.setVisibility(View.GONE);
             mSearchBar.setVisibility(View.VISIBLE);
@@ -108,7 +117,7 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
             InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });
-        mSearchBar.setHintAndListener("请输入运单号", text -> {
+        mSearchBar.setHintAndListener("请输入航班号", text -> {
             seachString = text;
             seachWith();
         });
@@ -127,21 +136,36 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
             EventBus.getDefault().register(this);
         }
         initData();
-
+        setUserVisibleHint(true);
     }
 
-    private void gotoScan() {
-        if (TextUtils.isEmpty(nowRoleCode)) {
-            return;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mSearchBar.setHintAndListener("请输入航班号", text -> {
+                seachString = text;
+                seachWith();
+            });
         }
-
-        ScanManagerActivity.startActivity(getContext(), "MainActivity");
-
     }
-
+    private void gotoScan() {
+        ScanManagerActivity.startActivity(getContext(), "MainActivity");
+    }
 
     private void initData() {
-        adapter = new LnstallationAdapter(list);
+        adapter = new GoodsManifestAdapter(list);
+        adapter.setOnFlightSafeguardListenner(new GoodsManifestAdapter.OnFlightSafeguardListenner() {
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext, list.get(position).getFlightId());
+            }
+
+            @Override
+            public void onClearClick(int position) {
+                ToastUtil.showToast("结载不能发起清场任务");
+            }
+        });
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -158,13 +182,13 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         if (TextUtils.isEmpty(seachString)) {
             list.addAll(list1);
         } else {
-            for (TransportDataBase team : list1) {
+            for (LoadAndUnloadTodoBean team : list1) {
                 if (team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
         }
-
+        mToolBar.setMainTitle(Color.WHITE, "装机单（" + list.size() + "）");
         if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(adapter);
         }
@@ -186,84 +210,26 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
-            chooseCode(daibanCode);
+//            chooseCode(daibanCode);
         }
     }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            list.addAll(mWebSocketResultBean.getChgData());
-            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, mWebSocketResultBean.getChgData().get(0).getAircraftNo() + "收到新的装机单建议，请查看！", () -> {
-                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-                intent.putExtra("data", mWebSocketResultBean.getChgData().get(0));
-                getContext().startActivity(intent);
-            });
-            pushDialog.show();
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            for (TransportDataBase mTransportListBean : list) {
-                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {
-                    list.remove(mTransportListBean);
-                }
-            }
-        }
-        seachWith();
-    }
-
-    /**
-     * 通过获取的code，筛选代办，直接进入处理代办
-     *
-     * @param daibanCode 代办号
-     */
-    private void chooseCode(String daibanCode) {
-        for (TransportDataBase item : list) {
-            if (daibanCode.equals(item.getId())) {
-
-                CURRENT_TASK_BEAN = item;
-//                mPresenter = new TaskLockPresenter(this);
-                TaskLockEntity entity = new TaskLockEntity();
-                List<String> taskIdList = new ArrayList<>();
-                taskIdList.add(item.getTaskId());
-                entity.setTaskId(taskIdList);
-                entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                entity.setRoleCode(Constants.BEFOREHAND);
-
-                ((TaskLockPresenter) mPresenter).taskLock(entity);
-                return;
-            }
+    public void onEventMainThread(CommonJson4List result) {
+        if (result != null) {
+           getData();
         }
     }
+
 
 
     private void getData() {
-
-        mPresenter = new GroupBoardToDoPresenter(this);
-        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setRoleCode(Constants.JUNCTION_LOAD);
-        //装机单传2
-        entity.setUndoType(2);
-        List<String> ascs = new ArrayList<>();
-        ascs.add("ETD");
-        entity.setAscs(ascs);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
-    }
-
-    @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
-        mToolBar.setMainTitle(Color.WHITE, "我的待办（" + transportListBeans.size() + "）");
-        if (transportListBeans != null) {
-            if (pageCurrent == 1) {
-                list1.clear();
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            list1.addAll(transportListBeans);
-            seachWith();
-        } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
-        }
+        mPresenter = new EndInstallTodoPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(mCurrentPage);
+        entity.setSize(mCurrentSize);
+        entity.setFilterAtd(true);
+        ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 
     /**
@@ -276,14 +242,10 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 ////            turnToDetailActivity(CURRENT_TASK_BEAN);
 //        }
 //    }
-    @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-
-    }
 
     @Override
     public void toastView(String error) {
-        if (pageCurrent == 1) {
+        if (mCurrentPage == 1) {
             list.clear();
             mMfrvData.finishRefresh();
         } else {
@@ -303,21 +265,47 @@ public class LnstallationFragment extends BaseFragment implements GroupBoardToDo
 
     @Override
     public void onRetry() {
-        pageCurrent = 1;
+        mCurrentPage = 1;
         getData();
 
     }
 
     @Override
     public void onRefresh() {
-        pageCurrent = 1;
+        mCurrentPage = 1;
         getData();
 
     }
 
     @Override
     public void onLoadMore() {
-//        pageCurrent++;
-//        getData();
+        mCurrentPage++;
+        getData();
+    }
+
+    @Override
+    public void getEndInstallTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+
+        if (loadAndUnloadTodoBean != null) {
+            for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+                StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+            }
+            if (mCurrentPage == 1) {
+                list1.clear();
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
+            }
+            list1.addAll(loadAndUnloadTodoBean);
+
+            seachWith();
+        } else {
+            ToastUtil.showToast(getActivity(), "数据为空");
+        }
+    }
+
+    @Override
+    public void slideTaskResult(String result) {
+
     }
 }

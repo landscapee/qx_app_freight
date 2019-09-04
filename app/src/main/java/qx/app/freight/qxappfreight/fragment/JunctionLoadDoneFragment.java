@@ -79,7 +79,11 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setUserVisibleHint(true);
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null) {

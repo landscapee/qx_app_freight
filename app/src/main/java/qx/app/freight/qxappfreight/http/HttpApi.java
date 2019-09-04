@@ -105,6 +105,8 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -518,6 +520,11 @@ public interface HttpApi {
     @POST("service-product-delivery/delivery/selectInwaybillByCounterBillId")
     Observable<BaseEntity<ArrivalDeliveryInfoBean>> arrivalDeliveryInfo(@Body BaseFilterEntity model);
 
+
+    //查询提货管理列表
+    @POST("service-product-inwaybill/arrival-waybill/searchWaybillByWaybillCode")
+    Observable<BaseEntity<WaybillsListBean>> searchWaybillByWaybillCode(@Body BaseFilterEntity model);
+
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")
     Observable<BaseEntity<List<OverweightBean>>> getWaybillOverWeight(@Body BaseFilterEntity model);
@@ -734,7 +741,7 @@ public interface HttpApi {
      *
      * @return
      */
-    @POST("service-product-finishloading/stowage-report-info/synchronousLoading")
+    @POST("service-product-finishloading/stowage-report-info/synchronousLoadingByFlightId")
     Observable<BaseEntity<Object>> synchronousLoading(@Body BaseFilterEntity entity);
 
     /**
@@ -746,12 +753,19 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
 
     /**
-     * 释放
+     * 获取装机单或货邮舱单数据
      *
      * @return
      */
-    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfo")
+    @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfoByAndroid")
     Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
+    /**
+     * 重新开启装机任务
+     *
+     * @return
+     */
+    @POST("service-product-transport/tp-main-info/restartUnloadTask")
+    Observable<BaseEntity<Object>> reOpenLoadTask(@Body BaseFilterEntity entity);
 
 
 

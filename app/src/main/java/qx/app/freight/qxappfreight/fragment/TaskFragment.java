@@ -61,6 +61,7 @@ public class TaskFragment extends BaseFragment {
         });
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
+
                 mSearchBar.getSearchView().setText("");
 
                     mToolBar.setVisibility(View.VISIBLE);
@@ -213,8 +214,8 @@ public class TaskFragment extends BaseFragment {
 
         if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
-            //如果第一个是外场运输就把搜索框隐藏
-            if (list_Title.get(0).equals("外场运输")){
+            //如果第一个是结载就把搜索框隐藏
+            if (list_Title.get(0).equals("结载")){
                 mToolBar.setRightIconViewVisiable(false);
             }
         }
@@ -227,7 +228,7 @@ public class TaskFragment extends BaseFragment {
         else
             mTabLayout.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
-        mViewPager.setOffscreenPageLimit(3);
+//        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 
     }
@@ -263,4 +264,5 @@ public class TaskFragment extends BaseFragment {
             return list_Title.get(position);
         }
     }
+
 }
