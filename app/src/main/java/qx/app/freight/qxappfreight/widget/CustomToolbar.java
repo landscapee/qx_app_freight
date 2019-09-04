@@ -56,6 +56,14 @@ public class CustomToolbar extends LinearLayout {
         mLeftIv.setImageResource(iconSrc);
         mLeftIv.setOnClickListener(listener);
     }
+    /**
+     * 设置左边图标
+     *
+     * @param show     是否显示
+     */
+    public void setLeftIconView(int show) {
+        mLeftIv.setVisibility(show);
+    }
 
     /**
      * 设置左边文字

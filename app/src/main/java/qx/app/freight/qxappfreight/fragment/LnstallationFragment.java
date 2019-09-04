@@ -92,7 +92,9 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         View view = inflater.inflate(R.layout.fragment_lnstallation, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+//        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+        mToolBar.setLeftIconView(View.GONE);
+
         mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
             mToolBar.setVisibility(View.GONE);
             mSearchBar.setVisibility(View.VISIBLE);

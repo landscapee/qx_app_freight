@@ -79,7 +79,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cargomanifest, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+//        mToolBar.setLeftIconView(View.VISIBLE, R.mipmap.richscan, v -> gotoScan());
+        mToolBar.setLeftIconView(View.GONE);
         mToolBar.setRightIconView(View.VISIBLE, R.mipmap.search, v -> {
             mToolBar.setVisibility(View.GONE);
             mSearchBar.setVisibility(View.VISIBLE);

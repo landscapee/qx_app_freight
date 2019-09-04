@@ -214,10 +214,10 @@ public class TaskFragment extends BaseFragment {
 
         if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
-            //如果第一个是外场运输就把搜索框隐藏
-//            if (list_Title.get(0).equals("外场运输")){
-//                mToolBar.setRightIconViewVisiable(false);
-//            }
+            //如果第一个是结载就把搜索框隐藏
+            if (list_Title.get(0).equals("结载")){
+                mToolBar.setRightIconViewVisiable(false);
+            }
         }
         else
             ToastUtil.showToast("该用户没有被分配角色");
@@ -264,4 +264,5 @@ public class TaskFragment extends BaseFragment {
             return list_Title.get(position);
         }
     }
+
 }
