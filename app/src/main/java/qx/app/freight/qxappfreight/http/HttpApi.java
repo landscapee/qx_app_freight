@@ -724,10 +724,6 @@ public interface HttpApi {
     @POST("service-bussiness-facility/uld/saveOrUpdate")
     Observable<BaseEntity<Object>> saveOrUpdate(@Body SaveOrUpdateEntity entity);
 
-
-    @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
-    Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
-
     /**
      * 获取基础参数类型
      *
@@ -759,6 +755,10 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/getFlightAllReportInfoByAndroid")
     Observable<BaseEntity<List<FlightAllReportInfo>>> getFlightAllReportInfo(@Body BaseFilterEntity entity);
+
+    @POST("service-product-finishloading/stowage-report-info/getLastReportInfo")
+    Observable<BaseEntity<LastReportInfoListBean>> getLastReportInfo(@Body BaseFilterEntity entity);
+
     /**
      * 重新开启装机任务
      *

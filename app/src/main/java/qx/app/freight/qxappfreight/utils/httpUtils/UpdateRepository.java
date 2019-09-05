@@ -1247,12 +1247,20 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().listByType(entity));
     }
     /**
-     * ULD根据字段过滤
-     *
+     * 获取货邮舱单/装机单 /卸机单 机下建议舱单等
      * @param entity
      * @return
      */
     public Observable<List<FlightAllReportInfo>> getFlightAllReportInfo(BaseFilterEntity entity) {
+        return transform(getService().getFlightAllReportInfo(entity));
+    }
+    /**
+     * 获取货邮舱单/装机单 /卸机单 机下建议舱单等
+     *
+     * @param entity
+     * @return
+     */
+    public Observable<List<FlightAllReportInfo>> getLastReportInfo(BaseFilterEntity entity) {
         return transform(getService().getFlightAllReportInfo(entity));
     }
     /**
@@ -1265,15 +1273,7 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().reOpenLoadTask(entity));
     }
 
-    /**
-     * ULD根据字段过滤
-     *
-     * @param entity
-     * @return
-     */
-    public Observable<LastReportInfoListBean> getLastReportInfo(BaseFilterEntity entity) {
-        return transform(getService().getLastReportInfo(entity));
-    }
+
 
     public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity) {
         return nothingtransform(getService().saveOrUpdate(entity));
