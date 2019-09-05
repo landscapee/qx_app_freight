@@ -26,6 +26,7 @@ import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
@@ -166,7 +167,13 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
     private void loadData() {
         mPresenter = new LoadUnloadTaskHisPresenter(this);
-        ((LoadUnloadTaskHisPresenter) mPresenter).loadUnloadTaskHis(UserInfoSingle.getInstance().getUserId());
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(mCurrentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((LoadUnloadTaskHisPresenter) mPresenter).loadUnloadTaskHis(entity);
     }
 
     @Override

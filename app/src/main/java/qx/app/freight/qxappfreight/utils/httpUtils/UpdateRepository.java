@@ -1292,27 +1292,27 @@ public class UpdateRepository extends BaseRepository {
     }
 
 
-    public Observable<List<CargoReportHisBean>> cargoReportHis(String operatorId) {
+    public Observable<List<CargoReportHisBean>> cargoReportHis(BaseFilterEntity operatorId) {
         return transform(getService().cargoReportHis(operatorId));
     }
 
-    public Observable<List<CargoReportHisBean>> baggageSubHis(String operatorId) {
+    public Observable<List<CargoReportHisBean>> baggageSubHis(BaseFilterEntity operatorId) {
         return transform(getService().baggageSubHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> reportTaskHis(String operatorId) {
+    public Observable<List<LoadAndUnloadTodoBean>> reportTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().reportTaskHis(operatorId));
     }
 
-    public Observable<List<OutFieldTaskBean>> transportTaskHis(String operatorId) {
+    public Observable<List<OutFieldTaskBean>> transportTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().transportTaskHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> stevedoresTaskHis(String operatorId) {
+    public Observable<List<LoadAndUnloadTodoBean>> stevedoresTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().stevedoresTaskHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> loadUnloadTaskHis(String operatorId) {
+    public Observable<List<LoadAndUnloadTodoBean>> loadUnloadTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().loadUnloadTaskHis(operatorId));
     }
 }

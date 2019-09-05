@@ -21,6 +21,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
@@ -90,5 +91,17 @@ public class UpdatePushDialog extends Dialog {
 
     public interface OnTpPushListener {
         void onSureBtnCallBack();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
     }
 }

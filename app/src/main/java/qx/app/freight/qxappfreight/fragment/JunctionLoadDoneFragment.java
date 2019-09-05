@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
+import org.fusesource.hawtdispatch.Task;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -35,12 +36,15 @@ import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
+import qx.app.freight.qxappfreight.contract.ReportTaskHisContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
+import qx.app.freight.qxappfreight.presenter.ReportTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -53,7 +57,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 结载已办页面
  */
-public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EndInstallToDoContract.IView, EmptyLayout.OnRetryLisenter {
+public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, ReportTaskHisContract.eportTaskHisView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -177,7 +181,6 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mPresenter = new EndInstallTodoPresenter(this);
         mAdapter = new NewInstallEquipAdapter(mList);
         mMfrvData.setAdapter(mAdapter);
         SearchToolbar searchToolbar = ((TaskDoneFragment) getParentFragment()).getSearchView();
@@ -197,7 +200,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mCacheList.size());
             if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     mSearchText = text;
                     seachByText();
                 });
@@ -223,11 +226,14 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
     }
 
     private void loadData() {
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+        mPresenter = new ReportTaskHisPresenter(this);
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
-        entity.setSize(mCurrentSize);
-        ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((ReportTaskHisPresenter) mPresenter).reportTaskHis(entity);
     }
 
     @Override
@@ -251,8 +257,57 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         loadData();
     }
 
+
+    /**
+     * 设置滑动监听
+     */
+    private void setSlideListener() {
+        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
+            //滑动步骤去调接口，以及跳转页面
+            mSlideadapter = adapter;
+            go2SlideStep(bigPos, mList.get(bigPos).getOperationStepObj().get(smallPos).getOperationCode());
+        });
+    }
+
+
+    private void go2SlideStep(int bigPos, String code) {
+        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+        entity.setType(1);
+        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
+        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
+        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setOperationCode(code);
+        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setUserName(mList.get(bigPos).getWorkerName());
+        entity.setCreateTime(System.currentTimeMillis());
+        ((EndInstallTodoPresenter) mPresenter).slideTask(entity);
+    }
+
+
     @Override
-    public void getEndInstallTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void toastView(String error) {
+        if (mCurrentPage == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
+    }
+
+    @Override
+    public void reportTaskHisResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans) {
         mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -261,7 +316,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             mMfrvData.finishLoadMore();
         }
         mCurrentPage++;
-        for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+        for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
@@ -296,62 +351,5 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             if (isShow)
                 mTaskFragment.setTitleText(mCacheList.size());
         }
-    }
-
-    /**
-     * 设置滑动监听
-     */
-    private void setSlideListener() {
-        mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
-            //滑动步骤去调接口，以及跳转页面
-            mSlideadapter = adapter;
-            go2SlideStep(bigPos, mList.get(bigPos).getOperationStepObj().get(smallPos).getOperationCode());
-        });
-    }
-
-
-    private void go2SlideStep(int bigPos, String code) {
-        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-        entity.setType(1);
-        entity.setLoadUnloadDataId(mList.get(bigPos).getId());
-        entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
-        entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-        entity.setOperationCode(code);
-        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mList.get(bigPos).getWorkerName());
-        entity.setCreateTime(System.currentTimeMillis());
-        ((EndInstallTodoPresenter) mPresenter).slideTask(entity);
-    }
-
-
-    @Override
-    public void slideTaskResult(String result) {
-        if ("正确".equals(result)) {
-            mSlideadapter.notifyDataSetChanged();
-            mCurrentPage = 1;
-            loadData();
-        }
-    }
-
-    @Override
-    public void toastView(String error) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
-    }
-
-    @Override
-    public void showNetDialog() {
-
-    }
-
-    @Override
-    public void dissMiss() {
-
     }
 }

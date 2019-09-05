@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
 import qx.app.freight.qxappfreight.model.LoadUnloadTaskHisModel;
@@ -15,7 +16,7 @@ public class LoadUnloadTaskHisPresenter extends BasePresenter {
         mRequestModel = new LoadUnloadTaskHisModel();
     }
 
-    public void loadUnloadTaskHis(String operatorId) {
+    public void loadUnloadTaskHis(BaseFilterEntity operatorId) {
         mRequestView.showNetDialog();
         ((LoadUnloadTaskHisModel) mRequestModel).loadUnloadTaskHis(operatorId, new IResultLisenter<List<LoadAndUnloadTodoBean>>() {
             @Override

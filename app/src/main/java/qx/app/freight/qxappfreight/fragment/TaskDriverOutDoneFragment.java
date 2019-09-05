@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.adapter.TaskTpDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -120,11 +121,13 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
     private void getData() {
         mPresenter = new TransportTaskHisPresenter(this);
-//        BaseFilterEntity entity = new BaseFilterEntity();
-//        entity.setCurrent(currentPage);
-//        entity.setSize(Constants.PAGE_SIZE);
-//        entity.setUserId();
-        ((TransportTaskHisPresenter) mPresenter).transportTaskHis(UserInfoSingle.getInstance().getUserId());
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(currentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((TransportTaskHisPresenter) mPresenter).transportTaskHis(entity);
     }
 
     @Override
@@ -231,9 +234,9 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
             if (currentPage == 1) {
                 list.clear();
-            } else {
-                currentPage++;
             }
+            currentPage++;
+
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
 

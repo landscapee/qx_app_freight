@@ -5,12 +5,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.contract.LoadUnloadTaskHisContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class LoadUnloadTaskHisModel extends BaseModel implements LoadUnloadTaskHisContract.loadUnloadTaskHisModel {
     @Override
-    public void loadUnloadTaskHis(String operatorId, IResultLisenter lisenter) {
+    public void loadUnloadTaskHis(BaseFilterEntity operatorId, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().loadUnloadTaskHis(operatorId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

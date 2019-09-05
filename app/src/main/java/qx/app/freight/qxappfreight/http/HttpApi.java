@@ -772,29 +772,29 @@ public interface HttpApi {
     /****************************已办***********************************/
 
     //货物上报已办
-    @GET("service-product-transport/tp-task-his/cargoReportHis/{operatorId}")
-    Observable<BaseEntity<List<CargoReportHisBean>>> cargoReportHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/cargoReportHis")
+    Observable<BaseEntity<List<CargoReportHisBean>>> cargoReportHis(@Body BaseFilterEntity operatorId);
 
     //行李上报已办
-    @GET("service-product-transport/tp-task-his/baggageSubHis/{operatorId}")
-    Observable<BaseEntity<List<CargoReportHisBean>>> baggageSubHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/baggageSubHis")
+    Observable<BaseEntity<List<CargoReportHisBean>>> baggageSubHis(@Body BaseFilterEntity operatorId);
 
     //截载已办
-    @GET("service-product-transport/tp-task-his/reportTaskHis/{operatorId}")
-    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> reportTaskHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/reportTaskHis")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> reportTaskHis(@Body BaseFilterEntity operatorId);
 
     //运输已办
-    @GET("service-product-transport/tp-task-his/transportTaskHis/{operatorId}")
-    Observable<BaseEntity<List<OutFieldTaskBean>>> transportTaskHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/transportTaskHis")
+    Observable<BaseEntity<List<OutFieldTaskBean>>> transportTaskHis(@Body BaseFilterEntity operatorId);
 
 
     //装卸员已办
-    @GET("service-product-transport/tp-task-his/stevedoresTaskHis/{operatorId}")
-    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> stevedoresTaskHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/stevedoresTaskHis")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> stevedoresTaskHis(@Body BaseFilterEntity operatorId);
 
     //监装监卸已办
-    @GET("service-product-transport/tp-task-his/loadUnloadTaskHis/{operatorId}")
-    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadUnloadTaskHis(@Path("operatorId") String operatorId);
+    @POST("service-product-transport/tp-task-his/loadUnloadTaskHis")
+    Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadUnloadTaskHis(@Body BaseFilterEntity operatorId);
 
 
 

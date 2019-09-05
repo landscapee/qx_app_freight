@@ -25,6 +25,8 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InstallEquipLeaderAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -46,7 +48,6 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
     private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
-    private int mCurrentPage = 1;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();//推送的缓存任务
     private InstallEquipLeaderAdapter mAdapter;
@@ -55,7 +56,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     private TaskDoneFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
-
+    private int currentPage = 1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -123,7 +124,13 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     private void loadData() {
         mPresenter = new StevedoresTaskHisPresenter(this);
-        ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(UserInfoSingle.getInstance().getUserId());
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(currentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(entity);
     }
     /**
      * 发起清场任务
@@ -142,7 +149,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
-            mCurrentPage = 1;
+            currentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -150,7 +157,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void onRefresh() {
-        mCurrentPage = 1;
+        currentPage = 1;
         loadData();
     }
 
@@ -162,12 +169,12 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     @Override
     public void stevedoresTaskHisResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mCacheList.clear();
-        if (mCurrentPage == 1) {
+        if (currentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
         }
-        mCurrentPage++;
+        currentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
@@ -220,7 +227,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void toastView(String error) {
-        if (mCurrentPage == 1) {
+        if (currentPage == 1) {
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();

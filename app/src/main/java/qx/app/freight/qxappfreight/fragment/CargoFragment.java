@@ -150,7 +150,8 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        pageCurrent = 1;
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             loadData();
             dismissProgessDialog();

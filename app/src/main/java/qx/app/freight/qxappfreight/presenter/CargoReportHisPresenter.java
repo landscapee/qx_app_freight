@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.contract.CargoReportHisContract;
@@ -16,7 +17,7 @@ public class CargoReportHisPresenter extends BasePresenter {
         mRequestModel = new CargoReportHisModel();
     }
 
-    public void cargoReportHis(String operatorId) {
+    public void cargoReportHis(BaseFilterEntity operatorId) {
         mRequestView.showNetDialog();
         ((CargoReportHisModel) mRequestModel).cargoReportHis(operatorId, new IResultLisenter<List<CargoReportHisBean>>() {
             @Override

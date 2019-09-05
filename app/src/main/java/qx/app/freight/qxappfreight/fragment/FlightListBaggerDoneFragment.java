@@ -27,8 +27,11 @@ import qx.app.freight.qxappfreight.activity.BaggageListActivity;
 import qx.app.freight.qxappfreight.adapter.FlightListDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageSubHisContract;
 import qx.app.freight.qxappfreight.presenter.BaggageSubHisPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -70,7 +73,7 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
         setUserVisibleHint(true);
     }
     private void initView() {
-        mPresenter = new BaggageSubHisPresenter(this);
+
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
@@ -81,6 +84,7 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
             startActivity(new Intent(getContext(), BaggageDoneListActivity.class).putExtra("flightBean",  mList.get(position)));
         });
         mMfrvData.setAdapter(mAdapter);
+        loadData();
         setUserVisibleHint(true);
     }
 
@@ -119,16 +123,18 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
-    }
-
     private void loadData() {
 //        BaseFilterEntity entity = new BaseFilterEntity();
 //        entity.setMinutes("120");
-        ((BaggageSubHisPresenter) mPresenter).baggageSubHis(UserInfoSingle.getInstance().getUserId());
+        mPresenter = new BaggageSubHisPresenter(this);
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(pageCurrent);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+
+        ((BaggageSubHisPresenter) mPresenter).baggageSubHis(entity);
     }
 
     @Override
@@ -153,6 +159,7 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
 
     @Override
     public void onRetry() {
+        pageCurrent = 1;
         showProgessDialog("正在加载数据。。。。。。");
         new Handler().postDelayed(() -> {
             loadData();
@@ -169,7 +176,7 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
         } else {
             mMfrvData.finishLoadMore();
         }
-
+        pageCurrent++;
 //        for (int i = 0; i < cargoReportHisBeans.size(); i++) {
             mListTemp.addAll(cargoReportHisBeans);
 //        }
@@ -194,7 +201,6 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
         loadData();
     }
 
