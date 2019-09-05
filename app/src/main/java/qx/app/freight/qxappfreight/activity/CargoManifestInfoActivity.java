@@ -4,6 +4,9 @@ package qx.app.freight.qxappfreight.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -32,6 +36,11 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
+import qx.app.freight.qxappfreight.fragment.HyFragment;
+import qx.app.freight.qxappfreight.fragment.TodayFragment;
+import qx.app.freight.qxappfreight.fragment.TomorrowFragment;
+import qx.app.freight.qxappfreight.fragment.YesterdayFragment;
+import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -60,21 +69,25 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     TextView mTvDate;//日期
     @BindView(R.id.tv_version)
     TextView mTvVersion;//版本号
-    @BindView(R.id.mfrv_data)
-    RecyclerView mRvData;//货邮舱单信息列表
+//    @BindView(R.id.mfrv_data)
+//    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
     Button mBtShifang;    //释放
     @BindView(R.id.btn_print)
     Button mBtPrint;    //打印
+    @BindView(R.id.tb_title)
+    RadioGroup mRgTitle;    //切换按钮
 
-    @BindView(R.id.sr_refush)
-    SwipeRefreshLayout mSrRefush;
+//    @BindView(R.id.sr_refush)
+//    SwipeRefreshLayout mSrRefush;
 
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
-
     private String mId;
+    private HyFragment mHYragment;
+    private ZdFragment mZdFragment;
+    private Fragment nowFragment;
 
     @Override
     public int getLayoutId() {
@@ -99,11 +112,13 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mTvTakeOff.setText(StringUtil.getTimeTextByRegix(mBaseData.getEtd(), "HH:mm"));
         mTvFallDown.setText(StringUtil.getTimeTextByRegix(mBaseData.getAta(), "HH:mm"));
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getScheduleTime(), "yyyy-MM-dd"));
-        mRvData.setLayoutManager(new LinearLayoutManager(this));
+//        mRvData.setLayoutManager(new LinearLayoutManager(this));
 //        mRvData.setRefreshListener(this);
 //        mRvData.setOnRetryLisenter(this);
 //        mRvData.setRefreshStyle(false);
-        loadData();
+        initFragment();
+        initView();
+//        loadData();
         //释放
         mBtShifang.setOnClickListener(v -> {
             mPresenter = new AuditManifestPresenter(this);
@@ -119,22 +134,55 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mBtPrint.setOnClickListener(v -> {
             ToastUtil.showToast("该功能正处于研发过程中……");
         });
-        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadData();
+//        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                loadData();
+//            }
+//        });
+    }
+
+//    private void loadData() {
+//        mPresenter = new GetLastReportInfoPresenter(this);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+//        entity.setFlightId(mBaseData.getFlightId());
+//        //货邮舱单
+//        entity.setDocumentType(1);
+//        entity.setSort(1);
+//        ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
+//    }
+    public void initView() {
+        mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.rb_hy:
+                    nowFragment = mHYragment; //昨天
+                    break;
+                case R.id.rb_zd:
+                    nowFragment = mZdFragment; //今天
+                    break;
             }
+            showFragment(nowFragment);
         });
     }
 
-    private void loadData() {
-        mPresenter = new GetLastReportInfoPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightId(mBaseData.getFlightId());
-        //货邮舱单
-        entity.setDocumentType(1);
-        entity.setSort(1);
-        ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
+    public void showFragment(Fragment fragment) {
+
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .hide(mHYragment)
+                .hide(mZdFragment);
+        transaction.show(fragment).commit();
+    }
+
+    private void initFragment() {
+        mHYragment = new HyFragment();
+        mZdFragment = new ZdFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fl_content, mHYragment)
+                .add(R.id.fl_content, mZdFragment)
+                .commit();
+        showFragment(mHYragment);
     }
 
     @Override
@@ -143,7 +191,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mId = result.getId();
             mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
-            mSrRefush.setRefreshing(false);
+//            mSrRefush.setRefreshing(false);
             mList.clear();
             Gson mGson = new Gson();
             ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
@@ -162,13 +210,13 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             title.setVolume("体积");
             mList.add(0, title);
             ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
-            mRvData.setAdapter(adapter);
+//            mRvData.setAdapter(adapter);
         }
     }
 
     @Override
     public void toastView(String error) {
-        mSrRefush.setRefreshing(false);
+//        mSrRefush.setRefreshing(false);
 //        mRvData.finishRefresh();
     }
 
@@ -186,14 +234,14 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
-            loadData();
+//            loadData();
             dismissProgessDialog();
         }, 2000);
     }
 
     @Override
     public void onRefresh() {
-        loadData();
+//        loadData();
     }
 
     @Override
