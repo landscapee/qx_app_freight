@@ -1,8 +1,11 @@
 package qx.app.freight.qxappfreight.presenter;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.model.GetLastReportInfoModel;
@@ -15,9 +18,9 @@ public class GetLastReportInfoPresenter extends BasePresenter {
 
     public void getLastReportInfo(BaseFilterEntity entity) {
         mRequestView.showNetDialog();
-        ((GetLastReportInfoModel) mRequestModel).getLastReportInfo(entity, new IResultLisenter<LastReportInfoListBean>() {
+        ((GetLastReportInfoModel) mRequestModel).getLastReportInfo(entity, new IResultLisenter<List <FlightAllReportInfo>>() {
             @Override
-            public void onSuccess(LastReportInfoListBean result) {
+            public void onSuccess(List<FlightAllReportInfo> result) {
                 ((GetLastReportInfoContract.getLastReportInfoView) mRequestView).getLastReportInfoResult(result);
                 mRequestView.dissMiss();
             }

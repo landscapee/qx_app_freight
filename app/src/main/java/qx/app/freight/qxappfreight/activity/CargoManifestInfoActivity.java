@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
@@ -186,8 +187,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     }
 
     @Override
-    public void getLastReportInfoResult(LastReportInfoListBean result) {
-        if (result != null) {
+    public void getLastReportInfoResult(List<FlightAllReportInfo> results) {
+        if (results != null && results.get(0) != null) {
+            FlightAllReportInfo result = results.get(0);
             mId = result.getId();
             mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();

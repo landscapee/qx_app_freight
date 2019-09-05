@@ -83,7 +83,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     LinearLayout LlStorageVersion;
     private LoadAndUnloadTodoBean mBaseData;
     private List<String> mListVerson = new ArrayList<>();
-    private HashMap<Integer, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
+    private List<String> mListVersonCode = new ArrayList<>();
+    private String newest;//最新版本号
+    private HashMap<String, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
 
@@ -152,9 +154,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         map.clear();
         mSrRefush.setRefreshing(false);
         mListVerson.clear();
+        mListVersonCode.clear();
         mapPresen.clear();
         mapDate.clear();
-        mTvVersion.setText("版本号:" + flightAllReportInfos.get(0).getVersion());
+//        mTvVersion.setText("版本号:" + flightAllReportInfos.get(0).getVersion());
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
@@ -164,19 +167,24 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     for (LnstallationInfoBean data : datas) {
                         list.addAll(data.getScooters());
                     }
-                    map.put(i, list);
+                    map.put(flightAllReportInfos.get(i).getVersion(), list);
+                    if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
+                        mListVerson.add("监装确认(版本" + flightAllReportInfos.get(i).getVersion() + ")");
+                        mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
+                        mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-DD HH:mm"));
+                    } else {
+                        mListVerson.add("版本号:" + flightAllReportInfos.get(i).getVersion());
+                        mapPresen.put(i, "");
+                        mapDate.put(i, "");
+                    }
+                    mListVersonCode.add(flightAllReportInfos.get(i).getVersion());
+                    newest = flightAllReportInfos.get(i).getVersion();
+                    mTvVersion.setText("版本号:" + newest);
+
                 }
-                if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
-                    mListVerson.add("监装确认(版本" + flightAllReportInfos.get(i).getVersion() + ")");
-                    mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
-                    mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-DD HH:mm"));
-                } else {
-                    mListVerson.add("版本号:" + flightAllReportInfos.get(i).getVersion());
-                    mapPresen.put(i, "");
-                    mapDate.put(i, "");
-                }
+
             }
-            screenData(0);
+            screenData(newest);
         }
     }
 
@@ -215,7 +223,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         mTvConfirmDate.setVisibility(View.GONE);
                     }
                     mTvVersion.setText(mListVerson.get(options1));
-                    screenData(options1);
+
+                    screenData(mListVersonCode.get(options1));
                 }
             }
         }).build();
@@ -229,7 +238,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }
     }
 
-    private void screenData(int verson) {
+    private void screenData(String verson) {
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
         title.setGoodsPosition("货位");
