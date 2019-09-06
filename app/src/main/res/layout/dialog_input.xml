@@ -33,7 +33,7 @@
             android:layout_marginRight="40dp"
             android:gravity="center"
             android:lineSpacingExtra="3dp"
-            android:maxLength="18"
+            android:maxLength="50"
             android:background="@drawable/shape_rect_gray_line"
             android:textColor="#071c1a"
             android:textSize="18sp"

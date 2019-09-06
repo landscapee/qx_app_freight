@@ -78,10 +78,10 @@ public class NewspaperClient extends StompClient {
                             sendMess(my);
                             if (mTimerReConnect != null)
                                 mTimerReConnect.cancel();
-                            Log.e(TAG, "webSocket  报载 打开");
+                            Log.e(TAG, "webSocket  结载 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket 报载 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket 结载 出错", lifecycleEvent.getException());
                             if (mTimer != null)
                                 mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -89,7 +89,7 @@ public class NewspaperClient extends StompClient {
 //                            connect(uri);
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket 报载 关闭");
+                            Log.e(TAG, "websocket 结载 关闭");
                             if (mTimer != null)
                                 mTimer.cancel();
                             WebSocketService.isTopic = false;

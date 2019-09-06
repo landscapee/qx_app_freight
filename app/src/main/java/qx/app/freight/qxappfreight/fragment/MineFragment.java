@@ -181,7 +181,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 UpdatePWDActivity.startActivity(getActivity());
                 break;
             case R.id.rl_today_done:
-                //今日已办
+                //我的已办
                 startActivity(new Intent(getActivity(), TaskDoneActivity.class));
                 break;
         }
