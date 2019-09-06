@@ -253,7 +253,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 return;
             }
         }
-        ToastUtil.showToast("该运单号无效");
+//        ToastUtil.showToast("该运单号无效");
     }
 
     @Override

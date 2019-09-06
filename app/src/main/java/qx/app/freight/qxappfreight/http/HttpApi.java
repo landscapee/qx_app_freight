@@ -745,10 +745,9 @@ public interface HttpApi {
      *
      * @return
      */
-    @POST("service-product-finishloading/stowage-report-info/auditManifest")
+    @POST("service-product-finishloading/stowage-report-info/releaseFlightByFlightId")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
-
-    /**
+  /**
      * 获取装机单或货邮舱单数据
      *
      * @return

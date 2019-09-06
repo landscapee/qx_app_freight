@@ -2,9 +2,11 @@ package qx.app.freight.qxappfreight.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import qx.app.freight.qxappfreight.R;
 
@@ -82,6 +84,11 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_common);
+        if (Build.VERSION.SDK_INT >= 23) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         initView();
     }
 

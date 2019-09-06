@@ -193,7 +193,6 @@ public class PreplanerClient extends StompClient {
                 .isCanceledOnTouchOutside(false)
                 .isCanceled(true)
                 .setOnClickListener((dialog1, confirm) -> loginOut());
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> dialog.show());
     }

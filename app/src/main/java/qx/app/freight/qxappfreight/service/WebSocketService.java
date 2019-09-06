@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.listener.WeighterClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import ua.naiksoftware.stomp.StompClient;
 
 public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
@@ -271,6 +272,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     //停止连接 并关闭服务
     public static void stopServer(Context context) {
+        //顺便 关闭可能没关闭的声音 和震动
+        Tools.closeVibrator(context.getApplicationContext());
         closeLink();
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);
