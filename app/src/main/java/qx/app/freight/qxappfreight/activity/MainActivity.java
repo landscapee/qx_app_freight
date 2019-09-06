@@ -22,14 +22,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
@@ -347,7 +353,19 @@ public class MainActivity extends BaseActivity implements LocationObservable {
             UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
             updatePushDialog.show();
         }
-
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(List<LoadingListBean.DataBean.ContentObjectBean> result) {
+        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
+        if (result.size()> 0){
+            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : result){
+                scooters.addAll(mContentObjectBean.getScooters());
+            }
+            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters, () -> EventBus.getDefault().post("refresh_data_update"));
+            updatePushDialog.show();
+        }
+    }
+
+
 }
 

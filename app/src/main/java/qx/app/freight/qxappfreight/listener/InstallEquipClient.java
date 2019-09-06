@@ -28,9 +28,11 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -195,6 +197,28 @@ public class InstallEquipClient extends StompClient {
                     });
 
             compositeDisposable.add(loadingListPush);
+
+            Disposable dispTopic4 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.Install)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "websocket-->发送至结载的建议装机单 " + topicMessage.getPayload());
+                        JSONObject messObj = JSONObject.parseObject(topicMessage.getPayload(),JSONObject.class);
+                        if (messObj != null){
+                            String str = messObj.getString("data");
+                            JSONObject content = JSONObject.parseObject(str,JSONObject.class);
+                            str = content.getString("content");
+                            if (str!=null&& str.length() > 2){
+                                str = str.replace("\\","");
+//                                str = str.substring(1,str.length()-1);
+                                List<LoadingListBean.DataBean.ContentObjectBean> mWebSocketBean = JSONObject.parseArray(str, LoadingListBean.DataBean.ContentObjectBean.class);
+                                sendInstallEventBus(mWebSocketBean);
+                            }
+
+                        }
+
+                    }, throwable -> Log.e(TAG, "websocket-->发送至结载的建议装机单", throwable));
+            compositeDisposable.add(dispTopic4);
             //订阅  登录地址
             Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
                     .subscribeOn(Schedulers.io())
@@ -239,6 +263,10 @@ public class InstallEquipClient extends StompClient {
 
     //用于代办刷新
     public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+    //用于通知结载 装机单 建议
+    public static void sendInstallEventBus(List<LoadingListBean.DataBean.ContentObjectBean> bean) {
         EventBus.getDefault().post(bean);
     }
 

@@ -48,6 +48,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static String ToList = "/taskTodo/taskTodoList";
     public static String Message = "/MT/msMsg";
     public static String Login = "/MT/message";
+    public static String Install = "/departure/installedAdvice";
+
     public static List<String> subList = new ArrayList<>();
 
     @Override

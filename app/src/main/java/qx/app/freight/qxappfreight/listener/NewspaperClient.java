@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
@@ -78,10 +79,10 @@ public class NewspaperClient extends StompClient {
                             sendMess(my);
                             if (mTimerReConnect != null)
                                 mTimerReConnect.cancel();
-                            Log.e(TAG, "webSocket  结载 打开");
+                            Log.e(TAG, "webSocket  报载 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket 结载 出错", lifecycleEvent.getException());
+                            Log.e(TAG, "websocket 报载 出错", lifecycleEvent.getException());
                             if (mTimer != null)
                                 mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -89,7 +90,7 @@ public class NewspaperClient extends StompClient {
 //                            connect(uri);
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket 结载 关闭");
+                            Log.e(TAG, "websocket 报载 关闭");
                             if (mTimer != null)
                                 mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -119,6 +120,7 @@ public class NewspaperClient extends StompClient {
                         }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
                 compositeDisposable.add(dispTopic1);
                 WebSocketService.subList.add(WebSocketService.ToList);
+
             }
             if (WebSocketService.isExist(WebSocketService.Login)) {
                 //订阅  登录地址
@@ -225,6 +227,7 @@ public class NewspaperClient extends StompClient {
     public static void sendReshEventBus(WebSocketResultBean bean) {
         EventBus.getDefault().post(bean);
     }
+
 
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {

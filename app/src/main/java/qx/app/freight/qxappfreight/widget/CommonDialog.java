@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
      * @param cancel
      */
     public CommonDialog isCanceled(boolean cancel) {
-        setCancelable(cancel);
+        setCancelable(false);
         return this;
     }
 
@@ -84,7 +85,8 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_common);
-        if (Build.VERSION.SDK_INT >= 23) {
+        Log.e("Build.VERSION.SDK_INT",Build.VERSION.SDK_INT+"");
+        if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
         else

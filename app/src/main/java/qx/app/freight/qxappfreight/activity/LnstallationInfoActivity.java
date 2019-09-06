@@ -188,9 +188,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                 }
 
             }
+            if (StringUtil.isEmpty(newest))
+                mTvVersion.setText("版本号:无");
+            else{
+                mTvVersion.setText("版本号:" + newest);
+                screenData(newest);
+            }
 
-            mTvVersion.setText("版本号:" + newest);
-            screenData(newest);
         }
     }
 

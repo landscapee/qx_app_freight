@@ -198,20 +198,20 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             ivControl.setImageResource(R.mipmap.down);
             llDetail.collapse();
         }
-        llControl.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
-            if (item.isShowDetail()) {
-                rvLeft.setVisibility(View.VISIBLE);
-                rvRight.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.right);
-                llDetail.expand();
-            } else {
-                rvLeft.setVisibility(View.GONE);
-                rvRight.setVisibility(View.GONE);
-                ivControl.setImageResource(R.mipmap.down);
-                llDetail.collapse();
-            }
-        });
+//        llControl.setOnClickListener(v -> {
+//            item.setShowDetail(!item.isShowDetail());
+//            if (item.isShowDetail()) {
+//                rvLeft.setVisibility(View.VISIBLE);
+//                rvRight.setVisibility(View.VISIBLE);
+//                ivControl.setImageResource(R.mipmap.right);
+//                llDetail.expand();
+//            } else {
+//                rvLeft.setVisibility(View.GONE);
+//                rvRight.setVisibility(View.GONE);
+//                ivControl.setImageResource(R.mipmap.down);
+//                llDetail.collapse();
+//            }
+//        });
     }
 
     public interface OnDataCheckListener {
