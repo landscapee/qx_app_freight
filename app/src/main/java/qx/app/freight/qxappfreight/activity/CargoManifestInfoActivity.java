@@ -75,7 +75,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
 
-    private String mId;
+    private String mId = null;
 
     @Override
     public int getLayoutId() {
@@ -108,13 +108,19 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         //释放
         mBtShifang.setOnClickListener(v -> {
             mPresenter = new AuditManifestPresenter(this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setReportInfoId(mId);
-            entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
-            entity.setAuditType("2");
-            entity.setTaskId(mBaseData.getTaskId());
-            entity.setReturnReason("手持端退回请求");
-            ((AuditManifestPresenter) mPresenter).auditManifest(entity);
+            if (mId !=null){
+                BaseFilterEntity entity = new BaseFilterEntity();
+                entity.setReportInfoId(mId);
+                entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+                entity.setAuditType("2");
+                entity.setFlightId(mBaseData.getFlightId());
+                entity.setReturnReason("手持端退回请求");
+                ((AuditManifestPresenter) mPresenter).auditManifest(entity);
+            }
+            else
+                ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
+
+
 
         });
         mBtPrint.setOnClickListener(v -> {

@@ -161,7 +161,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
-                if (flightAllReportInfos.get(i).getContent() != null) {
+                if (flightAllReportInfos.get(i).getContent() != null&&!"[]".equals(flightAllReportInfos.get(i).getContent())) {
                     LnstallationInfoBean[] datas = mGson.fromJson(flightAllReportInfos.get(i).getContent(), LnstallationInfoBean[].class);
                     List<LnstallationInfoBean.ScootersBean> list = new ArrayList<>();
                     for (LnstallationInfoBean data : datas) {
@@ -178,12 +178,18 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         mapDate.put(i, "");
                     }
                     mListVersonCode.add(flightAllReportInfos.get(i).getVersion());
-                    newest = flightAllReportInfos.get(i).getVersion();
-                    mTvVersion.setText("版本号:" + newest);
 
+                }
+            }
+            for (FlightAllReportInfo mFlightAllReportInfo:flightAllReportInfos){
+                if (mFlightAllReportInfo.getContent() != null&&!"[]".equals(mFlightAllReportInfo.getContent())){
+                    newest = mFlightAllReportInfo.getVersion();
+                    break;
                 }
 
             }
+
+            mTvVersion.setText("版本号:" + newest);
             screenData(newest);
         }
     }

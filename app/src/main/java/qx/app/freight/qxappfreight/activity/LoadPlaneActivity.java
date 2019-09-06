@@ -416,6 +416,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing())
+            mWaitCallBackDialog.dismiss();
+    }
+
+    @Override
     public void flightDoneInstallResult(String result) {
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(1);

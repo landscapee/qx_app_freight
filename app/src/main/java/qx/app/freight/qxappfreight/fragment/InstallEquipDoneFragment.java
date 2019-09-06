@@ -218,8 +218,9 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void loadUnloadTaskHisResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        mCacheList.clear();
+
         if (mCurrentPage == 1) {
+            mCacheList.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
