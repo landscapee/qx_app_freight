@@ -192,7 +192,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
+        if (result != null&& result.isNewStowage()) {
             getData();
         }
     }
@@ -204,6 +204,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setFilterAtd(true);
+        entity.setFilterHycd(true);
+
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 
