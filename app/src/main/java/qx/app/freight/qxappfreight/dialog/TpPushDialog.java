@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -73,7 +74,11 @@ public class TpPushDialog extends Dialog {
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
         this.mAcceptTerminalTodoBean = mAcceptTerminalTodoBean;
-        Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         convertView = getLayoutInflater().inflate(R.layout.popup_new_tp_task, null);
         setCancelable(false);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

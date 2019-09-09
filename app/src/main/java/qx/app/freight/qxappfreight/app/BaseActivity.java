@@ -181,7 +181,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void checkPermissionsForWindow() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 26) {
             if (!Settings.canDrawOverlays(this)) {
                 Tools.applyCommonPermission(this);
             }

@@ -7,6 +7,7 @@
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" /> <!-- 显示系统窗口权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 在 屏幕最顶部显示addview -->
+    <uses-permission android:name="android.permission.TYPE_APPLICATION_OVERLAY" /> <!-- 在 屏幕最顶部显示  版本号大于 23 -->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 运行权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

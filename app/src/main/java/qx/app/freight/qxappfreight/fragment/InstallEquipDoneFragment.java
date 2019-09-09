@@ -105,7 +105,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
      */
     private void showDialog(final int pos) {
         InputDialog dialog1 = new InputDialog(getActivity());
-        dialog1.setTitle("输入部门")
+        dialog1.setTitle("开舱门原因")
                 .setHint("请输入......")
                 .setPositiveButton("取消")
                 .setNegativeButton("确定")

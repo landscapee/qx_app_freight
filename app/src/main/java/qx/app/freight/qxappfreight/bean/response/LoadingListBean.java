@@ -67,6 +67,7 @@ public class LoadingListBean implements Serializable {
                 private String location;//货位
                 private String serialInd;//ULD号
 
+
                 @Data
                 public static class WaybillBean  implements  Serializable{
                     private String cargoCn;

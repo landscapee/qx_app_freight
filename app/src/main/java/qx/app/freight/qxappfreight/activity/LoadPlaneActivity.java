@@ -326,6 +326,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     //舱位集合
                     mBaseContent = new ArrayList<>(Arrays.asList(datas));
                     mBaseIdMap.clear();
+                    //存储 板车的 拉与不拉的 初始状态
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List<CompareInfoBean> idList = new ArrayList<>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
