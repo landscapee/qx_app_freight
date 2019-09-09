@@ -49,7 +49,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
-    private String cagnWeight, emailWeight, name;
+    private int cagnWeight, emailWeight;
+    private String name;
 
 
     @Override
@@ -115,8 +116,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     public void getLastReportInfoResult(List<FlightAllReportInfo> result) {
         if (result != null) {
 //            mTvVersion.setText("版本号" + result.getVersion());
-            cagnWeight = "";
-            emailWeight = "";
+            cagnWeight = 0;
+            emailWeight = 0;
             name = "";
             mSrRefush.setRefreshing(false);
             mList.clear();
@@ -134,22 +135,25 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 name = datas[i].getCreateUserName();
                 for (int j = 0; j < datas[i].getCargos().size(); j++) {
                     for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
-
-                        //TODO C 货物
-                        if ("C".equals(datas[i].getCargos().get(j).getScooters().get(k).getMailType()))
-                            cagnWeight += datas[i].getCargos().get(j).getScooters().get(k).getWeight();
-                            //TODO M 邮件
-                        else if ("M".equals(datas[i].getCargos().get(j).getScooters().get(k).getMailType()))
-                            emailWeight += datas[i].getCargos().get(j).getScooters().get(k).getWeight();
-
                         datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
                         mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
                     }
                 }
             }
 
-            tvCagnWeight.setText("货物总重量：" + cagnWeight);
-            tvEmailWeight.setText("邮件总重量：" + emailWeight);
+            for (int i = 0; i < mList.size(); i++) {
+                //TODO C 货物
+                if (!"".equals(mList.get(i).getWeight())) {
+                    if ("C".equals(mList.get(i).getMailType()))
+                        cagnWeight += Double.valueOf(mList.get(i).getWeight());
+                        //TODO M 邮件
+                    else if ("M".equals(mList.get(i).getMailType()))
+                        emailWeight += Double.valueOf(mList.get(i).getWeight());
+                }
+            }
+
+            tvCagnWeight.setText("货物总重量：" + cagnWeight + "");
+            tvEmailWeight.setText("邮件总重量：" + emailWeight + "");
             tvName.setText("配载员：" + name);
             //TODO 是否是宽体机 0 宽体机 1 窄体机
             if (1 == mBaseData.getWidthAirFlag()) {
@@ -173,7 +177,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 mList.add(0, title);
             }
 
-            ManifestWaybillListjianyiAdapter adapter = new ManifestWaybillListjianyiAdapter(mList,mBaseData.getWidthAirFlag());
+            ManifestWaybillListjianyiAdapter adapter = new ManifestWaybillListjianyiAdapter(mList, mBaseData.getWidthAirFlag());
             mRvData.setAdapter(adapter);
         }
     }

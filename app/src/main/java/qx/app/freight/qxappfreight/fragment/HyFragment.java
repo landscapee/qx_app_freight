@@ -47,7 +47,8 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
-    private String cagnWeight, emailWeight, name;
+    private int cagnWeight, emailWeight;
+    private String name;
 
 
     @Override
@@ -98,8 +99,8 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
         if (result != null) {
 //            mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
-            cagnWeight = "";
-            emailWeight = "";
+            cagnWeight = 0;
+            emailWeight = 0;
             name = "";
             mSrRefush.setRefreshing(false);
             mList.clear();
@@ -108,20 +109,25 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             for (ManifestMainBean data : datas) {
                 name = data.getCreateUserName();
                 for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-
                     for (ManifestScooterListBean data1 : bean.getScooters()) {
-                        //TODO C 货物
-                        if ("C".equals(data1.getMailType()))
-                            cagnWeight += data1.getWeight();
-                            //TODO M 邮件
-                        else if ("M".equals(data1.getMailType()))
-                            emailWeight += data1.getWeight();
                         mList.addAll(data1.getWaybillList());
                     }
                 }
             }
-            tvCagnWeight.setText("货物总重量：" + cagnWeight);
-            tvEmailWeight.setText("邮件总重量：" + emailWeight);
+            for (int i = 0; i < mList.size(); i++) {
+                if (!"".equals(mList.get(i).getWeight())) {
+                    //TODO C 货物
+                    if ("C".equals(mList.get(i).getMailType())) {
+                        cagnWeight += Double.valueOf(mList.get(i).getWeight());
+                    }
+                    //TODO M 邮件
+                    else if ("M".equals(mList.get(i).getMailType())) {
+                        emailWeight += Double.valueOf(mList.get(i).getWeight());
+                    }
+                }
+            }
+            tvCagnWeight.setText("货物总重量：" + cagnWeight + "");
+            tvEmailWeight.setText("邮件总重量：" + emailWeight + "");
             tvName.setText("配载员：" + name);
             ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
             title.setWaybillCode("箱板号");
