@@ -87,7 +87,6 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
 
     private String mId = null;
-    private String mId;
     private HyFragment mHYragment;
     private ZdFragment mZdFragment;
     private Fragment nowFragment;

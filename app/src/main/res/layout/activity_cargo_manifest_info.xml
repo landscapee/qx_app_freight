@@ -93,12 +93,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
-            android:orientation="horizontal"
-            android:background="@color/gray_8f">
-        <!--<TextView-->
+            android:background="@color/gray_8f"
+            android:orientation="horizontal">
+            <!--<TextView-->
             <!--android:layout_width="0dp"-->
             <!--android:layout_weight="1"-->
             <!--android:layout_height="match_parent"-->
@@ -110,77 +111,77 @@
             <!--android:textColor="@color/grassgreen"-->
             <!--android:textSize="@dimen/sp_12" />-->
 
-                <RadioGroup
-                    android:id="@+id/tb_title"
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/shape_dynamic_blue"
-                    android:orientation="horizontal">
+            <RadioGroup
+                android:id="@+id/tb_title"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_dynamic_blue"
+                android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/rb_hy"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/selector_blue_center"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:text="货邮舱单"
-                        android:checked="true"
-                        android:textColor="@drawable/selector_text_blue" />
+                <RadioButton
+                    android:id="@+id/rb_hy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="货邮舱单"
+                    android:textColor="@drawable/selector_text_blue_a" />
 
-                    <RadioButton
-                        android:id="@+id/rb_zd"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/selector_blue_center"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:text="装单建议"
-                        android:textColor="@drawable/selector_text_blue" />
+                <RadioButton
+                    android:id="@+id/rb_zd"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="装机建议"
+                    android:textColor="@drawable/selector_text_blue_a" />
 
-                </RadioGroup>
+            </RadioGroup>
 
 
-                <!--<ImageView-->
-                <!--android:layout_width="18dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginRight="15dp"-->
-                <!--android:background="@mipmap/icon_query" />-->
+            <!--<ImageView-->
+            <!--android:layout_width="18dp"-->
+            <!--android:layout_height="18dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="@mipmap/icon_query" />-->
 
-        <TextView
-            android:id="@+id/tv_version"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_40"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_10"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_12" />
         </LinearLayout>
         <!--<android.support.v4.widget.SwipeRefreshLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:id="@+id/sr_refush"-->
-            <!--android:layout_height="match_parent">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:id="@+id/sr_refush"-->
+        <!--android:layout_height="match_parent">-->
 
-            <!--<HorizontalScrollView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:scrollbars="none">-->
+        <!--<HorizontalScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
 
-                <!--<android.support.v7.widget.RecyclerView-->
-                    <!--android:id="@+id/mfrv_data"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent" />-->
-            <!--</HorizontalScrollView>-->
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/mfrv_data"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+        <!--</HorizontalScrollView>-->
         <!--</android.support.v4.widget.SwipeRefreshLayout>-->
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            />
 
     </LinearLayout>
 

@@ -120,5 +120,9 @@ public class ManifestScooterListBean {
         private String waybillCode;
         private boolean liveBody;//是否是活体
         private String specialCode;
+        private String model; //型号
+        private String suggestRepository;//仓位
+        private String routeEn;//航线信息
+        private String info;//备注
     }
 }

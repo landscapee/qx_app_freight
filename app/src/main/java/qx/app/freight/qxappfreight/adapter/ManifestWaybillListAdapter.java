@@ -24,15 +24,22 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
     @Override
     protected void convert(BaseViewHolder helper, ManifestScooterListBean.WaybillListBean item) {
         helper.setText(R.id.tv_waybill_number, item.getWaybillCode()).setText(R.id.tv_weight, String.valueOf(item.getWeight()))
+                .setText(R.id.tv_model, item.getModel())
+                .setText(R.id.tv_specialCode, item.getSpecialCode())
+                .setText(R.id.tv_mailtype, item.getMailType())
+                .setText(R.id.tv_suggestRepository, item.getSuggestRepository())
                 .setText(R.id.tv_total, String.valueOf(item.getNumber()))
-                .setText(R.id.tv_goods_name, item.getCargoCn())
                 .setText(R.id.tv_volume, String.valueOf(item.getVolume()));
+
         TextView tv1 = helper.getView(R.id.tv_waybill_number);
-        TextView tv2 = helper.getView(R.id.tv_weight);
+        TextView tv2 = helper.getView(R.id.tv_model);
         TextView tv3 = helper.getView(R.id.tv_total);
-        TextView tv4 = helper.getView(R.id.tv_goods_name);
+        TextView tv4 = helper.getView(R.id.tv_weight);
         TextView tv5 = helper.getView(R.id.tv_volume);
-        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5};
+        TextView tv6 = helper.getView(R.id.tv_specialCode);
+        TextView tv7 = helper.getView(R.id.tv_mailtype);
+        TextView tv8 = helper.getView(R.id.tv_suggestRepository);
+        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8};
         if (helper.getAdapterPosition() == 0) {
             helper.itemView.setBackgroundColor(Color.parseColor("#2E81FD"));
             for (TextView tv : tvList) {

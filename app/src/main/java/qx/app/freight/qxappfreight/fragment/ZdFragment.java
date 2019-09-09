@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
@@ -19,12 +20,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
+import qx.app.freight.qxappfreight.adapter.ManifestWaybillListjianyiAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
@@ -38,10 +39,17 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     @BindView(R.id.sr_refush)
     SwipeRefreshLayout mSrRefush;
 
+    @BindView(R.id.tv_cagn_weight)
+    TextView tvCagnWeight;
+    @BindView(R.id.tv_email_weight)
+    TextView tvEmailWeight;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
-    private String mId;
+    private String cagnWeight, emailWeight, name;
 
 
     @Override
@@ -56,6 +64,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
         super.onViewCreated(view, savedInstanceState);
 
         mRvData.setLayoutManager(new LinearLayoutManager(getContext()));
+
         mBaseData = (LoadAndUnloadTodoBean) getActivity().getIntent().getSerializableExtra("data");
         loadData();
         mSrRefush.setOnRefreshListener(() -> loadData());
@@ -87,35 +96,6 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     }
 
     @Override
-    public void getLastReportInfoResult(LastReportInfoListBean result) {
-        if (result != null) {
-            mId = result.getId();
-//            mTvVersion.setText("版本号" + result.getVersion());
-//        mRvData.finishRefresh();
-            mSrRefush.setRefreshing(false);
-            mList.clear();
-            Gson mGson = new Gson();
-            ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
-            for (ManifestMainBean data : datas) {
-                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-                    for (ManifestScooterListBean data1 : bean.getScooters()) {
-                        mList.addAll(data1.getWaybillList());
-                    }
-                }
-            }
-            ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-            title.setWaybillCode("运单号");
-            title.setWeight("重量");
-            title.setNumber("件数");
-            title.setCargoCn("货物名称");
-            title.setVolume("体积");
-            mList.add(0, title);
-            ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
-            mRvData.setAdapter(adapter);
-        }
-    }
-
-    @Override
     public void toastView(String error) {
         mSrRefush.setRefreshing(false);
 //        mRvData.finishRefresh();
@@ -129,5 +109,72 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     @Override
     public void dissMiss() {
 
+    }
+
+    @Override
+    public void getLastReportInfoResult(List<FlightAllReportInfo> result) {
+        if (result != null) {
+//            mTvVersion.setText("版本号" + result.getVersion());
+            cagnWeight = "";
+            emailWeight = "";
+            name = "";
+            mSrRefush.setRefreshing(false);
+            mList.clear();
+            Gson mGson = new Gson();
+            ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
+//            for (ManifestMainBean data : datas) {
+//                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
+//                    for (ManifestScooterListBean data1 : bean.getScooters()) {
+//                        data1.getWaybillList().get(0).setRouteEn();
+//                        mList.addAll(data1.getWaybillList());
+//                    }
+//                }
+//            }
+            for (int i = 0; i < datas.length; i++) {
+                name = datas[i].getCreateUserName();
+                for (int j = 0; j < datas[i].getCargos().size(); j++) {
+                    for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
+
+                        //TODO C 货物
+                        if ("C".equals(datas[i].getCargos().get(j).getScooters().get(k).getMailType()))
+                            cagnWeight += datas[i].getCargos().get(j).getScooters().get(k).getWeight();
+                            //TODO M 邮件
+                        else if ("M".equals(datas[i].getCargos().get(j).getScooters().get(k).getMailType()))
+                            emailWeight += datas[i].getCargos().get(j).getScooters().get(k).getWeight();
+
+                        datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
+                        mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
+                    }
+                }
+            }
+
+            tvCagnWeight.setText("货物总重量：" + cagnWeight);
+            tvEmailWeight.setText("邮件总重量：" + emailWeight);
+            tvName.setText("配载员：" + name);
+            //TODO 是否是宽体机 0 宽体机 1 窄体机
+            if (1 == mBaseData.getWidthAirFlag()) {
+                ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
+                title.setWaybillCode("运单号");
+                title.setNumber("件数");
+                title.setWeight("重量");
+                title.setRouteEn("航程");
+                title.setCargoCn("货物名称");
+                title.setSpecialCode("特货代码");
+                title.setInfo("备注");
+                mList.add(0, title);
+            } else if (0 == mBaseData.getWidthAirFlag()) {
+                ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
+                title.setModel("型号");
+                title.setWaybillCode("集装箱板号");
+                title.setNumber("件数");
+                title.setWeight("重量");
+                title.setSpecialCode("特货代码");
+                title.setMailType("货邮代码");
+                mList.add(0, title);
+            }
+
+            ManifestWaybillListjianyiAdapter adapter = new ManifestWaybillListjianyiAdapter(mList,mBaseData.getWidthAirFlag());
+            mRvData.setAdapter(adapter);
+        }
     }
 }

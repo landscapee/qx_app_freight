@@ -1315,5 +1315,9 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<LoadAndUnloadTodoBean>> loadUnloadTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().loadUnloadTaskHis(operatorId));
     }
+
+    public Observable<String> exceptionContent(BaseFilterEntity exceptionContent) {
+        return nothingDatatransform(getService().exceptionContent(exceptionContent));
+    }
 }
 

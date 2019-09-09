@@ -7,16 +7,9 @@
     <TextView
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:text="箱板号"
+        android:text="运单号"
         android:textColor="@color/white"
         android:id="@+id/tv_waybill_number"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:text="型号"
-        android:textColor="@color/white"
-        android:id="@+id/tv_model"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
@@ -33,34 +26,33 @@
         android:id="@+id/tv_weight"
         android:gravity="center"/>
     <TextView
-        android:layout_width="85dp"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="航程"
+        android:textColor="@color/white"
+        android:id="@+id/tv_routeen"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:textColor="@color/white"
-        android:text="体积"
-        android:id="@+id/tv_volume"
+        android:text="货物名称"
+        android:ellipsize="end"
+        android:id="@+id/tv_goods_name"
         android:gravity="center"/>
     <TextView
         android:layout_width="85dp"
         android:layout_height="match_parent"
         android:textColor="@color/white"
         android:text="特货代码"
-        android:ellipsize="end"
         android:id="@+id/tv_specialCode"
         android:gravity="center"/>
     <TextView
         android:layout_width="85dp"
         android:layout_height="match_parent"
         android:textColor="@color/white"
-        android:text="货邮代码"
-        android:ellipsize="end"
-        android:id="@+id/tv_mailtype"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="85dp"
-        android:layout_height="match_parent"
-        android:textColor="@color/white"
-        android:text="舱位"
-        android:ellipsize="end"
-        android:id="@+id/tv_suggestRepository"
+        android:text="备注"
+        android:id="@+id/tv_info"
         android:gravity="center"/>
 </LinearLayout>

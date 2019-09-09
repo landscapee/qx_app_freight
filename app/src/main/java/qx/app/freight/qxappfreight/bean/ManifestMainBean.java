@@ -24,6 +24,7 @@ public class ManifestMainBean {
     private String routeEn;
     private String toCity;
     private String id;
+    private String createUserName;
     private List<CargosBean> cargos;
 @Data
     public static class CargosBean {
