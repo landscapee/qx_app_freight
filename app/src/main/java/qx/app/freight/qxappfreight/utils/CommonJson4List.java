@@ -19,10 +19,14 @@ public class CommonJson4List<T> implements Serializable {
     private String taskId;//取消任务时对应的taskId标识
     private boolean confirmTask=true;
     private boolean transportTaskAutoDone;//任务超时自动完成
+
+    private boolean newStowage; //为true代表是新来了货邮舱单得推送数据
+
     private List<T> taskData;
     public  CommonJson4List<T> fromJson(String json, Class clazz) {
         Gson gson = new Gson();
         Type objectType = type(CommonJson4List.class, clazz);
+
         return gson.fromJson(json, objectType);
     }
     static ParameterizedType type(final Class raw, final Type... args) {

@@ -84,7 +84,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
+        if (result != null && !result.isNewStowage()) {
             if (result.isChangeWorkerUser()) {//换人直接刷新代办列表
                 loadData();
             } else if (result.isCancelFlag()) {

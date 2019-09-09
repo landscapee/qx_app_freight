@@ -71,6 +71,8 @@ public class BaseFilterEntity<T> {
     private String operationUserName;
     private int sort;
     private boolean filterAtd;//true 货邮舱单 装机单 待办 false 结载待办
+    private boolean filterHycd;//true  货邮舱单 待办 这个字段传true
+
     /**
      * 备注
      */

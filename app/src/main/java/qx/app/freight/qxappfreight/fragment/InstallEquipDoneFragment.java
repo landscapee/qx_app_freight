@@ -303,7 +303,10 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void reOpenLoadTaskResult(String result) {
-        ToastUtil.showToast(result);
+        if (result != null){
+            ToastUtil.showToast("操作成功");
+        }
+        mCurrentPage = 1;
         loadData();
     }
 }
