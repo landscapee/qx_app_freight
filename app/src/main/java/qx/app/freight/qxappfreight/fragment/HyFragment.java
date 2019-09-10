@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +22,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +42,9 @@ import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
+/**
+ * 货邮舱单
+ */
 public class HyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter{
 
     @BindView(R.id.mfrv_data)
@@ -100,21 +107,21 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             Gson mGson = new Gson();
             name = result.get(0).getCreateUserName();
             ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
-//            for (ManifestMainBean data : datas) {
-//                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-//                    for (ManifestScooterListBean data1 : bean.getScooters()) {
-//                        mList.addAll(data1.getWaybillList());
-//                    }
-//                }
+
+//            List<ManifestMainBean> manifestMainBeans = Arrays.asList(datas);
+//            if (Build.VERSION.SDK_INT >= 24) {
+//                mList.addAll(manifestMainBeans.parallelStream().map(ManifestMainBean::getCargos).flatMap(Collection::stream).map(ManifestMainBean.CargosBean::getScooters).flatMap(Collection::stream).map(ManifestScooterListBean::getWaybillList).flatMap(Collection::stream).collect(Collectors.toList()));
 //            }
-            for (int i = 0; i < datas.length; i++) {
-                for (int j = 0; j < datas[i].getCargos().size(); j++) {
-                    for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
-                        datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
-                        mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
+//            else {
+                for (int i = 0; i < datas.length; i++) {
+                    for (int j = 0; j < datas[i].getCargos().size(); j++) {
+                        for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
+                            datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
+                            mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
+                        }
                     }
                 }
-            }
+//            }
             for (int i = 0; i < mList.size(); i++) {
                 if (!"".equals(mList.get(i).getWeight())) {
                     //TODO C 货物

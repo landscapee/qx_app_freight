@@ -5,11 +5,26 @@
     android:layout_height="@dimen/dp_40"
    >
     <TextView
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
+        android:text="型号"
+        android:textColor="@color/white"
+        android:id="@+id/tv_model"
+        android:gravity="center"/>
+    <TextView
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:text="运单号"
         android:textColor="@color/white"
-        android:id="@+id/tv_waybill_number"
+        android:text="舱位"
+        android:ellipsize="end"
+        android:id="@+id/tv_suggestRepository"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:text="板车号/集装箱板号"
+        android:textColor="@color/white"
+        android:id="@+id/tv_scooter_number"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
@@ -26,20 +41,15 @@
         android:id="@+id/tv_weight"
         android:gravity="center"/>
     <TextView
-        android:layout_width="85dp"
-        android:layout_height="match_parent"
-        android:text="型号"
-        android:textColor="@color/white"
-        android:id="@+id/tv_model"
-        android:gravity="center"/>
-    <TextView
         android:layout_width="100dp"
         android:layout_height="match_parent"
+        android:text="体积"
         android:textColor="@color/white"
-        android:text="舱位"
-        android:ellipsize="end"
-        android:id="@+id/tv_suggestRepository"
-        android:gravity="center"/>
+        android:id="@+id/tv_volume"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+
     <TextView
         android:layout_width="100dp"
         android:layout_height="match_parent"

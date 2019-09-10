@@ -12,14 +12,7 @@
         android:id="@+id/tv_waybill_number"
         android:gravity="center"/>
     <TextView
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:text="航程"
-        android:textColor="@color/white"
-        android:id="@+id/tv_routeen"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="85dp"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:text="件数"
         android:textColor="@color/white"
@@ -31,6 +24,21 @@
         android:text="重量"
         android:textColor="@color/white"
         android:id="@+id/tv_weight"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:text="航线"
+        android:textColor="@color/white"
+        android:id="@+id/tv_route"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
+        android:textColor="@color/white"
+        android:text="货物名称"
+        android:ellipsize="end"
+        android:id="@+id/tv_cargocn"
         android:gravity="center"/>
     <!--<TextView-->
         <!--android:layout_width="85dp"-->
@@ -47,20 +55,13 @@
         android:ellipsize="end"
         android:id="@+id/tv_specialCode"
         android:gravity="center"/>
-    <TextView
-        android:layout_width="85dp"
-        android:layout_height="match_parent"
-        android:textColor="@color/white"
-        android:text="货邮代码"
-        android:ellipsize="end"
-        android:id="@+id/tv_mailtype"
-        android:gravity="center"/>
+
     <TextView
         android:layout_width="85dp"
         android:layout_height="match_parent"
         android:textColor="@color/white"
         android:text="舱位"
         android:ellipsize="end"
-        android:id="@+id/tv_suggestRepository"
+        android:id="@+id/tv_info"
         android:gravity="center"/>
 </LinearLayout>

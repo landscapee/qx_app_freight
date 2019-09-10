@@ -1321,7 +1321,7 @@ public class UpdateRepository extends BaseRepository {
     }
 
     public Observable<String> printRequest(BaseFilterEntity exceptionContent) {
-        return nothingDatatransform(getService().printRequest(exceptionContent));
+        return nothingtransform(getService().printRequest(exceptionContent));
     }
 }
 

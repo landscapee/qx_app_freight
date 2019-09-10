@@ -35,10 +35,12 @@ public class ManifestScooterListBean {
      * 缺的数据
      */
     private String toCity;
-    private String uldCode = "- -";
+    private String uldCode;
+    private String uldType ;
+    private String iata ;
     private String mailType;
-    private String goodsPosition = "- -";
-    private String specialNumber = "- -";
+    private String goodsPosition ;
+    private String specialNumber;
     private List<String> manifestList;
 
     private int scooterType;

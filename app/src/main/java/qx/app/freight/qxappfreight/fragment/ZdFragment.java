@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +58,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
 
 
     private LoadAndUnloadTodoBean mBaseData;
-    private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
+    private List<ManifestScooterListBean> mList = new ArrayList<>();
     private int cagnWeight, emailWeight;
     private String name;
 
@@ -100,14 +105,29 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
             Gson mGson = new Gson();
             name = result.get(0).getCreateUserName();
             ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
-            for (int i = 0; i < datas.length; i++) {
-                for (int j = 0; j < datas[i].getCargos().size(); j++) {
-                    for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
-                        datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
-                        mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
+            //            非空判断
+//            Optional.ofNullable(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList()).ifPresent(waybillListBeans -> {
+//                if (!waybillListBeans.isEmpty()) {
+//
+//                }
+//            });
+            //催老师 叫的 stream 链式
+//            List<ManifestMainBean> manifestMainBeans = Arrays.asList(datas);
+//            if (Build.VERSION.SDK_INT >= 24) {
+//                mList.addAll(manifestMainBeans.parallelStream().map(ManifestMainBean::getCargos).flatMap(Collection::stream).map(ManifestMainBean.CargosBean::getScooters).flatMap(Collection::stream).collect(Collectors.toList()));
+//            }
+//            else {
+                for (int i = 0; i < datas.length; i++) {
+                    for (int j = 0; j < datas[i].getCargos().size(); j++) {
+                        for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
+                            datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
+                            if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() !=null &&datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size()>0 )
+                                datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
+                            mList.addAll(datas[i].getCargos().get(j).getScooters());
+                        }
                     }
                 }
-            }
+//            }
             for (int i = 0; i < mList.size(); i++) {
                 //TODO C 货物
                 if (!"".equals(mList.get(i).getWeight())) {
@@ -124,21 +144,21 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
             tvName.setText("配载员：" + name);
             //TODO 是否是宽体机 0 宽体机 1 窄体机
             if (1 == mBaseData.getWidthAirFlag()) {
-                ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-                title.setSuggestRepository("仓位");
-                title.setWaybillCode("板车号");
-                title.setNumber("件数");
+                ManifestScooterListBean title = new ManifestScooterListBean();
+                title.setSuggestRepository("舱位");
+                title.setScooterCode("板车号");
+                title.setTotal("件数");
                 title.setWeight("重量");
-                title.setSpecialCode("特货代码");
+                title.setSpecialNumber("特货代码");
                 title.setMailType("货邮代码");
                 mList.add(0, title);
             } else if (0 == mBaseData.getWidthAirFlag()) {
-                ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-                title.setModel("型号");
-                title.setWaybillCode("集装箱板号");
-                title.setNumber("件数");
+                ManifestScooterListBean title = new ManifestScooterListBean();
+                title.setUldCode("型号");
+                title.setUldCode("集装箱板号");
+                title.setTotal("件数");
                 title.setWeight("重量");
-                title.setSpecialCode("特货代码");
+                title.setSpecialNumber("特货代码");
                 title.setMailType("货邮代码");
                 mList.add(0, title);
             }

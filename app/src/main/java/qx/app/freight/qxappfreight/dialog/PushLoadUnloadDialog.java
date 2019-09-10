@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
