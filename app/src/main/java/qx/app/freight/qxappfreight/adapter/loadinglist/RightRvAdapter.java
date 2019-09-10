@@ -70,6 +70,12 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
             if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
                 helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
             }
+            else if ((item.isHasGUNGoods())){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+            }
+            else
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
             tvPullDownTitle.setVisibility(View.GONE);
             if ("行李".equals(item.getType())){
                 tvPullDown.setVisibility(View.INVISIBLE);

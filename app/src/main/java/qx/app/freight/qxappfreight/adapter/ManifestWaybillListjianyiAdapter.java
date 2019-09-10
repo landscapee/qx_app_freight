@@ -30,18 +30,18 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
         if (1 == mWidthairflag) {
             helper.setText(R.id.tv_waybill_number, item.getWaybillCode()).setText(R.id.tv_weight, String.valueOf(item.getWeight()))
                     .setText(R.id.tv_total, String.valueOf(item.getNumber()))
-                    .setText(R.id.tv_goods_name, item.getCargoCn())
+                    .setText(R.id.tv_suggestRepository, item.getSuggestRepository())
                     .setText(R.id.tv_specialCode, item.getSpecialCode())
-                    .setText(R.id.tv_info, item.getInfo())
-                    .setText(R.id.tv_routeen, item.getRouteEn());
+                    .setText(R.id.tv_mailtype, item.getMailType())
+            ;
             TextView tv1 = helper.getView(R.id.tv_waybill_number);
             TextView tv2 = helper.getView(R.id.tv_total);
             TextView tv3 = helper.getView(R.id.tv_weight);
-            TextView tv4 = helper.getView(R.id.tv_routeen);
-            TextView tv5 = helper.getView(R.id.tv_goods_name);
-            TextView tv6 = helper.getView(R.id.tv_specialCode);
-            TextView tv7 = helper.getView(R.id.tv_info);
-            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7};
+            TextView tv4 = helper.getView(R.id.tv_suggestRepository);
+            TextView tv5 = helper.getView(R.id.tv_specialCode);
+            TextView tv6 = helper.getView(R.id.tv_mailtype);
+//            TextView tv7 = helper.getView(R.id.tv_volume);
+            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6};
             if (helper.getAdapterPosition() == 0) {
                 helper.itemView.setBackgroundColor(Color.parseColor("#2E81FD"));
                 for (TextView tv : tvList) {
@@ -61,20 +61,19 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                 }
             }
         } else if (0 == mWidthairflag) {
-            helper.getView(R.id.tv_info).setVisibility(View.GONE);
-            helper.setText(R.id.tv_waybill_number, item.getModel())
-                    .setText(R.id.tv_routeen, item.getWaybillCode())
+            helper.getView(R.id.tv_suggestRepository).setVisibility(View.GONE);
+
+            helper.setText(R.id.tv_model, item.getModel())
                     .setText(R.id.tv_total, String.valueOf(item.getNumber()))
                     .setText(R.id.tv_weight, String.valueOf(item.getWeight()))
                     .setText(R.id.tv_specialCode, item.getSpecialCode())
-                    .setText(R.id.tv_goods_name, item.getMailType());
-            TextView tv1 = helper.getView(R.id.tv_waybill_number);
-            TextView tv2 = helper.getView(R.id.tv_routeen);
-            TextView tv3 = helper.getView(R.id.tv_total);
-            TextView tv4 = helper.getView(R.id.tv_weight);
-            TextView tv5 = helper.getView(R.id.tv_specialCode);
-            TextView tv6 = helper.getView(R.id.tv_goods_name);
-            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6};
+                    .setText(R.id.tv_mailtype, item.getMailType());
+            TextView tv1 = helper.getView(R.id.tv_model);
+            TextView tv2 = helper.getView(R.id.tv_total);
+            TextView tv3 = helper.getView(R.id.tv_weight);
+            TextView tv4 = helper.getView(R.id.tv_specialCode);
+            TextView tv5 = helper.getView(R.id.tv_mailtype);
+            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5};
             if (helper.getAdapterPosition() == 0) {
                 helper.itemView.setBackgroundColor(Color.parseColor("#2E81FD"));
                 for (TextView tv : tvList) {

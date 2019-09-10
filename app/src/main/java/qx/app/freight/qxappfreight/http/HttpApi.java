@@ -795,7 +795,7 @@ public interface HttpApi {
     @POST("service-product-transport/tp-task-his/loadUnloadTaskHis")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadUnloadTaskHis(@Body BaseFilterEntity operatorId);
 
-    //异常内容
+    //异常捕获 上传服务器
     @POST("service-product-transport/tp-main-info/exceptionUpload")
     Observable<BaseEntity<Object>> exceptionContent(@Body BaseFilterEntity exceptionContent);
 

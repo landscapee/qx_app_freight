@@ -73,6 +73,12 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
             if (item.isHasLiveGoods()) {//有活体运单时背景设为桃红色
                 helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
             }
+            else if ((item.isHasGUNGoods())){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+            }
+            else
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
             helper.getView(R.id.iv_lock_status).setVisibility(View.VISIBLE);
             helper.getView(R.id.tv_lock).setVisibility(View.GONE);
             ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);

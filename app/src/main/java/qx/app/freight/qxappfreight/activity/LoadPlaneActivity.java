@@ -43,13 +43,17 @@ import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
+import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
+import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -91,16 +95,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvConfirmCargo;
     @BindView(R.id.tv_end_install_equip)
     TextView mTvEndInstall;
-    private List<LoadingListBean.DataBean> mLoadingList = new ArrayList<>();
+    private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
     private String mCurrentTaskId;
     private String mCurrentFlightId;
     private WaitCallBackDialog mWaitCallBackDialog;
     private LoadAndUnloadTodoBean data;
     @SuppressLint("UseSparseArrays")
-    private Map<Integer, List<CompareInfoBean>> mBaseIdMap = new HashMap<>();
+    private Map <Integer, List <CompareInfoBean>> mBaseIdMap = new HashMap <>();
     @SuppressLint("UseSparseArrays")
-    private Map<Integer, List<CompareInfoBean>> mNewIdMap = new HashMap<>();
-    private ArrayList<LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
+    private Map <Integer, List <CompareInfoBean>> mNewIdMap = new HashMap <>();
+    private ArrayList <LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
     private int mOperateErrorStatus = -1;
     private boolean mConfirmPlan = false;
 
@@ -175,10 +179,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
-        LoadingListRequestEntity entity = new LoadingListRequestEntity();
-        entity.setDocumentType(2);
-        entity.setFlightId(mCurrentFlightId);
-        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+
         mTvSendOver.setOnClickListener(v -> {
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
@@ -293,7 +294,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 }
             }
         });
+        loadData();
     }
+
+    private void loadData() {
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(mCurrentFlightId);
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+    }
+
 
     @Override
     public void getLoadingListResult(LoadingListBean result) {
@@ -310,7 +320,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             } else {
                 mLoadingList.add(result.getData().get(0));
                 mPresenter = new GetFlightCargoResPresenter(this);
-                BaseFilterEntity<Object> entity = new BaseFilterEntity<>();
+                BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
                 entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
                 ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
                 for (LoadingListBean.DataBean bean : mLoadingList) {
@@ -324,11 +334,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
                     LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
                     //舱位集合
-                    mBaseContent = new ArrayList<>(Arrays.asList(datas));
+                    mBaseContent = new ArrayList <>(Arrays.asList(datas));
                     mBaseIdMap.clear();
                     //存储 板车的 拉与不拉的 初始状态
                     for (int i = 0; i < mBaseContent.size(); i++) {
-                        List<CompareInfoBean> idList = new ArrayList<>();
+                        List <CompareInfoBean> idList = new ArrayList <>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
                             CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());
@@ -337,9 +347,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
                         mBaseIdMap.put(i, idList);
                     }
-                    Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function<String, ObservableSource<List<LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
+                    Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function <String, ObservableSource <List <LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
                         LoadingListBean.DataBean.ContentObjectBean[] datasNew = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
-                        return Observable.just(new ArrayList<>(Arrays.asList(datasNew)));
+                        return Observable.just(new ArrayList <>(Arrays.asList(datasNew)));
                     }).subscribe(boardMultiBeans -> {
                         result.getData().get(0).setContentObject(boardMultiBeans);
                         UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
@@ -358,7 +368,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                             }
                             mNewIdMap.clear();
                             for (int i = 0; i < boardMultiBeans.size(); i++) {
-                                List<CompareInfoBean> idList = new ArrayList<>();
+                                List <CompareInfoBean> idList = new ArrayList <>();
                                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
                                     CompareInfoBean bean = new CompareInfoBean();
                                     bean.setId(scooterBean.getId());
@@ -367,10 +377,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 }
                                 mNewIdMap.put(i, idList);
                             }
+                            //判断两个map 是否相等 - 周正权 code
                             boolean modified = false;
                             for (Integer set : mBaseIdMap.keySet()) {
-                                List<CompareInfoBean> ids = mBaseIdMap.get(set);
-                                List<CompareInfoBean> idNews = mNewIdMap.get(set);
+                                List <CompareInfoBean> ids = mBaseIdMap.get(set);
+                                List <CompareInfoBean> idNews = mNewIdMap.get(set);
                                 for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
                                     if (!Objects.requireNonNull(ids).contains(s)) {
                                         modified = true;
@@ -378,8 +389,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 }
                             }
                             for (Integer set : mNewIdMap.keySet()) {
-                                List<CompareInfoBean> ids = mNewIdMap.get(set);
-                                List<CompareInfoBean> idNews = mBaseIdMap.get(set);
+                                List <CompareInfoBean> ids = mNewIdMap.get(set);
+                                List <CompareInfoBean> idNews = mBaseIdMap.get(set);
                                 for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
                                     if (!Objects.requireNonNull(ids).contains(s)) {
                                         modified = true;
@@ -410,7 +421,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         super.onResume();
         if (mLoadingList != null && mLoadingList.size() != 0) {
             mPresenter = new GetFlightCargoResPresenter(this);
-            BaseFilterEntity<Object> entity = new BaseFilterEntity<>();
+            BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
             entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
             ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
         }
@@ -464,7 +475,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
 
     }
 
@@ -489,7 +500,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Override
-    public void getPullStatusResult(BaseEntity<String> result) {
+    public void getPullStatusResult(BaseEntity <String> result) {
         if (Integer.valueOf(result.getData()) != 0) {
             mIvHint.setVisibility(View.VISIBLE);
         } else {

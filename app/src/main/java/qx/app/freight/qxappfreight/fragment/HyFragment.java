@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,18 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
@@ -31,7 +38,7 @@ import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
-public class HyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView {
+public class HyFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter{
 
     @BindView(R.id.mfrv_data)
     RecyclerView mRvData;//货邮舱单信息列表
@@ -50,7 +57,6 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
     private int cagnWeight, emailWeight;
     private String name;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_hy, container, false);
@@ -62,55 +68,50 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mRvData.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mBaseData = (LoadAndUnloadTodoBean) getActivity().getIntent().getSerializableExtra("data");
-        loadData();
-        mSrRefush.setOnRefreshListener(() -> loadData());
+        mSrRefush.setOnRefreshListener(() ->
+                        ((CargoManifestInfoActivity)getActivity()).loadData()
+                );
     }
-
-    private void loadData() {
-        mPresenter = new GetLastReportInfoPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightId(mBaseData.getFlightId());
-        //货邮舱单
-        entity.setDocumentType(1);
-        entity.setSort(1);
-        ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
-    }
-
     @Override
     public void onRetry() {
 
     }
-
     @Override
     public void onRefresh() {
 
     }
-
     @Override
     public void onLoadMore() {
 
     }
-
-    @Override
-    public void getLastReportInfoResult(List<FlightAllReportInfo> result) {
-        if (result != null) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(List<FlightAllReportInfo> result) {
+        if (result != null&&result.size()>0) {
 //            mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
             cagnWeight = 0;
             emailWeight = 0;
-            name = "";
             mSrRefush.setRefreshing(false);
             mList.clear();
             Gson mGson = new Gson();
+            name = result.get(0).getCreateUserName();
             ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
-            for (ManifestMainBean data : datas) {
-                name = data.getCreateUserName();
-                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-                    for (ManifestScooterListBean data1 : bean.getScooters()) {
-                        mList.addAll(data1.getWaybillList());
+//            for (ManifestMainBean data : datas) {
+//                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
+//                    for (ManifestScooterListBean data1 : bean.getScooters()) {
+//                        mList.addAll(data1.getWaybillList());
+//                    }
+//                }
+//            }
+            for (int i = 0; i < datas.length; i++) {
+                for (int j = 0; j < datas[i].getCargos().size(); j++) {
+                    for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
+                        datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
+                        mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
                     }
                 }
             }
@@ -130,33 +131,20 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             tvEmailWeight.setText("邮件总重量：" + emailWeight + "");
             tvName.setText("配载员：" + name);
             ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-            title.setWaybillCode("箱板号");
-            title.setModel("型号");
+            title.setWaybillCode("运单号");
+//            title.setModel("型号");
+            title.setRouteEn("航程");
             title.setNumber("件数");
             title.setWeight("重量");
-            title.setVolume("体积");
+//            title.setVolume("体积");
             title.setSpecialCode("特货代码");
-            title.setMailType("货邮代码");
-            title.setSuggestRepository("仓位");
+            title.setCargoCn("货物名称");
+//            title.setSuggestRepository("仓位");
+            title.setInfo("备注");
 //            title.setCargoCn("货物名称");
             mList.add(0, title);
             ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
             mRvData.setAdapter(adapter);
         }
-    }
-
-    @Override
-    public void toastView(String error) {
-
-    }
-
-    @Override
-    public void showNetDialog() {
-
-    }
-
-    @Override
-    public void dissMiss() {
-
     }
 }

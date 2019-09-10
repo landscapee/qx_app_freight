@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,7 +152,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //        });
     }
 
-    private void loadData() {
+    public void loadData() {
         mPresenter = new GetLastReportInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(mBaseData.getFlightId());
@@ -163,10 +165,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_hy:
-                    nowFragment = mHYragment; //昨天
+                    nowFragment = mHYragment; //货邮舱单
                     break;
                 case R.id.rb_zd:
-                    nowFragment = mZdFragment; //今天
+                    nowFragment = mZdFragment; //装舱建议
                     break;
             }
             showFragment(nowFragment);
@@ -199,32 +201,16 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             FlightAllReportInfo result = results.get(0);
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
-//        mRvData.finishRefresh();
-//            mSrRefush.setRefreshing(false);
-//            mList.clear();
-//            Gson mGson = new Gson();
-//            ManifestMainBean[] datas = mGson.fromJson(result.getContent(), ManifestMainBean[].class);
-//            for (ManifestMainBean data : datas) {
-//                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-//                    for (ManifestScooterListBean data1 : bean.getScooters()) {
-//                        mList.addAll(data1.getWaybillList());
-//                    }
-//                }
-//            }
-//            ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-//            title.setWaybillCode("运单号");
-//            title.setWeight("重量");
-//            title.setNumber("件数");
-//            title.setCargoCn("货物名称");
-//            title.setVolume("体积");
-//            mList.add(0, title);
-//            ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
-////            mRvData.setAdapter(adapter);
+            EventBus.getDefault().post(results);
+//
         }
     }
 
     @Override
     public void toastView(String error) {
+        if (error!=null){
+            ToastUtil.showToast(error);
+        }
 //        mSrRefush.setRefreshing(false);
 //        mRvData.finishRefresh();
     }

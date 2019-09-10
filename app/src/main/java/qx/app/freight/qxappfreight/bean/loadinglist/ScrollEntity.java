@@ -18,6 +18,7 @@ public class ScrollEntity {
     private boolean pull;//是否显示拉下
     private String scooterId;//板车id
     private boolean hasLiveGoods;//是否有活体
+    private boolean hasGUNGoods;//是否有枪支
     private List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> data;//运单数据
     private boolean locked;//是否已经锁定修改
 }

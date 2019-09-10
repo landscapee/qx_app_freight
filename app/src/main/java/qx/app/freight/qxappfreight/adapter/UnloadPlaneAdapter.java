@@ -60,9 +60,14 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     left.setScooterId(scooterBean.getId());
                     left.setMoveSize((scooterBean.getWaybillList() == null) ? 0 : scooterBean.getWaybillList().size());
                     boolean hasLiveGoods = false;
+                    boolean hasGUNGoods = false;
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
                         if (bill.getSpecialCode().equals("AVI")) {
                             hasLiveGoods = true;
+                            break;
+                        }
+                        if (bill.getSpecialCode().equals("GUN")) {
+                            hasGUNGoods = true;
                             break;
                         }
                     }
@@ -74,6 +79,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                         goodsPosList.add(scooterBean.getLocation());
                     }
                     left.setHasLiveGoods(hasLiveGoods);
+                    left.setHasGUNGoods(hasGUNGoods);
                     if (shouldShowGoodsPos) {
                         left.setGoodsPosition(scooterBean.getLocation());
                     }
@@ -84,6 +90,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     right.setTarget(scooterBean.getDestinationStation());
                     right.setScooterId(scooterBean.getId());
                     right.setHasLiveGoods(hasLiveGoods);
+                    right.setHasGUNGoods(hasGUNGoods);
                     String type = "行李";
                     if ("M".equals(scooterBean.getType())) {
                         type = "邮件";

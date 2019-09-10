@@ -1,12 +1,13 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 
 @Data
-public class FlightAllReportInfo {
+public class FlightAllReportInfo implements Serializable {
 
         /**
          * id : e0a7a397d755471bebfe901eb7326812
@@ -29,6 +30,7 @@ public class FlightAllReportInfo {
          * flightNo : null
          */
 
+
         private String id;
         private String flightInfoId;
         private String version;
@@ -36,6 +38,7 @@ public class FlightAllReportInfo {
         private int reviewStatus;
         private long createTime;
         private String createUser;
+        private String createUserName;
         private Object updateTime;
         private Object updateUser;
         private int documentType;
@@ -49,6 +52,5 @@ public class FlightAllReportInfo {
         private Object flightNo;
         private int installedSingleConfirm;//1 是确认
         private String installedSingleConfirmUser;//确认人
-
 
 }

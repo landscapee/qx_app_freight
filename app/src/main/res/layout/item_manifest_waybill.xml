@@ -14,12 +14,12 @@
     <TextView
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:text="型号"
+        android:text="航程"
         android:textColor="@color/white"
-        android:id="@+id/tv_model"
+        android:id="@+id/tv_routeen"
         android:gravity="center"/>
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:text="件数"
         android:textColor="@color/white"
@@ -32,13 +32,13 @@
         android:textColor="@color/white"
         android:id="@+id/tv_weight"
         android:gravity="center"/>
-    <TextView
-        android:layout_width="85dp"
-        android:layout_height="match_parent"
-        android:textColor="@color/white"
-        android:text="体积"
-        android:id="@+id/tv_volume"
-        android:gravity="center"/>
+    <!--<TextView-->
+        <!--android:layout_width="85dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="体积"-->
+        <!--android:id="@+id/tv_volume"-->
+        <!--android:gravity="center"/>-->
     <TextView
         android:layout_width="85dp"
         android:layout_height="match_parent"

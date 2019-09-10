@@ -14,12 +14,17 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.adapter.ManifestWaybillListjianyiAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
@@ -31,7 +36,7 @@ import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
-public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView {
+public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
 
 
     @BindView(R.id.mfrv_data)
@@ -63,24 +68,13 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mRvData.setLayoutManager(new LinearLayoutManager(getContext()));
-
         mBaseData = (LoadAndUnloadTodoBean) getActivity().getIntent().getSerializableExtra("data");
-        loadData();
-        mSrRefush.setOnRefreshListener(() -> loadData());
+        mSrRefush.setOnRefreshListener(() -> ((CargoManifestInfoActivity)getActivity()).loadData());
     }
-
-    private void loadData() {
-        mPresenter = new GetLastReportInfoPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightId(mBaseData.getFlightId());
-        //货邮舱单
-        entity.setDocumentType(1);
-        entity.setSort(1);
-        ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
-    }
-
     @Override
     public void onRetry() {
 
@@ -96,43 +90,17 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
 
     }
 
-    @Override
-    public void toastView(String error) {
-        mSrRefush.setRefreshing(false);
-//        mRvData.finishRefresh();
-    }
-
-    @Override
-    public void showNetDialog() {
-
-    }
-
-    @Override
-    public void dissMiss() {
-
-    }
-
-    @Override
-    public void getLastReportInfoResult(List<FlightAllReportInfo> result) {
-        if (result != null) {
-//            mTvVersion.setText("版本号" + result.getVersion());
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(List<FlightAllReportInfo> result) {
+        if (result != null&& result.size()>0) {
             cagnWeight = 0;
             emailWeight = 0;
-            name = "";
             mSrRefush.setRefreshing(false);
             mList.clear();
             Gson mGson = new Gson();
+            name = result.get(0).getCreateUserName();
             ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
-//            for (ManifestMainBean data : datas) {
-//                for (ManifestMainBean.CargosBean bean : data.getCargos()) {
-//                    for (ManifestScooterListBean data1 : bean.getScooters()) {
-//                        data1.getWaybillList().get(0).setRouteEn();
-//                        mList.addAll(data1.getWaybillList());
-//                    }
-//                }
-//            }
             for (int i = 0; i < datas.length; i++) {
-                name = datas[i].getCreateUserName();
                 for (int j = 0; j < datas[i].getCargos().size(); j++) {
                     for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
                         datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
@@ -140,7 +108,6 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                     }
                 }
             }
-
             for (int i = 0; i < mList.size(); i++) {
                 //TODO C 货物
                 if (!"".equals(mList.get(i).getWeight())) {
@@ -158,13 +125,12 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
             //TODO 是否是宽体机 0 宽体机 1 窄体机
             if (1 == mBaseData.getWidthAirFlag()) {
                 ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
-                title.setWaybillCode("运单号");
+                title.setSuggestRepository("仓位");
+                title.setWaybillCode("板车号");
                 title.setNumber("件数");
                 title.setWeight("重量");
-                title.setRouteEn("航程");
-                title.setCargoCn("货物名称");
                 title.setSpecialCode("特货代码");
-                title.setInfo("备注");
+                title.setMailType("货邮代码");
                 mList.add(0, title);
             } else if (0 == mBaseData.getWidthAirFlag()) {
                 ManifestScooterListBean.WaybillListBean title = new ManifestScooterListBean.WaybillListBean();
