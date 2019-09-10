@@ -5,11 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,25 +22,20 @@ import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
-import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
+import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.fragment.HyFragment;
-import qx.app.freight.qxappfreight.fragment.TodayFragment;
-import qx.app.freight.qxappfreight.fragment.TomorrowFragment;
-import qx.app.freight.qxappfreight.fragment.YesterdayFragment;
 import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -55,7 +45,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 /****
  * 货邮舱单详情页面
  */
-public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView, AuditManifestContract.auditManifestView {
+public class CargoManifestInfoActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetLastReportInfoContract.getLastReportInfoView, AuditManifestContract.auditManifestView, PrintRequestContract.printRequestView {
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -72,7 +62,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     TextView mTvDate;//日期
     @BindView(R.id.tv_version)
     TextView mTvVersion;//版本号
-//    @BindView(R.id.mfrv_data)
+    //    @BindView(R.id.mfrv_data)
 //    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
     Button mBtShifang;    //释放
@@ -126,7 +116,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         //释放
         mBtShifang.setOnClickListener(v -> {
             mPresenter = new AuditManifestPresenter(this);
-            if (mId !=null){
+            if (mId != null) {
                 BaseFilterEntity entity = new BaseFilterEntity();
                 entity.setReportInfoId(mId);
                 entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
@@ -134,14 +124,19 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                 entity.setFlightId(mBaseData.getFlightId());
                 entity.setReturnReason("手持端退回请求");
                 ((AuditManifestPresenter) mPresenter).auditManifest(entity);
-            }
-            else
+            } else
                 ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
-
 
 
         });
         mBtPrint.setOnClickListener(v -> {
+            mPresenter = new PrintRequestPresenter(this);
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setFlightId(mBaseData.getFlightId());
+            // 1 货邮舱单 2 装机单
+            entity.setType(1);
+            entity.setPrintName("123张耀是傻逼");
+            ((PrintRequestPresenter) mPresenter).printRequest(entity);
             ToastUtil.showToast("该功能正处于研发过程中……");
         });
 //        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -161,6 +156,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         entity.setSort(1);
         ((GetLastReportInfoPresenter) mPresenter).getLastReportInfo(entity);
     }
+
     public void initView() {
         mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -202,13 +198,12 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
             EventBus.getDefault().post(results);
-//
         }
     }
 
     @Override
     public void toastView(String error) {
-        if (error!=null){
+        if (error != null) {
             ToastUtil.showToast(error);
         }
 //        mSrRefush.setRefreshing(false);
@@ -247,5 +242,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     public void auditManifestResult(String result) {
         ToastUtil.showToast(result);
         finish();
+    }
+
+    @Override
+    public void printRequestResult(String result) {
+        ToastUtil.showToast("打印成功");
     }
 }

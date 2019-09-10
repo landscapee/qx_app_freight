@@ -799,6 +799,10 @@ public interface HttpApi {
     @POST("service-product-transport/tp-main-info/exceptionUpload")
     Observable<BaseEntity<Object>> exceptionContent(@Body BaseFilterEntity exceptionContent);
 
+    //手持设备打印舱单/装机单
+    @POST("service-product-finishloading/stowage-report-info/printRequest")
+    Observable<BaseEntity<Object>> printRequest(@Body BaseFilterEntity exceptionContent);
+
 
 
 }

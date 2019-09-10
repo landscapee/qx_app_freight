@@ -34,12 +34,13 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
+import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
 import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
 import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.SynchronousLoadingPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -50,7 +51,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * 装机单详情页面
  */
-public class LnstallationInfoActivity extends BaseActivity implements EmptyLayout.OnRetryLisenter, GetFlightAllReportInfoContract.getFlightAllReportInfoView, SynchronousLoadingContract.synchronousLoadingView, ReOpenLoadTaskContract.ReOpenLoadTaskView {
+public class LnstallationInfoActivity extends BaseActivity implements EmptyLayout.OnRetryLisenter, GetFlightAllReportInfoContract.getFlightAllReportInfoView, SynchronousLoadingContract.synchronousLoadingView, ReOpenLoadTaskContract.ReOpenLoadTaskView, PrintRequestContract.printRequestView {
     @BindView(R.id.tv_flight_number)
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
@@ -136,6 +137,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
+        mBtRefuse.setOnClickListener(v -> {
+            mPresenter = new PrintRequestPresenter(this);
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setFlightId(mBaseData.getFlightId());
+            entity.setType(2);
+            entity.setPrintName("123张耀是傻逼");
+            ((PrintRequestPresenter) mPresenter).printRequest(entity);
+        });
     }
 
     private void loadData() {
@@ -161,7 +170,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
-                if (flightAllReportInfos.get(i).getContent() != null&&!"[]".equals(flightAllReportInfos.get(i).getContent())) {
+                if (flightAllReportInfos.get(i).getContent() != null && !"[]".equals(flightAllReportInfos.get(i).getContent())) {
                     LnstallationInfoBean[] datas = mGson.fromJson(flightAllReportInfos.get(i).getContent(), LnstallationInfoBean[].class);
                     List<LnstallationInfoBean.ScootersBean> list = new ArrayList<>();
                     for (LnstallationInfoBean data : datas) {
@@ -181,8 +190,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
                 }
             }
-            for (FlightAllReportInfo mFlightAllReportInfo:flightAllReportInfos){
-                if (mFlightAllReportInfo.getContent() != null&&!"[]".equals(mFlightAllReportInfo.getContent())){
+            for (FlightAllReportInfo mFlightAllReportInfo : flightAllReportInfos) {
+                if (mFlightAllReportInfo.getContent() != null && !"[]".equals(mFlightAllReportInfo.getContent())) {
                     newest = mFlightAllReportInfo.getVersion();
                     break;
                 }
@@ -190,7 +199,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             }
             if (StringUtil.isEmpty(newest))
                 mTvVersion.setText("版本号:无");
-            else{
+            else {
                 mTvVersion.setText("版本号:" + newest);
                 screenData(newest);
             }
@@ -242,8 +251,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         pickerView.setTitleText("版本号");
         if (!map.isEmpty())
             pickerView.show();
-        else
-        {
+        else {
             ToastUtil.showToast("还没有装机单！");
         }
     }
@@ -295,5 +303,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     public void synchronousLoadingResult(String result) {
         ToastUtil.showToast(result);
         finish();
+    }
+
+    @Override
+    public void printRequestResult(String result) {
+        ToastUtil.showToast("打印成功");
     }
 }
