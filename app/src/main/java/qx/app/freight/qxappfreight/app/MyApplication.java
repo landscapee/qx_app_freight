@@ -19,7 +19,7 @@ import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 
-public class MyApplication extends Application {
+public class MyApplication extends Application  {
 
     private static Context appContext;
 

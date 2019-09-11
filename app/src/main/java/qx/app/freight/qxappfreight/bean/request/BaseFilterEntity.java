@@ -79,4 +79,5 @@ public class BaseFilterEntity<T> {
     private String remark;
     private int type;
     private String printName;
+    private String exceptionContent; //异常内容
 }

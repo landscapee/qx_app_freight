@@ -786,7 +786,6 @@ public interface HttpApi {
     @POST("service-product-transport/tp-task-his/transportTaskHis")
     Observable<BaseEntity<List<OutFieldTaskBean>>> transportTaskHis(@Body BaseFilterEntity operatorId);
 
-
     //装卸员已办
     @POST("service-product-transport/tp-task-his/stevedoresTaskHis")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> stevedoresTaskHis(@Body BaseFilterEntity operatorId);
