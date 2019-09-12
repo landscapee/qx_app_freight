@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
@@ -355,10 +356,11 @@ public class MainActivity extends BaseActivity implements LocationObservable {
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(List<LoadingListBean.DataBean.ContentObjectBean> result) {
+    public void onEventMainThread(NewInstallEventBusEntity  result) {
         List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
-        if (result.size()> 0){
-            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : result){
+        List<LoadingListBean.DataBean.ContentObjectBean> objectBeans = result.getBeans();
+        if (objectBeans !=null && objectBeans.size()> 0){
+            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans){
                 scooters.addAll(mContentObjectBean.getScooters());
             }
             InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters, () -> EventBus.getDefault().post("refresh_data_update"));

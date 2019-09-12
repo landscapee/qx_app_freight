@@ -322,8 +322,8 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
-            if (bean.getActualArriveTime() > 0)
-                times.add(String.valueOf(bean.getActualArriveTime()));
+            if (bean.getPassengerLoadSend() > 0)
+                times.add(String.valueOf(bean.getPassengerLoadSend()));
             else
                 times.add("0");
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息

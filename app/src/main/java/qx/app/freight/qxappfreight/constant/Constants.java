@@ -165,7 +165,7 @@ public class Constants {
 
     public static final String TP_TYPE_CLEAR = "clear";//清场任务
 
-    public static final String TP_TYPE_TEMP = "temp_task";//临时任务
+    public static final String TP_TYPE_TEMP = "temp";//临时任务
 
     /**
      * 装卸机 运输 结载 步骤操作code
@@ -228,6 +228,16 @@ public class Constants {
     public static final int TYPE_PULL_BACK_FAILED = 2;
 
 
-    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";  //已到板车数量变化字段
+    /**
+     * //已到板车数量变化字段
+     */
+    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";
+
+    /**
+     * 新装机单更新
+     */
+    public static String NEW_INSTALL_UPDATE = "new_install_update";
+
+    public static final String DANGER = "DGR";//被@的消息、
 
 }

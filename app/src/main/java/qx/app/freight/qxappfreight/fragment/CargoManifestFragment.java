@@ -147,9 +147,12 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-            intent.putExtra("data", list.get(position));
-            getContext().startActivity(intent);
+            if (list !=null&&list.size() > 0){
+                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+                intent.putExtra("data", list.get(position));
+                getContext().startActivity(intent);
+            }
+
         });
         getData();
     }
@@ -193,9 +196,16 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null&& result.isNewStowage()) {
+            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, list.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
+                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+                intent.putExtra("data", list.get(0));
+                getContext().startActivity(intent);
+            });
+            pushDialog.show();
             getData();
         }
     }
+
 
     private void getData() {
         mPresenter = new EndInstallTodoPresenter(this);

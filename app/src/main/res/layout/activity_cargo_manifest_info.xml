@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="EU2448"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="B-2310"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <LinearLayout
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="132"
+            android:text=""
             android:textSize="@dimen/sp_12" />
     </LinearLayout>
 
@@ -68,7 +68,7 @@
             android:drawableStart="@mipmap/take_off"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="--:--" />
 
         <TextView
             android:id="@+id/tv_time_fall_down"
@@ -78,14 +78,14 @@
             android:drawableStart="@mipmap/landfall"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="--:--" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="2018-11-24" />
+            android:text="" />
     </LinearLayout>
 
     <LinearLayout
@@ -210,7 +210,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:background="@drawable/shape_dynamic_blue"
+            android:background="@color/gray_cc"
             android:text="释放"
             android:textColor="@color/white" />
 

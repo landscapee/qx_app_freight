@@ -120,6 +120,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         }
     }
 
+    /**
+     * 弹出收到新装机提示
+     */
     private void showCargoResUpdate() {
         UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, "预装机单已更新，请查看！", () -> {
             LoadingListRequestEntity entity = new LoadingListRequestEntity();
@@ -130,7 +133,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (mWaitCallBackDialog != null) {
             mWaitCallBackDialog.dismiss();
         }
-        Tools.startVibrator(getApplicationContext(), true, R.raw.ring);
         updatePushDialog.show();
     }
 
@@ -180,6 +182,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
 
+        //发送结载
         mTvSendOver.setOnClickListener(v -> {
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
@@ -340,6 +343,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List <CompareInfoBean> idList = new ArrayList <>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
+
                             CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());
                             bean.setPullStatus(scooterBean.getExceptionFlag());

@@ -53,4 +53,6 @@ public class FlightAllReportInfo implements Serializable {
         private int installedSingleConfirm;//1 是确认
         private String installedSingleConfirmUser;//确认人
 
+        private boolean canRelease;//true 可以释放
+
 }

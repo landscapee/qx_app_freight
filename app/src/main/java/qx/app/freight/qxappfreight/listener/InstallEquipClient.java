@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
@@ -188,12 +189,12 @@ public class InstallEquipClient extends StompClient {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
-                        Log.d(TAG, "订阅成功 " + topicMessage.getPayload());
+                        Log.d(TAG, "收到装机单变更推送： " + topicMessage.getPayload());
                         if (null != topicMessage.getPayload()) {
                             sendLoadingListPush(topicMessage.getPayload());
                         }
                     }, throwable -> {
-                        Log.e(TAG, "订阅失败", throwable);
+                        Log.e(TAG, "收到装机单变更推送失败", throwable);
                     });
 
             compositeDisposable.add(loadingListPush);
@@ -267,7 +268,8 @@ public class InstallEquipClient extends StompClient {
     }
     //用于通知结载 装机单 建议
     public static void sendInstallEventBus(List<LoadingListBean.DataBean.ContentObjectBean> bean) {
-        EventBus.getDefault().post(bean);
+        NewInstallEventBusEntity newInstallEventBusEntity = new NewInstallEventBusEntity(bean);
+        EventBus.getDefault().post(newInstallEventBusEntity);
     }
 
     public void reConnect(String uri) {

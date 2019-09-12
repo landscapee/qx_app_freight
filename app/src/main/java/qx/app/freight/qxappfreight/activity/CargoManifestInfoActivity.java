@@ -25,6 +25,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -197,7 +198,18 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             FlightAllReportInfo result = results.get(0);
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
-            EventBus.getDefault().post(results);
+
+            //是否能释放航班
+            if (!results.get(0).isCanRelease()){
+                mBtShifang.setBackgroundColor(getResources().getColor(R.color.gray_cc));
+                mBtShifang.setEnabled(false);
+            }else {
+                mBtShifang.setBackgroundResource(R.drawable.shape_dynamic_blue);
+                mBtShifang.setEnabled(true);
+                mBtShifang.setFocusableInTouchMode(true);
+            }
+            CargoManifestEventBusEntity cargoManifestEventBusEntity = new CargoManifestEventBusEntity(results);
+            EventBus.getDefault().post(cargoManifestEventBusEntity);
         }
     }
 

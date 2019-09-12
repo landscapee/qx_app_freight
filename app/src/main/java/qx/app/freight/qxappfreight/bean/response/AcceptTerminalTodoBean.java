@@ -25,6 +25,7 @@ public class AcceptTerminalTodoBean implements Serializable {
     private String transfortType; //0-大滚筒（宽），1-小滚筒，2-平板，3-大滚筒（窄）
     private String taskType;
 
+    private String  taskIntro;//临时任务 描述
 //    private Map<String, List <OutFieldTaskBean>> collect;
 
 }

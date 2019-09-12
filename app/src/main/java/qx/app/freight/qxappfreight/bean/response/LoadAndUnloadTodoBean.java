@@ -61,6 +61,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long startUnloadTime;
     private long endUnloadTime;
     private long closeDoorTime;
+    private long  passengerLoadSend;// 舱单送达时间
     private String aircraftno;
     private String seat;
     private long scheduleTime;
@@ -162,6 +163,8 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private long startUnloadTime;
         private long endUnloadTime;
         private long closeDoorTime;
+
+        private long  passengerLoadSend;// 舱单送达时间
         private String aircraftno;
         private String seat;
         private long scheduleTime;

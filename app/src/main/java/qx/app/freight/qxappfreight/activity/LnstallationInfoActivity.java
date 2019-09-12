@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
@@ -115,7 +116,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mTvDate.setText(StringUtil.getTimeTextByRegix(mBaseData.getScheduleTime(), "yyyy-MM-dd"));
 //        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
-        loadData();
         mBtSure.setOnClickListener(v -> {
             mPresenter = new SynchronousLoadingPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
@@ -142,9 +142,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
             entity.setType(2);
-            entity.setPrintName("123张耀是傻逼");
+            entity.setPrintName("彭瑞张伟都是傻逼");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
+
+        loadData();
     }
 
     private void loadData() {
@@ -180,7 +182,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
                         mListVerson.add("监装确认(版本" + flightAllReportInfos.get(i).getVersion() + ")");
                         mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
-                        mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-DD HH:mm"));
+                        mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
                     } else {
                         mListVerson.add("版本号:" + flightAllReportInfos.get(i).getVersion());
                         mapPresen.put(i, "");
@@ -227,12 +229,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //    }
     }
 
+
     private void showStoragePickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 if (mListVerson.size() > 0) {
-                    if (mListVerson.get(options1).contains("监装建议")) {
+                    if (mListVerson.get(options1).contains("监装确认")) {
                         mTvConfirm.setVisibility(View.VISIBLE);
                         mTvConfirmDate.setVisibility(View.VISIBLE);
                         mTvConfirm.setText("监装员:" + mapPresen.get(options1));

@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.adapter.loadinglist.RightRvAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.RegularEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
@@ -66,7 +67,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                             hasLiveGoods = true;
                             break;
                         }
-                        if (bill.getSpecialCode().equals("GUN")) {
+                        if (bill.getSpecialCode().equals(Constants.DANGER)) {
                             hasGUNGoods = true;
                             break;
                         }
@@ -168,6 +169,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             }
             for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {//遍历寻找选择的舱位，将该板车加到对应舱位上
                 if (content.getCargoName().equals(berth)) {
+                    operateScooter.setCargoName(berth);//并且修改 板车上的所属舱位 数据 -by zyy
                     content.getScooters().add(operateScooter);
                     break;
                 }

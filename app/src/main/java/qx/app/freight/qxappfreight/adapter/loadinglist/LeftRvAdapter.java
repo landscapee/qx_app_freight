@@ -114,7 +114,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (item.isLocked()) {
-                        ToastUtil.showToast("数据已锁定修改");
+                        ToastUtil.showToast("数据已锁定，无法修改");
                         spBerth.setSelection(pos, true);
                     } else {
                         pos = position;
@@ -151,7 +151,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (item.isLocked()) {
-                            ToastUtil.showToast("数据已锁定修改");
+                            ToastUtil.showToast("数据已锁定，无法修改");
                             spBerth.setSelection(pos, true);
                         } else {
                             pos = position;

@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -96,8 +97,9 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
 
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(List<FlightAllReportInfo> result) {
-        if (result != null&&result.size()>0) {
+    public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
+        List<FlightAllReportInfo> result = cargoManifestEventBusEntity.getBeans();
+        if (result != null && result.size()>0) {
 //            mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
             cagnWeight = 0;

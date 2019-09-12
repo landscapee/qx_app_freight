@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.adapter.ManifestWaybillListjianyiAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -96,7 +97,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(List<FlightAllReportInfo> result) {
+    public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
+        List<FlightAllReportInfo> result = cargoManifestEventBusEntity.getBeans();
         if (result != null&& result.size()>0) {
             cagnWeight = 0;
             emailWeight = 0;
@@ -123,6 +125,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                             datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
                             if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() !=null &&datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size()>0 )
                                 datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
+                            if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() !=null &&datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size()>0 )
+                                datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
                             mList.addAll(datas[i].getCargos().get(j).getScooters());
                         }
                     }

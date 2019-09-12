@@ -37,14 +37,20 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 //        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
         helper.setText(R.id.tv_task_id, item.getTaskNumber());
 //        helper.setText(R.id.tv_task_num, "任务单号:" + item.getTaskId());
-        StringBuilder sb = new StringBuilder();
-        if (item.getTasks() != null && item.getTasks().size() != 0) {
-            for (OutFieldTaskBean task : item.getTasks()) {
-                sb.append(task.getFlightNo());
-                sb.append("&");
+        if (!Constants.TP_TYPE_TEMP.equals(item.getTaskType())){
+            StringBuilder sb = new StringBuilder();
+            if (item.getTasks() != null && item.getTasks().size() != 0) {
+                for (OutFieldTaskBean task : item.getTasks()) {
+                    sb.append(task.getFlightNo());
+                    sb.append("&");
+                }
             }
+            helper.setText(R.id.tv_flight_number, "航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
         }
-        helper.setText(R.id.tv_flight_number, "航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
+        else {//临时任务的显示
+            helper.setText(R.id.tv_flight_number, item.getTaskIntro().length());
+        }
+
         helper.setText(R.id.tv_task_type, item.getProjectName());
         helper.setText(R.id.tv_task_status, "#执行中#");
         //列表设置

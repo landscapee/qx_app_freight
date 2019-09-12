@@ -12,6 +12,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 
 /**
  * 货邮舱单列表数据适配器
@@ -54,7 +55,7 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }
-            } else if (item.getSpecialCode() != null && item.getSpecialCode().equals("GUN")){//枪支
+            } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)){//枪支
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));

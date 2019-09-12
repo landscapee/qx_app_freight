@@ -162,6 +162,12 @@ public class PushLoadUnloadDialog extends DialogFragment implements LoadAndUnloa
         dialog.setCanceledOnTouchOutside(false); // 外部点击取消
         // 设置宽度为屏宽, 靠近屏幕底部。
         Window window = dialog.getWindow();
+        if (Build.VERSION.SDK_INT >= 26) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平

@@ -36,8 +36,8 @@ public class ManifestScooterListBean {
      */
     private String toCity;
     private String uldCode;
-    private String uldType ;
-    private String iata ;
+    private String uldType;
+    private String iata;
     private String mailType;
     private String goodsPosition ;
     private String specialNumber;

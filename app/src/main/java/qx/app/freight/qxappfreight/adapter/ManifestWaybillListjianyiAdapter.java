@@ -12,6 +12,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 
 /**
  * 装舱建议列表数据适配器
@@ -57,7 +58,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }
-                else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals("GUN")){//枪支
+                else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals(Constants.DANGER)){//枪支
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
@@ -78,7 +79,9 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
             TextView tv4 = helper.getView(R.id.tv_volume);
             TextView tv5 = helper.getView(R.id.tv_specialCode);
             TextView tv6 = helper.getView(R.id.tv_mailtype);
-            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5,tv6};
+            TextView tv7 = helper.getView(R.id.tv_scooter_number);
+
+            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5,tv6,tv7};
             if (helper.getAdapterPosition() == 0) {
                 helper.itemView.setBackgroundColor(Color.parseColor("#2E81FD"));
                 for (TextView tv : tvList) {
@@ -103,7 +106,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }
-                else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals("GUN")){//枪支
+                else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals(Constants.DANGER)){//枪支
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
