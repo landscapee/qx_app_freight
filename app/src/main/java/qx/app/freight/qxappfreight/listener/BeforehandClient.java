@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.NetworkUtils;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -128,7 +129,7 @@ public class BeforehandClient extends StompClient {
                         .subscribe(topicMessage -> {
                             Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
                             if (null != topicMessage.getPayload()) {
-                                showDialog();
+                                Tools.showDialog(mContext);
                             }
                         }, throwable -> {
                             Log.e(TAG, "websocket-->登录失败", throwable);
@@ -218,27 +219,27 @@ public class BeforehandClient extends StompClient {
         }
     }
 
-    private void showDialog() {
-        CommonDialog dialog = new CommonDialog(mContext);
-        dialog.setTitle("提示")
-                .setMessage("你的账号在其他地方登陆！请重新登陆")
-                .setNegativeButton("确定")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) -> loginOut());
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
-    }
-
-    //强制登出
-    private void loginOut() {
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(MyApplication.getContext());
-        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        mContext.startActivity(intent);
-    }
+//    private void showDialog() {
+//        CommonDialog dialog = new CommonDialog(mContext);
+//        dialog.setTitle("提示")
+//                .setMessage("你的账号在其他地方登陆！请重新登陆")
+//                .setNegativeButton("确定")
+//                .isCanceledOnTouchOutside(false)
+//                .isCanceled(true)
+//                .setOnClickListener((dialog1, confirm) -> loginOut());
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        handler.post(() -> dialog.show());
+//    }
+//
+//    //强制登出
+//    private void loginOut() {
+//        UserInfoSingle.setUserNil();
+//        ActManager.getAppManager().finishAllActivity();
+//        WebSocketService.stopServer(MyApplication.getContext());
+//        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        mContext.startActivity(intent);
+//    }
 
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {

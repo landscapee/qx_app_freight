@@ -4,11 +4,10 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,11 +31,14 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
+import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
@@ -50,6 +51,7 @@ public class Tools {
     public static String getFilePath() {
         return Objects.requireNonNull(Objects.requireNonNull(MyApplication.getContext()).getExternalCacheDir()).getAbsolutePath() + "/";
     }
+
     /**
      * 获取当前登录用户得角色名称
      *
@@ -136,13 +138,14 @@ public class Tools {
 
     /**
      * clone 类
+     *
      * @param obj
      * @param <T>
      * @return
      * @throws ClassNotFoundException
      * @throws IOException
      */
-    public static <T extends Serializable> T IOclone(T obj) throws ClassNotFoundException, IOException{
+    public static <T extends Serializable> T IOclone(T obj) throws ClassNotFoundException, IOException {
         ByteArrayOutputStream bous = new ByteArrayOutputStream();
         ObjectOutputStream oos = null;
 
@@ -158,7 +161,7 @@ public class Tools {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 oos.close();
                 ojs.close();
@@ -167,11 +170,12 @@ public class Tools {
                 e.printStackTrace();
             }
         }
-        return (T)ojs.readObject();
+        return (T) ojs.readObject();
     }
 
     /**
      * 列表深拷贝
+     *
      * @param src
      * @param <T>
      * @return
@@ -231,10 +235,12 @@ public class Tools {
     public static BSLoactionUtil.BSLocationBean getBSLoaction() {
         return (BSLoactionUtil.BSLocationBean) SaveUtils.getInstance().getValue(KEY_BSLoaction);
     }
+
     public static String getToken() {
         String token = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.token, "");
         return token;
     }
+
     public static String getRealName() {
         String realName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
         return realName;
@@ -244,6 +250,7 @@ public class Tools {
         String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
         return loginName;
     }
+
     /**
      * 判断当前程序是否在后台运行
      *
@@ -280,6 +287,7 @@ public class Tools {
         }
         return false;
     }
+
     /**
      * TODO: 字符串为空返回 --
      */
@@ -293,9 +301,10 @@ public class Tools {
 
     /**
      * 自动生成 板车业务id
+     *
      * @return
      */
-    public static String generateUniqueKey(){
+    public static String generateUniqueKey() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
@@ -321,10 +330,11 @@ public class Tools {
      * 是否一直循环提醒
      * 指定铃音的资源id
      */
-    public static void startVibrator(Context context,boolean isforcedispose, int rawId) {
+    public static void startVibrator(Context context, boolean isforcedispose, int rawId) {
         SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
     }
+
     /**
      * 开启短震动
      */
@@ -332,6 +342,7 @@ public class Tools {
         VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，短时间震动
         startShortSound(context);
     }
+
     /**
      * 短暂提示音
      */
@@ -352,10 +363,35 @@ public class Tools {
      *
      * @return
      */
-    public  static boolean isProduct() {
+    public static boolean isProduct() {
         if (BuildConfig.Model.equals("product"))
             return true;
         else
             return false;
+    }
+
+    public static void showDialog(Context mContext) {
+        UserInfoSingle.setUserNil();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(MyApplication.getContext());
+
+        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mContext.startActivity(intent);
+
+        CommonDialog dialog = new CommonDialog(mContext);
+        dialog.setTitle("提示")
+                .setMessage("你的账号在其他地方登陆！请重新登陆")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog1, confirm) -> loginOut(mContext));
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> dialog.show());
+    }
+
+    //强制登出
+    public static void loginOut(Context mContext) {
+
     }
 }

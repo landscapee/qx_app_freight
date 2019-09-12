@@ -132,7 +132,7 @@ public class ReceiveClient extends StompClient {
                         .subscribe(topicMessage -> {
                             Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
                             if (null != topicMessage.getPayload()) {
-                                showDialog();
+                                Tools.showDialog(mContext);
                             }
                         }, throwable -> {
                             Log.e(TAG, "websocket-->登录失败", throwable);
@@ -221,27 +221,27 @@ public class ReceiveClient extends StompClient {
         }
     }
 
-    private void showDialog() {
-        CommonDialog dialog = new CommonDialog(mContext);
-        dialog.setTitle("提示")
-                .setMessage("你的账号在其他地方登陆！请重新登陆")
-                .setNegativeButton("确定")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) -> loginOut());
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
-    }
-
-    //强制登出
-    private void loginOut() {
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(MyApplication.getContext());
-        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        mContext.startActivity(intent);
-    }
+//    private void showDialog() {
+//        CommonDialog dialog = new CommonDialog(mContext);
+//        dialog.setTitle("提示")
+//                .setMessage("你的账号在其他地方登陆！请重新登陆")
+//                .setNegativeButton("确定")
+//                .isCanceledOnTouchOutside(false)
+//                .isCanceled(true)
+//                .setOnClickListener((dialog1, confirm) -> loginOut());
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        handler.post(() -> dialog.show());
+//    }
+//
+//    //强制登出
+//    private void loginOut() {
+//        UserInfoSingle.setUserNil();
+//        ActManager.getAppManager().finishAllActivity();
+//        WebSocketService.stopServer(MyApplication.getContext());
+//        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        mContext.startActivity(intent);
+//    }
 
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {
