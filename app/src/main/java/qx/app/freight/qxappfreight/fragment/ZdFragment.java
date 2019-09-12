@@ -153,7 +153,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 mList.add(0, title);
             } else if (0 == mBaseData.getWidthAirFlag()) {
                 ManifestScooterListBean title = new ManifestScooterListBean();
-                title.setUldCode("型号");
+                title.setUldType("型号");
                 title.setUldCode("集装箱板号");
                 title.setTotal("件数");
                 title.setWeight("重量");

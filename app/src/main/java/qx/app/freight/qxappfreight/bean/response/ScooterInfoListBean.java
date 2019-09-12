@@ -19,6 +19,13 @@ public class ScooterInfoListBean {
     private String createUser;
     private long updateDate;
     private String updateUser;
+    /**
+     * 国际国内标记
+     */
     private String flightType;
     private boolean noticeTransport;
+    /**
+     * 0无效，1横向，竖向
+     */
+    private int headingFlag;
 }

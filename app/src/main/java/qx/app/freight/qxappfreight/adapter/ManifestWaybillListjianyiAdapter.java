@@ -95,7 +95,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                         .setText(R.id.tv_mailtype, item.getMailType());
             } else {
                 helper.setText(R.id.tv_model, item.getUldType()!=null?item.getUldType():item.getScooterCode()!=null ? "散货":"--")
-                        .setText(R.id.tv_scooter_number, item.getUldCode()!=null?item.getUldCode():item.getScooterCode()!=null ? item.getScooterCode():"--")
+                        .setText(R.id.tv_scooter_number, item.getUldCode()!=null?item.getUldCode()+item.getIata():item.getScooterCode()!=null ? item.getScooterCode():"--")
                         .setText(R.id.tv_total, item.getTotal()!=null ? item.getTotal()+"":"--")
                         .setText(R.id.tv_weight,  item.getWeight()!=null ? item.getWeight()+"":"--")
                         .setText(R.id.tv_specialCode, item.getSpecialNumber()!=null ? item.getSpecialNumber():"--")
