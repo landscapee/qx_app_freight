@@ -118,7 +118,9 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
                 for (int i = 0; i < datas.length; i++) {
                     for (int j = 0; j < datas[i].getCargos().size(); j++) {
                         for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
-                            datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
+                            for (int l = 0; l < datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size(); l++) {
+                                datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(l).setRouteEn(datas[i].getRouteEn());
+                            }
                             mList.addAll(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList());
                         }
                     }

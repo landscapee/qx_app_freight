@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,11 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,11 +30,8 @@ import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
-import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
@@ -79,8 +71,9 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
         }
         mRvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mBaseData = (LoadAndUnloadTodoBean) getActivity().getIntent().getSerializableExtra("data");
-        mSrRefush.setOnRefreshListener(() -> ((CargoManifestInfoActivity)getActivity()).loadData());
+        mSrRefush.setOnRefreshListener(() -> ((CargoManifestInfoActivity) getActivity()).loadData());
     }
+
     @Override
     public void onRetry() {
 
@@ -99,7 +92,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
         List<FlightAllReportInfo> result = cargoManifestEventBusEntity.getBeans();
-        if (result != null&& result.size()>0) {
+        if (result != null && result.size() > 0) {
             cagnWeight = 0;
             emailWeight = 0;
             mSrRefush.setRefreshing(false);
@@ -119,18 +112,20 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
 //                mList.addAll(manifestMainBeans.parallelStream().map(ManifestMainBean::getCargos).flatMap(Collection::stream).map(ManifestMainBean.CargosBean::getScooters).flatMap(Collection::stream).collect(Collectors.toList()));
 //            }
 //            else {
-                for (int i = 0; i < datas.length; i++) {
-                    for (int j = 0; j < datas[i].getCargos().size(); j++) {
-                        for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
-                            datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(k).setRouteEn(datas[i].getRouteEn());
-                            if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() !=null &&datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size()>0 )
-                                datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
-                            if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() !=null &&datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size()>0 )
-                                datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
-                            mList.addAll(datas[i].getCargos().get(j).getScooters());
+            for (int i = 0; i < datas.length; i++) {
+                for (int j = 0; j < datas[i].getCargos().size(); j++) {
+                    for (int k = 0; k < datas[i].getCargos().get(j).getScooters().size(); k++) {
+                        for (int l = 0; l < datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size(); l++) {
+                            datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(l).setRouteEn(datas[i].getRouteEn());
                         }
+                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
+                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
+                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
+                            datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
+                        mList.addAll(datas[i].getCargos().get(j).getScooters());
                     }
                 }
+            }
 //            }
             for (int i = 0; i < mList.size(); i++) {
                 //TODO C 货物
