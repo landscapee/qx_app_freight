@@ -68,7 +68,7 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 rvBill.setAdapter(new OnBoardBillsAdapter(data));
             }
             if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
-                helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red_avi));
             }
             else if ((item.isHasGUNGoods())){
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
@@ -83,20 +83,20 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 tvPullDown.setVisibility(View.VISIBLE);
             }
             for (TextView tv : tvList) {
-                tv.setTextColor(Color.parseColor("#666666"));
-                tv.setBackgroundColor(Color.parseColor("#ffffff"));
+                tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
+                tv.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
             }
             tvPullDown.setOnClickListener(v -> {
                 if (!item.isLocked()) {
                     if (item.isPull()) {
                         item.setPull(false);
-                        tvPullDown.setTextColor(Color.parseColor("#666666"));
+                        tvPullDown.setTextColor(mContext.getResources().getColor(R.color.gray_888));
                     } else {
                         item.setPull(true);
-                        tvPullDown.setTextColor(Color.parseColor("#FFFF00"));
+                        tvPullDown.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
                     }
                     onPullCheckListener.onPullChecked(helper.getAdapterPosition(), item.isPull());
-                    onDataCheckListener.onDataChecked();
+                    onDataCheckListener.onDataChecked(item.getScooterId());
                 }else {
                     ToastUtil.showToast("数据已锁定修改，请检查");
                 }

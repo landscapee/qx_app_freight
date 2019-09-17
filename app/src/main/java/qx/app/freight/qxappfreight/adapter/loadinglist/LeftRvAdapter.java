@@ -119,7 +119,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                     } else {
                         pos = position;
                         onBerthChoseListener.onBerthChosed(helper.getAdapterPosition(), item.getBerthList().get(position));
-                        onDataCheckListener.onDataChecked();
+                        onDataCheckListener.onDataChecked(item.getScooterId());
                     }
                 }
 
@@ -147,15 +147,15 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 }
                 spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     int pos;
-
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (item.isLocked()) {
                             ToastUtil.showToast("数据已锁定，无法修改");
-                            spBerth.setSelection(pos, true);
+                            spGoodsPos.setSelection(pos, true);
                         } else {
                             pos = position;
                             onGoodsPosChoseListener.onGoodsPosChosed(helper.getAdapterPosition(), item.getGoodsPosList().get(position));
+                            onDataCheckListener.onDataChecked(item.getScooterId());
                         }
                     }
 

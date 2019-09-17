@@ -461,9 +461,29 @@ public class TimeUtils {
      * @param second
      * @return
      */
+    public static String datetimeTo4(long second) {
+        if (second <= 0) {
+            return "-";
+        }
+        String seconds = (second / 1000) + "";
+        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+            return "";
+        }
+        String format = "HHmm";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
+        return re;
+    }
+    /**
+     * 时间戳转换成年月日
+     *
+     * @param second
+     * @return
+     */
     public static String date2time(long second) {
         if (second <= 0) {
-            return "0";
+            return "-";
         }
         String seconds = (second / 1000) + "";
         if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {

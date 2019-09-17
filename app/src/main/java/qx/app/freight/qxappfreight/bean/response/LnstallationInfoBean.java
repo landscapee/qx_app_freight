@@ -22,7 +22,7 @@ public class LnstallationInfoBean {
 
     @Data
     public static class ScootersBean {
-        private String goodsPosition = "- -";//
+        private String location;//货位
         private String uldCode = "- -";//
         private String specialNumber = "- -";//
         private String cargoName = "- -";//舱位
@@ -39,5 +39,6 @@ public class LnstallationInfoBean {
         private int version;//版本号
         private List<?> waybillList;
         private String weight;//重量
+        private boolean isChange;//是否修改过
     }
 }

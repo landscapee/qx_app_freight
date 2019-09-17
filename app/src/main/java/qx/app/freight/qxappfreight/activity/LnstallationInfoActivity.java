@@ -6,10 +6,12 @@ import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -18,6 +20,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -30,6 +33,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.LnstallationListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
@@ -40,6 +44,7 @@ import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
+import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
 import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
@@ -81,8 +86,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     Button mBtRefuse;//打印
     @BindView(R.id.sr_refush)
     SwipeRefreshLayout mSrRefush;
-    @BindView(R.id.ll_storage_version)
-    LinearLayout LlStorageVersion;
+
+    @BindView(R.id.tb_title)
+    RadioGroup mRgTitle;    //切换按钮
+
     private LoadAndUnloadTodoBean mBaseData;
     private List<String> mListVerson = new ArrayList<>();
     private List<String> mListVersonCode = new ArrayList<>();
@@ -91,6 +98,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
 
+    private int loadFlag = -1;
+
+    private WaitCallBackDialog mWaitCallBackDialog;
     @Override
     public int getLayoutId() {
         return R.layout.activity_lnstalla_tion_info;
@@ -103,6 +113,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "装机单详情");
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftno());
@@ -136,7 +149,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
-        LlStorageVersion.setOnClickListener((v -> showStoragePickView()));
+        mTvVersion.setOnClickListener((v -> showStoragePickView()));
         mBtRefuse.setOnClickListener(v -> {
             mPresenter = new PrintRequestPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
@@ -145,8 +158,35 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             entity.setPrintName("彭瑞张伟都是傻逼");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
-
+        loadFlag = 2;
         loadData();
+        mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.rb_install: //装机单
+                    loadFlag = 2;
+                    loadData();
+                    break;
+                case R.id.rb_advise_install://建议装机单
+                    loadFlag = 3;
+                    loadData();
+                    break;
+            }
+        });
+
+    }
+
+    private void showDialogWait(){
+        mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
+        mWaitCallBackDialog.setCancelable(false);
+        mWaitCallBackDialog.setCanceledOnTouchOutside(false);
+        mWaitCallBackDialog.show();
+        new Handler().postDelayed(() -> {
+            if (mWaitCallBackDialog.isShowing()){
+                mWaitCallBackDialog.dismiss();
+                ToastUtil.showToast("通知录入可能失败，请重新通知录入！");
+            }
+        }, 30000);
+
     }
 
     private void loadData() {
@@ -154,7 +194,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(mBaseData.getFlightId());
         //装机单
-        entity.setDocumentType(2);
+        entity.setDocumentType(loadFlag);
         //1:倒序 2:正序
         entity.setSort(1);
         ((GetFlightAllReportInfoPresenter) mPresenter).getFlightAllReportInfoView(entity);
@@ -228,8 +268,19 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //            }
 //    }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(InstallNotifyEventBusEntity installNotifyEventBusEntity) {
+        if (installNotifyEventBusEntity.getFlighNo().equals(mBaseData.getFlightNo())){
+            if (mWaitCallBackDialog != null){
+                mWaitCallBackDialog.dismiss();
+            }
+            mRgTitle.check(R.id.rb_install);// 切换到 装机单
+            loadFlag = 2;
+            loadData();
 
+        }
 
+    }
     private void showStoragePickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
@@ -262,7 +313,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void screenData(String verson) {
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
-        title.setGoodsPosition("货位");
+        title.setLocation("货位");
         title.setScooterCode("板车号");
         title.setUldCode("ULD号");
         title.setDestinationStation("目的站");
@@ -302,10 +353,15 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }, 2000);
     }
 
+    /**
+     * 通知录入 结果返回
+     * @param result
+     */
     @Override
     public void synchronousLoadingResult(String result) {
         ToastUtil.showToast(result);
-        finish();
+        showDialogWait();
+//        finish();
     }
 
     @Override

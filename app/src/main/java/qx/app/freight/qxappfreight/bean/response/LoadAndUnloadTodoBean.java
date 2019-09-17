@@ -73,6 +73,14 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private Object beginLoadUnloadTime;
     private RelateInfoObjBean relateInfoObj;
     /**
+     * 结载使用数据 json
+     */
+    private String loadingAndUnloadExtJson;
+    /**
+     * 结载使用数据
+     */
+    private LoadingAndUnloadBean loadingAndUnloadBean;
+    /**
      * 机型
      */
     private String aircraftType;

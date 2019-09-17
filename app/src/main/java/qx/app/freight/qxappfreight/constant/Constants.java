@@ -238,6 +238,8 @@ public class Constants {
      */
     public static String NEW_INSTALL_UPDATE = "new_install_update";
 
-    public static final String DANGER = "DGR";//被@的消息、
+    public static final String DANGER = "DGR";// 危险品
+
+    public static final String YCS = "压舱沙";//压舱沙
 
 }

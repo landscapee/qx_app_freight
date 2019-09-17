@@ -105,6 +105,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @SuppressLint("UseSparseArrays")
     private Map <Integer, List <CompareInfoBean>> mNewIdMap = new HashMap <>();
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
+    private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> oriScooters;//原始板车列表数据
+    private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> newScooters = new ArrayList <>();//修改过后的板车列表数据
     private int mOperateErrorStatus = -1;
     private boolean mConfirmPlan = false;
 
@@ -124,7 +126,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
      * 弹出收到新装机提示
      */
     private void showCargoResUpdate() {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, "预装机单已更新，请查看！", () -> {
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, data.getFlightNo()+"预装机单已更新，请查看！", () -> {
             LoadingListRequestEntity entity = new LoadingListRequestEntity();
             entity.setDocumentType(2);
             entity.setFlightId(mCurrentFlightId);
@@ -338,12 +340,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
                     //舱位集合
                     mBaseContent = new ArrayList <>(Arrays.asList(datas));
+                    oriScooters = new ArrayList <>();
                     mBaseIdMap.clear();
                     //存储 板车的 拉与不拉的 初始状态
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List <CompareInfoBean> idList = new ArrayList <>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
-
+                            oriScooters.add(scooterBean);
                             CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());
                             bean.setPullStatus(scooterBean.getExceptionFlag());
@@ -358,11 +361,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         result.getData().get(0).setContentObject(boardMultiBeans);
                         UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
                         mRvData.setAdapter(adapter);
-                        adapter.setOnDataCheckListener(() -> {
+                        adapter.setOnDataCheckListener((scooterId) -> {
+
+                            newScooters.clear();
                             for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : boardMultiBeans) {
                                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
+
+                                    newScooters.add(scooterBean);
+                                    //获取板车运单列表
                                     Iterator iterator = scooterBean.getWaybillList().iterator();
-                                    while (iterator.hasNext()) {
+                                    while (iterator.hasNext()) {  //遍历板车运单列表
                                         LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill = (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean) iterator.next();
                                         if (bill.isTitle()) {
                                             iterator.remove();
@@ -370,10 +378,30 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                     }
                                 }
                             }
+                            /**
+                             * 修改板车数据与原始数据做对比 判断板车位置或可拉状态是否被修改
+                             */
+                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanO:oriScooters){
+                                if (scooterBeanO.getId().equals(scooterId)){//在原始里找到数据正在变化的板车
+                                    for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanN:newScooters){
+                                        if (scooterBeanN.getId().equals(scooterId)){//在新数据里找到数据正在变化的板车
+                                            if (!scooterBeanN.getLocation().equals(scooterBeanO.getLocation())||!scooterBeanN.getCargoName().equals(scooterBeanO.getCargoName())|| scooterBeanN.getExceptionFlag() == 1){//如果新数据 和 老数据的舱位信息不一样 或者 新数据板车信息为 建议拉下标识修改
+                                                scooterBeanN.setChange(true);
+                                            }
+                                            else
+                                                scooterBeanN.setChange(false);
+                                        }
+                                    }
+                                }
+
+                            }
+
                             mNewIdMap.clear();
+                            //遍历舱位列表  查询所有板车
                             for (int i = 0; i < boardMultiBeans.size(); i++) {
                                 List <CompareInfoBean> idList = new ArrayList <>();
-                                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
+                                //遍历所有板车 存储板车是否建议拉下的新状态
+                                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
                                     CompareInfoBean bean = new CompareInfoBean();
                                     bean.setId(scooterBean.getId());
                                     bean.setPullStatus(scooterBean.getExceptionFlag());
@@ -400,6 +428,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                         modified = true;
                                     }
                                 }
+                            }
+                            //直接判断是否数据有过修改
+                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanN:newScooters){
+                                if (scooterBeanN.isChange()){
+                                    modified = true;
+                                    break;
+                                }
+
                             }
                             if (modified) {
                                 mTvSendOver.setEnabled(true);

@@ -66,7 +66,7 @@ public class LoadingListBean implements Serializable {
                 private boolean locked;//是否锁定
                 private String location;//货位
                 private String serialInd;//ULD号
-
+                private boolean isChange;//是否修改
 
                 @Data
                 public static class WaybillBean  implements  Serializable{

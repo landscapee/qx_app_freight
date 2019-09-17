@@ -226,6 +226,8 @@
     <color name="flight_yifei">#110eba</color>
     <!--特殊航班颜色标注红色 -->
     <color name="flight_speical">#FF0000</color>
+    <color name="red_avi">#ee3f8e</color>
+
 
     <color name="task_state_finish">#c6deab</color>
     <color name="network_error">#FFFFDD</color>

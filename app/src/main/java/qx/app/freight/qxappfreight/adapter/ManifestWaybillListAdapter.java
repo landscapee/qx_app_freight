@@ -60,7 +60,13 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }
-            } else {
+            }
+            else if (item.getCargoCn() != null && item.getCargoCn().equals(Constants.YCS)){//压舱沙
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(Color.parseColor("#000000"));
+                }
+            }else {
                 helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));

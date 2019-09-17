@@ -28,7 +28,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
 
     @Override
     protected void convert(BaseViewHolder helper, ManifestScooterListBean item) {
-        if (1 == mWidthairflag) {
+        if (1 == mWidthairflag) { //窄体机
             helper.getView(R.id.tv_model).setVisibility(View.GONE);
             helper.getView(R.id.tv_volume).setVisibility(View.GONE);
             helper.setText(R.id.tv_suggestRepository, item.getSuggestRepository()!=null ? item.getSuggestRepository():"--")
@@ -36,7 +36,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                     .setText(R.id.tv_total, item.getTotal()!=null ? item.getTotal()+"":"--")
                     .setText(R.id.tv_weight,  item.getWeight()!=null ? item.getWeight()+"":"--")
                     .setText(R.id.tv_specialCode, item.getSpecialNumber()!=null ? item.getSpecialNumber():"--")
-                    .setText(R.id.tv_mailtype, item.getMailType()!=null ? item.getMailType():"--");
+                    .setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx")?"X":item.getMailType()!=null ? item.getMailType():"--");
             TextView tv1 = helper.getView(R.id.tv_scooter_number);
             TextView tv2 = helper.getView(R.id.tv_total);
             TextView tv3 = helper.getView(R.id.tv_weight);
@@ -70,7 +70,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                     }
                 }
             }
-        } else if (0 == mWidthairflag) {
+        } else if (0 == mWidthairflag) {//宽体机
             helper.getView(R.id.tv_suggestRepository).setVisibility(View.GONE);
             helper.getView(R.id.tv_model).setVisibility(View.VISIBLE);
             TextView tv1 = helper.getView(R.id.tv_model);

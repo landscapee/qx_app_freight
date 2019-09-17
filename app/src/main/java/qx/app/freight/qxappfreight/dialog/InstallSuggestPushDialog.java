@@ -68,7 +68,7 @@ public class InstallSuggestPushDialog extends Dialog {
     private void screenData( List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1) {
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
-        title.setGoodsPosition("货位");
+        title.setLocation("货位");
         title.setScooterCode("板车号");
         title.setUldCode("ULD号");
         title.setDestinationStation("目的站");
@@ -82,7 +82,7 @@ public class InstallSuggestPushDialog extends Dialog {
         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean :mList1 ){
             LnstallationInfoBean.ScootersBean scootersBean1 = new LnstallationInfoBean.ScootersBean();
             scootersBean1.setCargoName(scooterBean.getCargoName());
-            scootersBean1.setGoodsPosition(scooterBean.getLocation());
+            scootersBean1.setLocation(scooterBean.getLocation());
             scootersBean1.setScooterCode(scooterBean.getScooterCode());
             scootersBean1.setUldCode(scooterBean.getSerialInd());
             scootersBean1.setDestinationStation(scooterBean.getDestinationStation());
@@ -92,7 +92,7 @@ public class InstallSuggestPushDialog extends Dialog {
             if (scooterBean.getWaybillList() != null&& scooterBean.getWaybillList().size()> 0)
                 scootersBean1.setSpecialNumber(scooterBean.getWaybillList().get(0).getSpecialCode());
             else
-                scootersBean1.setSpecialNumber("/");
+                scootersBean1.setSpecialNumber(null);
             mList2.add(scootersBean1);
         }
         LnstallationListAdapter adapter = new LnstallationListAdapter(mList2);

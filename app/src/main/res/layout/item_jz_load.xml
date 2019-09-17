@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_10">
+    android:layout_marginTop="@dimen/dp_10"
+    >
 
     <ImageView
         android:id="@+id/iv_done"
@@ -29,7 +31,18 @@
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                >
 
+                <ImageView
+                    android:id="@+id/iv_operate_type"
+                    android:layout_width="@dimen/dp_18"
+                    android:layout_height="@dimen/dp_18"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/li" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -38,7 +51,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingStart="9dp"
-                android:paddingEnd="9dp">
+                android:paddingEnd="9dp"
+                android:layout_marginLeft="5dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -51,7 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/dp_4"
                     android:gravity="center_vertical"
-                    android:text="3U8375"
+                    android:text="3U8375(3U8376)"
                     android:textColor="#136BEF"
                     android:textSize="@dimen/sp_16"
                     android:textStyle="bold" />
@@ -66,12 +80,15 @@
                 android:layout_marginEnd="@dimen/dp_5"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" />
-
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+            <!--TODO: 标签-->
+            <LinearLayout
+                android:id="@+id/layout_lable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ll_flight_info_container"
+                android:orientation="horizontal">
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_craft_number"
@@ -82,7 +99,8 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black_3"
                 android:textSize="@dimen/sp_14"
-                tools:text="B2310" />
+                tools:text="B2310"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -92,34 +110,36 @@
             android:layout_marginBottom="13dp"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/iv_operate_type"
-                    android:layout_width="@dimen/dp_18"
-                    android:layout_height="@dimen/dp_18"
-                    android:layout_gravity="center_vertical"
-                    android:src="@mipmap/li" />
-
                 <TextView
-                    android:id="@+id/tv_seat"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_atd"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_5"
-                    android:drawableStart="@mipmap/placement"
+                    android:drawableStart="@mipmap/shi"
                     android:drawablePadding="@dimen/dp_6"
                     android:gravity="center_vertical"
                     android:text="101"
                     android:textColor="#738598"
                     android:textSize="@dimen/sp_14" />
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_etd"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:drawableStart="@mipmap/yu"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:gravity="center_vertical"
+                    android:text="101"
+                    android:textColor="#738598"
+                    android:textSize="@dimen/sp_14" />
+
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_std"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -127,7 +147,26 @@
                 android:drawablePadding="@dimen/dp_5"
                 android:gravity="center_vertical"
                 android:text="13:12(4)" />
-
+            <TextView
+                android:id="@+id/tv_ctot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:text="CTOT - -"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/tv_xg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:text="协关 - -"
+                android:textStyle="bold"
+                />
             <TextView
                 android:id="@+id/tv_plane_type"
                 android:layout_width="wrap_content"
@@ -136,12 +175,71 @@
                 android:textColor="#738598"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/btn_task_item_layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            >
+            <TextView
+                android:id="@+id/item_tv_seat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@mipmap/icon_craftseat"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_boarding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_seat"
+                android:drawableLeft="@mipmap/icon_boarding"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_boarding"
+                android:drawableLeft="@mipmap/icon_fly"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_xingli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_type"
+                android:drawableLeft="@mipmap/icon_xingli"
+                android:drawablePadding="3dp"
+                android:text="-" />
+
+
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"

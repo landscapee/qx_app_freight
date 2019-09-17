@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,6 +31,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -37,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
@@ -65,7 +68,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
     private NewInstallEquipStepAdapter mSlideadapter;
     private List <LoadAndUnloadTodoBean> mListCache = new ArrayList <>();
     private String mSearchText;
-    private NewInstallEquipAdapter mAdapter;
+    private JZLoadAdapter mAdapter;
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
@@ -183,14 +186,14 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new EndInstallTodoPresenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList);
+        mAdapter = new JZLoadAdapter(mList,false,true);
         mMfrvData.setAdapter(mAdapter);
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", text -> {
             mSearchText = text;
             seachByText();
         });
-        mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
+        mAdapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
                 IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
@@ -279,6 +282,11 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         }
         mCurrentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
+
+            //结载单独使用数据 json 解析
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+                bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示

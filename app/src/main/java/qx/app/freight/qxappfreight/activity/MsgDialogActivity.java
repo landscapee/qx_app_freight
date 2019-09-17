@@ -67,7 +67,7 @@ public class MsgDialogActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
+        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
     }
 
     @Override

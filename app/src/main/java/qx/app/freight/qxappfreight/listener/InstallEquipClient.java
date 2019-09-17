@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
@@ -159,6 +160,10 @@ public class InstallEquipClient extends StompClient {
                                 Gson gson = new Gson();
                                 SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
                                 pushFlightInfo(data);
+                            }else if (topicMessage.getPayload().contains("\"passengerLoadUnSend\":true")) {//结载15分钟推送
+                                Gson gson = new Gson();
+                                SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
+                                pushFlightInfo(data);
                             }
                             else {
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
@@ -197,8 +202,23 @@ public class InstallEquipClient extends StompClient {
                     }, throwable -> {
                         Log.e(TAG, "收到装机单变更推送失败", throwable);
                     });
-
             compositeDisposable.add(loadingListPush);
+            //结载收到 通知录入的新装机单
+            Disposable loadingListPush1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/departure/newInstalledSingleto")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(topicMessage -> {
+                        Log.d(TAG, "通知录入的新装机单： " + topicMessage.getPayload());
+                        if (null != topicMessage.getPayload()) {
+                            InstallNotifyEventBusEntity installNotifyEventBusEntity = new InstallNotifyEventBusEntity();
+                            installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
+                            sendLoadingListPushNotify(installNotifyEventBusEntity);
+                        }
+                    }, throwable -> {
+                        Log.e(TAG, "通知录入的新装机单", throwable);
+                    });
+            compositeDisposable.add(loadingListPush1);
+
 
             Disposable dispTopic4 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.Install)
                     .subscribeOn(Schedulers.io())
@@ -340,7 +360,9 @@ public class InstallEquipClient extends StompClient {
     private void sendLoadingListPush(String result) {
         EventBus.getDefault().post(result);
     }
-
+    private void sendLoadingListPushNotify(InstallNotifyEventBusEntity result) {
+        EventBus.getDefault().post(result);
+    }
 //    private void showDialog() {
 //        CommonDialog dialog = new CommonDialog(mContext);
 //        dialog.setTitle("提示")

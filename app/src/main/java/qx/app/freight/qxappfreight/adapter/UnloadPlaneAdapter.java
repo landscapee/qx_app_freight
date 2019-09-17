@@ -134,6 +134,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         }
         RecyclerView rvLeft = helper.getView(R.id.rv_regular);
         RecyclerView rvRight = helper.getView(R.id.rv_scroll_data);
+        //装机单左边适配器
         LeftRvAdapter leftRvAdapter = new LeftRvAdapter(leftData, onDataCheckListener);
         rvLeft.setLayoutManager(new LinearLayoutManager(mContext));
         rvLeft.setAdapter(leftRvAdapter);
@@ -184,6 +185,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 }
             }
         });
+        //装机单右边适配器
         RightRvAdapter rightRvAdapter = new RightRvAdapter(rightData, onDataCheckListener);
         rvRight.setLayoutManager(new LinearLayoutManager(mContext));
         rvRight.setAdapter(rightRvAdapter);
@@ -224,7 +226,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
     }
 
     public interface OnDataCheckListener {
-        void onDataChecked();
+        void onDataChecked(String scooterId);
     }
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
