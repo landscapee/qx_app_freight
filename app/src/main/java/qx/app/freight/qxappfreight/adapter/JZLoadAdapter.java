@@ -64,12 +64,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean item) {
         helper.setIsRecyclable(false);
-        LinearLayout llBg = helper.getView(R.id.ll_bg);
-        if (!item.isAcceptTask()) {
-            llBg.setBackgroundColor(Color.parseColor("#ffac00"));
-        } else {
-            llBg.setBackgroundColor(Color.parseColor("#ffffff"));
-        }
+
 //        boolean isWidePlane = item.getWidthAirFlag() == 0;
 //        helper.setText(R.id.tv_plane_type, isWidePlane ? "宽体机" : "窄体机");
         helper.setText(R.id.tv_plane_type, item.getAircraftType());
@@ -159,6 +154,9 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             helper.setText(R.id.tv_xg, "协关 "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getUnifiedCloseTime()));
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getElecState())){
                 showLable(item.getLoadingAndUnloadBean().getElecState(),mLayoutLable);
+            }
+            if (item.getLoadingAndUnloadBean().getVipMark()!=null && item.getLoadingAndUnloadBean().getVipMark().equals("0")){
+                showLable(8,mLayoutLable);
             }
 
         }
@@ -284,16 +282,17 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
                 }
             }
         });
-        CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
-        if (item.isShowDetail()) {
-            rvStep.setVisibility(View.VISIBLE);
-            collView.expand();
-        } else {
+
+        //货邮舱单和装机单待办 不显示 步凑列表
+        if (showExReport){
             rvStep.setVisibility(View.GONE);
-            collView.collapse();
-        }
-        llBg.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
+            LinearLayout llBg = helper.getView(R.id.ll_bg);
+            if (!item.isAcceptTask()) {
+                llBg.setBackgroundColor(Color.parseColor("#ffac00"));
+            } else {
+                llBg.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
+            CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
             if (item.isShowDetail()) {
                 rvStep.setVisibility(View.VISIBLE);
                 collView.expand();
@@ -301,7 +300,22 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
                 rvStep.setVisibility(View.GONE);
                 collView.collapse();
             }
-        });
+            llBg.setOnClickListener(v -> {
+                item.setShowDetail(!item.isShowDetail());
+                if (item.isShowDetail()) {
+                    rvStep.setVisibility(View.VISIBLE);
+                    collView.expand();
+                } else {
+                    rvStep.setVisibility(View.GONE);
+                    collView.collapse();
+                }
+            });
+        }
+        else
+        {
+            rvStep.setVisibility(View.VISIBLE);
+        }
+
     }
 
     public interface OnSlideStepListener {

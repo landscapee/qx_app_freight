@@ -76,6 +76,7 @@ public class InstallSuggestPushDialog extends Dialog {
         title.setWeight("重量");
         title.setTotal("件数");
         title.setSpecialNumber("特货代码");
+        title.setExceptionFlag(1);
 //        mList.add(0, title);
         List <LnstallationInfoBean.ScootersBean> mList2 = new ArrayList <>();
         mList2.add(title);
@@ -89,6 +90,8 @@ public class InstallSuggestPushDialog extends Dialog {
             scootersBean1.setType(scooterBean.getType());
             scootersBean1.setWeight(scooterBean.getWeight()+"");
             scootersBean1.setTotal(scooterBean.getTotal()+"");
+            scootersBean1.setChange(scooterBean.isChange());
+            scootersBean1.setExceptionFlag(scooterBean.getExceptionFlag());
             if (scooterBean.getWaybillList() != null&& scooterBean.getWaybillList().size()> 0)
                 scootersBean1.setSpecialNumber(scooterBean.getWaybillList().get(0).getSpecialCode());
             else

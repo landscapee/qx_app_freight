@@ -24,17 +24,17 @@ public class MapValue {
     /**
      * 根据code 获取 板车类型
      * @param code
-     * @return 0-大滚筒-宽，，1-小滚筒，2-平板 3大滚筒-窄";
+     * @return 9-大滚筒-宽，，8-小滚筒，7-平板 6大滚筒-窄";
      */
     public static String getCarTypeValue(String code){
         String value ="无";
-        if ("0".equals(code))
+        if ("9".equals(code))
             value = "大滚筒-宽";
-        else if ("1".equals(code))
+        else if ("8".equals(code))
             value = "小滚筒";
-        else if ("2".equals(code))
+        else if ("7".equals(code))
             value = "平板";
-        else if ("3".equals(code))
+        else if ("6".equals(code))
             value = "大滚筒-窄";
         return value;
     }

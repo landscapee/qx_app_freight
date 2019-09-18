@@ -129,6 +129,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             TransportTodoListBean bean = new TransportTodoListBean();
             bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
             bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+            bean.setHeadingFlag(scooterInfoListBeans.get(0).getHeadingFlag());
 
             bean.setFlightId(flightBean.getFlightId());
             bean.setFlightNo(flightBean.getFlightNo());
@@ -137,6 +138,8 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             bean.setFlightInfoId(flightBean.getId());
             bean.setAsFlightId(flightBean.getSuccessionId());
             bean.setTpFlightType(flightBean.getTpFlightType());
+
+
 /**
  *屏蔽行李 信息补充
  */

@@ -385,7 +385,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 if (scooterBeanO.getId().equals(scooterId)){//在原始里找到数据正在变化的板车
                                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanN:newScooters){
                                         if (scooterBeanN.getId().equals(scooterId)){//在新数据里找到数据正在变化的板车
-                                            if (!scooterBeanN.getLocation().equals(scooterBeanO.getLocation())||!scooterBeanN.getCargoName().equals(scooterBeanO.getCargoName())|| scooterBeanN.getExceptionFlag() == 1){//如果新数据 和 老数据的舱位信息不一样 或者 新数据板车信息为 建议拉下标识修改
+                                            if ((scooterBeanN.getLocation()!=null&&!scooterBeanN.getLocation().equals(scooterBeanO.getLocation()))||!scooterBeanN.getCargoName().equals(scooterBeanO.getCargoName())|| scooterBeanN.getExceptionFlag() == 1){//如果新数据 和 老数据的舱位信息不一样 或者 新数据板车信息为 建议拉下标识修改
                                                 scooterBeanN.setChange(true);
                                             }
                                             else

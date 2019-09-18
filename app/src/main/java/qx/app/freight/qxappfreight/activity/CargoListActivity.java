@@ -288,6 +288,8 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         TransportTodoListBean bean = new TransportTodoListBean();
         bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
         bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+        bean.setHeadingFlag(scooterInfoListBeans.get(0).getHeadingFlag());
+
         bean.setFlightId(flightBean.getFlightId());
         bean.setFlightNo(flightBean.getFlightNo());
         bean.setTpFlightLocate(flightBean.getSeat());
@@ -295,7 +297,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         bean.setFlightInfoId(flightBean.getId());
         bean.setAsFlightId(flightBean.getSuccessionId());
         bean.setTpFlightType(flightBean.getTpFlightType());
-        bean.setFlightIndicator("I");
+        bean.setFlightIndicator(scooterInfoListBeans.get(0).getFlightType());
         mList.add(bean);
         mAdapter.notifyDataSetChanged();
     }

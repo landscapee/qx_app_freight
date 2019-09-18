@@ -414,6 +414,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                         } else {
                             downLoadFile(mVersionBean);
                         }
+                        dialog.dismiss();
                     }
                 })
                 .show();

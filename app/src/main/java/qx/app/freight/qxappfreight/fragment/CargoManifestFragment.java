@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
+import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -68,7 +69,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     CustomToolbar mToolBar;
     @BindView(R.id.search_toolbar)
     SearchToolbar mSearchBar;
-    private GoodsManifestAdapter adapter;
+    private JZLoadAdapter adapter;
     private List<LoadAndUnloadTodoBean> list1 = new ArrayList<>();
     private List<LoadAndUnloadTodoBean> list = new ArrayList<>();
     private int pageCurrent = 1;//页数
@@ -132,8 +133,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     }
 
     private void initData() {
-        adapter = new GoodsManifestAdapter(list);
-        adapter.setOnFlightSafeguardListenner(new GoodsManifestAdapter.OnFlightSafeguardListenner() {
+        adapter = new JZLoadAdapter(list);
+        adapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
                 IMUtils.chatToGroup(mContext, list.get(position).getFlightId());

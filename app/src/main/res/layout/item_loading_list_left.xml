@@ -19,10 +19,8 @@
             android:background="#e5e5e5" />
         <TextView
             android:id="@+id/tv_lock"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
             android:background="@color/white"
             android:gravity="center"
             android:text="锁定"
@@ -30,11 +28,9 @@
             android:textColor="#666"/>
         <ImageView
             android:id="@+id/iv_lock_status"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:src="@mipmap/icon_lock_data"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
             android:scaleType="center"/>
         <TextView
             android:layout_width="1px"
@@ -42,7 +38,7 @@
             android:background="#e5e5e5" />
         <TextView
             android:id="@+id/tv_berth"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:paddingRight="10dp"
@@ -51,7 +47,7 @@
             android:text="1H"
             android:textColor="#666" />
         <Spinner
-            android:layout_width="50dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:id="@+id/sp_berth"
             android:gravity="center_vertical|end"
@@ -65,7 +61,7 @@
 
         <TextView
             android:id="@+id/tv_goods_position"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:paddingRight="10dp"
@@ -74,7 +70,7 @@
             android:text="55R"
             android:textColor="#666" />
         <Spinner
-            android:layout_width="50dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:id="@+id/sp_goods_position"
             android:gravity="center_vertical|end"

@@ -18,7 +18,6 @@ import qx.app.freight.qxappfreight.constant.Constants;
  * 货邮舱单列表数据适配器
  */
 public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooterListBean.WaybillListBean, BaseViewHolder> {
-
     public ManifestWaybillListAdapter(@Nullable List<ManifestScooterListBean.WaybillListBean> list) {
         super(R.layout.item_manifest_waybill, list);
     }

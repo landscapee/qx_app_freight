@@ -35,8 +35,12 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                     .setText(R.id.tv_scooter_number, item.getScooterCode()!=null ? item.getScooterCode():"--")
                     .setText(R.id.tv_total, item.getTotal()!=null ? item.getTotal()+"":"--")
                     .setText(R.id.tv_weight,  item.getWeight()!=null ? item.getWeight()+"":"--")
-                    .setText(R.id.tv_specialCode, item.getSpecialNumber()!=null ? item.getSpecialNumber():"--")
-                    .setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx")?"X":item.getMailType()!=null ? item.getMailType():"--");
+                    .setText(R.id.tv_specialCode, item.getSpecialNumber()!=null ? item.getSpecialNumber():"--");
+            if (item.getWaybillList() != null && item.getWaybillList().size()> 0)
+                helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx")?"X":item.getMailType()!=null ? item.getMailType():"--");
+            else
+                helper.setText(R.id.tv_mailtype, item.getMailType()!=null ? item.getMailType():"--");
+
             TextView tv1 = helper.getView(R.id.tv_scooter_number);
             TextView tv2 = helper.getView(R.id.tv_total);
             TextView tv3 = helper.getView(R.id.tv_weight);

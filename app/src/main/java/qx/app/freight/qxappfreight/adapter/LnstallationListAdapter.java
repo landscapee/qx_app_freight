@@ -41,15 +41,31 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
 //        } else if ("X".equals(item.getType())) {
 //            type = "空集装箱";
 //        }
-        helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" :item.getCargoName())
-                .setText(R.id.tv_goods_position, item.getLocation())
-                .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
-                .setText(R.id.tv_uld_number, item.getUldCode() == null ? "- -" : item.getUldCode())
-                .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
-                .setText(R.id.tv_type,item.getType()== null ? "- -" : item.getType())
-                .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
-                .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
-                .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber());
+        if (helper.getAdapterPosition() == 0){
+            helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" :item.getCargoName())
+                    .setText(R.id.tv_goods_position, item.getLocation())
+                    .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
+                    .setText(R.id.tv_uld_number, item.getUldCode() == null ? "- -" : item.getUldCode())
+                    .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
+                    .setText(R.id.tv_type,item.getType()== null ? "- -" : item.getType())
+                    .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
+                    .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
+                    .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber())
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "状态" :"- -");
+        }
+        else {
+            helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" :item.getCargoName())
+                    .setText(R.id.tv_goods_position, item.getLocation())
+                    .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
+                    .setText(R.id.tv_uld_number, item.getUldCode() == null ? "- -" : item.getUldCode())
+                    .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
+                    .setText(R.id.tv_type,item.getType()== null ? "- -" : item.getType())
+                    .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
+                    .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
+                    .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber())
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "拉下" :"- -");
+        }
+
 
         TextView tv1 = helper.getView(R.id.tv_manifest);
         TextView tv2 = helper.getView(R.id.tv_scooter_number);
@@ -60,7 +76,8 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
         TextView tv7 = helper.getView(R.id.tv_total);
         TextView tv8 = helper.getView(R.id.tv_goods_position);
         TextView tv9 = helper.getView(R.id.tv_special_number);
-        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9};
+        TextView tv10 = helper.getView(R.id.tv_pull_state);
+        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9,tv10};
 
         if (item.isChange()){
             helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
