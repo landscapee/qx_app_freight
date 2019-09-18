@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,11 +34,13 @@ import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
@@ -197,13 +200,19 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null&& result.isNewStowage()) {
-            UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, list.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
-                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-                intent.putExtra("data", list.get(0));
-                getContext().startActivity(intent);
-            });
-            pushDialog.show();
-            getData();
+
+            //
+            List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans  = result.getTaskData();
+            if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
+                UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
+                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
+                    getContext().startActivity(intent);
+                });
+                pushDialog.show();
+                getData();
+            }
+
         }
     }
 
