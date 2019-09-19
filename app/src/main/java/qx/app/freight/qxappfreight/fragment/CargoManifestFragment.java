@@ -201,7 +201,6 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     public void onEventMainThread(CommonJson4List result) {
         if (result != null&& result.isNewStowage()) {
 
-            //
             List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans  = result.getTaskData();
             if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
                 UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {

@@ -22,7 +22,8 @@
             android:background="@drawable/shape_circle_green"
             android:gravity="center"
             android:text=""
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="0dp"

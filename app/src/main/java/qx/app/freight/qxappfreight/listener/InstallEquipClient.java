@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -65,6 +66,7 @@ public class InstallEquipClient extends StompClient {
     private Timer mTimerReConnect;
     private TimerTask mTimerTaskReConnect;
 
+
     public InstallEquipClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
@@ -87,31 +89,34 @@ public class InstallEquipClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            sendMess(my);
-                            if (mTimerReConnect != null)
-                                mTimerReConnect.cancel();
+
+                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect);
+
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
+                            WebSocketService.mStompClient.remove(my);
                             Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+
                             WebSocketService.isTopic = false;
                             reConnect(uri);
-//                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -124,6 +129,8 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.e(TAG, topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
                         if (topicMessage.getPayload().trim().contains("\"cancelFlag\":true")) {//任务取消的推送
                             if (topicMessage.getPayload().contains("\"taskType\":1")) {//装卸机
                                 CommonJson4List<LoadAndUnloadTodoBean> gson = new CommonJson4List<>();
@@ -180,6 +187,10 @@ public class InstallEquipClient extends StompClient {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
+                        //
+                        Log.e("msgId", topicMessage.getStompHeaders().get(0).getValue());
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
+
                         Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
@@ -196,6 +207,8 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "收到装机单变更推送： " + topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
                         if (null != topicMessage.getPayload()) {
                             sendLoadingListPush(topicMessage.getPayload());
                         }
@@ -209,6 +222,8 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "通知录入的新装机单： " + topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
                         if (null != topicMessage.getPayload()) {
                             InstallNotifyEventBusEntity installNotifyEventBusEntity = new InstallNotifyEventBusEntity();
                             installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
@@ -225,6 +240,8 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->发送至结载的建议装机单 " + topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
                         JSONObject messObj = JSONObject.parseObject(topicMessage.getPayload(),JSONObject.class);
                         if (messObj != null){
                             String str = messObj.getString("data");

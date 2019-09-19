@@ -97,10 +97,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private HashMap<String, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
+    private HashMap<String, String> mapMid = new HashMap<>();
 
     private int loadFlag = -1;
 
     private WaitCallBackDialog mWaitCallBackDialog;
+
+
+    private String mId = null;//装机单id
     @Override
     public int getLayoutId() {
         return R.layout.activity_lnstalla_tion_info;
@@ -154,6 +158,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             mPresenter = new PrintRequestPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
+            entity.setReportInfoId(mId);
             entity.setType(2);
             entity.setPrintName("彭瑞张伟都是傻逼");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
@@ -208,6 +213,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mListVersonCode.clear();
         mapPresen.clear();
         mapDate.clear();
+        mapMid.clear();
 //        mTvVersion.setText("版本号:" + flightAllReportInfos.get(0).getVersion());
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
@@ -221,6 +227,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         list.addAll(data.getScooters());
                     }
                     map.put(version+"", list);
+                    mapMid.put(version+"",flightAllReportInfos.get(i).getId());//储存装机单 id
                     if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
                         mListVerson.add("监装确认(版本" + version + ")");
                         mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
@@ -300,7 +307,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         mTvConfirmDate.setVisibility(View.GONE);
                     }
                     mTvVersion.setText(mListVerson.get(options1));
-
                     screenData((options1+1)+"");
                 }
             }
@@ -330,6 +336,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
         mList1.add(title);
         mList1.addAll(map.get(verson));
+        mId = mapMid.get(verson);
         LnstallationListAdapter adapter = new LnstallationListAdapter(mList1);
         mRvData.setAdapter(adapter);
     }

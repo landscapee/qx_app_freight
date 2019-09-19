@@ -61,7 +61,7 @@ public class BaseFilterEntity<T> {
 
     private int documentType;
     //报载记录ID
-    private String reportInfoId;
+    private String reportInfoId;//货邮仓单ID/装机单ID
     //操作类型
     private String auditType;
     //退回报载原因

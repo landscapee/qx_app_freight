@@ -63,7 +63,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
                     .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
                     .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
                     .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber())
-                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "拉下" :"- -");
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "拉下" :item.isChange()?"调舱":"- -");
         }
 
 

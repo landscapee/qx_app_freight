@@ -11,6 +11,12 @@
         android:orientation="vertical"
         android:padding="13dp">
 
+        <LinearLayout
+            android:id="@+id/ll_flight_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_flight"
             android:layout_width="match_parent"
@@ -40,6 +46,7 @@
                 android:background="@drawable/btn_blue_press"
                 android:text="航班保障组"
                 android:textColor="@color/white" />
+        </LinearLayout>
         </LinearLayout>
         <RelativeLayout
             android:id="@+id/rl_back_accept"

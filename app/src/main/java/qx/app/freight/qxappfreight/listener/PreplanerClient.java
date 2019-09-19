@@ -32,7 +32,9 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.AppUtil;
+import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -48,7 +50,8 @@ public class PreplanerClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-
+    private Timer mTimerReConnect;
+    private TimerTask mTimerTaskReConnect;
     public PreplanerClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
@@ -71,28 +74,35 @@ public class PreplanerClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            sendMess(my);
+                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect);
+//                            sendMess(my);
+//                            if (mTimerReConnect != null)
+//                                mTimerReConnect.cancel();
                             Log.e(TAG, "webSocket  组板 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 组板 出错", lifecycleEvent.getException());
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 组板 关闭");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -105,6 +115,9 @@ public class PreplanerClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
+
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
                     }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
@@ -154,6 +167,19 @@ public class PreplanerClient extends StompClient {
             }
         };
         mTimer.schedule(mTimerTask, 20000, 30000);
+    }
+    public void reConnect(String uri) {
+        WebSocketService.subList.clear();
+        if (mTimerReConnect != null)
+            mTimerReConnect.cancel();
+        mTimerReConnect = new Timer();
+        mTimerTaskReConnect = new TimerTask() {
+            public void run() {
+                if (NetworkUtils.isNetWorkAvailable(mContext))
+                    connect(uri);
+            }
+        };
+        mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
     }
 
     private void resetSubscriptions() {

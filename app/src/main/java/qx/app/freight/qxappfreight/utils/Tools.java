@@ -370,6 +370,10 @@ public class Tools {
             return false;
     }
 
+    /**
+     * 登录被挤下线 dialog
+     * @param mContext
+     */
     public static void showDialog(Context mContext) {
         UserInfoSingle.setUserNil();
         ActManager.getAppManager().finishAllActivity();

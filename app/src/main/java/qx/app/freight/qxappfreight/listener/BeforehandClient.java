@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -72,15 +73,15 @@ public class BeforehandClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.mStompClient.add(my);
-                            sendMess(my);
-                            if (mTimerReConnect != null)
-                                mTimerReConnect.cancel();
+                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect);
                             Log.e(TAG, "webSocket  进港理货 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 进港理货 出错", lifecycleEvent.getException());
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             if (WebSocketService.isTopic) {
                                 WebSocketService.setIsTopic(false);
                             }
@@ -90,16 +91,18 @@ public class BeforehandClient extends StompClient {
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 进港理货 关闭");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             resetSubscriptions();
 //                            connect(uri);
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketUtils.stopTimer(mTimer);
+//                            if (mTimer != null)
+//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -113,6 +116,8 @@ public class BeforehandClient extends StompClient {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(topicMessage -> {
+                            // 消息回执
+                            WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
                             Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
                             WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                             sendReshEventBus(mWebSocketBean);

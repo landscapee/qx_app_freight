@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.Tools;
 
@@ -46,6 +47,8 @@ public class TpPushDialog extends Dialog {
     RecyclerView rcNewTask;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.tv_temp_intro)
+    TextView tvTemp ;
 
     private AcceptTerminalTodoBean mAcceptTerminalTodoBean;
     private  List<OutFieldTaskBean> list;
@@ -106,12 +109,23 @@ public class TpPushDialog extends Dialog {
 
         setCancelable(false);
         setCanceledOnTouchOutside(false);
-        //列表设置
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
-        rcNewTask.setLayoutManager(manager);
-        list = new ArrayList<>();
-        TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list);
-        rcNewTask.setAdapter(mTaskFlightAdapter);
+        if (!Constants.TP_TYPE_TEMP.equals(mAcceptTerminalTodoBean.getTaskType())){
+            //列表设置
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
+            rcNewTask.setLayoutManager(manager);
+            list = new ArrayList<>();
+            TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list);
+            rcNewTask.setAdapter(mTaskFlightAdapter);
+            setView();
+            tvTemp.setVisibility(View.GONE);
+            rcNewTask.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvTemp.setVisibility(View.VISIBLE);
+            rcNewTask.setVisibility(View.GONE);
+            tvTemp.setText(mAcceptTerminalTodoBean.getTasks().get(0).getTaskIntro());
+            tvTpType.setText(mAcceptTerminalTodoBean.getProjectName());
+        }
 
         btnSure.setOnClickListener(v -> {
 
@@ -120,8 +134,6 @@ public class TpPushDialog extends Dialog {
             dismiss();
 
         });
-
-        setView();
 
     }
 

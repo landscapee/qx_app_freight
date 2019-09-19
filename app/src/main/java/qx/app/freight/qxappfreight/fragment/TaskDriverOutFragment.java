@@ -176,7 +176,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(0);
         entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
-        entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
+        if (mOutFieldTaskBean.getFlightId()!=null&&mOutFieldTaskBean.getFlightId().length()>0){
+            entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
+        }
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
@@ -240,8 +242,14 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             getData();
         }else {
             List<AcceptTerminalTodoBean> list = result.getTaskData();
-            if (list != null)
+            if (list != null){
+                for (AcceptTerminalTodoBean acceptTerminalTodoBean :listSearch){
+                    if (list.get(0).getTaskId().equals(acceptTerminalTodoBean.getTaskId())){
+                        return;
+                    }
+                }
                 listCache.addAll(list);
+            }
             showTpNewTaskDialog();
         }
 

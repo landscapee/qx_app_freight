@@ -134,11 +134,11 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mPresenter = new PrintRequestPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
+            entity.setReportInfoId(mId);
             // 1 货邮舱单 2 装机单
             entity.setType(1);
             entity.setPrintName("123张耀是傻逼");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
-            ToastUtil.showToast("该功能正处于研发过程中……");
         });
 //        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
