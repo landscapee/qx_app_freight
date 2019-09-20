@@ -25,7 +25,7 @@ public class ScooterInfoListBean {
     private String flightType;
     private boolean noticeTransport;
     /**
-     * 0无效，1横向，竖向
+     * 0无效，1横向，2竖向
      */
     private int headingFlag;
 }

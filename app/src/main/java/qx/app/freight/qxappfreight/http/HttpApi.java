@@ -95,6 +95,7 @@ import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -141,6 +142,11 @@ public interface HttpApi {
     @POST("userLoginOut")
     @FormUrlEncoded
     Observable<RespBean> loginOutQxAi(@FieldMap Map<String, String> masp);
+
+
+    //获取板车类型基础配置
+    @GET("/service-bussiness-facility/baseParam/listByType/{type}")
+    Observable<BaseEntity<List<ScooterConfBean.ScooterConf>>> getScooterConf(@Path("type") String type);
 
     /***********收验****************************/
     //获取货代公司资质

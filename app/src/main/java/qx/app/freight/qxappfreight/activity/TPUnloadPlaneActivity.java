@@ -239,6 +239,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setHeadingFlag(bean.getHeadingFlag());
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("cargo");
@@ -258,6 +259,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setHeadingFlag(bean.getHeadingFlag());
             entity.setTpScooterCode(bean.getScooterCode());
             entity.setFlightIndicator(bean.getFlightType());
             entity.setTpCargoType("baggage");

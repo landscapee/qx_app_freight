@@ -15,12 +15,6 @@ import ua.naiksoftware.stomp.StompClient;
  */
 public class WebSocketUtils {
     public static final String TAG = "websocket";
-    //心跳定时器
-    private static Timer mTimer;
-    private static TimerTask mTimerTask;
-    //重连定时器
-    private static Timer mTimerReConnect;
-    private static TimerTask mTimerTaskReConnect;
 
     /**
      * 消失回执

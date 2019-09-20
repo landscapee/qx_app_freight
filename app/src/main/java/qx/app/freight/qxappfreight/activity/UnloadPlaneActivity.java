@@ -259,6 +259,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             for (ScooterInfoListBean bean : mListGoods) {
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+                entity.setHeadingFlag(bean.getHeadingFlag());
                 entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("cargo");
@@ -274,6 +275,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             for (ScooterInfoListBean bean : mListPac) {
                 TransportTodoListBean entity = new TransportTodoListBean();
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+                entity.setHeadingFlag(bean.getHeadingFlag());
                 entity.setFlightIndicator(bean.getFlightType());//添加板车 国际国内航班标记
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setTpCargoType("baggage");

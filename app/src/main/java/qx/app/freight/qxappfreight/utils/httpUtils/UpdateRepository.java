@@ -94,6 +94,7 @@ import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
@@ -222,6 +223,16 @@ public class UpdateRepository extends BaseRepository {
     public Observable<SearchReservoirBean> searchReservoir(BaseFilterEntity param) {
         return transform(getService().searchReservoir(param));
     }
+    /*****
+     * 板车配置查询
+     * @param
+     * @return
+     */
+    public Observable<List<ScooterConfBean.ScooterConf>> getScooterConf(String param) {
+        return transform(getService().getScooterConf(param));
+    }
+
+
 
     /***
      *获取货代公司资质

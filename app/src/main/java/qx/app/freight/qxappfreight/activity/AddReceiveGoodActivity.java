@@ -230,7 +230,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //        });
         mTvUldnumber.setOnClickListener(v -> {
             if (null != scooterInfo) {
-                if (!TextUtils.isEmpty(mTvScooter.getText()) || !scooterInfo.getScooterType().equals("2"))
+                if (!TextUtils.isEmpty(mTvScooter.getText()) || !scooterInfo.getScooterType().equals(Constants.SCOOTER_P))
                     showPopWindowUld();
                 else
                     ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
@@ -430,7 +430,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             scooterInfo = scooterInfoListBeans.get(0);
             scooterId = scooterInfoListBeans.get(0).getId();
             scooterType = scooterInfoListBeans.get(0).getScooterType();
-            if ("2".equals(scooterInfoListBeans.get(0).getScooterType())) {
+            //等彭老师解答下面的代码 ???
+            if (Constants.SCOOTER_P.equals(scooterInfoListBeans.get(0).getScooterType())) {
                 mTvScooter.setText(scooterInfoListBeans.get(0).getScooterCode());
                 mTvCooterWeight.setText(scooterInfoListBeans.get(0).getScooterWeight() + "");
             } else {

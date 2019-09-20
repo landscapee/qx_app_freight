@@ -106,6 +106,9 @@ public class Constants {
     // 位置信息
     public static final String POSITION = "position";
 
+    // 平板车-状态值
+    public static final String SCOOTER_P = "9";
+
     //====================================================广播接收======================================================
     public static final String ACTION = "android.intent.ACTION_DECODE_DATA";
 

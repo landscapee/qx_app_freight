@@ -3,9 +3,11 @@ package qx.app.freight.qxappfreight.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -23,19 +25,24 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.ScooterConfContract;
 import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
@@ -45,6 +52,7 @@ import qx.app.freight.qxappfreight.fragment.LnstallationFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
+import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -54,7 +62,7 @@ import qx.app.freight.qxappfreight.utils.Tools;
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements LocationObservable {
+public class MainActivity extends BaseActivity implements LocationObservable , ScooterConfContract.scooterConfView{
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -141,6 +149,14 @@ public class MainActivity extends BaseActivity implements LocationObservable {
             fragment5 = new MineFragment();
         }
         initFragment();
+    }
+
+    /**
+     * 获取 板车基础配置
+     */
+    private void getScooterConf() {
+        mPresenter = new GetScooterConfPresenter(this);
+       ((GetScooterConfPresenter) mPresenter).getScooterConf("0");
 
     }
 
@@ -368,6 +384,42 @@ public class MainActivity extends BaseActivity implements LocationObservable {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ScooterConfiSingle.getInstance().isEmpty()){
+            Log.e("MainActivity","板车基础信息为空,从服务器请求板车基础数据");
+            getScooterConf();
+        }
 
+    }
+
+    @Override
+    public void getScooterConfResult(List<ScooterConfBean.ScooterConf> result) {
+        if (result!= null&& result.size() > 0){
+            HashMap<String,String> scooterMap = new HashMap <>();
+            for (ScooterConfBean.ScooterConf scooterConf:result){
+                scooterMap.put(scooterConf.getValue(),scooterConf.getName());
+            }
+            if (!scooterMap.isEmpty())
+                ScooterConfiSingle.setScooterMap(scooterMap);
+        }
+
+    }
+
+    @Override
+    public void toastView(String error) {
+
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
+    }
 }
 

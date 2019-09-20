@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.utils;
 
+import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
+
 public class MapValue {
 
     /**
@@ -27,16 +29,20 @@ public class MapValue {
      * @return 9-大滚筒-宽，，8-小滚筒，7-平板 6大滚筒-窄";
      */
     public static String getCarTypeValue(String code){
+
         String value ="无";
-        if ("9".equals(code))
-            value = "大滚筒-宽";
-        else if ("8".equals(code))
-            value = "小滚筒";
-        else if ("7".equals(code))
-            value = "平板";
-        else if ("6".equals(code))
-            value = "大滚筒-窄";
-        return value;
+//        if ("9".equals(code))
+//            value = "大滚筒-宽";
+//        else if ("8".equals(code))
+//            value = "小滚筒";
+//        else if ("7".equals(code))
+//            value = "平板";
+//        else if ("6".equals(code))
+//            value = "大滚筒-窄";
+        if (ScooterConfiSingle.getInstance().isEmpty())
+            return value;
+        else
+            return ScooterConfiSingle.getInstance().get(code);
     }
 
     /**
@@ -71,6 +77,23 @@ public class MapValue {
             areaType = 1;
 
         return areaType;
+    }
+
+
+    public static String getHYOfZP(String code){
+        String hyType = "";
+        if ("0".equals(code))
+            hyType = "8";
+        else if ("1".equals(code))
+            hyType = "7";
+        else if ("2".equals(code))
+            hyType = "9";
+        else if ("3".equals(code))
+            hyType = "8";
+        else if ("4".equals(code))
+            hyType = "6";
+
+        return hyType;
     }
 
 }
