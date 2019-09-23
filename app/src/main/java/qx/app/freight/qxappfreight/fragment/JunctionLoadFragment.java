@@ -122,31 +122,46 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     }
                 }
                 if (mDialog == null) {
-                    mDialog = new PushLoadUnloadDialog();
+                    mDialog = new PushLoadUnloadDialog(getContext(),R.style.custom_dialog,mListCache, success -> {
+                        if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                            ToastUtil.showToast("领受结载新任务成功");
+                            Observable.timer(300, TimeUnit.MILLISECONDS)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(aLong -> {
+                                        loadData();
+                                    });
+                            mListCache.clear();
+                        } else {//领受失败后，清空未领受列表缓存
+                            Log.e("tagPush", "推送出错了");
+                            mListCache.clear();
+                        }
+//                        Tools.closeVibrator(getActivity().getApplicationContext());
+                    });
                 }
-                mDialog.setData(getContext(), mListCache, success -> {
-                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-                        ToastUtil.showToast("领受结载新任务成功");
-                        Observable.timer(300, TimeUnit.MILLISECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> {
-                                    loadData();
-                                });
-                        mListCache.clear();
-                    } else {//领受失败后，清空未领受列表缓存
-                        Log.e("tagPush", "推送出错了");
-                        mListCache.clear();
-                    }
-                    Tools.closeVibrator(getActivity().getApplicationContext());
-                });
-                if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+//                mDialog.setData(getContext(), mListCache, success -> {
+//                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+//                        ToastUtil.showToast("领受结载新任务成功");
+//                        Observable.timer(300, TimeUnit.MILLISECONDS)
+//                                .subscribeOn(Schedulers.io())
+//                                .observeOn(AndroidSchedulers.mainThread())
+//                                .subscribe(aLong -> {
+//                                    loadData();
+//                                });
+//                        mListCache.clear();
+//                    } else {//领受失败后，清空未领受列表缓存
+//                        Log.e("tagPush", "推送出错了");
+//                        mListCache.clear();
+//                    }
+//                    Tools.closeVibrator(getActivity().getApplicationContext());
+//                });
+                if (!mDialog.isShowing()) {//新任务弹出框未显示在屏幕中
                     if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
                         loadData();
                         mListCache.clear();
                     } else {
-                        Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
-                        mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+//                        Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
+                        mDialog.show();//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示
                     Observable.timer(300, TimeUnit.MILLISECONDS)

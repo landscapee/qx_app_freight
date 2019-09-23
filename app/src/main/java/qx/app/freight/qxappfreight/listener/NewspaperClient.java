@@ -78,8 +78,8 @@ public class NewspaperClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
-                            WebSocketUtils.stopTimer(mTimerReConnect);
+                            WebSocketUtils.sendHeartBeat(mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect,mTimerTaskReConnect);
 //                            sendMess(my);
 //                            if (mTimerReConnect != null)
 //                                mTimerReConnect.cancel();
@@ -87,7 +87,7 @@ public class NewspaperClient extends StompClient {
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 报载 出错", lifecycleEvent.getException());
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -96,7 +96,7 @@ public class NewspaperClient extends StompClient {
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 报载 关闭");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -105,7 +105,7 @@ public class NewspaperClient extends StompClient {
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;

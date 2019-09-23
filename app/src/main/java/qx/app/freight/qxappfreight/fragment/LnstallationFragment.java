@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
@@ -290,7 +292,12 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         if (loadAndUnloadTodoBean != null) {
             for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
                 StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+                //结载单独使用数据 json 解析
+                if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+                    bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+                }
             }
+
             if (mCurrentPage == 1) {
                 list1.clear();
                 mMfrvData.finishRefresh();

@@ -39,6 +39,6 @@ public class LnstallationInfoBean {
         private int version;//版本号
         private List<?> waybillList;
         private String weight;//重量
-        private boolean isChange;//是否修改过
+        private boolean change;//是否修改过
     }
 }

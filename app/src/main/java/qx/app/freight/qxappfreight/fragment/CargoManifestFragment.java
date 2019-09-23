@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
@@ -152,9 +153,11 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (list !=null&&list.size() > 0){
-                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-                intent.putExtra("data", list.get(position));
-                getContext().startActivity(intent);
+
+                CargoManifestInfoActivity.startActivity(getContext(),list.get(position),0);
+//                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+//                intent.putExtra("data", list.get(position));
+//                getContext().startActivity(intent);
             }
 
         });
@@ -180,7 +183,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("CargoHandlingActivity_refresh")) {
+        if (result.equals("CargoManifestFragment_refresh")) {
             pageCurrent = 1;
             getData();
         }
@@ -204,9 +207,11 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans  = result.getTaskData();
             if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
                 UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
-                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
-                    getContext().startActivity(intent);
+
+                    CargoManifestInfoActivity.startActivity(getContext(),loadAndUnloadTodoBeans.get(0),1);
+//                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+//                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
+//                    getContext().startActivity(intent);
                 });
                 pushDialog.show();
                 getData();
@@ -290,6 +295,10 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         }
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+            //结载单独使用数据 json 解析
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+                bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
         }
         list1.addAll(loadAndUnloadTodoBean);
 

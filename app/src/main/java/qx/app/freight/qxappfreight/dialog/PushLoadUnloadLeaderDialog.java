@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -47,7 +48,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 /**
  * * 装卸员小组长任务推送弹窗
  */
-public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUnloadLeaderContract.LoadUnloadLeaderView {
+public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLeaderContract.LoadUnloadLeaderView {
     private List<LoadAndUnloadTodoBean> list;
     private Context context;
     private View convertView;
@@ -57,6 +58,32 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
     private TextView mTvRefuse;
     private DialogLoadUnloadPushAdapter mAdapter;
 
+
+    public PushLoadUnloadLeaderDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, PushLoadUnloadLeaderDialog.OnDismissListener onDismissListener) {
+        super(context,themeResId);
+        this.context = context;
+        this.list = list;
+        this.onDismissListener = onDismissListener;
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.dialog_load_unload);
+        convertView = findViewById(R.id.content_view);
+        setCanceledOnTouchOutside(false); // 外部点击取消
+        // 设置宽度为屏宽, 靠近屏幕底部。
+        Window window = getWindow();
+        if (Build.VERSION.SDK_INT >= 26) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.BOTTOM; // 紧贴底部
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+        window.setAttributes(lp);
+        window.setWindowAnimations(R.style.anim_bottom_bottom);
+        setCancelable(false);
+        initViews();
+    }
     public void setData(Context context, List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
         this.context = context;
         this.list = list;
@@ -80,25 +107,25 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         setListeners();
     }
 
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        try {
-            Class c = Class.forName("android.support.v4.app.DialogFragment");
-            Constructor con = c.getConstructor();
-            Object obj = con.newInstance();
-            Field dismissed = c.getDeclaredField("mDismissed");
-            dismissed.setAccessible(true);
-            dismissed.set(obj, false);
-            Field shownByMe = c.getDeclaredField("mShownByMe");
-            shownByMe.setAccessible(true);
-            shownByMe.set(obj, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.add(this, tag);
-        ft.commitAllowingStateLoss();
-    }
+//    @Override
+//    public void show(FragmentManager manager, String tag) {
+//        try {
+//            Class c = Class.forName("android.support.v4.app.DialogFragment");
+//            Constructor con = c.getConstructor();
+//            Object obj = con.newInstance();
+//            Field dismissed = c.getDeclaredField("mDismissed");
+//            dismissed.setAccessible(true);
+//            dismissed.set(obj, false);
+//            Field shownByMe = c.getDeclaredField("mShownByMe");
+//            shownByMe.setAccessible(true);
+//            shownByMe.set(obj, false);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        FragmentTransaction ft = manager.beginTransaction();
+//        ft.add(this, tag);
+//        ft.commitAllowingStateLoss();
+//    }
 
     private void setListeners() {
         mTvTitle.setText(context.getString(R.string.format_new_task_push, list.size()));
@@ -142,25 +169,25 @@ public class PushLoadUnloadLeaderDialog extends DialogFragment implements LoadUn
         });
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(context, R.style.dialog2);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_load_unload_leader);
-        convertView = dialog.findViewById(R.id.content_view);
-        dialog.setCanceledOnTouchOutside(false); // 外部点击取消
-        // 设置宽度为屏宽, 靠近屏幕底部。
-        Window window = dialog.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.BOTTOM; // 紧贴底部
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
-        window.setAttributes(lp);
-        window.setWindowAnimations(R.style.anim_bottom_bottom);
-        dialog.setCancelable(false);
-        initViews();
-        return dialog;
-    }
+//    @NonNull
+//    @Override
+//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+//        Dialog dialog = new Dialog(context, R.style.dialog2);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.dialog_load_unload_leader);
+//        convertView = dialog.findViewById(R.id.content_view);
+//        dialog.setCanceledOnTouchOutside(false); // 外部点击取消
+//        // 设置宽度为屏宽, 靠近屏幕底部。
+//        Window window = dialog.getWindow();
+//        WindowManager.LayoutParams lp = window.getAttributes();
+//        lp.gravity = Gravity.BOTTOM; // 紧贴底部
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+//        window.setAttributes(lp);
+//        window.setWindowAnimations(R.style.anim_bottom_bottom);
+//        dialog.setCancelable(false);
+//        initViews();
+//        return dialog;
+//    }
 
     @Override
     public void slideTaskResult(String result) {

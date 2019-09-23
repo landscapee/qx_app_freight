@@ -15,7 +15,6 @@ import ua.naiksoftware.stomp.StompClient;
  */
 public class WebSocketUtils {
     public static final String TAG = "websocket";
-
     /**
      * 消失回执
      * @param my
@@ -33,31 +32,44 @@ public class WebSocketUtils {
 
     /**
      * 开启定时器 发送心跳
-     * @param my
-     * @param compositeDisposable
      */
-    public static void sendHeartBeat(StompClient my,CompositeDisposable compositeDisposable ,Timer mTimer,TimerTask mTimerTask) {
-        mTimer = new Timer();
+    public static void sendHeartBeat(Timer mTimer,TimerTask mTimerTask) {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("json", "123");
+//        mTimerTask = new TimerTask() {
+//            public void run() {
+//                compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+//                Log.e("websocket", "发送消息" + jsonObject.toJSONString());
+//            }
+//        };
+        mTimer.schedule(mTimerTask, 20000, 30000);
+    }
+
+    public static TimerTask newTimerTaskHeart(StompClient my,CompositeDisposable compositeDisposable ){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
-        mTimerTask = new TimerTask() {
+        TimerTask mTimerTask = new TimerTask() {
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
                 Log.e("websocket", "发送消息" + jsonObject.toJSONString());
             }
         };
-        mTimer.schedule(mTimerTask, 20000, 30000);
+        return mTimerTask;
     }
 
     /**
      * 关闭定时器
      * @param mTimer
      */
-    public static void stopTimer(Timer mTimer){
-        if (mTimer != null){
-            mTimer.cancel();
-            mTimer = null;
+    public static void stopTimer(Timer mTimer,TimerTask mTimerTask){
+        if (mTimerTask !=null){
+            mTimerTask.cancel();
         }
+        if (mTimer != null){
+            mTimer.purge();
+            mTimer.cancel();
+        }
+
 
     }
 

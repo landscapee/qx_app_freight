@@ -44,7 +44,6 @@ import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadLeaderDialog;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
-import qx.app.freight.qxappfreight.presenter.LoadUnloadLeaderPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -181,14 +180,12 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
      * mListCache 为0 就不展示
      */
     private void showDialogTask() {
-        if ((mDialog != null && mDialog.isAdded()) || mListCache.size() == 0)
+        if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0)
             return;
         mListCacheUse.clear();
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
-        mDialog = new PushLoadUnloadLeaderDialog();
-        Log.e("tagTest", "mData======" + mListCacheUse.size());
-        mDialog.setData(getContext(), mListCacheUse, status -> {
+        mDialog = new PushLoadUnloadLeaderDialog(getContext(), R.style.custom_dialog,mListCacheUse, status -> {
             switch (status) {
                 case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
                     mDialog.dismiss();
@@ -212,11 +209,37 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     mListCacheUse.clear();
                     break;
             }
-            Tools.closeVibrator(getActivity().getApplicationContext());
-        });
-        if (!mDialog.isAdded()) {//新任务弹出框未显示在屏幕中
+            });
+//        Log.e("tagTest", "mData======" + mListCacheUse.size());
+//        mDialog.setData(getContext(), mListCacheUse, status -> {
+//            switch (status) {
+//                case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
+//                    mDialog.dismiss();
+//                    ToastUtil.showToast("领受新装卸任务成功");
+//                    mListCacheUse.clear();
+//                    loadData();
+//                    showDialogTask();
+//                    break;
+//                case 1://拒绝任务后清除taskId记录
+//                    mDialog.dismiss();
+//                    mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
+//                    if (isShow) {
+//                        mTaskFragment.setTitleText(mTaskIdList.size());
+//                        mMfrvData.notifyForAdapter(mAdapter);
+//                    }
+//                    showDialogTask();
+//                    break;
+//                case -1://领受失败后，清空未领受列表缓存
+//                    Log.e("tagPush", "推送出错了");
+//                    mDialog.dismiss();
+//                    mListCacheUse.clear();
+//                    break;
+//            }
+//            Tools.closeVibrator(getActivity().getApplicationContext());
+//        });
+        if (!mDialog.isShowing()) {//新任务弹出框未显示在屏幕中
             Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
-            mDialog.show(getFragmentManager(), "11");//显示新任务弹窗
+            mDialog.show();//显示新任务弹窗
         }
     }
 

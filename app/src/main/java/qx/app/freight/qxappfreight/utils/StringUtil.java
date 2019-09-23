@@ -391,6 +391,9 @@ public class StringUtil {
      * @return 结果
      */
     public static String getTimeTextByRegix(long timeMillions, String regix) {
+        if(timeMillions <= 0){
+            return "- -";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(regix, Locale.CHINESE);
         Date date = new Date(timeMillions);
         return sdf.format(date);

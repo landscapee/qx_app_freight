@@ -118,24 +118,34 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                         for (int l = 0; l < datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size(); l++) {
                             datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(l).setRouteEn(datas[i].getRouteEn());
                         }
-                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
-                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
+                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0){
+                            for (ManifestScooterListBean.WaybillListBean waybillListBeans :datas[i].getCargos().get(j).getScooters().get(k).getWaybillList()){
+                                datas[i].getCargos().get(j).getScooters().get(k).setMailType(waybillListBeans.getMailType());
+                                if ("C".equals(waybillListBeans.getMailType())){
+                                    break;
+                                }
+                            }
+                        }
+//                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
                         if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
                             datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
-                        mList.addAll(datas[i].getCargos().get(j).getScooters());
                     }
+                    mList.addAll(datas[i].getCargos().get(j).getScooters());
                 }
             }
 //            }
             for (int i = 0; i < mList.size(); i++) {
-                //TODO C 货物
-                if (!"".equals(mList.get(i).getWeight())) {
-                    if ("C".equals(mList.get(i).getMailType()))
-                        cagnWeight += Double.valueOf(mList.get(i).getWeight());
-                        //TODO M 邮件
-                    else if ("M".equals(mList.get(i).getMailType()))
-                        emailWeight += Double.valueOf(mList.get(i).getWeight());
+                for (int j = 0;j<mList.get(i).getWaybillList().size();j++){
+                    //TODO C 货物
+                    if (!"".equals(mList.get(i).getWaybillList().get(j).getWeight())) {
+                        if ("C".equals(mList.get(i).getWaybillList().get(j).getMailType()))
+                            cagnWeight += Double.valueOf(mList.get(i).getWaybillList().get(j).getWeight());
+                            //TODO M 邮件
+                        else if ("M".equals(mList.get(i).getWaybillList().get(j).getMailType()))
+                            emailWeight += Double.valueOf(mList.get(i).getWaybillList().get(j).getWeight());
+                    }
                 }
+
             }
 
             tvCagnWeight.setText("货物总重量：" + cagnWeight + "");

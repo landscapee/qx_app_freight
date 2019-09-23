@@ -17,7 +17,7 @@ import android.widget.TextView;
 import qx.app.freight.qxappfreight.R;
 
 /**
- * 装卸机推送弹窗
+ * 下载进度框
  */
 public class ProgressDialog extends DialogFragment {
     private Context context;

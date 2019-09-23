@@ -94,7 +94,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long etd;//预计离港时间
     private long atd;//实际离港时间
     private List<OperationStepObjBean> operationStepObj;
-    private int widthAirFlag;//0是宽体机，1是窄体机
+    private int widthAirFlag = 1;//0是宽体机，1是窄体机
     /*
      * 行李重量
      */

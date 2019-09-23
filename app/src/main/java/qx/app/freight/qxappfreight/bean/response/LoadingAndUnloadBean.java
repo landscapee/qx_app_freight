@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class LoadingAndUnloadBean {
+public class LoadingAndUnloadBean implements Serializable {
     /**
      * 行李转盘
      */

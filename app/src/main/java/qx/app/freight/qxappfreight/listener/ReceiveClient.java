@@ -76,8 +76,8 @@ public class ReceiveClient extends StompClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             WebSocketService.mStompClient.add(my);
-                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
-                            WebSocketUtils.stopTimer(mTimerReConnect);
+                            WebSocketUtils.sendHeartBeat(mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect,mTimerTaskReConnect);
 //                            sendMess(my);
 //                            if (mTimerReConnect != null)
 //                                mTimerReConnect.cancel();
@@ -85,7 +85,7 @@ public class ReceiveClient extends StompClient {
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 收验 出错", lifecycleEvent.getException());
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             if (WebSocketService.isTopic) {
@@ -97,7 +97,7 @@ public class ReceiveClient extends StompClient {
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 收验 关闭");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -106,7 +106,7 @@ public class ReceiveClient extends StompClient {
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;

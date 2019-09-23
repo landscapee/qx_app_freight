@@ -22,11 +22,13 @@ public class UpDateVersionDialog extends CommonDialog {
                 if (listener != null) {
                     listener.onClick(this, false);
                 }
+                this.dismiss();
                 break;
             case R.id.positiveTv:
                 if (listener != null) {
                     listener.onClick(this, true);
                 }
+                this.dismiss();
                 break;
         }
     }

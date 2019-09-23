@@ -61,7 +61,7 @@ public class InstallEquipClient extends StompClient {
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
     private Context mContext;
-    private Timer mTimer;
+    private Timer mTimer = new Timer();
     private TimerTask mTimerTask;
     private Timer mTimerReConnect;
     private TimerTask mTimerTaskReConnect;
@@ -89,23 +89,23 @@ public class InstallEquipClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-
-                            WebSocketUtils.sendHeartBeat(my,compositeDisposable,mTimer,mTimerTask);
-                            WebSocketUtils.stopTimer(mTimerReConnect);
+                            mTimerTask = WebSocketUtils.newTimerTaskHeart(my,compositeDisposable);
+                            WebSocketUtils.sendHeartBeat(mTimer,mTimerTask);
+                            WebSocketUtils.stopTimer(mTimerReConnect,mTimerTaskReConnect);
 
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
                             WebSocketService.mStompClient.remove(my);
                             Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 
                             WebSocketService.isTopic = false;
                             reConnect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -114,7 +114,7 @@ public class InstallEquipClient extends StompClient {
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            WebSocketUtils.stopTimer(mTimer);
+                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
 //                            if (mTimer != null)
 //                                mTimer.cancel();
                             WebSocketService.isTopic = false;
@@ -380,6 +380,7 @@ public class InstallEquipClient extends StompClient {
     private void sendLoadingListPushNotify(InstallNotifyEventBusEntity result) {
         EventBus.getDefault().post(result);
     }
+
 //    private void showDialog() {
 //        CommonDialog dialog = new CommonDialog(mContext);
 //        dialog.setTitle("提示")

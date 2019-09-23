@@ -1,6 +1,8 @@
 package qx.app.freight.qxappfreight.activity;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -84,6 +86,15 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     private ZdFragment mZdFragment;
     private Fragment nowFragment;
 
+    private int flag = 0;//0 展示或有舱单 1 展示装舱建议
+
+    public static void startActivity(Context context,LoadAndUnloadTodoBean loadAndUnloadTodoBean,int flag) {
+        Intent intent = new Intent(context, CargoManifestInfoActivity.class);
+        intent.putExtra("flag",flag);
+        intent.putExtra("data", loadAndUnloadTodoBean);
+        context.startActivity(intent);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_cargo_manifest_info;
@@ -97,6 +108,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "货邮舱单详情");
         mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
+        flag = getIntent().getIntExtra("flag",0);
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftno());
         FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
@@ -189,7 +201,12 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                 .add(R.id.fl_content, mHYragment)
                 .add(R.id.fl_content, mZdFragment)
                 .commit();
-        showFragment(mHYragment);
+        if (flag == 1){
+            mRgTitle.check(R.id.rb_zd);
+            showFragment(mZdFragment);
+        }
+        else
+            showFragment(mHYragment);
     }
 
     @Override
@@ -252,7 +269,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void auditManifestResult(String result) {
-        ToastUtil.showToast(result);
+        if (result!=null){
+            ToastUtil.showToast("释放成功！");
+        }
+        EventBus.getDefault().post("CargoManifestFragment_refresh");
         finish();
     }
 
