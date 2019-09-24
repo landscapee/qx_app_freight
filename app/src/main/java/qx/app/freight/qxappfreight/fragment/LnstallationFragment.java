@@ -172,9 +172,10 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
-            intent.putExtra("data", list.get(position));
-            getContext().startActivity(intent);
+//            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
+//            intent.putExtra("data", list.get(position));
+//            getContext().startActivity(intent);
+            LnstallationInfoActivity.startActivity(getContext(),list.get(position),0);
         });
         getData();
 

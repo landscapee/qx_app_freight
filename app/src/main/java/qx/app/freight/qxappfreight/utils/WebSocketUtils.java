@@ -50,7 +50,14 @@ public class WebSocketUtils {
         jsonObject.put("json", "123");
         TimerTask mTimerTask = new TimerTask() {
             public void run() {
-                compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                boolean success = compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"),throwable ->{
+                    Log.e(TAG, "websocket 消息发送失败 重连");
+                } ));
+                if (!success){
+                    my.reconnect();
+//                    my.connect();
+                    Log.e(TAG, "websocket 消息发送失败 开启重连中……");
+                }
                 Log.e("websocket", "发送消息" + jsonObject.toJSONString());
             }
         };
@@ -62,15 +69,13 @@ public class WebSocketUtils {
      * @param mTimer
      */
     public static void stopTimer(Timer mTimer,TimerTask mTimerTask){
-        if (mTimerTask !=null){
-            mTimerTask.cancel();
-        }
-        if (mTimer != null){
-            mTimer.purge();
-            mTimer.cancel();
-        }
-
-
+//        if (mTimerTask !=null){
+//            mTimerTask.cancel();
+//        }
+//        if (mTimer != null){
+//            mTimer.purge();
+////            mTimer.cancel();
+//        }
     }
 
 

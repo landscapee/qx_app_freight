@@ -39,9 +39,11 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.CompareInfoBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
@@ -98,6 +100,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
     private String mCurrentTaskId;
     private String mCurrentFlightId;
+    private String mCurrentFlightNo;
     private WaitCallBackDialog mWaitCallBackDialog;
     private LoadAndUnloadTodoBean data;
     @SuppressLint("UseSparseArrays")
@@ -116,8 +119,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(String result) {
-        if (result != null && result.equals(mCurrentFlightId)) {
+    public void onEventMainThread(InstallChangeEntity result) {
+        if (result.getFlightNo() != null && result.getFlightNo().equals(mCurrentFlightNo)) {
             showCargoResUpdate();
         }
     }
@@ -126,16 +129,26 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
      * 弹出收到新装机提示
      */
     private void showCargoResUpdate() {
-        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, data.getFlightNo()+"预装机单已更新，请查看！", () -> {
-            LoadingListRequestEntity entity = new LoadingListRequestEntity();
-            entity.setDocumentType(2);
-            entity.setFlightId(mCurrentFlightId);
-            ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
-        });
+//        String remark = "";
+//        if (data.getRelateInfoObj() != null)
+//            remark = data.getRelateInfoObj().getFlightNo()+"预装机单已更新，请查看！";
+//        else
+//            remark = data.getFlightNo()+"预装机单已更新，请查看！";
+//        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+//            LoadingListRequestEntity entity = new LoadingListRequestEntity();
+//            entity.setDocumentType(2);
+//            entity.setFlightId(mCurrentFlightId);
+//            ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+//        });
+//        updatePushDialog.show();
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(mCurrentFlightId);
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
         if (mWaitCallBackDialog != null) {
             mWaitCallBackDialog.dismiss();
         }
-        updatePushDialog.show();
+
     }
 
     @Override
@@ -183,12 +196,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mRvData.setLayoutManager(linearLayoutManager);
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
-
+        mCurrentFlightNo =  mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo();
         //发送结载
         mTvSendOver.setOnClickListener(v -> {
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
-            requestModel.setFlightNo(data.getFlightNo());
+            if (data.getRelateInfoObj()!=null){
+                requestModel.setFlightNo(data.getRelateInfoObj().getFlightNo());
+            }
+            else {
+                requestModel.setFlightNo(data.getFlightNo());
+            }
             requestModel.setCreateTime(mLoadingList.get(0).getCreateTime());
             requestModel.setLoadingUser(UserInfoSingle.getInstance().getUsername());
             requestModel.setCreateUser(mLoadingList.get(0).getCreateUser());

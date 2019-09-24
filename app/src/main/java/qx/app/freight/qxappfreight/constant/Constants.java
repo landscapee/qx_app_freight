@@ -245,4 +245,7 @@ public class Constants {
 
     public static final String YCS = "压舱沙";//压舱沙
 
+
+    //心跳时间
+    public static final int TIME_HEART = 10000;
 }

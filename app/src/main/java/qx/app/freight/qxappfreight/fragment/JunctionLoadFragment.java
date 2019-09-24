@@ -136,6 +136,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                             Log.e("tagPush", "推送出错了");
                             mListCache.clear();
                         }
+                        mDialog = null;
 //                        Tools.closeVibrator(getActivity().getApplicationContext());
                     });
                 }

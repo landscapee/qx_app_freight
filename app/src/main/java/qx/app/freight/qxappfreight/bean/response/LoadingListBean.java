@@ -43,6 +43,7 @@ public class LoadingListBean implements Serializable {
 
         @Data
         public static class ContentObjectBean implements  Serializable{
+            private String flightNo;
             private String cargoName;
             private List<ScooterBean> scooters;
 

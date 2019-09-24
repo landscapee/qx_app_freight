@@ -208,7 +208,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
                 UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
 
-                    CargoManifestInfoActivity.startActivity(getContext(),loadAndUnloadTodoBeans.get(0),1);
+                    CargoManifestInfoActivity.startActivity(getContext(),loadAndUnloadTodoBeans.get(0),0);
 //                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
 //                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
 //                    getContext().startActivity(intent);

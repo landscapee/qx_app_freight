@@ -45,13 +45,18 @@ public class InstallSuggestPushDialog extends Dialog {
     @BindView(R.id.mfrv_data)
     RecyclerView mRvData;//货邮舱单信息列表
     private OnTpPushListener mOnTpPushListener;
+    @BindView(R.id.tv_flight_no)
+    TextView tvFlightNo;
 
+    private String flightNo;
     private  List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1;
 
-    public InstallSuggestPushDialog(@NonNull Context context, int themeResId, List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1, OnTpPushListener mOnTpPushListener) {
+    public InstallSuggestPushDialog(@NonNull Context context, int themeResId, List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1,String flightNo, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
+        this.flightNo = flightNo;
+
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
@@ -66,11 +71,13 @@ public class InstallSuggestPushDialog extends Dialog {
         initViews();
     }
     private void screenData( List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1) {
+
+        tvFlightNo.setText(flightNo);
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
         title.setLocation("货位");
         title.setScooterCode("板车号");
-        title.setUldCode("ULD号");
+        title.setSerialInd("ULD号");
         title.setDestinationStation("目的站");
         title.setType("类型");
         title.setWeight("重量");
@@ -85,7 +92,7 @@ public class InstallSuggestPushDialog extends Dialog {
             scootersBean1.setCargoName(scooterBean.getCargoName());
             scootersBean1.setLocation(scooterBean.getLocation());
             scootersBean1.setScooterCode(scooterBean.getScooterCode());
-            scootersBean1.setUldCode(scooterBean.getSerialInd());
+            scootersBean1.setSerialInd(scooterBean.getSerialInd());
             scootersBean1.setDestinationStation(scooterBean.getDestinationStation());
             scootersBean1.setType(scooterBean.getType());
             scootersBean1.setWeight(scooterBean.getWeight()+"");

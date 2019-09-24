@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -93,7 +96,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private LoadAndUnloadTodoBean mBaseData;
     private List<String> mListVerson = new ArrayList<>();
     private List<String> mListVersonCode = new ArrayList<>();
-    private String newest = null;//最新版本号
+    private int newest = 0;//最新版本号
     private HashMap<String, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
@@ -103,8 +106,21 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     private WaitCallBackDialog mWaitCallBackDialog;
 
+    private int flag = 0;//0 展示或有舱单 1 展示装舱建议
 
     private String mId = null;//装机单id
+
+    List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
+    LnstallationListAdapter adapter ;
+
+
+    public static void startActivity(Context context, LoadAndUnloadTodoBean loadAndUnloadTodoBean, int flag) {
+        Intent intent = new Intent(context, LnstallationInfoActivity.class);
+        intent.putExtra("flag",flag);
+        intent.putExtra("data", loadAndUnloadTodoBean);
+        context.startActivity(intent);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_lnstalla_tion_info;
@@ -120,7 +136,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
         mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
+        flag = getIntent().getIntExtra("flag",0);
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftno());
         FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
@@ -163,7 +181,18 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             entity.setPrintName("彭瑞张伟都是傻逼");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
-        loadFlag = 2;
+
+        adapter = new LnstallationListAdapter(mList1);
+        mRvData.setAdapter(adapter);
+
+        if (flag == 1){
+            mRgTitle.check(R.id.rb_advise_install);
+            loadFlag = 3;
+        }
+        else {
+            mRgTitle.check(R.id.rb_install);
+            loadFlag = 2;
+        }
         loadData();
         mRgTitle.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -177,8 +206,20 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     break;
             }
         });
+    }
+
+    private void showConfirm(int i) {
+        if (i == 3){
+            mTvConfirm.setVisibility(View.GONE);
+            mTvConfirmDate.setVisibility(View.GONE);
+        }
+        else {
+            mTvConfirm.setVisibility(View.VISIBLE);
+            mTvConfirmDate.setVisibility(View.VISIBLE);
+        }
 
     }
+
 
     private void showDialogWait(){
         mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
@@ -218,7 +259,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
             int version = 1;//版本号
-            newest = null;
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
                 if (flightAllReportInfos.get(i).getContent() != null && !"[]".equals(flightAllReportInfos.get(i).getContent())) {
                     LnstallationInfoBean[] datas = mGson.fromJson(flightAllReportInfos.get(i).getContent(), LnstallationInfoBean[].class);
@@ -239,25 +279,18 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     }
                     mListVersonCode.add(version+"");
 //                    if (newest == null)
-                        newest = version+"";
                     version++;
                 }
             }
-//            for (int i = 0; i < flightAllReportInfos.size(); i++) {
-//                if (flightAllReportInfos.get(i).getContent() != null && !"[]".equals(flightAllReportInfos.get(i).getContent())) {
-//                    newest = i+"";
-//                    break;
-//                }
-//
-//            }
-            if (StringUtil.isEmpty(newest))
-                mTvVersion.setText("版本号:无");
-            else {
-                mTvVersion.setText("版本号:" + newest);
-                screenData(newest);
-            }
+            //倒序
+            Collections.reverse(mListVerson);
+            Collections.reverse(mListVersonCode);
+
+                screenData(0);
 
         }
+        else
+            mTvVersion.setText("版本号:无");
     }
 
     @Override
@@ -266,19 +299,6 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         finish();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            loadData();
-        }
-//        else if ("D".equals(mWebSocketResultBean.getFlag())) {
-//            for (TransportDataBase mTransportListBean : list) {
-//                if (mWebSocketResultBean.getChgData().get(0).getTaskId().equals(mTransportListBean.getTaskId())) {
-//                    list.remove(mTransportListBean);
-//                }
-//            }
-//    }
-    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallNotifyEventBusEntity installNotifyEventBusEntity) {
         if (installNotifyEventBusEntity.getFlighNo().equals(mBaseData.getFlightNo())){
@@ -297,17 +317,16 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 if (mListVerson.size() > 0) {
-                    if (mListVerson.get(options1).contains("监装确认")) {
-                        mTvConfirm.setVisibility(View.VISIBLE);
-                        mTvConfirmDate.setVisibility(View.VISIBLE);
-                        mTvConfirm.setText("监装员:" + mapPresen.get(options1));
-                        mTvConfirmDate.setText("发送时间:" + mapDate.get(options1));
-                    } else {
-                        mTvConfirm.setVisibility(View.GONE);
-                        mTvConfirmDate.setVisibility(View.GONE);
-                    }
-                    mTvVersion.setText(mListVerson.get(options1));
-                    screenData((options1+1)+"");
+//                    if (mListVerson.get(options1).contains("监装确认")) {
+//                        showConfirm(loadFlag);
+//                        mTvConfirm.setText("监装员:" + mapPresen.get(options1));
+//                        mTvConfirmDate.setText("发送时间:" + mapDate.get(options1));
+//                    } else {
+//                        mTvConfirm.setVisibility(View.GONE);
+//                        mTvConfirmDate.setVisibility(View.GONE);
+//                    }
+//                    mTvVersion.setText(mListVerson.get(options1));
+                    screenData(options1);
                 }
             }
         }).build();
@@ -320,12 +339,22 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }
     }
 
-    private void screenData(String verson) {
+    private void screenData(int verson) {
+        if (mListVerson.get(verson).contains("监装确认")) {
+            showConfirm(loadFlag);
+            mTvConfirm.setText("监装员:" + mapPresen.get(mListVersonCode.get(verson)));
+            mTvConfirmDate.setText("发送时间:" + mapDate.get(mListVersonCode.get(verson)));
+        } else {
+            mTvConfirm.setVisibility(View.GONE);
+            mTvConfirmDate.setVisibility(View.GONE);
+        }
+        mTvVersion.setText(mListVerson.get(verson));
+
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
         title.setLocation("货位");
         title.setScooterCode("板车号");
-        title.setUldCode("ULD号");
+        title.setSerialInd("ULD号");
         title.setDestinationStation("目的站");
         title.setType("类型");
         title.setWeight("重量");
@@ -333,17 +362,21 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         title.setSpecialNumber("特货代码");
         title.setExceptionFlag(1);
 //        mList.add(0, title);
-        List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
+//        List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
+        mList1.clear();
         mList1.add(title);
-        mList1.addAll(map.get(verson));
+        mList1.addAll(map.get(mListVersonCode.get(verson)));
         mId = mapMid.get(verson);
-        LnstallationListAdapter adapter = new LnstallationListAdapter(mList1);
-        mRvData.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void toastView(String error) {
         mSrRefush.setRefreshing(false);
+
+        mList1.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

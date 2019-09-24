@@ -59,15 +59,15 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 public class InstallEquipLeaderFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadUnloadLeaderToDoContract.LoadUnloadLeaderToDoView, EmptyLayout.OnRetryLisenter, LoadAndUnloadTodoContract.loadAndUnloadTodoView {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
-    private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> mList = new ArrayList <>();
+    private List <LoadAndUnloadTodoBean> mCacheList = new ArrayList <>();
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private LeaderInstallEquipStepAdapter mSlideAdapter;
     private int mOperatePos;
-    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();//推送的缓存任务
-    private List<LoadAndUnloadTodoBean> mListCacheUse = new ArrayList<>(); //领受拒绝任务显示使用
+    private List <LoadAndUnloadTodoBean> mListCache = new ArrayList <>();//推送的缓存任务
+    private List <LoadAndUnloadTodoBean> mListCacheUse = new ArrayList <>(); //领受拒绝任务显示使用
     private InstallEquipLeaderAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
@@ -76,7 +76,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     private boolean isShow = false;
 
     private PushLoadUnloadLeaderDialog mDialog = null;
-    private List<String> mTaskIdList = new ArrayList<>();
+    private List <String> mTaskIdList = new ArrayList <>();
     private String mSpecialTaskId = null;//专门记录由点击了结束装机或卸机返回刷新数据的taskId，匹配到该taskId则item应该展开
 
     @Nullable
@@ -90,7 +90,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoadUnLoadTaskPushBean result) {
         if (result != null) {
-            List<LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean> list = result.getTaskData().getStaffList();
+            List <LoadUnLoadTaskPushBean.TaskDataBean.StaffListBean> list = result.getTaskData().getStaffList();
             StringBuilder addMembers = new StringBuilder();
             StringBuilder removeMembers = new StringBuilder();
             int addNumber = 0, removeNumber = 0;
@@ -134,7 +134,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                 loadData();
             } else if (result.isCancelFlag()) {
                 if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
-                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    List <LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
                     Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -147,7 +147,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     loadData();
                 }
             } else {//新任务推送，筛选最新数据再添加进行展示
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                List <LoadAndUnloadTodoBean> list = result.getTaskData();
                 for (LoadAndUnloadTodoBean bean : list) {
                     for (LoadAndUnloadTodoBean bean1 : mListCache) {
                         if (bean.getTaskId().equals(bean1.getTaskId())) {//如果新任务id==旧任务id就删除
@@ -185,22 +185,25 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mListCacheUse.clear();
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
-        mDialog = new PushLoadUnloadLeaderDialog(getContext(), R.style.custom_dialog,mListCacheUse, status -> {
+        mDialog = new PushLoadUnloadLeaderDialog(getContext(), R.style.custom_dialog, mListCacheUse, status -> {
             switch (status) {
                 case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
                     mDialog.dismiss();
                     ToastUtil.showToast("领受新装卸任务成功");
                     mListCacheUse.clear();
+                    mDialog = null;
                     loadData();
                     showDialogTask();
                     break;
                 case 1://拒绝任务后清除taskId记录
                     mDialog.dismiss();
                     mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
+                    mListCacheUse.clear();
                     if (isShow) {
                         mTaskFragment.setTitleText(mTaskIdList.size());
                         mMfrvData.notifyForAdapter(mAdapter);
                     }
+                    mDialog = null;
                     showDialogTask();
                     break;
                 case -1://领受失败后，清空未领受列表缓存
@@ -209,7 +212,11 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     mListCacheUse.clear();
                     break;
             }
-            });
+        });
+        if (!mDialog.isShowing()) {//新任务弹出框未显示在屏幕中
+            mDialog.show();//显示新任务弹窗
+        }
+    }
 //        Log.e("tagTest", "mData======" + mListCacheUse.size());
 //        mDialog.setData(getContext(), mListCacheUse, status -> {
 //            switch (status) {
@@ -237,11 +244,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
 //            }
 //            Tools.closeVibrator(getActivity().getApplicationContext());
 //        });
-        if (!mDialog.isShowing()) {//新任务弹出框未显示在屏幕中
-            Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
-            mDialog.show();//显示新任务弹窗
-        }
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -300,7 +302,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
-        mPresenter=new LoadUnloadToDoLeaderPresenter(this);
+        mPresenter = new LoadUnloadToDoLeaderPresenter(this);
         ((LoadUnloadToDoLeaderPresenter) mPresenter).getLoadUnloadLeaderToDo(entity);
     }
 
@@ -326,7 +328,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
     }
 
     @Override
-    public void getLoadUnloadLeaderToDoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void getLoadUnloadLeaderToDoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
         mCacheList.clear();
         if (mCurrentPage == 1) {
@@ -349,7 +351,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
             }
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
-            List<String> times = new ArrayList<>();
+            List <String> times = new ArrayList <>();
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add(String.valueOf(bean.getArrivalTime()));
             if (bean.getTaskType() == 6) {//装机
@@ -421,12 +423,12 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         for (LoadAndUnloadTodoBean bean : mCacheList) {
             if (!bean.isAcceptTask()) {
                 boolean isInclude = false;
-                for (LoadAndUnloadTodoBean loadAndUnloadTodoBean1:mListCache){
-                    if (loadAndUnloadTodoBean1.getTaskId().equals(bean.getTaskId())){
-                        isInclude =true;
+                for (LoadAndUnloadTodoBean loadAndUnloadTodoBean1 : mListCache) {
+                    if (loadAndUnloadTodoBean1.getTaskId().equals(bean.getTaskId())) {
+                        isInclude = true;
                     }
                 }
-                if (!isInclude){
+                if (!isInclude) {
                     mListCache.add(bean);
                 }
             }
@@ -477,12 +479,12 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserName(mList.get(bigPos).getWorkerName());
         entity.setCreateTime(System.currentTimeMillis());
-        mPresenter=new LoadUnloadToDoLeaderPresenter(this);
+        mPresenter = new LoadUnloadToDoLeaderPresenter(this);
         ((LoadUnloadToDoLeaderPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
 
     }
 

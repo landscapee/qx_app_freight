@@ -139,6 +139,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     Log.e("tagPush", "推送出错了");
                     mListCache.clear();
                 }
+                mDialog = null;
             });
         }
 //        mDialog.setData(getContext(), mListCache, success -> {

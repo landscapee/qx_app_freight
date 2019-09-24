@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
+import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
@@ -56,6 +57,7 @@ import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 
@@ -372,6 +374,15 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(InstallChangeEntity result) {
+        String remark = result.getFlightNo()+"预装机单已更新，请查看！";
+
+        if (remark!=null&& !StringUtil.isEmpty(remark)){
+            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> EventBus.getDefault().post("refresh_data_update"));
+            updatePushDialog.show();
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(NewInstallEventBusEntity  result) {
         List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
         List<LoadingListBean.DataBean.ContentObjectBean> objectBeans = result.getBeans();
@@ -379,7 +390,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
             for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans){
                 scooters.addAll(mContentObjectBean.getScooters());
             }
-            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters, () -> EventBus.getDefault().post("refresh_data_update"));
+            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters,objectBeans.get(0).getFlightNo(), () -> EventBus.getDefault().post("refresh_data_update"));
             updatePushDialog.show();
         }
     }

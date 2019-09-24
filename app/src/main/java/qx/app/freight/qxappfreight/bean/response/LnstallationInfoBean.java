@@ -24,6 +24,7 @@ public class LnstallationInfoBean {
     public static class ScootersBean {
         private String location;//货位
         private String uldCode = "- -";//
+        private String serialInd;//
         private String specialNumber = "- -";//
         private String cargoName = "- -";//舱位
         private long createTime;

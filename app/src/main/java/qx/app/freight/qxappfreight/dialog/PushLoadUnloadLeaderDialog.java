@@ -65,7 +65,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         this.list = list;
         this.onDismissListener = onDismissListener;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_load_unload);
+        setContentView(R.layout.dialog_load_unload_leader);
         convertView = findViewById(R.id.content_view);
         setCanceledOnTouchOutside(false); // 外部点击取消
         // 设置宽度为屏宽, 靠近屏幕底部。
@@ -89,6 +89,12 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         this.list = list;
         this.onDismissListener = onDismissListener;
     }
+    public void setData(List<LoadAndUnloadTodoBean> list) {
+        if (this.list != null){
+            this.list.clear();
+            this.list.addAll(list);
+        }
+    }
 
     private void initViews() {
         RecyclerView mRvData = convertView.findViewById(R.id.rv_load_unload_list);
@@ -107,7 +113,16 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         setListeners();
     }
 
-//    @Override
+    @Override
+    public void show() {
+        if (mAdapter !=null){
+            mAdapter.notifyDataSetChanged();
+        }
+        super.show();
+
+    }
+
+    //    @Override
 //    public void show(FragmentManager manager, String tag) {
 //        try {
 //            Class c = Class.forName("android.support.v4.app.DialogFragment");
@@ -132,25 +147,31 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         LoadUnloadLeaderPresenter mPresenter = new LoadUnloadLeaderPresenter(PushLoadUnloadLeaderDialog.this);
         mTvAccept.setOnClickListener(v -> {
             Observable.just(list).all(loadAndUnloadTodoBeans -> {
-                for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
-                    PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-                    entity.setType(1);
-                    entity.setLoadUnloadDataId(bean.getId());
-                    entity.setFlightId(Long.valueOf(bean.getFlightId()));
-                    entity.setFlightTaskId(bean.getTaskId());
-                    entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                    entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                    if (bean.getTaskType() == 1) {
-                        entity.setOperationCode("FreightLoadReceived");
-                    } else {
-                        entity.setOperationCode("FreightUnloadReceived");
+                if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
+                    for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
+                        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+                        entity.setType(1);
+                        entity.setLoadUnloadDataId(bean.getId());
+                        entity.setFlightId(Long.valueOf(bean.getFlightId()));
+                        entity.setFlightTaskId(bean.getTaskId());
+                        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+                        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                        if (bean.getTaskType() == 1) {
+                            entity.setOperationCode("FreightLoadReceived");
+                        } else {
+                            entity.setOperationCode("FreightUnloadReceived");
+                        }
+                        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+                        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                        entity.setUserName(bean.getWorkerName());
+                        entity.setCreateTime(System.currentTimeMillis());
+                        mPresenter.slideTask(entity);
+                        Log.e("tagTest", "还在循环");
                     }
-                    entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-                    entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                    entity.setUserName(bean.getWorkerName());
-                    entity.setCreateTime(System.currentTimeMillis());
-                    mPresenter.slideTask(entity);
-                    Log.e("tagTest", "还在循环");
+                }
+                else {
+                    Log.e("tagTest", "任务列表为空");
+                    onDismissListener.refreshUI(-1);
                 }
                 return true;
             }).subscribe(aBoolean -> {
@@ -204,7 +225,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
 
     @Override
     public void toastView(String error) {
-
+        onDismissListener.refreshUI(-1);
     }
 
     @Override
@@ -219,6 +240,24 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
 
     public interface OnDismissListener {
         void refreshUI(int status);//1拒绝成功，0，领受成功，-1，调接口出错
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tools.startVibrator(context.getApplicationContext(), true, R.raw.ring);
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        Tools.closeVibrator(context.getApplicationContext());
+//    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Tools.closeVibrator(context.getApplicationContext());
     }
 
     private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {

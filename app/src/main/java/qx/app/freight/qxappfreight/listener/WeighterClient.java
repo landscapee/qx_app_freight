@@ -29,9 +29,11 @@ import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.NetworkUtils;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
@@ -48,8 +50,6 @@ public class WeighterClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-    private Timer mTimerReConnect;
-    private TimerTask mTimerTaskReConnect;
 
     public WeighterClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
@@ -71,40 +71,33 @@ public class WeighterClient extends StompClient {
                 .subscribe(lifecycleEvent -> {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
+                            WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            WebSocketUtils.sendHeartBeat(mTimer,mTimerTask);
-                            WebSocketUtils.stopTimer(mTimerReConnect,mTimerTaskReConnect);
-//                            sendMess(my);
-//                            if (mTimerReConnect != null)
-//                                mTimerReConnect.cancel();
+                            sendMess(my,uri);
                             Log.e(TAG, "webSocket  负重 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 负重 出错", lifecycleEvent.getException());
-                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
-//                            if (mTimer != null)
-//                                mTimer.cancel();
-                            if (WebSocketService.isTopic) {
-                                WebSocketService.setIsTopic(false);
-                            }
-////                            WebSocketService.isTopic = false;
-                            reConnect(uri);
-//                            connect(uri);
+                            WebSocketService.mStompClient.remove(my);
+                            WebSocketService.isTopic = false;
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 负重 关闭");
-                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
-//                            if (mTimer != null)
-//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
-                            resetSubscriptions();
-//                            connect(uri);
+                            if (UserInfoSingle.getInstance().getUserId() == null|| StringUtil.isEmpty(UserInfoSingle.getInstance().getUserId())){
+                                if (mTimerTask!= null){
+                                    mTimerTask.cancel();
+                                    mTimerTask= null;
+                                }
+                                if (mTimer != null){
+                                    mTimer.purge();
+                                    mTimer.cancel();
+                                    mTimer = null;
+                                }
+                            }
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            WebSocketUtils.stopTimer(mTimer,mTimerTask);
-//                            if (mTimer != null)
-//                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -167,31 +160,35 @@ public class WeighterClient extends StompClient {
         EventBus.getDefault().post(bean);
     }
 
-    public void sendMess(StompClient my) {
+    public void sendMess(StompClient my,String uri) {
+        if (mTimerTask!= null){
+            mTimerTask.cancel();
+            mTimerTask= null;
+        }
+        if (mTimer != null){
+            mTimer.purge();
+            mTimer.cancel();
+            mTimer = null;
+        }
         mTimer = new Timer();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                if (!WebSocketService.isTopic){
+                    reConnect1(uri);
+                }
                 Log.e("websocket", "发送消息" + jsonObject.toJSONString());
-            }
-        };
-        mTimer.schedule(mTimerTask, 20000, 30000);
-    }
 
-    public void reConnect(String uri) {
-        WebSocketService.subList.clear();
-        if (mTimerReConnect!=null)
-            mTimerReConnect.cancel();
-        mTimerReConnect = new Timer();
-        mTimerTaskReConnect = new TimerTask() {
-            public void run() {
-                if (NetworkUtils.isNetWorkAvailable(mContext))
-                    connect(uri);
             }
         };
-        mTimerReConnect.schedule(mTimerTaskReConnect, 1000, 1000);
+        mTimer.schedule(mTimerTask, Constants.TIME_HEART, Constants.TIME_HEART);
+    }
+    public void reConnect1(String uri) {
+        WebSocketService.subList.clear();
+        connect(uri);
+        Log.e("websocket", "心跳失败 正在重连……");
     }
 
     private void resetSubscriptions() {
