@@ -29,9 +29,10 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
  */
 public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBean, BaseViewHolder> {
     private OnDataCheckListener onDataCheckListener;
-
+    private List<LoadingListBean.DataBean> data;
     public UnloadPlaneAdapter(@Nullable List<LoadingListBean.DataBean> data) {
         super(R.layout.item_unload_plane_version, data);
+        this.data = data;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         } else {
             helper.setText(R.id.tv_version_type, "历史版本");
         }
-        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
+        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name),item.getVersion()));
         ImageView ivControl = helper.getView(R.id.iv_control);
         LinearLayout llControl = helper.getView(R.id.ll_controler);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
@@ -63,17 +64,17 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     boolean hasLiveGoods = false;
                     boolean hasGUNGoods = false;
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        if (bill.getSpecialCode().equals("AVI")) {
+                        if (bill.getSpecialCode()!=null && bill.getSpecialCode().equals("AVI")) {
                             hasLiveGoods = true;
                             break;
                         }
-                        if (bill.getSpecialCode().equals(Constants.DANGER)) {
+                        if (bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER)) {
                             hasGUNGoods = true;
                             break;
                         }
                     }
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        bill.setHasLiveGoods(bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
+                        bill.setHasLiveGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
                     }
                     boolean shouldShowGoodsPos = !TextUtils.isEmpty(scooterBean.getLocation());
                     if (!goodsPosList.contains(scooterBean.getLocation()) && !TextUtils.isEmpty(scooterBean.getLocation())) {

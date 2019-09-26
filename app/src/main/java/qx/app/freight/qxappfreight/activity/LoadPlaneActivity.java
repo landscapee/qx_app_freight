@@ -97,7 +97,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvConfirmCargo;
     @BindView(R.id.tv_end_install_equip)
     TextView mTvEndInstall;
+
     private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
+    private UnloadPlaneAdapter adapter;
     private String mCurrentTaskId;
     private String mCurrentFlightId;
     private String mCurrentFlightNo;
@@ -194,6 +196,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRvData.setLayoutManager(linearLayoutManager);
+        adapter = new UnloadPlaneAdapter(mLoadingList);
+        mRvData.setAdapter(adapter);
         mPresenter = new GetFlightCargoResPresenter(this);
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
         mCurrentFlightNo =  mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo();
@@ -341,7 +345,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvSendOver.setTextColor(Color.parseColor("#888888"));
                 mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
             } else {
+
                 mLoadingList.add(result.getData().get(0));
+                adapter.notifyDataSetChanged();
+
                 mPresenter = new GetFlightCargoResPresenter(this);
                 BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
                 entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
@@ -377,8 +384,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         return Observable.just(new ArrayList <>(Arrays.asList(datasNew)));
                     }).subscribe(boardMultiBeans -> {
                         result.getData().get(0).setContentObject(boardMultiBeans);
-                        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
-                        mRvData.setAdapter(adapter);
+//                        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
+//                        mRvData.setAdapter(adapter);
                         adapter.setOnDataCheckListener((scooterId) -> {
 
                             newScooters.clear();

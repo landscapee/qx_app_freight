@@ -11,6 +11,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 货邮舱单列表数据适配器
@@ -54,15 +55,15 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
                     .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "状态" :"- -");
         }
         else {
-            helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" :item.getCargoName())
-                    .setText(R.id.tv_goods_position, item.getLocation())
-                    .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
-                    .setText(R.id.tv_uld_number, item.getSerialInd() == null ? "- -" : item.getSerialInd())
-                    .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
-                    .setText(R.id.tv_type,item.getType()== null ? "- -" : item.getType())
-                    .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
-                    .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
-                    .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber())
+            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getCargoName()) ? "- -" :item.getCargoName())
+                    .setText(R.id.tv_goods_position,  StringUtil.isEmpty(item.getLocation()) ? "- -" :item.getLocation())
+                    .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode())? "- -" : item.getScooterCode())
+                    .setText(R.id.tv_uld_number, StringUtil.isEmpty(item.getSerialInd()) ? "- -" : item.getSerialInd())
+                    .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation())? "- -" : item.getDestinationStation())
+                    .setText(R.id.tv_type, StringUtil.isEmpty(item.getType())? "- -" : item.getType())
+                    .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight())? "- -" : item.getWeight())
+                    .setText(R.id.tv_total, StringUtil.isEmpty(item.getTotal())? "- -" : item.getTotal())
+                    .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialNumber())? "- -" :item.getSpecialNumber())
                     .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "拉下" :item.isChange()?"调舱":"- -");
         }
 

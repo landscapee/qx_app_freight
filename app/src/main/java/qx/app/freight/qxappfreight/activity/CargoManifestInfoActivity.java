@@ -88,6 +88,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     private int flag = 0;//0 展示或有舱单 1 展示装舱建议
 
+    private int printFlag = 1;// 1 货邮舱单 2 装机单
+
     public static void startActivity(Context context,LoadAndUnloadTodoBean loadAndUnloadTodoBean,int flag) {
         Intent intent = new Intent(context, CargoManifestInfoActivity.class);
         intent.putExtra("flag",flag);
@@ -149,7 +151,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             entity.setReportInfoId(mId);
             // 1 货邮舱单 2 装机单
             entity.setType(1);
-            entity.setPrintName("123张耀是傻逼");
+            entity.setPrintName("1");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 //        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -216,6 +218,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
 
+            CargoManifestEventBusEntity cargoManifestEventBusEntity = new CargoManifestEventBusEntity(results);
+            EventBus.getDefault().post(cargoManifestEventBusEntity);
             //是否能释放航班
             if (!results.get(0).isCanRelease()){
                 mBtShifang.setBackgroundColor(getResources().getColor(R.color.gray_cc));
@@ -224,9 +228,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                 mBtShifang.setBackgroundResource(R.drawable.shape_dynamic_blue);
                 mBtShifang.setEnabled(true);
                 mBtShifang.setFocusableInTouchMode(true);
+                mBtShifang.requestFocus();
             }
-            CargoManifestEventBusEntity cargoManifestEventBusEntity = new CargoManifestEventBusEntity(results);
-            EventBus.getDefault().post(cargoManifestEventBusEntity);
         }
     }
 

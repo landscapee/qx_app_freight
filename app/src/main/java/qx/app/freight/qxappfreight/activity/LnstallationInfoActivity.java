@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,6 +153,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mBtSure.setOnClickListener(v -> {
+            loadFlag = -1;
             mPresenter = new SynchronousLoadingPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
@@ -163,6 +165,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
+            loadFlag = -1;
             mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
@@ -173,12 +176,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mSrRefush.setOnRefreshListener(() -> loadData());
         mTvVersion.setOnClickListener((v -> showStoragePickView()));
         mBtRefuse.setOnClickListener(v -> {
+            loadFlag = -1;
             mPresenter = new PrintRequestPresenter(this);
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightId(mBaseData.getFlightId());
             entity.setReportInfoId(mId);
             entity.setType(2);
-            entity.setPrintName("彭瑞张伟都是傻逼");
+            entity.setPrintName("1");
             ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 
@@ -260,6 +264,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             Gson mGson = new Gson();
             int version = 1;//版本号
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
+
                 if (flightAllReportInfos.get(i).getContent() != null && !"[]".equals(flightAllReportInfos.get(i).getContent())) {
                     LnstallationInfoBean[] datas = mGson.fromJson(flightAllReportInfos.get(i).getContent(), LnstallationInfoBean[].class);
                     List<LnstallationInfoBean.ScootersBean> list = new ArrayList<>();
@@ -269,13 +274,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     map.put(version+"", list);
                     mapMid.put(version+"",flightAllReportInfos.get(i).getId());//储存装机单 id
                     if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
-                        mListVerson.add("监装确认(版本" + version + ")");
-                        mapPresen.put(i, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
-                        mapDate.put(i, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
+                        mListVerson.add("监装确认(版本" + (version-1) + ")");
+                        mapPresen.put(version, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
+                        mapDate.put(version, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
                     } else {
                         mListVerson.add("版本号:" + version);
-                        mapPresen.put(i, "");
-                        mapDate.put(i, "");
+                        mapPresen.put(version, "");
+                        mapDate.put(version, "");
                     }
                     mListVersonCode.add(version+"");
 //                    if (newest == null)
@@ -342,8 +347,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void screenData(int verson) {
         if (mListVerson.get(verson).contains("监装确认")) {
             showConfirm(loadFlag);
-            mTvConfirm.setText("监装员:" + mapPresen.get(mListVersonCode.get(verson)));
-            mTvConfirmDate.setText("发送时间:" + mapDate.get(mListVersonCode.get(verson)));
+            mTvConfirm.setText("监装员:" + mapPresen.get(Integer.valueOf(mListVersonCode.get(verson))));
+            mTvConfirmDate.setText("发送时间:" + mapDate.get(Integer.valueOf(mListVersonCode.get(verson))));
         } else {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
@@ -366,7 +371,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mList1.clear();
         mList1.add(title);
         mList1.addAll(map.get(mListVersonCode.get(verson)));
-        mId = mapMid.get(verson);
+        mId = mapMid.get(mListVersonCode.get(verson));
 
         adapter.notifyDataSetChanged();
     }
@@ -375,8 +380,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     public void toastView(String error) {
         mSrRefush.setRefreshing(false);
 
-        mList1.clear();
-        adapter.notifyDataSetChanged();
+        if (loadFlag !=-1){
+            mList1.clear();
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

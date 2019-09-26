@@ -8,6 +8,7 @@ import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -333,6 +334,7 @@ public class Tools {
     public static void startVibrator(Context context, boolean isforcedispose, int rawId) {
         SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
+        wakeupScreen(context);
     }
 
     /**
@@ -398,4 +400,25 @@ public class Tools {
     public static void loginOut(Context mContext) {
 
     }
+
+    /**
+     * 唤醒屏幕
+     *
+     * @param context
+     */
+    public static void wakeupScreen(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (pm.isScreenOn()) {
+            return;
+        }
+        //获取电源管理器对象
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
+        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+        //点亮屏幕
+        wl.acquire();
+
+        //释放
+        wl.release();
+    }
+
 }

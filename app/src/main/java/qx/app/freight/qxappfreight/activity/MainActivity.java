@@ -376,10 +376,9 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
         String remark = result.getFlightNo()+"预装机单已更新，请查看！";
-
         if (remark!=null&& !StringUtil.isEmpty(remark)){
-            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> EventBus.getDefault().post("refresh_data_update"));
-            updatePushDialog.show();
+            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+            updatePushDialogInstall.show();
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
