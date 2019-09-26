@@ -18,6 +18,7 @@ import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.GetIOManifestEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
@@ -70,6 +71,7 @@ import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
@@ -98,6 +100,7 @@ import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -807,6 +810,16 @@ public interface HttpApi {
     //手持设备打印舱单/装机单
     @POST("service-product-finishloading/stowage-report-info/printRequest")
     Observable<BaseEntity<Object>> printRequest(@Body BaseFilterEntity exceptionContent);
+
+    /****************************库区管理***********************************/
+
+    //获取 出入库列表
+    @POST("service-bussiness-warehouse/storage/pageByType")
+    Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
+
+    //获取 出入库列表
+//    @POST("service-bussiness-warehouse/storage/affirmInventory")
+//    Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
 
 
 

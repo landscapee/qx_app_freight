@@ -60,17 +60,6 @@ public class TpPushDialog extends Dialog {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Tools.closeVibrator(mContext.getApplicationContext());
-    }
 
     public TpPushDialog(@NonNull Context context, int themeResId, AcceptTerminalTodoBean mAcceptTerminalTodoBean, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);

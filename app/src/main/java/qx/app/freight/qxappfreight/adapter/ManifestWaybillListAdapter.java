@@ -55,7 +55,7 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
                     tv.setTextColor(Color.parseColor("#000000"));
                 }
             } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)){//枪支
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }

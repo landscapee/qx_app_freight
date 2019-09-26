@@ -82,7 +82,7 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
             else{
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#e5e5e5"));
+                    tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
                 }
             }
 
@@ -93,10 +93,10 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
             }else {
                 tvPullDown.setVisibility(View.VISIBLE);
             }
-            for (TextView tv : tvList) {
-                tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
-                tv.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
-            }
+//            for (TextView tv : tvList) {
+//                tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
+//                tv.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
+//            }
             tvPullDown.setOnClickListener(v -> {
                 if (!item.isLocked()) {
                     if (item.isPull()) {

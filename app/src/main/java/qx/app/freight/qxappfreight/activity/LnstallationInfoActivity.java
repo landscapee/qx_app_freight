@@ -274,7 +274,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     map.put(version+"", list);
                     mapMid.put(version+"",flightAllReportInfos.get(i).getId());//储存装机单 id
                     if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
-                        mListVerson.add("监装确认(版本" + (version-1) + ")");
+                        mListVerson.add("监装确认(版本" + (version) + ")");
                         mapPresen.put(version, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
                         mapDate.put(version, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
                     } else {
@@ -306,7 +306,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallNotifyEventBusEntity installNotifyEventBusEntity) {
-        if (installNotifyEventBusEntity.getFlighNo().equals(mBaseData.getFlightNo())){
+        if (installNotifyEventBusEntity.getFlightNo().equals(mBaseData.getFlightNo())&&installNotifyEventBusEntity.getType() == 1){
             if (mWaitCallBackDialog != null){
                 mWaitCallBackDialog.dismiss();
             }
@@ -364,7 +364,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         title.setType("类型");
         title.setWeight("重量");
         title.setTotal("件数");
-        title.setSpecialNumber("特货代码");
+        title.setSpecialCode("特货代码");
+//        title.setSpecialNumber("特货代码");
         title.setExceptionFlag(1);
 //        mList.add(0, title);
 //        List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();

@@ -11,7 +11,7 @@ public class LnstallationInfoBean {
 
     /**
      * cargoName :
-     * scooters : [{"actWgt":"54","cargoStatus":0,"dest":"CGQ","dst":"","estWgt":"54","pos":"","pri":"1","restrictedCargo":"","tailer":"","type":"BY"},{"actWgt":"12","cargoStatus":0,"dest":"SJW","dst":"","estWgt":"12","pos":"","pri":"1","restrictedCargo":"","tailer":"","type":"BY"}]
+     * scooters : [{"actWgt":"54","cargoStatus":0,"dest":"CGQ","dst":"","estWgt":"54","pos":"","pri":"1","specialCode":"","tailer":"","type":"BY"},{"actWgt":"12","cargoStatus":0,"dest":"SJW","dst":"","estWgt":"12","pos":"","pri":"1","specialCode":"","tailer":"","type":"BY"}]
      */
 
     private String cargoName;
@@ -26,6 +26,7 @@ public class LnstallationInfoBean {
         private String uldCode = "- -";//
         private String serialInd;//
         private String specialNumber = "- -";//
+        private String specialCode;//特货代码
         private String cargoName = "- -";//舱位
         private long createTime;
         private String createUser;//创建人

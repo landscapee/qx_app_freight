@@ -68,6 +68,7 @@ public class LoadingListBean implements Serializable {
                 private String location;//货位
                 private String serialInd;//ULD号
                 private boolean change;//是否修改
+                private String specialCode;//特货代码
 
                 @Data
                 public static class WaybillBean  implements  Serializable{

@@ -11,14 +11,15 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 货邮舱单列表数据适配器
  */
-public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBean.ScootersBean, BaseViewHolder> {
+public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoBean.ScootersBean, BaseViewHolder> {
 
-    public LnstallationListAdapter(@Nullable List<LnstallationInfoBean.ScootersBean> list) {
+    public LnstallationListAdapter(@Nullable List <LnstallationInfoBean.ScootersBean> list) {
         super(R.layout.item_manifest_scooter, list);
     }
 
@@ -42,29 +43,28 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
 //        } else if ("X".equals(item.getType())) {
 //            type = "空集装箱";
 //        }
-        if (helper.getAdapterPosition() == 0){
-            helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" :item.getCargoName())
+        if (helper.getAdapterPosition() == 0) {
+            helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" : item.getCargoName())
                     .setText(R.id.tv_goods_position, item.getLocation())
                     .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, item.getSerialInd() == null ? "- -" : item.getSerialInd())
                     .setText(R.id.tv_to_city, item.getDestinationStation() == null ? "- -" : item.getDestinationStation())
-                    .setText(R.id.tv_type,item.getType()== null ? "- -" : item.getType())
+                    .setText(R.id.tv_type, item.getType() == null ? "- -" : item.getType())
                     .setText(R.id.tv_weight, item.getWeight() == null ? "- -" : item.getWeight())
                     .setText(R.id.tv_total, item.getTotal() == null ? "- -" : item.getTotal())
-                    .setText(R.id.tv_special_number, item.getSpecialNumber()== null ? "- -" :item.getSpecialNumber())
-                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "状态" :"- -");
-        }
-        else {
-            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getCargoName()) ? "- -" :item.getCargoName())
-                    .setText(R.id.tv_goods_position,  StringUtil.isEmpty(item.getLocation()) ? "- -" :item.getLocation())
-                    .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode())? "- -" : item.getScooterCode())
+                    .setText(R.id.tv_special_number, item.getSpecialCode() == null ? "- -" : item.getSpecialCode())
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "状态" : "- -");
+        } else {
+            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName())
+                    .setText(R.id.tv_goods_position, StringUtil.isEmpty(item.getLocation()) ? "- -" : item.getLocation())
+                    .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode()) ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, StringUtil.isEmpty(item.getSerialInd()) ? "- -" : item.getSerialInd())
-                    .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation())? "- -" : item.getDestinationStation())
-                    .setText(R.id.tv_type, StringUtil.isEmpty(item.getType())? "- -" : item.getType())
-                    .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight())? "- -" : item.getWeight())
-                    .setText(R.id.tv_total, StringUtil.isEmpty(item.getTotal())? "- -" : item.getTotal())
-                    .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialNumber())? "- -" :item.getSpecialNumber())
-                    .setText(R.id.tv_pull_state, item.getExceptionFlag()== 1 ? "拉下" :item.isChange()?"调舱":"- -");
+                    .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
+                    .setText(R.id.tv_type, StringUtil.isEmpty(item.getType()) ? "- -" : item.getType())
+                    .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight()) ? "- -" : item.getWeight())
+                    .setText(R.id.tv_total, StringUtil.isEmpty(item.getTotal()) ? "- -" : item.getTotal())
+                    .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialCode()) ? "- -" : item.getSpecialCode())
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : "- -");
         }
 
 
@@ -78,28 +78,52 @@ public class LnstallationListAdapter extends BaseQuickAdapter<LnstallationInfoBe
         TextView tv8 = helper.getView(R.id.tv_goods_position);
         TextView tv9 = helper.getView(R.id.tv_special_number);
         TextView tv10 = helper.getView(R.id.tv_pull_state);
-        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9,tv10};
+        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10};
 
-        if (item.isChange()){
-            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
-            for (TextView tv : tvList) {
-                tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
-            }
-        }else if (helper.getAdapterPosition() == 0) {
+
+        if (helper.getAdapterPosition() == 0) {
 //            helper.getView(R.id.sp_berth).setVisibility(View.GONE);
             helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
             for (TextView tv : tvList) {
                 tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
             }
         } else {
-            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
-            for (TextView tv : tvList) {
-                tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+
+            if (item.getExceptionFlag() == 1){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
+                }
             }
-//            tv1.setVisibility(View.GONE);
-//            helper.getView(R.id.sp_berth).setVisibility(View.VISIBLE);
-//            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getManifestList());
-//            ((Spinner) helper.getView(R.id.sp_berth)).setAdapter(spinnerAdapter);
+            else if (item.isChange()) {
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_5d9));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
+                }
+            }
+            else {
+                if (item.getSpecialCode() != null && item.getSpecialCode().contains("AVI")) {//活体颜色标注
+                    helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
+                    for (TextView tv : tvList) {
+                        tv.setTextColor(Color.parseColor("#000000"));
+                    }
+                } else if (item.getSpecialCode() != null && item.getSpecialCode().contains(Constants.DANGER)) {//枪支
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+                    for (TextView tv : tvList) {
+                        tv.setTextColor(Color.parseColor("#000000"));
+                    }
+                }
+                else {
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
+                    for (TextView tv : tvList) {
+                        tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    }
+                }
+
+            }
+
+
+
         }
 
     }

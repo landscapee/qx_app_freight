@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 
@@ -95,8 +96,8 @@ public class InstallEquipClient extends StompClient {
                             break;
                         case ERROR:
                             WebSocketService.mStompClient.remove(my);
-                            Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
                             WebSocketService.isTopic = false;
+                            Log.e(TAG, "websocket 装卸机 出错", lifecycleEvent.getException());
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
@@ -222,8 +223,8 @@ public class InstallEquipClient extends StompClient {
                         // 消息回执
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
                         if (null != topicMessage.getPayload()) {
-                            InstallNotifyEventBusEntity installNotifyEventBusEntity = new InstallNotifyEventBusEntity();
-                            installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
+                            InstallNotifyEventBusEntity installNotifyEventBusEntity = JSON.parseObject(topicMessage.getPayload(),InstallNotifyEventBusEntity.class);
+//                            installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
                             sendLoadingListPushNotify(installNotifyEventBusEntity);
                         }
                     }, throwable -> {

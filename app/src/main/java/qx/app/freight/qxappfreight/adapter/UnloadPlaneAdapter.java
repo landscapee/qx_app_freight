@@ -42,7 +42,8 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         } else {
             helper.setText(R.id.tv_version_type, "历史版本");
         }
-        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name),item.getVersion()));
+//        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name),item.getVersion()));
+        helper.setText(R.id.tv_version_name,"最新装机单");
         ImageView ivControl = helper.getView(R.id.iv_control);
         LinearLayout llControl = helper.getView(R.id.ll_controler);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
@@ -98,6 +99,9 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                         type = "邮件";
                     } else if ("C".equals(scooterBean.getType()) || "CT".equals(scooterBean.getType())) {
                         type = "货物";
+                    }
+                    else if ("X".equals(scooterBean.getType())) {
+                        type = "X";
                     }
                     right.setType(type);
                     right.setWeight(String.valueOf(scooterBean.getWeight()));

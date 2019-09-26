@@ -63,7 +63,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter<ManifestS
                     }
                 }
                 else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals(Constants.DANGER)){//枪支
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }

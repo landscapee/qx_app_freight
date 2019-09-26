@@ -36,6 +36,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
@@ -49,6 +50,7 @@ import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
 import qx.app.freight.qxappfreight.fragment.DynamicFragment;
+import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
 import qx.app.freight.qxappfreight.fragment.LnstallationFragment;
 import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
@@ -147,7 +149,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
             if (MyApplication.isNeedIm && Tools.isProduct())
                 fragment4 = new ImLibSpecialHomeFragment();
             else
-                fragment4 = new TestFragment();
+                fragment4 = new IOManifestFragment();
             fragment5 = new MineFragment();
         }
         initFragment();
@@ -380,6 +382,17 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
             UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
             updatePushDialogInstall.show();
         }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(InstallNotifyEventBusEntity result) {
+        if (result.getType() == 2){
+            String remark = result.getFlightNo()+"监装已确认新的装机单版本，请查看！";
+            if (remark!=null&& !StringUtil.isEmpty(remark)){
+                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+                updatePushDialogInstall.show();
+            }
+        }
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(NewInstallEventBusEntity  result) {
