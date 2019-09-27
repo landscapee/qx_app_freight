@@ -256,8 +256,18 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         }
         mIvTask.setImageResource(R.mipmap.backlog_normal);
         mTvTask.setTextColor(getResources().getColor(R.color.main_tv_normal));
-        mIvMessgae.setImageResource(R.mipmap.news_normal);
-        mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
+        if (MyApplication.isNeedIm && Tools.isProduct()){
+            mIvMessgae.setImageResource(R.mipmap.news_normal);
+            mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvMessge.setText("消息");
+        }
+        else
+        {
+            mIvMessgae.setImageResource(R.mipmap.news_normal);
+            mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
+            mTvMessge.setText("库房管理");
+
+        }
         mIvMine.setImageResource(R.mipmap.my_normal);
         mTvMine.setTextColor(getResources().getColor(R.color.main_tv_normal));
         switch (index) {
@@ -284,8 +294,17 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
                 }
                 break;
             case 3:
-                mIvMessgae.setImageResource(R.mipmap.news_selected);
-                mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
+                if (MyApplication.isNeedIm && Tools.isProduct()){
+                    mIvMessgae.setImageResource(R.mipmap.news_selected);
+                    mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
+                }
+                else
+                {
+                    mIvMessgae.setImageResource(R.mipmap.news_selected);
+                    mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
+
+                }
+
                 break;
             case 4:
                 mIvMine.setImageResource(R.mipmap.my_selected);

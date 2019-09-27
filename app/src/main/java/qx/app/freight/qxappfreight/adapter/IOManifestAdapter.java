@@ -22,7 +22,7 @@ public class IOManifestAdapter extends BaseQuickAdapter<SmInventoryEntryandexit,
         super(R.layout.item_io_manifest, data);
     }
 
-    public void setOnDeleteClickListener(OnDoitClickListener listener) {
+    public void setOnDoitClickListener(OnDoitClickListener listener) {
         this.mOnDoitClickListener = listener;
     }
 

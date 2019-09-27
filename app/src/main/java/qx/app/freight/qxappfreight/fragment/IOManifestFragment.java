@@ -28,6 +28,8 @@ import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.IOqrcodeEntity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -46,10 +48,9 @@ public class IOManifestFragment extends BaseFragment {
     private Fragment nowFragment;
     private InWarehouseFragment inWarehouseFragment;
     private OutWarehouseFragment outWarehouseFragment;
+    private InventoryFragment inventoryFragment;
 
-
-    public static String outletId = "ctu_airport_cargo_00001";//"营业点Code码",
-    public static String repId;//库区id
+    public static IOqrcodeEntity iOqrcodeEntity;
 
     @Nullable
     @Override
@@ -67,19 +68,28 @@ public class IOManifestFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        Log.e("daibanCode",daibanCode+"");
+        Log.e("daibanCode", daibanCode + "");
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("IOManifestFragment")) {
 
-            IOqrcodeEntity iOqrcodeEntity = JSON.parseObject(daibanCode,IOqrcodeEntity.class);
-            if (iOqrcodeEntity !=null){
-                outletId = iOqrcodeEntity.getOutletId();
-                repId = iOqrcodeEntity.getDepotID();
-                tvWarehouseName.setText(iOqrcodeEntity.getBusinessName()+"-"+iOqrcodeEntity.getDepotName());
+            IOqrcodeEntity iOqrcodeEntity1 = JSON.parseObject(daibanCode, IOqrcodeEntity.class);
+            if (iOqrcodeEntity1 != null) {
+                try {
+                    iOqrcodeEntity = Tools.IOclone(iOqrcodeEntity1);
+                } catch (Exception e) {
+                    ToastUtil.showToast(e.getMessage());
+                    return;
+                }
+                tvWarehouseName.setText(iOqrcodeEntity.getBusinessName() + "-" + iOqrcodeEntity.getDepotName());
+
+                inWarehouseFragment.loadData(1);
+                outWarehouseFragment.loadData(1);
+                inventoryFragment.loadData(1);
 //                inWarehouseFragment.loadData();
 //                storageType = iOqrcodeEntity.getDepotID();
             }
 
         }
+
     }
 
 
@@ -95,43 +105,41 @@ public class IOManifestFragment extends BaseFragment {
                 case R.id.rb_out:
                     nowFragment = outWarehouseFragment; //出库单
                     break;
-//                case R.id.rb_current:
-//                    nowFragment = mZdFragment; //装舱建议
-//                    break;
+                case R.id.rb_current:
+                    nowFragment = inventoryFragment; //当前库存
+                    break;
             }
             showFragment(nowFragment);
         });
         btnSwitch.setOnClickListener(v -> {
             ScanManagerActivity.startActivity(getContext(), "IOManifestFragment");
         });
-
         initFragment();
-        setData();
     }
 
     private void initFragment() {
         inWarehouseFragment = new InWarehouseFragment();
         outWarehouseFragment = new OutWarehouseFragment();
+        inventoryFragment = new InventoryFragment();
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.fl_content, inWarehouseFragment)
                 .add(R.id.fl_content, outWarehouseFragment)
+                .add(R.id.fl_content, inventoryFragment)
                 .commit();
         showFragment(inWarehouseFragment);
     }
 
     public void showFragment(Fragment fragment) {
 
-        FragmentTransaction transaction =getChildFragmentManager()
+        FragmentTransaction transaction = getChildFragmentManager()
                 .beginTransaction()
                 .hide(outWarehouseFragment)
+                .hide(inventoryFragment)
                 .hide(inWarehouseFragment);
         transaction.show(fragment).commit();
     }
 
-    private void setData() {
-
-    }
 
     @Override
     public void onDetach() {

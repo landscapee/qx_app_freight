@@ -73,6 +73,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
+import qx.app.freight.qxappfreight.bean.response.InventoryBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
@@ -1340,6 +1341,12 @@ public class UpdateRepository extends BaseRepository {
     public Observable<IOManifestBean> getIOManifestList(BaseFilterEntity exceptionContent) {
         return transform(getService().getIOManifestList(exceptionContent));
     }
+    public Observable<InventoryBean> getInventory(BaseFilterEntity exceptionContent) {
+        return transform(getService().getInventory(exceptionContent));
+    }
 
+    public Observable<String> submitIOManifestList(SmInventoryEntryandexit exceptionContent) {
+        return nothingtransform(getService().submitIOManifestList(exceptionContent));
+    }
 }
 

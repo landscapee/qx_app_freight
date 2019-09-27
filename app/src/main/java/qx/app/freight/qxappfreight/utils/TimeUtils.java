@@ -11,6 +11,40 @@ import java.util.TimeZone;
  * Created by ouyangbin on 2015/9/23.
  */
 public class TimeUtils {
+
+    /**
+     *获取当前时间
+     *
+     * @return
+     */
+    public static Long getTime() {
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        return date.getTime();
+    }
+
+    /**
+     * 相差几天
+     *
+     * @return
+     */
+    public static String getMinToDay(int time) {
+        int day = 0;
+        int hour = 0;
+        int min = 0;
+        day = (int) time/(24*60);
+        hour = (int)(time - (day*24*60))/60;
+        min = time - (day*24*60) - (hour*60);
+        String date = "";
+        if (day > 0)
+            date = date+day+"d";
+        if (hour > 0)
+            date = date+hour+"h";
+        if (min > 0)
+            date = date+min+"m";
+        return date;
+    }
+
     /**
      * yyyy年MM月dd日 HH时mm分ss秒 星期几
      *

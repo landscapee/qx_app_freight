@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/blue_2e8"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:text="序号"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="运单号"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="进库件数"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="进库重量"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="库存时长"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
+    <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
+        android:id="@+id/mfrv_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="7dp"
+        android:paddingLeft="7dp"/>
+
+</LinearLayout>

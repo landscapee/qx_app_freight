@@ -38,6 +38,7 @@ import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 
@@ -361,7 +362,7 @@ public class Tools {
     }
 
     /**
-     * 是否在一秒类 连续点击 ，规避误操作
+     * 判断是否是生产环境
      *
      * @return
      */
@@ -377,6 +378,22 @@ public class Tools {
      * @param mContext
      */
     public static void showDialog(Context mContext) {
+
+        loginOut(mContext);
+
+        CommonDialog dialog = new CommonDialog(mContext);
+        dialog.setTitle("提示")
+                .setMessage("你的账号在其他地方登陆！请重新登陆")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog1, confirm) ->{});
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> dialog.show());
+    }
+
+    //强制登出
+    public static void loginOut(Context mContext) {
         UserInfoSingle.setUserNil();
         ActManager.getAppManager().finishAllActivity();
         WebSocketService.stopServer(MyApplication.getContext());
@@ -385,19 +402,10 @@ public class Tools {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mContext.startActivity(intent);
 
-        CommonDialog dialog = new CommonDialog(mContext);
-        dialog.setTitle("提示")
-                .setMessage("你的账号在其他地方登陆！请重新登陆")
-                .setNegativeButton("确定")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) -> loginOut(mContext));
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
-    }
-
-    //强制登出
-    public static void loginOut(Context mContext) {
+        //清空 库房信息
+        if (IOManifestFragment.iOqrcodeEntity != null){
+            IOManifestFragment.iOqrcodeEntity = null;
+        }
 
     }
 

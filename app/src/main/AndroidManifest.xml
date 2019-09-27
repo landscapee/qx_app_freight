@@ -257,12 +257,18 @@
             android:name=".activity.SortingAddActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" /> <!-- 注册服务 -->
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.DoItIOManifestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
+
+        <!-- 注册服务 -->
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />

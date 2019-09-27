@@ -74,6 +74,7 @@ import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
 import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
+import qx.app.freight.qxappfreight.bean.response.InventoryBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
 import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
@@ -816,10 +817,13 @@ public interface HttpApi {
     //获取 出入库列表
     @POST("service-bussiness-warehouse/storage/pageByType")
     Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
+    //获取 库存列表
+    @POST("service-bussiness-warehouse/storage/listAreaInfo")
+    Observable<BaseEntity<InventoryBean>> getInventory(@Body BaseFilterEntity entity);
+    //提交出库入库 单
+    @POST("service-bussiness-warehouse/storage/affirmInventory")
+    Observable<BaseEntity<Object>> submitIOManifestList(@Body SmInventoryEntryandexit entity);
 
-    //获取 出入库列表
-//    @POST("service-bussiness-warehouse/storage/affirmInventory")
-//    Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
 
 
 

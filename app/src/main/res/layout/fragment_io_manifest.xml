@@ -29,7 +29,7 @@
             android:id="@+id/tv_warehouse_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="国内出港 - 危险品库"
+            android:text="请扫描库房二维码"
             android:textColor="@color/blue_2e8"
             android:textSize="18sp"
             android:layout_weight="1"

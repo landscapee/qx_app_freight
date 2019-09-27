@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
+import qx.app.freight.qxappfreight.activity.DoItIOManifestActivity;
 import qx.app.freight.qxappfreight.adapter.IOManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -71,9 +72,15 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
 
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
+        mMfrvData.setOnRetryLisenter(this);
         ioManifestAdapter = new IOManifestAdapter(mList);
         mMfrvData.setAdapter(ioManifestAdapter);
+        ioManifestAdapter.setOnDoitClickListener((view1, position) -> {
+
+            DoItIOManifestActivity.startActivity(getActivity(),mList.get(position));
+        });
         loadData(pageCurrent);
+
     }
 
     public void loadData(int pageCurrent1){
@@ -81,14 +88,16 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
         BaseFilterEntity<GetIOManifestEntity> entityBaseFilterEntity = new BaseFilterEntity <>();
         GetIOManifestEntity getIOManifestEntity = new GetIOManifestEntity();
         entityBaseFilterEntity.setCurrent(pageCurrent1);
+        pageCurrent = pageCurrent1;
         entityBaseFilterEntity.setSize(Constants.PAGE_SIZE);
-        if (!StringUtil.isEmpty(IOManifestFragment.outletId))
-            getIOManifestEntity.setOutletId(IOManifestFragment.outletId);
+        if (IOManifestFragment.iOqrcodeEntity != null&&!StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getOutletId()))
+            getIOManifestEntity.setOutletId(IOManifestFragment.iOqrcodeEntity.getOutletId());
         else{
-            ToastUtil.showToast("请先扫描库房二维码");
+            mMfrvData.finishRefresh();
+            mMfrvData.finishLoadMore();
             return;
         }
-        getIOManifestEntity.setRepId(IOManifestFragment.repId);
+//        getIOManifestEntity.setRepId(IOManifestFragment.repId);
         getIOManifestEntity.setType("I");
         getIOManifestEntity.setStatus("0");
         entityBaseFilterEntity.setFilter(getIOManifestEntity);
@@ -110,9 +119,12 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
     public void onLoadMore() {
         loadData(pageCurrent);
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String msg) {
+        if (msg!=null && msg.equals("inventory_refresh_in")){
+            loadData(1);
+        }
     }
 
     @Override
@@ -134,6 +146,11 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void toastView(String error) {
+        if (pageCurrent == 1) {
+            mMfrvData.finishRefresh();
+        } else {
+            mMfrvData.finishLoadMore();
+        }
         if (error!=null)
             ToastUtil.showToast(error);
     }

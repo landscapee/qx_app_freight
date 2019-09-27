@@ -202,12 +202,7 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                             if (MyApplication.isNeedIm&& Tools.isProduct())
                                 ((NoReadCountPresenter) mPresenter).loginOut(new UserBean(UserInfoSingle.getInstance().getUserId()));
                             else {
-                                UserInfoSingle.setUserNil();
-                                ActManager.getAppManager().finishAllActivity();
-                                WebSocketService.stopServer(getContext());
-                                Intent intent = new Intent(getContext(), LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                Tools.loginOut(getContext());
                             }
                         } else {
 //                            ToastUtil.showToast("点击了右边的按钮");
@@ -261,12 +256,8 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         else {
             ToastUtil.showToast("签退失败");
         }
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(getContext());
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Tools.loginOut(getContext());
+
     }
 
     @Override

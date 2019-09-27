@@ -11,6 +11,6 @@ public class GetIOManifestEntity {
     private String type;//""I入库 O出库",
     private String status;//"0待执行 1已执行",
     private String waybillCode;//运单号
-    private String repId;//库区id
+    private String areaId;//库区id
 
 }

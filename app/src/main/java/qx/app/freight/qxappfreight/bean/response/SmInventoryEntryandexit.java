@@ -1,11 +1,13 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class SmInventoryEntryandexit {
+public class SmInventoryEntryandexit implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
@@ -125,6 +127,10 @@ public class SmInventoryEntryandexit {
          */
         private String mailType;
 
+        /**
+         *  库区名字
+         */
+        private String areaName;
         /**
          * 0生成库存逻辑表 1不生成 出库不需生成;自动完成的不需要生成;
          */
