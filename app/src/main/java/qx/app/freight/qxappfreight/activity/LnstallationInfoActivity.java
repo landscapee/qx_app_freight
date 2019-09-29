@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,6 +56,7 @@ import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.SynchronousLoadingPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
@@ -97,13 +99,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private LoadAndUnloadTodoBean mBaseData;
     private List<String> mListVerson = new ArrayList<>();
     private List<String> mListVersonCode = new ArrayList<>();
-    private int newest = 0;//最新版本号
+    private int currentVersion = 0;//最新版本号
     private HashMap<String, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
     private HashMap<Integer, String> mapPresen = new HashMap<>();
     private HashMap<Integer, String> mapDate = new HashMap<>();
     private HashMap<String, String> mapMid = new HashMap<>();
 
-    private int loadFlag = -1;
+    private int loadFlag = -1;//用 刷新 请求装机单或者 建议装机单
 
     private WaitCallBackDialog mWaitCallBackDialog;
 
@@ -154,36 +156,39 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mBtSure.setOnClickListener(v -> {
             loadFlag = -1;
-            mPresenter = new SynchronousLoadingPresenter(this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightId(mBaseData.getFlightId());
-            entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
-            entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
-            String userName = UserInfoSingle.getInstance().getUsername();
-            entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
-            ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
+            showYesOrNoDialog("","重新获取离港数据并发送至监装",5);
+//            mPresenter = new SynchronousLoadingPresenter(this);
+//            BaseFilterEntity entity = new BaseFilterEntity();
+//            entity.setFlightId(mBaseData.getFlightId());
+//            entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
+//            entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+//            String userName = UserInfoSingle.getInstance().getUsername();
+//            entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+//            ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
         });
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
             loadFlag = -1;
-            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightId(mBaseData.getFlightId());
-            entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
-            entity.setRemark("");
-            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
+            showYesOrNoDialog("","确认二次开启舱门",4);
+//            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
+//            BaseFilterEntity entity = new BaseFilterEntity();
+//            entity.setFlightId(mBaseData.getFlightId());
+//            entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+//            entity.setRemark("");
+//            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
         mSrRefush.setOnRefreshListener(() -> loadData());
         mTvVersion.setOnClickListener((v -> showStoragePickView()));
         mBtRefuse.setOnClickListener(v -> {
             loadFlag = -1;
-            mPresenter = new PrintRequestPresenter(this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightId(mBaseData.getFlightId());
-            entity.setReportInfoId(mId);
-            entity.setType(2);
-            entity.setPrintName("1");
-            ((PrintRequestPresenter) mPresenter).printRequest(entity);
+            showYesOrNoDialog("","打印【版本号"+currentVersion+"】装机单",2);
+//            mPresenter = new PrintRequestPresenter(this);
+//            BaseFilterEntity entity = new BaseFilterEntity();
+//            entity.setFlightId(mBaseData.getFlightId());
+//            entity.setReportInfoId(mId);
+//            entity.setType(2);
+//            entity.setPrintName("1");
+//            ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 
         adapter = new LnstallationListAdapter(mList1);
@@ -220,6 +225,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         else {
             mTvConfirm.setVisibility(View.VISIBLE);
             mTvConfirmDate.setVisibility(View.VISIBLE);
+            mRvData.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
         }
 
     }
@@ -352,8 +358,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         } else {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
+            mRvData.setBackgroundColor(getResources().getColor(R.color.white));
         }
         mTvVersion.setText(mListVerson.get(verson));
+        currentVersion = Integer.valueOf(mListVersonCode.get(verson));
 
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");
@@ -375,6 +383,88 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mId = mapMid.get(mListVersonCode.get(verson));
 
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 打印
+     */
+    private void printManifest(){
+
+        mPresenter = new PrintRequestPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mBaseData.getFlightId());
+        entity.setReportInfoId(mId);
+        // 1 货邮舱单 2 装机单 3装舱建议
+        entity.setType(2);
+        entity.setPrintName("1");
+        ((PrintRequestPresenter) mPresenter).printRequest(entity);
+
+    }
+
+    /**
+     * 二次打开舱门
+     */
+    private void openAirDoor(){
+        mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mBaseData.getFlightId());
+        entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
+        entity.setRemark("");
+        ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
+    }
+
+    /**
+     * 通知录入
+     */
+    private void notifyInput(){
+        mPresenter = new SynchronousLoadingPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mBaseData.getFlightId());
+        entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
+        entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+        String userName = UserInfoSingle.getInstance().getUsername();
+        entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+        ((SynchronousLoadingPresenter) mPresenter).synchronousLoading(entity);
+    }
+
+    /**
+     * 二次确认弹出框
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title,String msg,int flag) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            switch (flag){
+                                case 2:
+                                    printManifest();
+                                    break;
+                                case 4:
+                                    openAirDoor();
+                                    break;
+                                case 5:
+                                    notifyInput();
+                                    break;
+
+
+                            }
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+
     }
 
     @Override

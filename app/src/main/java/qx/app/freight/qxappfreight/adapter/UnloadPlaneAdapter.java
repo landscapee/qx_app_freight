@@ -29,10 +29,8 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
  */
 public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBean, BaseViewHolder> {
     private OnDataCheckListener onDataCheckListener;
-    private List<LoadingListBean.DataBean> data;
     public UnloadPlaneAdapter(@Nullable List<LoadingListBean.DataBean> data) {
         super(R.layout.item_unload_plane_version, data);
-        this.data = data;
     }
 
     @Override

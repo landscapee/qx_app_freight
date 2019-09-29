@@ -39,7 +39,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /**
- * 入库单 列表
+ * 库存 列表
  */
 public class InventoryFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetInventoryContract.getInventoryView {
 

@@ -33,7 +33,7 @@ public class InventoryAdapter extends BaseQuickAdapter<SmInventorySummary, BaseV
         helper.setText(R.id.tv_waybill_number,item.getWaybillCode());
         helper.setText(R.id.tv_num,item.getNumber()+"");
         helper.setText(R.id.tv_weight,item.getWeight()+"");
-        Log.e("时间间隔：",TimeUtils.getDuration(item.getExecTime(),TimeUtils.getTime())+"");
+//        Log.e("时间间隔：",TimeUtils.getDuration(item.getExecTime(),TimeUtils.getTime())+"");
         helper.setText(R.id.tv_time,  TimeUtils.getMinToDay(TimeUtils.getDuration(TimeUtils.getTime(),item.getExecTime())));
 //        View viewDoit = helper.getView(R.id.tv_do_it);
 //        viewDoit.setTag(helper.getAdapterPosition());

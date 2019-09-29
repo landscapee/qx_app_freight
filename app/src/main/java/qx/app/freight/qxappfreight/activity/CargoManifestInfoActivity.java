@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,10 +26,12 @@ import java.util.List;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
@@ -38,9 +41,12 @@ import qx.app.freight.qxappfreight.fragment.HyFragment;
 import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
+import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
 import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -65,6 +71,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     TextView mTvDate;//日期
     @BindView(R.id.tv_version)
     TextView mTvVersion;//版本号
+    @BindView(R.id.tv_status)
+    TextView mTvStatus;//离港系统写入状态
+
     //    @BindView(R.id.mfrv_data)
 //    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
@@ -79,16 +88,15 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
 
     private LoadAndUnloadTodoBean mBaseData;
-    private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
-
     private String mId = null;
+    private String currentVersion;
     private HyFragment mHYragment;
     private ZdFragment mZdFragment;
     private Fragment nowFragment;
 
     private int flag = 0;//0 展示或有舱单 1 展示装舱建议
 
-    private int printFlag = 1;// 1 货邮舱单 2 装机单
+    private int printFlag = 1;// 1 货邮舱单 2 装机单 3 装舱建议
 
     public static void startActivity(Context context,LoadAndUnloadTodoBean loadAndUnloadTodoBean,int flag) {
         Intent intent = new Intent(context, CargoManifestInfoActivity.class);
@@ -130,29 +138,24 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         loadData();
         //释放
         mBtShifang.setOnClickListener(v -> {
-            mPresenter = new AuditManifestPresenter(this);
-            if (mId != null) {
-                BaseFilterEntity entity = new BaseFilterEntity();
-                entity.setReportInfoId(mId);
-                entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
-                entity.setAuditType("2");
-                entity.setFlightId(mBaseData.getFlightId());
-                entity.setReturnReason("手持端退回请求");
-                ((AuditManifestPresenter) mPresenter).auditManifest(entity);
-            } else
-                ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
-
+            showYesOrNoDialog("","释放【版本号"+currentVersion+"】货邮舱单",4);
 
         });
         mBtPrint.setOnClickListener(v -> {
-            mPresenter = new PrintRequestPresenter(this);
-            BaseFilterEntity entity = new BaseFilterEntity();
-            entity.setFlightId(mBaseData.getFlightId());
-            entity.setReportInfoId(mId);
-            // 1 货邮舱单 2 装机单
-            entity.setType(1);
-            entity.setPrintName("1");
-            ((PrintRequestPresenter) mPresenter).printRequest(entity);
+
+            if (printFlag == 1)
+                showYesOrNoDialog("","打印【版本号"+currentVersion+"】货邮舱单",1);
+            else if (printFlag == 3)
+                showYesOrNoDialog("","打印【版本号"+currentVersion+"】舱位建议",3);
+
+//            mPresenter = new PrintRequestPresenter(this);
+//            BaseFilterEntity entity = new BaseFilterEntity();
+//            entity.setFlightId(mBaseData.getFlightId());
+//            entity.setReportInfoId(mId);
+//            // 1 货邮舱单 2 装机单 3装舱建议
+//            entity.setType(printFlag);
+//            entity.setPrintName("1");
+//            ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 //        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
@@ -160,6 +163,33 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //                loadData();
 //            }
 //        });
+    }
+
+    private void printManifest(){
+
+        mPresenter = new PrintRequestPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mBaseData.getFlightId());
+        entity.setReportInfoId(mId);
+        // 1 货邮舱单 2 装机单 3装舱建议
+        entity.setType(printFlag);
+        entity.setPrintName("1");
+        ((PrintRequestPresenter) mPresenter).printRequest(entity);
+
+    }
+
+    private void releaseFlight(){
+        mPresenter = new AuditManifestPresenter(this);
+        if (mId != null) {
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setReportInfoId(mId);
+            entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
+            entity.setAuditType("2");
+            entity.setFlightId(mBaseData.getFlightId());
+            entity.setReturnReason("手持端退回请求");
+            ((AuditManifestPresenter) mPresenter).auditManifest(entity);
+        } else
+            ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
     }
 
     public void loadData() {
@@ -177,9 +207,11 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             switch (checkedId) {
                 case R.id.rb_hy:
                     nowFragment = mHYragment; //货邮舱单
+                    printFlag = 1;
                     break;
                 case R.id.rb_zd:
                     nowFragment = mZdFragment; //装舱建议
+                    printFlag = 3;
                     break;
             }
             showFragment(nowFragment);
@@ -211,6 +243,43 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             showFragment(mHYragment);
     }
 
+    /**
+     * 二次确认弹出框
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title,String msg,int flag) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            switch (flag){
+                                case 1:
+                                case 3:
+                                    printManifest();
+                                    break;
+                                case 4:
+                                    releaseFlight();
+                                    break;
+
+                            }
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+
+    }
+
     @Override
     public void getLastReportInfoResult(List<FlightAllReportInfo> results) {
         if (results != null && results.get(0) != null) {
@@ -218,6 +287,20 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
 
+            if (result.getWriteResult()!= null && result.getWriteResult().contains("成功")){
+                mTvStatus.setTextColor(getResources().getColor(R.color.green));
+                mTvStatus.setText("离港系统"+result.getWriteResult());
+            }
+            else if (result.getWriteResult()!= null && result.getWriteResult().contains("失败")){
+                mTvStatus.setTextColor(getResources().getColor(R.color.red));
+                mTvStatus.setText("离港系统"+result.getWriteResult());
+            }
+            else {
+                mTvStatus.setTextColor(getResources().getColor(R.color.red));
+                mTvStatus.setText("离港系统未知");
+            }
+
+            currentVersion = result.getVersion();
             CargoManifestEventBusEntity cargoManifestEventBusEntity = new CargoManifestEventBusEntity(results);
             EventBus.getDefault().post(cargoManifestEventBusEntity);
             //是否能释放航班

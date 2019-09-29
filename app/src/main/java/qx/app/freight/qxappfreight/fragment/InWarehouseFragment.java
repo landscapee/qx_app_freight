@@ -3,15 +3,11 @@ package qx.app.freight.qxappfreight.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,18 +20,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.DoItIOManifestActivity;
 import qx.app.freight.qxappfreight.adapter.IOManifestAdapter;
-import qx.app.freight.qxappfreight.adapter.ManifestWaybillListAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.ManifestMainBean;
-import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
-import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GetIOManifestEntity;
-import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.IOManiFestContract;
@@ -56,6 +45,7 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
     private IOManifestAdapter ioManifestAdapter;
 
     private int pageCurrent = 1;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_in_warehouse, container, false);
@@ -77,22 +67,22 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
         mMfrvData.setAdapter(ioManifestAdapter);
         ioManifestAdapter.setOnDoitClickListener((view1, position) -> {
 
-            DoItIOManifestActivity.startActivity(getActivity(),mList.get(position));
+            DoItIOManifestActivity.startActivity(getActivity(), mList.get(position));
         });
         loadData(pageCurrent);
 
     }
 
-    public void loadData(int pageCurrent1){
+    public void loadData(int pageCurrent1) {
         mPresenter = new IOManifestPresenter(this);
-        BaseFilterEntity<GetIOManifestEntity> entityBaseFilterEntity = new BaseFilterEntity <>();
+        BaseFilterEntity <GetIOManifestEntity> entityBaseFilterEntity = new BaseFilterEntity <>();
         GetIOManifestEntity getIOManifestEntity = new GetIOManifestEntity();
         entityBaseFilterEntity.setCurrent(pageCurrent1);
         pageCurrent = pageCurrent1;
         entityBaseFilterEntity.setSize(Constants.PAGE_SIZE);
-        if (IOManifestFragment.iOqrcodeEntity != null&&!StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getOutletId()))
+        if (IOManifestFragment.iOqrcodeEntity != null && !StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getOutletId()))
             getIOManifestEntity.setOutletId(IOManifestFragment.iOqrcodeEntity.getOutletId());
-        else{
+        else {
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
             return;
@@ -101,20 +91,22 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
         getIOManifestEntity.setType("I");
         getIOManifestEntity.setStatus("0");
         entityBaseFilterEntity.setFilter(getIOManifestEntity);
-        ((IOManifestPresenter)mPresenter).getIOManifestList(entityBaseFilterEntity);
+        ((IOManifestPresenter) mPresenter).getIOManifestList(entityBaseFilterEntity);
 
     }
 
     @Override
     public void onRetry() {
-        pageCurrent=1;
+        pageCurrent = 1;
         loadData(pageCurrent);
     }
+
     @Override
     public void onRefresh() {
-        pageCurrent=1;
+        pageCurrent = 1;
         loadData(pageCurrent);
     }
+
     @Override
     public void onLoadMore() {
         loadData(pageCurrent);
@@ -122,7 +114,7 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String msg) {
-        if (msg!=null && msg.equals("inventory_refresh_in")){
+        if (msg != null && msg.equals("inventory_refresh_in")) {
             loadData(1);
         }
     }
@@ -130,14 +122,13 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
     @Override
     public void setManifestResult(List <SmInventoryEntryandexit> result) {
 
-        if (pageCurrent == 1) {
+        if (pageCurrent == 1)
             mList.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
-        if (result != null && result.size()> 0){
-            pageCurrent++;
+        mMfrvData.finishRefresh();
+        mMfrvData.finishLoadMore();
+        if (result != null && result.size() > 0) {
+            if (result.size() >= 100)
+                pageCurrent++;
             mList.addAll(result);
         }
         mMfrvData.notifyForAdapter(ioManifestAdapter);
@@ -146,12 +137,9 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void toastView(String error) {
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
-        if (error!=null)
+        mMfrvData.finishRefresh();
+        mMfrvData.finishLoadMore();
+        if (error != null)
             ToastUtil.showToast(error);
     }
 

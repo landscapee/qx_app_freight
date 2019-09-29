@@ -98,13 +98,15 @@
         android:layout_weight="1"
         android:background="@color/white" />
     <LinearLayout
+        android:id="@+id/ll_operation"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_gravity="center"
         android:layout_margin="@dimen/dp_20"
         android:paddingStart="@dimen/dp_20"
         android:paddingEnd="@dimen/dp_20"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
         <TextView
             android:id="@+id/tv_send_over"
             android:layout_width="100dp"
@@ -125,6 +127,44 @@
             android:textColor="#f00"
             android:textSize="@dimen/sp_11" />
     </LinearLayout>
+    <qx.app.freight.qxappfreight.widget.MyHorizontalScrollView
+        android:id="@+id/hor_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_data_nonuse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/white"
+            />
+    </qx.app.freight.qxappfreight.widget.MyHorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/ll_operation2"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp_20"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:orientation="horizontal"
+        >
+    <TextView
+        android:id="@+id/tv_sure_pull"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_rect_green_009eb5"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/dp_60"
+        android:text="确认拉货"
+        android:textColor="#009EB5"
+        android:textSize="@dimen/sp_11" />
+</LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

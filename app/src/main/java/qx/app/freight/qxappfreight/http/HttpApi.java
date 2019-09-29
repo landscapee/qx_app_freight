@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
+import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
@@ -390,8 +391,8 @@ public interface HttpApi {
     Observable<BaseEntity<Object>> scanScooter(@Body TransportTodoListBean model);
 
     //扫描板车查询
-    @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}")
-    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId);
+    @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}/{taskId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId,@Path("taskId") String taskId);
 
     //进入运输任务 获取该任务下可拉板车的列表
     @GET("service-product-transport/tp-main-info/scooterWithTask/{taskId}")
@@ -413,6 +414,10 @@ public interface HttpApi {
     //装机判断红点状态
     @POST("service-product-returngoods/pullGoods/hasUnReport")
     Observable<BaseEntity<String>> getPullStatus(@Body BaseFilterEntity model);
+
+    //监装发起的 板车拉下
+    @POST("service-product-returngoods/pullGoods/startPull")
+    Observable<BaseEntity<Object>> startPull(@Body PullGoodsEntity model);
 
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")

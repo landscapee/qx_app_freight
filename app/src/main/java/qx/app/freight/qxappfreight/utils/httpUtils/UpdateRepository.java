@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
+import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
@@ -583,8 +584,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId) {
-        return transform(getService().scooterWithUser(model, flightId));
+    public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId,String taskId) {
+        return transform(getService().scooterWithUser(model, flightId,taskId));
     }
 
     /****
@@ -626,6 +627,13 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<BaseEntity<String>> getPullStatus(BaseFilterEntity entity) {
         return getService().getPullStatus(entity);
+    }
+    /****
+     * 监装发起的 拉货
+     * @return
+     */
+    public Observable<String> startPull(PullGoodsEntity entity) {
+        return nothingtransform(getService().startPull(entity));
     }
 
     /*****

@@ -15,7 +15,7 @@ public class ScanScooterContract {
     public interface scanScooterModel {
         void scanScooter(TransportTodoListBean transportEndEntity, IResultLisenter lisenter);
         void scanLockScooter(TransportEndEntity transportEndEntity, IResultLisenter lisenter);
-        void scooterWithUser(String user,String flightId,IResultLisenter lisenter);
+        void scooterWithUser(String user,String flightId,String taskId,IResultLisenter lisenter);
         void scooterWithUserTask(String taskId,IResultLisenter lisenter);
 
     }

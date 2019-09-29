@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_40"
    >
+    <Button
+        android:id="@+id/tv_pull"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
+        android:textColor="@color/black_3"
+        android:text="拉"
+        android:background="@drawable/shape_rect_gray_979797"
+        />
     <TextView
         android:layout_width="85dp"
         android:layout_height="match_parent"

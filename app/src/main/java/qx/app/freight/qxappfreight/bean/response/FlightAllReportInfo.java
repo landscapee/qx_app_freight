@@ -34,6 +34,7 @@ public class FlightAllReportInfo implements Serializable {
         private String id;
         private String flightInfoId;
         private String version;
+        private String writeResult;//   写入成功  写入失败
         private String content;
         private int reviewStatus;
         private long createTime;

@@ -82,6 +82,6 @@ public class SmInventorySummary {
     /**
      *  入库时间
      */
-    private Long execTime;
+    private long execTime;
 
 }

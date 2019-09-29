@@ -238,7 +238,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     private void getData() {
         mPresenter = new ScanScooterPresenter(this);
-        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(), mAcceptTerminalTodoBean.get(0).getFlightId());
+        ((ScanScooterPresenter) mPresenter).scooterWithUser(UserInfoSingle.getInstance().getUserId(), mAcceptTerminalTodoBean.get(0).getFlightId(),mAcceptTerminalTodoBean.get(0).getTaskId());
 
     }
 
@@ -363,6 +363,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 //            mainIfos.setTpOperator("u6911330e59ce46c288181ed11a48ee23");
                 mainIfos.setTpOperator(UserInfoSingle.getInstance().getUserId());
                 mainIfos.setTpScooterType(MapValue.getHYOfZP(transfortType));
+                mainIfos.setTaskId(mAcceptTerminalTodoBean.get(0).getTaskId());
                 mainIfos.setTpStartLocate(mAcceptTerminalTodoBean.get(0).getBeginAreaType());
                 ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
             }
@@ -393,6 +394,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
         TransportEndEntity transportEndEntity = new TransportEndEntity();
         mPresenter = new ScanScooterPresenter(this);
+        mainIfos.setTaskId(mAcceptTerminalTodoBean.get(0).getTaskId());
         mainIfos.setFlightId(mAcceptTerminalTodoBean.get(0).getFlightId());
         mainIfos.setFlightNo(mAcceptTerminalTodoBean.get(0).getFlightNo());
         mainIfos.setTpCargoType(mAcceptTerminalTodoBean.get(0).getCargoType());
@@ -888,7 +890,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(error);
+        if (error != null)
+            ToastUtil.showToast(error);
     }
 
     @Override

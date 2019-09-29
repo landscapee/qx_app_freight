@@ -175,15 +175,17 @@ public class TaskDoneFragment extends BaseFragment {
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
-            } else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                //登录不成功的时候 手动添加 user
-//        LoginResponseBean loginResponseBean = new LoginResponseBean();
-//        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-//        UserInfoSingle.setUser(loginResponseBean);
-                fragmentList.add(new DriverInFragment());
-                list_Title.add("内场司机");
-                goneTitle();
-            } else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+            }
+//            else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+//                //登录不成功的时候 手动添加 user
+////        LoginResponseBean loginResponseBean = new LoginResponseBean();
+////        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
+////        UserInfoSingle.setUser(loginResponseBean);
+//                fragmentList.add(new DriverInFragment());
+//                list_Title.add("内场司机");
+//                goneTitle();
+//            }
+            else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskDriverOutDoneFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {

@@ -316,7 +316,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             //把运输的板车类型 赋值大 子任务
             for (AcceptTerminalTodoBean mAcceptTerminalTodoBean : acceptTerminalTodoBeanList) {
                 for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean.getTasks()) {
-                    mOutFieldTaskBean.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
+                    mOutFieldTaskBean.setTransfortType(mAcceptTerminalTodoBean.getTransportTypeMapping());
                 }
             }
             //根据BeginAreaId分类 21 以下 用 else

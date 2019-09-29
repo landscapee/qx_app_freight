@@ -42,6 +42,8 @@ public class TimeUtils {
             date = date+hour+"h";
         if (min > 0)
             date = date+min+"m";
+        if (day == 0&& hour == 0&&min == 0)
+            date = "<1m";
         return date;
     }
 

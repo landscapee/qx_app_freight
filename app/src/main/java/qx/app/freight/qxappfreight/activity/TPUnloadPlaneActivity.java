@@ -334,6 +334,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
+                entity.setHeadingFlag(bean.getHeadingFlag());
                 entity.setTpCargoType("cargo");
                 entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
                 entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
@@ -355,6 +356,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                 entity.setTpScooterType(String.valueOf(bean.getScooterType()));
                 entity.setTpScooterCode(bean.getScooterCode());
                 entity.setFlightIndicator(bean.getFlightType());
+                entity.setHeadingFlag(bean.getHeadingFlag());
                 entity.setTpCargoType("baggage");
                 entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
                 entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());

@@ -63,6 +63,8 @@ public class ManifestScooterListBean {
     private int reDifference;
     private List<WaybillListBean> waybillList;
 
+    private boolean pull;//是否拉下状态
+
     @Data
     public static class WaybillListBean {
         /**
