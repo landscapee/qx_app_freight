@@ -48,7 +48,11 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         helper.setText(R.id.tv_flight_place, item.getPlanePlace());
 
         helper.setText(R.id.tv_arrive_time, StringUtil.format(mContext, R.string.format_arrive_info, TimeUtils.date2Tasktime3(item.getEtd()), TimeUtils.getDay(item.getEtd())));
-        helper.setText(R.id.tv_flight_task_type, item.getNum() + "个" + MapValue.getCarTypeValue(item.getCarType()));
+        if(item.getNum()>0){
+            helper.setText(R.id.tv_flight_task_type, item.getNum() + "个" + MapValue.getCarTypeValue(item.getCarType()));
+        }
+        else
+            helper.setText(R.id.tv_flight_task_type, "");
 
         helper.setChecked(R.id.cb_flight, item.isSelect());
 

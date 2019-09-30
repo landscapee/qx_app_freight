@@ -50,6 +50,7 @@ public class LoadingListBean implements Serializable {
             @Data
             public static class ScooterBean implements  Serializable{
                 private String cargoName;
+                private String oldCargoName;//原舱位
                 private long createTime;
                 private String createUser;
                 private String destinationStation;//目的地
@@ -94,6 +95,7 @@ public class LoadingListBean implements Serializable {
                     private String waybillCode;
                     private String specialCode;
                     private boolean hasLiveGoods;
+                    private boolean hasGUNGoods;
                 }
             }
         }

@@ -225,7 +225,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         else {
             mTvConfirm.setVisibility(View.VISIBLE);
             mTvConfirmDate.setVisibility(View.VISIBLE);
-            mRvData.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
+            mSrRefush.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
         }
 
     }
@@ -358,7 +358,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         } else {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
-            mRvData.setBackgroundColor(getResources().getColor(R.color.white));
+            mSrRefush.setBackgroundColor(getResources().getColor(R.color.white));
         }
         mTvVersion.setText(mListVerson.get(verson));
         currentVersion = Integer.valueOf(mListVersonCode.get(verson));

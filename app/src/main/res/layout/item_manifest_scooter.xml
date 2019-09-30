@@ -11,6 +11,15 @@
         android:textColor="@color/white"
         android:id="@+id/tv_manifest"
         android:gravity="center"/>
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:text="调整舱位"
+        android:textColor="@color/white"
+        android:id="@+id/tv_adjust"
+        android:gravity="center"
+         android:visibility="gone"
+        />
     <!--<Spinner-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="match_parent"-->

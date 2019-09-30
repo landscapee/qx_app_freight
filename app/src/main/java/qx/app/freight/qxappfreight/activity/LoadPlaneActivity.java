@@ -132,7 +132,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private int mOperateErrorStatus = -1;
     private boolean mConfirmPlan = false;
 
-    private boolean useLGsys = false ;//是否使用离港系统 m默认为使用
+    private boolean useLGsys = true ;//是否使用离港系统 m默认为使用
 
     //不使用离港系统 显示货邮舱单 使用
     private List <ManifestScooterListBean> manifestScooterListBeans = new ArrayList <>();
@@ -318,7 +318,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         } else {
 
             mRvDataNonuse.setLayoutManager(new LinearLayoutManager(this));
-            adapterNonuse = new ManifestWaybillListjianyiAdapter(manifestScooterListBeans, data.getWidthAirFlag());
+            adapterNonuse = new ManifestWaybillListjianyiAdapter(manifestScooterListBeans, data.getWidthAirFlag(),true);
             mRvDataNonuse.setAdapter(adapterNonuse);
 
             loadData1();
@@ -485,6 +485,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List <CompareInfoBean> idList = new ArrayList <>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
+                            scooterBean.setOldCargoName(scooterBean.getCargoName());//保存原舱位
                             oriScooters.add(scooterBean);
                             CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());

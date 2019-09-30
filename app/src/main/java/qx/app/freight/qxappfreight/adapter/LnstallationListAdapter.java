@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -19,8 +20,15 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
  */
 public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoBean.ScootersBean, BaseViewHolder> {
 
+    private boolean showAdjust;
+
     public LnstallationListAdapter(@Nullable List <LnstallationInfoBean.ScootersBean> list) {
         super(R.layout.item_manifest_scooter, list);
+    }
+
+    public LnstallationListAdapter(@Nullable List <LnstallationInfoBean.ScootersBean> list, boolean showAdjust) {
+        super(R.layout.item_manifest_scooter, list);
+        this.showAdjust = showAdjust;
     }
 
     @Override
@@ -43,8 +51,17 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
 //        } else if ("X".equals(item.getType())) {
 //            type = "空集装箱";
 //        }
+        TextView tvAdjust = helper.getView(R.id.tv_adjust);
+        if (showAdjust){
+            tvAdjust.setVisibility(View.VISIBLE);
+        }
+        else
+            tvAdjust.setVisibility(View.GONE);
+
         if (helper.getAdapterPosition() == 0) {
+
             helper.setText(R.id.tv_manifest, item.getCargoName() == null ? "- -" : item.getCargoName())
+                    .setText(R.id.tv_adjust, "调整舱位")
                     .setText(R.id.tv_goods_position, item.getLocation())
                     .setText(R.id.tv_scooter_number, item.getScooterCode() == null ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, item.getSerialInd() == null ? "- -" : item.getSerialInd())
@@ -55,8 +72,10 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_special_number, item.getSpecialCode() == null ? "- -" : item.getSpecialCode())
                     .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "状态" : "- -");
         } else {
-            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName())
+
+            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getOldCargoName()) ? "- -" : item.getOldCargoName())
                     .setText(R.id.tv_goods_position, StringUtil.isEmpty(item.getLocation()) ? "- -" : item.getLocation())
+                    .setText(R.id.tv_adjust, item.isChange()? StringUtil.isEmpty(item.getCargoName()) ? "" : item.getCargoName():"")
                     .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode()) ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, StringUtil.isEmpty(item.getSerialInd()) ? "- -" : item.getSerialInd())
                     .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
@@ -89,19 +108,17 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
             }
         } else {
 
-            if (item.getExceptionFlag() == 1){
+            if (item.getExceptionFlag() == 1) {
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                 for (TextView tv : tvList) {
                     tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
                 }
-            }
-            else if (item.isChange()) {
+            } else if (item.isChange()) {
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_5d9));
                 for (TextView tv : tvList) {
                     tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
                 }
-            }
-            else {
+            } else {
                 if (item.getSpecialCode() != null && item.getSpecialCode().contains("AVI")) {//活体颜色标注
                     helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
                     for (TextView tv : tvList) {
@@ -112,19 +129,13 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
-                }
-                else {
+                } else {
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
                     for (TextView tv : tvList) {
                         tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
                     }
                 }
-
             }
-
-
-
         }
-
     }
 }

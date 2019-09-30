@@ -297,7 +297,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             }
             else {
                 mTvStatus.setTextColor(getResources().getColor(R.color.red));
-                mTvStatus.setText("离港系统未知");
+                mTvStatus.setText("离港系统 状态未知");
             }
 
             currentVersion = result.getVersion();

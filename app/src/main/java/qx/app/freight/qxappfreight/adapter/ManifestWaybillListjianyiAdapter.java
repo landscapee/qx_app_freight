@@ -49,24 +49,30 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                 helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getMailType() != null ? item.getMailType() : "--");
             else
                 helper.setText(R.id.tv_mailtype, item.getMailType() != null ? item.getMailType() : "--");
-
-            //设置 拉下的状态
             Button btnPull = helper.getView(R.id.tv_pull);
-            btnPull.setOnClickListener(v -> {
-                item.setPull(!item.isPull());
+            if (notShowPull){
+                btnPull.setVisibility(View.VISIBLE);
+                //设置 拉下的状态
+                btnPull.setOnClickListener(v -> {
+                    item.setPull(!item.isPull());
+                    if (item.isPull()){
+                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                    }
+                    else{
+                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    }
+                });
                 if (item.isPull()){
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                 }
                 else{
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 }
-            });
-            if (item.isPull()){
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
             }
-            else{
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+            else {
+                btnPull.setVisibility(View.GONE);
             }
+
 
             TextView tv1 = helper.getView(R.id.tv_scooter_number);
             TextView tv2 = helper.getView(R.id.tv_total);
@@ -116,25 +122,32 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
             TextView tv5 = helper.getView(R.id.tv_specialCode);
             TextView tv6 = helper.getView(R.id.tv_mailtype);
             TextView tv7 = helper.getView(R.id.tv_scooter_number);
-
-            //设置 拉下的状态
             Button btnPull = helper.getView(R.id.tv_pull);
-            btnPull.setOnClickListener(v -> {
+            if (notShowPull){
+                btnPull.setVisibility(View.VISIBLE);
+                //设置 拉下的状态
+                btnPull.setOnClickListener(v -> {
+                    if (item.isPull()){
+                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                    }
+                    else{
+                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    }
+                    item.setPull(!item.isPull());
+
+                });
                 if (item.isPull()){
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                 }
                 else{
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    btnPull.setTextColor (mContext.getResources().getColor(R.color.black_3));
                 }
-                item.setPull(!item.isPull());
+            }
+            else {
+                btnPull.setVisibility(View.GONE);
+            }
 
-            });
-            if (item.isPull()){
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
-            }
-            else{
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
-            }
+
 
             TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7};
             if (helper.getAdapterPosition() == 0) {
@@ -166,7 +179,14 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
-                } else {
+                }
+                else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    for (TextView tv : tvList) {
+                        tv.setTextColor(Color.parseColor("#000000"));
+                    }
+                }
+                else {
                     helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));

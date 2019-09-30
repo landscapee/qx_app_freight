@@ -169,6 +169,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
      */
     private void toLoadPlaneActivity(OutFieldTaskBean mOutFieldTaskBean) {
         Intent intent = new Intent(mContext, TPUnloadPlaneActivity.class);
+        intent.putExtra("flight_type", mOutFieldTaskBean.getFlights().getFlightType());
         intent.putExtra("plane_info", mOutFieldTaskBean);
         mContext.startActivity(intent);
     }

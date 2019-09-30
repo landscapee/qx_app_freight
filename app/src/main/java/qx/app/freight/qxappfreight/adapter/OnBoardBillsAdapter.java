@@ -24,12 +24,34 @@ public class OnBoardBillsAdapter extends BaseQuickAdapter<LoadingListBean.DataBe
     @Override
     protected void convert(BaseViewHolder helper, LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean item) {
         if (helper.getAdapterPosition()!=0){
-            ((TextView)helper.getView(R.id.tv_bill_number)).setText(String.valueOf(item.getWaybillCode()));
-            ((TextView)helper.getView(R.id.tv_bill_total)).setText(String.valueOf(item.getNumber()));
-            ((TextView)helper.getView(R.id.tv_bill_weight)).setText(String.valueOf(item.getWeight()));
-            ((TextView)helper.getView(R.id.tv_bill_special_code)).setText(TextUtils.isEmpty(item.getSpecialCode())?"- -":item.getSpecialCode());
-            if (item.isHasLiveGoods()){
-                helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
+            TextView tv1 =helper.getView(R.id.tv_bill_number);
+            TextView tv2 =helper.getView(R.id.tv_bill_total);
+            TextView tv3 =helper.getView(R.id.tv_bill_weight);
+            TextView tv4 =helper.getView(R.id.tv_bill_special_code);
+
+            tv1.setText(String.valueOf(item.getNumber()));
+            tv2.setText(String.valueOf(item.getWeight()));
+            tv3.setText(String.valueOf(item.getWaybillCode()));
+            tv4.setText(TextUtils.isEmpty(item.getSpecialCode())?"- -":item.getSpecialCode());
+
+            TextView[] tvList = {tv1, tv2, tv3, tv4};
+            if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red_avi));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                }
+            }
+            else if ((item.isHasGUNGoods())){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                }
+            }
+            else{
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
+                }
             }
         }
     }
