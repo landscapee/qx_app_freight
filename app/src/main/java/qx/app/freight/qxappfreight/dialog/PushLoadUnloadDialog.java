@@ -191,20 +191,15 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(context.getApplicationContext(), true, R.raw.ring);
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(context.getApplicationContext(),true,R.raw.ring);
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Tools.closeVibrator(context.getApplicationContext());
-//    }
-
     @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+    protected void onStop() {
+        super.onStop();
         Tools.closeVibrator(context.getApplicationContext());
     }
 

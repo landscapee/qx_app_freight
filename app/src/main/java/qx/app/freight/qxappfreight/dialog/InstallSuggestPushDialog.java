@@ -154,9 +154,10 @@ public class InstallSuggestPushDialog extends Dialog {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
     }
 
     @Override

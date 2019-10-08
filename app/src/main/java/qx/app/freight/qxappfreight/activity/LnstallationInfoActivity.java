@@ -306,7 +306,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     @Override
     public void reOpenLoadTaskResult(String result) {
-        ToastUtil.showToast(result);
+        ToastUtil.showToast("操作成功");
         finish();
     }
 

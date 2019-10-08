@@ -130,7 +130,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 } else {
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
                     for (TextView tv : tvList) {
                         tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
                     }

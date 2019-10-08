@@ -147,4 +147,23 @@ public class TpPushDialog extends Dialog {
             void onSureBtnCallBack(List<OutFieldTaskBean> list);
 
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+//    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
+    }
 }

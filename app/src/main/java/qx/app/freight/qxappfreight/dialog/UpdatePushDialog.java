@@ -98,11 +98,19 @@ public class UpdatePushDialog extends Dialog {
         void onSureBtnCallBack();
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+
     }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+//    }
 
     @Override
     protected void onStop() {
