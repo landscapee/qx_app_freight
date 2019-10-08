@@ -191,7 +191,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //            ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 
-        adapter = new LnstallationListAdapter(mList1);
+        adapter = new LnstallationListAdapter(mList1,true);
         mRvData.setAdapter(adapter);
 
         if (flag == 1){

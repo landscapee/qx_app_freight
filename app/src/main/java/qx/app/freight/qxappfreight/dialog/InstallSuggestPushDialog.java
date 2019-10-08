@@ -107,7 +107,7 @@ public class InstallSuggestPushDialog extends Dialog {
 //                scootersBean1.setSpecialNumber(null);
             mList2.add(scootersBean1);
         }
-        LnstallationListAdapter adapter = new LnstallationListAdapter(mList2);
+        LnstallationListAdapter adapter = new LnstallationListAdapter(mList2,true);
         mRvData.setAdapter(adapter);
 
     }

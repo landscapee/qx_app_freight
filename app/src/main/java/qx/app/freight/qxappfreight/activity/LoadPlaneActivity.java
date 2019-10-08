@@ -485,7 +485,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     for (int i = 0; i < mBaseContent.size(); i++) {
                         List <CompareInfoBean> idList = new ArrayList <>();
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
-                            scooterBean.setOldCargoName(scooterBean.getCargoName());//保存原舱位
                             oriScooters.add(scooterBean);
                             CompareInfoBean bean = new CompareInfoBean();
                             bean.setId(scooterBean.getId());
@@ -494,11 +493,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
                         mBaseIdMap.put(i, idList);
                     }
+
                     Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function <String, ObservableSource <List <LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
                         LoadingListBean.DataBean.ContentObjectBean[] datasNew = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
                         return Observable.just(new ArrayList <>(Arrays.asList(datasNew)));
                     }).subscribe(boardMultiBeans -> {
                         result.getData().get(0).setContentObject(boardMultiBeans);
+                        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : boardMultiBeans) {
+                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
+                                scooterBean.setOldCargoName(scooterBean.getCargoName());
+                            }
+                        }
 //                        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
 //                        mRvData.setAdapter(adapter);
                         adapter.setOnDataCheckListener((scooterId) -> {
