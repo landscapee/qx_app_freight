@@ -115,17 +115,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @BindView(R.id.tv_sure_pull)
     TextView mTvSurePull;
     private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
-    private UnloadPlaneAdapter adapter;
+//    private UnloadPlaneAdapter adapter;
 
     private String mCurrentTaskId;
     private String mCurrentFlightId;
     private String mCurrentFlightNo;
     private WaitCallBackDialog mWaitCallBackDialog;
     private LoadAndUnloadTodoBean data;
-    @SuppressLint("UseSparseArrays")
-    private Map <Integer, List <CompareInfoBean>> mBaseIdMap = new HashMap <>();
-    @SuppressLint("UseSparseArrays")
-    private Map <Integer, List <CompareInfoBean>> mNewIdMap = new HashMap <>();
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> oriScooters;//原始板车列表数据
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> newScooters = new ArrayList <>();//修改过后的板车列表数据
@@ -307,8 +303,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             mRvData.setLayoutManager(linearLayoutManager);
-            adapter = new UnloadPlaneAdapter(mLoadingList);
-            mRvData.setAdapter(adapter);
+//            adapter = new UnloadPlaneAdapter(mLoadingList);
+//            mRvData.setAdapter(adapter);
 
             loadData();
             mRvData.setVisibility(View.VISIBLE);
@@ -446,6 +442,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         ((StartPullPresenter) mPresenter).startPull(pullGoodsEntity);
 
     }
+
+    private void getPullgoodsStatus(){
+        mPresenter = new GetFlightCargoResPresenter(this);
+        BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
+        entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
+        ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
+    }
     @Override
     public void getLoadingListResult(LoadingListBean result) {
         Tools.closeVibrator(getApplicationContext());
@@ -461,15 +464,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             } else {
 
                 mLoadingList.add(result.getData().get(0));
-                adapter.notifyDataSetChanged();
 
-                mPresenter = new GetFlightCargoResPresenter(this);
-                BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
-                entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
-                ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
-                for (LoadingListBean.DataBean bean : mLoadingList) {
-                    bean.setShowDetail(true);
-                }
+                getPullgoodsStatus();
+
                 if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
                     Gson mGson = new Gson();
                     mTvSendOver.setEnabled(false);
@@ -480,126 +477,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     //舱位集合
                     mBaseContent = new ArrayList <>(Arrays.asList(datas));
                     oriScooters = new ArrayList <>();
-                    mBaseIdMap.clear();
-                    //存储 板车的 拉与不拉的 初始状态
-                    for (int i = 0; i < mBaseContent.size(); i++) {
-                        List <CompareInfoBean> idList = new ArrayList <>();
-                        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : mBaseContent.get(i).getScooters()) {
-                            oriScooters.add(scooterBean);
-                            CompareInfoBean bean = new CompareInfoBean();
-                            bean.setId(scooterBean.getId());
-                            bean.setPullStatus(scooterBean.getExceptionFlag());
-                            idList.add(bean);
-                        }
-                        mBaseIdMap.put(i, idList);
-                    }
 
-                    Disposable subscription = Observable.just(result.getData().get(0).getContent()).flatMap((Function <String, ObservableSource <List <LoadingListBean.DataBean.ContentObjectBean>>>) s -> {
-                        LoadingListBean.DataBean.ContentObjectBean[] datasNew = mGson.fromJson(s, LoadingListBean.DataBean.ContentObjectBean[].class);
-                        return Observable.just(new ArrayList <>(Arrays.asList(datasNew)));
-                    }).subscribe(boardMultiBeans -> {
-                        result.getData().get(0).setContentObject(boardMultiBeans);
-                        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : boardMultiBeans) {
-                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
-                                scooterBean.setOldCargoName(scooterBean.getCargoName());
-                            }
-                        }
-//                        UnloadPlaneAdapter adapter = new UnloadPlaneAdapter(mLoadingList);
-//                        mRvData.setAdapter(adapter);
-                        adapter.setOnDataCheckListener((scooterId) -> {
-
-                            newScooters.clear();
-                            for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : boardMultiBeans) {
-                                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
-
-                                    newScooters.add(scooterBean);
-                                    //获取板车运单列表
-                                    Iterator iterator = scooterBean.getWaybillList().iterator();
-                                    while (iterator.hasNext()) {  //遍历板车运单列表
-                                        LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill = (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean) iterator.next();
-                                        if (bill.isTitle()) {
-                                            iterator.remove();
-                                        }
-                                    }
-                                }
-                            }
-                            /**
-                             * 修改板车数据与原始数据做对比 判断板车位置或可拉状态是否被修改
-                             */
-                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanO : oriScooters) {
-                                if (scooterBeanO.getId().equals(scooterId)) {//在原始里找到数据正在变化的板车
-                                    for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanN : newScooters) {
-                                        if (scooterBeanN.getId().equals(scooterId)) {//在新数据里找到数据正在变化的板车
-                                            if ((scooterBeanN.getLocation() != null && !scooterBeanN.getLocation().equals(scooterBeanO.getLocation())) || !scooterBeanN.getCargoName().equals(scooterBeanO.getCargoName()) || scooterBeanN.getExceptionFlag() == 1) {//如果新数据 和 老数据的舱位信息不一样 或者 新数据板车信息为 建议拉下标识修改
-                                                scooterBeanN.setChange(true);
-                                            } else
-                                                scooterBeanN.setChange(false);
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            mNewIdMap.clear();
-                            //遍历舱位列表  查询所有板车
-                            for (int i = 0; i < boardMultiBeans.size(); i++) {
-                                List <CompareInfoBean> idList = new ArrayList <>();
-                                //遍历所有板车 存储板车是否建议拉下的新状态
-                                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : boardMultiBeans.get(i).getScooters()) {
-                                    CompareInfoBean bean = new CompareInfoBean();
-                                    bean.setId(scooterBean.getId());
-                                    bean.setPullStatus(scooterBean.getExceptionFlag());
-                                    idList.add(bean);
-                                }
-                                mNewIdMap.put(i, idList);
-                            }
-                            //判断两个map 是否相等 - 周正权 code
-                            boolean modified = false;
-                            for (Integer set : mBaseIdMap.keySet()) {
-                                List <CompareInfoBean> ids = mBaseIdMap.get(set);
-                                List <CompareInfoBean> idNews = mNewIdMap.get(set);
-                                for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
-                                    if (!Objects.requireNonNull(ids).contains(s)) {
-                                        modified = true;
-                                    }
-                                }
-                            }
-                            for (Integer set : mNewIdMap.keySet()) {
-                                List <CompareInfoBean> ids = mNewIdMap.get(set);
-                                List <CompareInfoBean> idNews = mBaseIdMap.get(set);
-                                for (CompareInfoBean s : Objects.requireNonNull(idNews)) {
-                                    if (!Objects.requireNonNull(ids).contains(s)) {
-                                        modified = true;
-                                    }
-                                }
-                            }
-                            //直接判断是否数据有过修改
-                            for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBeanN : newScooters) {
-                                if (scooterBeanN.isChange()) {
-                                    modified = true;
-                                    break;
-                                }
-
-                            }
-                            if (modified) {
-                                mTvSendOver.setEnabled(true);
-                                mTvConfirmCargo.setEnabled(false);
-                                mTvSendOver.setTextColor(Color.parseColor("#009EB5"));
-                                mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
-                            } else {
-                                mTvSendOver.setEnabled(false);
-                                mTvConfirmCargo.setEnabled(true);
-                                mTvSendOver.setTextColor(Color.parseColor("#888888"));
-                                mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
-                            }
-                        });
-                    });
-                    Log.e("tagTest", "string====" + subscription.toString());
                 }
             }
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -610,14 +492,12 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
         }
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing())
             mWaitCallBackDialog.dismiss();
     }
-
     @Override
     public void flightDoneInstallResult(String result) {
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
