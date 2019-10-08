@@ -42,6 +42,7 @@ import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
@@ -133,12 +134,22 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        testFragment = new TestFragment();
 //        mMineFragment = new MineFragment();
         //结载角色修改 底部tab 第二和第三项 货邮舱单 装机单
-        isJunctionLoad = Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        isJunctionLoad = false;
+        for (LoginResponseBean.RoleRSBean roleRSBean: UserInfoSingle.getInstance().getRoleRS()){
+            if (Constants.JUNCTION_LOAD.equals(roleRSBean.getRoleCode())){
+                isJunctionLoad = true;
+                break;
+            }
+        }
+
         if(isJunctionLoad){
             fragment1 =  new TaskFragment();
             fragment2 = new CargoManifestFragment();
             fragment3 =  new LnstallationFragment();
-            fragment4 = new TestFragment();
+            if (MyApplication.isNeedIm && Tools.isProduct())
+                fragment4 = new ImLibSpecialHomeFragment();
+            else
+                fragment4 = new IOManifestFragment();
             fragment5 = new MineFragment();
         }
         else

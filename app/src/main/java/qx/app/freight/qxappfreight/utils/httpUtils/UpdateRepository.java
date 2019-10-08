@@ -64,6 +64,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
+import qx.app.freight.qxappfreight.bean.response.ForkliftWorkingCostBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
@@ -958,6 +959,23 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<String> addOverweight(List<OverweightBean> model) {
         return nothingtransform(getService().addWaybillOverWeight(model));
+    }
+    /****
+     * 进港-查询出库运单叉车使用费用列表
+     * @param waybillId
+     * @return
+     */
+    public Observable<List<ForkliftWorkingCostBean>> getWaybillForklift(String waybillId) {
+        return transform(getService().getWaybillForklift(waybillId));
+    }
+
+    /****
+     * 进港-添加单叉车使用费记录
+     * @param model
+     * @return
+     */
+    public Observable<String> addWaybillForklift(List<ForkliftWorkingCostBean> model) {
+        return nothingtransform(getService().addWaybillForklift(model));
     }
 
     /****
