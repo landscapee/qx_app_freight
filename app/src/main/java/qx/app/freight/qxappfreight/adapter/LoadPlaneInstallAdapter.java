@@ -2,20 +2,26 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 装舱建议列表数据适配器
@@ -46,7 +52,6 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         Spinner spBerth = helper.getView(R.id.sp_berth);
         Spinner spGoodsPos = helper.getView(R.id.sp_goods_position);
 
-
         ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
         helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
             if (item.isLocked()) {
@@ -58,130 +63,138 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             onLockClickListener.onLockClicked(helper.getAdapterPosition());
         });
 
-        if (1 == mWidthairflag) { //窄体机
-            helper.getView(R.id.tv_model).setVisibility(View.GONE);
-            helper.getView(R.id.tv_volume).setVisibility(View.GONE);
+        helper.getView(R.id.tv_model).setVisibility(View.GONE);
+        helper.getView(R.id.tv_volume).setVisibility(View.GONE);
 
-            helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
-                    .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--");
-            if (item.getWaybillList() != null && item.getWaybillList().size() > 0)
-                helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
-            else
-                helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
-            Button btnPull = helper.getView(R.id.tv_pull);
-            if (notShowPull) {
-                btnPull.setVisibility(View.VISIBLE);
-                //设置 拉下的状态
-                btnPull.setOnClickListener(v -> {
-                    if (item.getExceptionFlag() == 1) {
-                        item.setExceptionFlag(0);
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                    } else {
-                        item.setExceptionFlag(1);
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
-                    }
-                });
+        helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
+                .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
+                .setText(R.id.tv_destination,item.getDestinationStation()!= null ?item.getDestinationStation():"--")
+                .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--");
+        if (item.getWaybillList() != null && item.getWaybillList().size() > 0)
+            helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
+        else
+            helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
+        Button btnPull = helper.getView(R.id.tv_pull);
+        if (notShowPull) {
+            btnPull.setVisibility(View.VISIBLE);
+            //设置 拉下的状态
+            btnPull.setOnClickListener(v -> {
                 if (item.getExceptionFlag() == 1) {
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
-                } else {
+                    item.setExceptionFlag(0);
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                } else {
+                    item.setExceptionFlag(1);
+                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                 }
+            });
+            if (item.getExceptionFlag() == 1) {
+                btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
             } else {
-                btnPull.setVisibility(View.GONE);
+                btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
             }
+        } else {
+            btnPull.setVisibility(View.GONE);
+        }
 
-
-            TextView tv1 = helper.getView(R.id.tv_scooter_number);
-            TextView tv2 = helper.getView(R.id.tv_total);
-            TextView tv3 = helper.getView(R.id.tv_weight);
-            TextView tv4 = helper.getView(R.id.tv_volume);
-            TextView tv5 = helper.getView(R.id.tv_suggestRepository);
-            TextView tv6 = helper.getView(R.id.tv_specialCode);
-            TextView tv7 = helper.getView(R.id.tv_mailtype);
+        TextView tv1 = helper.getView(R.id.tv_scooter_number);
+        TextView tv3 = helper.getView(R.id.tv_weight);
+        TextView tv7 = helper.getView(R.id.tv_mailtype);
 //            TextView tv7 = helper.getView(R.id.tv_volume);
-            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7};
-            if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
-                helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)) {//枪支
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else {
-                helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
+        TextView[] tvList = {tv1, tv3, tv7};
+        if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
+            helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
+            for (TextView tv : tvList) {
+                tv.setTextColor(Color.parseColor("#000000"));
             }
-        } else if (0 == mWidthairflag) {//宽体机
-            helper.getView(R.id.tv_suggestRepository).setVisibility(View.GONE);
-            helper.getView(R.id.tv_model).setVisibility(View.VISIBLE);
-            TextView tv1 = helper.getView(R.id.tv_model);
-            TextView tv2 = helper.getView(R.id.tv_total);
-            TextView tv3 = helper.getView(R.id.tv_weight);
-            TextView tv4 = helper.getView(R.id.tv_volume);
-            TextView tv5 = helper.getView(R.id.tv_specialCode);
-            TextView tv6 = helper.getView(R.id.tv_mailtype);
-            TextView tv7 = helper.getView(R.id.tv_scooter_number);
-            Button btnPull = helper.getView(R.id.tv_pull);
-            if (notShowPull) {
-                btnPull.setVisibility(View.VISIBLE);
-                //设置 拉下的状态
-                btnPull.setOnClickListener(v -> {
-                    if (item.getExceptionFlag() == 1) {
-                        item.setExceptionFlag(0);
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                    } else {
-                        item.setExceptionFlag(1);
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
-                    }
-                });
-                if (item.getExceptionFlag() == 1) {
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
-                } else {
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                }
-            } else {
-                btnPull.setVisibility(View.GONE);
+        } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)) {//枪支
+            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+            for (TextView tv : tvList) {
+                tv.setTextColor(Color.parseColor("#000000"));
             }
-
-            TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7};
-            helper.setText(R.id.tv_model, item.getSerialInd() != null ? item.getSerialInd() : "--")
-                    .setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode()  : "--")
-                    .setText(R.id.tv_total, item.getTotal() != 0 ? item.getTotal() + "" : "--")
-                    .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--")
-                    .setText(R.id.tv_specialCode, item.getSpecialCode() != null ? item.getSpecialCode() : "--")
-                    .setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
-            if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
-                helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)) {//枪支
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
-            } else {
-                helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(Color.parseColor("#000000"));
-                }
+        } else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+            for (TextView tv : tvList) {
+                tv.setTextColor(Color.parseColor("#000000"));
+            }
+        } else {
+            helper.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+            for (TextView tv : tvList) {
+                tv.setTextColor(Color.parseColor("#000000"));
             }
         }
+
+        spBerth.setVisibility(View.VISIBLE);
+//            if (item.isShowPull()) {
+//                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
+//            } else {
+        ArrayAdapter <String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,new ArrayList <>());
+//            }
+        spBerth.setAdapter(spinnerAdapter);
+        SpinnerAdapter apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
+        int k = apsAdapter1.getCount();
+        for (int i = 0; i < k; i++) {
+            if (item.getCargoName().equals(apsAdapter1.getItem(i).toString())) {
+                spBerth.setSelection(i, true);// 默认选中项
+                break;
+            }
+        }
+        spBerth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            int pos;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (item.isLocked()) {
+                    ToastUtil.showToast("数据已锁定，无法修改");
+                    spBerth.setSelection(pos, true);
+                } else {
+                    pos = position;
+                    onBerthChoseListener.onBerthChosed(helper.getAdapterPosition(), item.getCargoName());
+                    onDataCheckListener.onDataChecked(item.getScooterCode());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        if (TextUtils.isEmpty(item.getLocation())) {//有货位数据
+            spGoodsPos.setVisibility(View.GONE);
+        } else {
+            spGoodsPos.setVisibility(View.VISIBLE);
+//                if (item.isShowPull()) {
+//                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
+//                } else {
+            ArrayAdapter<String> spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, new ArrayList <>());
+            spGoodsPos.setAdapter(spGoodsAdapter);
+            SpinnerAdapter apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
+            int j = apsAdapter2.getCount();
+            for (int i = 0; i < j; i++) {
+                if (item.getLocation().equals(apsAdapter2.getItem(i).toString())) {
+                    spGoodsPos.setSelection(i, true);// 默认选中项
+                    break;
+                }
+            }
+            spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                int pos;
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (item.isLocked()) {
+                        ToastUtil.showToast("数据已锁定，无法修改");
+                        spGoodsPos.setSelection(pos, true);
+                    } else {
+                        pos = position;
+                        onGoodsPosChoseListener.onGoodsPosChosed(helper.getAdapterPosition(), item.getLocation());
+                        onDataCheckListener.onDataChecked(item.getScooterCode());
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+
     }
 
     public interface OnBerthChoseListener {
