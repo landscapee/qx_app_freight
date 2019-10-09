@@ -185,6 +185,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
+
+    implementation 'com.singleshu:ZxingPlus:1.1.4'
+
     //dex分包
     implementation 'com.android.support:multidex:1.0.3'
     //bugly
