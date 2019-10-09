@@ -28,7 +28,7 @@ public class LnstallationInfoBean {
         private String specialNumber = "- -";//
         private String specialCode;//特货代码
         private String cargoName = "- -";//舱位
-        private String oldCargoName = "- -";//舱位
+        private String oldCargoName;//舱位
         private long createTime;
         private String createUser;//创建人
         private String destinationStation;//目的站

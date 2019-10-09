@@ -90,6 +90,7 @@ public class InstallSuggestPushDialog extends Dialog {
         mList2.add(title);
         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean :mList1 ){
             LnstallationInfoBean.ScootersBean scootersBean1 = new LnstallationInfoBean.ScootersBean();
+            scootersBean1.setOldCargoName(scooterBean.getOldCargoName());
             scootersBean1.setCargoName(scooterBean.getCargoName());
             scootersBean1.setLocation(scooterBean.getLocation());
             scootersBean1.setScooterCode(scooterBean.getScooterCode());

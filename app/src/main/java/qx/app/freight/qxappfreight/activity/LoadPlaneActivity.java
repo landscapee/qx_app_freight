@@ -75,7 +75,7 @@ import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MyHorizontalScrollView;
 
 /**
- * 装机页面
+ * 装机页面 （修改前）
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, GetLastReportInfoContract.getLastReportInfoView, StartPullContract.startPullView {
     @BindView(R.id.rv_data)

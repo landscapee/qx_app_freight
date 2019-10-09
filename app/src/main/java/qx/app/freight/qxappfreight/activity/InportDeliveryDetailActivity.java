@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
+import qx.app.freight.qxappfreight.dialog.ForkliftCostDialogForNet;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
@@ -135,6 +136,20 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             public void inputOverWeight(int position) {
                 try {
                     SortingReturnGoodsDialogForNet dialog = new SortingReturnGoodsDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    dialog.setOnClickListener(text -> {
+                        getData();
+                    });
+                    dialog.show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void forkliftCost(int position) {
+                try {
+                    ForkliftCostDialogForNet dialog = new ForkliftCostDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
                     dialog.setOnClickListener(text -> {
                         getData();
                     });
@@ -313,8 +328,13 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     @Override
     public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
-        mList.clear();
-        mList.addAll(waybillsBeans);
-        mAdapter.notifyDataSetChanged();
+        if (waybillsBeans!=null && waybillsBeans.size()> 0){
+            mList.clear();
+            mList.addAll(waybillsBeans);
+            mAdapter.notifyDataSetChanged();
+        }
+        else
+            finish();
+
     }
 }

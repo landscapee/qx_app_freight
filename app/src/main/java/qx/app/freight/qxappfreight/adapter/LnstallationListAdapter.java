@@ -73,9 +73,9 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "状态" : "- -");
         } else {
 
-            helper.setText(R.id.tv_manifest, StringUtil.isEmpty(item.getOldCargoName()) ? "- -" : item.getOldCargoName())
+            helper.setText(R.id.tv_manifest, !StringUtil.isEmpty(item.getOldCargoName()) ? item.getOldCargoName(): StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName() )
                     .setText(R.id.tv_goods_position, StringUtil.isEmpty(item.getLocation()) ? "- -" : item.getLocation())
-                    .setText(R.id.tv_adjust, item.isChange()? StringUtil.isEmpty(item.getCargoName()) ? "" : item.getCargoName():"")
+                    .setText(R.id.tv_adjust, item.isChange()? StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName():"- -")
                     .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode()) ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, StringUtil.isEmpty(item.getSerialInd()) ? "- -" : item.getSerialInd())
                     .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
@@ -97,7 +97,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
         TextView tv8 = helper.getView(R.id.tv_goods_position);
         TextView tv9 = helper.getView(R.id.tv_special_number);
         TextView tv10 = helper.getView(R.id.tv_pull_state);
-        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10};
+        TextView[] tvList = {tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10,tvAdjust};
 
 
         if (helper.getAdapterPosition() == 0) {

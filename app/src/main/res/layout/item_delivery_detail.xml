@@ -151,7 +151,9 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            >
 
             <TextView
                 android:singleLine="true"
@@ -187,6 +189,15 @@
             android:textColor="#ff2e81fd"
             android:textSize="14sp"
             />
+        <Button
+            android:id="@+id/btn_forklift"
+            android:layout_width="60dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_green_05b"
+            android:text="叉车费用"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/btn_overweight"
             android:layout_width="60dp"

@@ -4,71 +4,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
-    >
-    <!--<HorizontalScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:scrollbars="none"-->
-        <!--android:background="@color/white"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--&gt;-->
-<TextView
-    android:id="@+id/tv_flight_no"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:gravity="center"
-    android:textColor="@color/blue_2e8"
-    android:textSize="25sp"
-    />
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/tv_flight_no"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textColor="@color/blue_2e8"
+            android:textSize="25sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mfrv_data"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            />
 
 
-    <!--</HorizontalScrollView>-->
+    </HorizontalScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingRight="13dp"
         android:paddingLeft="13dp"
-        >
+        android:paddingRight="13dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:background="@drawable/shape_rect_gray_eff2"
-            android:gravity="center_vertical"
             android:layout_centerInParent="true"
-            >
+            android:background="@drawable/shape_rect_gray_eff2"
+            android:gravity="center_vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="向右滑动更新"
-                android:textColor="@color/gray_888"
                 android:layout_centerInParent="true"
-                />
+                android:text="向右滑动更新"
+                android:textColor="@color/gray_888" />
+
             <qx.app.freight.qxappfreight.widget.SlideRightExecuteView
                 android:id="@+id/slide_right_start"
                 android:layout_width="match_parent"
                 android:layout_height="47dp"
                 android:gravity="center_vertical"
                 app:lock_drawable="@mipmap/swiperight"
-                app:lock_radius="47dp"
-                />
+                app:lock_radius="47dp" />
 
             <ImageView
                 android:id="@+id/iv_start_gif"
                 android:layout_width="wrap_content"
                 android:layout_height="47dp"
-                android:layout_alignParentLeft="true"
-                />
+                android:layout_alignParentLeft="true" />
         </RelativeLayout>
 
 
