@@ -129,11 +129,12 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private boolean mConfirmPlan = false;
 
     private boolean useLGsys = true ;//是否使用离港系统 m默认为使用
-
     //不使用离港系统 显示货邮舱单 使用
     private List <ManifestScooterListBean> manifestScooterListBeans = new ArrayList <>();
     private ManifestWaybillListjianyiAdapter adapterNonuse;
     private String flightInfoId = null; //货邮舱单 上的 flightInfoId
+
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
