@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -24,6 +23,8 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.jwenfeng.library.pulltorefresh.util.DisplayUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,7 +121,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private String cargoCn;
     private String mScooterCode;
     private ScooterInfoListBean scooterInfo;
-    List<RcInfoOverweight> rcInfoOverweight; // 超重记录列表
+    List <RcInfoOverweight> rcInfoOverweight; // 超重记录列表
     private MyAgentListBean mList;
     private int tag;
     private String wayBillId;
@@ -140,17 +141,17 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private UldAdapter uldAirlineAdapter;
     private LinearLayout llSearchUld;
     private Button btnAllAdd;
-    private List<String> ulds = new ArrayList<>();
-    private List<String> uldTypes = new ArrayList<>();
-    private List<String> airlineTwo = new ArrayList<>();
+    private List <String> ulds = new ArrayList <>();
+    private List <String> uldTypes = new ArrayList <>();
+    private List <String> airlineTwo = new ArrayList <>();
     private LikePageBean mLikePageBean = null;//当前选中的uld
-    private List<LikePageBean> LikePageBeans = new ArrayList<>();//uld数据源
-    private List<ListByTypeBean.RecordsBean> uldTypeList = new ArrayList<>();//uld类型数据源
+    private List <LikePageBean> LikePageBeans = new ArrayList <>();//uld数据源
+    private List <ListByTypeBean.RecordsBean> uldTypeList = new ArrayList <>();//uld类型数据源
     private boolean isShowAddUld = false; //true 为已经展开 uld新增。
     private int uldCount = 0;//uld输入框的字数
     private int uldTypeCount = 0;//uld输入框的字数
     private int airlineCount = 0;//uld输入框的字数
-    private List<FindAirlineAllBean> findAirlineAllBeans = new ArrayList<>(); //所有航司数据
+    private List <FindAirlineAllBean> findAirlineAllBeans = new ArrayList <>(); //所有航司数据
 
     private boolean isPopWindow = false;
 
@@ -270,14 +271,16 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             mPresenter = new GetWeightPresenter(this);
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
-        rcInfoOverweight = new ArrayList<>();
-        if(mList.getSpOverweight()!=null && mList.getSpOverweight().size()>0)
+        rcInfoOverweight = new ArrayList <>();
+        if (mList.getSpOverweight() != null && mList.getSpOverweight().size() > 0)
             rcInfoOverweight.addAll(mList.getSpOverweight());
 
         llOverweight.setOnClickListener(v -> {
             showPopWindowList();
         });
-        mIvScan.setOnClickListener(v -> ScanManagerActivity.startActivity(AddReceiveGoodActivity.this));
+        mIvScan.setOnClickListener(v -> {
+            CustomCaptureActivity.startActivity(AddReceiveGoodActivity.this,"AddReceiveGoodActivity");
+        });
     }
 
     //激光扫码获取返回板车信息
@@ -297,28 +300,28 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         }
     }
 
-    //普通扫码
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (Constants.SCAN_RESULT == resultCode) {
-            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            if (mScooterCode != null && mScooterCode.length() == Constants.SCOOTER_NO_LENGTH) {
-                if (!"".equals(mScooterCode)) {
-                    //板车号
-                    getNumberInfo(mScooterCode);
-                } else {
-                    ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
-                }
-            }
-            else {
-                ToastUtil.showToast("请扫描或输入正确的板车号");
-            }
-
-        }
-    }
+//    //普通扫码
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (Constants.SCAN_RESULT == resultCode) {
+//            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+//            if (mScooterCode != null && mScooterCode.length() == Constants.SCOOTER_NO_LENGTH) {
+//                if (!"".equals(mScooterCode)) {
+//                    //板车号
+//                    getNumberInfo(mScooterCode);
+//                } else {
+//                    ToastUtil.showToast(AddReceiveGoodActivity.this, "扫码数据为空请重新扫码");
+//                }
+//            }
+//            else {
+//                ToastUtil.showToast("请扫描或输入正确的板车号");
+//            }
+//
+//        }
+//    }
 
     //品名叠加
-    private String setCargoCn(List<DeclareItem> data) {
+    private String setCargoCn(List <DeclareItem> data) {
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < data.size(); i++) {
             str.append(data.get(i).getCargoCn() + ",");
@@ -420,12 +423,12 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     //根据扫一扫获取到的板车号查询获得数据
     @Override
-    public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
+    public void scooterInfoListResult(List <ScooterInfoListBean> scooterInfoListBeans) {
 
     }
 
     @Override
-    public void scooterInfoListForReceiveResult(List<ScooterInfoListBean> scooterInfoListBeans) {
+    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
             scooterInfo = scooterInfoListBeans.get(0);
             scooterId = scooterInfoListBeans.get(0).getId();
@@ -461,6 +464,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     /**
      * 添加单条收运记录返回对象
+     *
      * @param result
      */
     @Override
@@ -765,7 +769,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     private void searchAirline(String iata) {
         iata = iata.toUpperCase();
-        List<FindAirlineAllBean> airLineBeans = new ArrayList<>();
+        List <FindAirlineAllBean> airLineBeans = new ArrayList <>();
         airLineBeans.clear();
         for (FindAirlineAllBean mFindAirlineAllBean : findAirlineAllBeans) {
             if (mFindAirlineAllBean.getIata().contains(iata)) {
@@ -795,7 +799,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private void searchUld(String iata) {
         iata = iata.toUpperCase();
         mPresenter = new LikePagePresenter(this);
-        BaseFilterEntity<FtRuntimeFlightScooter> entity = new BaseFilterEntity();
+        BaseFilterEntity <FtRuntimeFlightScooter> entity = new BaseFilterEntity();
         FtRuntimeFlightScooter mFtRuntimeFlightScooter = new FtRuntimeFlightScooter();
         mFtRuntimeFlightScooter.setIata(iata);
         entity.setCurrent(1);
@@ -821,7 +825,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     }
 
     @Override
-    public void likePageResult(List<LikePageBean> result) {
+    public void likePageResult(List <LikePageBean> result) {
         if (uldCount == 10 && result.size() == 1) {//10位uld号已经输完，并且检测到了该uld号
             ulds.clear();
             LikePageBeans.clear();
@@ -868,7 +872,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     }
 
     @Override
-    public void findAirlineAllResult(List<FindAirlineAllBean> result) {
+    public void findAirlineAllResult(List <FindAirlineAllBean> result) {
         findAirlineAllBeans.clear();
         findAirlineAllBeans.addAll(result);
     }

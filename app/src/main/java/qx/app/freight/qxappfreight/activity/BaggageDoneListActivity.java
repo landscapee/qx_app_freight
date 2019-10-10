@@ -79,7 +79,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         Intent intent = getIntent();
         mData = (CargoReportHisBean) intent.getSerializableExtra("flightBean");
         mAbnormalList = new ArrayList<>();
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo());
@@ -115,12 +116,12 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             case R.id.ll_add:
                 mSlideRV.closeMenu();
                 flag = 0;
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"BaggageDoneListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();
                 flag = 1;
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"BaggageDoneListActivity");
                 break;
         }
     }

@@ -171,7 +171,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         switch (view.getId()) {
             case R.id.ll_add:
                 mSlideRV.closeMenu();
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"CargoListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();

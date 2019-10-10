@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="当前绑定库:"
+            android:text="当前扫码库:"
             android:textColor="@color/black_3"
             android:textSize="18sp"/>
         <TextView
@@ -62,7 +62,8 @@
             android:checked="true"
             android:gravity="center"
             android:text="进库单"
-            android:textColor="@drawable/selector_text_blue_a" />
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
 
         <RadioButton
             android:id="@+id/rb_out"
@@ -73,7 +74,8 @@
             android:button="@null"
             android:gravity="center"
             android:text="出库单"
-            android:textColor="@drawable/selector_text_blue_a" />
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
         <RadioButton
             android:id="@+id/rb_current"
             android:layout_width="0dp"
@@ -83,7 +85,8 @@
             android:button="@null"
             android:gravity="center"
             android:text="当前库存"
-            android:textColor="@drawable/selector_text_blue_a" />
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
 
     </RadioGroup>
     <FrameLayout

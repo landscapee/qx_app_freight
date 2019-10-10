@@ -165,7 +165,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         //扫码
         llAdd.setOnClickListener(v -> {
             if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"DriverOutDoingActivity");
             } else {
                 if (tpStatus == 0) {
                     ToastUtil.showToast("运输已经开始，无法再次扫版");
@@ -176,7 +176,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
                     return;
                 }
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"DriverOutDoingActivity");
             }
 
         });
@@ -454,7 +454,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
             case R.id.ll_add://添加板车
                 if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
-                    ScanManagerActivity.startActivity(this);
+                    CustomCaptureActivity.startActivity(this,"DriverOutDoingActivity");
                 } else {
                     if (tpStatus == 0) {
                         ToastUtil.showToast("运输已经开始，无法再次扫版");
@@ -465,7 +465,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         ToastUtil.showToast("任务只分配给你" + tpNum + "个板车");
                         return;
                     }
-                    ScanManagerActivity.startActivity(this);
+                    CustomCaptureActivity.startActivity(this,"DriverOutDoingActivity");
                 }
                 break;
             case R.id.tv_error_report://偏离上报
@@ -518,7 +518,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                      */
                     if ((Constants.TP_TYPE_BAGGAAGE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()) && "baggage_area".equals(mAcceptTerminalTodoBean.get(0).getEndAreaType())) || Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                         isSure = 1;
-                        ScanManagerActivity.startActivity(this);
+                        CustomCaptureActivity.startActivity(this,"DriverOutDoingActivity");
                         return;
                     }
                     doEnd();
