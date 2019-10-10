@@ -35,6 +35,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.LoadPlaneInstallAdapter;
 import qx.app.freight.qxappfreight.adapter.ManifestWaybillListjianyiAdapter;
 import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -79,7 +80,7 @@ import qx.app.freight.qxappfreight.widget.MyHorizontalScrollView;
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, GetLastReportInfoContract.getLastReportInfoView, StartPullContract.startPullView {
     @BindView(R.id.rv_data)
-    CustomRecylerView mRvData;
+    RecyclerView mRvData;
     @BindView(R.id.rv_data_nonuse)
     RecyclerView mRvDataNonuse; //不使用 离港系统 列表 根据货邮舱单 显示 板车信息
     @BindView(R.id.hor_scroll)
@@ -115,7 +116,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @BindView(R.id.tv_sure_pull)
     TextView mTvSurePull;
     private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
-//    private UnloadPlaneAdapter adapter;
+    private LoadPlaneInstallAdapter adapter;
 
     private String mCurrentTaskId;
     private String mCurrentFlightId;
@@ -299,25 +300,28 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             if (!useLGsys)
                 endLoadHyManifest();
         });
+
         if (useLGsys) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRvData.setLayoutManager(linearLayoutManager);
-//            adapter = new UnloadPlaneAdapter(mLoadingList);
-//            mRvData.setAdapter(adapter);
+            adapter = new LoadPlaneInstallAdapter(newScooters,0,true);
+            mRvData.setAdapter(adapter);
+            adapter.setOnDataCheckListener(scooterId -> {
 
+
+
+            });
             loadData();
             mRvData.setVisibility(View.VISIBLE);
             llOperation.setVisibility(View.VISIBLE);
             llOperation2.setVisibility(View.GONE);
             horScroll.setVisibility(View.GONE);
         } else {
-
             mRvDataNonuse.setLayoutManager(new LinearLayoutManager(this));
             adapterNonuse = new ManifestWaybillListjianyiAdapter(manifestScooterListBeans, data.getWidthAirFlag(),true);
             mRvDataNonuse.setAdapter(adapterNonuse);
-
             loadData1();
             mRvData.setVisibility(View.GONE);
             llOperation.setVisibility(View.GONE);
@@ -477,8 +481,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
                     //舱位集合
                     mBaseContent = new ArrayList <>(Arrays.asList(datas));
+                    mLoadingList.get(0).setContentObject(mBaseContent);
                     oriScooters = new ArrayList <>();
-
+                    //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
+                    for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
+                        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
+                            scooterBean.setOldCargoName(scooterBean.getCargoName());
+                            scooterBean.setOldLocation(scooterBean.getLocation());
+                        }
+                        newScooters.addAll(contentObjectBean.getScooters());
+                    }
+                    adapter.notifyDataSetChanged();
                 }
             }
         }

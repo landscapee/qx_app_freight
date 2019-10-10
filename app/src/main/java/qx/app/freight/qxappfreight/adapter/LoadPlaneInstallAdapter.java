@@ -2,6 +2,8 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,13 +30,9 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
  */
 public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.DataBean.ContentObjectBean.ScooterBean, BaseViewHolder> {
 
-    private OnBerthChoseListener onBerthChoseListener;
-    private OnGoodsPosChoseListener onGoodsPosChoseListener;
-    private OnLockClickListener onLockClickListener;
-    private UnloadPlaneAdapter.OnDataCheckListener onDataCheckListener;
     private int mWidthairflag;
-
     private boolean notShowPull;
+    private OnDataCheckListener onDataCheckListener;
 
     public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag) {
         super(R.layout.item_load_plane_install, list);
@@ -60,11 +58,8 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
             }
             item.setLocked(!item.isLocked());
-            onLockClickListener.onLockClicked(helper.getAdapterPosition());
+//            onLockClickListener.onLockClicked(helper.getAdapterPosition());
         });
-
-        helper.getView(R.id.tv_model).setVisibility(View.GONE);
-        helper.getView(R.id.tv_volume).setVisibility(View.GONE);
 
         helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
                 .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
@@ -86,6 +81,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                     item.setExceptionFlag(1);
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                 }
+                onDataCheckListener.onDataChecked(item.getScooterCode());
             });
             if (item.getExceptionFlag() == 1) {
                 btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
@@ -111,7 +107,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
             }
-        } else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+        } else if (item.getWaybillList()!=null&&item.getWaybillList().size()> 0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
             helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
@@ -123,11 +119,22 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             }
         }
 
+        List<String> cargos = new ArrayList();
+        cargos.add("1H");
+        cargos.add("2H");
+        cargos.add("3H");
+        cargos.add("4H");
+
+        List<String> goods = new ArrayList <>();
+        goods.add("11");
+        goods.add("22");
+        goods.add("33");
+        goods.add("44");
         spBerth.setVisibility(View.VISIBLE);
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
 //            } else {
-        ArrayAdapter <String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,new ArrayList <>());
+        ArrayAdapter <String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
 //            }
         spBerth.setAdapter(spinnerAdapter);
         SpinnerAdapter apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
@@ -147,8 +154,14 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                     spBerth.setSelection(pos, true);
                 } else {
                     pos = position;
-                    onBerthChoseListener.onBerthChosed(helper.getAdapterPosition(), item.getCargoName());
-                    onDataCheckListener.onDataChecked(item.getScooterCode());
+                    if (item.getOldCargoName().equals(cargos.get(position))){
+                        item.setChange(false);
+                    }
+                    else {
+                        item.setCargoName(cargos.get(position));
+                        item.setChange(true);
+                        onDataCheckListener.onDataChecked(item.getScooterCode());
+                    }
                 }
             }
 
@@ -164,7 +177,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //                if (item.isShowPull()) {
 //                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
 //                } else {
-            ArrayAdapter<String> spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, new ArrayList <>());
+            ArrayAdapter<String> spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, goods);
             spGoodsPos.setAdapter(spGoodsAdapter);
             SpinnerAdapter apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
             int j = apsAdapter2.getCount();
@@ -183,8 +196,14 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                         spGoodsPos.setSelection(pos, true);
                     } else {
                         pos = position;
-                        onGoodsPosChoseListener.onGoodsPosChosed(helper.getAdapterPosition(), item.getLocation());
-                        onDataCheckListener.onDataChecked(item.getScooterCode());
+                        if (item.getOldLocation().equals(goods.get(position))){
+                            item.setChange(false);
+                        }
+                        else {
+                            item.setLocation(goods.get(position));
+                            item.setChange(true);
+                            onDataCheckListener.onDataChecked(item.getScooterCode());
+                        }
                     }
                 }
 
@@ -194,30 +213,35 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 }
             });
         }
+        //展示 板车下的 运单
+        RecyclerView rvBill=helper.getView(R.id.rv_all_bill);
+        List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> data =item.getWaybillList();
+        if (data!=null&&data.size()!=0){
+            LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean title = new LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean();
+            title.setTitle(true);
+            data.add(0,title);
+            rvBill.setLayoutManager(new LinearLayoutManager(mContext));
+            rvBill.setAdapter(new OnBoardBillsAdapter(data));
+        }
+        helper.itemView.setOnClickListener(v -> {
+            if (item.isShow())
+                rvBill.setVisibility(View.GONE);
+            else
+                rvBill.setVisibility(View.VISIBLE);
 
+            item.setShow(!item.isShow());
+        });
+
+        if (item.isShow())
+            rvBill.setVisibility(View.VISIBLE);
+        else
+            rvBill.setVisibility(View.GONE);
+    }
+    public interface OnDataCheckListener {
+        void onDataChecked(String scooterId);
     }
 
-    public interface OnBerthChoseListener {
-        void onBerthChosed(int itemPos, String berth);
-    }
-
-    public interface OnGoodsPosChoseListener {
-        void onGoodsPosChosed(int itemPos, String goodsPos);
-    }
-
-    public interface OnLockClickListener {
-        void onLockClicked(int itemPos);
-    }
-
-    public void setOnBerthChoseListener(OnBerthChoseListener onBerthChoseListener) {
-        this.onBerthChoseListener = onBerthChoseListener;
-    }
-
-    public void setOnGoodsPosChoseListener(OnGoodsPosChoseListener onGoodsPosChoseListener) {
-        this.onGoodsPosChoseListener = onGoodsPosChoseListener;
-    }
-
-    public void setOnLockClickListener(OnLockClickListener onLockClickListener) {
-        this.onLockClickListener = onLockClickListener;
+    public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
+        this.onDataCheckListener = onDataCheckListener;
     }
 }

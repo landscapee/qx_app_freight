@@ -1,94 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_40"
-    android:orientation="horizontal">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="1px"
-        android:layout_height="match_parent"
-        android:background="#e5e5e5" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/iv_lock_status"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        android:src="@mipmap/icon_lock_data" />
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
 
-    <TextView
-        android:layout_width="1px"
-        android:layout_height="match_parent"
-        android:background="#e5e5e5" />
+        <ImageView
+            android:id="@+id/iv_lock_status"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@mipmap/icon_lock_data" />
 
-    <Spinner
-        android:id="@+id/sp_berth"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|end"
-        android:spinnerMode="dropdown" />
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
 
-    <TextView
-        android:id="@+id/tv_divider"
-        android:layout_width="1px"
-        android:layout_height="match_parent"
-        android:background="#e5e5e5" />
+        <Spinner
+            android:id="@+id/sp_berth"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:spinnerMode="dropdown" />
 
-    <Spinner
-        android:id="@+id/sp_goods_position"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|end"
-        android:spinnerMode="dropdown" />
+        <TextView
+            android:id="@+id/tv_divider"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
 
-    <Button
-        android:id="@+id/tv_pull"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/shape_rect_gray_979797"
-        android:text="拉"
-        android:textColor="@color/black_3"
-        android:textSize="12sp" />
+        <Spinner
+            android:id="@+id/sp_goods_position"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:spinnerMode="dropdown" />
 
-    <TextView
-        android:id="@+id/tv_scooter_number"
-        android:layout_width="85dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="板车"
-        android:textColor="@color/black_3" />
+        <Button
+            android:id="@+id/tv_pull"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_rect_gray_979797"
+            android:text="拉"
+            android:textColor="@color/black_3"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/tv_uld"
-        android:layout_width="109dp"
-        android:layout_height="match_parent"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:text="uld号"
-        android:textColor="@color/black_3" />
+        <TextView
+            android:id="@+id/tv_scooter_number"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="板车"
+            android:textColor="@color/black_3" />
 
-    <TextView
-        android:id="@+id/tv_destination"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="目的地"
-        android:textColor="@color/black_3" />
+        <TextView
+            android:id="@+id/tv_uld"
+            android:layout_width="109dp"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="uld号"
+            android:textColor="@color/black_3" />
 
-    <TextView
-        android:id="@+id/tv_mailtype"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="类别"
-        android:textColor="@color/black_3" />
+        <TextView
+            android:id="@+id/tv_destination"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="目的地"
+            android:textColor="@color/black_3" />
 
-    <TextView
-        android:id="@+id/tv_weight"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="重量"
-        android:textColor="@color/black_3" />
+        <TextView
+            android:id="@+id/tv_mailtype"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="类别"
+            android:textColor="@color/black_3" />
 
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="重量"
+            android:textColor="@color/black_3" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_all_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 </LinearLayout>
