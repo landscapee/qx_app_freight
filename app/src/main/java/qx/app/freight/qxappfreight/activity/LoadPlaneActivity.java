@@ -309,7 +309,24 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             adapter = new LoadPlaneInstallAdapter(newScooters,0,true);
             mRvData.setAdapter(adapter);
             adapter.setOnDataCheckListener(scooterId -> {
-
+                boolean modified = false;
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
+                    if (scooterBean.isChange()|| scooterBean.getExceptionFlag() == 1){
+                        modified = true;
+                        break;
+                    }
+                }
+                if (modified) {
+                    mTvSendOver.setEnabled(true);
+                    mTvConfirmCargo.setEnabled(false);
+                    mTvSendOver.setTextColor(Color.parseColor("#009EB5"));
+                    mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
+                } else {
+                    mTvSendOver.setEnabled(false);
+                    mTvConfirmCargo.setEnabled(true);
+                    mTvSendOver.setTextColor(Color.parseColor("#888888"));
+                    mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
+                }
 
 
             });

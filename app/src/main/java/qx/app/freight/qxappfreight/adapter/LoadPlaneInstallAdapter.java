@@ -120,16 +120,25 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         }
 
         List<String> cargos = new ArrayList();
-        cargos.add("1H");
-        cargos.add("2H");
-        cargos.add("3H");
-        cargos.add("4H");
+        cargos.add("1");
+        cargos.add("2");
+        cargos.add("3");
+        cargos.add("4");
 
         List<String> goods = new ArrayList <>();
-        goods.add("11");
-        goods.add("22");
-        goods.add("33");
-        goods.add("44");
+        goods.add("13P");
+        goods.add("12P");
+        goods.add("21P");
+        goods.add("22P");
+        goods.add("23P");
+        goods.add("33P");
+        goods.add("32P");
+        goods.add("31P");
+        goods.add("42R");
+        goods.add("43R");
+        goods.add("44R");
+        goods.add("43L");
+        goods.add("44L");
         spBerth.setVisibility(View.VISIBLE);
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
