@@ -23,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -87,7 +88,7 @@ public class TaskDoneFragment extends BaseFragment {
             return;
         }
 
-        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+        CustomCaptureActivity.startActivity(getContext(),"MainActivity");
 //        switch (nowRoleCode){
 //            case "复重":
 //                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);

@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
+import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
 import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
@@ -133,7 +134,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         }
     }
     private void gotoScan() {
-        ScanManagerActivity.startActivity(getContext(), "MainActivity");
+        CustomCaptureActivity.startActivity(getContext(), "MainActivity");
     }
 
     private void initData() {

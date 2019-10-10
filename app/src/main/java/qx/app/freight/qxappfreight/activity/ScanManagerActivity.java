@@ -19,6 +19,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.core.ScanBoxView;
+import cn.bingoogolapple.qrcode.zbar.ZBarView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -205,13 +207,17 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
     private void startZXing() {
         mZXingView.startCamera();
-        mZXingView.changeToScanQRCodeStyle();// 切换成扫描二维码样式
+        mZXingView.changeToScanQRCodeStyle();// 切换成扫描二维码样式z
         mZXingView.startSpotAndShowRect();//调用zxing扫描
     }
 
     @Override
     protected void onStart() {
         startZXing();
+        if (mZXingView.getIsScanBarcodeStyle())
+            ToastUtil.showToast("1111");
+        else
+            ToastUtil.showToast("2222");
         super.onStart();
     }
 
@@ -231,6 +237,13 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
     public void onScanQRCodeSuccess(String result) {
         getBackMessage(result);
     }
+    @Override
+    public void onCameraAmbientBrightnessChanged(boolean isDark) {
+        if (isDark){
+            ToastUtil.showToast("光线太暗请打开闪光灯！");
+        }
+    }
+
 
     /**
      * 获取回调的扫码信息
@@ -269,5 +282,4 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         }
 //        ToastUtil.showToast("扫码数据为空请重新扫码");
     }
-
 }

@@ -113,12 +113,12 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             case R.id.ll_add:
                 mSlideRV.closeMenu();
                 flag = 0;
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"BaggageListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();
                 flag = 1;
-                ScanManagerActivity.startActivity(this);
+                CustomCaptureActivity.startActivity(this,"BaggageListActivity");
                 break;
         }
     }
@@ -232,7 +232,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("BaggageListActivity")) {
-            if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
+            if (result.getData() != null ) {
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {

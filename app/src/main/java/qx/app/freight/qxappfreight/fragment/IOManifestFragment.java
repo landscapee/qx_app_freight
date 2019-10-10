@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.IOqrcodeEntity;
@@ -112,7 +113,7 @@ public class IOManifestFragment extends BaseFragment {
             showFragment(nowFragment);
         });
         btnSwitch.setOnClickListener(v -> {
-            ScanManagerActivity.startActivity(getContext(), "IOManifestFragment");
+            CustomCaptureActivity.startActivity(getContext(), "IOManifestFragment");
         });
         initFragment();
     }
