@@ -168,8 +168,9 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void stevedoresTaskHisResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        mCacheList.clear();
+
         if (currentPage == 1) {
+            mCacheList.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
