@@ -234,6 +234,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         entity.setFilterAtd(true);
+//        entity.setFilterHycd(true);
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 
