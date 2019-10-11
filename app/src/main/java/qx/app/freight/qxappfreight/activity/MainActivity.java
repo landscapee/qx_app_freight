@@ -34,6 +34,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
@@ -149,7 +150,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
             if (MyApplication.isNeedIm && Tools.isProduct())
                 fragment4 = new ImLibSpecialHomeFragment();
             else
-                fragment4 = new IOManifestFragment();
+                fragment4 = new TestFragment();
             fragment5 = new MineFragment();
         }
         else
@@ -422,7 +423,14 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
                 updatePushDialogInstall.show();
             }
         }
-
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(AfterHeavyExceptionBean result) {
+            String remark = "航班"+result.getFlightNo()+"出现复重异常, 异常板车"+result.getScooter()+"，请查看！";
+            if (remark!=null&& !StringUtil.isEmpty(remark)){
+                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+                updatePushDialogInstall.show();
+            }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(NewInstallEventBusEntity  result) {

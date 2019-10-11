@@ -27,6 +27,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
@@ -277,7 +278,14 @@ public class InstallEquipClient extends StompClient {
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
                         WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                        sendMessageEventBus(mWebSocketMessBean);
+                        if ("CLIPPING_WEIGHTER_ERROR_NOTICE".equals(mWebSocketMessBean.getMessageName())){ //负重异常
+                            String string = mWebSocketMessBean.getContent().replace("\\", "");
+                            AfterHeavyExceptionBean afterHeavyExceptionBean =  mGson.fromJson(string, AfterHeavyExceptionBean.class);
+                            sendMessageEventBus(afterHeavyExceptionBean);
+                        }else {
+                            sendMessageEventBus(mWebSocketMessBean);
+                        }
+
                     }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
 
             compositeDisposable.add(dispTopic2);
@@ -382,7 +390,10 @@ public class InstallEquipClient extends StompClient {
     public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
-
+    //负重异常
+    public void sendMessageEventBus(AfterHeavyExceptionBean bean) {
+        EventBus.getDefault().post(bean);
+    }
     private void sendLoadingListPush(String result) {
         InstallChangeEntity installChangeEntity = new InstallChangeEntity();
         installChangeEntity.setFlightNo(result);

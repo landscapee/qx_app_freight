@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.UserBean;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.NoReadCountContract;
@@ -102,14 +103,17 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         mPresenter = new NoReadCountPresenter(this);
         userName.setText(UserInfoSingle.getInstance().getLoginName());
         userRole.setText(UserInfoSingle.getInstance().getUsername());
-        if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())||
-                Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode())) {
-            llTodayDone.setVisibility(View.VISIBLE);
+        for (LoginResponseBean.RoleRSBean roleRSBean :UserInfoSingle.getInstance().getRoleRS()){
+            if (Constants.INSTALL_UNLOAD_EQUIP.equals(roleRSBean.getRoleCode())||
+                    Constants.JUNCTION_LOAD.equals(roleRSBean.getRoleCode())||
+                    Constants.DRIVEROUT.equals(roleRSBean.getRoleCode())||
+                    Constants.PORTER.equals(roleRSBean.getRoleCode())||
+                    Constants.INTERNATIONAL_GOODS.equals(roleRSBean.getRoleCode())||
+                    Constants.INSTALL_EQUIP_LEADER.equals(roleRSBean.getRoleCode())) {
+                llTodayDone.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
 

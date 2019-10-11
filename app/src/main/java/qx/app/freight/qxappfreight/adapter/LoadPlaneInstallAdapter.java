@@ -34,15 +34,22 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
     private boolean notShowPull;
     private OnDataCheckListener onDataCheckListener;
 
+    private List<String> cargos = new ArrayList <>();
+    private List<String> goods = new ArrayList <>();
+
     public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag) {
         super(R.layout.item_load_plane_install, list);
         this.mWidthairflag = widthairflag;
     }
 
-    public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag, boolean notShowPull) {
+    public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag, boolean notShowPull,List<String> cargos ,List<String> goods) {
         super(R.layout.item_load_plane_install, list);
         this.mWidthairflag = widthairflag;
         this.notShowPull = notShowPull;
+        this.cargos.clear();
+        this.cargos.addAll(cargos);
+        this.goods.clear();
+        this.goods.addAll(goods);
     }
 
     @Override
@@ -119,26 +126,26 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             }
         }
 
-        List<String> cargos = new ArrayList();
-        cargos.add("1");
-        cargos.add("2");
-        cargos.add("3");
-        cargos.add("4");
-
-        List<String> goods = new ArrayList <>();
-        goods.add("13P");
-        goods.add("12P");
-        goods.add("21P");
-        goods.add("22P");
-        goods.add("23P");
-        goods.add("33P");
-        goods.add("32P");
-        goods.add("31P");
-        goods.add("42R");
-        goods.add("43R");
-        goods.add("44R");
-        goods.add("43L");
-        goods.add("44L");
+//        List<String> cargos = new ArrayList();
+//        cargos.add("1");
+//        cargos.add("2");
+//        cargos.add("3");
+//        cargos.add("4");
+//
+//        List<String> goods = new ArrayList <>();
+//        goods.add("13P");
+//        goods.add("12P");
+//        goods.add("21P");
+//        goods.add("22P");
+//        goods.add("23P");
+//        goods.add("33P");
+//        goods.add("32P");
+//        goods.add("31P");
+//        goods.add("42R");
+//        goods.add("43R");
+//        goods.add("44R");
+//        goods.add("43L");
+//        goods.add("44L");
         spBerth.setVisibility(View.VISIBLE);
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());

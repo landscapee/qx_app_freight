@@ -55,6 +55,7 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
@@ -465,6 +466,10 @@ public interface HttpApi {
     //装卸机 货物扫描
     @POST("service-product-transport/tp-main-info/loadAndUnloadCarSubmit")
     Observable<BaseEntity<List<TransportTodoListBean>>> loadAndUnloadCarSubmit();
+
+    //获取航班 舱位信息
+    @POST("service-base-flight/f-flight/getFlightAirCraftNoRsByFlightId")
+    Observable<BaseEntity<CargoCabinData>> getFlightSpace(@Body BaseFilterEntity entity);
 
     //装机 - 装机单
     @POST("service-product-finishloading/stowage-report-info/getFlightCargotallyingResultByAndroid")

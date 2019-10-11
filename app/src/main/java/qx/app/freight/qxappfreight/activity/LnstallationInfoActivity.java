@@ -296,12 +296,15 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             //倒序
             Collections.reverse(mListVerson);
             Collections.reverse(mListVersonCode);
-
-                screenData(0);
+            screenData(0);
 
         }
-        else
+        else{
+            mList1.clear();
+            adapter.notifyDataSetChanged();
             mTvVersion.setText("版本号:无");
+        }
+
     }
 
     @Override

@@ -50,6 +50,7 @@ import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -63,6 +64,7 @@ import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StartPullPresenter;
+import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
@@ -124,7 +126,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private WaitCallBackDialog mWaitCallBackDialog;
     private LoadAndUnloadTodoBean data;
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean> mBaseContent;
-    private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> oriScooters;//原始板车列表数据
     private ArrayList <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> newScooters = new ArrayList <>();//修改过后的板车列表数据
     private int mOperateErrorStatus = -1;
     private boolean mConfirmPlan = false;
@@ -135,7 +136,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private ManifestWaybillListjianyiAdapter adapterNonuse;
     private String flightInfoId = null; //货邮舱单 上的 flightInfoId
 
-
+    private List<String> cargos = new ArrayList <>();
+    private List<String> goods = new ArrayList <>();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -306,7 +308,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRvData.setLayoutManager(linearLayoutManager);
-            adapter = new LoadPlaneInstallAdapter(newScooters,0,true);
+            adapter = new LoadPlaneInstallAdapter(newScooters,0,true,cargos,goods);
             mRvData.setAdapter(adapter);
             adapter.setOnDataCheckListener(scooterId -> {
                 boolean modified = false;
@@ -331,6 +333,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
             });
             loadData();
+            getPlaneSpace();
             mRvData.setVisibility(View.VISIBLE);
             llOperation.setVisibility(View.VISIBLE);
             llOperation2.setVisibility(View.GONE);
@@ -370,6 +373,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setDocumentType(2);
         entity.setFlightId(mCurrentFlightId);
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+    }
+
+    /**
+     * 获取飞机舱位信息
+     */
+    private void getPlaneSpace() {
+        mPresenter = new GetFlightCargoResPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(mCurrentFlightId);
+        ((GetFlightCargoResPresenter) mPresenter).getFlightSpace(entity);
     }
 
     /**
@@ -499,7 +512,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     //舱位集合
                     mBaseContent = new ArrayList <>(Arrays.asList(datas));
                     mLoadingList.get(0).setContentObject(mBaseContent);
-                    oriScooters = new ArrayList <>();
                     //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
                     for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
@@ -513,6 +525,36 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             }
         }
     }
+
+    /**
+     * 舱位信息返回
+     * @param result
+     */
+    @Override
+    public void setFlightSpace(CargoCabinData result) {
+        cargos.clear();
+        goods.clear();
+        if (result.getHld1wgt() > 0) {
+            cargos.add("1H");
+        }
+        if (result.getHld2wgt() > 0) {
+            cargos.add("2H");
+        }
+        if (result.getHld3wgt() > 0) {
+            cargos.add("3H");
+        }
+        if (result.getHld4wgt() > 0) {
+            cargos.add("4H");
+        }
+        if (result.getHld5wgt() > 0) {
+            cargos.add("5H");
+        }
+        for (CargoCabinData.CargosBean cargosBean:result.getCargos()){
+            goods.add(cargosBean.getPos());
+        }
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

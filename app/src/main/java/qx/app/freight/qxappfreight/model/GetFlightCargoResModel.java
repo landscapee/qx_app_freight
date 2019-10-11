@@ -26,6 +26,17 @@ public class GetFlightCargoResModel extends BaseModel implements GetFlightCargoR
     }
 
     @Override
+    public void getFlightSpace(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getFlightSpace(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
+
+    @Override
     public void flightDoneInstall(GetFlightCargoResBean entity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().flightDoneInstall(entity)
                 .subscribeOn(Schedulers.io())

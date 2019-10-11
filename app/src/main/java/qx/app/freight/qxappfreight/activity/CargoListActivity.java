@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
@@ -372,6 +373,11 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
             }
         }
         Log.e("tagTest", "" + mGoodsWeight + mMailWeight + mBaggageWeight);
+    }
+
+    @Override
+    public void setFlightSpace(CargoCabinData result) {
+
     }
 
     @Override

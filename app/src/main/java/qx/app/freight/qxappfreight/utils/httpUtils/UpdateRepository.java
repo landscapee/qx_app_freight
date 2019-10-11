@@ -54,6 +54,7 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
@@ -733,6 +734,16 @@ public class UpdateRepository extends BaseRepository {
     public Observable<LoadingListBean> getLoadingList(LoadingListRequestEntity entity) {
         return getService().getLoadingList(entity);
     }
+    /**
+     * 获取飞机舱位信息
+     *
+     * @param entity 请求参数
+     * @return
+     */
+    public Observable<CargoCabinData> getFlightSpace(BaseFilterEntity entity) {
+        return transform(getService().getFlightSpace(entity));
+    }
+
 
     /*****
      * 结束装机

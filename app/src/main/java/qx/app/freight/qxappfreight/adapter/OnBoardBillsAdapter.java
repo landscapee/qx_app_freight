@@ -29,9 +29,9 @@ public class OnBoardBillsAdapter extends BaseQuickAdapter<LoadingListBean.DataBe
             TextView tv3 =helper.getView(R.id.tv_bill_weight);
             TextView tv4 =helper.getView(R.id.tv_bill_special_code);
 
-            tv1.setText(String.valueOf(item.getNumber()));
-            tv2.setText(String.valueOf(item.getWeight()));
-            tv3.setText(String.valueOf(item.getWaybillCode()));
+            tv1.setText(TextUtils.isEmpty(String.valueOf(item.getNumber()))?"- -":String.valueOf(item.getNumber()));
+            tv2.setText(TextUtils.isEmpty(String.valueOf(item.getWeight()))?"- -":String.valueOf(item.getWeight()));
+            tv3.setText(item.getWaybillCode());
             tv4.setText(TextUtils.isEmpty(item.getSpecialCode())?"- -":item.getSpecialCode());
 
             TextView[] tvList = {tv1, tv2, tv3, tv4};
