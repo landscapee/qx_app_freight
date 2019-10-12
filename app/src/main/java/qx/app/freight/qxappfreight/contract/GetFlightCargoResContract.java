@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.contract;
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -14,7 +15,7 @@ public class GetFlightCargoResContract {
     public interface getFlightCargoResModel {
         void getLoadingList(LoadingListRequestEntity entity, IResultLisenter lisenter);
 
-        void getFlightSpace(BaseFilterEntity entity, IResultLisenter lisenter);
+        void getFlightSpace(FlightIdBean entity, IResultLisenter lisenter);
 
         void flightDoneInstall(GetFlightCargoResBean entity, IResultLisenter lisenter);
 

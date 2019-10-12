@@ -216,6 +216,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
                 });
                 pushDialog.show();
                 getData();
+                EventBus.getDefault().post("LnstallationFragment_refresh");
             }
 
         }

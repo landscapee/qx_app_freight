@@ -36,6 +36,8 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
     private List<String> cargos = new ArrayList <>();
     private List<String> goods = new ArrayList <>();
+    SpinnerAdapter apsAdapter1;
+    SpinnerAdapter apsAdapter2;
 
     public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag) {
         super(R.layout.item_load_plane_install, list);
@@ -77,26 +79,32 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         else
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
         Button btnPull = helper.getView(R.id.tv_pull);
+
+        notShowPull = !"BY".equals(item.getType());
         if (notShowPull) {
             btnPull.setVisibility(View.VISIBLE);
             //设置 拉下的状态
             btnPull.setOnClickListener(v -> {
                 if (item.getExceptionFlag() == 1) {
                     item.setExceptionFlag(0);
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    btnPull.setTextColor(mContext.getResources().getColor(R.color.white));
+                    btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
                 } else {
                     item.setExceptionFlag(1);
                     btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                    btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
                 }
                 onDataCheckListener.onDataChecked(item.getScooterCode());
             });
             if (item.getExceptionFlag() == 1) {
                 btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
             } else {
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                btnPull.setTextColor(mContext.getResources().getColor(R.color.white));
+                btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
             }
         } else {
-            btnPull.setVisibility(View.GONE);
+            btnPull.setVisibility(View.INVISIBLE);
         }
 
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
@@ -150,10 +158,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
 //            } else {
-        ArrayAdapter <String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
+        apsAdapter1 = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
 //            }
-        spBerth.setAdapter(spinnerAdapter);
-        SpinnerAdapter apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
+        spBerth.setAdapter(apsAdapter1);
+//        apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
         int k = apsAdapter1.getCount();
         for (int i = 0; i < k; i++) {
             if (item.getCargoName().equals(apsAdapter1.getItem(i).toString())) {
@@ -186,6 +194,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
             }
         });
+
         if (TextUtils.isEmpty(item.getLocation())) {//有货位数据
             spGoodsPos.setVisibility(View.GONE);
         } else {
@@ -193,9 +202,9 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //                if (item.isShowPull()) {
 //                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
 //                } else {
-            ArrayAdapter<String> spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, goods);
-            spGoodsPos.setAdapter(spGoodsAdapter);
-            SpinnerAdapter apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
+            apsAdapter2 = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, goods);
+            spGoodsPos.setAdapter(apsAdapter2);
+//            apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
             int j = apsAdapter2.getCount();
             for (int i = 0; i < j; i++) {
                 if (item.getLocation().equals(apsAdapter2.getItem(i).toString())) {
@@ -259,5 +268,22 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
         this.onDataCheckListener = onDataCheckListener;
+    }
+
+
+    /**
+     * 更新 sp的选择
+     */
+    public void notifySp(List<String> cargos ,List<String> goods){
+        this.cargos.clear();
+        this.cargos.addAll(cargos);
+        this.goods.clear();
+        this.goods.addAll(goods);
+        if (apsAdapter1 != null){
+            apsAdapter1.notify();
+        }
+        if (apsAdapter2 != null){
+            apsAdapter2.notify();
+        }
     }
 }

@@ -47,6 +47,7 @@ import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadUnloadToDoLeaderPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -191,7 +192,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                     mDialog.dismiss();
                     ToastUtil.showToast("领受新装卸任务成功");
                     mListCacheUse.clear();
-                    mDialog = null;
+//                    mDialog = null;
                     loadData();
                     showDialogTask();
                     break;
@@ -203,7 +204,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
                         mTaskFragment.setTitleText(mTaskIdList.size());
                         mMfrvData.notifyForAdapter(mAdapter);
                     }
-                    mDialog = null;
+//                    mDialog = null;
                     showDialogTask();
                     break;
                 case -1://领受失败后，清空未领受列表缓存
@@ -444,7 +445,18 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mSlideAdapter = adapter;
             go2SlideStep(bigPos, mList.get(bigPos).getOperationStepObj().get(smallPos).getOperationCode());
         });
-        mAdapter.setOnClearSeatListener(position -> startClearTask(position));
+//        mAdapter.setOnClearSeatListener(position -> startClearTask(position));
+        mAdapter.setOnClearSeatListener(new InstallEquipLeaderAdapter.OnClearSeatListener() {
+            @Override
+            public void onClearClicked(int position) {
+                startClearTask(position);
+            }
+
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
+            }
+        });
     }
 
     /**

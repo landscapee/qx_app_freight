@@ -31,12 +31,14 @@ import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.PrintBean;
 import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
+import qx.app.freight.qxappfreight.dialog.SingerDialog;
 import qx.app.freight.qxappfreight.fragment.HyFragment;
 import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
@@ -143,11 +145,24 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         });
         mBtPrint.setOnClickListener(v -> {
 
+            String intro = "";
             if (printFlag == 1)
-                showYesOrNoDialog("","打印【版本号"+currentVersion+"】货邮舱单",1);
+                intro = "打印【版本号"+currentVersion+"】货邮舱单";
             else if (printFlag == 3)
-                showYesOrNoDialog("","打印【版本号"+currentVersion+"】舱位建议",3);
+                intro= "打印【版本号"+currentVersion+"】舱位建议";
 
+            SingerDialog singerDialog = new SingerDialog(this,intro);
+            singerDialog.isCanceledOnTouchOutside(false)
+                    .isCanceled(true)
+                    .setOnClickListener(oAuserInfo -> {
+                        printManifest(oAuserInfo);
+                        singerDialog.dismiss();
+                    });
+            List<PrintBean> list = new ArrayList <>();
+            list.add(new PrintBean("1","打印机（1）"));
+            list.add(new PrintBean("2","打印机（2）"));
+            list.add(new PrintBean("3","打印机（3）"));
+            singerDialog.setData(list);
 //            mPresenter = new PrintRequestPresenter(this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
 //            entity.setFlightId(mBaseData.getFlightId());
@@ -165,7 +180,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //        });
     }
 
-    private void printManifest(){
+    private void printManifest(String printName){
 
         mPresenter = new PrintRequestPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
@@ -173,7 +188,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         entity.setReportInfoId(mId);
         // 1 货邮舱单 2 装机单 3装舱建议
         entity.setType(printFlag);
-        entity.setPrintName("1");
+        entity.setPrintName(printName);
         ((PrintRequestPresenter) mPresenter).printRequest(entity);
 
     }
@@ -264,7 +279,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                             switch (flag){
                                 case 1:
                                 case 3:
-                                    printManifest();
+                                    printManifest("1");
                                     break;
                                 case 4:
                                     releaseFlight();

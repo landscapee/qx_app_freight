@@ -140,6 +140,7 @@
                     android:background="#e5e5e5" />
 
                 <TextView
+                    android:id="@+id/tv_goods"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:textColor="@color/white"
@@ -148,6 +149,7 @@
                    />
 
                 <TextView
+                    android:id="@+id/tv_operation"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="操作"

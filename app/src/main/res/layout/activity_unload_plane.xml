@@ -128,7 +128,7 @@
                             android:background="@drawable/shape_rect_gray_979797"
                             android:gravity="center"
                             android:text="卸机单信息"
-                            android:textColor="#333333"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/sp_12" />
                     </LinearLayout>
 

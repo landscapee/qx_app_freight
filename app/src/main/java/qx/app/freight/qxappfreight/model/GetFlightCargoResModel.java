@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
@@ -26,7 +27,7 @@ public class GetFlightCargoResModel extends BaseModel implements GetFlightCargoR
     }
 
     @Override
-    public void getFlightSpace(BaseFilterEntity entity, IResultLisenter lisenter) {
+    public void getFlightSpace(FlightIdBean entity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().getFlightSpace(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.bean.request.DeclareWaybillEntity;
 import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
@@ -740,7 +741,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 请求参数
      * @return
      */
-    public Observable<CargoCabinData> getFlightSpace(BaseFilterEntity entity) {
+    public Observable<CargoCabinData> getFlightSpace(FlightIdBean entity) {
         return transform(getService().getFlightSpace(entity));
     }
 

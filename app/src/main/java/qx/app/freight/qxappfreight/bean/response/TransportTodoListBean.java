@@ -109,7 +109,7 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
     private String planeType;
     private Long etd;
     private List<String> flightRoute;
-    private Integer num;//板车数量
+    private int num;//板车数量
     private String carType;//板车类型
 
 

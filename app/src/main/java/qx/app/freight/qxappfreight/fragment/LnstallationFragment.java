@@ -219,6 +219,13 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result.equals("LnstallationFragment_refresh")) {
+            mCurrentPage = 1;
+            getData();
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
         if (result != null && !result.isNewStowage()) {
            getData();

@@ -57,7 +57,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
     private TextView mTvAccept;
     private TextView mTvRefuse;
     private DialogLoadUnloadPushAdapter mAdapter;
-
+    private boolean flag;//是否可以单击
 
     public PushLoadUnloadLeaderDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, PushLoadUnloadLeaderDialog.OnDismissListener onDismissListener) {
         super(context,themeResId);
@@ -146,6 +146,10 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         mTvTitle.setText(context.getString(R.string.format_new_task_push, list.size()));
         LoadUnloadLeaderPresenter mPresenter = new LoadUnloadLeaderPresenter(PushLoadUnloadLeaderDialog.this);
         mTvAccept.setOnClickListener(v -> {
+            if (flag)
+                return;
+            flag = true;
+
             Observable.just(list).all(loadAndUnloadTodoBeans -> {
                 if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
                     for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
@@ -182,6 +186,9 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
             });
         });
         mTvRefuse.setOnClickListener(v -> {
+            if (flag)
+                return;
+            flag = true;
             BaseFilterEntity entity = new BaseFilterEntity();
             if (list!=null &&list.size()> 0)
                 entity.setTaskId(list.get(0).getTaskId());
@@ -214,6 +221,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
     public void slideTaskResult(String result) {
         if ("正确".equals(result)) {
             onDismissListener.refreshUI(0);
+            flag = false;
         }
     }
 
@@ -221,11 +229,13 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
     public void refuseTaskResult(String result) {
         ToastUtil.showToast("拒绝任务操作成功");
         onDismissListener.refreshUI(1);
+        flag = false;
     }
 
     @Override
     public void toastView(String error) {
         onDismissListener.refreshUI(-1);
+        flag = false;
     }
 
     @Override

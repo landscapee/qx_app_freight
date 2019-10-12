@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -35,7 +36,7 @@ public class GetFlightCargoResPresenter extends BasePresenter {
             }
         });
     }
-    public void getFlightSpace(BaseFilterEntity entity) {
+    public void getFlightSpace(FlightIdBean entity) {
         mRequestView.showNetDialog();
         ((GetFlightCargoResModel) mRequestModel).getFlightSpace(entity, new IResultLisenter<CargoCabinData>() {
             @Override

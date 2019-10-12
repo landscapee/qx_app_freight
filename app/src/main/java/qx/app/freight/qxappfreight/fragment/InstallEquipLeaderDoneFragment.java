@@ -35,6 +35,7 @@ import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.contract.StevedoresTaskHisContract;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StevedoresTaskHisPresenter;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -79,8 +80,16 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
-        mAdapter.setOnClearSeatListener(position -> {
-            startClearTask(position);
+        mAdapter.setOnClearSeatListener(new InstallEquipLeaderAdapter.OnClearSeatListener() {
+            @Override
+            public void onClearClicked(int position) {
+                startClearTask(position);
+            }
+
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
+            }
         });
         mMfrvData.setAdapter(mAdapter);
         loadData();

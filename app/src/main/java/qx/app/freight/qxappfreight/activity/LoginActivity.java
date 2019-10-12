@@ -273,7 +273,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 }
                 if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
                         Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
-                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())) {
+                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())||
+                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())
+                ) {
 //                    loginBean.setUserId(loginBean.getLoginid());
                     isNeedIm = true;
                     break;

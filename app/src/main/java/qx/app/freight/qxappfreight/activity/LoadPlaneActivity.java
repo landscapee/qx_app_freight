@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.CompareInfoBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
@@ -92,6 +93,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @BindView(R.id.ll_operation2)
     LinearLayout llOperation2;//发送至结载 最终装机单确认 布局
 
+    @BindView(R.id.tv_goods)
+    TextView tvGoods; //title 是否显示 货位
+    @BindView(R.id.tv_operation)
+    TextView tvOperation; //title 是否显示 操作
 
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;
@@ -220,7 +225,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mTvStartTime.setText(time);
 
 
-
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
         mCurrentFlightNo = mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo();
         //发送结载
@@ -334,6 +338,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             });
             loadData();
             getPlaneSpace();
+            //TODO 是否是宽体机 0 宽体机 1 窄体机
+            if (1 == data.getWidthAirFlag()) {
+                 tvGoods.setVisibility(View.GONE);
+            } else if (0 == data.getWidthAirFlag()) {
+                tvGoods.setVisibility(View.VISIBLE);
+            }
+
             mRvData.setVisibility(View.VISIBLE);
             llOperation.setVisibility(View.VISIBLE);
             llOperation2.setVisibility(View.GONE);
@@ -380,8 +391,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
      */
     private void getPlaneSpace() {
         mPresenter = new GetFlightCargoResPresenter(this);
-        BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setFlightId(mCurrentFlightId);
+        FlightIdBean entity = new FlightIdBean();
+        entity.setFlightId(Long.valueOf(mCurrentFlightId));
         ((GetFlightCargoResPresenter) mPresenter).getFlightSpace(entity);
     }
 
@@ -552,7 +563,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         for (CargoCabinData.CargosBean cargosBean:result.getCargos()){
             goods.add(cargosBean.getPos());
         }
-
+        adapter.notifySp(cargos,goods);
     }
 
     @Override

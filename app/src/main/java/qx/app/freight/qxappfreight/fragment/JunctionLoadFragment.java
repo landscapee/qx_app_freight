@@ -130,6 +130,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(aLong -> {
                                         loadData();
+                                        EventBus.getDefault().post("CargoManifestFragment_refresh");
                                     });
                             mListCache.clear();
                         } else {//领受失败后，清空未领受列表缓存

@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.PrintBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -49,6 +50,7 @@ import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
 import qx.app.freight.qxappfreight.contract.SynchronousLoadingContract;
+import qx.app.freight.qxappfreight.dialog.SingerDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightAllReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
@@ -181,7 +183,20 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mTvVersion.setOnClickListener((v -> showStoragePickView()));
         mBtRefuse.setOnClickListener(v -> {
             loadFlag = -1;
-            showYesOrNoDialog("","打印【版本号"+currentVersion+"】装机单",2);
+
+            String intro = "打印【版本号"+currentVersion+"】装机单";
+            SingerDialog singerDialog = new SingerDialog(this,intro);
+            singerDialog.isCanceledOnTouchOutside(false)
+                    .isCanceled(true)
+                    .setOnClickListener(oAuserInfo -> {
+                        printManifest(oAuserInfo);
+                        singerDialog.dismiss();
+                    });
+            List<PrintBean> list = new ArrayList <>();
+            list.add(new PrintBean("1","打印机（1）"));
+            list.add(new PrintBean("2","打印机（2）"));
+            list.add(new PrintBean("3","打印机（3）"));
+            singerDialog.setData(list);
 //            mPresenter = new PrintRequestPresenter(this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
 //            entity.setFlightId(mBaseData.getFlightId());
@@ -391,7 +406,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     /**
      * 打印
      */
-    private void printManifest(){
+    private void printManifest(String printName){
 
         mPresenter = new PrintRequestPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
@@ -399,7 +414,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         entity.setReportInfoId(mId);
         // 1 货邮舱单 2 装机单 3装舱建议
         entity.setType(2);
-        entity.setPrintName("1");
+        entity.setPrintName(printName);
         ((PrintRequestPresenter) mPresenter).printRequest(entity);
 
     }
@@ -450,7 +465,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         if (confirm) {
                             switch (flag){
                                 case 2:
-                                    printManifest();
+                                    printManifest("1");
                                     break;
                                 case 4:
                                     openAirDoor();
