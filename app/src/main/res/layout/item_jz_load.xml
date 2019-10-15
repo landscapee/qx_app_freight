@@ -403,11 +403,11 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
-        <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
-            android:id="@+id/coll_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <!--<qx.app.freight.qxappfreight.widget.CollapsableLinearLayout-->
+            <!--android:id="@+id/coll_listview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_step"
@@ -415,6 +415,6 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:visibility="gone" />
-        </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
+        <!--</qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>-->
     </LinearLayout>
 </RelativeLayout>

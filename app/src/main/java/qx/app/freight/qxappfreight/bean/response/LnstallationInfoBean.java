@@ -4,6 +4,7 @@ package qx.app.freight.qxappfreight.bean.response;
 import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 
 @Data
 public class LnstallationInfoBean {
@@ -40,7 +41,7 @@ public class LnstallationInfoBean {
         private String total;//总数量
         private String type;//类型
         private int version;//版本号
-        private List<?> waybillList;
+        private List<ManifestScooterListBean.WaybillListBean> waybillList;
         private String weight;//重量
         private boolean change;//是否修改过
     }

@@ -13,6 +13,7 @@ public class BaseFilterEntity<T> {
     private String currentStep;
     private boolean androidFlag;
     private int current; // FIXME check this code
+    private int  currentVersion;//当前装机单版本
     private int size;
     private T filter;
     private String stepOwner;

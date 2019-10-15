@@ -114,9 +114,9 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
                 }
             } else if (item.isChange()) {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_5d9));
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
+                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 }
             } else {
                 if (item.getSpecialCode() != null && item.getSpecialCode().contains("AVI")) {//活体颜色标注
@@ -129,7 +129,13 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
-                } else {
+                }
+                else if (item.getWaybillList() != null &&item.getWaybillList().size()>0&&item.getWaybillList().get(0)!=null&&item.getWaybillList().get(0).getCargoCn()!=null&& item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)){//压舱沙
+                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    for (TextView tv : tvList) {
+                        tv.setTextColor(Color.parseColor("#000000"));
+                    }
+                }else {
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
                     for (TextView tv : tvList) {
                         tv.setTextColor(mContext.getResources().getColor(R.color.black_3));

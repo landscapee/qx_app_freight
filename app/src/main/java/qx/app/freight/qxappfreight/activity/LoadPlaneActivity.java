@@ -547,19 +547,19 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         cargos.clear();
         goods.clear();
         if (result.getHld1wgt() > 0) {
-            cargos.add("1H");
+            cargos.add("1");
         }
         if (result.getHld2wgt() > 0) {
-            cargos.add("2H");
+            cargos.add("2");
         }
         if (result.getHld3wgt() > 0) {
-            cargos.add("3H");
+            cargos.add("3");
         }
         if (result.getHld4wgt() > 0) {
-            cargos.add("4H");
+            cargos.add("4");
         }
         if (result.getHld5wgt() > 0) {
-            cargos.add("5H");
+            cargos.add("5");
         }
         for (CargoCabinData.CargosBean cargosBean:result.getCargos()){
             goods.add(cargosBean.getPos());

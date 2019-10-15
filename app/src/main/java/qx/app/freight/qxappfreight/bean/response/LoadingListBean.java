@@ -64,6 +64,7 @@ public class LoadingListBean implements Serializable {
                 private int version;
                 private List<WaybillBean> waybillList;
                 private double weight;
+                private double volume;
                 //添加数据
                 private boolean locked;//是否锁定
                 private String location;//货位

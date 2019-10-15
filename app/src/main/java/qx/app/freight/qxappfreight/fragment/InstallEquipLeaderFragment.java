@@ -405,7 +405,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
 
         if (mListCache.size() != 0) {
 //            mCacheList.removeAll(mListCache);
-            Log.e("tagTest", "弹框。。。。。");
             showDialogTask();
         } else {
             seachByText();

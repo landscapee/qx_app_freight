@@ -160,11 +160,13 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
                         entity.setFlightTaskId(bean.getTaskId());
                         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
                         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                        if (bean.getTaskType() == 1) {
-                            entity.setOperationCode("FreightLoadReceived");
-                        } else {
-                            entity.setOperationCode("FreightUnloadReceived");
-                        }
+//                        if (bean.getTaskType() == 1) {
+//                            entity.setOperationCode("FreightLoadReceived");
+//                        } else {
+//                            entity.setOperationCode("FreightUnloadReceived");
+//                        }
+                        entity.setOperationCode("StevedoresLoadReceived"); //by -zyy ：装卸员领受code
+
                         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                         entity.setUserId(UserInfoSingle.getInstance().getUserId());
                         entity.setUserName(bean.getWorkerName());

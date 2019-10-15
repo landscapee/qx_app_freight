@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -339,7 +340,6 @@ public class Tools {
     public static void startVibrator(Context context, boolean isforcedispose, int rawId) {
         SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
-        wakeupScreen(context);
     }
 
     /**
@@ -376,6 +376,33 @@ public class Tools {
         else
             return false;
     }
+    /**
+     * 判断是否是生产环境
+     *
+     * @return
+     */
+    public static boolean compareFist(String first,String second) {
+        if (first!=null&&second!=null){
+            if (first.equals(second))
+                return  true;
+            else {
+                if (first.length()>0&&second.length()>0){
+                    first = first.substring(0,1);
+                    second = second.substring(0,1);
+                    if (first.equals(second))
+                        return true;
+                    else
+                        return false;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        else
+            return false;
+    }
+
 
     /**
      * 登录被挤下线 dialog
@@ -439,6 +466,11 @@ public class Tools {
         if (pm.isScreenOn()) {
             return;
         }
+        //屏锁管理器
+        KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+        //解锁
+        kl.disableKeyguard();
         //获取电源管理器对象
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
         //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
@@ -448,5 +480,6 @@ public class Tools {
         //释放
         wl.release();
     }
+
 
 }

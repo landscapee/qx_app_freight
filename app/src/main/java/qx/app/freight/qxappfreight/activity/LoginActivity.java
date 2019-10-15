@@ -85,6 +85,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         //防止 重新点击app 图标 重启这个activity
+
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;

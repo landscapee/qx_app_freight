@@ -177,6 +177,7 @@ public class InstallEquipClient extends StompClient {
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         }
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
@@ -193,6 +194,7 @@ public class InstallEquipClient extends StompClient {
                         Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
             compositeDisposable.add(dispTopic1);
             WebSocketService.subList.add(WebSocketService.ToList);
@@ -211,6 +213,7 @@ public class InstallEquipClient extends StompClient {
                         if (null != topicMessage.getPayload()) {
                             sendLoadingListPush(topicMessage.getPayload());
                         }
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> {
                         Log.e(TAG, "收到装机单变更推送失败", throwable);
                     });
@@ -228,6 +231,7 @@ public class InstallEquipClient extends StompClient {
 //                            installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
                             sendLoadingListPushNotify(installNotifyEventBusEntity);
                         }
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> {
                         Log.e(TAG, "通知录入的新装机单", throwable);
                     });
@@ -256,6 +260,7 @@ public class InstallEquipClient extends StompClient {
                                 sendInstallEventBus(mWebSocketBean);
                             }
                         }
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "websocket-->发送至结载的建议装机单", throwable));
             compositeDisposable.add(dispTopic4);
             //订阅  登录地址
@@ -267,6 +272,7 @@ public class InstallEquipClient extends StompClient {
                         if (null != topicMessage.getPayload()) {
                             Tools.showDialog(mContext);
                         }
+//                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> {
                         Log.e(TAG, "websocket-->登录失败", throwable);
                     });

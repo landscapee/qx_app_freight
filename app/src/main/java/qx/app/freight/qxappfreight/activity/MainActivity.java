@@ -379,7 +379,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     @Override
     public void onBackPressed() {
-        quitApp();
+//        quitApp();
     }
 
     @Override
@@ -419,9 +419,12 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         if (result.getType() == 2){
             String remark = result.getFlightNo()+"监装已确认新的装机单版本，请查看！";
             if (remark!=null&& !StringUtil.isEmpty(remark)){
-                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+                    EventBus.getDefault().post("LoadInstall_Sure_Update");
+                });
                 updatePushDialogInstall.show();
             }
+
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)

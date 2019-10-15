@@ -337,10 +337,22 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             mRgTitle.check(R.id.rb_install);// 切换到 装机单
             loadFlag = 2;
             loadData();
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String installNotifyEventBusEntity) {
+        if ("LoadInstall_Sure_Update".equals(installNotifyEventBusEntity)){
+            if (mWaitCallBackDialog != null){
+                mWaitCallBackDialog.dismiss();
+            }
+            mRgTitle.check(R.id.rb_install);// 切换到 装机单
+            loadFlag = 2;
+            loadData();
 
         }
 
     }
+
     private void showStoragePickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
@@ -412,6 +424,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(mBaseData.getFlightId());
         entity.setReportInfoId(mId);
+        entity.setCurrentVersion(currentVersion);
         // 1 货邮舱单 2 装机单 3装舱建议
         entity.setType(2);
         entity.setPrintName(printName);

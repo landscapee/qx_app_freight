@@ -107,7 +107,9 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
 
     @Override
     public void toastView(String error) {
-
+        if (error!=null){
+            ToastUtil.showToast(error);
+        }
     }
 
     @Override

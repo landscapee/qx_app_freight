@@ -147,6 +147,7 @@ public class OffSiteEscortClient extends StompClient {
                                 CommonJson4List<LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
                             }
+                            Tools.wakeupScreen(mContext);//唤醒
                         }
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
@@ -160,6 +161,7 @@ public class OffSiteEscortClient extends StompClient {
                         if (null != topicMessage.getPayload()) {
                             Tools.showDialog(mContext);
                         }
+                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> {
                         Log.e(TAG, "websocket-->登录失败", throwable);
                     });

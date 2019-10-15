@@ -4,12 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,13 +23,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -43,6 +37,7 @@ import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
@@ -62,7 +57,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     public PushLoadUnloadDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
         super(context,themeResId);
-        this.context = context;
+        this.context = MyApplication.getContext();
         this.list = list;
         this.onDismissListener = onDismissListener;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -86,8 +81,14 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         initViews();
     }
 
+    @Override
+    public void show() {
+        Tools.wakeupScreen(context);//唤醒
+        super.show();
+    }
+
     public void setData(Context context, List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
-        this.context = context;
+        this.context = MyApplication.getContext();
         this.list = list;
         this.onDismissListener = onDismissListener;
     }
@@ -105,7 +106,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     }
 
     public void refreshData() {
-        mAdapter.notifyDataSetChanged();
+        if (mAdapter !=null){
+            mAdapter.notifyDataSetChanged();
+        }
         setListeners();
     }
 
@@ -224,7 +227,10 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void toastView(String error) {
-
+    if (error!=null)
+        ToastUtil.showToast(error);
+        dismiss();
+        onDismissListener.refreshUI(false);
     }
 
     @Override

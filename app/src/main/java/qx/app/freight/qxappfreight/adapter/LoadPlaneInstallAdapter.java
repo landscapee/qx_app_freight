@@ -24,6 +24,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 装舱建议列表数据适配器
@@ -71,11 +72,16 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             item.setLocked(!item.isLocked());
 //            onLockClickListener.onLockClicked(helper.getAdapterPosition());
         });
-
+        if (!item.isLocked()) {
+            ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
+        } else {
+            ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
+        }
         helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
                 .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
                 .setText(R.id.tv_destination,item.getDestinationStation()!= null ?item.getDestinationStation():"--")
-                .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--");
+                .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--")
+                .setText(R.id.tv_volume, item.getVolume() != 0 ? item.getVolume() + "" : "--");
         if (item.getWaybillList() != null && item.getWaybillList().size() > 0&&item.getWaybillList().get(0).getWaybillCode()!=null)
             helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
         else
@@ -111,9 +117,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
         TextView tv3 = helper.getView(R.id.tv_weight);
+        TextView tv4 = helper.getView(R.id.tv_volume);
         TextView tv7 = helper.getView(R.id.tv_mailtype);
 //            TextView tv7 = helper.getView(R.id.tv_volume);
-        TextView[] tvList = {tv1, tv3, tv7};
+        TextView[] tvList = {tv1, tv3,tv4, tv7};
         if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
             helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
             for (TextView tv : tvList) {
@@ -166,10 +173,11 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //        apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
         int k = apsAdapter1.getCount();
         for (int i = 0; i < k; i++) {
-            if (item.getCargoName().equals(apsAdapter1.getItem(i).toString())) {
+            if (Tools.compareFist(item.getCargoName(),apsAdapter1.getItem(i).toString())) {
                 spBerth.setSelection(i, true);// 默认选中项
                 break;
             }
+
         }
         spBerth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int pos;
@@ -180,7 +188,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                     spBerth.setSelection(pos, true);
                 } else {
                     pos = position;
-                    if (item.getOldCargoName().equals(cargos.get(position))){
+                    if (Tools.compareFist(item.getOldCargoName(),cargos.get(position))){
                         item.setChange(false);
                     }
                     else {

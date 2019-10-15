@@ -311,8 +311,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                 mTvStatus.setText("离港系统"+result.getWriteResult());
             }
             else {
-                mTvStatus.setTextColor(getResources().getColor(R.color.red));
-                mTvStatus.setText("离港系统 状态未知");
+                mTvStatus.setTextColor(getResources().getColor(R.color.gray_8f));
+                mTvStatus.setText("离港系统 待写入");
             }
 
             currentVersion = result.getVersion();
@@ -374,7 +374,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             ToastUtil.showToast("释放成功！");
         }
         EventBus.getDefault().post("CargoManifestFragment_refresh");
-        finish();
+//        finish();
     }
 
     @Override

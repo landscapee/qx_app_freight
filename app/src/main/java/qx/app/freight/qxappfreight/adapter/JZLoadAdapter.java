@@ -292,28 +292,28 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             } else {
                 llBg.setBackgroundColor(Color.parseColor("#ffffff"));
             }
-            CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
+//            CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
             if (item.isShowDetail()) {
                 rvStep.setVisibility(View.VISIBLE);
-                collView.expand();
+//                collView.expand();
             } else {
                 rvStep.setVisibility(View.GONE);
-                collView.collapse();
+//                collView.collapse();
             }
             llBg.setOnClickListener(v -> {
                 item.setShowDetail(!item.isShowDetail());
                 if (item.isShowDetail()) {
                     rvStep.setVisibility(View.VISIBLE);
-                    collView.expand();
+//                    collView.expand();
                 } else {
                     rvStep.setVisibility(View.GONE);
-                    collView.collapse();
+//                    collView.collapse();
                 }
             });
         }
         else
         {
-            rvStep.setVisibility(View.VISIBLE);
+            rvStep.setVisibility(View.GONE);
         }
 
     }

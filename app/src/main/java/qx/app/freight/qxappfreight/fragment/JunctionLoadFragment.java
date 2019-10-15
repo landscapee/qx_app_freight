@@ -95,12 +95,13 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     List <LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
-                            .subscribe(aLong -> {
-                                loadData();
-                            });
+//                    Observable.timer(300, TimeUnit.MILLISECONDS)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread()) //等待300毫秒后调取代办接口，避免数据库数据错误
+//                            .subscribe(aLong -> {
+//                                loadData();
+//                            });
+                    loadData();
                 } else {//取消任务，刷新代办列表
                     loadData();
                 }
@@ -125,13 +126,13 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     mDialog = new PushLoadUnloadDialog(getContext(),R.style.custom_dialog,mListCache, success -> {
                         if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
                             ToastUtil.showToast("领受结载新任务成功");
-                            Observable.timer(300, TimeUnit.MILLISECONDS)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(aLong -> {
+//                            Observable.timer(300, TimeUnit.MILLISECONDS)
+//                                    .subscribeOn(Schedulers.io())
+//                                    .observeOn(AndroidSchedulers.mainThread())
+//                                    .subscribe(aLong -> {
                                         loadData();
                                         EventBus.getDefault().post("CargoManifestFragment_refresh");
-                                    });
+//                                    });
                             mListCache.clear();
                         } else {//领受失败后，清空未领受列表缓存
                             Log.e("tagPush", "推送出错了");
@@ -166,12 +167,14 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                         mDialog.show();//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示
-                    Observable.timer(300, TimeUnit.MILLISECONDS)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(aLong -> {
-                                mDialog.refreshData();
-                            });
+//                    Observable.timer(300, TimeUnit.MILLISECONDS)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(aLong -> {
+//                                mDialog.refreshData();
+//                            });
+                    if (mDialog !=null)
+                        mDialog.refreshData();
                 }
             }
         }
