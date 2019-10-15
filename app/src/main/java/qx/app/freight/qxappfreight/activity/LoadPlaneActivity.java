@@ -524,6 +524,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     mBaseContent = new ArrayList <>(Arrays.asList(datas));
                     mLoadingList.get(0).setContentObject(mBaseContent);
                     //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
+                    newScooters.clear();
                     for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
                         for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
                             scooterBean.setOldCargoName(scooterBean.getCargoName());

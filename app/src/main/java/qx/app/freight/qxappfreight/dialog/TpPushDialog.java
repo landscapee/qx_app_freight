@@ -135,7 +135,7 @@ public class TpPushDialog extends Dialog {
             tvTpType.setText(mAcceptTerminalTodoBean.getProjectName());
             //把大任务的 运输板车类型赋值给子任务
             for (OutFieldTaskBean mOutFieldTaskBeans : mAcceptTerminalTodoBean.getTasks()){
-                mOutFieldTaskBeans.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
+                mOutFieldTaskBeans.setTransfortType(mAcceptTerminalTodoBean.getTransportTypeMapping());
             }
             list.addAll(mAcceptTerminalTodoBean.getTasks());
 

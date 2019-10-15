@@ -401,7 +401,7 @@ public class Tools {
         UserInfoSingle.setUserNil();
         ActManager.getAppManager().finishAllActivity();
         WebSocketService.stopServer(MyApplication.getContext());
-
+        IMUtils.imLoginout();
         Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mContext.startActivity(intent);

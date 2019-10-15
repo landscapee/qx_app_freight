@@ -121,7 +121,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             case R.id.btn_next:
                 mSlideRV.closeMenu();
                 flag = 1;
-                CustomCaptureActivity.startActivity(this,"BaggageDoneListActivity");
+                CustomCaptureActivity.startActivity(this,"BaggageDoneListActivity_done");
                 break;
         }
     }
@@ -221,7 +221,6 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
 
             } else {
                 checkScooterCode(mScooterCode);
-
             }
 
         } else {
@@ -244,6 +243,21 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
+        if (result.getFunctionFlag().equals("BaggageDoneListActivity_done")) {
+            if (flag == 1) {
+                if ( result.getData()!=null){
+                    for (String item : mAbnormalList) {
+                        if (result.getData().equals(item)) {
+                            submitScooter(result.getData());
+                            return;
+                        }
+                    }
+                    ToastUtil.showToast("无该行李转盘");
+                }
+            }
+        }
+
+
     }
 
     /**

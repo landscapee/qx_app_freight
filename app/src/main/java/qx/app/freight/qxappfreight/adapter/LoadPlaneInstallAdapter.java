@@ -49,8 +49,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         this.mWidthairflag = widthairflag;
         this.notShowPull = notShowPull;
         this.cargos.clear();
+        this.cargos.add("");
         this.cargos.addAll(cargos);
         this.goods.clear();
+        this.goods.add("");
         this.goods.addAll(goods);
     }
 
@@ -74,7 +76,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
                 .setText(R.id.tv_destination,item.getDestinationStation()!= null ?item.getDestinationStation():"--")
                 .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--");
-        if (item.getWaybillList() != null && item.getWaybillList().size() > 0)
+        if (item.getWaybillList() != null && item.getWaybillList().size() > 0&&item.getWaybillList().get(0).getWaybillCode()!=null)
             helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
         else
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
@@ -276,14 +278,16 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
      */
     public void notifySp(List<String> cargos ,List<String> goods){
         this.cargos.clear();
+        this.cargos.add("");
         this.cargos.addAll(cargos);
         this.goods.clear();
+        this.goods.add("");
         this.goods.addAll(goods);
-        if (apsAdapter1 != null){
-            apsAdapter1.notify();
-        }
-        if (apsAdapter2 != null){
-            apsAdapter2.notify();
-        }
+//        if (apsAdapter1 != null){
+//            apsAdapter1.notify();
+//        }
+//        if (apsAdapter2 != null){
+//            apsAdapter2.notify();
+//        }
     }
 }

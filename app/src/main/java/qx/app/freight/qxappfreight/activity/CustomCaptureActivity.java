@@ -26,9 +26,9 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 public class CustomCaptureActivity extends Activity {
-    private BeepManager beepManager;
     private String flag;
 
     private DecoratedBarcodeView barcodeScannerView;
@@ -46,11 +46,11 @@ public class CustomCaptureActivity extends Activity {
         @Override
         public void barcodeResult(final BarcodeResult result) {
             barcodeScannerView.pause();
-            beepManager.playBeepSoundAndVibrate();
             ScanDataBean scanDataBean = new ScanDataBean();
             scanDataBean.setData(result.getResult().toString());
             scanDataBean.setFunctionFlag(flag);
             EventBus.getDefault().post(scanDataBean);
+            Tools.startShortSound(CustomCaptureActivity.this);
             finish();
             Log.e("222222222222",result.getResult().toString());
         }
@@ -68,15 +68,15 @@ public class CustomCaptureActivity extends Activity {
         setContentView(R.layout.activity_custom_capture);// 自定义布局
         ButterKnife.bind(this);
         flag = getIntent().getStringExtra("flag");
-        beepManager = new BeepManager(this);
         barcodeScannerView = (DecoratedBarcodeView) findViewById(R.id.dbv_custom);
         llInput.setOnClickListener(v -> showDialog());
+        decode();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        decode();
+
     }
 
     /**
@@ -109,6 +109,7 @@ public class CustomCaptureActivity extends Activity {
                                 scanDataBean.setData(dialog1.getMessage());
                                 scanDataBean.setFunctionFlag(flag);
                                 EventBus.getDefault().post(scanDataBean);
+                                Tools.startShortSound(CustomCaptureActivity.this);
                                 finish();
 //                                getBackMessage(dialog1.getMessage());
                             }
