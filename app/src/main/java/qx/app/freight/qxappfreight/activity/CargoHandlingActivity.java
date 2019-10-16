@@ -464,7 +464,7 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_add:
-                CustomCaptureActivity.startActivity(this,"CargoHandlingActivity");
+                ScanManagerActivity.startActivity(this,"CargoHandlingActivity");
                 break;
             case R.id.btn_sure_cargo_handing:
                 boolean isOK = true;

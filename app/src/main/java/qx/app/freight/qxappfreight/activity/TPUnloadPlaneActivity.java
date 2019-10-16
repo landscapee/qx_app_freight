@@ -307,11 +307,11 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         });
         mLlScanGoods.setOnClickListener(v -> {
             mIsScanGoods = true;
-            CustomCaptureActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
-            CustomCaptureActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
+            ScanManagerActivity.startActivity(TPUnloadPlaneActivity.this, "TPUnloadPlaneActivity");
         });
         mTvErrorReport.setOnClickListener(
                 v -> {

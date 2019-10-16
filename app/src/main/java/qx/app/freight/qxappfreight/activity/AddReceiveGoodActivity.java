@@ -279,7 +279,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             showPopWindowList();
         });
         mIvScan.setOnClickListener(v -> {
-            CustomCaptureActivity.startActivity(AddReceiveGoodActivity.this,"AddReceiveGoodActivity");
+//            CustomCaptureActivity.startActivity(AddReceiveGoodActivity.this,"AddReceiveGoodActivity");
+            ScanManagerActivity.startActivity(AddReceiveGoodActivity.this,"AddReceiveGoodActivity");
         });
     }
 

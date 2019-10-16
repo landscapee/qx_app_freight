@@ -235,11 +235,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         });
         mLlScanGoods.setOnClickListener(v -> {
             mIsScanGoods = true;
-            CustomCaptureActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
         });
         mLlScanPac.setOnClickListener(v -> {
             mIsScanGoods = false;
-            CustomCaptureActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
+            ScanManagerActivity.startActivity(UnloadPlaneActivity.this, "UnloadPlaneActivity");
         });
         mTvErrorReport.setOnClickListener(
                 v -> {

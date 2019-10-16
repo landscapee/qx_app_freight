@@ -123,7 +123,7 @@ public class PullGoodsInfoAdapter<T extends PullGoodsShowInterface> extends Base
                 }
                 tvScanBoard.setOnClickListener(v -> {
                     entity = (PullGoodsInfoBean.PullWaybillsBean) item;
-                    CustomCaptureActivity.startActivity(mContext, "PullGoodsInfoAdapter_Scan");
+                    ScanManagerActivity.startActivity(mContext, "PullGoodsInfoAdapter_Scan");
                 });
                 tvBillNumber.setText(((PullGoodsInfoBean.PullWaybillsBean) item).getWaybillCode());
                 tvInfo.setText(String.format(mContext.getString(R.string.format_goods_info)

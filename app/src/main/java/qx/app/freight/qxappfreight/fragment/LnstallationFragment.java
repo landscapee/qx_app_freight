@@ -154,7 +154,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         }
     }
     private void gotoScan() {
-        CustomCaptureActivity.startActivity(getContext(), "MainActivity");
+        ScanManagerActivity.startActivity(getContext(), "MainActivity");
     }
 
     private void initData() {

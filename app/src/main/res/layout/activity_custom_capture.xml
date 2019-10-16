@@ -15,7 +15,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="50dp"
-        app:zxing_preview_scaling_strategy="fitXY" />
+        app:zxing_preview_scaling_strategy="fitXY"
+        />
 
     <LinearLayout
         android:id="@+id/ll_input"

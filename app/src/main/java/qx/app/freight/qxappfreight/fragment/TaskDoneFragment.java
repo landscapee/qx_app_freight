@@ -88,7 +88,7 @@ public class TaskDoneFragment extends BaseFragment {
             return;
         }
 
-        CustomCaptureActivity.startActivity(getContext(),"MainActivity");
+        ScanManagerActivity.startActivity(getContext(),"MainActivity");
 //        switch (nowRoleCode){
 //            case "复重":
 //                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);

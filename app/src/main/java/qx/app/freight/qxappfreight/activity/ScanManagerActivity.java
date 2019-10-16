@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +23,11 @@ import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.core.ScanBoxView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
+import me.devilsen.czxing.ResultActivity;
+import me.devilsen.czxing.code.BarcodeFormat;
+import me.devilsen.czxing.view.ScanActivityDelegate;
+import me.devilsen.czxing.view.ScanListener;
+import me.devilsen.czxing.view.ScanView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.LaserAndZxingBean;
@@ -41,11 +47,11 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  * <p>
  * 2019/2/26
  */
-public class ScanManagerActivity extends BaseActivity implements QRCodeView.Delegate {
+public class ScanManagerActivity extends BaseActivity  implements ScanListener {
 
 
     @BindView(R.id.zx_view)
-    ZXingView mZXingView;
+    ScanView mScanView;
     @BindView(R.id.btn_open_flash_light)
     Button btnOpen;
     @BindView(R.id.btn_again)
@@ -67,6 +73,7 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
 
     private boolean laserAndZxing;//是否是从激光扫描界面过来的
 
+    private ScanActivityDelegate.OnScanDelegate scanDelegate;
     /**
      * 普通启动
      */
@@ -124,33 +131,27 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         flag = getIntent().getStringExtra("flag");
         special = getIntent().getStringExtra("special");
         laserAndZxing = getIntent().getBooleanExtra("laserAndZxing", false);
-
+        mScanView.setScanMode(ScanView.SCAN_MODE_BIG);
+        mScanView.setScanListener(this);
         if (!TextUtils.isEmpty(special)) {
             tvSpecial.setText(special);
         }
 
-        mZXingView.setDelegate(this);
-        btnAgain.setOnClickListener(v -> {
-            startZXing();
-        });
         btnOpen.setOnClickListener(v -> {
             if (isOpen) {
-                mZXingView.closeFlashlight();
                 isOpen = false;
                 btnOpen.setText("打开闪光灯");
             } else {
-                mZXingView.openFlashlight();
+                mScanView.onFlashLightClick();
                 isOpen = true;
                 btnOpen.setText("关闭闪光灯");
             }
         });
         flashlightClose.setOnClickListener(v -> {
             if (isOpen) {
-                mZXingView.closeFlashlight();
                 isOpen = false;
                 btnOpen.setText("打开闪光灯");
             } else {
-                mZXingView.openFlashlight();
                 isOpen = true;
                 btnOpen.setText("关闭闪光灯");
             }
@@ -171,6 +172,8 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         llInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mScanView.onAnalysisBrightness(true);
+                mScanView.onFlashLightClick();
                 showDialog();
             }
         });
@@ -205,45 +208,38 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
                 .show();
     }
 
-    private void startZXing() {
-        mZXingView.startCamera();
-        mZXingView.changeToScanQRCodeStyle();// 切换成扫描二维码样式z
-        mZXingView.startSpotAndShowRect();//调用zxing扫描
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mScanView.openCamera(); // 打开后置摄像头开始预览，但是并未开始识别
+        mScanView.startScan();  // 显示扫描框，并开始识别
     }
 
     @Override
-    protected void onStart() {
-        startZXing();
-        if (mZXingView.getIsScanBarcodeStyle())
-            ToastUtil.showToast("1111");
-        else
-            ToastUtil.showToast("2222");
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mZXingView.stopCamera();
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+        mScanView.stopScan();
+        mScanView.closeCamera(); // 关闭摄像头预览，并且隐藏扫描框
     }
 
     @Override
     public void onDestroy() {
-        mZXingView.onDestroy();
+        mScanView.onDestroy(); // 销毁二维码扫描控件
         super.onDestroy();
     }
 
     @Override
-    public void onScanQRCodeSuccess(String result) {
-        getBackMessage(result);
-    }
-    @Override
-    public void onCameraAmbientBrightnessChanged(boolean isDark) {
-        if (isDark){
-            ToastUtil.showToast("光线太暗请打开闪光灯！");
-        }
+    public void onScanSuccess(String result, BarcodeFormat format) {
+        if (result!=null)
+            getBackMessage(result);
+        finish();
     }
 
+    @Override
+    public void onOpenCameraError() {
+        ToastUtil.showToast("扫描失败，请重试。");
+        Log.e("onOpenCameraError", "onOpenCameraError");
+    }
 
     /**
      * 获取回调的扫码信息
@@ -270,10 +266,6 @@ public class ScanManagerActivity extends BaseActivity implements QRCodeView.Dele
         finish();
     }
 
-    @Override
-    public void onScanQRCodeOpenCameraError() {
-        ToastUtil.showToast("扫描失败，请重试。");
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {

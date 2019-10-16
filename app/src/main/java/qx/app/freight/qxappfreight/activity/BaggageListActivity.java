@@ -113,12 +113,12 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
             case R.id.ll_add:
                 mSlideRV.closeMenu();
                 flag = 0;
-                CustomCaptureActivity.startActivity(this,"BaggageListActivity");
+                ScanManagerActivity.startActivity(this,"BaggageListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();
                 flag = 1;
-                CustomCaptureActivity.startActivity(this,"BaggageListActivity_done");
+                ScanManagerActivity.startActivity(this,"BaggageListActivity_done");
                 break;
         }
     }

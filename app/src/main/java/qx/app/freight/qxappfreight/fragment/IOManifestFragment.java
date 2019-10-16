@@ -113,7 +113,7 @@ public class IOManifestFragment extends BaseFragment {
             showFragment(nowFragment);
         });
         btnSwitch.setOnClickListener(v -> {
-            CustomCaptureActivity.startActivity(getContext(), "IOManifestFragment");
+            ScanManagerActivity.startActivity(getContext(), "IOManifestFragment");
         });
         initFragment();
     }

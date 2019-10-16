@@ -134,7 +134,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         }
     }
     private void gotoScan() {
-        CustomCaptureActivity.startActivity(getContext(), "MainActivity");
+        ScanManagerActivity.startActivity(getContext(), "MainActivity");
     }
 
     private void initData() {

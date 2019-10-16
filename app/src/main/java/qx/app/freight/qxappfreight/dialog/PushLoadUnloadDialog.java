@@ -83,7 +83,6 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void show() {
-        Tools.wakeupScreen(context);//唤醒
         super.show();
     }
 

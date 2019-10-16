@@ -305,14 +305,17 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             if (result.getWriteResult()!= null && result.getWriteResult().contains("成功")){
                 mTvStatus.setTextColor(getResources().getColor(R.color.green));
                 mTvStatus.setText("离港系统"+result.getWriteResult());
+                mTvStatus.getPaint().setFakeBoldText(false);
             }
             else if (result.getWriteResult()!= null && result.getWriteResult().contains("失败")){
                 mTvStatus.setTextColor(getResources().getColor(R.color.red));
                 mTvStatus.setText("离港系统"+result.getWriteResult());
+                mTvStatus.getPaint().setFakeBoldText(false);
             }
             else {
                 mTvStatus.setTextColor(getResources().getColor(R.color.gray_8f));
                 mTvStatus.setText("离港系统 待写入");
+                mTvStatus.getPaint().setFakeBoldText(true);
             }
 
             currentVersion = result.getVersion();

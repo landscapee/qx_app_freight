@@ -462,24 +462,39 @@ public class Tools {
      * @param context
      */
     public static void wakeupScreen(Context context) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (pm.isScreenOn()) {
-            return;
-        }
-        //屏锁管理器
-        KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
-        //解锁
-        kl.disableKeyguard();
-        //获取电源管理器对象
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
-        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-        //点亮屏幕
-        wl.acquire();
+        if (isBackground(context)){
+            wakeupApp(context);
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//        if (pm.isScreenOn()) {
+//            return;
+//        }
+            //获取电源管理器对象
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+            //点亮屏幕
+            wl.acquire();
+            //释放
+            wl.release();
+            Log.e("屏幕：","点亮");
+            //屏锁管理器
+            KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+            //解锁
+            kl.disableKeyguard();
+            Log.e("屏幕：","解锁");
 
-        //释放
-        wl.release();
+
+        }
     }
 
+    public static void wakeupApp(Context context){
+        Intent intent;
+        intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+        Log.e("屏幕：","唤醒app");
+    }
 
 }
