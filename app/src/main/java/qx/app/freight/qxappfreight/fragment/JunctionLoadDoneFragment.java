@@ -312,8 +312,8 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
     @Override
     public void reportTaskHisResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans) {
         mTaskIdList.clear();
-        mCacheList.clear();
         if (mCurrentPage == 1) {
+            mCacheList.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.contract.ExceptionContentContract;
@@ -75,6 +76,7 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler, Exceptio
                 Log.e("22222", "uncaughtException() InterruptedException:" + e);
             }
             UserInfoSingle.setUserNil();
+            ScooterMapSingle.getInstance().clear();
             ActManager.getAppManager().finishAllActivity();
             WebSocketService.stopServer(context);
             Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());

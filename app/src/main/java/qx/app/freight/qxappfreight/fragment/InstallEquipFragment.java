@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.FlightPhotoRecordActivity;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -183,6 +185,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             public void onClearClick(int position) {
                 startClearTask(position);
             }
+
+            @Override
+            public void onUploadPhoto(int position) {
+                intoPhotoAct(position);
+            }
         });
         loadData();
         setUserVisibleHint(true);
@@ -194,6 +201,19 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         setUserVisibleHint(true);
     }
 
+
+    /**
+     * 进入航班拍照界面
+     * @param position
+     */
+    private void intoPhotoAct(int position) {
+        Intent intent = new Intent(getActivity(), FlightPhotoRecordActivity.class);
+        intent.putExtra("flight_number",mList.get(position).getFlightNo());
+        intent.putExtra("task_id",mList.get(position).getId());
+        intent.putExtra("task_pic",mList.get(position).getTaskPic());
+
+        getActivity().startActivity(intent);
+    }
     /**
      * 发起清场任务
      */

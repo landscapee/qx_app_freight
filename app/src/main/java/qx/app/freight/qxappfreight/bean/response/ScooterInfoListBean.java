@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -7,7 +9,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class ScooterInfoListBean {
+public class ScooterInfoListBean implements Serializable {
 
 
     private String id;

@@ -534,7 +534,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
      */
     @Override
     public void synchronousLoadingResult(String result) {
-        ToastUtil.showToast(result);
+        if (result!=null)
+            ToastUtil.showToast(result);
         showDialogWait();
 //        finish();
     }

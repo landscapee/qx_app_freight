@@ -42,6 +42,12 @@
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
     <!--描述文字风格-->
     <style name="describe_tv_black_2">

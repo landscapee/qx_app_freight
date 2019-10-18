@@ -66,6 +66,8 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private String seat;
     private long scheduleTime;
     private String route;
+
+    private String taskPic;//任务绑定的图片url json
     private Object actualTakeoffTime;
     private long actualArriveTime;
     private boolean cancelFlag;

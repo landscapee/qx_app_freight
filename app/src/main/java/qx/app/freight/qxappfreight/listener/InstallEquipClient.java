@@ -177,7 +177,7 @@ public class InstallEquipClient extends StompClient {
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         }
-//                        Tools.wakeupScreen(mContext);//唤醒
+                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
@@ -194,7 +194,7 @@ public class InstallEquipClient extends StompClient {
                         Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
-//                        Tools.wakeupScreen(mContext);//唤醒
+                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
             compositeDisposable.add(dispTopic1);
             WebSocketService.subList.add(WebSocketService.ToList);

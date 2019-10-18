@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.FlightPhotoRecordActivity;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -84,6 +86,11 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             @Override
             public void onClearClick(int position) {
             }
+
+            @Override
+            public void onUploadPhoto(int position) {
+                intoPhotoAct(position);
+            }
         });
         mAdapter.setOnReOpenLoadTaskListener(pos -> {
             showDialog(pos);
@@ -123,7 +130,17 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
                 })
                 .show();
     }
-
+    /**
+     * 进入航班拍照界面
+     * @param position
+     */
+    private void intoPhotoAct(int position) {
+        Intent intent = new Intent(getActivity(), FlightPhotoRecordActivity.class);
+        intent.putExtra("flight_number",mList.get(position).getFlightNo());
+        intent.putExtra("task_id",mList.get(position).getId());
+        intent.putExtra("task_pic",mList.get(position).getTaskPic());
+        getActivity().startActivity(intent);
+    }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

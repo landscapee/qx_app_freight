@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,28 +28,25 @@ import java.util.List;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.app.MyApplication;
-import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
+import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PrintBean;
-import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.dialog.SingerDialog;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.HyFragment;
 import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
-import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
 import qx.app.freight.qxappfreight.presenter.PrintRequestPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
@@ -80,6 +79,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //    RecyclerView mRvData;//货邮舱单信息列表
     @BindView(R.id.bt_shifang)
     Button mBtShifang;    //释放
+
+    @BindView(R.id.bt_reload)
+    Button btnReload;    // 重新载入
     @BindView(R.id.btn_print)
     Button mBtPrint;    //打印
     @BindView(R.id.tb_title)
@@ -91,6 +93,8 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     private LoadAndUnloadTodoBean mBaseData;
     private String mId = null;
+    private String flightInfoId;
+    private String  writeInfo;
     private String currentVersion;
     private HyFragment mHYragment;
     private ZdFragment mZdFragment;
@@ -100,9 +104,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     private int printFlag = 1;// 1 货邮舱单 2 装机单 3 装舱建议
 
-    public static void startActivity(Context context,LoadAndUnloadTodoBean loadAndUnloadTodoBean,int flag) {
+    public static void startActivity(Context context, LoadAndUnloadTodoBean loadAndUnloadTodoBean, int flag) {
         Intent intent = new Intent(context, CargoManifestInfoActivity.class);
-        intent.putExtra("flag",flag);
+        intent.putExtra("flag", flag);
         intent.putExtra("data", loadAndUnloadTodoBean);
         context.startActivity(intent);
     }
@@ -114,13 +118,16 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "货邮舱单详情");
         mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
-        flag = getIntent().getIntExtra("flag",0);
+        flag = getIntent().getIntExtra("flag", 0);
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftno());
         FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
@@ -140,28 +147,27 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         loadData();
         //释放
         mBtShifang.setOnClickListener(v -> {
-            showYesOrNoDialog("","释放【版本号"+currentVersion+"】货邮舱单",4);
-
+            showYesOrNoDialog("", "释放【版本号" + currentVersion + "】货邮舱单", 4);
         });
         mBtPrint.setOnClickListener(v -> {
 
             String intro = "";
             if (printFlag == 1)
-                intro = "打印【版本号"+currentVersion+"】货邮舱单";
+                intro = "打印【版本号" + currentVersion + "】货邮舱单";
             else if (printFlag == 3)
-                intro= "打印【版本号"+currentVersion+"】舱位建议";
+                intro = "打印【版本号" + currentVersion + "】舱位建议";
 
-            SingerDialog singerDialog = new SingerDialog(this,intro);
+            SingerDialog singerDialog = new SingerDialog(this, intro);
             singerDialog.isCanceledOnTouchOutside(false)
                     .isCanceled(true)
                     .setOnClickListener(oAuserInfo -> {
                         printManifest(oAuserInfo);
                         singerDialog.dismiss();
                     });
-            List<PrintBean> list = new ArrayList <>();
-            list.add(new PrintBean("1","打印机（1）"));
-            list.add(new PrintBean("2","打印机（2）"));
-            list.add(new PrintBean("3","打印机（3）"));
+            List <PrintBean> list = new ArrayList <>();
+            list.add(new PrintBean("1", "打印机（1）"));
+            list.add(new PrintBean("2", "打印机（2）"));
+            list.add(new PrintBean("3", "打印机（3）"));
             singerDialog.setData(list);
 //            mPresenter = new PrintRequestPresenter(this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
@@ -172,6 +178,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //            entity.setPrintName("1");
 //            ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
+        btnReload.setOnClickListener(v->{
+            showYesOrNoDialog("", "确认重新载入离港系统", 5);
+
+        });
 //        mSrRefush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
@@ -180,7 +190,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 //        });
     }
 
-    private void printManifest(String printName){
+    private void printManifest(String printName) {
 
         mPresenter = new PrintRequestPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
@@ -193,7 +203,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
 
     }
 
-    private void releaseFlight(){
+    private void releaseFlight() {
         mPresenter = new AuditManifestPresenter(this);
         if (mId != null) {
             BaseFilterEntity entity = new BaseFilterEntity();
@@ -205,6 +215,17 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             ((AuditManifestPresenter) mPresenter).auditManifest(entity);
         } else
             ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
+    }
+
+    private void repartWriteLoading() {
+        mPresenter = new AuditManifestPresenter(this);
+        if (flightInfoId != null&& !StringUtil.isEmpty(writeInfo)) {
+            BaseFilterEntity entity = new BaseFilterEntity();
+            entity.setFlightInfoId(flightInfoId);
+            ((AuditManifestPresenter) mPresenter).repartWriteLoading(entity);
+        } else
+            ToastUtil.showToast("未写入离港系统，无法重新载入");
+
     }
 
     public void loadData() {
@@ -250,21 +271,21 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                 .add(R.id.fl_content, mHYragment)
                 .add(R.id.fl_content, mZdFragment)
                 .commit();
-        if (flag == 1){
+        if (flag == 1) {
             mRgTitle.check(R.id.rb_zd);
             showFragment(mZdFragment);
-        }
-        else
+        } else
             showFragment(mHYragment);
     }
 
     /**
      * 二次确认弹出框
+     *
      * @param title
      * @param msg
      * @param flag
      */
-    private void showYesOrNoDialog(String title,String msg,int flag) {
+    private void showYesOrNoDialog(String title, String msg, int flag) {
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle(title)
                 .setMessage(msg)
@@ -276,13 +297,16 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
-                            switch (flag){
+                            switch (flag) {
                                 case 1:
                                 case 3:
                                     printManifest("1");
                                     break;
                                 case 4:
                                     releaseFlight();
+                                    break;
+                                case 5:
+                                    repartWriteLoading();
                                     break;
 
                             }
@@ -296,23 +320,23 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     }
 
     @Override
-    public void getLastReportInfoResult(List<FlightAllReportInfo> results) {
+    public void getLastReportInfoResult(List <FlightAllReportInfo> results) {
         if (results != null && results.get(0) != null) {
             FlightAllReportInfo result = results.get(0);
+            flightInfoId = result.getFlightInfoId();
+            writeInfo = result.getWriteInfo();
             mId = result.getId();
             mTvVersion.setText("版本号:" + result.getVersion());
 
-            if (result.getWriteResult()!= null && result.getWriteResult().contains("成功")){
+            if (result.getWriteResult() != null && result.getWriteResult().contains("成功")) {
                 mTvStatus.setTextColor(getResources().getColor(R.color.green));
-                mTvStatus.setText("离港系统"+result.getWriteResult());
+                mTvStatus.setText("离港系统" + result.getWriteResult());
                 mTvStatus.getPaint().setFakeBoldText(false);
-            }
-            else if (result.getWriteResult()!= null && result.getWriteResult().contains("失败")){
+            } else if (result.getWriteResult() != null && result.getWriteResult().contains("失败")) {
                 mTvStatus.setTextColor(getResources().getColor(R.color.red));
-                mTvStatus.setText("离港系统"+result.getWriteResult());
+                mTvStatus.setText("离港系统" + result.getWriteResult());
                 mTvStatus.getPaint().setFakeBoldText(false);
-            }
-            else {
+            } else {
                 mTvStatus.setTextColor(getResources().getColor(R.color.gray_8f));
                 mTvStatus.setText("离港系统 待写入");
                 mTvStatus.getPaint().setFakeBoldText(true);
@@ -322,10 +346,10 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             CargoManifestEventBusEntity cargoManifestEventBusEntity = new CargoManifestEventBusEntity(results);
             EventBus.getDefault().post(cargoManifestEventBusEntity);
             //是否能释放航班
-            if (!results.get(0).isCanRelease()){
+            if (!results.get(0).isCanRelease()) {
                 mBtShifang.setBackgroundColor(getResources().getColor(R.color.gray_cc));
                 mBtShifang.setEnabled(false);
-            }else {
+            } else {
                 mBtShifang.setBackgroundResource(R.drawable.shape_dynamic_blue);
                 mBtShifang.setEnabled(true);
                 mBtShifang.setFocusableInTouchMode(true);
@@ -370,14 +394,31 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     @Override
     public void onLoadMore() {
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(InstallNotifyEventBusEntity result) {
+        if (result.getFlightNo().equals(mBaseData.getFlightNo())){
+            if (result.getType() == 3){
+                loadData();
+            }
+        }
+    }
 
     @Override
     public void auditManifestResult(String result) {
-        if (result!=null){
+        if (result != null) {
             ToastUtil.showToast("释放成功！");
+            loadData();
         }
         EventBus.getDefault().post("CargoManifestFragment_refresh");
 //        finish();
+    }
+
+    @Override
+    public void repartWriteLoadingResult(String result) {
+        if (result != null) {
+            ToastUtil.showToast("重新载入成功！");
+            loadData();
+        }
     }
 
     @Override

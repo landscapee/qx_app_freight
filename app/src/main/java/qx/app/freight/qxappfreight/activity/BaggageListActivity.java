@@ -205,30 +205,6 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
         dismissProgessDialog();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (Constants.SCAN_RESULT == resultCode) {
-            mScooterCode = data.getStringExtra(Constants.SACN_DATA);
-            if (flag == 1) {
-                for (String item : mAbnormalList) {
-                    if (mScooterCode.equals(item)) {
-                        submitScooter(mScooterCode);
-                        return;
-                    }
-                }
-                ToastUtil.showToast("无该行李转盘");
-
-            } else {
-                checkScooterCode(mScooterCode);
-
-            }
-
-        } else {
-            Log.e("resultCode", "收货页面不是200");
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         if (result.getFunctionFlag().equals("BaggageListActivity")) {

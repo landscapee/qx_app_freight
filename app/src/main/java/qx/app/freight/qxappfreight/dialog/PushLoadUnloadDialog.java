@@ -55,6 +55,8 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     private SlideRightExecuteView mSlideView;
     private DialogLoadUnloadPushAdapter mAdapter;
 
+    private int count = 0;// 任务 领取条数
+
     public PushLoadUnloadDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
         super(context,themeResId);
         this.context = MyApplication.getContext();
@@ -144,9 +146,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         mSlideView.setLockListener(new SlideRightExecuteView.OnLockListener() {
             @Override
             public void onOpenLockSuccess() {
+                count =0;
                 LoadAndUnloadTodoPresenter mPresenter = new LoadAndUnloadTodoPresenter(PushLoadUnloadDialog.this);
-                Observable.just(list).all(loadAndUnloadTodoBeans -> {
-                    for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBeans) {
+                    for (LoadAndUnloadTodoBean bean : list) {
                         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
                         entity.setType(1);
                         entity.setLoadUnloadDataId(bean.getId());
@@ -164,16 +166,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
                         entity.setUserName(bean.getWorkerName());
                         entity.setCreateTime(System.currentTimeMillis());
                         mPresenter.slideTask(entity);
-                        Log.e("tagTest", "还在循环");
                     }
-                    return true;
-                }).subscribe(aBoolean -> {
-                    Log.e("tagTest", "循环结束，弹窗消失");
-                }, throwable -> {
-                    Log.e("tagTest", "循环结束，调接口出错了");
-                    dismiss();
-                    onDismissListener.refreshUI(false);
-                });
             }
 
             @Override
@@ -212,9 +205,13 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void slideTaskResult(String result) {
+        count++;
         if ("正确".equals(result)) {
-            dismiss();
-            onDismissListener.refreshUI(true);
+            if (count == list.size()){
+                dismiss();
+                onDismissListener.refreshUI(true);
+            }
+
         }
     }
 
@@ -226,10 +223,14 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void toastView(String error) {
+        count++;
     if (error!=null)
         ToastUtil.showToast(error);
-        dismiss();
-        onDismissListener.refreshUI(false);
+        if (count == list.size()){
+            dismiss();
+            onDismissListener.refreshUI(false);
+        }
+
     }
 
     @Override

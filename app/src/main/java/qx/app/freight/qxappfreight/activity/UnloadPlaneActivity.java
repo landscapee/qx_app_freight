@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,6 +25,8 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ScanInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
+import qx.app.freight.qxappfreight.bean.UnloadScooterListEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
@@ -131,8 +134,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
-        toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
+//        toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
+//        toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         mData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
         if (mData.getWidthAirFlag() == 0) {
             mLlScan.setVisibility(View.GONE);
@@ -202,7 +205,31 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         });
         mScanPacAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
+        //获取暂存板车数据
+        if (mCurrentTaskId !=null){
+            if (ScooterMapSingle.getInstance().get(mCurrentTaskId)!=null){
+                if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods()!=null){
+                    mListGoods.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods());
+                    mSlideRvGoods.setVisibility(View.VISIBLE);
+                    mScanGoodsAdapter.notifyDataSetChanged();
+                }
+                if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage()!=null){
+                    mListPac.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage());
+                    mSlideRvPac.setVisibility(View.VISIBLE);
+                    mScanPacAdapter.notifyDataSetChanged();
+                }
+            }
+        }
         setListeners();
+
+        //返回键 监听 保存数据
+        setIsBack(true,()->{
+            UnloadScooterListEntity unloadScooterListEntity = new UnloadScooterListEntity();
+            unloadScooterListEntity.setMListGoods(mListGoods);
+            unloadScooterListEntity.setMListBaggage(mListPac);
+            ScooterMapSingle.getInstance().put(mCurrentTaskId,unloadScooterListEntity);
+            finish();
+        });
     }
 
     private void setListeners() {
@@ -470,6 +497,8 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             mScanPacAdapter.notifyDataSetChanged();
         }
     }
+
+
 
     @Override
     public void scooterInfoListForReceiveResult(List<ScooterInfoListBean> scooterInfoListBeans) {

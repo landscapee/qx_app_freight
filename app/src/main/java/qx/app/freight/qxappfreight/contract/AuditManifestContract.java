@@ -7,9 +7,12 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 public class AuditManifestContract {
     public interface auditManifestModel {
         void auditManifest(BaseFilterEntity entity,IResultLisenter lisenter);
+        void repartWriteLoading(BaseFilterEntity entity,IResultLisenter lisenter);
+
     }
 
     public interface auditManifestView extends IBaseView {
         void auditManifestResult(String result);
+        void repartWriteLoadingResult(String result);
     }
 }

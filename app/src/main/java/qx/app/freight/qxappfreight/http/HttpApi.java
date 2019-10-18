@@ -19,6 +19,7 @@ import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
+import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
 import qx.app.freight.qxappfreight.bean.request.GetIOManifestEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
@@ -418,9 +419,14 @@ public interface HttpApi {
     @POST("service-product-returngoods/pullGoods/hasUnReport")
     Observable<BaseEntity<String>> getPullStatus(@Body BaseFilterEntity model);
 
+    //上传航班照片记录
+    @POST("service-product-transport/tp-main-info/modifyTaskPic")
+    Observable<BaseEntity<Object>> uploadFlightPhoto(@Body FlightPhotoEntity exceptionContent);
+
     //监装发起的 板车拉下
     @POST("service-product-returngoods/pullGoods/startPull")
     Observable<BaseEntity<Object>> startPull(@Body PullGoodsEntity model);
+
 
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
@@ -778,6 +784,14 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/releaseFlightByFlightId")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+    /**
+     * 重新写入离港系统
+     *
+     * @return
+     */
+    @POST("service-product-finishloading/stowage-report-info/repartWriteLoadingInfo")
+    Observable<BaseEntity<Object>> repartWriteLoading(@Body BaseFilterEntity entity);
+
   /**
      * 获取装机单或货邮舱单数据
      *

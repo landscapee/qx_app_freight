@@ -116,6 +116,11 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         btnClear.setOnClickListener(v -> {
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
+        Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
+        btnPhotoRecord.setVisibility(View.VISIBLE);
+        btnPhotoRecord.setOnClickListener(v -> {
+            onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
+        });
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
         if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
@@ -289,8 +294,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     public interface OnFlightSafeguardListenner {
         void onFlightSafeguardClick(int position);
-
         void onClearClick(int position);
+        void onUploadPhoto(int position);
     }
 
     public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {

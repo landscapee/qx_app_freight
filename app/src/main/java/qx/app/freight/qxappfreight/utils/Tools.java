@@ -38,8 +38,11 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.activity.MsgDialogAct;
+import qx.app.freight.qxappfreight.activity.MsgDialogActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -426,6 +429,7 @@ public class Tools {
     //强制登出
     public static void loginOut(Context mContext) {
         UserInfoSingle.setUserNil();
+        ScooterMapSingle.getInstance().clear();
         ActManager.getAppManager().finishAllActivity();
         WebSocketService.stopServer(MyApplication.getContext());
         IMUtils.imLoginout();
@@ -463,7 +467,13 @@ public class Tools {
      */
     public static void wakeupScreen(Context context) {
         if (isBackground(context)){
-            wakeupApp(context);
+            //屏锁管理器
+            KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+            //解锁
+            kl.disableKeyguard();
+            Log.e("屏幕：","解锁");
+
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 //        if (pm.isScreenOn()) {
 //            return;
@@ -476,14 +486,10 @@ public class Tools {
             //释放
             wl.release();
             Log.e("屏幕：","点亮");
-            //屏锁管理器
-            KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
-            //解锁
-            kl.disableKeyguard();
-            Log.e("屏幕：","解锁");
-
-
+//            wakeupApp(context);
+//            if (isLocked(context)){
+//                MsgDialogAct.startActivity(context);
+//            }
         }
     }
 
@@ -495,6 +501,27 @@ public class Tools {
         }
         context.startActivity(intent);
         Log.e("屏幕：","唤醒app");
+    }
+    /**
+     * 判断当前是否锁屏
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isLocked(Context context) {
+        KeyguardManager mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        return mKeyguardManager.inKeyguardRestrictedInputMode();
+    }
+    /**
+     * 判断当前屏幕是否亮着
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isScreenOn(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
+        return isScreenOn;
     }
 
 }

@@ -20,6 +20,7 @@ import qx.app.freight.qxappfreight.bean.request.ErrorFilingEntity;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
+import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
@@ -631,6 +632,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<BaseEntity<String>> getPullStatus(BaseFilterEntity entity) {
         return getService().getPullStatus(entity);
     }
+    /****
+     * 上传航班照片记录
+     * @return
+     */
+    public Observable<String> uploadFlightPhoto(FlightPhotoEntity entity) {
+        return nothingtransform(getService().uploadFlightPhoto(entity));
+    }
+
     /****
      * 监装发起的 拉货
      * @return
@@ -1341,6 +1350,9 @@ public class UpdateRepository extends BaseRepository {
 
     public Observable<String> auditManifest(BaseFilterEntity entity) {
         return nothingtransform(getService().auditManifest(entity));
+    }
+    public Observable<String> repartWriteLoading(BaseFilterEntity entity) {
+        return nothingtransform(getService().repartWriteLoading(entity));
     }
 
 

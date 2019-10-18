@@ -222,7 +222,15 @@
             android:background="@color/gray_cc"
             android:text="释放"
             android:textColor="@color/white" />
-
+        <Button
+            android:id="@+id/bt_reload"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue_press"
+            android:text="重新载入"
+            android:textColor="@color/white" />
 
         <Space
             android:layout_width="0dp"

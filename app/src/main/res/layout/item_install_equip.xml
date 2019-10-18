@@ -275,6 +275,14 @@
                 android:textColor="@color/white"
                 android:visibility="gone"
                 />
+            <Button
+                android:id="@+id/btn_photo_record"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="拍照记录"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"/>
 
             <Button
                 android:id="@+id/btn_seat_clear"

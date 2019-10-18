@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,26 +22,16 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.LoadPlaneInstallAdapter;
 import qx.app.freight.qxappfreight.adapter.ManifestWaybillListjianyiAdapter;
-import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ManifestMainBean;
 import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.loadinglist.CompareInfoBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
@@ -65,7 +54,6 @@ import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StartPullPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
@@ -73,13 +61,12 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.widget.CustomRecylerView;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.MyHorizontalScrollView;
 
 /**
- * 装机页面 （修改前）
+ * 装机页面
  */
 public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoResContract.getFlightCargoResView, LoadAndUnloadTodoContract.loadAndUnloadTodoView, GetLastReportInfoContract.getLastReportInfoView, StartPullContract.startPullView {
     @BindView(R.id.rv_data)
@@ -336,7 +323,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
 
             });
-            loadData();
+//            loadData();
             getPlaneSpace();
             //TODO 是否是宽体机 0 宽体机 1 窄体机
             if (1 == data.getWidthAirFlag()) {
@@ -565,6 +552,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             goods.add(cargosBean.getPos());
         }
         adapter.notifySp(cargos,goods);
+        loadData();
     }
 
     @Override
