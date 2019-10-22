@@ -275,6 +275,7 @@
                 android:textColor="@color/white"
                 android:visibility="gone"
                 />
+
             <Button
                 android:id="@+id/btn_photo_record"
                 android:layout_width="wrap_content"
@@ -282,7 +283,9 @@
                 android:background="@drawable/btn_blue_press"
                 android:text="拍照记录"
                 android:textColor="@color/white"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btn_seat_clear"
@@ -312,7 +315,31 @@
                 android:text="航班保障组"
                 android:textColor="@color/white" />
         </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_look_install"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_blue_press"
+            android:text="查看装机单"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/btn_look_un_install"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_blue_press"
+            android:text="查看卸机单"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"/>
+    </LinearLayout>
         <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
             android:id="@+id/coll_listview"
             android:layout_width="match_parent"

@@ -11,18 +11,20 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.ImageUrlEntity;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 
 /**
  * 选择图片预览适配器
  */
-public class ImageRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class ImageNetAndLocationAdapter extends BaseQuickAdapter<ImageUrlEntity, BaseViewHolder> {
 
-    public ImageRvAdapter(@Nullable List<String> data) {
+    public ImageNetAndLocationAdapter(@Nullable List<ImageUrlEntity> data) {
         super(R.layout.item_image_rv, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, ImageUrlEntity item) {
         ImageView ivImage = helper.getView(R.id.iv_image);
         ImageView ivDelete = helper.getView(R.id.iv_delete);
         helper.addOnClickListener(R.id.iv_delete);
@@ -30,11 +32,17 @@ public class ImageRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 //            ivDelete.setVisibility(View.VISIBLE);
 //            return true;
 //        });
-        if (item =="111"){
+        if (item.getImageUrl() =="111"){
             ivImage.setImageResource(R.mipmap.icon_chose_photo_2);
             ivDelete.setVisibility(View.GONE);
         }else {
-            Glide.with(mContext).load(item).into(ivImage);
+            if (item.isNet()){
+                Glide.with(mContext).load(HttpConstant.IMAGEURL+item.getImageUrl()).into(ivImage);
+            }
+            else {
+                Glide.with(mContext).load(item.getImageUrl()).into(ivImage);
+            }
+
             ivDelete.setVisibility(View.VISIBLE);
         }
 

@@ -9,8 +9,6 @@ import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,8 +42,6 @@ import qx.app.freight.qxappfreight.bean.request.PrintBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetFlightAllReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.contract.ReOpenLoadTaskContract;
@@ -99,13 +95,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     RadioGroup mRgTitle;    //切换按钮
 
     private LoadAndUnloadTodoBean mBaseData;
-    private List<String> mListVerson = new ArrayList<>();
-    private List<String> mListVersonCode = new ArrayList<>();
+    private List <String> mListVerson = new ArrayList <>();
+    private List <String> mListVersonCode = new ArrayList <>();
     private int currentVersion = 0;//最新版本号
-    private HashMap<String, List<LnstallationInfoBean.ScootersBean>> map = new HashMap<>();
-    private HashMap<Integer, String> mapPresen = new HashMap<>();
-    private HashMap<Integer, String> mapDate = new HashMap<>();
-    private HashMap<String, String> mapMid = new HashMap<>();
+    private HashMap <String, List <LnstallationInfoBean.ScootersBean>> map = new HashMap <>();
+    private HashMap <String, String> mapPresen = new HashMap <>();
+    private HashMap <String, String> mapDate = new HashMap <>();
+    private HashMap <String, String> mapMid = new HashMap <>();
 
     private int loadFlag = -1;//用 刷新 请求装机单或者 建议装机单
 
@@ -115,13 +111,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     private String mId = null;//装机单id
 
-    List<LnstallationInfoBean.ScootersBean> mList1 = new ArrayList<>();
-    LnstallationListAdapter adapter ;
+    List <LnstallationInfoBean.ScootersBean> mList1 = new ArrayList <>();
+    LnstallationListAdapter adapter;
 
 
     public static void startActivity(Context context, LoadAndUnloadTodoBean loadAndUnloadTodoBean, int flag) {
         Intent intent = new Intent(context, LnstallationInfoActivity.class);
-        intent.putExtra("flag",flag);
+        intent.putExtra("flag", flag);
         intent.putExtra("data", loadAndUnloadTodoBean);
         context.startActivity(intent);
     }
@@ -143,7 +139,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }
 
         mBaseData = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("data");
-        flag = getIntent().getIntExtra("flag",0);
+        flag = getIntent().getIntExtra("flag", 0);
         mTvFlightNumber.setText(mBaseData.getFlightNo());
         mTvPlaneInfo.setText(mBaseData.getAircraftno());
         FlightInfoLayout layout = new FlightInfoLayout(this, mBaseData.getFlightInfoList());
@@ -158,7 +154,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mBtSure.setOnClickListener(v -> {
             loadFlag = -1;
-            showYesOrNoDialog("","重新获取离港数据并发送至监装",5);
+            showYesOrNoDialog("", "重新获取离港数据并发送至监装", 5);
 //            mPresenter = new SynchronousLoadingPresenter(this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
 //            entity.setFlightId(mBaseData.getFlightId());
@@ -171,7 +167,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
             loadFlag = -1;
-            showYesOrNoDialog("","确认二次开启舱门",4);
+            showYesOrNoDialog("", "确认二次开启舱门", 4);
 //            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
 //            entity.setFlightId(mBaseData.getFlightId());
@@ -184,18 +180,18 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mBtRefuse.setOnClickListener(v -> {
             loadFlag = -1;
 
-            String intro = "打印【版本号"+currentVersion+"】装机单";
-            SingerDialog singerDialog = new SingerDialog(this,intro);
+            String intro = "打印【版本号" + currentVersion + "】装机单";
+            SingerDialog singerDialog = new SingerDialog(this, intro);
             singerDialog.isCanceledOnTouchOutside(false)
                     .isCanceled(true)
                     .setOnClickListener(oAuserInfo -> {
                         printManifest(oAuserInfo);
                         singerDialog.dismiss();
                     });
-            List<PrintBean> list = new ArrayList <>();
-            list.add(new PrintBean("1","打印机（1）"));
-            list.add(new PrintBean("2","打印机（2）"));
-            list.add(new PrintBean("3","打印机（3）"));
+            List <PrintBean> list = new ArrayList <>();
+            list.add(new PrintBean("1", "打印机（1）"));
+            list.add(new PrintBean("2", "打印机（2）"));
+            list.add(new PrintBean("3", "打印机（3）"));
             singerDialog.setData(list);
 //            mPresenter = new PrintRequestPresenter(this);
 //            BaseFilterEntity entity = new BaseFilterEntity();
@@ -206,14 +202,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //            ((PrintRequestPresenter) mPresenter).printRequest(entity);
         });
 
-        adapter = new LnstallationListAdapter(mList1,true);
+        adapter = new LnstallationListAdapter(mList1, true);
         mRvData.setAdapter(adapter);
 
-        if (flag == 1){
+        if (flag == 1) {
             mRgTitle.check(R.id.rb_advise_install);
             loadFlag = 3;
-        }
-        else {
+        } else {
             mRgTitle.check(R.id.rb_install);
             loadFlag = 2;
         }
@@ -233,11 +228,10 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     }
 
     private void showConfirm(int i) {
-        if (i == 3){
+        if (i == 3) {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             mTvConfirm.setVisibility(View.VISIBLE);
             mTvConfirmDate.setVisibility(View.VISIBLE);
             mSrRefush.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
@@ -246,13 +240,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     }
 
 
-    private void showDialogWait(){
+    private void showDialogWait() {
         mWaitCallBackDialog = new WaitCallBackDialog(this, R.style.dialog2);
         mWaitCallBackDialog.setCancelable(false);
         mWaitCallBackDialog.setCanceledOnTouchOutside(false);
         mWaitCallBackDialog.show();
         new Handler().postDelayed(() -> {
-            if (mWaitCallBackDialog.isShowing()){
+            if (mWaitCallBackDialog.isShowing()) {
                 mWaitCallBackDialog.dismiss();
                 ToastUtil.showToast("通知录入可能失败，请重新通知录入！");
             }
@@ -272,7 +266,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     }
 
     @Override
-    public void getFlightAllReportInfoResult(List<FlightAllReportInfo> flightAllReportInfos) {
+    public void getFlightAllReportInfoResult(List <FlightAllReportInfo> flightAllReportInfos) {
         map.clear();
         mSrRefush.setRefreshing(false);
         mListVerson.clear();
@@ -283,29 +277,30 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //        mTvVersion.setText("版本号:" + flightAllReportInfos.get(0).getVersion());
         if (flightAllReportInfos.size() > 0) {
             Gson mGson = new Gson();
-            int version = 1;//版本号
             for (int i = 0; i < flightAllReportInfos.size(); i++) {
 
                 if (flightAllReportInfos.get(i).getContent() != null && !"[]".equals(flightAllReportInfos.get(i).getContent())) {
                     LnstallationInfoBean[] datas = mGson.fromJson(flightAllReportInfos.get(i).getContent(), LnstallationInfoBean[].class);
-                    List<LnstallationInfoBean.ScootersBean> list = new ArrayList<>();
+                    List <LnstallationInfoBean.ScootersBean> list = new ArrayList <>();
                     for (LnstallationInfoBean data : datas) {
                         list.addAll(data.getScooters());
                     }
-                    map.put(version+"", list);
-                    mapMid.put(version+"",flightAllReportInfos.get(i).getId());//储存装机单 id
-                    if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
-                        mListVerson.add("监装确认(版本" + (version) + ")");
-                        mapPresen.put(version, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
-                        mapDate.put(version, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
-                    } else {
-                        mListVerson.add("版本号:" + version);
-                        mapPresen.put(version, "");
-                        mapDate.put(version, "");
-                    }
-                    mListVersonCode.add(version+"");
-//                    if (newest == null)
-                    version++;
+                    map.put(flightAllReportInfos.get(i).getVersion(), list);
+                    mapMid.put(flightAllReportInfos.get(i).getVersion(), flightAllReportInfos.get(i).getId());//储存装机单 id
+//                    if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
+//                        mListVerson.add("监装确认(版本" + (version) + ")");
+//                        mapPresen.put(version, flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
+//                        mapDate.put(version, StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
+//                    } else {
+//                        mListVerson.add("版本号:" + version);
+//                        mapPresen.put(version, "");
+//                        mapDate.put(version, "");
+//                    }
+                    mListVerson.add("版本号:" + flightAllReportInfos.get(i).getVersion());
+                    mapPresen.put(flightAllReportInfos.get(i).getVersion(), "");
+                    mapDate.put(flightAllReportInfos.get(i).getVersion(), "");
+
+                    mListVersonCode.add(flightAllReportInfos.get(i).getVersion());
                 }
             }
             //倒序
@@ -313,8 +308,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             Collections.reverse(mListVersonCode);
             screenData(0);
 
-        }
-        else{
+        } else {
             mList1.clear();
             adapter.notifyDataSetChanged();
             mTvVersion.setText("版本号:无");
@@ -330,8 +324,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallNotifyEventBusEntity installNotifyEventBusEntity) {
-        if (installNotifyEventBusEntity.getFlightNo().equals(mBaseData.getFlightNo())&&installNotifyEventBusEntity.getType() == 1){
-            if (mWaitCallBackDialog != null){
+        if (installNotifyEventBusEntity.getFlightNo().equals(mBaseData.getFlightNo()) && installNotifyEventBusEntity.getType() == 1) {
+            if (mWaitCallBackDialog != null) {
                 mWaitCallBackDialog.dismiss();
             }
             mRgTitle.check(R.id.rb_install);// 切换到 装机单
@@ -339,10 +333,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             loadData();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String installNotifyEventBusEntity) {
-        if ("LoadInstall_Sure_Update".equals(installNotifyEventBusEntity)){
-            if (mWaitCallBackDialog != null){
+        if ("LoadInstall_Sure_Update".equals(installNotifyEventBusEntity)) {
+            if (mWaitCallBackDialog != null) {
                 mWaitCallBackDialog.dismiss();
             }
             mRgTitle.check(R.id.rb_install);// 切换到 装机单
@@ -383,8 +378,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void screenData(int verson) {
         if (mListVerson.get(verson).contains("监装确认")) {
             showConfirm(loadFlag);
-            mTvConfirm.setText("监装员:" + mapPresen.get(Integer.valueOf(mListVersonCode.get(verson))));
-            mTvConfirmDate.setText("发送时间:" + mapDate.get(Integer.valueOf(mListVersonCode.get(verson))));
+            mTvConfirm.setText("监装员:" + mapPresen.get(mListVersonCode.get(verson)));
+            mTvConfirmDate.setText("发送时间:" + mapDate.get(mListVersonCode.get(verson)));
         } else {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
@@ -418,7 +413,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     /**
      * 打印
      */
-    private void printManifest(String printName){
+    private void printManifest(String printName) {
 
         mPresenter = new PrintRequestPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
@@ -435,7 +430,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     /**
      * 二次打开舱门
      */
-    private void openAirDoor(){
+    private void openAirDoor() {
         mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(mBaseData.getFlightId());
@@ -447,7 +442,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     /**
      * 通知录入
      */
-    private void notifyInput(){
+    private void notifyInput() {
         mPresenter = new SynchronousLoadingPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(mBaseData.getFlightId());
@@ -460,11 +455,12 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     /**
      * 二次确认弹出框
+     *
      * @param title
      * @param msg
      * @param flag
      */
-    private void showYesOrNoDialog(String title,String msg,int flag) {
+    private void showYesOrNoDialog(String title, String msg, int flag) {
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle(title)
                 .setMessage(msg)
@@ -476,7 +472,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
-                            switch (flag){
+                            switch (flag) {
                                 case 2:
                                     printManifest("1");
                                     break;
@@ -502,7 +498,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     public void toastView(String error) {
         mSrRefush.setRefreshing(false);
 
-        if (loadFlag !=-1){
+        if (loadFlag != -1) {
             mList1.clear();
             adapter.notifyDataSetChanged();
         }
@@ -530,11 +526,12 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     /**
      * 通知录入 结果返回
+     *
      * @param result
      */
     @Override
     public void synchronousLoadingResult(String result) {
-        if (result!=null)
+        if (result != null)
             ToastUtil.showToast(result);
         showDialogWait();
 //        finish();
@@ -548,7 +545,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mWaitCallBackDialog!= null && mWaitCallBackDialog.isShowing()){
+        if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing()) {
             mWaitCallBackDialog.dismiss();
         }
     }

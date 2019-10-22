@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -38,12 +41,24 @@ import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
+import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
+import qx.app.freight.qxappfreight.contract.GetUnLoadListBillContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
+import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
+import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
+import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
+import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -57,7 +72,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /**
  * 装机fragment
  */
-public class InstallEquipFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, EmptyLayout.OnRetryLisenter {
+public class InstallEquipFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, GetUnLoadListBillContract.IView, GetFlightCargoResContract.getFlightCargoResView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
@@ -173,7 +188,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList);
+        mAdapter = new NewInstallEquipAdapter(mList,false,true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
@@ -190,6 +205,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             public void onUploadPhoto(int position) {
                 intoPhotoAct(position);
             }
+
+            @Override
+            public void onLookUnloadInstall(int position) {
+                lookUnloadInstall(position);
+            }
+
+            @Override
+            public void onLookLoadInstall(int position) {
+                lookLoadInstall(position);
+            }
         });
         loadData();
         setUserVisibleHint(true);
@@ -201,7 +226,30 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         setUserVisibleHint(true);
     }
 
+    /**
+     *  查看卸机单
+     * @param position
+     */
+    private void lookUnloadInstall(int position){
+        mPresenter = new GetUnLoadListBillPresenter(this);
+        UnLoadRequestEntity entity = new UnLoadRequestEntity();
+        entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
+        entity.setFlightId(mList.get(position).getFlightId());
+        String userName = UserInfoSingle.getInstance().getUsername();
+        entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+        ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
+    }
 
+    /**
+     * 查看装机单
+     */
+    private void lookLoadInstall(int position) {
+        mPresenter = new GetFlightCargoResPresenter(this);
+        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+        entity.setDocumentType(2);
+        entity.setFlightId(mList.get(position).getFlightId());
+        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+    }
     /**
      * 进入航班拍照界面
      * @param position
@@ -266,7 +314,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.contains("InstallEquipFragment_refresh") || "refresh_data_update".equals(result)) {
-            mSpecialTaskId = result.split("@")[1];
+//            mSpecialTaskId = result.split("@")[1];
+            mCurrentPage = 1;
             loadData();
         }
     }
@@ -509,5 +558,70 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    @Override
+    public void getUnLoadingListResult(UnLoadListBillBean result) {
+        if (result != null) {
+            if (result.getData() != null) {
+                List<UnLoadListBillBean.DataBean.ContentObjectBean> list = result.getData().getContentObject();
+                UnloadBillInfoDialog unloadBillInfoDialog = new UnloadBillInfoDialog();
+                unloadBillInfoDialog.setData(list, getActivity());
+                unloadBillInfoDialog.show(getActivity().getSupportFragmentManager(), "unload_bill");
+            } else {
+                ToastUtil.showToast(result.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void getLoadingListResult(LoadingListBean result) {
+        if ("318".equals(result.getStatus())) {
+            ToastUtil.showToast("装机单未就绪");
+        } else {
+            if (result.getData() != null || result.getData().size() != 0) {
+
+                if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
+                    Gson mGson = new Gson();
+                    LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
+                    //舱位集合
+                    List<LoadingListBean.DataBean.ContentObjectBean> mBaseContent = new ArrayList <>(Arrays.asList(datas));
+
+                    if (mBaseContent !=null && mBaseContent.size()> 0){
+                        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
+                        for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : mBaseContent){
+                            scooters.addAll(mContentObjectBean.getScooters());
+                        }
+                        InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(getActivity(), R.style.custom_dialog, scooters,mBaseContent.get(0).getFlightNo(), () -> {});
+                        updatePushDialog.show();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setFlightSpace(CargoCabinData result) {
+
+    }
+
+    @Override
+    public void flightDoneInstallResult(String result) {
+
+    }
+
+    @Override
+    public void overLoadResult(String result) {
+
+    }
+
+    @Override
+    public void confirmLoadPlanResult(String result) {
+
+    }
+
+    @Override
+    public void getPullStatusResult(BaseEntity <String> result) {
+
     }
 }

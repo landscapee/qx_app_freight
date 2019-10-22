@@ -216,6 +216,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         mCurrentFlightNo = mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo();
         //发送结载
         mTvSendOver.setOnClickListener(v -> {
+            if (Tools.isFastClick())
+                return;
+
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
             if (data.getRelateInfoObj() != null) {
@@ -232,6 +235,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
+            if (Tools.isFastClick())
+                return;
             if (mLoadingList.size() > 0 && mLoadingList.get(0).getContentObject() != null && mLoadingList.get(0).getContentObject().size() > 0
                     && mLoadingList.get(0).getContentObject().get(0).getScooters() != null && mLoadingList.get(0).getContentObject().get(0).getScooters().size() > 0) {
                 BaseFilterEntity entity1 = new BaseFilterEntity();
@@ -484,7 +489,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     }
     @Override
     public void getLoadingListResult(LoadingListBean result) {
-        Tools.closeVibrator(getApplicationContext());
+//        Tools.closeVibrator(getApplicationContext());
         if ("318".equals(result.getStatus())) {
             mWaitCallBackDialog.show();
         } else {

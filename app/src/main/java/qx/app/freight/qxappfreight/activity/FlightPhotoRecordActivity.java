@@ -40,9 +40,13 @@ import me.shaohui.advancedluban.Luban;
 import me.shaohui.advancedluban.OnMultiCompressListener;
 import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.ImageNetAndLocationAdapter;
 import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ImageUrlEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
+import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.UpLoadFlightPhotoContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.presenter.UploadFlightPhotoPresenter;
@@ -66,13 +70,13 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
     List<String> filePaths = new ArrayList<>();
 
     private static final int REQUEST_IMAGE = 5;
-    private List <String> mPhotoPath = new ArrayList <>();
+    private List <ImageUrlEntity> mPhotoPath = new ArrayList <>();
     private static final String[] mAuthPermissions = {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int mAuthBaseRequestCode = 1;
-    private ImageRvAdapter mAdapter;
+    private ImageNetAndLocationAdapter mAdapter;
     private String mFlightNumber;
     private String mCurrentTaskId;//当前任务ID
     private String taskPic;
@@ -106,18 +110,14 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         mFlightNumber = getIntent().getStringExtra("flight_number");
         mCurrentTaskId = getIntent().getStringExtra("task_id");
         mTvFlightInfo.setText(mFlightNumber);
-        if (taskPic!=null){
-            List<String> filePathsOfTask = JSONArray.parseArray(taskPic,String.class);
-            filePaths.clear();
-            filePaths.addAll(filePathsOfTask);
-            mPhotoPath.addAll(filePathsOfTask);
-        }
-        mPhotoPath.add("111");
-        mAdapter = new ImageRvAdapter(mPhotoPath);
+        getIntentPics();
+
+        mPhotoPath.add(new ImageUrlEntity("111",false));
+        mAdapter = new ImageNetAndLocationAdapter(mPhotoPath);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mPhotoPath.get(position).equals("111")) {
+                if (mPhotoPath.get(position).getImageUrl().equals("111")) {
                     choosePictrue();
                 } else {
                     previewPictrue(position);
@@ -129,8 +129,9 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view.getId() == R.id.iv_delete) {
+                    if (mPhotoPath.get(position).isNet())
+                        filePaths.remove(position);
                     mPhotoPath.remove(position);
-                    filePaths.remove(position);
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -146,17 +147,30 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         });
     }
 
+    private void getIntentPics() {
+        if (taskPic!=null){
+            List<String> filePathsOfTask = JSONArray.parseArray(taskPic,String.class);
+            filePaths.clear();
+            filePaths.addAll(filePathsOfTask);
+            for (String url:filePathsOfTask){
+                mPhotoPath.add(new ImageUrlEntity(url,true));
+            }
+        }
+    }
+
     /**
      * 选择相册照片
      */
     private void choosePictrue() {
         List <String> originList = new ArrayList <>();
-        if (mAdapter == null) {
-            originList.addAll(mPhotoPath);
-        } else {
-            originList.addAll(mPhotoPath);
+        for (ImageUrlEntity imageUrlEntity: mPhotoPath){
+            if (!imageUrlEntity.isNet())
+                originList.add(imageUrlEntity.getImageUrl());
+        }
+        if (mAdapter != null) {
             originList.remove(originList.size() - 1);
         }
+
         MultiImageSelector.create(FlightPhotoRecordActivity.this)
                 .showCamera(true) // 是否显示相机. 默认为显示
                 .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
@@ -171,6 +185,8 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         flightPhotoEntity.setId(mCurrentTaskId);
         if (filePaths !=null && filePaths.size()>0)
             flightPhotoEntity.setTaskPic(JSONArray.toJSONString(filePaths));
+        else
+            flightPhotoEntity.setTaskPic("[]");
 
         uploadFlightPhotoPresenter.uploadFlightPhoto(flightPhotoEntity);
     }
@@ -180,15 +196,22 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
      * 忽略最后一个
      */
     private void previewPictrue(int position) {
-        ImgPreviewAct.startPreview(FlightPhotoRecordActivity.this, getNoAddPictureList(), position);
+        List<String> images = new ArrayList <>();
+        for (ImageUrlEntity imageUrlEntity:mPhotoPath){
+            if (imageUrlEntity.isNet())
+                images.add(HttpConstant.IMAGEURL+imageUrlEntity.getImageUrl());
+            else
+                images.add(imageUrlEntity.getImageUrl());
+        }
+        images.remove(images.size()-1);
+        ImgPreviewAct.startPreview(FlightPhotoRecordActivity.this, images, position);
     }
 
     private List <String> getNoAddPictureList() {
         List <String> list = new ArrayList <>();
-
-        for (String url:mPhotoPath){//去处已经上传的图片
-            if (!filePaths.contains(url))
-                list.add(url);
+        for (ImageUrlEntity url:mPhotoPath){//去处已经上传的图片
+            if (!filePaths.contains(url.getImageUrl()))
+                list.add(url.getImageUrl());
         }
         list.remove(list.size() - 1);
         return list;
@@ -223,8 +246,11 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
             switch (requestCode) {
                 case 5:
                     mPhotoPath.clear();
-                    mPhotoPath.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
-                    mPhotoPath.add("111");
+                    getIntentPics();
+                    for (String url:data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT)){
+                        mPhotoPath.add(new ImageUrlEntity(url,false));
+                    }
+                    mPhotoPath.add(new ImageUrlEntity("111",false));
 //                    mAdapter = new ImageRvAdapter(mPhotoPath);
 //                    mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 //                        @Override
@@ -251,35 +277,38 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
      * @param paths 文件路径集合
      */
     private void pressImage(List <String> paths) {
-        if (paths == null || paths.size() == 0)
-            return;
-        List <File> files = new ArrayList <>();
-        for (String path : paths) {
-            files.add(new File(path));
+        if (paths == null || paths.size() == 0){
+            uploadFlightPhoto();
+        }
+        else {
+            List <File> files = new ArrayList <>();
+            for (String path : paths) {
+                files.add(new File(path));
+            }
+            Luban.get(this).load(files)
+                    .setMaxSize(150)
+                    .setMaxHeight(1920)
+                    .setMaxWidth(1080)
+                    .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener() {
+                @Override
+                public void onStart() {
+
+                }
+
+                @Override
+                public void onSuccess(List <File> fileList) {
+                    List <MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
+                    mPresenter = new UploadsPresenter(FlightPhotoRecordActivity.this);
+                    ((UploadsPresenter) mPresenter).uploads(upFiles);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+            });
         }
 
-        Luban.get(this).load(files)
-                .setMaxSize(150)
-                .setMaxHeight(1920)
-                .setMaxWidth(1080)
-                .putGear(Luban.CUSTOM_GEAR).launch(new OnMultiCompressListener() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onSuccess(List <File> fileList) {
-                List <MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
-                mPresenter = new UploadsPresenter(FlightPhotoRecordActivity.this);
-                ((UploadsPresenter) mPresenter).uploads(upFiles);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
     }
 
     /**
@@ -292,8 +321,8 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         Map <String, String> map = (Map<String, String>) result;
         Set <Map.Entry<String, String>> entries = map.entrySet();
         for (Map.Entry<String, String> entry : entries) {
-            if (!filePaths.contains(entry.getValue()))
-                filePaths.add(entry.getValue());
+            if (!filePaths.contains(entry.getKey()))
+                filePaths.add(entry.getKey());
         }
         uploadFlightPhoto();
     }
@@ -323,6 +352,11 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
      */
     @Override
     public void uploadFlightPhotoResult(String result) {
+        if (result!=null)
+            ToastUtil.showToast(this, "已保存");
+
+        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        finish();
 
     }
 }

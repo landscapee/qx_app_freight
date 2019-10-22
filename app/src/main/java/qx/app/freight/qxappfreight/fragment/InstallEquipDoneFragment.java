@@ -91,6 +91,16 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             public void onUploadPhoto(int position) {
                 intoPhotoAct(position);
             }
+
+            @Override
+            public void onLookUnloadInstall(int position) {
+
+            }
+
+            @Override
+            public void onLookLoadInstall(int position) {
+
+            }
         });
         mAdapter.setOnReOpenLoadTaskListener(pos -> {
             showDialog(pos);

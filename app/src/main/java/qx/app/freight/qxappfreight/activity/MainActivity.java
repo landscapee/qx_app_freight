@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         }
         else
         {
-            mIvMessgae.setImageResource(R.mipmap.news_normal);
+            mIvMessgae.setImageResource(R.mipmap.warehouse_press);
             mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvMessge.setText("库房管理");
 
@@ -312,7 +312,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
                 }
                 else
                 {
-                    mIvMessgae.setImageResource(R.mipmap.news_selected);
+                    mIvMessgae.setImageResource(R.mipmap.warehouse);
                     mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
 
                 }

@@ -47,6 +47,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     private boolean showExReport; //是否显示 异常上报按钮
 
+    private boolean showLook; //是否显示 拍照记录
+
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
     }
@@ -59,7 +61,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
     public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn,boolean showExReport) {
         this(data);
         this.showReOpenBtn = showReOpenBtn;
-        this.showExReport = showExReport;
+//        this.showExReport = showExReport;
+        this.showLook = showExReport;
     }
 
     @Override
@@ -116,11 +119,25 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         btnClear.setOnClickListener(v -> {
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
-        Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
-        btnPhotoRecord.setVisibility(View.VISIBLE);
-        btnPhotoRecord.setOnClickListener(v -> {
-            onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
-        });
+        if (showLook){
+            Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
+            btnPhotoRecord.setVisibility(View.VISIBLE);
+            btnPhotoRecord.setOnClickListener(v -> {
+                onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
+            });
+
+            Button btnLookInstall = helper.getView(R.id.btn_look_install);
+            btnLookInstall.setVisibility(View.VISIBLE);
+            btnLookInstall.setOnClickListener(v -> {
+                onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
+            });
+            Button btnLookUnInstall = helper.getView(R.id.btn_look_un_install);
+            btnLookUnInstall.setVisibility(View.VISIBLE);
+            btnLookUnInstall.setOnClickListener(v -> {
+                onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
+            });
+        }
+
         tvTime.setText(item.getTimeForShow());
         Drawable drawableLeft = null;
         if (item.getMovement() == 1 || item.getMovement() == 4) {//装机
@@ -296,6 +313,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         void onFlightSafeguardClick(int position);
         void onClearClick(int position);
         void onUploadPhoto(int position);
+        void onLookUnloadInstall(int position);
+        void onLookLoadInstall(int position);
     }
 
     public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {
