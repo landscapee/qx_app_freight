@@ -99,15 +99,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_install_version"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="最新装机单"
-                android:textColor="@color/blue_2e8"
-                android:padding="5dp"
-                android:layout_marginLeft="5dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:id="@+id/tv_install_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/black_3"
+                    android:padding="5dp"
+                    android:text="装机单版本"
+                    android:layout_marginLeft="5dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/down"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -217,6 +230,28 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@color/white" />
+
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical|left"
+                android:text="结载员:"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_confim_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical|left"
+                android:text="发送时间:"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </HorizontalScrollView>
 

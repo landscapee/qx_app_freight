@@ -203,6 +203,14 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private List<String> flightInfoList;//航线信息列表
         private List<String> stepCodeList;//航线信息列表
         private boolean showDetail;
+        /**
+         * 结载使用数据 json
+         */
+        private String loadingAndUnloadExtJson;
+        /**
+         * 结载使用数据
+         */
+        private LoadingAndUnloadBean loadingAndUnloadBean;
     }
 
     @Data

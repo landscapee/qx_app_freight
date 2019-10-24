@@ -23,6 +23,7 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 
@@ -81,7 +82,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
                 .setText(R.id.tv_destination,item.getDestinationStation()!= null ?item.getDestinationStation():"--")
                 .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--")
-                .setText(R.id.tv_volume, item.getVolume() != 0 ? item.getVolume() + "" : "--");
+                .setText(R.id.tv_volume, !StringUtil.isEmpty(item.getSpecialCode())&&item.getSpecialCode().contains("/") ? item.getSpecialCode().substring(0,item.getSpecialCode().indexOf("/")) : "--");
         if (item.getWaybillList() != null && item.getWaybillList().size() > 0&&item.getWaybillList().get(0).getWaybillCode()!=null)
             helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
         else
@@ -206,7 +207,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         });
 
         if (TextUtils.isEmpty(item.getLocation())) {//有货位数据
-            spGoodsPos.setVisibility(View.GONE);
+            spGoodsPos.setVisibility(View.INVISIBLE);
         } else {
             spGoodsPos.setVisibility(View.VISIBLE);
 //                if (item.isShowPull()) {

@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -216,8 +218,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         });
 
         ivNoticeTp.setOnClickListener(v -> {
-
-            noticeTp();
+            showYesOrNoDialog("","确认提前通知押运进行现有板车的运输?",1);
 
         });
         mTvUnloadBillInfo.setOnClickListener(v -> {
@@ -251,7 +252,64 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             ScooterMapSingle.getInstance().put(mCurrentTaskId,unloadScooterListEntity);
         });
     }
+    private void endUnload() {
+        TransportEndEntity model = new TransportEndEntity();
+        model.setTaskId(mOutFieldTaskBean.getTaskId());
+        Log.e("tag", "卸机id======" + mOutFieldTaskBean.getId());
+        List<TransportTodoListBean> infos = new ArrayList<>();
+        for (ScooterInfoListBean bean : mListGoods) {
+            TransportTodoListBean entity = new TransportTodoListBean();
+            entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setTpScooterCode(bean.getScooterCode());
+            entity.setFlightIndicator(bean.getFlightType());
+            entity.setHeadingFlag(bean.getHeadingFlag());
+            entity.setTpCargoType("cargo");
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
+            entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
+            entity.setDtoType(8);
+            entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
+            entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+            entity.setTpStartLocate("seat");
+            entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
+            entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
+            entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
+            entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
 
+            infos.add(entity);
+        }
+        for (ScooterInfoListBean bean : mListPac) {
+            TransportTodoListBean entity = new TransportTodoListBean();
+            entity.setTpScooterType(String.valueOf(bean.getScooterType()));
+            entity.setTpScooterCode(bean.getScooterCode());
+            entity.setFlightIndicator(bean.getFlightType());
+            entity.setHeadingFlag(bean.getHeadingFlag());
+            entity.setTpCargoType("baggage");
+            entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
+            entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
+            entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
+            entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
+            entity.setDtoType(8);
+            entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
+            entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+            entity.setTpStartLocate("seat");
+            entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
+            entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
+            entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
+            entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
+            infos.add(entity);
+        }
+        if (infos.size() == 0) {
+            ToastUtil.showToast("请选择上传板车信息再提交");
+        } else {
+            model.setSeat(mOutFieldTaskBean.getFlights().getSeat());
+            model.setScooters(infos);
+            model.setEndUnloadTask(false);
+            mPresenter = new ArrivalDataSavePresenter(this);
+            ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
+        }
+    }
     /**
      * 通知开始运输
      */
@@ -350,65 +408,43 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
                     TPUnloadPlaneActivity.this.startActivity(intent);
                 });
         mTvEndUnload.setOnClickListener(v -> {
-            TransportEndEntity model = new TransportEndEntity();
-            model.setTaskId(mOutFieldTaskBean.getTaskId());
-            Log.e("tag", "卸机id======" + mOutFieldTaskBean.getId());
-            List<TransportTodoListBean> infos = new ArrayList<>();
-            for (ScooterInfoListBean bean : mListGoods) {
-                TransportTodoListBean entity = new TransportTodoListBean();
-                entity.setTpScooterType(String.valueOf(bean.getScooterType()));
-                entity.setTpScooterCode(bean.getScooterCode());
-                entity.setFlightIndicator(bean.getFlightType());
-                entity.setHeadingFlag(bean.getHeadingFlag());
-                entity.setTpCargoType("cargo");
-                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
-                entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
-                entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                entity.setDtoType(8);
-                entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
-                entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
-                entity.setTpStartLocate("seat");
-                entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
-                entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
-                entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
-                entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
-
-                infos.add(entity);
-            }
-            for (ScooterInfoListBean bean : mListPac) {
-                TransportTodoListBean entity = new TransportTodoListBean();
-                entity.setTpScooterType(String.valueOf(bean.getScooterType()));
-                entity.setTpScooterCode(bean.getScooterCode());
-                entity.setFlightIndicator(bean.getFlightType());
-                entity.setHeadingFlag(bean.getHeadingFlag());
-                entity.setTpCargoType("baggage");
-                entity.setFlightId(mOutFieldTaskBean.getFlights().getFlightId() + "");
-                entity.setFlightNo(mOutFieldTaskBean.getFlights().getFlightNo());
-                entity.setTpFlightLocate(mOutFieldTaskBean.getFlights().getSeat());
-                entity.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                entity.setDtoType(8);
-                entity.setTpType(mOutFieldTaskBean.getFlights().getMovement());
-                entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
-                entity.setTpStartLocate("seat");
-                entity.setBeginAreaType(mOutFieldTaskBean.getBeginAreaType());
-                entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
-                entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
-                entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
-                infos.add(entity);
-            }
-            if (infos.size() == 0) {
-                ToastUtil.showToast("请选择上传板车信息再提交");
-            } else {
-                model.setSeat(mOutFieldTaskBean.getFlights().getSeat());
-                model.setScooters(infos);
-                model.setEndUnloadTask(false);
-                mPresenter = new ArrivalDataSavePresenter(this);
-                ((ArrivalDataSavePresenter) mPresenter).arrivalDataSave(model);
-            }
+            showYesOrNoDialog("","请确认卸机任务已完成?",2);
         });
     }
-
+    /**
+     * 二次确认弹出框
+     *
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title, String msg, int flag) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            switch (flag) {
+                                case 1:
+                                    noticeTp();
+                                    break;
+                                case 2:
+                                    endUnload();
+                                    break;
+                            }
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+    }
     private String mNowScooterCode;
 
     @Subscribe(threadMode = ThreadMode.MAIN)

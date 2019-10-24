@@ -81,7 +81,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
                     .setText(R.id.tv_type, StringUtil.isEmpty(item.getType()) ? "- -" : item.getType())
                     .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight()) ? "- -" : item.getWeight())
-                    .setText(R.id.tv_total, StringUtil.isEmpty(item.getTotal()) ? "- -" : item.getTotal())
+                    .setText(R.id.tv_total, !StringUtil.isEmpty(item.getSpecialCode())&&item.getSpecialCode().contains("/") ? item.getSpecialCode().substring(0,item.getSpecialCode().indexOf("/")) : "--")
                     .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialCode()) ? "- -" : item.getSpecialCode())
                     .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : "- -");
         }

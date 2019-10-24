@@ -125,17 +125,36 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             btnPhotoRecord.setOnClickListener(v -> {
                 onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
             });
-
             Button btnLookInstall = helper.getView(R.id.btn_look_install);
-            btnLookInstall.setVisibility(View.VISIBLE);
-            btnLookInstall.setOnClickListener(v -> {
-                onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
-            });
             Button btnLookUnInstall = helper.getView(R.id.btn_look_un_install);
-            btnLookUnInstall.setVisibility(View.VISIBLE);
-            btnLookUnInstall.setOnClickListener(v -> {
-                onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
-            });
+            if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
+                btnLookInstall.setVisibility(View.VISIBLE);
+                btnLookInstall.setOnClickListener(v -> {
+                    onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
+                });
+                btnLookUnInstall.setVisibility(View.VISIBLE);
+                btnLookUnInstall.setOnClickListener(v -> {
+                    onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
+                });
+            }
+            else{
+                if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
+                    btnLookUnInstall.setVisibility(View.VISIBLE);
+                    btnLookUnInstall.setOnClickListener(v -> {
+                        onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
+                    });
+                    btnLookInstall.setVisibility(View.GONE);
+                }
+                else {
+                    btnLookInstall.setVisibility(View.VISIBLE);
+                    btnLookInstall.setOnClickListener(v -> {
+                        onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
+                    });
+                    btnLookUnInstall.setVisibility(View.GONE);
+
+                }
+            }
+
         }
 
         tvTime.setText(item.getTimeForShow());

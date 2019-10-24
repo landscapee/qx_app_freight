@@ -401,14 +401,14 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SeatChangeEntity result) {
-        if (result.getRemark()!=null){
+        if (result.getRemark()!=null&& !result.getRemark().contains("CTOT")){
             UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
             updatePushDialog.show();
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
-        String remark = result.getFlightNo()+"预装机单已更新，请查看！";
+        String remark = result.getFlightNo();
         if (remark!=null&& !StringUtil.isEmpty(remark)){
             UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
             updatePushDialogInstall.show();
@@ -416,15 +416,18 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallNotifyEventBusEntity result) {
+        String remark = "";
         if (result.getType() == 2){
-            String remark = result.getFlightNo()+"监装已确认新的装机单版本，请查看！";
-            if (remark!=null&& !StringUtil.isEmpty(remark)){
-                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
-                    EventBus.getDefault().post("LoadInstall_Sure_Update");
-                });
-                updatePushDialogInstall.show();
-            }
-
+            remark = result.getFlightNo()+"监装已确认按此装机，版本："+result.getVersion();
+        }
+        else if (result.getType() == 4){
+            remark = result.getFlightNo()+"监装已确认最终装机单，版本："+result.getVersion();
+        }
+        if (remark!=null&& !StringUtil.isEmpty(remark)){
+            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+                EventBus.getDefault().post("LoadInstall_Sure_Update");
+            });
+            updatePushDialogInstall.show();
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -443,7 +446,11 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
             for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans){
                 scooters.addAll(mContentObjectBean.getScooters());
             }
-            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters,objectBeans.get(0).getFlightNo(), () -> EventBus.getDefault().post("refresh_data_update"));
+            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters,objectBeans.get(0).getFlightNo(), () -> {
+                EventBus.getDefault().post("LoadInstall_Sure_Update");
+                EventBus.getDefault().post("refresh_data_update");
+            });
+
             updatePushDialog.show();
         }
     }

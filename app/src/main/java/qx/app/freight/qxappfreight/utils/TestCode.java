@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.utils;
 
+import android.util.Log;
+
 import java.util.Arrays;
 
 /**
@@ -31,7 +33,10 @@ public class TestCode {
 //        System.out.println("次数"+count);
 //    }
     public static void main(String[] args) {
-        getMinToDay(30);
+        String str = "01M/AVI";
+        str= str.substring(0,str.indexOf("/"));
+        Log.e("sss",str);
+
     }
     /**
      * 相差几天

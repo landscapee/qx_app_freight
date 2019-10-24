@@ -251,9 +251,11 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     public void toastView(String error) {
         if (pageCurrent == 1) {
             list.clear();
-            mMfrvData.finishRefresh();
+            if(mMfrvData !=null)
+                mMfrvData.finishRefresh();
         } else {
-            mMfrvData.finishLoadMore();
+            if(mMfrvData !=null)
+                mMfrvData.finishLoadMore();
         }
         if (error!=null)
             ToastUtil.showToast(error);

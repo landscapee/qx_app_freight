@@ -94,6 +94,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private List<String> mTaskIdList = new ArrayList<>();
     private String mSpecialTaskId = null;//专门记录由点击了结束装机或卸机返回刷新数据的taskId，匹配到该taskId则item应该展开
 
+    private int currentPosition = 0;
+
+    private int loadInstall = 0; //请求装机单标记 1 ：装机单
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -118,6 +121,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 //                            .subscribe(aLong -> {
 //                                loadData();
 //                            });
+                    mCurrentPage = 1;
                     loadData();
                 } else {//取消任务，刷新代办列表
                     loadData();
@@ -151,6 +155,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 if (success) {//成功领受后吐司提示，
                     ToastUtil.showToast("领受装卸机新任务成功");
                     mDialog.dismiss();
+                    mCurrentPage = 1;
                     loadData();
                     mListCache.clear();
                 } else {//领受失败后，清空未领受列表缓存
@@ -213,6 +218,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
             @Override
             public void onLookLoadInstall(int position) {
+                currentPosition = position;
                 lookLoadInstall(position);
             }
         });
@@ -231,6 +237,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
      * @param position
      */
     private void lookUnloadInstall(int position){
+        loadInstall = 1;
         mPresenter = new GetUnLoadListBillPresenter(this);
         UnLoadRequestEntity entity = new UnLoadRequestEntity();
         entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
@@ -247,7 +254,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mPresenter = new GetFlightCargoResPresenter(this);
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
-        entity.setFlightId(mList.get(position).getFlightId());
+        if (mList.get(position).getMovement() == 4 && mList.get(position).getRelateInfoObj() != null) {
+            entity.setFlightId(mList.get(position).getRelateInfoObj().getFlightId());
+        }
+        else {
+            entity.setFlightId(mList.get(position).getFlightId());
+        }
         ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
     }
     /**
@@ -257,8 +269,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private void intoPhotoAct(int position) {
         Intent intent = new Intent(getActivity(), FlightPhotoRecordActivity.class);
         intent.putExtra("flight_number",mList.get(position).getFlightNo());
+        intent.putExtra("flight_id",mList.get(position).getFlightId());
         intent.putExtra("task_id",mList.get(position).getId());
         intent.putExtra("task_pic",mList.get(position).getTaskPic());
+        intent.putExtra("task_task_id",mList.get(position).getTaskId());
 
         getActivity().startActivity(intent);
     }
@@ -321,6 +335,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     }
 
     private void loadData() {
+        loadInstall = 0;
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setWorkerId(UserInfoSingle.getInstance().getUserId());
         entity.setCurrent(mCurrentPage);
@@ -543,10 +558,15 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void toastView(String error) {
+        if (loadInstall == 1)
+            ToastUtil.showToast("暂无装机单");
+
         if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
+            if (mMfrvData!=null)
+                mMfrvData.finishRefresh();
         } else {
-            mMfrvData.finishLoadMore();
+            if (mMfrvData!=null)
+                mMfrvData.finishLoadMore();
         }
     }
 
@@ -592,10 +612,13 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : mBaseContent){
                             scooters.addAll(mContentObjectBean.getScooters());
                         }
-                        InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(getActivity(), R.style.custom_dialog, scooters,mBaseContent.get(0).getFlightNo(), () -> {});
+                        InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(getActivity(), R.style.custom_dialog,scooters,mList.get(currentPosition).getRelateInfoObj()!=null?mList.get(currentPosition).getRelateInfoObj().getFlightNo():mList.get(currentPosition).getFlightNo(),false, () -> {});
                         updatePushDialog.show();
                     }
                 }
+            }
+            else {
+                ToastUtil.showToast("装机单未就绪");
             }
         }
     }

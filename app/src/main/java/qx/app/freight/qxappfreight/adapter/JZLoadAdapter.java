@@ -73,6 +73,8 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         helper.setText(R.id.tv_etd, TimeUtils.datetimeTo4(item.getEtd()));
         helper.setText(R.id.tv_std, TimeUtils.datetimeTo4(item.getStd()));
 
+
+
         Button btnReopen = helper.getView(R.id.btn_reopen_load_task);
         if (showReOpenBtn) {//显示重新开启装机任务按钮，只有装机已办页面中有使用
             btnReopen.setVisibility(View.VISIBLE);
@@ -88,6 +90,12 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         //异常上报
         Button btnExReport = helper.getView(R.id.btn_ex_report);
         if (showExReport){
+            if (item.getAcceptTime()> 0&&item.getPassengerLoadSend()> 0){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_btn_bg_color));
+            }
+            else {
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            }
             btnExReport.setVisibility(View.VISIBLE);
             btnExReport.setOnClickListener(b->{
                 Intent intent = new Intent(mContext, ErrorReportActivity.class);
@@ -152,6 +160,8 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             helper.setText(R.id.item_tv_xingli, item.getLoadingAndUnloadBean().getCarousel()!=null?item.getLoadingAndUnloadBean().getCarousel():"-");
             helper.setText(R.id.tv_ctot, "CTOT "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getCtot()));
             helper.setText(R.id.tv_xg, "协关 "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getUnifiedCloseTime()));
+            helper.setText(R.id.tv_pre, "前飞 "+TimeUtils.datetimeTo4(item.getRelateInfoObj()!=null?item.getRelateInfoObj().getLoadingAndUnloadBean()!=null?item.getRelateInfoObj().getLoadingAndUnloadBean().getPreAtd():0:0));
+            helper.setText(R.id.tv_eta, "预达 "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getNxtEta()));
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getElecState())){
                 showLable(item.getLoadingAndUnloadBean().getElecState(),mLayoutLable);
             }
@@ -290,7 +300,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             if (!item.isAcceptTask()) {
                 llBg.setBackgroundColor(Color.parseColor("#ffac00"));
             } else {
-                llBg.setBackgroundColor(Color.parseColor("#ffffff"));
+                llBg.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
             }
 //            CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
             if (item.isShowDetail()) {

@@ -44,6 +44,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <!--//解决 java.lang.NoClassDefFoundError:failed resolution of :Lorg/apache/http/ProtocolVersion-->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">

@@ -7,5 +7,8 @@ import lombok.Setter;
 @Getter
 public class FlightPhotoEntity {
     private String id;
+    private String taskId;
     private String taskPic;
+    private String flightId;
+    private String staffId;
 }

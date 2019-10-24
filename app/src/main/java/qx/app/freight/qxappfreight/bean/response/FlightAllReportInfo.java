@@ -51,9 +51,11 @@ public class FlightAllReportInfo implements Serializable {
         private Object preContent;
         private Object cgoContent;
         private int autoLoadInstalledSingle;
+
         private Object flightNo;
         private int installedSingleConfirm;//1 是确认
         private String installedSingleConfirmUser;//确认人
+        private long installedSingleConfirmTime;
 
         private boolean canRelease;//true 可以释放
 

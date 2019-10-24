@@ -404,7 +404,8 @@ public class InstallEquipClient extends StompClient {
         InstallChangeEntity installChangeEntity = new InstallChangeEntity();
         installChangeEntity.setFlightNo(result);
         EventBus.getDefault().post(installChangeEntity);
-        EventBus.getDefault().post(result);
+        String flightNo = result.substring(0,result.indexOf(":"));
+        EventBus.getDefault().post(flightNo);
     }
 
     private void sendLoadingListPushNotify(InstallNotifyEventBusEntity result) {

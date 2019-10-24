@@ -75,7 +75,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadUnloadTaskHisPresenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList, true);
+        mAdapter = new NewInstallEquipAdapter(mList, false,true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
@@ -147,8 +147,10 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
     private void intoPhotoAct(int position) {
         Intent intent = new Intent(getActivity(), FlightPhotoRecordActivity.class);
         intent.putExtra("flight_number",mList.get(position).getFlightNo());
+        intent.putExtra("flight_id",mList.get(position).getFlightId());
         intent.putExtra("task_id",mList.get(position).getId());
         intent.putExtra("task_pic",mList.get(position).getTaskPic());
+        intent.putExtra("task_task_id",mList.get(position).getTaskId());
         getActivity().startActivity(intent);
     }
     @Override

@@ -505,7 +505,7 @@ public class TimeUtils {
         if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
             return "";
         }
-        String format = "HHmm";
+        String format = "HHmm(dd)";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));

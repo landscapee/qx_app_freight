@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:orientation="horizontal"
-        android:background="@color/gray_cc"
+        android:background="@color/white"
         android:gravity="center_vertical"
         >
         <TextView
@@ -33,9 +33,10 @@
             android:id="@+id/sp_berth"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:spinnerMode="dropdown" />
-
+            android:gravity="center_vertical"
+            android:spinnerMode="dropdown"
+            android:padding="0dp"
+            />
         <TextView
             android:id="@+id/tv_divider"
             android:layout_width="1px"
@@ -46,8 +47,10 @@
             android:id="@+id/sp_goods_position"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:spinnerMode="dropdown" />
+            android:gravity="center_vertical"
+            android:spinnerMode="dropdown"
+            android:padding="0dp"
+            />
 
         <Button
             android:id="@+id/tv_pull"

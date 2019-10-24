@@ -31,6 +31,15 @@ public class LoadingAndUnloadBean implements Serializable {
      * tobt
      */
     private long tobt;
+    /**
+     * 下站预达
+     */
+    private long nxtEta;
+
+    /**
+     * 前站起飞
+     */
+    private long  preAtd;
 
     /**
      * VIP标记

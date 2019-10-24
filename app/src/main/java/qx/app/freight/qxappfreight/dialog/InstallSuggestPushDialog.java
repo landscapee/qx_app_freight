@@ -51,6 +51,8 @@ public class InstallSuggestPushDialog extends Dialog {
     private String flightNo;
     private  List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1;
 
+    private boolean ring = true;
+
     public InstallSuggestPushDialog(@NonNull Context context, int themeResId, List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1,String flightNo, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
@@ -70,6 +72,27 @@ public class InstallSuggestPushDialog extends Dialog {
         this.mList1 = mList1;
         initViews();
     }
+    public InstallSuggestPushDialog(@NonNull Context context, int themeResId, List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1,String flightNo, boolean ring,OnTpPushListener mOnTpPushListener) {
+        super(context, themeResId);
+        mContext = context;
+        this.mOnTpPushListener = mOnTpPushListener;
+        this.flightNo = flightNo;
+        this.ring = ring;
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+        convertView = getLayoutInflater().inflate(R.layout.popup_install_suggest, null);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(convertView);
+        ButterKnife.bind(this, convertView);
+        this.mList1 = mList1;
+        initViews();
+
+    }
     private void screenData( List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean> mList1) {
 
         tvFlightNo.setText(flightNo);
@@ -81,7 +104,7 @@ public class InstallSuggestPushDialog extends Dialog {
         title.setDestinationStation("目的站");
         title.setType("类型");
         title.setWeight("重量");
-        title.setTotal("件数");
+        title.setTotal("体积");
 //        title.setSpecialNumber("特货代码");
         title.setSpecialCode("特货代码");
         title.setExceptionFlag(1);
@@ -157,8 +180,11 @@ public class InstallSuggestPushDialog extends Dialog {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
-            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+        if (hasFocus){
+            if (ring)
+                Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+        }
+
     }
 
     @Override

@@ -21,5 +21,7 @@ public class LoadingListSendEntity implements Serializable {
     private long createTime;
     private String createUser;
     private String loadingUser;
+    private int documentType;
+    private int version;
     private List<LoadingListBean.DataBean.ContentObjectBean> content;
 }

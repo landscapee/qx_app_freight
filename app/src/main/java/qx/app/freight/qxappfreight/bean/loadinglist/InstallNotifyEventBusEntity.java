@@ -8,5 +8,6 @@ import lombok.Setter;
 public class InstallNotifyEventBusEntity {
 
     private String flightNo;
-    private int type;//1 通知录入 2 装机单确认 3 写入状态更新
+    private int version;
+    private int type;//1 预装机单 2确认按此装机 3 写入状态更新 4 确认最终装机单
 }

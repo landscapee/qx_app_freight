@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.adapter.ImageNetAndLocationAdapter;
 import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ImageUrlEntity;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
@@ -78,7 +79,9 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
     private static final int mAuthBaseRequestCode = 1;
     private ImageNetAndLocationAdapter mAdapter;
     private String mFlightNumber;
-    private String mCurrentTaskId;//当前任务ID
+    private String mFlightId;
+    private String mCurrentTaskId;//当前任务主键ID
+    private String mCurrentTaskTaskId;//当前任务ID
     private String taskPic;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -105,10 +108,12 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         toolbar.setMainTitle(Color.WHITE, "拍照记录");
 
-        taskPic = getIntent().getStringExtra("task_pic");
         mTvFlightInfo.setVisibility(View.VISIBLE);
+        taskPic = getIntent().getStringExtra("task_pic");
         mFlightNumber = getIntent().getStringExtra("flight_number");
+        mFlightId = getIntent().getStringExtra("flight_id");
         mCurrentTaskId = getIntent().getStringExtra("task_id");
+        mCurrentTaskTaskId = getIntent().getStringExtra("task_task_id");
         mTvFlightInfo.setText(mFlightNumber);
         getIntentPics();
 
@@ -183,6 +188,10 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         UploadFlightPhotoPresenter uploadFlightPhotoPresenter = new UploadFlightPhotoPresenter(this);
         FlightPhotoEntity flightPhotoEntity = new FlightPhotoEntity();
         flightPhotoEntity.setId(mCurrentTaskId);
+        flightPhotoEntity.setTaskId(mCurrentTaskTaskId);
+        flightPhotoEntity.setFlightId(mFlightId);
+
+        flightPhotoEntity.setStaffId(UserInfoSingle.getInstance().getUserId());
         if (filePaths !=null && filePaths.size()>0)
             flightPhotoEntity.setTaskPic(JSONArray.toJSONString(filePaths));
         else

@@ -99,6 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
             android:background="@color/white"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <!--<TextView-->
             <!--android:layout_width="0dp"-->
@@ -114,7 +115,7 @@
 
             <RadioGroup
                 android:id="@+id/tb_title"
-                android:layout_width="220dp"
+                android:layout_width="440dp"
                 android:layout_height="40dp"
                 android:background="@drawable/shape_dynamic_blue"
                 android:orientation="horizontal">
@@ -128,11 +129,33 @@
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
-                    android:text="装机单"
+                    android:text="预装机单"
                     android:textColor="@drawable/selector_text_blue_a" />
 
                 <RadioButton
                     android:id="@+id/rb_advise_install"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="监装调舱建议"
+                    android:textColor="@drawable/selector_text_blue_a" />
+
+                <RadioButton
+                    android:id="@+id/rb_end_install"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="最终装机单"
+                    android:textColor="@drawable/selector_text_blue_a" />
+
+                <RadioButton
+                    android:id="@+id/rb_end_advise_install"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -157,12 +180,16 @@
                 android:id="@+id/tv_version"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_40"
-                android:gravity="center_vertical|right"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_12"
                 android:layout_weight="1"
-                />
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_12" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/down" />
         </LinearLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -170,19 +197,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <HorizontalScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+                android:layout_height="match_parent">
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/mfrv_data"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
 
 
-            </HorizontalScrollView>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/mfrv_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </HorizontalScrollView>
+                <TextView
+                    android:id="@+id/tv_sure_install"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@color/transparent_half"
+                    android:text="确认按此装机"
+                     android:textColor="@color/red"
+                    android:textSize="50sp"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
@@ -192,18 +234,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:visibility="gone"
         android:gravity="center_vertical|right"
-        android:text="监装员:" />
+        android:text="监装员:"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_confim_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_margin="15dp"
         android:gravity="center_vertical|right"
-        android:text="发送时间:" />
+        android:text="发送时间:"
+        android:visibility="gone" />
 
     <Space
         android:layout_width="0dp"
@@ -249,6 +291,7 @@
             android:background="@drawable/shape_dynamic_black"
             android:text="打印"
             android:textColor="@color/black" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -60,7 +60,7 @@ public class BaseFilterEntity<T> {
     private String staffId;
     private String staffIds;
 
-    private int documentType;
+    private int documentType; //1 货邮舱单 2 预装机单 3 预装机单建议 4 卸机单 5 最终装机单 6 最终装机单建议
     //报载记录ID
     private String reportInfoId;//货邮仓单ID/装机单ID
     //操作类型
@@ -73,6 +73,7 @@ public class BaseFilterEntity<T> {
     private int sort;
     private boolean filterAtd;//true 货邮舱单 装机单 待办 false 结载待办
     private boolean filterHycd;//true  货邮舱单 待办 这个字段传true
+    private boolean  filterZjd;//true 装机单待办
 
     /**
      * 备注
@@ -81,4 +82,6 @@ public class BaseFilterEntity<T> {
     private int type;
     private String printName;
     private String exceptionContent; //异常内容
+
+    private int location; //1:最终装机单录入 2:预装机单录入
 }

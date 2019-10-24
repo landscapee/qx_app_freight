@@ -12,8 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,6 +90,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @BindView(R.id.tv_operation)
     TextView tvOperation; //title 是否显示 操作
 
+    @BindView(R.id.tv_confirm)
+    TextView mTvConfirm;//确认人
+    @BindView(R.id.tv_confim_date)
+    TextView mTvConfirmDate;//确认时间
+
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;
     @BindView(R.id.tv_flight_craft)
@@ -109,6 +119,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvEndInstall;
     @BindView(R.id.tv_sure_pull)
     TextView mTvSurePull;
+
+    @BindView(R.id.tv_install_version)
+    TextView tvChooseVersion;
+    private List<String> versions = new ArrayList <>();
+
+    private int sureFlag; //1 预装机单 2 最终装机单
+
     private List <LoadingListBean.DataBean> mLoadingList = new ArrayList <>();
     private LoadPlaneInstallAdapter adapter;
 
@@ -138,7 +155,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
-        if (result.getFlightNo() != null && result.getFlightNo().equals(mCurrentFlightNo)) {
+        String flightNo = result.getFlightNo().substring(0,result.getFlightNo().indexOf(":"));
+        if (flightNo != null && flightNo.equals(mCurrentFlightNo)) {
             showCargoResUpdate();
         }
     }
@@ -214,6 +232,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
         mCurrentFlightId = mIsKeepOnTask ? data.getRelateInfoObj().getFlightId() : data.getFlightId();
         mCurrentFlightNo = mIsKeepOnTask ? data.getRelateInfoObj().getFlightNo() : data.getFlightNo();
+
+
+        //选择装机单版本
+        tvChooseVersion.setOnClickListener(v->{
+            showStoragePickView();
+        });
+
         //发送结载
         mTvSendOver.setOnClickListener(v -> {
             if (Tools.isFastClick())
@@ -231,6 +256,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             requestModel.setCreateUser(mLoadingList.get(0).getCreateUser());
             requestModel.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
             requestModel.setContent(mLoadingList.get(0).getContentObject());
+            requestModel.setVersion(mLoadingList.get(0).getVersion());
+            if(sureFlag == 1)
+                requestModel.setDocumentType(3);
+            else if(sureFlag == 2)
+                requestModel.setDocumentType(6);
             mPresenter = new GetFlightCargoResPresenter(this);
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
@@ -487,12 +517,88 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
         ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
     }
+
+    private void showStoragePickView() {
+        OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                if (versions.size() > 0) {
+                    //切换装机单版本
+                    switchoverInstall(options1);
+                    tvChooseVersion.setText(versions.get(options1));
+                }
+            }
+        }).build();
+        pickerView.setPicker(versions);
+        pickerView.setTitleText("版本号");
+        if (!versions.isEmpty())
+            pickerView.show();
+        else {
+            ToastUtil.showToast("还没有装机单！");
+        }
+    }
+
+    /**
+     * 切换装机单版本
+     * @param options1
+     */
+    private void switchoverInstall(int options1) {
+
+        if (!TextUtils.isEmpty(mLoadingList.get(options1).getContent())) {
+            if (options1 == 0){ // 只有最新版本才能 发送至结载 和 确认装机单
+                mTvConfirmCargo.setVisibility(View.VISIBLE);
+                mTvSendOver.setVisibility(View.VISIBLE);
+                if (mLoadingList.get(options1).getInstalledSingleConfirm() == 1){ //已确认
+                    mTvConfirmCargo.setVisibility(View.GONE);
+                    mTvSendOver.setVisibility(View.GONE);
+                }
+                if (versions.get(options1).contains("最终装机单")){
+                    sureFlag = 2;
+                    mTvConfirmCargo.setText("最终装机单确认");
+                }
+                else {
+                    sureFlag = 1;
+                    mTvConfirmCargo.setText("确认按此装机");
+                }
+            }
+            else {
+                mTvConfirmCargo.setVisibility(View.GONE);
+                mTvSendOver.setVisibility(View.GONE);
+            }
+            mTvConfirmDate.setVisibility(View.VISIBLE);
+            mTvConfirm.setVisibility(View.VISIBLE);
+            mTvConfirm.setText("结载员:"+mLoadingList.get(options1).getCreateUserName());
+            mTvConfirmDate.setText("发送时间:"+ TimeUtils.date2Tasktime6(mLoadingList.get(options1).getCreateTime()));
+
+            Gson mGson = new Gson();
+            mTvSendOver.setEnabled(false);
+            mTvConfirmCargo.setEnabled(true);
+            mTvSendOver.setTextColor(Color.parseColor("#888888"));
+            mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
+            LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(mLoadingList.get(options1).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
+            //舱位集合
+            mBaseContent = new ArrayList <>(Arrays.asList(datas));
+            mLoadingList.get(options1).setContentObject(mBaseContent);
+            //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
+            newScooters.clear();
+            for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
+                    scooterBean.setOldCargoName(scooterBean.getCargoName());
+                    scooterBean.setOldLocation(scooterBean.getLocation());
+                }
+                newScooters.addAll(contentObjectBean.getScooters());
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void getLoadingListResult(LoadingListBean result) {
 //        Tools.closeVibrator(getApplicationContext());
         if ("318".equals(result.getStatus())) {
             mWaitCallBackDialog.show();
         } else {
+
             mLoadingList.clear();
             if (result.getData() == null || result.getData().size() == 0) {
                 mTvSendOver.setEnabled(false);
@@ -501,31 +607,21 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
             } else {
 
-                mLoadingList.add(result.getData().get(0));
+                mLoadingList.addAll(result.getData());
 
+//                Collections.reverse(mLoadingList);
+
+                versions.clear();
+                for (LoadingListBean.DataBean dataBean:mLoadingList){
+                    if (dataBean.getDocumentType() == 2)
+                        versions.add("预装机单"+dataBean.getVersion());
+                    else
+                        versions.add("最终装机单"+dataBean.getVersion());
+                }
                 getPullgoodsStatus();
 
-                if (!TextUtils.isEmpty(result.getData().get(0).getContent())) {
-                    Gson mGson = new Gson();
-                    mTvSendOver.setEnabled(false);
-                    mTvConfirmCargo.setEnabled(true);
-                    mTvSendOver.setTextColor(Color.parseColor("#888888"));
-                    mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
-                    LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
-                    //舱位集合
-                    mBaseContent = new ArrayList <>(Arrays.asList(datas));
-                    mLoadingList.get(0).setContentObject(mBaseContent);
-                    //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
-                    newScooters.clear();
-                    for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
-                        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
-                            scooterBean.setOldCargoName(scooterBean.getCargoName());
-                            scooterBean.setOldLocation(scooterBean.getLocation());
-                        }
-                        newScooters.addAll(contentObjectBean.getScooters());
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                tvChooseVersion.setText(versions.get(0));
+                switchoverInstall(0);
             }
         }
     }
@@ -637,6 +733,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     public void confirmLoadPlanResult(String result) {
         mConfirmPlan = true;
         ToastUtil.showToast("装机单版本信息确认成功");
+        loadData();
         mTvConfirmCargo.setEnabled(false);
         mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
     }

@@ -130,6 +130,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 //                                    .subscribeOn(Schedulers.io())
 //                                    .observeOn(AndroidSchedulers.mainThread())
 //                                    .subscribe(aLong -> {
+                                        mCurrentPage = 1;
                                         loadData();
                                         EventBus.getDefault().post("CargoManifestFragment_refresh");
 //                                    });
@@ -268,6 +269,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
+
     }
 
     @Override
@@ -307,14 +309,26 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
                 bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
+            if (bean.getRelateInfoObj()!= null&&!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())){
+                bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
             mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
+
+            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
+
             List <String> times = new ArrayList <>();
             times.add(String.valueOf(bean.getAcceptTime()));
-            times.add("0");
+
+            if (bean.getPassengerLoadSend() > 0){
+                posNow = 2;
+                times.add(String.valueOf(bean.getPassengerLoadSend()));
+            }
+            else
+                times.add("0");
+
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 : 1;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
             if (posNow > 0) {
                 bean.setAcceptTask(true);//已经领受过了设置acceptTask未true，设置该条item的背景为白色，否则为黄色警告颜色背景
             }
