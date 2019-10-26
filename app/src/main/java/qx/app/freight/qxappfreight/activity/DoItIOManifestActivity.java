@@ -23,6 +23,8 @@ import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
 import qx.app.freight.qxappfreight.presenter.SubmitIOManifestPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 
@@ -74,6 +76,8 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
         tvNum.setText(smInventoryEntryandexit.getNumber()+"");
         tvWeight.setText(smInventoryEntryandexit.getWeight()+"");
         btnSubmit.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             smInventoryEntryandexit.setExecUserId(UserInfoSingle.getInstance().getUserId());
             smInventoryEntryandexit.setExecUserName(UserInfoSingle.getInstance().getUsername());
             smInventoryEntryandexit.setExecTime(TimeUtils.getTime());

@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +54,8 @@ import qx.app.freight.qxappfreight.presenter.ReOpenLoadTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.SynchronousLoadingPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
@@ -158,6 +159,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mBtSure.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             loadFlag = -1;
             showYesOrNoDialog("", "重新获取离港数据并发送至监装", 5);
 //            mPresenter = new SynchronousLoadingPresenter(this);
@@ -171,6 +174,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             loadFlag = -1;
             showYesOrNoDialog("", "确认二次开启舱门", 4);
 //            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
@@ -180,17 +185,24 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //            entity.setRemark("");
 //            ((ReOpenLoadTaskPresenter) mPresenter).reOpenLoadTask(entity);
         });
-        mSrRefush.setOnRefreshListener(() ->{
-            if (loadFlag == -1){
+        mSrRefush.setOnRefreshListener(() -> {
+            if (loadFlag == -1) {
 
                 loadFlag = getRadioBtnFlag();
 
 
             }
             loadData();
-        } );
-        mTvVersion.setOnClickListener((v -> showStoragePickView()));
+        });
+        mTvVersion.setOnClickListener((v -> {
+            if (!Tools.isFastClick())
+                return;
+            showStoragePickView();
+        }
+        ));
         mBtRefuse.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             loadFlag = -1;
 
             String intro = "打印【版本号" + currentVersion + "】装机单";
@@ -264,8 +276,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 
     }
 
-    private int getRadioBtnFlag(){
-        switch (mRgTitle.getCheckedRadioButtonId()){
+    private int getRadioBtnFlag() {
+        switch (mRgTitle.getCheckedRadioButtonId()) {
             case R.id.rb_install:
                 return 2;
             case R.id.rb_advise_install:
@@ -326,12 +338,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     map.put(flightAllReportInfos.get(i).getVersion(), list);
                     mapMid.put(flightAllReportInfos.get(i).getVersion(), flightAllReportInfos.get(i).getId());//储存装机单 id
                     if (flightAllReportInfos.get(i).getInstalledSingleConfirm() == 1) {
-                        if (loadFlag == 3){//确认按此装机版本
+                        if (loadFlag == 3) {//确认按此装机版本
                             mListVerson.add("确认按此装机(版本" + (flightAllReportInfos.get(i).getVersion()) + ")");
                             mapPresen.put(flightAllReportInfos.get(i).getVersion(), flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
                             mapDate.put(flightAllReportInfos.get(i).getVersion(), StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getInstalledSingleConfirmTime(), "yyyy-MM-dd HH:mm"));
-                        }
-                        else {
+                        } else {
                             mListVerson.add("监装确认(版本" + (flightAllReportInfos.get(i).getVersion()) + ")");
                             mapPresen.put(flightAllReportInfos.get(i).getVersion(), flightAllReportInfos.get(i).getInstalledSingleConfirmUser());
                             mapDate.put(flightAllReportInfos.get(i).getVersion(), StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getInstalledSingleConfirmTime(), "yyyy-MM-dd HH:mm"));
@@ -372,7 +383,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             if (mWaitCallBackDialog != null) {
                 mWaitCallBackDialog.dismiss();
             }
-            switch (mRgTitle.getCheckedRadioButtonId()){
+            switch (mRgTitle.getCheckedRadioButtonId()) {
                 case R.id.rb_install:
                     mRgTitle.check(R.id.rb_install);// 切换到 装机单
                     break;
@@ -397,7 +408,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             if (mWaitCallBackDialog != null) {
                 mWaitCallBackDialog.dismiss();
             }
-            switch (mRgTitle.getCheckedRadioButtonId()){
+            switch (mRgTitle.getCheckedRadioButtonId()) {
                 case R.id.rb_install:
                     mRgTitle.check(R.id.rb_install);// 切换到 装机单
                     break;
@@ -448,12 +459,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private void screenData(int verson) {
 
         tvSureInstall.setVisibility(View.GONE);
-        if (mListVerson.get(verson).contains("确认按此装机")){
+        if (mListVerson.get(verson).contains("确认按此装机")) {
             tvSureInstall.setVisibility(View.VISIBLE);
             mTvConfirm.setText("监装员:" + mapPresen.get(mListVersonCode.get(verson)));
             mTvConfirmDate.setText("发送时间:" + mapDate.get(mListVersonCode.get(verson)));
-        }
-        else if (mListVerson.get(verson).contains("监装确认")) {
+        } else if (mListVerson.get(verson).contains("监装确认")) {
             showConfirm(loadFlag);
             mTvConfirm.setText("监装员:" + mapPresen.get(mListVersonCode.get(verson)));
             mTvConfirmDate.setText("发送时间:" + mapDate.get(mListVersonCode.get(verson)));
@@ -525,7 +535,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         entity.setFlightId(mBaseData.getFlightId());
         entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
         entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
-        if (getRadioBtnFlag()== 5 || getRadioBtnFlag()== 6 )
+        if (getRadioBtnFlag() == 5 || getRadioBtnFlag() == 6)
             entity.setLocation(1);
         else {
             entity.setLocation(2);
@@ -612,8 +622,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
      */
     @Override
     public void synchronousLoadingResult(String result) {
-        if (result != null)
-            ToastUtil.showToast(result);
+//        if (result != null)
+//            ToastUtil.showToast(result);
         showDialogWait();
 //        finish();
     }

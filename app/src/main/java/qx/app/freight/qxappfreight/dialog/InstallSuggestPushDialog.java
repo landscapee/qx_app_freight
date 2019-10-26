@@ -123,6 +123,7 @@ public class InstallSuggestPushDialog extends Dialog {
             scootersBean1.setWeight(scooterBean.getWeight()+"");
             scootersBean1.setTotal(scooterBean.getTotal()+"");
             scootersBean1.setChange(scooterBean.isChange());
+            scootersBean1.setSplit(scooterBean.isSplit());
             scootersBean1.setExceptionFlag(scooterBean.getExceptionFlag());
             scootersBean1.setSpecialCode(scooterBean.getSpecialCode());
 //            if (scooterBean.getWaybillList() != null&& scooterBean.getWaybillList().size()> 0)

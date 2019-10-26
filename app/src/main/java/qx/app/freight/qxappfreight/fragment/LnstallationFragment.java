@@ -59,6 +59,8 @@ import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -176,6 +178,8 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
 //            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
 //            intent.putExtra("data", list.get(position));
 //            getContext().startActivity(intent);
+            if (!Tools.isFastClick())
+                return;
             LnstallationInfoActivity.startActivity(getContext(),list.get(position),0);
         });
         getData();
@@ -241,7 +245,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         entity.setFilterAtd(true);
-        entity.setFilterZjd(true);
+//        entity.setFilterZjd(true);
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 

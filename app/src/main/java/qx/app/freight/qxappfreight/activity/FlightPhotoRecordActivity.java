@@ -338,7 +338,8 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(this, error);
+        if (error!=null)
+            ToastUtil.showToast(error);
     }
 
     @Override
@@ -361,11 +362,11 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
      */
     @Override
     public void uploadFlightPhotoResult(String result) {
+        finish();
         if (result!=null)
             ToastUtil.showToast(this, "已保存");
-
         EventBus.getDefault().post("InstallEquipFragment_refresh");
-        finish();
+
 
     }
 }

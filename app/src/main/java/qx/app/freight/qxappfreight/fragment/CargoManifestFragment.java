@@ -59,6 +59,8 @@ import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -153,8 +155,9 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
+            if (!Tools.isFastClick())
+                return;
             if (list !=null&&list.size() > 0){
-
                 CargoManifestInfoActivity.startActivity(getContext(),list.get(position),0);
 //                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
 //                intent.putExtra("data", list.get(position));

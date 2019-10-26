@@ -60,7 +60,14 @@
             android:text="拉"
             android:textColor="@color/white"
             android:textSize="15sp" />
-
+        <Button
+            android:id="@+id/tv_take"
+            android:layout_width="40dp"
+            android:layout_height="38dp"
+            android:background="@drawable/shape_rect_green_45b"
+            android:text="拆"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/tv_scooter_number"
             android:layout_width="85dp"

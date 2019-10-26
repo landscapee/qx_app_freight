@@ -33,7 +33,6 @@ public class LnstallationInfoBean {
         private long createTime;
         private String createUser;//创建人
         private String destinationStation;//目的站
-        private int exceptionFlag;//1表示建议拉下
         private String flightInfoId;
         private String id;
         private String reportInfoId;
@@ -43,6 +42,8 @@ public class LnstallationInfoBean {
         private int version;//版本号
         private List<ManifestScooterListBean.WaybillListBean> waybillList;
         private String weight;//重量
+        private int exceptionFlag;//1表示建议拉下
         private boolean change;//是否修改过
+        private boolean split;//是否是被拆分 item
     }
 }

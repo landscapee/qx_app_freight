@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.bean.IOqrcodeEntity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -113,6 +114,8 @@ public class IOManifestFragment extends BaseFragment {
             showFragment(nowFragment);
         });
         btnSwitch.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             ScanManagerActivity.startActivity(getContext(), "IOManifestFragment");
         });
         initFragment();

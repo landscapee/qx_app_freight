@@ -29,6 +29,8 @@ import qx.app.freight.qxappfreight.contract.FindUserNoticeByPageContract;
 import qx.app.freight.qxappfreight.presenter.FindUserNoticeByPagePresenter;
 import qx.app.freight.qxappfreight.presenter.MessagePresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
@@ -73,10 +75,10 @@ public class NoticeActivity extends BaseActivity implements FindUserNoticeByPage
         mfrvNotice.setRefreshListener(this);
         mfrvNotice.setOnRetryLisenter(this);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (!Tools.isFastClick())
+                return;
                 readMessage(position);
                 nowPosition = position;
-
-
         });
 //        mAdapter.setOnDeleteClickListener((view, position) -> {
 //            if (list.size() != 0) {

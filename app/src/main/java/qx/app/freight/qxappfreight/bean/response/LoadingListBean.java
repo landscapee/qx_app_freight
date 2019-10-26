@@ -54,7 +54,6 @@ public class LoadingListBean implements Serializable {
                 private long createTime;
                 private String createUser;
                 private String destinationStation;//目的地
-                private int exceptionFlag;//1建议拉
                 private String flightInfoId;
                 private String id;
                 private String reportInfoId;
@@ -70,7 +69,11 @@ public class LoadingListBean implements Serializable {
                 private String location;//货位
                 private String oldLocation;//原货位
                 private String serialInd;//ULD号
+
                 private boolean change;//是否修改
+                private int exceptionFlag;//1建议拉
+                private boolean split;//是否是被拆分 item
+
                 private String specialCode;//特货代码
                 private boolean show;
 

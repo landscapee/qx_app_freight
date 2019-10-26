@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.beidouapp.et.c.n;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -27,6 +29,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,6 +57,8 @@ import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.StartPullContract;
+import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
+import qx.app.freight.qxappfreight.dialog.TakeSpiltDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
@@ -241,8 +246,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
         //发送结载
         mTvSendOver.setOnClickListener(v -> {
-            if (Tools.isFastClick())
-                return;
 
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
@@ -265,8 +268,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
         mTvConfirmCargo.setOnClickListener(v -> {
-            if (Tools.isFastClick())
-                return;
             if (mLoadingList.size() > 0 && mLoadingList.get(0).getContentObject() != null && mLoadingList.get(0).getContentObject().size() > 0
                     && mLoadingList.get(0).getContentObject().get(0).getScooters() != null && mLoadingList.get(0).getContentObject().get(0).getScooters().size() > 0) {
                 BaseFilterEntity entity1 = new BaseFilterEntity();
@@ -334,30 +335,38 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRvData.setLayoutManager(linearLayoutManager);
-            adapter = new LoadPlaneInstallAdapter(newScooters,0,true,cargos,goods);
+            adapter = new LoadPlaneInstallAdapter(newScooters,data.getWidthAirFlag(),true,cargos,goods);
             mRvData.setAdapter(adapter);
-            adapter.setOnDataCheckListener(scooterId -> {
-                boolean modified = false;
-                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
-                    if (scooterBean.isChange()|| scooterBean.getExceptionFlag() == 1){
-                        modified = true;
-                        break;
+            adapter.setOnDataCheckListener(new LoadPlaneInstallAdapter.OnDataCheckListener() {
+                @Override
+                public void onDataChecked(String scooterId) {
+
+                    compareInstall();
+
+                }
+
+                @Override
+                public void onTakeSplit(int position) {// 拆舱 /拆箱
+                    if (newScooters.get(position).isLocked()){
+                        ToastUtil.showToast("板车已锁定");
+                        return;
+                    }
+                    if (newScooters.get(position).getExceptionFlag() == 1){
+                        ToastUtil.showToast("拉下的板车无法拆分");
+                        return;
+                    }
+
+                    if (!newScooters.get(position).isSplit()){
+                        showSpiltDialog(position);
+                    }
+                    else {
+                        removeInstall(position);
+                        compareInstall();
+                        adapter.notifyDataSetChanged();
                     }
                 }
-                if (modified) {
-                    mTvSendOver.setEnabled(true);
-                    mTvConfirmCargo.setEnabled(false);
-                    mTvSendOver.setTextColor(Color.parseColor("#009EB5"));
-                    mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
-                } else {
-                    mTvSendOver.setEnabled(false);
-                    mTvConfirmCargo.setEnabled(true);
-                    mTvSendOver.setTextColor(Color.parseColor("#888888"));
-                    mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
-                }
-
-
             });
+
 //            loadData();
             getPlaneSpace();
             //TODO 是否是宽体机 0 宽体机 1 窄体机
@@ -384,6 +393,108 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
 
     }
+
+
+    /**
+     * 比较装机单是否有改变
+     */
+    private void compareInstall() {
+        boolean modified = false;
+        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
+            if (scooterBean.isChange()|| scooterBean.getExceptionFlag() == 1||scooterBean.isSplit()){
+                modified = true;
+                break;
+            }
+        }
+        if (modified) {
+            mTvSendOver.setEnabled(true);
+            mTvConfirmCargo.setEnabled(false);
+            mTvSendOver.setTextColor(Color.parseColor("#009EB5"));
+            mTvConfirmCargo.setTextColor(Color.parseColor("#888888"));
+        } else {
+            mTvSendOver.setEnabled(false);
+            mTvConfirmCargo.setEnabled(true);
+            mTvSendOver.setTextColor(Color.parseColor("#888888"));
+            mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
+        }
+    }
+
+    /**
+     * 拆舱弹出框
+     * @param position
+     */
+    private void showSpiltDialog(int position) {
+        TakeSpiltDialog dialog1 = new TakeSpiltDialog(this,cargos,goods,newScooters.get(position).getOldCargoName(),newScooters.get(position).getOldLocation(),newScooters.get(position).getWeight(),data.getWidthAirFlag());
+        dialog1.setTitle("请选择调整舱位/货位")
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new TakeSpiltDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm, String strBerth, String strGoos, Double weight) {
+                        if (confirm) {
+                            try {
+                                LoadingListBean.DataBean.ContentObjectBean.ScooterBean splitScooter = Tools.IOclone(newScooters.get(position));
+                                newScooters.get(position).setWeight(newScooters.get(position).getWeight() - weight);
+                                splitScooter.setWeight(weight);
+                                splitScooter.setCargoName(strBerth);
+                                if (data.getWidthAirFlag() == 0)
+                                    splitScooter.setLocation(strGoos);
+                                splitScooter.setSplit(true);
+                                newScooters.add(position+1,splitScooter);
+                                joinInstall(newScooters.get(position).getId(),splitScooter);
+                                adapter.notifyDataSetChanged();
+                                compareInstall();
+                            }
+                            catch (Exception e){
+                                Log.e("Tools.IOclone",e.getMessage());
+                            }
+                        } else {
+                            if (dialog!=null && dialog.isShowing())
+                                dialog.dismiss();
+                        }
+                    }
+                })
+                .show();
+
+    }
+
+    /**
+     * 把拆分出来的装机单 加入到装机单
+     * @param id
+     * @param splitScooter
+     */
+    private void joinInstall(String id, LoadingListBean.DataBean.ContentObjectBean.ScooterBean splitScooter) {
+        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
+            for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
+                if (id.equals(contentObjectBean.getScooters().get(i).getId())){
+                    splitScooter.setId(String.valueOf(System.currentTimeMillis())); //标记拆分出来的新板车 方便删除
+                    contentObjectBean.getScooters().add(i+1,splitScooter);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 删除拆分出来的
+     * @param position
+     */
+    private void removeInstall(int position) {
+
+        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
+            for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
+                if (newScooters.get(position).getId().equals(contentObjectBean.getScooters().get(i).getId())){
+                    contentObjectBean.getScooters().remove(i);
+                    break;
+                }
+            }
+        }
+        newScooters.remove(position);
+    }
+
     /**
      * 获取 货邮舱单
      */

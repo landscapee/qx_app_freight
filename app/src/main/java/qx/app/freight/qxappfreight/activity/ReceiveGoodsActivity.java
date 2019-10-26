@@ -56,6 +56,8 @@ import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
@@ -144,6 +146,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             String goodsName = mDeclare.getCargoCn();
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
@@ -153,7 +157,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             ReceiveGoodsActivity.this.startActivityForResult(intent, 123);
         });
         //提交
-        mBtnReceiveGood.setOnClickListener(v -> commit());
+        mBtnReceiveGood.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
+            commit();
+        });
         getAutoReservoir();
         initView();
         initPopupWindow();
@@ -508,6 +516,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     }
                 });
                 btnPrint.setOnClickListener((v) -> {
+                    if (!Tools.isFastClick())
+                        return;
                     printWayBill();
                 });
             }

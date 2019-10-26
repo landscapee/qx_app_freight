@@ -33,6 +33,8 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
@@ -84,6 +86,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             btnReopen.setVisibility(View.VISIBLE);
             btnReopen.setOnClickListener(v -> {
                 if (onReOpenLoadTaskListener != null) {
+                    if (!Tools.isFastClick())
+                        return;
                     onReOpenLoadTaskListener.onReOpenLoadTask(helper.getAdapterPosition());
                 }
             });
@@ -96,6 +100,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         if (showExReport){
             btnExReport.setVisibility(View.VISIBLE);
             btnExReport.setOnClickListener(b->{
+                if (!Tools.isFastClick())
+                    return;
                 Intent intent = new Intent(mContext, ErrorReportActivity.class);
                 intent.putExtra("flight_number", item.getFlightNo());//航班号
                 intent.putExtra("task_id", item.getTaskId());//任务id
@@ -112,17 +118,23 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         btnFS.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
         });
         Button btnClear = helper.getView(R.id.btn_seat_clear);
         btnClear.setVisibility(View.GONE);
         btnClear.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
         if (showLook){
             Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
             btnPhotoRecord.setVisibility(View.VISIBLE);
             btnPhotoRecord.setOnClickListener(v -> {
+                if (!Tools.isFastClick())
+                    return;
                 onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
             });
             Button btnLookInstall = helper.getView(R.id.btn_look_install);
@@ -130,10 +142,14 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
             if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
                 btnLookInstall.setVisibility(View.VISIBLE);
                 btnLookInstall.setOnClickListener(v -> {
+                    if (!Tools.isFastClick())
+                        return;
                     onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
                 });
                 btnLookUnInstall.setVisibility(View.VISIBLE);
                 btnLookUnInstall.setOnClickListener(v -> {
+                    if (!Tools.isFastClick())
+                        return;
                     onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                 });
             }
@@ -141,6 +157,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                 if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
                     btnLookUnInstall.setVisibility(View.VISIBLE);
                     btnLookUnInstall.setOnClickListener(v -> {
+                        if (!Tools.isFastClick())
+                            return;
                         onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                     });
                     btnLookInstall.setVisibility(View.GONE);
@@ -148,6 +166,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                 else {
                     btnLookInstall.setVisibility(View.VISIBLE);
                     btnLookInstall.setOnClickListener(v -> {
+                        if (!Tools.isFastClick())
+                            return;
                         onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
                     });
                     btnLookUnInstall.setVisibility(View.GONE);

@@ -58,6 +58,7 @@ import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.MapValue;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -164,6 +165,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         //扫码
         llAdd.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                 ScanManagerActivity.startActivity(this, "DriverOutDoingActivity");
             } else {

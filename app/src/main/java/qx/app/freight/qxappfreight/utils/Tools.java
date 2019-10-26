@@ -110,11 +110,11 @@ public class Tools {
      */
     public synchronized static boolean isFastClick() {
         long time = System.currentTimeMillis();
-        if (lastClickTime > 0 && time - lastClickTime < 1000) {
-            return true;
+        if (lastClickTime >= 0 && time - lastClickTime < 1000) {
+            return false;
         }
         lastClickTime = time;
-        return false;
+        return true;
     }
 
     /**

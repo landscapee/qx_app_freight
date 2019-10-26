@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
+import com.liys.doubleclicklibrary.ViewDoubleHelper;
 import com.qxkj.positionapp.GPSService;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -36,8 +37,10 @@ public class MyApplication extends Application  {
         builder.detectFileUriExposure();
 
         Log.e("Application：运行模式>>>", BuildConfig.Model);
-
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
+
+        //处理点击事件重复点击问题
+        ViewDoubleHelper.init(this);
 
         initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

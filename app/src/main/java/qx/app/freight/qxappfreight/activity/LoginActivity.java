@@ -6,7 +6,9 @@ import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,6 +54,7 @@ import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import retrofit2.Call;
@@ -101,6 +104,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //        mEtPassWord.setText("yuwenjing123");
 
         mBtnLogin.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             login();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -331,7 +336,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * 登录成功 跳转到主页
      */
     private void toMainAct() {
-        dismissProgessDialog();
+//        dismissProgessDialog();
         MainActivity.startActivity(this);
         finish();
     }

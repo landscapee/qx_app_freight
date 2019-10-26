@@ -30,6 +30,8 @@ import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 
 public class DynamicInfoFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {
     @BindView(R.id.rl_dynamic)
@@ -97,7 +99,13 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new DynamicInfoAdapter(mList, type);
         rlDynamic.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo()));
+        mAdapter.setOnItemClickListener((adapter, view, position) ->
+                {
+                    if (!Tools.isFastClick())
+                        return;
+                    DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo());
+                }
+                );
     }
 
 

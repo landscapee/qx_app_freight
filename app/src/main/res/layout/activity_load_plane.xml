@@ -173,7 +173,7 @@
 
                 <TextView
                     android:id="@+id/tv_operation"
-                    android:layout_width="40dp"
+                    android:layout_width="80dp"
                     android:layout_height="40dp"
                     android:text="操作"
                     android:textColor="@color/white"

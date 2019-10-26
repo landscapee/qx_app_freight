@@ -328,7 +328,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.contains("InstallEquipFragment_refresh") || "refresh_data_update".equals(result)) {
-//            mSpecialTaskId = result.split("@")[1];
+            if (result.contains("@"))
+                mSpecialTaskId = result.split("@")[1];
             mCurrentPage = 1;
             loadData();
         }

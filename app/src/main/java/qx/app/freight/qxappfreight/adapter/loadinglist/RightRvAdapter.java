@@ -20,6 +20,8 @@ import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 
 /**
  * 装机单位置右边的适配器
@@ -98,6 +100,8 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
 //                tv.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
 //            }
             tvPullDown.setOnClickListener(v -> {
+                if (!Tools.isFastClick())
+                    return;
                 if (!item.isLocked()) {
                     if (item.isPull()) {
                         item.setPull(false);

@@ -75,7 +75,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
 
             helper.setText(R.id.tv_manifest, !StringUtil.isEmpty(item.getOldCargoName()) ? item.getOldCargoName(): StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName() )
                     .setText(R.id.tv_goods_position, StringUtil.isEmpty(item.getLocation()) ? "- -" : item.getLocation())
-                    .setText(R.id.tv_adjust, item.isChange()? StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName():"- -")
+                    .setText(R.id.tv_adjust, item.isChange()||item.isSplit()? StringUtil.isEmpty(item.getCargoName()) ? "- -" : item.getCargoName():"- -")
                     .setText(R.id.tv_scooter_number, StringUtil.isEmpty(item.getScooterCode()) ? "- -" : item.getScooterCode())
                     .setText(R.id.tv_uld_number, StringUtil.isEmpty(item.getSerialInd()) ? "- -" : item.getSerialInd())
                     .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
@@ -83,7 +83,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight()) ? "- -" : item.getWeight())
                     .setText(R.id.tv_total, !StringUtil.isEmpty(item.getSpecialCode())&&item.getSpecialCode().contains("/") ? item.getSpecialCode().substring(0,item.getSpecialCode().indexOf("/")) : "--")
                     .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialCode()) ? "- -" : item.getSpecialCode())
-                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : "- -");
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : item.isSplit()?item.getType().endsWith("BY")?"拆舱":"拆箱":"- -");
         }
 
 
@@ -107,7 +107,9 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                 tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
             }
         } else {
-
+            tv1.setVisibility(View.VISIBLE);
+            tv2.setVisibility(View.VISIBLE);
+            tv3.setVisibility(View.VISIBLE);
             if (item.getExceptionFlag() == 1) {
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
                 for (TextView tv : tvList) {
@@ -118,7 +120,19 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                 for (TextView tv : tvList) {
                     tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 }
-            } else {
+            }
+            else if (item.isSplit()) {
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.gray_cc));
+                if (helper.getPosition() != 0){
+                    tv1.setVisibility(View.INVISIBLE);
+                    tv2.setVisibility(View.INVISIBLE);
+                    tv3.setVisibility(View.INVISIBLE);
+                }
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                }
+            }
+            else {
                 if (item.getSpecialCode() != null && item.getSpecialCode().contains("AVI")) {//活体颜色标注
                     helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
                     for (TextView tv : tvList) {

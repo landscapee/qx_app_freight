@@ -88,7 +88,6 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         else
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
         Button btnPull = helper.getView(R.id.tv_pull);
-
         notShowPull = !"BY".equals(item.getType());
         if (notShowPull) {
             btnPull.setVisibility(View.VISIBLE);
@@ -96,25 +95,37 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             btnPull.setOnClickListener(v -> {
                 if (item.getExceptionFlag() == 1) {
                     item.setExceptionFlag(0);
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.white));
                     btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
                 } else {
                     item.setExceptionFlag(1);
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                     btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
                 }
                 onDataCheckListener.onDataChecked(item.getScooterCode());
             });
             if (item.getExceptionFlag() == 1) {
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
                 btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
             } else {
-                btnPull.setTextColor(mContext.getResources().getColor(R.color.white));
                 btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
             }
         } else {
             btnPull.setVisibility(View.INVISIBLE);
         }
+        Button btnTake = helper.getView(R.id.tv_take);
+        btnTake.setOnClickListener(v->{
+            if (!Tools.isFastClick())
+                return;
+            onDataCheckListener.onTakeSplit(helper.getAdapterPosition());
+
+        });
+        if (item.isSplit()){
+            btnTake.setText("X");
+            btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
+        }
+        else {
+            btnTake.setText("拆");
+            btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.green_45b));
+        }
+
 
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
         TextView tv3 = helper.getView(R.id.tv_weight);
@@ -164,7 +175,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //        goods.add("44R");
 //        goods.add("43L");
 //        goods.add("44L");
-        spBerth.setVisibility(View.VISIBLE);
+        if (item.isSplit())
+            spBerth.setVisibility(View.INVISIBLE);
+        else
+            spBerth.setVisibility(View.VISIBLE);
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
 //            } else {
@@ -178,12 +192,13 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 spBerth.setSelection(i, true);// 默认选中项
                 break;
             }
-
         }
         spBerth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int pos;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (item.isSplit())
+                    return;
                 if (item.isLocked()) {
                     ToastUtil.showToast("数据已锁定，无法修改");
                     spBerth.setSelection(pos, true);
@@ -205,11 +220,16 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
             }
         });
-
-        if (TextUtils.isEmpty(item.getLocation())) {//有货位数据
-            spGoodsPos.setVisibility(View.INVISIBLE);
+        if (TextUtils.isEmpty(item.getLocation())) {//没有有货位数据
+            if (mWidthairflag == 0)
+                spGoodsPos.setVisibility(View.INVISIBLE);
+            else
+                spGoodsPos.setVisibility(View.GONE);
         } else {
-            spGoodsPos.setVisibility(View.VISIBLE);
+            if (item.isSplit())
+                spGoodsPos.setVisibility(View.INVISIBLE);
+            else
+                spGoodsPos.setVisibility(View.VISIBLE);
 //                if (item.isShowPull()) {
 //                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
 //                } else {
@@ -275,6 +295,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
     }
     public interface OnDataCheckListener {
         void onDataChecked(String scooterId);
+        void onTakeSplit(int position);
     }
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
