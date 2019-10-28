@@ -56,6 +56,7 @@ public class LoadingListBean implements Serializable {
                 private String destinationStation;//目的地
                 private String flightInfoId;
                 private String id;
+                private String oldId;
                 private String reportInfoId;
                 private String scooterCode;
                 private int total;

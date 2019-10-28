@@ -274,10 +274,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.CustomCaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activity.FlightPhotoRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

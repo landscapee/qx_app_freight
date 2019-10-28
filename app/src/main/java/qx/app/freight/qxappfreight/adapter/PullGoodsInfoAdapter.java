@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsShowInterface;

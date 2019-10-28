@@ -24,14 +24,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.IOqrcodeEntity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**

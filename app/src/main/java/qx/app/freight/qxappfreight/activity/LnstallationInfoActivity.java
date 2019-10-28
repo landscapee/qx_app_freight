@@ -68,10 +68,16 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     TextView mTvFlightNumber;//航班号
     @BindView(R.id.tv_plane_info)
     TextView mTvPlaneInfo;//机型
+
     @BindView(R.id.tv_confirm)
     TextView mTvConfirm;//确认人
     @BindView(R.id.tv_confim_date)
     TextView mTvConfirmDate;//确认时间
+    @BindView(R.id.tv_confirm_jz)
+    TextView mTvConfirmJZ;//结载确认人
+    @BindView(R.id.tv_confim_date_jz)
+    TextView mTvConfirmDateJZ;//结载 录入时间
+
     @BindView(R.id.ll_flight_info_container)
     LinearLayout mLlContainer;//航线数据控件
     @BindView(R.id.tv_seat)
@@ -107,6 +113,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
     private HashMap <String, List <LnstallationInfoBean.ScootersBean>> map = new HashMap <>();
     private HashMap <String, String> mapPresen = new HashMap <>();
     private HashMap <String, String> mapDate = new HashMap <>();
+    private HashMap <String, String> mapPresenJZ = new HashMap <>();
+    private HashMap <String, String> mapDateJZ = new HashMap <>();
+
     private HashMap <String, String> mapMid = new HashMap <>();
 
     private int loadFlag = -1;//用 刷新 请求装机单或者 建议装机单
@@ -242,6 +251,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             tvSureInstall.setVisibility(View.GONE); //隐藏按此装机
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
+            mTvConfirmJZ.setVisibility(View.GONE);
+            mTvConfirmDateJZ.setVisibility(View.GONE);
             mSrRefush.setBackgroundColor(getResources().getColor(R.color.white));
             switch (checkedId) {
                 case R.id.rb_install: //装机单
@@ -253,11 +264,11 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                     loadData();
                     break;
                 case R.id.rb_end_install://最终装机单
-                    loadFlag = 4;
+                    loadFlag = 5;
                     loadData();
                     break;
                 case R.id.rb_end_advise_install://建议装机单
-                    loadFlag = 5;
+                    loadFlag = 6;
                     loadData();
                     break;
             }
@@ -268,9 +279,13 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         if (i == 3) {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
+            mTvConfirmJZ.setVisibility(View.GONE);
+            mTvConfirmDateJZ.setVisibility(View.GONE);
         } else {
             mTvConfirm.setVisibility(View.VISIBLE);
             mTvConfirmDate.setVisibility(View.VISIBLE);
+            mTvConfirmJZ.setVisibility(View.VISIBLE);
+            mTvConfirmDateJZ.setVisibility(View.VISIBLE);
             mSrRefush.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
         }
 
@@ -353,7 +368,8 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
                         mapPresen.put(flightAllReportInfos.get(i).getVersion(), "");
                         mapDate.put(flightAllReportInfos.get(i).getVersion(), "");
                     }
-
+                    mapPresenJZ.put(flightAllReportInfos.get(i).getVersion(), flightAllReportInfos.get(i).getCreateUserName());
+                    mapDateJZ.put(flightAllReportInfos.get(i).getVersion(), StringUtil.getTimeTextByRegix(flightAllReportInfos.get(i).getCreateTime(), "yyyy-MM-dd HH:mm"));
 
                     mListVersonCode.add(flightAllReportInfos.get(i).getVersion());
                 }
@@ -474,6 +490,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }
         mTvVersion.setText(mListVerson.get(verson));
         currentVersion = Integer.valueOf(mListVersonCode.get(verson));
+
+        mTvConfirmJZ.setText("结载员:" + mapPresenJZ.get(mListVersonCode.get(verson)));
+        mTvConfirmDateJZ.setText("录入时间:" + mapDateJZ.get(mListVersonCode.get(verson)));
 
         LnstallationInfoBean.ScootersBean title = new LnstallationInfoBean.ScootersBean();
         title.setCargoName("舱位");

@@ -469,6 +469,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
             for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
                 if (id.equals(contentObjectBean.getScooters().get(i).getId())){
+//                    contentObjectBean.getScooters().get(i).setWeight(contentObjectBean.getScooters().get(i).getWeight() - splitScooter.getWeight());
+                    splitScooter.setOldId(id);//记录被拆分板车的 id
                     splitScooter.setId(String.valueOf(System.currentTimeMillis())); //标记拆分出来的新板车 方便删除
                     contentObjectBean.getScooters().add(i+1,splitScooter);
                     break;
@@ -486,13 +488,26 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
         for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
             for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
+//                //通过删除拆分板车记录的被拆分板车id 找到被拆分板车 把重量加回去。
+//                if (newScooters.get(position).getOldId().equals(contentObjectBean.getScooters().get(i).getId())){
+//                    contentObjectBean.getScooters().get(i).setWeight(contentObjectBean.getScooters().get(i).getWeight()+newScooters.get(position).getWeight());
+//                }
+                //比对被拆分板车 生成的id（时间戳） 删除被拆分板车
                 if (newScooters.get(position).getId().equals(contentObjectBean.getScooters().get(i).getId())){
                     contentObjectBean.getScooters().remove(i);
                     break;
                 }
             }
         }
-        newScooters.remove(position);
+        //通过删除拆分板车记录的被拆分板车id 找到被拆分板车 把重量加回去。
+        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
+            if (scooterBean.getId().equals(newScooters.get(position).getOldId())){
+                scooterBean.setWeight(scooterBean.getWeight()+newScooters.get(position).getWeight());
+                newScooters.remove(position);
+                break;
+            }
+        }
+
     }
 
     /**
@@ -580,7 +595,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                    ToastUtil.showToast("当前航班还有拉货任务，请检查！");
                    break;
                case 2:
-                   ToastUtil.showToast("未进行装机单确认操作，请检查！");
+                   ToastUtil.showToast("未进行最终装机单确认操作，请检查！");
                    break;
                case 3:
                    ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
@@ -717,20 +732,20 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 mTvSendOver.setTextColor(Color.parseColor("#888888"));
                 mTvConfirmCargo.setTextColor(Color.parseColor("#ff0000"));
             } else {
-
                 mLoadingList.addAll(result.getData());
-
-//                Collections.reverse(mLoadingList);
-
                 versions.clear();
                 for (LoadingListBean.DataBean dataBean:mLoadingList){
-                    if (dataBean.getDocumentType() == 2)
+                    if (dataBean.getDocumentType() == 2){
                         versions.add("预装机单"+dataBean.getVersion());
-                    else
+                    } else{
                         versions.add("最终装机单"+dataBean.getVersion());
+                    }
                 }
-                getPullgoodsStatus();
+                //已经确认最终装机单
+                if (mLoadingList.get(0).getDocumentType()!= 2&&mLoadingList.get(0).getInstalledSingleConfirm() == 1)
+                    mConfirmPlan = true;
 
+                getPullgoodsStatus();
                 tvChooseVersion.setText(versions.get(0));
                 switchoverInstall(0);
             }
@@ -842,7 +857,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Override
     public void confirmLoadPlanResult(String result) {
-        mConfirmPlan = true;
         ToastUtil.showToast("装机单版本信息确认成功");
         loadData();
         mTvConfirmCargo.setEnabled(false);

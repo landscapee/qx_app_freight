@@ -226,6 +226,8 @@
     <color name="flight_pre_atd">#ab05ab</color>
     <color name="flight_dengji">#110eba</color>
     <color name="flight_yifei">#110eba</color>
+    <color name="flight_yundeng">#e2993d</color>
+    <color name="flight_wanchengdengji">#3883A9</color>
     <!--特殊航班颜色标注红色 -->
     <color name="flight_speical">#FF0000</color>
     <color name="red_avi">#ee3f8e</color>

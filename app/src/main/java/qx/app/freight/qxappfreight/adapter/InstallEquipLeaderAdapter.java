@@ -129,7 +129,11 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         rvStep.setAdapter(adapter);
         adapter.setOnSlideListener(pos -> {
             if (onSlideStepListener != null) {
-                onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
+                if (pos == 0 && item.getAcceptTime()==0)
+                    onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
+                else if (pos != 0)
+                    onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
+
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
                 item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));
                 if (pos == 0) {

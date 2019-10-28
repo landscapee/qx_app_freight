@@ -213,39 +213,67 @@
                         android:layout_height="wrap_content" />
 
                 </HorizontalScrollView>
+
                 <TextView
                     android:id="@+id/tv_sure_install"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:background="@color/transparent_half"
+                    android:gravity="center"
                     android:text="确认按此装机"
-                     android:textColor="@color/red"
+                    android:textColor="@color/red"
                     android:textSize="50sp"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </RelativeLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_confirm"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:gravity="center_vertical|right"
-        android:text="监装员:"
-        android:visibility="gone" />
+        android:padding="10dp"
+        >
 
-    <TextView
-        android:id="@+id/tv_confim_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:gravity="center_vertical|right"
-        android:text="发送时间:"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/tv_confirm_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/tv_confim_date"
+            android:layout_marginEnd="0dp"
+            android:text="结载员:"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录入时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm_jz"
+            />
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="监装员:"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
 
     <Space
         android:layout_width="0dp"

@@ -85,4 +85,8 @@ public class LoadingAndUnloadBean implements Serializable {
      * 重点保障
      */
     private String keyMaintaince;
+    /**
+     * 航班状态 （角标）
+     * */
+    private String flightStatus;
 }

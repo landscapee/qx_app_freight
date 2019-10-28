@@ -33,7 +33,7 @@ public class LeaderInstallEquipStepAdapter extends BaseMultiItemQuickAdapter<Loa
             if (helper.getAdapterPosition() == 0) {
                 if (onSlideListener != null) {
                     isJumped = true;
-                    onSlideListener.onSlide(0);
+                    onSlideListener.onSlide(0); //zyy 注释。防止重复领受任务。
                 }
                 if (!isJumped) {
                     Intent intent = new Intent(mContext, AssignInstallEquipMemberActivity.class);

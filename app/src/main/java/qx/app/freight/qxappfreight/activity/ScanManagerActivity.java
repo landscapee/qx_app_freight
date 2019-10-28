@@ -19,11 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import cn.bingoogolapple.qrcode.core.QRCodeView;
-import cn.bingoogolapple.qrcode.core.ScanBoxView;
-import cn.bingoogolapple.qrcode.zbar.ZBarView;
-import cn.bingoogolapple.qrcode.zxing.ZXingView;
-import me.devilsen.czxing.ResultActivity;
 import me.devilsen.czxing.code.BarcodeFormat;
 import me.devilsen.czxing.view.ScanActivityDelegate;
 import me.devilsen.czxing.view.ScanListener;

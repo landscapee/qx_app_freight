@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,14 +34,12 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
-import qx.app.freight.qxappfreight.activity.CustomCaptureActivity;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
-import qx.app.freight.qxappfreight.activity.MsgDialogAct;
-import qx.app.freight.qxappfreight.activity.MsgDialogActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
@@ -445,22 +441,6 @@ public class Tools {
     }
 
     /**
-     * 开启扫码
-     * @param activity
-     */
-    public static void startScanCaptureAct(Activity activity){
-        new IntentIntegrator(activity)
-                // 自定义Activity，重点是这行----------------------------
-                .setCaptureActivity(CustomCaptureActivity.class)
-                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)// 扫码的类型,可选：一维码，二维码，一/二维码
-                .setPrompt("请对准二维码")// 设置提示语
-                .setCameraId(0)// 选择摄像头,可使用前置或者后置
-                .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
-                .setBarcodeImageEnabled(true)// 扫完码之后生成二维码的图片
-                .initiateScan();// 初始化扫码
-    }
-
-    /**
      * 唤醒屏幕
      *
      * @param context
@@ -524,4 +504,18 @@ public class Tools {
         return isScreenOn;
     }
 
+    public static int groupImlibUid(OutFieldFlightBean flights) {
+        if ("D".equals(flights.getMovement())){
+            if (flights.getSuccessionId()!=0){
+
+                return flights.getSuccessionId();
+            }
+            else {
+                return flights.getFlightId();
+            }
+        }
+        else
+            return flights.getFlightId();
+
+    }
 }

@@ -130,7 +130,8 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
             @Override
             public void onFlightSafeguardClick(int parentPosition, int position) {
-                IMUtils.chatToGroup(getActivity(),list.get(parentPosition).getUseTasks().get(position).get(0).getFlightId());
+
+                    IMUtils.chatToGroup(getActivity(),Tools.groupImlibUid(list.get(parentPosition).getUseTasks().get(position).get(0).getFlights())+"");
             }
         });
         getData();

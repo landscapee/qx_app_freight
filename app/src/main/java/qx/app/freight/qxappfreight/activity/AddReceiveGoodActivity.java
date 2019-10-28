@@ -22,9 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.jwenfeng.library.pulltorefresh.util.DisplayUtil;
 
 import org.greenrobot.eventbus.EventBus;

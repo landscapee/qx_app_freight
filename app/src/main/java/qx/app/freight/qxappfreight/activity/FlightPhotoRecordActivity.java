@@ -115,7 +115,7 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         mCurrentTaskId = getIntent().getStringExtra("task_id");
         mCurrentTaskTaskId = getIntent().getStringExtra("task_task_id");
         mTvFlightInfo.setText(mFlightNumber);
-        getIntentPics();
+        getIntentPics(true);
 
         mPhotoPath.add(new ImageUrlEntity("111",false));
         mAdapter = new ImageNetAndLocationAdapter(mPhotoPath);
@@ -152,12 +152,17 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         });
     }
 
-    private void getIntentPics() {
-        if (taskPic!=null){
+    private void getIntentPics(boolean fisrt) {
+        if (taskPic!=null &&fisrt){
             List<String> filePathsOfTask = JSONArray.parseArray(taskPic,String.class);
             filePaths.clear();
             filePaths.addAll(filePathsOfTask);
             for (String url:filePathsOfTask){
+                mPhotoPath.add(new ImageUrlEntity(url,true));
+            }
+        }
+        else {
+            for (String url:filePaths){
                 mPhotoPath.add(new ImageUrlEntity(url,true));
             }
         }
@@ -255,7 +260,7 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
             switch (requestCode) {
                 case 5:
                     mPhotoPath.clear();
-                    getIntentPics();
+                    getIntentPics(false);
                     for (String url:data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT)){
                         mPhotoPath.add(new ImageUrlEntity(url,false));
                     }

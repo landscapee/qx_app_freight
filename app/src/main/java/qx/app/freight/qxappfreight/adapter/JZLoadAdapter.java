@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cn.label.library.LabelView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ErrorReportActivity;
 import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
@@ -72,6 +73,9 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         helper.setText(R.id.tv_atd, TimeUtils.datetimeTo4(item.getAtd()));
         helper.setText(R.id.tv_etd, TimeUtils.datetimeTo4(item.getEtd()));
         helper.setText(R.id.tv_std, TimeUtils.datetimeTo4(item.getStd()));
+
+        LabelView mLabelView = helper.getView(R.id.task_lable);
+//        mLabelView.setVisibility(View.GONE);
 
 
 
@@ -168,6 +172,31 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             if (item.getLoadingAndUnloadBean().getVipMark()!=null && item.getLoadingAndUnloadBean().getVipMark().equals("0")){
                 showLable(8,mLayoutLable);
             }
+            if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getFlightStatus())){
+                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("到达"))// 到达
+                {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_a));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
+                {
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_d));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("前起")) {//前起
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_pre_atd));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("允登")) {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_yundeng));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("登机")) {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_dengji));
+                }
+                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")){//完成登记
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_wanchengdengji));
+                }
+                mLabelView.setTextContent(item.getLoadingAndUnloadBean().getFlightStatus());
+            }
+
 
         }
 
