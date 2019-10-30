@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.beidouapp.et.client.callback.IFileReceiveListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -160,7 +161,13 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
 //                        } else {
 //                            entity.setOperationCode("FreightUnloadReceived");
 //                        }
-                    entity.setOperationCode("StevedoresLoadReceived"); //by -zyy ：装卸员领受code
+                    if (bean.getTaskType() == 7)//单进
+                        entity.setOperationCode("StevedoresUnloadReceived"); //by -zyy ：装卸员领受code
+                    else  if (bean.getTaskType() == 6)//单出
+                        entity.setOperationCode("StevedoresLoadReceived"); //by -zyy ：装卸员领受code
+                    else  if (bean.getTaskType() == 8)//连班
+                        entity.setOperationCode("StevedoresLoadAnUnloadReceived"); //by -zyy ：装卸员领受code
+
 
                     entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                     entity.setUserId(UserInfoSingle.getInstance().getUserId());

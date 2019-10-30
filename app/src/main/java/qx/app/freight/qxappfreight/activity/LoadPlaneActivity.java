@@ -365,6 +365,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         adapter.notifyDataSetChanged();
                     }
                 }
+
+                @Override
+                public void onLockClicked(int position) {
+                     lockItem(position);
+                }
             });
 
 //            loadData();
@@ -391,6 +396,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             horScroll.setVisibility(View.VISIBLE);
         }
 
+
+    }
+
+    /**
+     * 锁定一条装机内容
+     * @param position
+     */
+    private void lockItem(int position) {
+        //TODO
 
     }
 
@@ -709,6 +723,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             newScooters.clear();
             for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
+                    //防止装机单订舱没有填写 H
+                    if (!StringUtil.isEmpty(scooterBean.getCargoName())&&scooterBean.getCargoName().length() == 1){
+                        scooterBean.setCargoName(scooterBean.getCargoName()+"H");
+                    }
+                    else{
+                        scooterBean.setCargoName(scooterBean.getCargoName());
+                    }
+
                     scooterBean.setOldCargoName(scooterBean.getCargoName());
                     scooterBean.setOldLocation(scooterBean.getLocation());
                 }
@@ -761,19 +783,19 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         cargos.clear();
         goods.clear();
         if (result.getHld1wgt() > 0) {
-            cargos.add("1");
+            cargos.add("1H");
         }
         if (result.getHld2wgt() > 0) {
-            cargos.add("2");
+            cargos.add("2H");
         }
         if (result.getHld3wgt() > 0) {
-            cargos.add("3");
+            cargos.add("3H");
         }
         if (result.getHld4wgt() > 0) {
-            cargos.add("4");
+            cargos.add("4H");
         }
         if (result.getHld5wgt() > 0) {
-            cargos.add("5");
+            cargos.add("5H");
         }
         for (CargoCabinData.CargosBean cargosBean:result.getCargos()){
             goods.add(cargosBean.getPos());
@@ -921,6 +943,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 }
                             }
                         }
+
 //                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
                         if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
                             datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());

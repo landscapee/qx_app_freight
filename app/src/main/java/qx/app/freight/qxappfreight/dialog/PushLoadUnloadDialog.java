@@ -158,8 +158,11 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
                         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
                         if (bean.getTaskType() == 1) {
                             entity.setOperationCode("FreightLoadReceived");
-                        } else {
+                        } else  if (bean.getTaskType() == 2||bean.getTaskType() == 5){
                             entity.setOperationCode("FreightUnloadReceived");
+                        }
+                        else  if (bean.getTaskType() == 3){
+                            entity.setOperationCode("PassengerLoadReceived");
                         }
                         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                         entity.setUserId(UserInfoSingle.getInstance().getUserId());

@@ -173,11 +173,16 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
                 showLable(8,mLayoutLable);
             }
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getFlightStatus())){
-                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("到达"))// 到达
+                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("已达"))// 已达
                 {
                     mLabelView.setVisibility(View.VISIBLE);
                     mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_a));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
+                }
+                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("正常")){//正常
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.lightgreen));
+                }
+                else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
                 {
                     mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_d));
                 } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("前起")) {//前起
@@ -190,9 +195,17 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
                     mLabelView.setVisibility(View.VISIBLE);
                     mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_dengji));
                 }
-                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")){//完成登记
+                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")){//完成登机
                     mLabelView.setVisibility(View.VISIBLE);
                     mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_wanchengdengji));
+                }
+                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("撤轮档")){//撤轮档
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.imlib_yellowa));
+                }
+                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("推出")){//飞机推出
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.red));
                 }
                 mLabelView.setTextContent(item.getLoadingAndUnloadBean().getFlightStatus());
             }

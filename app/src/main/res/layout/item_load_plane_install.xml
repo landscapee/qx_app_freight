@@ -33,7 +33,7 @@
             android:id="@+id/sp_berth"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|start"
             android:spinnerMode="dropdown"
             android:padding="0dp"
             />
@@ -47,7 +47,7 @@
             android:id="@+id/sp_goods_position"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|start"
             android:spinnerMode="dropdown"
             android:padding="0dp"
             />

@@ -98,8 +98,8 @@ public class CargoDoneListActivity extends BaseActivity implements International
     Button btnNext;
     private InternationalCargoAdapter mAdapter;
     private List<TransportTodoListBean> mList = new ArrayList<>();
+    private List<TransportTodoListBean> uploadList = new ArrayList<>();
     private CustomToolbar toolbar;
-    private List<TransportTodoListBean> flightBean;
     private CargoReportHisBean mData;
     private String mScooterCode;
     private double mBaggageWeight;//行李重量
@@ -119,7 +119,11 @@ public class CargoDoneListActivity extends BaseActivity implements International
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "货物上报");
-        flightBean = mData.getMainInfos();
+        if (mData.getMainInfos()!=null)
+        mList.addAll(mData.getMainInfos());
+        for (TransportTodoListBean transportTodoListBean:mList){
+            transportTodoListBean.setNotCanDelete(true);
+        }
         mPresenter = new GetFlightCargoResPresenter(this);
         LoadingListRequestEntity entity = new LoadingListRequestEntity();
         entity.setDocumentType(2);
@@ -133,17 +137,21 @@ public class CargoDoneListActivity extends BaseActivity implements International
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new InternationalCargoAdapter(mList);
         mAdapter.setOnDeleteClickListener((view, position) -> {
+            if (mList.get(position).isNotCanDelete()){
+                ToastUtil.showToast("已上传板车，不能删除");
+                return;
+            }
             mSlideRV.closeMenu();
             mList.remove(position);
             mAdapter.notifyDataSetChanged();
         });
         //传过来的板车如果有数据就显示
-        if (flightBean.size() > 0) {
-            mList.addAll(flightBean);
-//            mAdapter1 = new InternationalCargoAdapter(mList1);
-//            mAdapter1.notifyDataSetChanged();
-//            mSlideRV.setAdapter(mAdapter1);
-        }
+//        if (mList.size() > 0) {
+//            mList.addAll(mList);
+////            mAdapter1 = new InternationalCargoAdapter(mList1);
+////            mAdapter1.notifyDataSetChanged();
+////            mSlideRV.setAdapter(mAdapter1);
+//        }
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRV.setAdapter(mAdapter);
@@ -237,9 +245,13 @@ public class CargoDoneListActivity extends BaseActivity implements International
 //            entity.setBaggageWeight(1.11);
 //            entity.setMailWeight(2.22);
 //            entity.setCargoWeight(3.33);
-            entity.setData(mList);
-            entity.setMovement(flightBean.get(0).getFlightIndicator());
-            entity.setFlightId(Long.valueOf(flightBean.get(0).getFlightId()));
+            for (TransportTodoListBean transportTodoListBean:mList){
+                if (!transportTodoListBean.isNotCanDelete())
+                    uploadList.add(transportTodoListBean);
+            }
+            entity.setData(uploadList);
+            entity.setMovement(mList.get(0).getFlightIndicator());
+            entity.setFlightId(Long.valueOf(mList.get(0).getFlightId()));
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter = new InternationalCargoReportPresenter(this);
             ((InternationalCargoReportPresenter) mPresenter).internationalCargoReport(entity);
@@ -272,7 +284,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
     @Override
     public void scooterInfoListResult(List<ScooterInfoListBean> scooterInfoListBeans) {
         if (scooterInfoListBeans != null && scooterInfoListBeans.size() > 0) {
-            String flightType = flightBean.get(0).getFlightIndicator();
+            String flightType = mList.get(0).getFlightIndicator();
             if ("D".equals(flightType) || "I".equals(flightType)) {
                 for (ScooterInfoListBean bean : scooterInfoListBeans) {
                     bean.setFlightType(flightType);
@@ -304,13 +316,13 @@ public class CargoDoneListActivity extends BaseActivity implements International
         TransportTodoListBean bean = new TransportTodoListBean();
         bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
         bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
-        bean.setFlightId(flightBean.get(0).getFlightId());
-        bean.setFlightNo(flightBean.get(0).getFlightNo());
-        bean.setTpFlightLocate(flightBean.get(0).getTpFlightLocate());
-        bean.setTpFlightTime(flightBean.get(0).getTpFlightTime());
-        bean.setFlightInfoId(flightBean.get(0).getId());
-        bean.setAsFlightId(flightBean.get(0).getAsFlightId());
-        bean.setTpFlightType(flightBean.get(0).getTpFlightType());
+        bean.setFlightId(mList.get(0).getFlightId());
+        bean.setFlightNo(mList.get(0).getFlightNo());
+        bean.setTpFlightLocate(mList.get(0).getTpFlightLocate());
+        bean.setTpFlightTime(mList.get(0).getTpFlightTime());
+        bean.setFlightInfoId(mList.get(0).getId());
+        bean.setAsFlightId(mList.get(0).getAsFlightId());
+        bean.setTpFlightType(mList.get(0).getTpFlightType());
         bean.setFlightIndicator("I");
         mList.add(bean);
         mAdapter.notifyDataSetChanged();

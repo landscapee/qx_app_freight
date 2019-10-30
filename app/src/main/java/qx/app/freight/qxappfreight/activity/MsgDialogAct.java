@@ -8,10 +8,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.utils.Tools;
 
 public class MsgDialogAct extends Activity {
@@ -36,7 +39,8 @@ public class MsgDialogAct extends Activity {
         setContentView(R.layout.activity_lock_msg);
         mContext = this;
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         initView();
     }
 
@@ -54,6 +58,8 @@ public class MsgDialogAct extends Activity {
 
     private void initView() {
         btnGo.setOnClickListener(v->{
+            if (Tools.isLocked(MyApplication.getContext()))
+                Tools.unLock(MyApplication.getContext());
             MainActivity.startActivity(mContext);
         });
     }
@@ -62,7 +68,9 @@ public class MsgDialogAct extends Activity {
     private void setView() {
 
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

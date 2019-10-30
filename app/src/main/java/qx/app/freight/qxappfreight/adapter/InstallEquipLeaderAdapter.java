@@ -171,7 +171,8 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         btnFS.setVisibility(View.VISIBLE);
         btnClear.setVisibility(View.VISIBLE);
         ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
-        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
+
+        if (item.getOperationStepObj()!=null && item.getOperationStepObj().size()>0&&!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
             ivDone.setVisibility(View.VISIBLE);
         } else {
             ivDone.setVisibility(View.GONE);

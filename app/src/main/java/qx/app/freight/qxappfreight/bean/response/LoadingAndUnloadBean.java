@@ -89,4 +89,6 @@ public class LoadingAndUnloadBean implements Serializable {
      * 航班状态 （角标）
      * */
     private String flightStatus;
+
+    private String successionId;//如果是进港，直接用flightId,如果是出港，并且succsionID不为空，以successiID为保障组航班id
 }

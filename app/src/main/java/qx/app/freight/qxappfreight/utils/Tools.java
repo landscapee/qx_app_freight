@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.utils;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -35,10 +34,13 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.activity.MainActivity;
+import qx.app.freight.qxappfreight.activity.MsgDialogAct;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -131,8 +133,8 @@ public class Tools {
         }
     }
 
-    public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
+    public static List <MultipartBody.Part> filesToMultipartBodyParts(List <File> files) {
+        List <MultipartBody.Part> parts = new ArrayList <>(files.size());
         for (File file : files) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             //"files"与后台 沟通后 确定的 接收 key
@@ -188,7 +190,7 @@ public class Tools {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
+    public static <T> ArrayList <T> deepCopy(ArrayList <T> src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -196,7 +198,7 @@ public class Tools {
         ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
         ObjectInputStream in = new ObjectInputStream(byteIn);
         @SuppressWarnings("unchecked")
-        ArrayList<T> dest = (ArrayList<T>) in.readObject();
+        ArrayList <T> dest = (ArrayList <T>) in.readObject();
         return dest;
     }
 
@@ -266,7 +268,7 @@ public class Tools {
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+        List <ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
         if (appProcesses == null)
             return false;
@@ -375,36 +377,36 @@ public class Tools {
         else
             return false;
     }
+
     /**
      * 判断是否是生产环境
      *
      * @return
      */
-    public static boolean compareFist(String first,String second) {
-        if (first!=null&&second!=null){
+    public static boolean compareFist(String first, String second) {
+        if (first != null && second != null) {
             if (first.equals(second))
-                return  true;
+                return true;
             else {
-                if (first.length()>0&&second.length()>0){
-                    first = first.substring(0,1);
-                    second = second.substring(0,1);
+                if (first.length() > 0 && second.length() > 0) {
+                    first = first.substring(0, 1);
+                    second = second.substring(0, 1);
                     if (first.equals(second))
                         return true;
                     else
                         return false;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
-        }
-        else
+        } else
             return false;
     }
 
 
     /**
      * 登录被挤下线 dialog
+     *
      * @param mContext
      */
     public static void showDialog(Context mContext) {
@@ -417,7 +419,8 @@ public class Tools {
                 .setNegativeButton("确定")
                 .isCanceledOnTouchOutside(false)
                 .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) ->{});
+                .setOnClickListener((dialog1, confirm) -> {
+                });
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> dialog.show());
     }
@@ -434,7 +437,7 @@ public class Tools {
         mContext.startActivity(intent);
 
         //清空 库房信息
-        if (IOManifestFragment.iOqrcodeEntity != null){
+        if (IOManifestFragment.iOqrcodeEntity != null) {
             IOManifestFragment.iOqrcodeEntity = null;
         }
 
@@ -446,18 +449,19 @@ public class Tools {
      * @param context
      */
     public static void wakeupScreen(Context context) {
-        if (isBackground(context)){
-            //屏锁管理器
-            KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
-            //解锁
-            kl.disableKeyguard();
-            Log.e("屏幕：","解锁");
+        if (isBackground(context)) {
+//            //屏锁管理器
+//            KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+//            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+//            //解锁
+//            kl.disableKeyguard();
+//            Log.e("屏幕：", "解锁");
 
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-//        if (pm.isScreenOn()) {
-//            return;
-//        }
+            if (pm.isScreenOn()) {
+                wakeupApp(context);
+                return;
+            }
             //获取电源管理器对象
             PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
             //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
@@ -465,23 +469,25 @@ public class Tools {
             wl.acquire();
             //释放
             wl.release();
-            Log.e("屏幕：","点亮");
-//            wakeupApp(context);
-//            if (isLocked(context)){
-//                MsgDialogAct.startActivity(context);
-//            }
+            Log.e("屏幕：", "点亮");
+            wakeupApp(context);
+            if (isLocked(context)) {
+                MsgDialogAct.startActivity(context);
+            }
         }
     }
 
-    public static void wakeupApp(Context context){
+    public static void wakeupApp(Context context) {
         Intent intent;
         intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
-        Log.e("屏幕：","唤醒app");
+//        MainActivity.startActivity(MyApplication.getContext());
+        Log.e("屏幕：", "唤醒app");
     }
+
     /**
      * 判断当前是否锁屏
      *
@@ -492,6 +498,7 @@ public class Tools {
         KeyguardManager mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return mKeyguardManager.inKeyguardRestrictedInputMode();
     }
+
     /**
      * 判断当前屏幕是否亮着
      *
@@ -504,18 +511,39 @@ public class Tools {
         return isScreenOn;
     }
 
+    public static void unLock(Context context) {
+
+        //屏锁管理器
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+        //解锁
+        kl.disableKeyguard();
+        Log.e("屏幕：", "解锁");
+    }
+
     public static int groupImlibUid(OutFieldFlightBean flights) {
-        if ("D".equals(flights.getMovement())){
-            if (flights.getSuccessionId()!=0){
+        if ("D".equals(flights.getMovement())) {
+            if (flights.getSuccessionId() != 0) {
 
                 return flights.getSuccessionId();
-            }
-            else {
+            } else {
                 return flights.getFlightId();
             }
-        }
-        else
+        } else
             return flights.getFlightId();
 
+    }
+    public static int groupImlibUid(LoadAndUnloadTodoBean flights) {
+        if (flights.getMovement()==1 || flights.getMovement()==4) {
+            return Integer.valueOf(flights.getFlightId());
+        } else if (flights.getLoadingAndUnloadBean()!=null&&flights.getLoadingAndUnloadBean().getSuccessionId()!=null&&!StringUtil.isEmpty(flights.getLoadingAndUnloadBean().getSuccessionId())){
+            if (Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId()) > 0){
+                return Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId());
+            }
+            else
+                return Integer.valueOf(flights.getFlightId());
+        }
+        else
+            return Integer.valueOf(flights.getFlightId());
     }
 }

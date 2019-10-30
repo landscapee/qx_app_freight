@@ -71,7 +71,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
             }
             item.setLocked(!item.isLocked());
-//            onLockClickListener.onLockClicked(helper.getAdapterPosition());
+            onDataCheckListener.onLockClicked(helper.getAdapterPosition());
         });
         if (!item.isLocked()) {
             ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
@@ -296,6 +296,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
     public interface OnDataCheckListener {
         void onDataChecked(String scooterId);
         void onTakeSplit(int position);
+        void onLockClicked(int position);
     }
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {

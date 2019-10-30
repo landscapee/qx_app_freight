@@ -238,7 +238,6 @@
             android:id="@+id/tv_confirm_jz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/tv_confim_date"
             android:layout_marginEnd="0dp"
             android:text="结载员:"
             android:visibility="gone"

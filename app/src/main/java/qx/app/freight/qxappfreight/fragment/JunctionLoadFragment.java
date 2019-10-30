@@ -217,7 +217,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         mAdapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, mList.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position))+"");
             }
 
             @Override

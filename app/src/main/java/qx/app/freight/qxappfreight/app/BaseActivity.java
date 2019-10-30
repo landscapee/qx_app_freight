@@ -33,6 +33,8 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -305,6 +307,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (token != null) {
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0)
+            outState.putSerializable("static_user", UserInfoSingle.getInstance());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (UserInfoSingle.getInstance().getRoleRS() == null || UserInfoSingle.getInstance().getRoleRS().size() == 0) {
+                UserInfoSingle.setUser((LoginResponseBean) savedInstanceState.getSerializable("static_user"));
+            }
         }
     }
 }

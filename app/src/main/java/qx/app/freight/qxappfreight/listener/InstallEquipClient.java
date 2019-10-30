@@ -129,6 +129,7 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.e(TAG, topicMessage.getPayload());
+//                        Tools.wakeupScreen(mContext);//唤醒
                         // 消息回执
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
                         if (topicMessage.getPayload().trim().contains("\"cancelFlag\":true")) {//任务取消的推送
@@ -177,7 +178,6 @@ public class InstallEquipClient extends StompClient {
                                 sendLoadUnLoadGroupBoard(data);
                             }
                         }
-                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
@@ -188,13 +188,12 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         //
+//                        Tools.wakeupScreen(mContext);//唤醒
                         Log.e("msgId", topicMessage.getStompHeaders().get(0).getValue());
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
-
                         Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
-                        Tools.wakeupScreen(mContext);//唤醒
                     }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
             compositeDisposable.add(dispTopic1);
             WebSocketService.subList.add(WebSocketService.ToList);

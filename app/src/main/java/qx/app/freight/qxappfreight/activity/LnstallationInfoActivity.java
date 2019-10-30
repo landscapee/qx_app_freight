@@ -213,8 +213,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             if (!Tools.isFastClick())
                 return;
             loadFlag = -1;
+            String intro ="";
+            if (getRadioBtnFlag() == 5|| getRadioBtnFlag() == 6){
+                intro = "打印【版本号" + currentVersion + "】最终装机单";
+            }
+            else {
+                intro = "打印【版本号" + currentVersion + "】预装机单";
+            }
 
-            String intro = "打印【版本号" + currentVersion + "】装机单";
             SingerDialog singerDialog = new SingerDialog(this, intro);
             singerDialog.isCanceledOnTouchOutside(false)
                     .isCanceled(true)
@@ -526,8 +532,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         entity.setFlightId(mBaseData.getFlightId());
         entity.setReportInfoId(mId);
         entity.setCurrentVersion(currentVersion);
-        // 1 货邮舱单 2 装机单 3装舱建议
-        entity.setType(2);
+        if (getRadioBtnFlag() == 5|| getRadioBtnFlag() == 6){
+            entity.setType(4);
+        }
+        else {
+        // 1 货邮舱单 2 装机单 3装舱建议 4最终装机单
+            entity.setType(2);
+        }
+
         entity.setPrintName(printName);
         ((PrintRequestPresenter) mPresenter).printRequest(entity);
 

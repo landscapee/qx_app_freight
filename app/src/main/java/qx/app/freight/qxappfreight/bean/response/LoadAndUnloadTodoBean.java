@@ -51,7 +51,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private String flightType;
     private int movement;//4 为装卸机 连班任务 1 单进 2单出 4连进 8连出
     private String taskId;
-    private int taskType;
+    private int taskType; //
     private long createTime;
     private long acceptTime;
     private long arrivalTime;

@@ -128,7 +128,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         adapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, list.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(list.get(position))+"");
             }
 
             @Override

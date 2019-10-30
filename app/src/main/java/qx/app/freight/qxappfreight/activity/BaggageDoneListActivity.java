@@ -59,7 +59,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
     Button btnNext;
 
     private BaggerListAdapter mAdapter;
-    private List<TransportTodoListBean> mList;
+    private List<TransportTodoListBean> mList = new ArrayList<>();
+    private List<TransportTodoListBean> uploadList = new ArrayList<>();
     private CustomToolbar toolbar;
 
     private List<String> mAbnormalList; //行李区列表
@@ -84,8 +85,12 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo());
-        mList = mData.getMainInfos();
-
+        if (mData.getMainInfos()!=null)
+            mList.addAll(mData.getMainInfos());
+        for (TransportTodoListBean transportTodoListBean:mList){
+            transportTodoListBean.setNotCanDelete(true);
+        }
+        flightBean = mData.getMainInfos().get(0);
         initView();
     }
 
@@ -94,11 +99,14 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
 //        mPresenter = new BaggageAreaSubPresenter(this);
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mList = new ArrayList<>();
         mAdapter = new BaggerListAdapter(mList);
         mAdapter.setOnDeleteClickListener(new BaggerListAdapter.OnDeleteClickLister() {
             @Override
             public void onDeleteClick(View view, int position) {
+                if (mList.get(position).isNotCanDelete()){
+                    ToastUtil.showToast("已上传板车，不能删除");
+                    return;
+                }
                 mSlideRV.closeMenu();
                 mList.remove(position);
                 mAdapter.notifyDataSetChanged();
@@ -132,6 +140,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             TransportTodoListBean bean = new TransportTodoListBean();
             bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
             bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+            bean.setHeadingFlag(scooterInfoListBeans.get(0).getHeadingFlag());
 
             bean.setFlightId(flightBean.getFlightId());
             bean.setFlightNo(flightBean.getFlightNo());
@@ -304,8 +313,11 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
 
     //提交数据，现在改成下一步
     private void submitScooter(String turntableId) {
-
-        for (TransportTodoListBean item : mList) {
+        for (TransportTodoListBean transportTodoListBean:mList){
+            if (!transportTodoListBean.isNotCanDelete())
+                uploadList.add(transportTodoListBean);
+        }
+        for (TransportTodoListBean item : uploadList) {
             item.setBaggageTurntable(turntableId);
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
             item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
@@ -316,7 +328,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
 //        entity.setFilter(mList);
 //        List<TransportTodoListBean> mList2 = new ArrayList<>();
         Intent intent = new Intent(this, BaggageListConfirmActivity.class)
-                .putExtra("listBean", (Serializable) mList)
+                .putExtra("listBean", (Serializable) uploadList)
                 .putExtra("flightNo", flightBean.getFlightNo())
                 .putExtra("turntableId", turntableId);
         startActivity(intent);

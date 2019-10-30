@@ -146,6 +146,8 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
 
     private String taskPk;//子任务id
 
+    private boolean notCanDelete; // 是否不能滑动删除
+
     @Override
     public int getItemType() {
         return infoType;
