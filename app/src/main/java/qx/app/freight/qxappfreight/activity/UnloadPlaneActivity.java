@@ -145,6 +145,13 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         } else {
             mLlScan.setVisibility(View.VISIBLE);
         }
+
+        if(mData.getEndUnloadTimeIn()> 0){
+            mTvEndUnload.setVisibility(View.GONE);
+        }
+        else {
+            mTvEndUnload.setVisibility(View.VISIBLE);
+        }
         mCurrentTaskId = mData.getTaskId();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo() + "  卸机");
         mTvPlaneInfo.setText(mData.getFlightNo());
@@ -577,20 +584,23 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void arrivalDataSaveResult(String result) {
-        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-        entity.setType(1);
-        entity.setLoadUnloadDataId(mData.getId());
-        entity.setFlightId(Long.valueOf(mData.getFlightId()));
-        entity.setFlightTaskId(mData.getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-        entity.setOperationCode("FreightUnloadFinish");
-        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mData.getWorkerName());
-        entity.setCreateTime(System.currentTimeMillis());
-        mPresenter = new LoadAndUnloadTodoPresenter(this);
-        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+        ToastUtil.showToast("结束卸机机成功");
+        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        finish();
+//        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+//        entity.setType(1);
+//        entity.setLoadUnloadDataId(mData.getId());
+//        entity.setFlightId(Long.valueOf(mData.getFlightId()));
+//        entity.setFlightTaskId(mData.getTaskId());
+//        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+//        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+//        entity.setOperationCode("FreightUnloadFinish");
+//        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//        entity.setUserName(mData.getWorkerName());
+//        entity.setCreateTime(System.currentTimeMillis());
+//        mPresenter = new LoadAndUnloadTodoPresenter(this);
+//        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override

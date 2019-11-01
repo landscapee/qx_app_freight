@@ -37,6 +37,7 @@ import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.activity.MsgDialogAct;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -449,7 +450,7 @@ public class Tools {
      * @param context
      */
     public static void wakeupScreen(Context context) {
-        if (isBackground(context)) {
+        if (isBackground(context)||!isScreenOn(context)) {
 //            //屏锁管理器
 //            KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
 //            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
@@ -458,7 +459,7 @@ public class Tools {
 //            Log.e("屏幕：", "解锁");
 
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            if (pm.isScreenOn()) {
+            if (isScreenOn(context)) {
                 wakeupApp(context);
                 return;
             }
@@ -478,13 +479,13 @@ public class Tools {
     }
 
     public static void wakeupApp(Context context) {
-        Intent intent;
-        intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        if (intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        context.startActivity(intent);
-//        MainActivity.startActivity(MyApplication.getContext());
+//        Intent intent;
+//        intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+////        if (intent != null) {
+////            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////        }
+//        context.startActivity(intent);
+        MainActivity.startActivity(context,0);
         Log.e("屏幕：", "唤醒app");
     }
 

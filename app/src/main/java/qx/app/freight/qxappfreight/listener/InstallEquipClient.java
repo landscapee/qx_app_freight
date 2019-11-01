@@ -2,11 +2,7 @@ package qx.app.freight.qxappfreight.listener;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,15 +21,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import qx.app.freight.qxappfreight.activity.LoginActivity;
-import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
+import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -42,13 +36,10 @@ import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
-import qx.app.freight.qxappfreight.utils.NetworkUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.WebSocketUtils;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
@@ -92,7 +83,7 @@ public class InstallEquipClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            sendMess(my,uri);
+                            sendMess(my, uri);
                             Log.e(TAG, "webSocket  装卸机 打开");
                             break;
                         case ERROR:
@@ -103,12 +94,12 @@ public class InstallEquipClient extends StompClient {
                         case CLOSED:
                             Log.e(TAG, "websocket 装卸机 关闭");
                             WebSocketService.isTopic = false;
-                            if (UserInfoSingle.getInstance().getUserId() == null|| StringUtil.isEmpty(UserInfoSingle.getInstance().getUserId())){
-                                if (mTimerTask!= null){
+                            if (UserInfoSingle.getInstance().getUserId() == null || StringUtil.isEmpty(UserInfoSingle.getInstance().getUserId())) {
+                                if (mTimerTask != null) {
                                     mTimerTask.cancel();
-                                    mTimerTask= null;
+                                    mTimerTask = null;
                                 }
-                                if (mTimer != null){
+                                if (mTimer != null) {
                                     mTimer.purge();
                                     mTimer.cancel();
                                     mTimer = null;
@@ -129,7 +120,6 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.e(TAG, topicMessage.getPayload());
-//                        Tools.wakeupScreen(mContext);//唤醒
                         // 消息回执
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
                         if (topicMessage.getPayload().trim().contains("\"cancelFlag\":true")) {//任务取消的推送
@@ -156,6 +146,7 @@ public class InstallEquipClient extends StompClient {
                                 CommonJson4List <LoadAndUnloadTodoBean> gson = new CommonJson4List <>();
                                 CommonJson4List <LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);
+
                             } else if (topicMessage.getPayload().contains("\"taskType\":0")) {//运输
                                 CommonJson4List <AcceptTerminalTodoBean> gson = new CommonJson4List <>();
                                 CommonJson4List <AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
@@ -188,7 +179,6 @@ public class InstallEquipClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         //
-//                        Tools.wakeupScreen(mContext);//唤醒
                         Log.e("msgId", topicMessage.getStompHeaders().get(0).getValue());
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
                         Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
@@ -226,7 +216,7 @@ public class InstallEquipClient extends StompClient {
                         // 消息回执
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
                         if (null != topicMessage.getPayload()) {
-                            InstallNotifyEventBusEntity installNotifyEventBusEntity = JSON.parseObject(topicMessage.getPayload(),InstallNotifyEventBusEntity.class);
+                            InstallNotifyEventBusEntity installNotifyEventBusEntity = JSON.parseObject(topicMessage.getPayload(), InstallNotifyEventBusEntity.class);
 //                            installNotifyEventBusEntity.setFlighNo(topicMessage.getPayload());
                             sendLoadingListPushNotify(installNotifyEventBusEntity);
                         }
@@ -254,7 +244,7 @@ public class InstallEquipClient extends StompClient {
                                 str = str.replace("\\", "");
 //                                str = str.substring(1,str.length()-1);
                                 List <LoadingListBean.DataBean.ContentObjectBean> mWebSocketBean = JSONObject.parseArray(str, LoadingListBean.DataBean.ContentObjectBean.class);
-                                if (mWebSocketBean!=null && mWebSocketBean.size()> 0)
+                                if (mWebSocketBean != null && mWebSocketBean.size() > 0)
                                     mWebSocketBean.get(0).setFlightNo(flightNo);
                                 sendInstallEventBus(mWebSocketBean);
                             }
@@ -283,11 +273,11 @@ public class InstallEquipClient extends StompClient {
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
                         WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                        if ("CLIPPING_WEIGHTER_ERROR_NOTICE".equals(mWebSocketMessBean.getMessageName())){ //负重异常
+                        if ("CLIPPING_WEIGHTER_ERROR_NOTICE".equals(mWebSocketMessBean.getMessageName())) { //负重异常
                             String string = mWebSocketMessBean.getContent().replace("\\", "");
-                            AfterHeavyExceptionBean afterHeavyExceptionBean =  mGson.fromJson(string, AfterHeavyExceptionBean.class);
+                            AfterHeavyExceptionBean afterHeavyExceptionBean = mGson.fromJson(string, AfterHeavyExceptionBean.class);
                             sendMessageEventBus(afterHeavyExceptionBean);
-                        }else {
+                        } else {
                             sendMessageEventBus(mWebSocketMessBean);
                         }
 
@@ -299,12 +289,12 @@ public class InstallEquipClient extends StompClient {
         my.connect();
     }
 
-    public void sendMess(StompClient my,String uri) {
-        if (mTimerTask!= null){
+    public void sendMess(StompClient my, String uri) {
+        if (mTimerTask != null) {
             mTimerTask.cancel();
-            mTimerTask= null;
+            mTimerTask = null;
         }
-        if (mTimer != null){
+        if (mTimer != null) {
             mTimer.purge();
             mTimer.cancel();
             mTimer = null;
@@ -314,8 +304,8 @@ public class InstallEquipClient extends StompClient {
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
             public void run() {
-                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
-                if (!WebSocketService.isTopic){
+                compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                if (!WebSocketService.isTopic) {
                     reConnect1(uri);
                 }
                 Log.e("websocket", "发送消息" + jsonObject.toJSONString());
@@ -324,6 +314,7 @@ public class InstallEquipClient extends StompClient {
         };
         mTimer.schedule(mTimerTask, Constants.TIME_HEART, Constants.TIME_HEART);
     }
+
     public void reConnect1(String uri) {
         WebSocketService.subList.clear();
         connect(uri);
@@ -341,8 +332,6 @@ public class InstallEquipClient extends StompClient {
         NewInstallEventBusEntity newInstallEventBusEntity = new NewInstallEventBusEntity(bean);
         EventBus.getDefault().post(newInstallEventBusEntity);
     }
-
-
 
 
     private void resetSubscriptions() {
@@ -395,15 +384,17 @@ public class InstallEquipClient extends StompClient {
     public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
+
     //负重异常
     public void sendMessageEventBus(AfterHeavyExceptionBean bean) {
         EventBus.getDefault().post(bean);
     }
+
     private void sendLoadingListPush(String result) {
         InstallChangeEntity installChangeEntity = new InstallChangeEntity();
         installChangeEntity.setFlightNo(result);
         EventBus.getDefault().post(installChangeEntity);
-        String flightNo = result.substring(0,result.indexOf(":"));
+        String flightNo = result.substring(0, result.indexOf(":"));
         EventBus.getDefault().post(flightNo);
     }
 

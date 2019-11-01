@@ -192,7 +192,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         mListCache.remove(0);
         mDialog = new PushLoadUnloadLeaderDialog(getContext(), R.style.custom_dialog, mListCacheUse, status -> {
             switch (status) {
-                case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
+                case 0://成功领受后吐司提示
                     mDialog.dismiss();
                     ToastUtil.showToast("领受新装卸任务成功");
                     mListCacheUse.clear();
@@ -222,33 +222,6 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mDialog.show();//显示新任务弹窗
         }
     }
-//        Log.e("tagTest", "mData======" + mListCacheUse.size());
-//        mDialog.setData(getContext(), mListCacheUse, status -> {
-//            switch (status) {
-//                case 0://成功领受后吐司提示，并延时300毫秒刷新代办列表
-//                    mDialog.dismiss();
-//                    ToastUtil.showToast("领受新装卸任务成功");
-//                    mListCacheUse.clear();
-//                    loadData();
-//                    showDialogTask();
-//                    break;
-//                case 1://拒绝任务后清除taskId记录
-//                    mDialog.dismiss();
-//                    mTaskIdList.remove(mListCacheUse.get(0).getTaskId());
-//                    if (isShow) {
-//                        mTaskFragment.setTitleText(mTaskIdList.size());
-//                        mMfrvData.notifyForAdapter(mAdapter);
-//                    }
-//                    showDialogTask();
-//                    break;
-//                case -1://领受失败后，清空未领受列表缓存
-//                    Log.e("tagPush", "推送出错了");
-//                    mDialog.dismiss();
-//                    mListCacheUse.clear();
-//                    break;
-//            }
-//            Tools.closeVibrator(getActivity().getApplicationContext());
-//        });
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -292,7 +265,7 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }

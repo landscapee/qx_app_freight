@@ -66,7 +66,8 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
     @Override
     protected void onResume() {
         super.onResume();
-        requestData(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        if (UserInfoSingle.getInstance().getRoleRS().size()> 0)
+            requestData(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
     }
 
     private void initTitle() {

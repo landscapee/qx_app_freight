@@ -23,16 +23,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
-import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -123,58 +118,29 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                     }
                 }
                 if (mDialog == null) {
-                    mDialog = new PushLoadUnloadDialog(getContext(),R.style.custom_dialog,mListCache, success -> {
-                        if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
+                    mDialog = new PushLoadUnloadDialog(getContext(), R.style.custom_dialog, mListCache, success -> {
+                        if (success) {//成功领受后吐司提示，
                             ToastUtil.showToast("领受结载新任务成功");
-//                            Observable.timer(300, TimeUnit.MILLISECONDS)
-//                                    .subscribeOn(Schedulers.io())
-//                                    .observeOn(AndroidSchedulers.mainThread())
-//                                    .subscribe(aLong -> {
-                                        mCurrentPage = 1;
-                                        loadData();
-                                        EventBus.getDefault().post("CargoManifestFragment_refresh");
-//                                    });
-                            mListCache.clear();
+
                         } else {//领受失败后，清空未领受列表缓存
-                            Log.e("tagPush", "推送出错了");
-                            mListCache.clear();
+                            Log.e("tagPush", "领受失败");
                         }
+                        mCurrentPage = 1;
+                        loadData();
+                        EventBus.getDefault().post("CargoManifestFragment_refresh");
+                        mListCache.clear();
                         mDialog = null;
-//                        Tools.closeVibrator(getActivity().getApplicationContext());
                     });
                 }
-//                mDialog.setData(getContext(), mListCache, success -> {
-//                    if (success) {//成功领受后吐司提示，并延时300毫秒刷新代办列表
-//                        ToastUtil.showToast("领受结载新任务成功");
-//                        Observable.timer(300, TimeUnit.MILLISECONDS)
-//                                .subscribeOn(Schedulers.io())
-//                                .observeOn(AndroidSchedulers.mainThread())
-//                                .subscribe(aLong -> {
-//                                    loadData();
-//                                });
-//                        mListCache.clear();
-//                    } else {//领受失败后，清空未领受列表缓存
-//                        Log.e("tagPush", "推送出错了");
-//                        mListCache.clear();
-//                    }
-//                    Tools.closeVibrator(getActivity().getApplicationContext());
-//                });
                 if (!mDialog.isShowing()) {//新任务弹出框未显示在屏幕中
                     if (mTaskIdList.contains(list.get(0).getTaskId())) {//代办列表中有当前推送过来的任务，则不弹窗提示，只是刷新页面
                         loadData();
                         mListCache.clear();
                     } else {
-//                        Tools.startVibrator(getActivity().getApplicationContext(), true, R.raw.ring);
                         mDialog.show();//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示
-//                    Observable.timer(300, TimeUnit.MILLISECONDS)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(aLong -> {
-//                                mDialog.refreshData();
-//                            });
-                    if (mDialog !=null)
+                    if (mDialog != null)
                         mDialog.refreshData();
                 }
             }
@@ -207,7 +173,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new EndInstallTodoPresenter(this);
-        mAdapter = new JZLoadAdapter(mList,false,true);
+        mAdapter = new JZLoadAdapter(mList, false, true);
         mMfrvData.setAdapter(mAdapter);
         SearchToolbar searchToolbar = ((TaskFragment) getParentFragment()).getSearchView();
         searchToolbar.setHintAndListener("请输入航班号", text -> {
@@ -217,7 +183,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         mAdapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position))+"");
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position)) + "");
             }
 
             @Override
@@ -252,7 +218,7 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -306,10 +272,10 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
 
             //结载单独使用数据 json 解析
-            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())) {
                 bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
-            if (bean.getRelateInfoObj()!= null&&!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())){
+            if (bean.getRelateInfoObj() != null && !StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
                 bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
             mTaskIdList.add(bean.getTaskId());
@@ -321,11 +287,10 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             List <String> times = new ArrayList <>();
             times.add(String.valueOf(bean.getAcceptTime()));
 
-            if (bean.getPassengerLoadSend() > 0){
+            if (bean.getPassengerLoadSend() > 0) {
                 posNow = 2;
                 times.add(String.valueOf(bean.getPassengerLoadSend()));
-            }
-            else
+            } else
                 times.add("0");
 
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息

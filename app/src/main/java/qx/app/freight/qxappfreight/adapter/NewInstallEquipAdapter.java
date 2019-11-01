@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,23 +24,18 @@ import java.util.Locale;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ErrorReportActivity;
-import qx.app.freight.qxappfreight.activity.ExceptionFilingActivity;
-import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
-import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
  * 使用服务器原始数据的装卸机代办适配器
  */
-public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
+public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
     private OnFlightSafeguardListenner onFlightSafeguardListenner;
     private OnReOpenLoadTaskListener onReOpenLoadTaskListener;
@@ -49,22 +43,32 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     private boolean showExReport; //是否显示 异常上报按钮
 
-    private boolean showLook; //是否显示 拍照记录
+    private boolean showLook; //是否显示  装机单 卸机单
 
-    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
+    private boolean showPhoto;//是否显示 拍照记录
+
+    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
     }
 
-    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
+    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
         this(data);
         this.showReOpenBtn = showReOpenBtn;
     }
 
-    public NewInstallEquipAdapter(@Nullable List<LoadAndUnloadTodoBean> data, boolean showReOpenBtn,boolean showExReport) {
+    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport) {
         this(data);
         this.showReOpenBtn = showReOpenBtn;
 //        this.showExReport = showExReport;
         this.showLook = showExReport;
+    }
+
+    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport, boolean showPhoto) {
+        this(data);
+        this.showReOpenBtn = showReOpenBtn;
+        this.showExReport = showExReport;
+        this.showLook = showExReport;
+        this.showPhoto = showPhoto;
     }
 
     @Override
@@ -97,22 +101,49 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
         //异常上报
         Button btnExReport = helper.getView(R.id.btn_ex_report);
-        if (showExReport){
+        if (showExReport) {
             btnExReport.setVisibility(View.VISIBLE);
-            btnExReport.setOnClickListener(b->{
+            btnExReport.setOnClickListener(b -> {
                 if (!Tools.isFastClick())
                     return;
                 Intent intent = new Intent(mContext, ErrorReportActivity.class);
-                intent.putExtra("flight_number", item.getFlightNo());//航班号
                 intent.putExtra("task_id", item.getTaskId());//任务id
-                intent.putExtra("flight_id",item.getFlightId());//Flight id
-                intent.putExtra("area_id",item.getSeat());//area_id
-                intent.putExtra("step_code", item.getOperationStepObj().get(1).getOperationCode());//step_code //默认为 舱单送达步骤
-                intent.putExtra("error_type", 4);//偏离上报
+                intent.putExtra("area_id", item.getSeat());//area_id
+                if (item.getMovement() == 4) {
+                    if (item.getStartLoadTime() > 0||item.getEndUnloadTime() > 0) {// 卸机结束结束 装机异常
+                        if (item.getRelateInfoObj() != null) {
+                            intent.putExtra("flight_number", item.getRelateInfoObj().getFlightNo());//航班号
+                            intent.putExtra("flight_id", item.getRelateInfoObj().getFlightId());//Flight id
+                        } else {
+                            intent.putExtra("flight_number", item.getFlightNo());//航班号
+                        }
+                        intent.putExtra("step_code", "FreightLoadFinish");//step_code //默认为
+                        intent.putExtra("error_type", 1);// 装机异常
+                    } else  {//卸机异常
+                        intent.putExtra("flight_number", item.getFlightNo());//航班号
+                        intent.putExtra("flight_id", item.getFlightId());//Flight id
+                        intent.putExtra("error_type", 2);//卸机异常
+                        intent.putExtra("step_code", "FreightUnLoadFinish");//step_code //默认为
+                    }
+                } else {
+                    intent.putExtra("flight_number", item.getFlightNo());//航班号
+                    intent.putExtra("flight_id", item.getFlightId());//Flight id
+                    if (item.getMovement() == 1) //进港 卸机
+                    {
+                        intent.putExtra("step_code", "FreightUnLoadFinish");//step_code //默认为
+                        intent.putExtra("error_type", 2);//卸机异常
+                    }
+                    else{
+                        intent.putExtra("step_code", "FreightLoadFinish");//step_code //默认为
+                        intent.putExtra("error_type", 1);//装机异常
+                    }
+
+
+
+                }
                 mContext.startActivity(intent);
             });
-        }
-        else {
+        } else {
             btnExReport.setVisibility(View.GONE);
         }
 
@@ -129,7 +160,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                 return;
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
-        if (showLook){
+        if (showPhoto) {
             Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
             btnPhotoRecord.setVisibility(View.VISIBLE);
             btnPhotoRecord.setOnClickListener(v -> {
@@ -137,6 +168,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                     return;
                 onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
             });
+        }
+
+        if (showLook) {
+
             Button btnLookInstall = helper.getView(R.id.btn_look_install);
             Button btnLookUnInstall = helper.getView(R.id.btn_look_un_install);
             if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
@@ -152,8 +187,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                         return;
                     onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                 });
-            }
-            else{
+            } else {
                 if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
                     btnLookUnInstall.setVisibility(View.VISIBLE);
                     btnLookUnInstall.setOnClickListener(v -> {
@@ -162,8 +196,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                         onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                     });
                     btnLookInstall.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     btnLookInstall.setVisibility(View.VISIBLE);
                     btnLookInstall.setOnClickListener(v -> {
                         if (!Tools.isFastClick())
@@ -245,7 +278,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
         ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
-        if (!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
+        if (item.getOperationStepObj()!=null && item.getOperationStepObj().size()>0&&!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
             btnFS.setVisibility(View.GONE);
             ivDone.setVisibility(View.VISIBLE);
         } else {
@@ -263,25 +296,28 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                 if (item.getTaskType() == 5) {//装卸机2合1代办单独处理
                     item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
                     if (pos == 3) {
-                        if (TextUtils.isEmpty(item.getSeat())) {
-                            ToastUtil.showToast("当前航班未分配机位，不能进行卸机操作");
-                        } else {
+//                        if (TextUtils.isEmpty(item.getSeat())) {
+//                            ToastUtil.showToast("当前航班未分配机位，不能进行卸机操作");
+//                        } else {
 //                            if (!isWidePlane) {//窄体机卸机才到卸机页面
-                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type", item.getFlightType());
-                            intent.putExtra("plane_info", item);
-                            mContext.startActivity(intent);
+//                            Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+//                            intent.putExtra("flight_type", item.getFlightType());
+//                            intent.putExtra("plane_info", item);
+//                            mContext.startActivity(intent);
 //                            } else {
-//                                item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-//                                item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-//                                item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
 //                            }
-                        }
+//                        }
                     } else if (pos == 4) {
-                        Intent intent = new Intent(mContext, LoadPlaneActivity.class);
-                        intent.putExtra("plane_info", item);
-                        intent.putExtra("position", 5);
-                        mContext.startActivity(intent);
+//                        Intent intent = new Intent(mContext, LoadPlaneActivity.class);
+//                        intent.putExtra("plane_info", item);
+//                        intent.putExtra("position", 5);
+//                        mContext.startActivity(intent);
+                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                        item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
                     } else {
                         item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));//设置显示时间
@@ -293,20 +329,20 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
                     if (pos == 3) {
                         item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-");
 //                        if (isWidePlane && item.getTaskType() == 2) {
-//                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-//                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-//                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                        item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
 //                        } else {
-                        Intent intent;
-                        if (item.getTaskType() == 1) {
-                            intent = new Intent(mContext, LoadPlaneActivity.class);
-                            intent.putExtra("position", 3);
-                        } else {
-                            intent = new Intent(mContext, UnloadPlaneActivity.class);
-                            intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
-                        }
-                        intent.putExtra("plane_info", item);
-                        mContext.startActivity(intent);
+//                        Intent intent;
+//                        if (item.getTaskType() == 1) {
+//                            intent = new Intent(mContext, LoadPlaneActivity.class);
+//                            intent.putExtra("position", 3);
+//                        } else {
+//                            intent = new Intent(mContext, UnloadPlaneActivity.class);
+//                            intent.putExtra("flight_type", item.getOperationStepObj().get(pos).getFlightType());
+//                        }
+//                        intent.putExtra("plane_info", item);
+//                        mContext.startActivity(intent);
 //                        }
                     } else {
                         item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
@@ -350,9 +386,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBe
 
     public interface OnFlightSafeguardListenner {
         void onFlightSafeguardClick(int position);
+
         void onClearClick(int position);
+
         void onUploadPhoto(int position);
+
         void onLookUnloadInstall(int position);
+
         void onLookLoadInstall(int position);
     }
 

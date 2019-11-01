@@ -5,18 +5,18 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.beidouapp.et.c.n;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -28,8 +28,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
-import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
+import qx.app.freight.qxappfreight.bean.request.LockScooterEntity;
 import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
@@ -57,15 +55,12 @@ import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.StartPullContract;
-import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
 import qx.app.freight.qxappfreight.dialog.TakeSpiltDialog;
 import qx.app.freight.qxappfreight.dialog.WaitCallBackDialog;
 import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
-import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StartPullPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.PushDataUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
@@ -124,10 +119,13 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     TextView mTvEndInstall;
     @BindView(R.id.tv_sure_pull)
     TextView mTvSurePull;
+    @BindView(R.id.fr_pull_goods_report)
+    FrameLayout frameLayout;//拉货上报按钮
+
 
     @BindView(R.id.tv_install_version)
     TextView tvChooseVersion;
-    private List<String> versions = new ArrayList <>();
+    private List <String> versions = new ArrayList <>();
 
     private int sureFlag; //1 预装机单 2 最终装机单
 
@@ -144,14 +142,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private int mOperateErrorStatus = -1;
     private boolean mConfirmPlan = false;
 
-    private boolean useLGsys = true ;//是否使用离港系统 m默认为使用
+    private boolean useLGsys = true;//是否使用离港系统 m默认为使用
     //不使用离港系统 显示货邮舱单 使用
     private List <ManifestScooterListBean> manifestScooterListBeans = new ArrayList <>();
     private ManifestWaybillListjianyiAdapter adapterNonuse;
     private String flightInfoId = null; //货邮舱单 上的 flightInfoId
 
-    private List<String> cargos = new ArrayList <>();
-    private List<String> goods = new ArrayList <>();
+    private List <String> cargos = new ArrayList <>();
+    private List <String> goods = new ArrayList <>();
+
+    private String loadInstallId;//当前装机单id
+
+    private int currentLockPosition;//当前点击的 position
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
@@ -160,7 +162,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
-        String flightNo = result.getFlightNo().substring(0,result.getFlightNo().indexOf(":"));
+        String flightNo = result.getFlightNo().substring(0, result.getFlightNo().indexOf(":"));
         if (flightNo != null && flightNo.equals(mCurrentFlightNo)) {
             showCargoResUpdate();
         }
@@ -212,6 +214,17 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
+
+        if (data.getEndLoadTimeIn()> 0){
+            mTvEndInstall.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.GONE);
+        }
+        else{
+            frameLayout.setVisibility(View.VISIBLE);
+            mTvEndInstall.setVisibility(View.VISIBLE);
+        }
+
+
         //是否是连班航班,连班航班的话所有关联操作都应该使用连班航班的数据
         boolean mIsKeepOnTask = data.getMovement() == 4;
         mCurrentTaskId = mIsKeepOnTask ? data.getRelateInfoObj().getTaskId() : data.getTaskId();
@@ -240,13 +253,16 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
 
         //选择装机单版本
-        tvChooseVersion.setOnClickListener(v->{
+        tvChooseVersion.setOnClickListener(v -> {
             showStoragePickView();
         });
 
         //发送结载
         mTvSendOver.setOnClickListener(v -> {
-
+            if (mLoadingList.size() == 0) {
+                ToastUtil.showToast("当前航班任务无装机单数据，不能进行发送至结载操作");
+                return;
+            }
             mConfirmPlan = false;
             LoadingListSendEntity requestModel = new LoadingListSendEntity();
             if (data.getRelateInfoObj() != null) {
@@ -260,9 +276,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             requestModel.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
             requestModel.setContent(mLoadingList.get(0).getContentObject());
             requestModel.setVersion(mLoadingList.get(0).getVersion());
-            if(sureFlag == 1)
+            if (sureFlag == 1)
                 requestModel.setDocumentType(3);
-            else if(sureFlag == 2)
+            else if (sureFlag == 2)
                 requestModel.setDocumentType(6);
             mPresenter = new GetFlightCargoResPresenter(this);
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
@@ -310,7 +326,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         });
         mTvEndInstall.setOnClickListener(v -> {
 //            if (useLGsys)
-                endLoadInstall();
+            endLoadInstall();
 //            else {
 //                boolean canNot = false;
 //                for (ManifestScooterListBean manifestScooterListBean: manifestScooterListBeans){
@@ -335,7 +351,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //配置布局，默认为vertical（垂直布局），下边这句将布局改为水平布局
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRvData.setLayoutManager(linearLayoutManager);
-            adapter = new LoadPlaneInstallAdapter(newScooters,data.getWidthAirFlag(),true,cargos,goods);
+            adapter = new LoadPlaneInstallAdapter(newScooters, data.getWidthAirFlag(), true, cargos, goods);
             mRvData.setAdapter(adapter);
             adapter.setOnDataCheckListener(new LoadPlaneInstallAdapter.OnDataCheckListener() {
                 @Override
@@ -347,19 +363,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
                 @Override
                 public void onTakeSplit(int position) {// 拆舱 /拆箱
-                    if (newScooters.get(position).isLocked()){
+                    if (newScooters.get(position).getLock() == 1) {
                         ToastUtil.showToast("板车已锁定");
                         return;
                     }
-                    if (newScooters.get(position).getExceptionFlag() == 1){
+                    if (newScooters.get(position).getExceptionFlag() == 1) {
                         ToastUtil.showToast("拉下的板车无法拆分");
                         return;
                     }
 
-                    if (!newScooters.get(position).isSplit()){
+                    if (!newScooters.get(position).isSplit()) {
                         showSpiltDialog(position);
-                    }
-                    else {
+                    } else {
                         removeInstall(position);
                         compareInstall();
                         adapter.notifyDataSetChanged();
@@ -368,7 +383,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
                 @Override
                 public void onLockClicked(int position) {
-                     lockItem(position);
+                    lockItem(position);
                 }
             });
 
@@ -376,7 +391,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             getPlaneSpace();
             //TODO 是否是宽体机 0 宽体机 1 窄体机
             if (1 == data.getWidthAirFlag()) {
-                 tvGoods.setVisibility(View.GONE);
+                tvGoods.setVisibility(View.GONE);
             } else if (0 == data.getWidthAirFlag()) {
                 tvGoods.setVisibility(View.VISIBLE);
             }
@@ -387,7 +402,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             horScroll.setVisibility(View.GONE);
         } else {
             mRvDataNonuse.setLayoutManager(new LinearLayoutManager(this));
-            adapterNonuse = new ManifestWaybillListjianyiAdapter(manifestScooterListBeans, data.getWidthAirFlag(),true);
+            adapterNonuse = new ManifestWaybillListjianyiAdapter(manifestScooterListBeans, data.getWidthAirFlag(), true);
             mRvDataNonuse.setAdapter(adapterNonuse);
             loadData1();
             mRvData.setVisibility(View.GONE);
@@ -401,11 +416,12 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 锁定一条装机内容
+     *
      * @param position
      */
     private void lockItem(int position) {
         //TODO
-
+        lockOrUnlockScooter(position);
     }
 
 
@@ -414,8 +430,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
      */
     private void compareInstall() {
         boolean modified = false;
-        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
-            if (scooterBean.isChange()|| scooterBean.getExceptionFlag() == 1||scooterBean.isSplit()){
+        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : newScooters) {
+            if (scooterBean.isChange() || scooterBean.getExceptionFlag() == 1 || scooterBean.isSplit()) {
                 modified = true;
                 break;
             }
@@ -435,10 +451,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 拆舱弹出框
+     *
      * @param position
      */
     private void showSpiltDialog(int position) {
-        TakeSpiltDialog dialog1 = new TakeSpiltDialog(this,cargos,goods,newScooters.get(position).getOldCargoName(),newScooters.get(position).getOldLocation(),newScooters.get(position).getWeight(),data.getWidthAirFlag());
+        TakeSpiltDialog dialog1 = new TakeSpiltDialog(this, cargos, goods, newScooters.get(position).getOldCargoName(), newScooters.get(position).getOldLocation(), newScooters.get(position).getWeight(), data.getWidthAirFlag());
         dialog1.setTitle("请选择调整舱位/货位")
                 .setPositiveButton("确定")
                 .setNegativeButton("取消")
@@ -456,16 +473,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 if (data.getWidthAirFlag() == 0)
                                     splitScooter.setLocation(strGoos);
                                 splitScooter.setSplit(true);
-                                newScooters.add(position+1,splitScooter);
-                                joinInstall(newScooters.get(position).getId(),splitScooter);
+                                newScooters.add(position + 1, splitScooter);
+                                joinInstall(newScooters.get(position).getId(), splitScooter);
                                 adapter.notifyDataSetChanged();
                                 compareInstall();
-                            }
-                            catch (Exception e){
-                                Log.e("Tools.IOclone",e.getMessage());
+                            } catch (Exception e) {
+                                Log.e("Tools.IOclone", e.getMessage());
                             }
                         } else {
-                            if (dialog!=null && dialog.isShowing())
+                            if (dialog != null && dialog.isShowing())
                                 dialog.dismiss();
                         }
                     }
@@ -476,17 +492,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 把拆分出来的装机单 加入到装机单
+     *
      * @param id
      * @param splitScooter
      */
     private void joinInstall(String id, LoadingListBean.DataBean.ContentObjectBean.ScooterBean splitScooter) {
-        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
-            for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
-                if (id.equals(contentObjectBean.getScooters().get(i).getId())){
+        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : mBaseContent) {
+            for (int i = 0; i < contentObjectBean.getScooters().size(); i++) {
+                if (id.equals(contentObjectBean.getScooters().get(i).getId())) {
 //                    contentObjectBean.getScooters().get(i).setWeight(contentObjectBean.getScooters().get(i).getWeight() - splitScooter.getWeight());
                     splitScooter.setOldId(id);//记录被拆分板车的 id
                     splitScooter.setId(String.valueOf(System.currentTimeMillis())); //标记拆分出来的新板车 方便删除
-                    contentObjectBean.getScooters().add(i+1,splitScooter);
+                    contentObjectBean.getScooters().add(i + 1, splitScooter);
                     break;
                 }
             }
@@ -496,27 +513,28 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 删除拆分出来的
+     *
      * @param position
      */
     private void removeInstall(int position) {
 
-        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
-            for ( int i = 0; i < contentObjectBean.getScooters().size() ;i++){
+        for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : mBaseContent) {
+            for (int i = 0; i < contentObjectBean.getScooters().size(); i++) {
 //                //通过删除拆分板车记录的被拆分板车id 找到被拆分板车 把重量加回去。
 //                if (newScooters.get(position).getOldId().equals(contentObjectBean.getScooters().get(i).getId())){
 //                    contentObjectBean.getScooters().get(i).setWeight(contentObjectBean.getScooters().get(i).getWeight()+newScooters.get(position).getWeight());
 //                }
                 //比对被拆分板车 生成的id（时间戳） 删除被拆分板车
-                if (newScooters.get(position).getId().equals(contentObjectBean.getScooters().get(i).getId())){
+                if (newScooters.get(position).getId().equals(contentObjectBean.getScooters().get(i).getId())) {
                     contentObjectBean.getScooters().remove(i);
                     break;
                 }
             }
         }
         //通过删除拆分板车记录的被拆分板车id 找到被拆分板车 把重量加回去。
-        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:newScooters){
-            if (scooterBean.getId().equals(newScooters.get(position).getOldId())){
-                scooterBean.setWeight(scooterBean.getWeight()+newScooters.get(position).getWeight());
+        for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : newScooters) {
+            if (scooterBean.getId().equals(newScooters.get(position).getOldId())) {
+                scooterBean.setWeight(scooterBean.getWeight() + newScooters.get(position).getWeight());
                 newScooters.remove(position);
                 break;
             }
@@ -557,80 +575,97 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightId(Long.valueOf(mCurrentFlightId));
         ((GetFlightCargoResPresenter) mPresenter).getFlightSpace(entity);
     }
+    /**
+     * 锁定或解锁板车
+     */
+    private void lockOrUnlockScooter(int position) {
+        mPresenter = new GetLastReportInfoPresenter(this);
+        LockScooterEntity entity = new LockScooterEntity();
+        if (newScooters.get(position).getLock() == 0||newScooters.get(position).getLock() == 3)
+            entity.setOperationType(1);
+        else
+            entity.setOperationType(2);
+
+        entity.setScooterId(newScooters.get(position).getId());
+        entity.setReportInfoId(loadInstallId);
+        entity.setOperationUser(UserInfoSingle.getInstance().getUsername());
+        ((GetLastReportInfoPresenter) mPresenter).lockOrUnlockScooter(entity);
+        currentLockPosition = position;
+    }
 
     /**
      * 结束装机 提交装机单
      */
-   private void endLoadInstall(){
-       mPresenter = new GetFlightCargoResPresenter(this);
-       if (mLoadingList.size() == 0) {
-           AlertDialog.Builder builder = new AlertDialog.Builder(LoadPlaneActivity.this);
-           builder.setTitle("提示");
-           builder.setMessage("未收到装机单，是否结束装机?");
-           builder.setPositiveButton("确定", (dialog, which) -> {
-               dialog.dismiss();
-               GetFlightCargoResBean bean = new GetFlightCargoResBean();
-               bean.setTpFlightId(data.getFlightId());
-               bean.setTaskId(data.getId());
-               bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-               ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-           });
-           builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
-           builder.show();
-       } else {
-           boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
-           LoadingListBean.DataBean entity1 = mLoadingList.get(0);
-           if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
-               for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
-                   for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : entity2.getScooters()) {
-                       if (!scooterBean.isLocked()) {
-                           doRight = false;
-                           break;
-                       }
-                   }
-               }
-           }
-           boolean hasPullTask = mIvHint.getVisibility() == View.VISIBLE;
-           if (hasPullTask) {//还有拉货任务，优先级最高
-               mOperateErrorStatus = 1;
-           } else {
-               if (!mConfirmPlan) {//未进行装机单确认，优先级其次
-                   mOperateErrorStatus = 2;
-               } else {
-                   if (!doRight) {
-                       mOperateErrorStatus = 3;//信息未锁定修改
-                   } else {
-                       mOperateErrorStatus = -1;//所有操作都正确
-                   }
-               }
-           }
-           switch (mOperateErrorStatus) {
-               case 1:
-                   ToastUtil.showToast("当前航班还有拉货任务，请检查！");
-                   break;
-               case 2:
-                   ToastUtil.showToast("未进行最终装机单确认操作，请检查！");
-                   break;
-               case 3:
-                   ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
-                   break;
-               case -1:
-                   GetFlightCargoResBean bean = new GetFlightCargoResBean();
-                   bean.setTpFlightId(data.getFlightId());
-                   bean.setTaskId(data.getId());
-                   bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
-                   ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
-                   break;
-           }
-       }
-   }
+    private void endLoadInstall() {
+        mPresenter = new GetFlightCargoResPresenter(this);
+        if (mLoadingList.size() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoadPlaneActivity.this);
+            builder.setTitle("提示");
+            builder.setMessage("未收到装机单，是否结束装机?");
+            builder.setPositiveButton("确定", (dialog, which) -> {
+                dialog.dismiss();
+                GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                bean.setTpFlightId(data.getFlightId());
+                bean.setTaskId(data.getId());
+                bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+            });
+            builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        } else {
+            boolean doRight = true;//全部装机单的状态锁定后才能提交结束装机，暂取消判断
+            LoadingListBean.DataBean entity1 = mLoadingList.get(0);
+            if (entity1.getContentObject() != null && entity1.getContentObject().size() != 0) {
+                for (LoadingListBean.DataBean.ContentObjectBean entity2 : entity1.getContentObject()) {
+                    for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : entity2.getScooters()) {
+                        if (!(scooterBean.getLock() == 1)) {
+                            doRight = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            boolean hasPullTask = mIvHint.getVisibility() == View.VISIBLE;
+            if (hasPullTask) {//还有拉货任务，优先级最高
+                mOperateErrorStatus = 1;
+            } else {
+                if (!mConfirmPlan) {//未进行装机单确认，优先级其次
+                    mOperateErrorStatus = 2;
+                } else {
+                    if (!doRight) {
+                        mOperateErrorStatus = 3;//信息未锁定修改
+                    } else {
+                        mOperateErrorStatus = -1;//所有操作都正确
+                    }
+                }
+            }
+            switch (mOperateErrorStatus) {
+                case 1:
+                    ToastUtil.showToast("当前航班还有拉货任务，请检查！");
+                    break;
+                case 2:
+                    ToastUtil.showToast("未进行最终装机单确认操作，请检查！");
+                    break;
+                case 3:
+                    ToastUtil.showToast("装机单信息中有未锁定的数据，请检查！");
+                    break;
+                case -1:
+                    GetFlightCargoResBean bean = new GetFlightCargoResBean();
+                    bean.setTpFlightId(data.getFlightId());
+                    bean.setTaskId(data.getId());
+                    bean.setTpOperator(UserInfoSingle.getInstance().getUserId());
+                    ((GetFlightCargoResPresenter) mPresenter).flightDoneInstall(bean);
+                    break;
+            }
+        }
+    }
 
     /**
-     *  提交货邮舱单 （生成的拉下板车数据）
+     * 提交货邮舱单 （生成的拉下板车数据）
      */
     private void endLoadHyManifest() {
-        List<String> listScooters = new ArrayList <>();
-        for (ManifestScooterListBean manifestScooterListBean: manifestScooterListBeans){
+        List <String> listScooters = new ArrayList <>();
+        for (ManifestScooterListBean manifestScooterListBean : manifestScooterListBeans) {
             if (manifestScooterListBean.isPull())
                 listScooters.add(manifestScooterListBean.getScooterId());
         }
@@ -651,7 +686,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     }
 
-    private void getPullgoodsStatus(){
+    private void getPullgoodsStatus() {
         mPresenter = new GetFlightCargoResPresenter(this);
         BaseFilterEntity <Object> entity = new BaseFilterEntity <>();
         entity.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
@@ -680,35 +715,40 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 切换装机单版本
+     *
      * @param options1
      */
     private void switchoverInstall(int options1) {
 
         if (!TextUtils.isEmpty(mLoadingList.get(options1).getContent())) {
-            if (options1 == 0){ // 只有最新版本才能 发送至结载 和 确认装机单
+            if (options1 == 0) { // 只有最新版本才能 发送至结载 和 确认装机单
                 mTvConfirmCargo.setVisibility(View.VISIBLE);
                 mTvSendOver.setVisibility(View.VISIBLE);
-                if (mLoadingList.get(options1).getInstalledSingleConfirm() == 1){ //已确认
+                if (mLoadingList.get(options1).getInstalledSingleConfirm() == 1) { //已确认
                     mTvConfirmCargo.setVisibility(View.GONE);
                     mTvSendOver.setVisibility(View.GONE);
                 }
-                if (versions.get(options1).contains("最终装机单")){
+                if (versions.get(options1).contains("最终装机单")) {
                     sureFlag = 2;
                     mTvConfirmCargo.setText("最终装机单确认");
-                }
-                else {
+                } else {
                     sureFlag = 1;
                     mTvConfirmCargo.setText("确认按此装机");
                 }
-            }
-            else {
+                //最新的最终装机单 才有锁定按钮
+                if (versions.get(options1).contains("最终装机单"))
+                    adapter.setShowLock(true);
+                else
+                    adapter.setShowLock(false);
+
+            } else {
                 mTvConfirmCargo.setVisibility(View.GONE);
                 mTvSendOver.setVisibility(View.GONE);
             }
             mTvConfirmDate.setVisibility(View.VISIBLE);
             mTvConfirm.setVisibility(View.VISIBLE);
-            mTvConfirm.setText("结载员:"+mLoadingList.get(options1).getCreateUserName());
-            mTvConfirmDate.setText("发送时间:"+ TimeUtils.date2Tasktime6(mLoadingList.get(options1).getCreateTime()));
+            mTvConfirm.setText("结载员:" + mLoadingList.get(options1).getCreateUserName());
+            mTvConfirmDate.setText("发送时间:" + TimeUtils.date2Tasktime6(mLoadingList.get(options1).getCreateTime()));
 
             Gson mGson = new Gson();
             mTvSendOver.setEnabled(false);
@@ -719,15 +759,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //舱位集合
             mBaseContent = new ArrayList <>(Arrays.asList(datas));
             mLoadingList.get(options1).setContentObject(mBaseContent);
+            loadInstallId =  mLoadingList.get(options1).getId();
             //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
             newScooters.clear();
-            for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean:mBaseContent){
-                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean:contentObjectBean.getScooters()){
+            for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : mBaseContent) {
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : contentObjectBean.getScooters()) {
                     //防止装机单订舱没有填写 H
-                    if (!StringUtil.isEmpty(scooterBean.getCargoName())&&scooterBean.getCargoName().length() == 1){
-                        scooterBean.setCargoName(scooterBean.getCargoName()+"H");
-                    }
-                    else{
+                    if (!StringUtil.isEmpty(scooterBean.getCargoName()) && scooterBean.getCargoName().length() == 1) {
+                        scooterBean.setCargoName(scooterBean.getCargoName() + "H");
+                    } else {
                         scooterBean.setCargoName(scooterBean.getCargoName());
                     }
 
@@ -756,15 +796,15 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             } else {
                 mLoadingList.addAll(result.getData());
                 versions.clear();
-                for (LoadingListBean.DataBean dataBean:mLoadingList){
-                    if (dataBean.getDocumentType() == 2){
-                        versions.add("预装机单"+dataBean.getVersion());
-                    } else{
-                        versions.add("最终装机单"+dataBean.getVersion());
+                for (LoadingListBean.DataBean dataBean : mLoadingList) {
+                    if (dataBean.getDocumentType() == 2) {
+                        versions.add("预装机单" + dataBean.getVersion());
+                    } else {
+                        versions.add("最终装机单" + dataBean.getVersion());
                     }
                 }
                 //已经确认最终装机单
-                if (mLoadingList.get(0).getDocumentType()!= 2&&mLoadingList.get(0).getInstalledSingleConfirm() == 1)
+                if (mLoadingList.get(0).getDocumentType() != 2 && mLoadingList.get(0).getInstalledSingleConfirm() == 1)
                     mConfirmPlan = true;
 
                 getPullgoodsStatus();
@@ -776,6 +816,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 舱位信息返回
+     *
      * @param result
      */
     @Override
@@ -797,10 +838,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         if (result.getHld5wgt() > 0) {
             cargos.add("5H");
         }
-        for (CargoCabinData.CargosBean cargosBean:result.getCargos()){
+        for (CargoCabinData.CargosBean cargosBean : result.getCargos()) {
             goods.add(cargosBean.getPos());
         }
-        adapter.notifySp(cargos,goods);
+        adapter.notifySp(cargos, goods);
         loadData();
     }
 
@@ -814,28 +855,33 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             ((GetFlightCargoResPresenter) mPresenter).getPullStatus(entity);
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing())
             mWaitCallBackDialog.dismiss();
     }
+
     @Override
     public void flightDoneInstallResult(String result) {
-        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-        entity.setType(1);
-        entity.setLoadUnloadDataId(data.getId());
-        entity.setFlightId(Long.valueOf(data.getFlightId()));
-        entity.setFlightTaskId(data.getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-        entity.setOperationCode("FreightLoadFinish");
-        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
-        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(data.getWorkerName());
-        entity.setCreateTime(System.currentTimeMillis());
-        mPresenter = new LoadAndUnloadTodoPresenter(this);
-        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
+        ToastUtil.showToast("结束装机成功");
+        EventBus.getDefault().post("InstallEquipFragment_refresh");
+        finish();
+//        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+//        entity.setType(1);
+//        entity.setLoadUnloadDataId(data.getId());
+//        entity.setFlightId(Long.valueOf(data.getFlightId()));
+//        entity.setFlightTaskId(data.getTaskId());
+//        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+//        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+//        entity.setOperationCode("FreightLoadFinish");
+//        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
+//        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//        entity.setUserName(data.getWorkerName());
+//        entity.setCreateTime(System.currentTimeMillis());
+//        mPresenter = new LoadAndUnloadTodoPresenter(this);
+//        ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
     }
 
     @Override
@@ -951,9 +997,25 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     manifestScooterListBeans.addAll(datas[i].getCargos().get(j).getScooters());
                 }
             }
-          adapterNonuse.notifyDataSetChanged();
+            adapterNonuse.notifyDataSetChanged();
 
         }
+    }
+
+    /**
+     * 锁定或者解锁板车 成功
+     * @param result
+     */
+    @Override
+    public void lockOrUnlockScooterResult(String result) {
+        if (currentLockPosition != -1){
+            if (newScooters.get(currentLockPosition).getLock() == 0||newScooters.get(currentLockPosition).getLock() == 3)
+                newScooters.get(currentLockPosition).setLock(1);
+            else
+                newScooters.get(currentLockPosition).setLock(0);
+        }
+        if (result!=null)
+            ToastUtil.showToast("操作成功");
     }
 
     @Override

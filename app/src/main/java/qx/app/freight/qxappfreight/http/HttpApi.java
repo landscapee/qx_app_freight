@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
+import qx.app.freight.qxappfreight.bean.request.LockScooterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
@@ -497,6 +498,11 @@ public interface HttpApi {
     //装卸机代办   1是装机  2是卸机  3装卸机
     @POST("service-product-transport/tp-main-info/loadAndUnloadTodo")
     Observable<BaseEntity<List<LoadAndUnloadTodoBean>>> loadAndUnloadTodo(@Body BaseFilterEntity model);
+
+
+    //发送至结载
+    @POST(" service-product-finishloading/stowage-middlewar/lockOrUnlockScooter")
+    Observable<BaseEntity<Object>> lockOrUnlockScooter(@Body LockScooterEntity model);
 
     //装卸员小组长获取可选择人员 6是装机  7是卸机  8装卸机
     @GET("service-product-transport/tp-stevedores/selectAreaStaffs/{taskId}")

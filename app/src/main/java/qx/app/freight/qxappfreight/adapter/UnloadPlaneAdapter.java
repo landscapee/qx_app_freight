@@ -148,8 +148,8 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
                     if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
-                        lockStatus=!scooter.isLocked();
-                        scooter.setLocked(!scooter.isLocked());
+//                        lockStatus=!scooter.isLocked();
+//                        scooter.setLocked(!scooter.isLocked());
                         break;
                     }
                 }

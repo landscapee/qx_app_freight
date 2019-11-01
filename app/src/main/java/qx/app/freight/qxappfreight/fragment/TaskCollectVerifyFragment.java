@@ -130,7 +130,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             transportListList.addAll(transportListList1);
         } else {
             for (TransportDataBase team : transportListList1) {
-                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo()!=null&&team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     transportListList.add(team);
                 }
             }

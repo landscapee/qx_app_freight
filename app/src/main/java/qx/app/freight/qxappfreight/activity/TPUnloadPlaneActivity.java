@@ -250,6 +250,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             unloadScooterListEntity.setMListGoods(mListGoods);
             unloadScooterListEntity.setMListBaggage(mListPac);
             ScooterMapSingle.getInstance().put(mCurrentTaskId,unloadScooterListEntity);
+            finish();
         });
     }
     private void endUnload() {

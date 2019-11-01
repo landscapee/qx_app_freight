@@ -6,22 +6,40 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sr_refush"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/mfrv_data"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mfrv_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
         </HorizontalScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="无货无单"
+        android:textColor="@color/gray_888"
+        android:textSize="@dimen/dp_50"
+        android:visibility="gone" />
     <LinearLayout
 
         android:layout_width="match_parent"

@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,29 +13,33 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.utils.Tools;
 
-public class MsgDialogAct extends Activity {
+public class MsgDialogAct extends BaseActivity {
 
     @BindView(R.id.btn_go)
     Button btnGo;
-
     private Context mContext;
 
     public static void startActivity(Context context) {
         Intent starter = new Intent(context, MsgDialogAct.class);
-        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         context.startActivity(starter);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutId() {
+        return R.layout.activity_lock_msg;
+    }
+
+    @Override
+    public void businessLogic(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        setContentView(R.layout.activity_lock_msg);
         mContext = this;
         ButterKnife.bind(this);
         if (!EventBus.getDefault().isRegistered(this))
@@ -60,20 +63,24 @@ public class MsgDialogAct extends Activity {
         btnGo.setOnClickListener(v->{
             if (Tools.isLocked(MyApplication.getContext()))
                 Tools.unLock(MyApplication.getContext());
-            MainActivity.startActivity(mContext);
+//            MainActivity.startActivity(mContext);
+            finish();
         });
     }
 
 
-    private void setView() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LockEventbusEntity result) {
+
 
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if ("MsgDialogAct_finish".equals(result)){
+            if (Tools.isLocked(MyApplication.getContext()))
+                Tools.unLock(MyApplication.getContext());
+            finish();
+        }
+
     }
 }

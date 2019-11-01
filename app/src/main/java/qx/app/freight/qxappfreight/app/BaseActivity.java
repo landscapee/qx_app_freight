@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.app;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -54,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private IsBackListener mIsBackListener;
 
+    private ViewGroup viewGroup;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +64,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActManager.getAppManager().addActivity(this);
         initDialog();
         FrameLayout contentView = findViewById(android.R.id.content);
-        ViewGroup viewGroup = (ViewGroup) contentView.getChildAt(0);
+
+        if (contentView!=null)
+             viewGroup = (ViewGroup) contentView.getChildAt(0);
         mToolbar = new CustomToolbar(this);
-        viewGroup.addView(mToolbar, 0);
+        if (viewGroup!=null)
+            viewGroup.addView(mToolbar, 0);
         businessLogic(savedInstanceState);
     }
 
@@ -327,4 +332,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

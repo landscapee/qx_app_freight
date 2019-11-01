@@ -174,7 +174,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
             list.addAll(list1);
         } else {
             for (LoadAndUnloadTodoBean team : list1) {
-                if (team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo()!=null&&team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }

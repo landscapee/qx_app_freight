@@ -183,7 +183,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
-                    model.setFlightNum(mFlightNumber);
+                    model.setFlightNo(mFlightNumber);
                     model.setFlightId(Long.valueOf(mFlightId));
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
@@ -340,7 +340,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             filePaths.add(entry.getKey());
         }
         ExceptionReportEntity model = new ExceptionReportEntity();
-        model.setFlightNum(mFlightNumber);
+        model.setFlightNo(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
         model.setFlightId(Long.valueOf(mFlightId));

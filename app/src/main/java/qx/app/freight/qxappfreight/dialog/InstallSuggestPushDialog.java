@@ -145,7 +145,14 @@ public class InstallSuggestPushDialog extends Dialog {
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
         p.height = d.getHeight();
+        p.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
         getWindow().setAttributes(p);
+    }
+
+    @Override
+    public void show() {
+        Tools.wakeupScreen(mContext);
+        super.show();
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -218,7 +218,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
                     mList.add(item);
                 }
             }

@@ -342,6 +342,7 @@
         android:paddingBottom="@dimen/dp_4">
 
         <FrameLayout
+            android:id="@+id/fr_pull_goods_report"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -387,6 +388,7 @@
             android:gravity="center"
             android:text="结束装机"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_18" />
+            android:textSize="@dimen/sp_18"
+            />
     </LinearLayout>
 </LinearLayout>

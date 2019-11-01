@@ -336,7 +336,8 @@
                     android:gravity="center"
                     android:text="结束卸机"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_18" />
+                    android:textSize="@dimen/sp_18"
+                    />
             </LinearLayout>
         </LinearLayout>
 

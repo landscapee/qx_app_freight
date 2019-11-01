@@ -2,7 +2,12 @@ package qx.app.freight.qxappfreight.utils;
 
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Arrays;
+
+import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 
 /**
  *  拷贝测试代码片段  到main方法内 第11行 绿色小按钮 可以运行 和debug 代码片段
@@ -33,9 +38,12 @@ public class TestCode {
 //        System.out.println("次数"+count);
 //    }
     public static void main(String[] args) {
-        String str = "01M/AVI";
-        str= str.substring(0,str.indexOf("/"));
-        Log.e("sss",str);
+        String string = "装机单 →第三代";
+        if (!(string==null|| string.contains("CTOT") || string.contains("机位"))){
+            Log.e("dialog：","222222222222");
+//            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
+//            updatePushDialog.show();
+        }
 
     }
     /**

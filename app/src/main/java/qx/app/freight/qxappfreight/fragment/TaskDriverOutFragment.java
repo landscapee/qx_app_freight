@@ -368,7 +368,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             listSearch.addAll(list);
         } else {
             for (AcceptTerminalTodoBean item : list) {
-                if (item.getTasks().get(0).getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getTasks()!=null&&item.getTasks().size()>0&&item.getTasks().get(0)!=null&&item.getTasks().get(0).getFlightNo()!=null&&item.getTasks().get(0).getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     listSearch.add(item);
                 }
             }

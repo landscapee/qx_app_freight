@@ -97,7 +97,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
             list.addAll(mCacheList);
         } else {
             for (TransportDataBase item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
                     list.add(item);
                 }
             }

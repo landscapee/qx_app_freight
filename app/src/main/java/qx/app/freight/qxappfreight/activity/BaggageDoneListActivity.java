@@ -317,6 +317,11 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             if (!transportTodoListBean.isNotCanDelete())
                 uploadList.add(transportTodoListBean);
         }
+
+        if (uploadList.size() == 0){
+            ToastUtil.showToast("请先扫码添加板车");
+            return;
+        }
         for (TransportTodoListBean item : uploadList) {
             item.setBaggageTurntable(turntableId);
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());

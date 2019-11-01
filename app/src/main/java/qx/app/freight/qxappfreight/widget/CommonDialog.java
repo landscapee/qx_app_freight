@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.widget;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
@@ -81,6 +82,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         return this;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,19 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
 
         if (!TextUtils.isEmpty(title)) {
             titleTxt.setText(title);
+        }
+
+    }
+
+    @Override
+    public void show() {
+        if (mContext instanceof Activity){
+            if (!((Activity)mContext).isFinishing())
+                super.show();
+        }
+        else {
+            if (mContext!=null)
+                super.show();
         }
 
     }

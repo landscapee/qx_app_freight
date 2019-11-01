@@ -93,6 +93,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
             finish();
             return;
         }
+
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
@@ -301,9 +302,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     dismissProgessDialog();
                     UpdatePWDActivity.startActivity(this);
                 }
+                dismissProgessDialog();
                 toMainAct();
             }
         } else {
+            dismissProgessDialog();
             ToastUtil.showToast(this, "数据错误");
         }
     }
@@ -336,7 +339,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      * 登录成功 跳转到主页
      */
     private void toMainAct() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
         MainActivity.startActivity(this);
         finish();
     }

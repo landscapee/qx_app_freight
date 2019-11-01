@@ -359,6 +359,11 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
     }
 
     @Override
+    public void lockOrUnlockScooterResult(String result) {
+
+    }
+
+    @Override
     public void toastView(String error) {
         if (error != null) {
             ToastUtil.showToast(error);

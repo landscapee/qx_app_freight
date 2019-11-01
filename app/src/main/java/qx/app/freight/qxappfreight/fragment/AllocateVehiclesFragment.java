@@ -135,7 +135,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             list.addAll(list1);
         } else {
             for (TransportDataBase item : list1) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }

@@ -126,7 +126,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }

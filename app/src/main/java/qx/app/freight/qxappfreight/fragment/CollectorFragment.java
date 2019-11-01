@@ -100,7 +100,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             list.addAll(list1);
         } else {
             for (TransportDataBase team : list1) {
-                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getWaybillCode()!=null&&team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }

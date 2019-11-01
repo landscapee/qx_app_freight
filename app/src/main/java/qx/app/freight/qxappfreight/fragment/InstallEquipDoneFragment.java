@@ -15,6 +15,10 @@ import android.view.ViewGroup;
 import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,13 +76,16 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mTaskFragment = (TaskDoneFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadUnloadTaskHisPresenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList, false,true);
+        mAdapter = new NewInstallEquipAdapter(mList, true,false,true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
@@ -156,6 +163,14 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         intent.putExtra("task_task_id",mList.get(position).getTaskId());
         getActivity().startActivity(intent);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result.contains("InstallEquipFragment_refresh") || "refresh_data_update".equals(result)) {
+            mCurrentPage = 1;
+            loadData();
+        }
+    }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -187,7 +202,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }

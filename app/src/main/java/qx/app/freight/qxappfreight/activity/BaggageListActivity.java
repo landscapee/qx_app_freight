@@ -279,14 +279,16 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
 
     //提交数据，现在改成下一步
     private void submitScooter(String turntableId) {
-
+        if (mList.size() == 0){
+            ToastUtil.showToast("请先扫码添加板车");
+            return;
+        }
         for (TransportTodoListBean item : mList) {
             item.setBaggageTurntable(turntableId);
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
             item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
             item.setBaggageSubUserName(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
         }
-//
 //        BaseFilterEntity entity = new BaseFilterEntity();
 //        entity.setFilter(mList);
 //        List<TransportTodoListBean> mList2 = new ArrayList<>();

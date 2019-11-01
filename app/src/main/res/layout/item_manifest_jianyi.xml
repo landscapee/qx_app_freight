@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_40"
+    android:layout_height="wrap_content"
    >
     <Button
         android:id="@+id/tv_pull"
@@ -15,14 +15,14 @@
         />
     <TextView
         android:layout_width="85dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="型号"
         android:textColor="@color/white"
         android:id="@+id/tv_model"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="舱位"
         android:ellipsize="end"
@@ -30,28 +30,28 @@
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="板车号/集装箱板号"
         android:textColor="@color/white"
         android:id="@+id/tv_scooter_number"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="件数"
         android:textColor="@color/white"
         android:id="@+id/tv_total"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="重量"
         android:textColor="@color/white"
         android:id="@+id/tv_weight"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="体积"
         android:textColor="@color/white"
         android:id="@+id/tv_volume"
@@ -61,14 +61,14 @@
 
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="特货代码"
         android:id="@+id/tv_specialCode"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="货邮代码"
         android:id="@+id/tv_mailtype"

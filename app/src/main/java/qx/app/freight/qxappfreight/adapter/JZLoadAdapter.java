@@ -165,7 +165,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             helper.setText(R.id.tv_ctot, "CTOT "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getCtot()));
             helper.setText(R.id.tv_xg, "协关 "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getUnifiedCloseTime()));
             helper.setText(R.id.tv_pre, "前飞 "+TimeUtils.datetimeTo4(item.getRelateInfoObj()!=null?item.getRelateInfoObj().getLoadingAndUnloadBean()!=null?item.getRelateInfoObj().getLoadingAndUnloadBean().getPreAtd():0:0));
-            helper.setText(R.id.tv_eta, "预达 "+TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getNxtEta()));
+            helper.setText(R.id.tv_eta, "预达 "+TimeUtils.datetimeTo4(item.getRelateInfoObj()!=null?item.getRelateInfoObj().getEta()>0?item.getRelateInfoObj().getEta():0:0));
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getElecState())){
                 showLable(item.getLoadingAndUnloadBean().getElecState(),mLayoutLable);
             }

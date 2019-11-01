@@ -34,12 +34,15 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
     private int mWidthairflag;
     private boolean notShowPull;
+
+    private boolean showLock;
     private OnDataCheckListener onDataCheckListener;
 
     private List<String> cargos = new ArrayList <>();
     private List<String> goods = new ArrayList <>();
     SpinnerAdapter apsAdapter1;
     SpinnerAdapter apsAdapter2;
+
 
     public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag) {
         super(R.layout.item_load_plane_install, list);
@@ -57,26 +60,38 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         this.goods.add("");
         this.goods.addAll(goods);
     }
+    public void setShowLock(boolean showLock){
+        this.showLock = showLock;
+    }
 
     @Override
     protected void convert(BaseViewHolder helper, LoadingListBean.DataBean.ContentObjectBean.ScooterBean item) {
         Spinner spBerth = helper.getView(R.id.sp_berth);
         Spinner spGoodsPos = helper.getView(R.id.sp_goods_position);
+        ImageView lock = helper.getView(R.id.iv_lock_status);
+        if (showLock){
+            lock.setVisibility(View.VISIBLE);
+        }
+        else
+            lock.setVisibility(View.GONE);
 
-        ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
+        lock.setImageResource(R.mipmap.icon_unlock_data);
         helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
-            if (item.isLocked()) {
-                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
-            } else {
-                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
-            }
-            item.setLocked(!item.isLocked());
+//            if (item.isLocked()) {
+//                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
+//            } else {
+//                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
+//            }
+//            item.setLocked(!item.isLocked());
             onDataCheckListener.onLockClicked(helper.getAdapterPosition());
         });
-        if (!item.isLocked()) {
-            ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
+        if (item.getLock() == 0||item.getLock() == 3) {
+            if (item.getLock() == 3){
+                //数据发生变化 自动解锁
+            }
+            lock.setImageResource(R.mipmap.icon_unlock_data);
         } else {
-            ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
+            lock.setImageResource(R.mipmap.icon_lock_data);
         }
         helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
                 .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
@@ -199,7 +214,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (item.isSplit())
                     return;
-                if (item.isLocked()) {
+                if (item.getLock() == 1) {
                     ToastUtil.showToast("数据已锁定，无法修改");
                     spBerth.setSelection(pos, true);
                 } else {
@@ -247,7 +262,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 int pos;
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (item.isLocked()) {
+                    if (item.getLock() == 1) {
                         ToastUtil.showToast("数据已锁定，无法修改");
                         spGoodsPos.setSelection(pos, true);
                     } else {

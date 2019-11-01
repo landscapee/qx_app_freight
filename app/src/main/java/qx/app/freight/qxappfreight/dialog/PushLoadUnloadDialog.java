@@ -23,6 +23,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -58,9 +60,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     private int count = 0;// 任务 领取条数
 
     public PushLoadUnloadDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
-        super(context,themeResId);
-        this.context = MyApplication.getContext();
+        super(MyApplication.getContext(),themeResId);
         this.list = list;
+        this.context = MyApplication.getContext();
         this.onDismissListener = onDismissListener;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_load_unload);
@@ -77,6 +79,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+
+        lp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
+
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
         setCancelable(false);
@@ -85,6 +90,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void show() {
+        Tools.wakeupScreen(context);//唤醒
         super.show();
     }
 
@@ -146,6 +152,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         mSlideView.setLockListener(new SlideRightExecuteView.OnLockListener() {
             @Override
             public void onOpenLockSuccess() {
+                EventBus.getDefault().post("MsgDialogAct_finish");
                 count =0;
                 LoadAndUnloadTodoPresenter mPresenter = new LoadAndUnloadTodoPresenter(PushLoadUnloadDialog.this);
                     for (LoadAndUnloadTodoBean bean : list) {

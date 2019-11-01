@@ -66,7 +66,7 @@ public class LoadingListBean implements Serializable {
                 private double weight;
                 private double volume;
                 //添加数据
-                private boolean locked;//是否锁定
+                private int lock;// 0 未锁定 1 已锁定 2
                 private String location;//货位
                 private String oldLocation;//原货位
                 private String serialInd;//ULD号

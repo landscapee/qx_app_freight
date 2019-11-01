@@ -112,7 +112,7 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
             mList.addAll(mListTemp);
         } else {
             for (FlightLuggageBean itemData : mListTemp) {
-                if (itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(itemData);
                 }
             }

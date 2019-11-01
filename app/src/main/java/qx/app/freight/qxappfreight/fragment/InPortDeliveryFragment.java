@@ -112,7 +112,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             mList.addAll(list1);
         } else {
             for (WaybillsBean item : list1) {
-                if (item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }

@@ -148,7 +148,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             mList.addAll(mListTemp);
         }else{
             for(TransportDataBase itemData: mListTemp){
-                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                if(itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
             }

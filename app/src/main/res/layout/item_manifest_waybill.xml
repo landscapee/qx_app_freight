@@ -2,39 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_40"
+    android:layout_height="wrap_content"
    >
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="箱板号"
         android:textColor="@color/white"
         android:id="@+id/tv_waybill_number"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="件数"
         android:textColor="@color/white"
         android:id="@+id/tv_total"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="重量"
         android:textColor="@color/white"
         android:id="@+id/tv_weight"
         android:gravity="center"/>
     <TextView
         android:layout_width="100dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="航线"
         android:textColor="@color/white"
         android:id="@+id/tv_route"
         android:gravity="center"/>
     <TextView
         android:layout_width="85dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="货物名称"
         android:ellipsize="end"
@@ -49,7 +49,7 @@
         <!--android:gravity="center"/>-->
     <TextView
         android:layout_width="85dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="特货代码"
         android:ellipsize="end"
@@ -58,7 +58,7 @@
 
     <TextView
         android:layout_width="85dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="舱位"
         android:ellipsize="end"

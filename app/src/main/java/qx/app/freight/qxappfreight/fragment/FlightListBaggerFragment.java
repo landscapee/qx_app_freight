@@ -115,7 +115,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             mList.addAll(mListTemp);
         }else{
             for(FlightLuggageBean itemData: mListTemp){
-                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                if(itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
             }

@@ -126,7 +126,7 @@ public class CargoDoneFragment extends BaseFragment implements CargoReportHisCon
             mList.addAll(mListTemp);
         } else {
             for (CargoReportHisBean itemData : mListTemp) {
-                if (itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(itemData);
                 }
             }

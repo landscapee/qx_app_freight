@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,24 +27,20 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FlightPhotoRecordActivity;
+import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
+import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
-import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -59,8 +54,6 @@ import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.PushLoadUnloadDialog;
 import qx.app.freight.qxappfreight.dialog.UnloadBillInfoDialog;
-import qx.app.freight.qxappfreight.presenter.GetFlightCargoResPresenter;
-import qx.app.freight.qxappfreight.presenter.GetUnLoadListBillPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
@@ -77,14 +70,14 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 public class InstallEquipFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, LoadAndUnloadTodoContract.loadAndUnloadTodoView, GetUnLoadListBillContract.IView, GetFlightCargoResContract.getFlightCargoResView, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-    private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
-    private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> mList = new ArrayList <>();
+    private List <LoadAndUnloadTodoBean> mCacheList = new ArrayList <>();
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private NewInstallEquipStepAdapter mSlideAdapter;
     private int mOperatePos;
-    private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> mListCache = new ArrayList <>();
     private NewInstallEquipAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
@@ -93,12 +86,13 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     private boolean isShow = false;
 
     private PushLoadUnloadDialog mDialog = null;
-    private List<String> mTaskIdList = new ArrayList<>();
+    private List <String> mTaskIdList = new ArrayList <>();
     private String mSpecialTaskId = null;//专门记录由点击了结束装机或卸机返回刷新数据的taskId，匹配到该taskId则item应该展开
 
     private int currentPosition = 0;
 
     private int loadInstall = 0; //请求装机单标记 1 ：装机单
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,7 +108,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 loadData();
             } else if (result.isCancelFlag()) {
                 if (!result.isConfirmTask()) {//不再保障任务，吐司提示航班任务取消保障
-                    List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                    List <LoadAndUnloadTodoBean> list = result.getTaskData();
                     String flightName = list.get(0).getFlightNo();
                     ToastUtil.showToast("航班" + flightName + "任务已取消保障，数据即将重新刷新");
 //                    Observable.timer(300, TimeUnit.MILLISECONDS)
@@ -129,7 +123,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     loadData();
                 }
             } else {//新任务推送，筛选最新数据再添加进行展示
-                List<LoadAndUnloadTodoBean> list = result.getTaskData();
+                List <LoadAndUnloadTodoBean> list = result.getTaskData();
                 for (LoadAndUnloadTodoBean bean : list) {
                     for (LoadAndUnloadTodoBean bean1 : mListCache) {
                         if (bean.getTaskId().equals(bean1.getTaskId())) {//如果新任务id==旧任务id就删除
@@ -153,17 +147,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0)
             return;
         if (mDialog == null) {
-            mDialog = new PushLoadUnloadDialog(getContext(),R.style.custom_dialog,mListCache,success -> {
+            mDialog = new PushLoadUnloadDialog(getContext(), R.style.custom_dialog, mListCache, success -> {
                 if (success) {//成功领受后吐司提示，
                     ToastUtil.showToast("领受装卸机新任务成功");
-                    mDialog.dismiss();
-                    mCurrentPage = 1;
-                    loadData();
-                    mListCache.clear();
                 } else {//领受失败后，清空未领受列表缓存
-                    Log.e("tagPush", "推送出错了");
-                    mListCache.clear();
+                    Log.e("tagPush", "领受失败");
                 }
+                mDialog.dismiss();
+                mCurrentPage = 1;
+                loadData();
+                mListCache.clear();
                 mDialog = null;
             });
         }
@@ -195,12 +188,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList,false,true);
+        mAdapter = new NewInstallEquipAdapter(mList, false, true, true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                    IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position))+"");
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position)) + "");
             }
 
             @Override
@@ -235,49 +228,67 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     }
 
     /**
-     *  查看卸机单
+     * 查看卸机单
+     *
      * @param position
      */
-    private void lookUnloadInstall(int position){
-        loadInstall = 1;
-        mPresenter = new GetUnLoadListBillPresenter(this);
-        UnLoadRequestEntity entity = new UnLoadRequestEntity();
-        entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
-        entity.setFlightId(mList.get(position).getFlightId());
-        String userName = UserInfoSingle.getInstance().getUsername();
-        entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
-        ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
+    private void lookUnloadInstall(int position) {
+
+        Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+        intent.putExtra("flight_type", mList.get(position).getFlightType());
+        intent.putExtra("plane_info", mList.get(position));
+        mContext.startActivity(intent);
+//        loadInstall = 1;
+//        mPresenter = new GetUnLoadListBillPresenter(this);
+//        UnLoadRequestEntity entity = new UnLoadRequestEntity();
+//        entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
+//        entity.setFlightId(mList.get(position).getFlightId());
+//        String userName = UserInfoSingle.getInstance().getUsername();
+//        entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+//        ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
     }
 
     /**
      * 查看装机单
      */
     private void lookLoadInstall(int position) {
-        mPresenter = new GetFlightCargoResPresenter(this);
-        LoadingListRequestEntity entity = new LoadingListRequestEntity();
-        entity.setDocumentType(2);
-        if (mList.get(position).getMovement() == 4 && mList.get(position).getRelateInfoObj() != null) {
-            entity.setFlightId(mList.get(position).getRelateInfoObj().getFlightId());
-        }
+
+        Intent intent = new Intent(mContext, LoadPlaneActivity.class);
+        intent.putExtra("plane_info", mList.get(position));
+        if ( mList.get(position).getTaskType() == 5)
+            intent.putExtra("position", 5);
         else {
-            entity.setFlightId(mList.get(position).getFlightId());
+            intent.putExtra("position", 3);
         }
-        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
+        mContext.startActivity(intent);
+//        mPresenter = new GetFlightCargoResPresenter(this);
+//        LoadingListRequestEntity entity = new LoadingListRequestEntity();
+//        entity.setDocumentType(2);
+//        if (mList.get(position).getMovement() == 4 && mList.get(position).getRelateInfoObj() != null) {
+//            entity.setFlightId(mList.get(position).getRelateInfoObj().getFlightId());
+//        }
+//        else {
+//            entity.setFlightId(mList.get(position).getFlightId());
+//        }
+//        ((GetFlightCargoResPresenter) mPresenter).getLoadingList(entity);
     }
+
     /**
      * 进入航班拍照界面
+     *
      * @param position
      */
     private void intoPhotoAct(int position) {
         Intent intent = new Intent(getActivity(), FlightPhotoRecordActivity.class);
-        intent.putExtra("flight_number",mList.get(position).getFlightNo());
-        intent.putExtra("flight_id",mList.get(position).getFlightId());
-        intent.putExtra("task_id",mList.get(position).getId());
-        intent.putExtra("task_pic",mList.get(position).getTaskPic());
-        intent.putExtra("task_task_id",mList.get(position).getTaskId());
+        intent.putExtra("flight_number", mList.get(position).getFlightNo());
+        intent.putExtra("flight_id", mList.get(position).getFlightId());
+        intent.putExtra("task_id", mList.get(position).getId());
+        intent.putExtra("task_pic", mList.get(position).getTaskPic());
+        intent.putExtra("task_task_id", mList.get(position).getTaskId());
 
         getActivity().startActivity(intent);
     }
+
     /**
      * 发起清场任务
      */
@@ -316,7 +327,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -369,9 +380,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
         mTaskIdList.clear();
-        List<Boolean> checkedList = new ArrayList<>();
+        List <Boolean> checkedList = new ArrayList <>();
         mCacheList.clear();
         if (mCurrentPage == 1) {
             mMfrvData.finishRefresh();
@@ -391,15 +402,15 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             if (bean.getRelateInfoObj() != null) {
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
-                if (!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())){
+                if (!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
                     bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
                 }
             }
-            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())) {
                 bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
-            List<String> times = new ArrayList<>();
+            List <String> times = new ArrayList <>();
             times.add(String.valueOf(bean.getAcceptTime()));
             times.add(String.valueOf(bean.getArrivalTime()));
             times.add(String.valueOf(bean.getOpenDoorTime()));
@@ -473,7 +484,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 }
             }
-            List<String> codeList = new ArrayList<>();
+            List <String> codeList = new ArrayList <>();
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
                 String code = bean.getOperationStepObj().get(i).getOperationCode();
                 if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {//排除了装机结束和卸机结束的code，宽体机滑动开始卸机时会自动调取步骤接口生成卸机开始和卸机结束时间
@@ -503,22 +514,37 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
      *
      * @param checkedList 是否滑动过当前步骤  列表
      */
-    private void setSlideListener(List<Boolean> checkedList) {
+    private void setSlideListener(List <Boolean> checkedList) {
         mAdapter.setOnSlideStepListener((bigPos, adapter, smallPos) -> {
             //滑动步骤去调接口，以及跳转页面
-            if ((smallPos == 3 || smallPos == 4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
-                Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
-            } else {
-                mOperatePos = smallPos;
-                mSlideAdapter = adapter;
-                if (smallPos == 3 && mList.get(bigPos).getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
-                    String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
-                    for (String code : codes) {
-                        go2SlideStep(bigPos, code);
-                    }
-                } else {
-                    go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
+//            if ((smallPos == 3 || smallPos == 4) && checkedList.get(bigPos)) {//如果已经调过滑动开始装机或开始卸机步骤接口，再次滑动不去调接口
+//                Log.e("tagTest", "已经开始装卸机，但是返回退出了页面！");
+//            } else {
+//                mOperatePos = smallPos;
+//                mSlideAdapter = adapter;
+//                if (smallPos == 3 && mList.get(bigPos).getWidthAirFlag() == 0) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
+//                    String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
+//                    for (String code : codes) {
+//                        go2SlideStep(bigPos, code);
+//                    }
+//                } else {
+//                    go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
+//                }
+//            }
+            mOperatePos = smallPos;
+            mSlideAdapter = adapter;
+            if (smallPos == 3) {//滑动卸机步骤时如果判断到是宽体机直接调用开始卸机和结束卸机，进行下一步操作
+                String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightUnloadFinish"};
+                for (String code : codes) {
+                    go2SlideStep(bigPos, code);
                 }
+            } else if (smallPos == 4) {
+                String[] codes = {mList.get(bigPos).getStepCodeList().get(smallPos), "FreightLoadFinish"};
+                for (String code : codes) {
+                    go2SlideStep(bigPos, code);
+                }
+            } else {
+                go2SlideStep(bigPos, mList.get(bigPos).getStepCodeList().get(smallPos));
             }
         });
     }
@@ -571,10 +597,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             ToastUtil.showToast("暂无装机单");
 
         if (mCurrentPage == 1) {
-            if (mMfrvData!=null)
+            if (mMfrvData != null)
                 mMfrvData.finishRefresh();
         } else {
-            if (mMfrvData!=null)
+            if (mMfrvData != null)
                 mMfrvData.finishLoadMore();
         }
     }
@@ -593,7 +619,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     public void getUnLoadingListResult(UnLoadListBillBean result) {
         if (result != null) {
             if (result.getData() != null) {
-                List<UnLoadListBillBean.DataBean.ContentObjectBean> list = result.getData().getContentObject();
+                List <UnLoadListBillBean.DataBean.ContentObjectBean> list = result.getData().getContentObject();
                 UnloadBillInfoDialog unloadBillInfoDialog = new UnloadBillInfoDialog();
                 unloadBillInfoDialog.setData(list, getActivity());
                 unloadBillInfoDialog.show(getActivity().getSupportFragmentManager(), "unload_bill");
@@ -614,19 +640,19 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     Gson mGson = new Gson();
                     LoadingListBean.DataBean.ContentObjectBean[] datas = mGson.fromJson(result.getData().get(0).getContent(), LoadingListBean.DataBean.ContentObjectBean[].class);
                     //舱位集合
-                    List<LoadingListBean.DataBean.ContentObjectBean> mBaseContent = new ArrayList <>(Arrays.asList(datas));
+                    List <LoadingListBean.DataBean.ContentObjectBean> mBaseContent = new ArrayList <>(Arrays.asList(datas));
 
-                    if (mBaseContent !=null && mBaseContent.size()> 0){
-                        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
-                        for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : mBaseContent){
+                    if (mBaseContent != null && mBaseContent.size() > 0) {
+                        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList <>();
+                        for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : mBaseContent) {
                             scooters.addAll(mContentObjectBean.getScooters());
                         }
-                        InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(getActivity(), R.style.custom_dialog,scooters,mList.get(currentPosition).getRelateInfoObj()!=null?mList.get(currentPosition).getRelateInfoObj().getFlightNo():mList.get(currentPosition).getFlightNo(),false, () -> {});
+                        InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(getActivity(), R.style.custom_dialog, scooters, mList.get(currentPosition).getRelateInfoObj() != null ? mList.get(currentPosition).getRelateInfoObj().getFlightNo() : mList.get(currentPosition).getFlightNo(), false, () -> {
+                        });
                         updatePushDialog.show();
                     }
                 }
-            }
-            else {
+            } else {
                 ToastUtil.showToast("装机单未就绪");
             }
         }

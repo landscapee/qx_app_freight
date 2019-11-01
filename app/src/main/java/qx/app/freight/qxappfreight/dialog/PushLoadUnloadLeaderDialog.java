@@ -74,6 +74,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
+        lp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
         window.setAttributes(lp);
         window.setWindowAnimations(R.style.anim_bottom_bottom);
         setCancelable(false);
@@ -115,6 +116,7 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
+        Tools.wakeupScreen(context);
         super.show();
 
     }

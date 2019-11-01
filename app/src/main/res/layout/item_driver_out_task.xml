@@ -101,12 +101,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
-        android:id="@+id/coll_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+    <!--<qx.app.freight.qxappfreight.widget.CollapsableLinearLayout-->
+        <!--android:id="@+id/coll_listview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -120,6 +120,6 @@
             android:visibility="visible"/>
 
 
-    </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
+    <!--</qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>-->
 
 </LinearLayout>

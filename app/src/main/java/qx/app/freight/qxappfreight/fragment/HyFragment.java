@@ -41,6 +41,7 @@ import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.presenter.GetLastReportInfoPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /**
@@ -59,6 +60,10 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
     TextView tvEmailWeight;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
+
+
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean.WaybillListBean> mList = new ArrayList<>();
@@ -100,6 +105,13 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
     public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
         List<FlightAllReportInfo> result = cargoManifestEventBusEntity.getBeans();
         if (result != null && result.size()>0) {
+            if (StringUtil.isEmpty(result.get(0).getContent())){
+                tvNoData.setVisibility(View.VISIBLE);
+                mSrRefush.setVisibility(View.GONE);
+                return;
+            }
+            tvNoData.setVisibility(View.GONE);
+            mSrRefush.setVisibility(View.VISIBLE);
 //            mTvVersion.setText("版本号" + result.getVersion());
 //        mRvData.finishRefresh();
             cagnWeight = 0;
@@ -108,7 +120,9 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             mList.clear();
             Gson mGson = new Gson();
             name = result.get(0).getCreateUserName();
+
             ManifestMainBean[] datas = mGson.fromJson(result.get(0).getContent(), ManifestMainBean[].class);
+
 
 //            List<ManifestMainBean> manifestMainBeans = Arrays.asList(datas);
 //            if (Build.VERSION.SDK_INT >= 24) {
@@ -156,6 +170,11 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             mList.add(0, title);
             ManifestWaybillListAdapter adapter = new ManifestWaybillListAdapter(mList);
             mRvData.setAdapter(adapter);
+        }
+        else {
+            tvNoData.setVisibility(View.VISIBLE);
+            mRvData.setVisibility(View.GONE);
+
         }
     }
 }

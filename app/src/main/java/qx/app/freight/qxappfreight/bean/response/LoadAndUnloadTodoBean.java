@@ -62,6 +62,12 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long endUnloadTime;
     private long closeDoorTime;
     private long  passengerLoadSend;// 舱单送达时间
+
+    //用于监装监卸 不能再次 结束装机和卸机
+    private long endLoadTimeIn;
+    private long endUnloadTimeIn;
+
+
     private String aircraftno;
     private String seat;
     private long scheduleTime;

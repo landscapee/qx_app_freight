@@ -1,10 +1,13 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -35,6 +38,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
+import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
@@ -44,6 +48,7 @@ import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
@@ -96,6 +101,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     LinearLayout llSearch;//第三个tab
 
 
+//    List <LockEventbusEntity> pushList = new ArrayList <>();
 
     private Fragment nowFragment;
     private Fragment fragment1;
@@ -105,11 +111,18 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     private Fragment fragment5;
 
     private MessageReciver mMessageReciver;//聊天消息广播接收器
+    private ScreenStateReciver mScreenStateReciver;
 
     private boolean isJunctionLoad = false;//是否是结载角色
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(intent);
+    }
+    public static void startActivity(Context context,int wakeFlag) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         context.startActivity(intent);
     }
 
@@ -129,6 +142,9 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         mMessageReciver = new MessageReciver(this);
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
+        mScreenStateReciver = new ScreenStateReciver();
+        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
+        registerReceiver(mScreenStateReciver, screenfilter);
 //        mTaskFragment = new TaskFragment();
 //        mDynamicFragment = new DynamicFragment();
 //        mCSFragment = new ClearStorageFragment();
@@ -388,6 +404,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
+            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -401,10 +418,12 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SeatChangeEntity result) {
-        if (result.getRemark()!=null&& !result.getRemark().contains("CTOT")){
-            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
+        if (!(result.getRemark()==null || result.getRemark().contains("CTOT") ||result.getRemark().contains("机位"))){
+            Log.e("dialog：","222222222222");
+            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> {});
             updatePushDialog.show();
         }
+        EventBus.getDefault().post("refresh_data_update");
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
@@ -491,6 +510,56 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     @Override
     public void dissMiss() {
 
+    }
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventMainThread(LockEventbusEntity result) {
+//       if (pushList!=null&&result!=null){
+//           pushList.add(result);
+//       }
+//    }
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 1:
+//                    LockEventbusEntity push = (LockEventbusEntity) msg.obj;
+//                    if (push != null){//根据 flag 分发未解锁 收到的任务
+//                        EventBus.getDefault().post(push.getCommonJson4List());
+//                    }
+//                    break;
+//            }
+//        }
+//    };
+//    /**
+//     * 读取消息队列里面的消息并发送给handler处理
+//     *
+//     * @param pushList
+//     */
+//    private void checkPush(List <LockEventbusEntity> pushList) {
+//        if (pushList != null && pushList.size() != 0) {
+//            for (int i = 0; i < pushList.size(); i++) {
+//                mHandler.obtainMessage(1, pushList.get(i)).sendToTarget();
+//            }
+//        }
+//    }
+    /**
+     * 屏幕监听
+     */
+    class ScreenStateReciver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+                Log.e("屏幕监听:", "屏幕亮了");
+            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                Log.e("屏幕监听:", "屏幕黑了");
+            } else if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+                Log.e("屏幕监听:", "屏幕解锁了");
+//                checkPush(pushList);//解锁后去读取消息队列的推送列表
+            }
+        }
     }
 }
 

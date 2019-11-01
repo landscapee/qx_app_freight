@@ -32,6 +32,7 @@ import qx.app.freight.qxappfreight.bean.ManifestScooterListBean;
 import qx.app.freight.qxappfreight.bean.loadinglist.CargoManifestEventBusEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
@@ -48,7 +49,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     TextView tvEmailWeight;
     @BindView(R.id.tv_name)
     TextView tvName;
-
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     private LoadAndUnloadTodoBean mBaseData;
     private List<ManifestScooterListBean> mList = new ArrayList<>();
@@ -93,6 +95,13 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
     public void onEventMainThread(CargoManifestEventBusEntity cargoManifestEventBusEntity) {
         List<FlightAllReportInfo> result = cargoManifestEventBusEntity.getBeans();
         if (result != null && result.size() > 0) {
+            if (StringUtil.isEmpty(result.get(0).getContent())){
+                tvNoData.setVisibility(View.VISIBLE);
+                mSrRefush.setVisibility(View.GONE);
+                return;
+            }
+            tvNoData.setVisibility(View.GONE);
+            mSrRefush.setVisibility(View.VISIBLE);
             cagnWeight = 0;
             emailWeight = 0;
             mSrRefush.setRefreshing(false);
@@ -174,6 +183,11 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
 
             ManifestWaybillListjianyiAdapter adapter = new ManifestWaybillListjianyiAdapter(mList, mBaseData.getWidthAirFlag());
             mRvData.setAdapter(adapter);
+        }
+        else
+        {
+            tvNoData.setVisibility(View.VISIBLE);
+            mRvData.setVisibility(View.GONE);
         }
     }
 }
