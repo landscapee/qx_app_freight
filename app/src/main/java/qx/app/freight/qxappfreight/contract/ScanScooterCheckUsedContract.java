@@ -9,7 +9,7 @@ import qx.app.freight.qxappfreight.bean.response.BaseEntity;
  */
 public class ScanScooterCheckUsedContract {
     public interface ScanScooterCheckModel {
-        void checkScooterCode(String scooterCode, IResultLisenter lisenter);
+        void checkScooterCode(String scooterCode,String flightId,String scSubCategory, IResultLisenter lisenter);
     }
 
     public interface ScanScooterCheckView extends IBaseView {

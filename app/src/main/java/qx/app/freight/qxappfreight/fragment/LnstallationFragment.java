@@ -206,7 +206,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("LnstallationFragment_refresh")) {
+        if (result.equals("LnstallationFragment_refresh")||result.equals("refresh_data_update")) {
             mCurrentPage = 1;
             getData();
         }
@@ -246,10 +246,11 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     public void toastView(String error) {
         if (mCurrentPage == 1) {
             list.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
         }
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -291,6 +292,9 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
                 //结载单独使用数据 json 解析
                 if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
                     bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+                }
+                if (bean.getRelateInfoObj() != null && !StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
+                    bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
                 }
             }
 

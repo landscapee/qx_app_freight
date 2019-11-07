@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -36,6 +38,7 @@ import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.activity.MsgDialogAct;
+import qx.app.freight.qxappfreight.activity.MsgDialogVisibleAct;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.PositionBean;
@@ -451,29 +454,29 @@ public class Tools {
      */
     public static void wakeupScreen(Context context) {
         if (isBackground(context)||!isScreenOn(context)) {
-//            //屏锁管理器
-//            KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-//            KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
-//            //解锁
-//            kl.disableKeyguard();
-//            Log.e("屏幕：", "解锁");
-
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             if (isScreenOn(context)) {
                 wakeupApp(context);
                 return;
             }
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             //获取电源管理器对象
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
             //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
             //点亮屏幕
             wl.acquire();
             //释放
             wl.release();
-            Log.e("屏幕：", "点亮");
             wakeupApp(context);
-            if (isLocked(context)) {
-                MsgDialogAct.startActivity(context);
+            Log.e("屏幕：", "点亮");
+            if (Build.VERSION.SDK_INT >= 26) {
+                if (isLocked(context)) {
+                    MsgDialogAct.startActivity(context);
+                }
+            }
+            else {
+                if (isLocked(context)) {
+                    MsgDialogVisibleAct.startActivity(context);
+                }
             }
         }
     }
@@ -485,7 +488,9 @@ public class Tools {
 ////            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 ////        }
 //        context.startActivity(intent);
-        MainActivity.startActivity(context,0);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(intent);
         Log.e("屏幕：", "唤醒app");
     }
 
@@ -513,7 +518,6 @@ public class Tools {
     }
 
     public static void unLock(Context context) {
-
         //屏锁管理器
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
@@ -546,5 +550,32 @@ public class Tools {
         }
         else
             return Integer.valueOf(flights.getFlightId());
+    }
+
+    /**
+     * 通过特货代码 获取 体积
+     * @param specialCode
+     * @return
+     */
+    public static String getVolumeForSpCode(String specialCode) {
+        String volume= specialCode;
+        if (specialCode.contains("/")){
+            volume= specialCode.substring(0,specialCode.indexOf("/"));
+        }
+        return volume;
+    }
+    /**
+     * 通过特货代码 获取 正确的特货代码
+     * @param specialCode
+     * @return
+     */
+    public static String getSpCodeForSpCode(String specialCode) {
+        String spCode= specialCode;
+        if (specialCode.contains("/")){
+            spCode= specialCode.substring(specialCode.indexOf("/"),specialCode.length()-1);
+        }
+        else
+            spCode="";
+        return spCode;
     }
 }

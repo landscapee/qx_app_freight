@@ -39,14 +39,15 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
     protected void convert(BaseViewHolder helper, ManifestScooterListBean item) {
         if (1 == mWidthairflag) { //窄体机
             helper.getView(R.id.tv_model).setVisibility(View.GONE);
-            helper.getView(R.id.tv_volume).setVisibility(View.GONE);
+//            helper.getView(R.id.tv_volume).setVisibility(View.GONE);
             helper.setText(R.id.tv_suggestRepository, item.getSuggestRepository() != null ? item.getSuggestRepository() : "--")
                     .setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
                     .setText(R.id.tv_total, item.getTotal() != null ? item.getTotal() + "" : "--")
+                    .setText(R.id.tv_volume, item.getVolume() != null ? item.getVolume() + "" : "--")
                     .setText(R.id.tv_weight, item.getWeight() != null ? item.getWeight() + "" : "--")
                     .setText(R.id.tv_specialCode, item.getSpecialNumber() != null ? item.getSpecialNumber() : "--");
             if (item.getWaybillList() != null && item.getWaybillList().size() > 0)
-                helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getMailType() != null ? item.getMailType() : "--");
+                helper.setText(R.id.tv_mailtype, item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getMailType() != null ? item.getMailType() : "--");
             else
                 helper.setText(R.id.tv_mailtype, item.getMailType() != null ? item.getMailType() : "--");
             Button btnPull = helper.getView(R.id.tv_pull);
@@ -100,7 +101,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
-                } else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+                } else if (item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
@@ -159,6 +160,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                 helper.setText(R.id.tv_model, "型号")
                         .setText(R.id.tv_scooter_number, "集装箱板号")
                         .setText(R.id.tv_total, item.getTotal())
+                        .setText(R.id.tv_volume, item.getVolume())
                         .setText(R.id.tv_weight, item.getWeight())
                         .setText(R.id.tv_specialCode, item.getSpecialNumber())
                         .setText(R.id.tv_mailtype, item.getMailType());
@@ -166,6 +168,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                 helper.setText(R.id.tv_model, item.getUldType() != null ? item.getUldType() : item.getScooterCode() != null ? "散货" : "--")
                         .setText(R.id.tv_scooter_number, item.getUldCode() != null ? item.getUldCode() + item.getIata() : item.getScooterCode() != null ? item.getScooterCode() : "--")
                         .setText(R.id.tv_total, item.getTotal() != null ? item.getTotal() + "" : "--")
+                        .setText(R.id.tv_volume, item.getVolume() != null ? item.getVolume() + "" : "--")
                         .setText(R.id.tv_weight, item.getWeight() != null ? item.getWeight() + "" : "--")
                         .setText(R.id.tv_specialCode, item.getSpecialNumber() != null ? item.getSpecialNumber() : "--")
                         .setText(R.id.tv_mailtype, item.getMailType() != null ? item.getMailType() : "--");
@@ -180,7 +183,7 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }
-                else if (item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+                else if (item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
                     helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));

@@ -150,7 +150,7 @@
                     android:background="#e5e5e5" />
 
                 <TextView
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textColor="@color/white"
                     android:gravity="center"
@@ -164,43 +164,27 @@
 
                 <TextView
                     android:id="@+id/tv_goods"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:text="货位"
                    />
-
-                <TextView
-                    android:id="@+id/tv_operation"
-                    android:layout_width="80dp"
-                    android:layout_height="40dp"
-                    android:text="操作"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_scooter_number"
-                    android:layout_width="85dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="板号"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="109dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="uld号"
-                    android:textColor="@color/white" />
-
                 <TextView
                     android:id="@+id/tv_destination"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="目的地"
+                    android:textColor="@color/white" />
+
+
+                <TextView
+                    android:id="@+id/tv_scooter_number"
+                    android:layout_width="85dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="板号/uld号"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -211,17 +195,19 @@
                     android:textColor="@color/white" />
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="重量"
+                    android:text="重量/体积"
                     android:textColor="@color/white" />
                 <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
+                    android:id="@+id/tv_operation"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:text="操作"
+                    android:textColor="@color/white"
                     android:gravity="center"
-                    android:text="体积"
-                    android:textColor="@color/white" />
+                    />
 
             </LinearLayout>
             <android.support.v7.widget.RecyclerView

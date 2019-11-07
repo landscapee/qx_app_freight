@@ -113,61 +113,67 @@
             <!--android:textColor="@color/grassgreen"-->
             <!--android:textSize="@dimen/sp_12" />-->
 
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_weight="1"
+                >
             <RadioGroup
                 android:id="@+id/tb_title"
-                android:layout_width="440dp"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="@drawable/shape_dynamic_blue"
                 android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rb_install"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:background="@drawable/selector_blue_center_a"
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
                     android:text="预装机单"
-                    android:textColor="@drawable/selector_text_blue_a" />
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
                 <RadioButton
                     android:id="@+id/rb_advise_install"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:background="@drawable/selector_blue_center_a"
                     android:button="@null"
                     android:gravity="center"
                     android:text="监装调舱建议"
-                    android:textColor="@drawable/selector_text_blue_a" />
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
                 <RadioButton
                     android:id="@+id/rb_end_install"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:background="@drawable/selector_blue_center_a"
                     android:button="@null"
                     android:gravity="center"
                     android:text="最终装机单"
-                    android:textColor="@drawable/selector_text_blue_a" />
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
                 <RadioButton
                     android:id="@+id/rb_end_advise_install"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:background="@drawable/selector_blue_center_a"
                     android:button="@null"
                     android:gravity="center"
                     android:text="监装调舱建议"
-                    android:textColor="@drawable/selector_text_blue_a" />
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
             </RadioGroup>
 
-
+            </HorizontalScrollView>
             <!--<ImageView-->
             <!--android:layout_width="18dp"-->
             <!--android:layout_height="18dp"-->
@@ -178,9 +184,8 @@
 
             <TextView
                 android:id="@+id/tv_version"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_40"
-                android:layout_weight="1"
                 android:gravity="center_vertical|right"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_12" />

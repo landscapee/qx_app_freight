@@ -121,6 +121,28 @@
             android:background="@color/divider_line_grey" />
 
         <TextView
+            android:id="@+id/tv_statistics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/black_3"
+            android:text="货物:20kg 邮件:20kg "
+            />
+        <TextView
+            android:id="@+id/tv_statistics_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/black_3"
+            android:text="行李:20kg 其他:20kg"
+            />
+        <TextView
             android:id="@+id/tv_close_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

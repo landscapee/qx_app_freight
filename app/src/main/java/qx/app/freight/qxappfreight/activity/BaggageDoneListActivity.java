@@ -229,6 +229,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 ToastUtil.showToast("无该行李转盘");
 
             } else {
+//                isIncludeScooterCode(mScooterCode);
                 checkScooterCode(mScooterCode);
             }
 
@@ -244,6 +245,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {
+//                    isIncludeScooterCode(mScooterCode);
                     checkScooterCode(mScooterCode);
                 } else {
                     ToastUtil.showToast("扫码数据为空请重新扫码");
@@ -323,6 +325,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             return;
         }
         for (TransportTodoListBean item : uploadList) {
+            item.setScSubCategory(1);
             item.setBaggageTurntable(turntableId);
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
             item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
@@ -359,7 +362,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
      */
     private void checkScooterCode(String scooterCode) {
         mPresenter = new ScanScooterCheckUsedPresenter(this);
-        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode,flightBean.getFlightId(),Constants.SCAN_XINGLI);
     }
 
     @Override

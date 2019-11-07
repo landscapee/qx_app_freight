@@ -114,6 +114,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     private boolean mIsScanGoods = true;
     private List<ScooterInfoListBean> mListGoods = new ArrayList<>();
     private List<ScooterInfoListBean> mListPac = new ArrayList<>();
+    private List<ScooterInfoListBean> mListTempAlreadyNotify = new ArrayList<>();
     private ScanInfoAdapter mScanGoodsAdapter;//扫描货物适配器
     private ScanInfoAdapter mScanPacAdapter;//扫描行李适配器
     private String mCurrentTaskId;
@@ -317,7 +318,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setDtoType(8);
             entity.setTpType(String.valueOf(mData.getMovement()));
             entity.setTaskId(mData.getTaskId());//代办数据中的id
-            infos.add(entity);
+            entity.setScSubCategory(3);
+            if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
+            {
+                infos.add(entity);
+            }
         }
         for (ScooterInfoListBean bean : mListPac) {
             TransportTodoListBean entity = new TransportTodoListBean();
@@ -333,7 +338,11 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setDtoType(8);
             entity.setTpType(String.valueOf(mData.getMovement()));
             entity.setTaskId(mData.getTaskId());//代办数据中的id
-            infos.add(entity);
+            entity.setScSubCategory(3);
+            if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
+            {
+                infos.add(entity);
+            }
         }
 //            if (infos.size() == 0) {
 //                ToastUtil.showToast("请选择上传板车信息再提交");
@@ -354,7 +363,6 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         Log.e("tag", "卸机id======" + mData.getId());
         List<TransportTodoListBean> infos = new ArrayList<>();
         for (ScooterInfoListBean bean : mListGoods) {
-            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setHeadingFlag(bean.getHeadingFlag());
@@ -371,10 +379,14 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpType("进");
             entity.setTpState(0);
             entity.setTaskId(mData.getTaskId());//代办数据中的id
-            infos.add(entity);
+            entity.setScSubCategory(3);
+            if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
+            {
+                infos.add(entity);
+                mListTempAlreadyNotify.add(bean);
+            }
         }
         for (ScooterInfoListBean bean : mListPac) {
-            bean.setNoticeTransport(true);
             TransportTodoListBean entity = new TransportTodoListBean();
             entity.setTpScooterType(String.valueOf(bean.getScooterType()));
             entity.setHeadingFlag(bean.getHeadingFlag());
@@ -391,12 +403,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             entity.setTpType("进");
             entity.setTpState(0);
             entity.setTaskId(mData.getTaskId());//代办数据中的id
-            infos.add(entity);
+            entity.setScSubCategory(3);
+            if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
+            {
+                infos.add(entity);
+                mListTempAlreadyNotify.add(bean);
+            }
         }
         model.setScooters(infos);
         model.setTaskType("2");
         if (model.getScooters().size() == 0) {
-            ToastUtil.showToast("请选择上传板车信息再提交");
+            ToastUtil.showToast("未添加新传板车，无需再次通知运输");
         } else {
             mPresenter = new ScanScooterPresenter(this);
             ((ScanScooterPresenter) mPresenter).scanLockScooter(model);
@@ -417,15 +434,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
                         dialog.setData(this, "请选择货物或行李", "货物", "行李", isCheckRight -> {
                             mIsScanGoods= !isCheckRight;
                             mNowScooterCode = result.getData();
+//                            addScooterInfo(mNowScooterCode);
                             mPresenter = new ScanScooterCheckUsedPresenter(this);
-                            ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                            ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode,mData.getFlightId(),Constants.SCAN_UNLOAD);
                         });
                         dialog.setCancelable(false);
                         dialog.show(getSupportFragmentManager(), "222");
                     } else {
                         mNowScooterCode = result.getData();
+//                        addScooterInfo(mNowScooterCode);
                         mPresenter = new ScanScooterCheckUsedPresenter(this);
-                        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode);
+                        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(mNowScooterCode,mData.getFlightId(),Constants.SCAN_UNLOAD);
                     }
                 } else {
                     ToastUtil.showToast("操作不合法，不能重复扫描");
@@ -442,20 +461,27 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     public void checkScooterCodeResult(BaseEntity<Object> result) {
         if ("200".equals(result.getStatus())) {
             if (!"".equals(mNowScooterCode)) {
-                mPresenter = new ScooterInfoListPresenter(this);
-                BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
-                MyAgentListBean myAgentListBean = new MyAgentListBean();
-                baseFilterEntity.setSize(10);
-                baseFilterEntity.setCurrent(1);
-                myAgentListBean.setScooterCode(mNowScooterCode);
-                baseFilterEntity.setFilter(myAgentListBean);
-                ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
+                addScooterInfo(mNowScooterCode);
             } else{
                 ToastUtil.showToast(this, "扫描结果为空请重新扫描");
             }
         } else {
             ToastUtil.showToast("操作不合法，不能重复扫描");
         }
+    }
+
+    private void addScooterInfo(String scooterCode) {
+        if (!"".equals(scooterCode)) {
+            mPresenter = new ScooterInfoListPresenter(this);
+            BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
+            MyAgentListBean myAgentListBean = new MyAgentListBean();
+            baseFilterEntity.setSize(10);
+            baseFilterEntity.setCurrent(1);
+            myAgentListBean.setScooterCode(scooterCode);
+            baseFilterEntity.setFilter(myAgentListBean);
+            ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
+        } else
+            ToastUtil.showToast(this, "扫描结果为空请重新扫描");
     }
 
     @Override
@@ -569,6 +595,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
     public void toastView(String error) {
         if (error!=null)
             ToastUtil.showToast(error);
+        mListTempAlreadyNotify.clear();
         Log.e("tagError", "error========" + error);
     }
 
@@ -584,6 +611,7 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void arrivalDataSaveResult(String result) {
+        ScooterMapSingle.getInstance().put(mCurrentTaskId,null);
         ToastUtil.showToast("结束卸机机成功");
         EventBus.getDefault().post("InstallEquipFragment_refresh");
         finish();
@@ -610,6 +638,10 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void scanLockScooterResult(String result) {
+//        ScooterMapSingle.getInstance().put(mCurrentTaskId,null);
+        for (ScooterInfoListBean bean:mListTempAlreadyNotify){
+            bean.setNoticeTransport(true);
+        }
         ToastUtil.showToast("已通知运输");
     }
 

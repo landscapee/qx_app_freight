@@ -209,6 +209,11 @@ public interface HttpApi {
     @POST("service-bussiness-baseparam/baseParam/list")
     Observable<BaseEntity<BaseParamBean>> baseParam(@Body BaseFilterEntity model);
 
+
+    //根据存储类型 查询库区
+    @POST("service-bussiness-warehouse/reservoir/list")
+    Observable<BaseEntity<BaseParamBean>> baseParamType(@Body BaseFilterEntity model);
+
     /**
      * 收验，代办 -- pr & guohao
      *
@@ -484,8 +489,8 @@ public interface HttpApi {
     Observable<LoadingListBean> getLoadingList(@Body LoadingListRequestEntity entity);
 
     //判断板车是否被扫描上传过
-    @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}")
-    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode);
+    @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}/{flightId}/{scSubCategory}")
+    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode,@Path("flightId") String flightId,@Path("scSubCategory") String scSubType);
 
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")

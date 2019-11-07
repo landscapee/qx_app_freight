@@ -4,20 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.beidouapp.imlibapi.IMLIBContext;
 import com.beidouapp.imlibapi.activity.ImLibSpecialHomeFragment;
 import com.qxkj.positionapp.GPSService;
 import com.qxkj.positionapp.LocationEntity;
@@ -30,7 +25,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,17 +32,14 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
-import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
-import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
-import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
@@ -65,7 +56,6 @@ import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -117,12 +107,10 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         context.startActivity(intent);
     }
     public static void startActivity(Context context,int wakeFlag) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         context.startActivity(intent);
     }
 
@@ -142,9 +130,9 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         mMessageReciver = new MessageReciver(this);
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
-        mScreenStateReciver = new ScreenStateReciver();
-        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
-        registerReceiver(mScreenStateReciver, screenfilter);
+//        mScreenStateReciver = new ScreenStateReciver();
+//        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
+//        registerReceiver(mScreenStateReciver, screenfilter);
 //        mTaskFragment = new TaskFragment();
 //        mDynamicFragment = new DynamicFragment();
 //        mCSFragment = new ClearStorageFragment();
@@ -404,7 +392,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
-            unregisterReceiver(mScreenStateReciver);
+//            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
             e.printStackTrace();
         }

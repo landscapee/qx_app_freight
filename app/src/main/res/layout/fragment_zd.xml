@@ -54,7 +54,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:paddingStart="10dp"
-            android:text="货物总重量：56"
+            android:text="货物总重量：0"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -65,7 +65,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:paddingStart="10dp"
-            android:text="邮件总重量：56"
+            android:text="邮件总重量：0"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

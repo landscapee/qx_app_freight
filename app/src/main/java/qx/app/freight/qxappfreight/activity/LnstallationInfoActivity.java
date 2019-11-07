@@ -196,10 +196,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         mSrRefush.setOnRefreshListener(() -> {
             if (loadFlag == -1) {
-
                 loadFlag = getRadioBtnFlag();
-
-
             }
             loadData();
         });
@@ -519,6 +516,14 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         mList1.addAll(map.get(mListVersonCode.get(verson)));
         mId = mapMid.get(mListVersonCode.get(verson));
 
+        for (LnstallationInfoBean.ScootersBean scootersBean:mList1){
+            if (scootersBean.getCargoName()!=null&&scootersBean.getCargoName().length()==1){
+                scootersBean.setCargoName(scootersBean.getCargoName()+"H");
+            }
+            if (scootersBean.getOldCargoName()!=null&&scootersBean.getOldCargoName().length()==1){
+                scootersBean.setOldCargoName(scootersBean.getOldCargoName()+"H");
+            }
+        }
         adapter.notifyDataSetChanged();
     }
 

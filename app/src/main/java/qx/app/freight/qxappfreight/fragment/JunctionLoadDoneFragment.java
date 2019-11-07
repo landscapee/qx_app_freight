@@ -77,7 +77,6 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
     private boolean isShow = false;
 
     private PushLoadUnloadDialog mDialog = null;
-    private List<String> mTaskIdList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -292,11 +291,10 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void toastView(String error) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -311,7 +309,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void reportTaskHisResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans) {
-        mTaskIdList.clear();
+
         if (mCurrentPage == 1) {
             mCacheList.clear();
             mMfrvData.finishRefresh();
@@ -328,7 +326,6 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             if (bean.getRelateInfoObj()!= null&&!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())){
                 bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
-            mTaskIdList.add(bean.getTaskId());
             //原始装卸机数据封装成InstallEquipEntity
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();

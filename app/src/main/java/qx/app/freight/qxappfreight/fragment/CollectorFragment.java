@@ -144,6 +144,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                         .putExtra("wayBillId", bean.getWaybillId())
                         .putExtra("taskId", bean.getTaskId())
                         .putExtra("id", bean.getId())
+                        .putExtra("storage", bean.getStorageType())
                         .putExtra("taskTypeCode", bean.getTaskTypeCode()));
                 break;
             case "reCollection"://补单收运
@@ -340,11 +341,10 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

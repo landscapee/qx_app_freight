@@ -108,6 +108,8 @@ public class HyFragment extends BaseFragment implements MultiFunctionRecylerView
             if (StringUtil.isEmpty(result.get(0).getContent())){
                 tvNoData.setVisibility(View.VISIBLE);
                 mSrRefush.setVisibility(View.GONE);
+                if (result.get(0)!=null)
+                    tvName.setText("配载员：" + result.get(0).getCreateUserName());
                 return;
             }
             tvNoData.setVisibility(View.GONE);

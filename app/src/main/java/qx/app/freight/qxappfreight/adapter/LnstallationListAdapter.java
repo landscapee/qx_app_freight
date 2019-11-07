@@ -14,6 +14,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.LnstallationInfoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 货邮舱单列表数据适配器
@@ -81,8 +82,8 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_to_city, StringUtil.isEmpty(item.getDestinationStation()) ? "- -" : item.getDestinationStation())
                     .setText(R.id.tv_type, StringUtil.isEmpty(item.getType()) ? "- -" : item.getType())
                     .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight()) ? "- -" : item.getWeight())
-                    .setText(R.id.tv_total, !StringUtil.isEmpty(item.getSpecialCode())&&item.getSpecialCode().contains("/") ? item.getSpecialCode().substring(0,item.getSpecialCode().indexOf("/")) : "--")
-                    .setText(R.id.tv_special_number, StringUtil.isEmpty(item.getSpecialCode()) ? "- -" : item.getSpecialCode())
+                    .setText(R.id.tv_total, !StringUtil.isEmpty(item.getSpecialCode())?Tools.getVolumeForSpCode(item.getSpecialCode()) : "--")
+                    .setText(R.id.tv_special_number, !StringUtil.isEmpty(item.getSpecialCode()) ? Tools.getSpCodeForSpCode(item.getSpecialCode()) : "--")
                     .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : item.isSplit()?item.getType().endsWith("BY")?"拆舱":"拆箱":"- -");
         }
 

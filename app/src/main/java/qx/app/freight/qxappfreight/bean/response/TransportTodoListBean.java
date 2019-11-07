@@ -58,6 +58,9 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
      * 0无效，1横向，竖向
      */
     private int headingFlag;
+
+    private int scSubCategory;//1行李  2货物  3卸机 4
+
     /**
      * 作用一:用来对MQ接收的数据进行判断,判断值由MQ发送方填写
      * 作用二:手持端结束运输时传入该字段对应的值,根据值修改该板车的下个起始地以及运输目的地

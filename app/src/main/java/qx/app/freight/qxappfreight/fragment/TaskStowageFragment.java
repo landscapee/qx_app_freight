@@ -250,10 +250,11 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void toastView(String error) {
         if (pageCurrent == 1) {
             mCacheList.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
         }
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

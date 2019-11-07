@@ -33,13 +33,14 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
     @SuppressLint("StringFormatMatches")
     @Override
     protected void convert(BaseViewHolder helper, TransportDataBase item) {
+
         //运单号
         helper.setText(R.id.tv_order, item.getWaybillCode());
         //预交道口-预交时段
 //        String roadStr = item.getExpectedDeliveryGate()+" | "+TimeUtils.date2Tasktime3(item.getExpectedDeliveryTime())+"("+TimeUtils.getDay(item.getExpectedDeliveryTime())+")";
 //        helper.setText(R.id.tv_road_info, roadStr);
         //总件数-总体积-总重量
-        helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), StringUtil.formatStringDeleteDot(item.getTotalNumber()), StringUtil.formatStringDeleteDot(item.getTotalVolume()), StringUtil.formatStringDeleteDot(item.getTotalWeight())));
+        helper.setText(R.id.tv_number_info, String.format(mContext.getString(R.string.format_number_info), StringUtil.formatStringDeleteDot(item.getTotalNumber()), item.getTotalVolume()+"", StringUtil.formatStringDeleteDot(item.getTotalWeight())));
 
         TextView tvStatusName = helper.getView(R.id.tv_step_name);
         ImageView ivFlag = helper.getView(R.id.iv_flag);

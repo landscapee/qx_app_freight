@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -48,7 +46,7 @@ import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
  * 装卸机推送弹窗
  */
 public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoContract.loadAndUnloadTodoView {
-    private List<LoadAndUnloadTodoBean> list;
+    private List <LoadAndUnloadTodoBean> list;
     private Context context;
     private View convertView;
     private OnDismissListener onDismissListener;
@@ -59,8 +57,8 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     private int count = 0;// 任务 领取条数
 
-    public PushLoadUnloadDialog(@NonNull Context context,int themeResId,List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
-        super(MyApplication.getContext(),themeResId);
+    public PushLoadUnloadDialog(@NonNull Context context, int themeResId, List <LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
+        super(MyApplication.getContext(), themeResId);
         this.list = list;
         this.context = MyApplication.getContext();
         this.onDismissListener = onDismissListener;
@@ -72,14 +70,12 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= 26) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        }
-        else
+        } else
             window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度持平
-
         lp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
 
         window.setAttributes(lp);
@@ -90,11 +86,11 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
 
     @Override
     public void show() {
-        Tools.wakeupScreen(context);//唤醒
         super.show();
+        Tools.wakeupScreen(context);//唤醒
     }
 
-    public void setData(Context context, List<LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
+    public void setData(Context context, List <LoadAndUnloadTodoBean> list, OnDismissListener onDismissListener) {
         this.context = MyApplication.getContext();
         this.list = list;
         this.onDismissListener = onDismissListener;
@@ -113,12 +109,11 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     }
 
     public void refreshData() {
-        if (mAdapter !=null){
+        if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
         setListeners();
     }
-
 
 
 //    @Override
@@ -153,30 +148,29 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
             @Override
             public void onOpenLockSuccess() {
                 EventBus.getDefault().post("MsgDialogAct_finish");
-                count =0;
+                count = 0;
                 LoadAndUnloadTodoPresenter mPresenter = new LoadAndUnloadTodoPresenter(PushLoadUnloadDialog.this);
-                    for (LoadAndUnloadTodoBean bean : list) {
-                        PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
-                        entity.setType(1);
-                        entity.setLoadUnloadDataId(bean.getId());
-                        entity.setFlightId(Long.valueOf(bean.getFlightId()));
-                        entity.setFlightTaskId(bean.getTaskId());
-                        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
-                        if (bean.getTaskType() == 1) {
-                            entity.setOperationCode("FreightLoadReceived");
-                        } else  if (bean.getTaskType() == 2||bean.getTaskType() == 5){
-                            entity.setOperationCode("FreightUnloadReceived");
-                        }
-                        else  if (bean.getTaskType() == 3){
-                            entity.setOperationCode("PassengerLoadReceived");
-                        }
-                        entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
-                        entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                        entity.setUserName(bean.getWorkerName());
-                        entity.setCreateTime(System.currentTimeMillis());
-                        mPresenter.slideTask(entity);
+                for (LoadAndUnloadTodoBean bean : list) {
+                    PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
+                    entity.setType(1);
+                    entity.setLoadUnloadDataId(bean.getId());
+                    entity.setFlightId(Long.valueOf(bean.getFlightId()));
+                    entity.setFlightTaskId(bean.getTaskId());
+                    entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
+                    entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                    if (bean.getTaskType() == 1) {
+                        entity.setOperationCode("FreightLoadReceived");
+                    } else if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {
+                        entity.setOperationCode("FreightUnloadReceived");
+                    } else if (bean.getTaskType() == 3) {
+                        entity.setOperationCode("PassengerLoadReceived");
                     }
+                    entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
+                    entity.setUserId(UserInfoSingle.getInstance().getUserId());
+                    entity.setUserName(bean.getWorkerName());
+                    entity.setCreateTime(System.currentTimeMillis());
+                    mPresenter.slideTask(entity);
+                }
             }
 
             @Override
@@ -199,7 +193,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus)
-            Tools.startVibrator(context.getApplicationContext(),true,R.raw.ring);
+            Tools.startVibrator(context.getApplicationContext(), true, R.raw.ring);
     }
 
     @Override
@@ -209,7 +203,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
 
     }
 
@@ -217,7 +211,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     public void slideTaskResult(String result) {
         count++;
         if ("正确".equals(result)) {
-            if (count == list.size()){
+            if (count == list.size()) {
                 dismiss();
                 onDismissListener.refreshUI(true);
             }
@@ -234,9 +228,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     @Override
     public void toastView(String error) {
         count++;
-    if (error!=null)
-        ToastUtil.showToast(error);
-        if (count == list.size()){
+        if (error != null)
+            ToastUtil.showToast(error);
+        if (count == list.size()) {
             dismiss();
             onDismissListener.refreshUI(false);
         }
@@ -257,8 +251,8 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         void refreshUI(boolean success);
     }
 
-    private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
-        DialogLoadUnloadPushAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
+    private class DialogLoadUnloadPushAdapter extends BaseQuickAdapter <LoadAndUnloadTodoBean, BaseViewHolder> {
+        DialogLoadUnloadPushAdapter(@Nullable List <LoadAndUnloadTodoBean> data) {
             super(R.layout.item_push_load_unload_rv, data);
         }
 
@@ -313,7 +307,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
             tvTime.setText(time);
             tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
             tvTime.setCompoundDrawablePadding(3);
-            List<String> result = StringUtil.getFlightList(item.getRoute());
+            List <String> result = StringUtil.getFlightList(item.getRoute());
             FlightInfoLayout layout = new FlightInfoLayout(context, result);
             LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             LinearLayout llContainer = helper.getView(R.id.ll_flight_info_container);

@@ -98,6 +98,8 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
             if (StringUtil.isEmpty(result.get(0).getContent())){
                 tvNoData.setVisibility(View.VISIBLE);
                 mSrRefush.setVisibility(View.GONE);
+                if (result.get(0)!=null)
+                    tvName.setText("配载员：" + result.get(0).getCreateUserName());
                 return;
             }
             tvNoData.setVisibility(View.GONE);
@@ -167,6 +169,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 title.setScooterCode("板车号");
                 title.setTotal("件数");
                 title.setWeight("重量");
+                title.setVolume("体积");
                 title.setSpecialNumber("特货代码");
                 title.setMailType("货邮代码");
                 mList.add(0, title);
@@ -176,6 +179,7 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 title.setUldCode("集装箱板号");
                 title.setTotal("件数");
                 title.setWeight("重量");
+                title.setVolume("体积");
                 title.setSpecialNumber("特货代码");
                 title.setMailType("货邮代码");
                 mList.add(0, title);

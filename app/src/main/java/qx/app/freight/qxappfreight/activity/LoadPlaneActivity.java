@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,6 +28,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -215,11 +217,10 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> finish());
         data = (LoadAndUnloadTodoBean) getIntent().getSerializableExtra("plane_info");
 
-        if (data.getEndLoadTimeIn()> 0){
+        if (data.getEndLoadTimeIn() > 0) {
             mTvEndInstall.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             frameLayout.setVisibility(View.VISIBLE);
             mTvEndInstall.setVisibility(View.VISIBLE);
         }
@@ -383,7 +384,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
                 @Override
                 public void onLockClicked(int position) {
-                    lockItem(position);
+                    lockOrUnlockScooter(position);
                 }
             });
 
@@ -412,16 +413,6 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         }
 
 
-    }
-
-    /**
-     * 锁定一条装机内容
-     *
-     * @param position
-     */
-    private void lockItem(int position) {
-        //TODO
-        lockOrUnlockScooter(position);
     }
 
 
@@ -575,13 +566,14 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         entity.setFlightId(Long.valueOf(mCurrentFlightId));
         ((GetFlightCargoResPresenter) mPresenter).getFlightSpace(entity);
     }
+
     /**
      * 锁定或解锁板车
      */
     private void lockOrUnlockScooter(int position) {
         mPresenter = new GetLastReportInfoPresenter(this);
         LockScooterEntity entity = new LockScooterEntity();
-        if (newScooters.get(position).getLock() == 0||newScooters.get(position).getLock() == 3)
+        if (newScooters.get(position).getLock() == 0 || newScooters.get(position).getLock() == 3)
             entity.setOperationType(1);
         else
             entity.setOperationType(2);
@@ -735,13 +727,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     sureFlag = 1;
                     mTvConfirmCargo.setText("确认按此装机");
                 }
-                //最新的最终装机单 才有锁定按钮
-                if (versions.get(options1).contains("最终装机单"))
-                    adapter.setShowLock(true);
-                else
-                    adapter.setShowLock(false);
-
+                adapter.setShowLock(true);// 最新装机单 才显示 锁定按钮
             } else {
+                adapter.setShowLock(false);
                 mTvConfirmCargo.setVisibility(View.GONE);
                 mTvSendOver.setVisibility(View.GONE);
             }
@@ -759,7 +747,7 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             //舱位集合
             mBaseContent = new ArrayList <>(Arrays.asList(datas));
             mLoadingList.get(options1).setContentObject(mBaseContent);
-            loadInstallId =  mLoadingList.get(options1).getId();
+            loadInstallId = mLoadingList.get(options1).getId();
             //保存原有舱位，并 把装机单上的 板车数据 放到一个列表上
             newScooters.clear();
             for (LoadingListBean.DataBean.ContentObjectBean contentObjectBean : mBaseContent) {
@@ -776,6 +764,20 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                 }
                 newScooters.addAll(contentObjectBean.getScooters());
             }
+//            //根据舱位排序
+//            if (Build.VERSION.SDK_INT > 24) {
+//                newScooters.sort((x, y) -> Integer.compare(Integer.valueOf(!StringUtil.isEmpty(x.getCargoName()) ? x.getCargoName().substring(0, 1) : "0"), Integer.valueOf(!StringUtil.isEmpty(y.getCargoName()) ? y.getCargoName().substring(0, 1) : "0")));
+//            } else {
+//                Collections.sort(newScooters, new Comparator <LoadingListBean.DataBean.ContentObjectBean.ScooterBean>() {
+//                    @Override
+//                    public int compare(LoadingListBean.DataBean.ContentObjectBean.ScooterBean o1, LoadingListBean.DataBean.ContentObjectBean.ScooterBean o2) {
+//                        int x = Integer.valueOf(!StringUtil.isEmpty(o1.getCargoName()) ? o1.getCargoName().substring(0, 1) : "0");
+//                        int y = Integer.valueOf(!StringUtil.isEmpty(o2.getCargoName()) ? o2.getCargoName().substring(0, 1) : "0");
+//                        return y - x;
+//                    }
+//                });
+//            }
+
             adapter.notifyDataSetChanged();
         }
     }
@@ -1004,18 +1006,21 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 
     /**
      * 锁定或者解锁板车 成功
+     *
      * @param result
      */
     @Override
     public void lockOrUnlockScooterResult(String result) {
-        if (currentLockPosition != -1){
-            if (newScooters.get(currentLockPosition).getLock() == 0||newScooters.get(currentLockPosition).getLock() == 3)
+        if (currentLockPosition != -1) {
+            if (newScooters.get(currentLockPosition).getLock() == 0 || newScooters.get(currentLockPosition).getLock() == 3)
                 newScooters.get(currentLockPosition).setLock(1);
             else
                 newScooters.get(currentLockPosition).setLock(0);
         }
-        if (result!=null)
+        if (result != null)
             ToastUtil.showToast("操作成功");
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override

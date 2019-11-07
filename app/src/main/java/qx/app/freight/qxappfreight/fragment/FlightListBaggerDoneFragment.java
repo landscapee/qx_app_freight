@@ -140,11 +140,10 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -169,9 +168,8 @@ public class FlightListBaggerDoneFragment extends BaseFragment implements Baggag
 
     @Override
     public void baggageSubHisResult(List<CargoReportHisBean> cargoReportHisBeans) {
-        //因为没有分页，不做分页判断
-        mListTemp.clear();
         if (pageCurrent == 1) {
+            mListTemp.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();

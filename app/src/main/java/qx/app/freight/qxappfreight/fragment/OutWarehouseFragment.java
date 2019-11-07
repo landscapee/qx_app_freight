@@ -136,8 +136,10 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void toastView(String error) {
-        mMfrvData.finishRefresh();
-        mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
         if (error != null)
             ToastUtil.showToast(error);
     }

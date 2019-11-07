@@ -341,7 +341,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         if (null != changeStorageBean) {
             if (changeStorageBean.getRecords().size() > 0)
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
-                    storageList.add(changeStorageBean.getRecords().get(i).getName());
+                    storageList.add(changeStorageBean.getRecords().get(i).getReservoirName());
                     resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
                 }
             initData();

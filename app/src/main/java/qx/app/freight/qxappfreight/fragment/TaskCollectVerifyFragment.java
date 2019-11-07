@@ -284,12 +284,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(getActivity(), "数据为空");
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (error!=null)
+            ToastUtil.showToast(getActivity(), error);
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

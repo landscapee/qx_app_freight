@@ -151,8 +151,8 @@ public class InstallSuggestPushDialog extends Dialog {
 
     @Override
     public void show() {
-        Tools.wakeupScreen(mContext);
         super.show();
+        Tools.wakeupScreen(mContext);
     }
 
     @SuppressLint("ClickableViewAccessibility")

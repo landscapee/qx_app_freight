@@ -116,11 +116,10 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
 
     @Override
     public void toastView(String error) {
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
         if (error!=null)
             ToastUtil.showToast(error);
     }

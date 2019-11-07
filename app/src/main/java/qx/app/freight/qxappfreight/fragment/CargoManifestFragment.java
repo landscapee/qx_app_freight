@@ -61,8 +61,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     @BindView(R.id.search_toolbar)
     SearchToolbar mSearchBar;
     private JZLoadAdapter adapter;
-    private List<LoadAndUnloadTodoBean> list1 = new ArrayList<>();
-    private List<LoadAndUnloadTodoBean> list = new ArrayList<>();
+    private List <LoadAndUnloadTodoBean> list1 = new ArrayList <>();
+    private List <LoadAndUnloadTodoBean> list = new ArrayList <>();
     private int pageCurrent = 1;//页数
     private String seachString = "";
 
@@ -109,6 +109,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         initData();
         setUserVisibleHint(true);
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -119,6 +120,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             });
         }
     }
+
     private void gotoScan() {
         ScanManagerActivity.startActivity(getContext(), "MainActivity");
     }
@@ -128,7 +130,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         adapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(list.get(position))+"");
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(list.get(position)) + "");
             }
 
             @Override
@@ -141,8 +143,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         adapter.setOnItemClickListener((adapter, view, position) -> {
             if (!Tools.isFastClick())
                 return;
-            if (list !=null&&list.size() > 0){
-                CargoManifestInfoActivity.startActivity(getContext(),list.get(position),0);
+            if (list != null && list.size() > 0) {
+                CargoManifestInfoActivity.startActivity(getContext(), list.get(position), 0);
 //                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
 //                intent.putExtra("data", list.get(position));
 //                getContext().startActivity(intent);
@@ -158,7 +160,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             list.addAll(list1);
         } else {
             for (LoadAndUnloadTodoBean team : list1) {
-                if (team.getFlightNo()!=null&&team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo() != null && team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
@@ -171,7 +173,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("CargoManifestFragment_refresh")) {
+        if (result.equals("CargoManifestFragment_refresh") || result.equals("refresh_data_update")) {
             pageCurrent = 1;
             getData();
         }
@@ -188,15 +190,16 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 //            chooseCode(daibanCode);
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null&& result.isNewStowage()) {
+        if (result != null && result.isNewStowage()) {
 
-            List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans  = result.getTaskData();
-            if (loadAndUnloadTodoBeans !=null && loadAndUnloadTodoBeans.size()> 0){
+            List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans = result.getTaskData();
+            if (loadAndUnloadTodoBeans != null && loadAndUnloadTodoBeans.size() > 0) {
                 UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
                     StringUtil.setFlightRoute(loadAndUnloadTodoBeans.get(0).getRoute(), loadAndUnloadTodoBeans.get(0));//设置航班航线信息
-                    CargoManifestInfoActivity.startActivity(getContext(),loadAndUnloadTodoBeans.get(0),0);
+                    CargoManifestInfoActivity.startActivity(getContext(), loadAndUnloadTodoBeans.get(0), 0);
 //                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
 //                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
 //                    getContext().startActivity(intent);
@@ -233,18 +236,16 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 ////            turnToDetailActivity(CURRENT_TASK_BEAN);
 //        }
 //    }
-
     @Override
     public void toastView(String error) {
         if (pageCurrent == 1) {
             list.clear();
-            if(mMfrvData !=null)
-                mMfrvData.finishRefresh();
-        } else {
-            if(mMfrvData !=null)
-                mMfrvData.finishLoadMore();
         }
-        if (error!=null)
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
+        if (error != null)
             ToastUtil.showToast(error);
     }
 
@@ -287,8 +288,11 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
             //结载单独使用数据 json 解析
-            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())) {
                 bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
+            if (bean.getRelateInfoObj() != null && !StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
+                bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
         }
         list1.addAll(loadAndUnloadTodoBean);

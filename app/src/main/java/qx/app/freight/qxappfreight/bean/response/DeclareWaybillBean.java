@@ -204,6 +204,9 @@ public class DeclareWaybillBean implements Serializable {
      */
     private int receivecargoVolumn;
 
+    private String reservoirType;
+    private String repName;
+
     /**
      * 入库时间
      */

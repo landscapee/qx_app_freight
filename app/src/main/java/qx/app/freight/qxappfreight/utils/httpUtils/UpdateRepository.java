@@ -391,6 +391,10 @@ public class UpdateRepository extends BaseRepository {
         return transform(getService().baseParam(model));
     }
 
+    public Observable<BaseParamBean> baseParamType(BaseFilterEntity model) {
+        return transform(getService().baseParamType(model));
+    }
+
 
     /********
      * 代验收运列表
@@ -1177,8 +1181,8 @@ public class UpdateRepository extends BaseRepository {
      * @param scooterCode
      * @return
      */
-    public Observable<BaseEntity<Object>> checkScooterCode(String scooterCode) {
-        return getService().checkScooterCode(scooterCode);
+    public Observable<BaseEntity<Object>> checkScooterCode(String scooterCode,String flightId,String scSubType) {
+        return getService().checkScooterCode(scooterCode,flightId,scSubType);
     }
 
     /**

@@ -94,84 +94,90 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:background="@color/white"
-            android:orientation="horizontal">
-            <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:drawableStart="@mipmap/news_normal"-->
-            <!--android:drawablePadding="@dimen/dp_10"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:padding="@dimen/dp_10"-->
-            <!--android:text="货邮舱单"-->
-            <!--android:textColor="@color/grassgreen"-->
-            <!--android:textSize="@dimen/sp_12" />-->
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
-            <RadioGroup
-                android:id="@+id/tb_title"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_dynamic_blue"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:background="@color/white"
                 android:orientation="horizontal">
+                <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:drawableStart="@mipmap/news_normal"-->
+                <!--android:drawablePadding="@dimen/dp_10"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:padding="@dimen/dp_10"-->
+                <!--android:text="货邮舱单"-->
+                <!--android:textColor="@color/grassgreen"-->
+                <!--android:textSize="@dimen/sp_12" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_hy"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_blue_center_a"
-                    android:button="@null"
-                    android:checked="true"
+                <RadioGroup
+                    android:id="@+id/tb_title"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/shape_dynamic_blue"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_hy"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_blue_center_a"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="货邮舱单"
+                        android:textColor="@drawable/selector_text_blue_a" />
+
+                    <RadioButton
+                        android:id="@+id/rb_zd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_blue_center_a"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="装舱建议"
+                        android:textColor="@drawable/selector_text_blue_a" />
+
+                </RadioGroup>
+
+
+                <!--<ImageView-->
+                <!--android:layout_width="18dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:background="@mipmap/icon_query" />-->
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="货邮舱单"
-                    android:textColor="@drawable/selector_text_blue_a" />
+                    android:padding="@dimen/dp_10"
+                    android:textColor="@color/red"
+                    android:textSize="15sp" />
 
-                <RadioButton
-                    android:id="@+id/rb_zd"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_blue_center_a"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="装舱建议"
-                    android:textColor="@drawable/selector_text_blue_a" />
-
-            </RadioGroup>
-
-
-            <!--<ImageView-->
-            <!--android:layout_width="18dp"-->
-            <!--android:layout_height="18dp"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="15dp"-->
-            <!--android:background="@mipmap/icon_query" />-->
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:gravity="center"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/red"
-                android:textSize="15sp"
-                android:layout_marginLeft="10dp"
-                />
-            <TextView
-                android:id="@+id/tv_version"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_40"
-                android:gravity="center_vertical|right"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_12"
-                android:layout_weight="1"
-                />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:gravity="center_vertical|right"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginLeft="20dp"
+                    />
+            </LinearLayout>
+        </HorizontalScrollView>
         <!--<android.support.v4.widget.SwipeRefreshLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:id="@+id/sr_refush"-->
@@ -191,8 +197,7 @@
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -222,6 +227,7 @@
             android:background="@color/gray_cc"
             android:text="释放"
             android:textColor="@color/white" />
+
         <Button
             android:id="@+id/bt_reload"
             android:layout_width="0dp"

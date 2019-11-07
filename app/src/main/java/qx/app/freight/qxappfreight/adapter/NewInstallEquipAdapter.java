@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,12 +21,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cn.label.library.LabelView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.ErrorReportActivity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
@@ -110,7 +110,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
                 intent.putExtra("task_id", item.getTaskId());//任务id
                 intent.putExtra("area_id", item.getSeat());//area_id
                 if (item.getMovement() == 4) {
-                    if (item.getStartLoadTime() > 0||item.getEndUnloadTime() > 0) {// 卸机结束结束 装机异常
+                    if (item.getStartLoadTime() > 0 || item.getEndUnloadTime() > 0) {// 卸机结束结束 装机异常
                         if (item.getRelateInfoObj() != null) {
                             intent.putExtra("flight_number", item.getRelateInfoObj().getFlightNo());//航班号
                             intent.putExtra("flight_id", item.getRelateInfoObj().getFlightId());//Flight id
@@ -119,7 +119,7 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
                         }
                         intent.putExtra("step_code", "FreightLoadFinish");//step_code //默认为
                         intent.putExtra("error_type", 1);// 装机异常
-                    } else  {//卸机异常
+                    } else {//卸机异常
                         intent.putExtra("flight_number", item.getFlightNo());//航班号
                         intent.putExtra("flight_id", item.getFlightId());//Flight id
                         intent.putExtra("error_type", 2);//卸机异常
@@ -132,12 +132,10 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
                     {
                         intent.putExtra("step_code", "FreightUnLoadFinish");//step_code //默认为
                         intent.putExtra("error_type", 2);//卸机异常
-                    }
-                    else{
+                    } else {
                         intent.putExtra("step_code", "FreightLoadFinish");//step_code //默认为
                         intent.putExtra("error_type", 1);//装机异常
                     }
-
 
 
                 }
@@ -278,13 +276,59 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
         container.addView(layout, paramsMain);
         helper.setText(R.id.tv_seat, StringUtil.toText(item.getSeat()));
         ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
-        if (item.getOperationStepObj()!=null && item.getOperationStepObj().size()>0&&!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
+        if (item.getOperationStepObj() != null && item.getOperationStepObj().size() > 0 && !StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
             btnFS.setVisibility(View.GONE);
             ivDone.setVisibility(View.VISIBLE);
         } else {
             ivDone.setVisibility(View.GONE);
             btnFS.setVisibility(View.VISIBLE);
         }
+
+        LabelView mLabelView = helper.getView(R.id.task_lable);
+        if (item.getLoadingAndUnloadBean() != null) {
+            helper.setText(R.id.tv_ctot, "CTOT " + TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getCtot()));
+            helper.setText(R.id.tv_xg, "协关 " + TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean().getUnifiedCloseTime()));
+            helper.setText(R.id.tv_pre, "前飞 " + TimeUtils.datetimeTo4(item.getLoadingAndUnloadBean() != null&&item.getLoadingAndUnloadBean().getPreAtd()>0 ? item.getLoadingAndUnloadBean().getPreAtd() : 0 ));
+            helper.setText(R.id.tv_eta, "预达 " + TimeUtils.datetimeTo4(item.getEta() > 0 ? item.getEta() : 0));
+
+            if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getFlightStatus())) {
+                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("已达"))// 已达
+                {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_a));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("正常")) {//正常
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.lightgreen));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
+                {
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_d));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("前起")) {//前起
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_pre_atd));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("允登")) {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_yundeng));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("登机")) {
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_dengji));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")) {//完成登机
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_wanchengdengji));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("撤轮档")) {//撤轮档
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.imlib_yellowa));
+                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("推出")) {//飞机推出
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.red));
+                }
+                else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("入位")) {//入位
+                    mLabelView.setVisibility(View.VISIBLE);
+                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.indianred));
+                }
+                mLabelView.setTextContent(item.getLoadingAndUnloadBean().getFlightStatus());
+            }
+        }
+
         RecyclerView rvStep = helper.getView(R.id.rv_step);
         rvStep.setLayoutManager(new LinearLayoutManager(mContext));
         NewInstallEquipStepAdapter adapter = new NewInstallEquipStepAdapter(item.getOperationStepObj());
@@ -305,9 +349,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
 //                            intent.putExtra("plane_info", item);
 //                            mContext.startActivity(intent);
 //                            } else {
-                            item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
-                            item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
-                            item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
+                        item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()) + "-" + sdf.format(new Date()));
+                        item.getOperationStepObj().get(pos).setItemType(Constants.TYPE_STEP_OVER);//滑动的那个item马上设置为已完成的步骤类型显示
+                        item.getOperationStepObj().get(pos + 1).setItemType(Constants.TYPE_STEP_NOW);
 //                            }
 //                        }
                     } else if (pos == 4) {
@@ -396,7 +440,8 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
         void onLookLoadInstall(int position);
     }
 
-    public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner onFlightSafeguardListenner) {
+    public void setOnFlightSafeguardListenner(OnFlightSafeguardListenner
+                                                      onFlightSafeguardListenner) {
         this.onFlightSafeguardListenner = onFlightSafeguardListenner;
     }
 

@@ -280,11 +280,10 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
     @Override
     public void toastView(String error) {
-        if (currentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

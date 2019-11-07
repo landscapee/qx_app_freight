@@ -238,6 +238,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {
+//                    isIncludeScooterCode(mScooterCode);
                     checkScooterCode(mScooterCode);
                 } else {
                     ToastUtil.showToast("扫码数据为空请重新扫码");
@@ -299,6 +300,8 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         bean.setAsFlightId(flightBean.getSuccessionId());
         bean.setTpFlightType(flightBean.getTpFlightType());
         bean.setFlightIndicator(scooterInfoListBeans.get(0).getFlightType());
+
+        bean.setScSubCategory(2);
         mList.add(bean);
         mAdapter.notifyDataSetChanged();
     }
@@ -322,6 +325,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         super.onActivityResult(requestCode, resultCode, data);
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+//            isIncludeScooterCode(mScooterCode);
             checkScooterCode(mScooterCode);
         } else {
             Log.e("resultCode", "收货页面不是200");
@@ -335,7 +339,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
      */
     private void checkScooterCode(String scooterCode) {
         mPresenter = new ScanScooterCheckUsedPresenter(this);
-        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode,flightBean.getFlightId(),Constants.SCAN_HUOWU);
     }
 
     @Override

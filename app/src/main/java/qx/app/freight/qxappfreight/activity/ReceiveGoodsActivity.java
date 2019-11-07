@@ -110,14 +110,16 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private String wayBillId;
     private int mTag;
     private int listPostion;
+    private String storage;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId) {
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId,String storage) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
         starter.putExtra("taskTypeCode", taskTypeCode);
         starter.putExtra("id", id);
         starter.putExtra("wayBillId", wayBillId);
+        starter.putExtra("storage", storage);
         context.startActivityForResult(starter, 0);
     }
 
@@ -135,6 +137,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         wayBillId = getIntent().getStringExtra("wayBillId");
         id = getIntent().getStringExtra("id");
+        storage = getIntent().getStringExtra("storage");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
         reservoirType = mDeclare.getColdStorage() + "";
@@ -142,7 +145,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             mTag = 1;
-            startAct(new MyAgentListBean(), 1);
+            MyAgentListBean mBean = new MyAgentListBean();
+            mBean.setReservoirType(storage);
+            startAct(mBean, 1);
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
@@ -203,9 +208,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setWaybillCode(mDeclare.getWaybillCode());
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
+
             List<MyAgentListBean> myAgentListBeans = new ArrayList<>();
-            for (MyAgentListBean mMyAgentListBean : list) {
-                myAgentListBeans.add(mMyAgentListBean);
+//            for (MyAgentListBean mMyAgentListBean : list) {
+//                myAgentListBeans.add(mMyAgentListBean);
+//            }
+            for (int i = 0; i <list.size() ; i++) {
+                list.get(i).setRepName(mDeclare.getRepName());
+                list.get(i).setReservoirType(mDeclare.getReservoirType());
+                myAgentListBeans.add(list.get(i));
             }
             transportListCommitEntity.setRcInfos(myAgentListBeans);
             transportListCommitEntity.setTaskTypeCode(taskTypeCode);
@@ -333,11 +344,10 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void toastView(String error) {
         Log.e("refresh", error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

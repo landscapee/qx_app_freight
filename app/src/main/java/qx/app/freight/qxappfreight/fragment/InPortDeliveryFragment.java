@@ -281,11 +281,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

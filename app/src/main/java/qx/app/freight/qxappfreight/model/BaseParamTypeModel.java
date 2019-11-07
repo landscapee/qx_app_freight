@@ -5,17 +5,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.contract.ScanScooterCheckUsedContract;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.contract.BaseParamContract;
+import qx.app.freight.qxappfreight.contract.BaseParamTypeContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
-/**
- * 检查板车二维码是否在数据库中处于被占用的状态
- */
-public class ScanScooterCheckUsedModel extends BaseModel implements ScanScooterCheckUsedContract.ScanScooterCheckModel {
-
+public class BaseParamTypeModel extends BaseModel implements BaseParamTypeContract.baseParamTypeModel {
     @Override
-    public void checkScooterCode(String scooterCode,String flightId,String scSubCategory, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().checkScooterCode(scooterCode,flightId,scSubCategory)
+    public void baseParamType(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().baseParamType(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

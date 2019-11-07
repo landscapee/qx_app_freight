@@ -116,9 +116,8 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
-        Tools.wakeupScreen(context);
         super.show();
-
+        Tools.wakeupScreen(context);
     }
 
     //    @Override

@@ -97,8 +97,8 @@ public class UpdatePushDialog extends Dialog {
 
     @Override
     public void show() {
-        Tools.wakeupScreen(mContext);
         super.show();
+        Tools.wakeupScreen(mContext);
     }
 
     public interface OnTpPushListener {

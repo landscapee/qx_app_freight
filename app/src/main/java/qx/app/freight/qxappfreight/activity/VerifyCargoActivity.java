@@ -204,6 +204,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             mStorageCommitEntity.setFileCheck(fileCheck);
             mStorageCommitEntity.setFileCheck(isPack);
             mStorageCommitEntity.setRequire(isRequire);
+            mStorageCommitEntity.setAddOrderId(mBean.getWaybillId());
             mStorageCommitEntity.setSpotResult(isSpSpot);
             mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
             mStorageCommitEntity.setUnspotReson(etReason.getText().toString().trim());

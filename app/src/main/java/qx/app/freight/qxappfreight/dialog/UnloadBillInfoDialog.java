@@ -25,7 +25,9 @@ import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 卸机单数据dialog
@@ -54,6 +56,31 @@ public class UnloadBillInfoDialog extends DialogFragment {
         window.setWindowAnimations(R.style.anim_bottom_bottom);
         RecyclerView rvUnloadBill = dialog.findViewById(R.id.rv_unload_bill);
         TextView tvClose = dialog.findViewById(R.id.tv_close_dialog);
+        TextView tvStatistics =  dialog.findViewById(R.id.tv_statistics);
+        TextView tvStatistics1 =  dialog.findViewById(R.id.tv_statistics_1);
+
+        double c =0;
+        double m= 0;
+        double b = 0;
+        double o = 0;
+        for (UnLoadListBillBean.DataBean.ContentObjectBean objectBean:list){
+            if (StringUtil.isDouble(objectBean.getActWgt())){
+                if ("C".equals(objectBean.getType()))//货物
+                    c+=Double.valueOf(objectBean.getActWgt());
+                else if ("M".equals(objectBean.getType()))//邮件
+                    m+=Double.valueOf(objectBean.getActWgt());
+                else if ("BY".equals(objectBean.getType()))//行李
+                    b+=Double.valueOf(objectBean.getActWgt());
+                else if ("T".equals(objectBean.getType()))
+                    b+=Double.valueOf(objectBean.getActWgt());
+                else if ("BY".equals(objectBean.getType()))
+                    b+=Double.valueOf(objectBean.getActWgt());
+                else//其他
+                    o+=Double.valueOf(objectBean.getActWgt());
+            }
+        }
+        tvStatistics.setText("货物:"+c+"kg 邮件:"+m+"kg" );
+        tvStatistics1.setText("行李:"+b+"kg 其他:"+o+"kg");
         rvUnloadBill.setLayoutManager(new LinearLayoutManager(context));
         UnloadBillAdapter adapter=new UnloadBillAdapter(list);
         rvUnloadBill.setAdapter(adapter);

@@ -38,8 +38,8 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
     private boolean showLock;
     private OnDataCheckListener onDataCheckListener;
 
-    private List<String> cargos = new ArrayList <>();
-    private List<String> goods = new ArrayList <>();
+    private List <String> cargos = new ArrayList <>();
+    private List <String> goods = new ArrayList <>();
     SpinnerAdapter apsAdapter1;
     SpinnerAdapter apsAdapter2;
 
@@ -49,7 +49,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         this.mWidthairflag = widthairflag;
     }
 
-    public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag, boolean notShowPull,List<String> cargos ,List<String> goods) {
+    public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag, boolean notShowPull, List <String> cargos, List <String> goods) {
         super(R.layout.item_load_plane_install, list);
         this.mWidthairflag = widthairflag;
         this.notShowPull = notShowPull;
@@ -60,7 +60,8 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         this.goods.add("");
         this.goods.addAll(goods);
     }
-    public void setShowLock(boolean showLock){
+
+    public void setShowLock(boolean showLock) {
         this.showLock = showLock;
     }
 
@@ -69,13 +70,11 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         Spinner spBerth = helper.getView(R.id.sp_berth);
         Spinner spGoodsPos = helper.getView(R.id.sp_goods_position);
         ImageView lock = helper.getView(R.id.iv_lock_status);
-        if (showLock){
+        if (showLock) {
             lock.setVisibility(View.VISIBLE);
-        }
-        else
-            lock.setVisibility(View.GONE);
+        } else
+            lock.setVisibility(View.INVISIBLE);
 
-        lock.setImageResource(R.mipmap.icon_unlock_data);
         helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
 //            if (item.isLocked()) {
 //                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
@@ -85,23 +84,40 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //            item.setLocked(!item.isLocked());
             onDataCheckListener.onLockClicked(helper.getAdapterPosition());
         });
-        if (item.getLock() == 0||item.getLock() == 3) {
-            if (item.getLock() == 3){
+        if (item.getLock() == 0 || item.getLock() == 3) {
+            if (item.getLock() == 3) {
                 //数据发生变化 自动解锁
+
             }
             lock.setImageResource(R.mipmap.icon_unlock_data);
+            spBerth.setEnabled(true);
+            spGoodsPos.setEnabled(true);
+//            spBerth.setFocusableInTouchMode(true);
         } else {
             lock.setImageResource(R.mipmap.icon_lock_data);
+            spBerth.setEnabled(false);
+            spGoodsPos.setEnabled(false);
         }
-        helper.setText(R.id.tv_scooter_number, item.getScooterCode() != null ? item.getScooterCode() : "--")
-                .setText(R.id.tv_uld, item.getSerialInd() != null ? item.getSerialInd() : "--")
-                .setText(R.id.tv_destination,item.getDestinationStation()!= null ?item.getDestinationStation():"--")
-                .setText(R.id.tv_weight, item.getWeight() != 0 ? item.getWeight() + "" : "--")
-                .setText(R.id.tv_volume, !StringUtil.isEmpty(item.getSpecialCode())&&item.getSpecialCode().contains("/") ? item.getSpecialCode().substring(0,item.getSpecialCode().indexOf("/")) : "--");
-        if (item.getWaybillList() != null && item.getWaybillList().size() > 0&&item.getWaybillList().get(0).getWaybillCode()!=null)
+        String weightAndVolume = "";
+        if (item.getWeight() > 0) {
+            weightAndVolume = weightAndVolume + item.getWeight() + "/";
+        } else {
+            weightAndVolume = weightAndVolume + "--/";
+        }
+        if (!StringUtil.isEmpty(item.getSpecialCode())) {
+            weightAndVolume = weightAndVolume + Tools.getVolumeForSpCode(item.getSpecialCode());
+        } else {
+            weightAndVolume = weightAndVolume + "--";
+        }
+        helper.setText(R.id.tv_scooter_number, item.getSerialInd() != null ? item.getSerialInd() : item.getScooterCode() != null ? item.getScooterCode() : "--")
+                .setText(R.id.tv_destination, item.getDestinationStation() != null ? item.getDestinationStation() : "--")
+                .setText(R.id.tv_weight, weightAndVolume);
+
+        if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getWaybillCode() != null)
             helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
         else
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
+
         Button btnPull = helper.getView(R.id.tv_pull);
         notShowPull = !"BY".equals(item.getType());
         if (notShowPull) {
@@ -126,17 +142,16 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             btnPull.setVisibility(View.INVISIBLE);
         }
         Button btnTake = helper.getView(R.id.tv_take);
-        btnTake.setOnClickListener(v->{
+        btnTake.setOnClickListener(v -> {
             if (!Tools.isFastClick())
                 return;
             onDataCheckListener.onTakeSplit(helper.getAdapterPosition());
 
         });
-        if (item.isSplit()){
+        if (item.isSplit()) {
             btnTake.setText("X");
             btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
-        }
-        else {
+        } else {
             btnTake.setText("拆");
             btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.green_45b));
         }
@@ -144,10 +159,9 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
         TextView tv3 = helper.getView(R.id.tv_weight);
-        TextView tv4 = helper.getView(R.id.tv_volume);
         TextView tv7 = helper.getView(R.id.tv_mailtype);
 //            TextView tv7 = helper.getView(R.id.tv_volume);
-        TextView[] tvList = {tv1, tv3,tv4, tv7};
+        TextView[] tvList = {tv1, tv3, tv7};
         if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
             helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
             for (TextView tv : tvList) {
@@ -158,7 +172,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
             }
-        } else if (item.getWaybillList()!=null&&item.getWaybillList().size()> 0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
+        } else if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
             helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
@@ -197,41 +211,33 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //            if (item.isShowPull()) {
 //                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
 //            } else {
-        apsAdapter1 = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
+        apsAdapter1 = new CargoSpinnerAdapter (mContext, R.layout.item_spinner_loading_list_normal, cargos);
 //            }
         spBerth.setAdapter(apsAdapter1);
 //        apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
         int k = apsAdapter1.getCount();
         for (int i = 0; i < k; i++) {
-            if (Tools.compareFist(item.getCargoName(),apsAdapter1.getItem(i).toString())) {
+            if (Tools.compareFist(item.getCargoName(), apsAdapter1.getItem(i).toString())) {
                 spBerth.setSelection(i, true);// 默认选中项
                 break;
             }
         }
         spBerth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            int pos;
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView <?> parent, View view, int position, long id) {
                 if (item.isSplit())
                     return;
-                if (item.getLock() == 1) {
-                    ToastUtil.showToast("数据已锁定，无法修改");
-                    spBerth.setSelection(pos, true);
+                if (Tools.compareFist(item.getOldCargoName(), cargos.get(position))) {
+                    item.setChange(false);
                 } else {
-                    pos = position;
-                    if (Tools.compareFist(item.getOldCargoName(),cargos.get(position))){
-                        item.setChange(false);
-                    }
-                    else {
-                        item.setCargoName(cargos.get(position));
-                        item.setChange(true);
-                        onDataCheckListener.onDataChecked(item.getScooterCode());
-                    }
+                    item.setCargoName(cargos.get(position));
+                    item.setChange(true);
+                    onDataCheckListener.onDataChecked(item.getScooterCode());
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView <?> parent) {
 
             }
         });
@@ -248,7 +254,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //                if (item.isShowPull()) {
 //                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
 //                } else {
-            apsAdapter2 = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, goods);
+            apsAdapter2 = new CargoSpinnerAdapter (mContext, R.layout.item_spinner_loading_list_normal, goods);
             spGoodsPos.setAdapter(apsAdapter2);
 //            apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
             int j = apsAdapter2.getCount();
@@ -259,38 +265,29 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 }
             }
             spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                int pos;
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (item.getLock() == 1) {
-                        ToastUtil.showToast("数据已锁定，无法修改");
-                        spGoodsPos.setSelection(pos, true);
-                    } else {
-                        pos = position;
-                        if (item.getOldLocation().equals(goods.get(position))){
+                public void onItemSelected(AdapterView <?> parent, View view, int position, long id) {
+                        if (item.getOldLocation().equals(goods.get(position))) {
                             item.setChange(false);
-                        }
-                        else {
+                        } else {
                             item.setLocation(goods.get(position));
                             item.setChange(true);
                             onDataCheckListener.onDataChecked(item.getScooterCode());
                         }
-                    }
                 }
-
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                public void onNothingSelected(AdapterView <?> parent) {
 
                 }
             });
         }
         //展示 板车下的 运单
-        RecyclerView rvBill=helper.getView(R.id.rv_all_bill);
-        List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> data =item.getWaybillList();
-        if (data!=null&&data.size()!=0){
+        RecyclerView rvBill = helper.getView(R.id.rv_all_bill);
+        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> data = item.getWaybillList();
+        if (data != null && data.size() != 0) {
             LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean title = new LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean();
             title.setTitle(true);
-            data.add(0,title);
+            data.add(0, title);
             rvBill.setLayoutManager(new LinearLayoutManager(mContext));
             rvBill.setAdapter(new OnBoardBillsAdapter(data));
         }
@@ -308,9 +305,12 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         else
             rvBill.setVisibility(View.GONE);
     }
+
     public interface OnDataCheckListener {
         void onDataChecked(String scooterId);
+
         void onTakeSplit(int position);
+
         void onLockClicked(int position);
     }
 
@@ -322,7 +322,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
     /**
      * 更新 sp的选择
      */
-    public void notifySp(List<String> cargos ,List<String> goods){
+    public void notifySp(List <String> cargos, List <String> goods) {
         this.cargos.clear();
         this.cargos.add("");
         this.cargos.addAll(cargos);

@@ -58,10 +58,10 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
 
-    List<AcceptTerminalTodoBean> listCache;
+    List <AcceptTerminalTodoBean> listCache;
 
-    private List<AcceptTerminalTodoBean> list;
-    private List<AcceptTerminalTodoBean> listSearch;
+    private List <AcceptTerminalTodoBean> list;
+    private List <AcceptTerminalTodoBean> listSearch;
     private int slidePosition, slidePositionChild, step;
     private DriverOutTaskAdapter adapter;
     private int currentPage = 1;
@@ -99,10 +99,11 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         initData();
         setUserVisibleHint(true);
     }
+
     private void initData() {
-        listCache = new ArrayList<>();
-        listSearch = new ArrayList<>();
-        list = new ArrayList<>();
+        listCache = new ArrayList <>();
+        listSearch = new ArrayList <>();
+        list = new ArrayList <>();
         adapter = new DriverOutTaskAdapter(listSearch);
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
@@ -131,7 +132,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             @Override
             public void onFlightSafeguardClick(int parentPosition, int position) {
 
-                    IMUtils.chatToGroup(getActivity(),Tools.groupImlibUid(list.get(parentPosition).getUseTasks().get(position).get(0).getFlights())+"");
+                IMUtils.chatToGroup(getActivity(), Tools.groupImlibUid(list.get(parentPosition).getUseTasks().get(position).get(0).getFlights()) + "");
             }
         });
         getData();
@@ -156,7 +157,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                 mTaskFragment.setTitleText(list.size());
             if (mToolBar != null) {
 //                mToolBar.setRightIconViewVisiable(false);
-                    searchToolbar.setHintAndListener("请输入航班号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachByText();
                 });
@@ -177,7 +178,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         PerformTaskStepsEntity entity = new PerformTaskStepsEntity();
         entity.setType(0);
         entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
-        if (mOutFieldTaskBean.getFlightId()!=null&&mOutFieldTaskBean.getFlightId().length()>0){
+        if (mOutFieldTaskBean.getFlightId() != null && mOutFieldTaskBean.getFlightId().length() > 0) {
             entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
         }
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
@@ -223,7 +224,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("TaskDriverOutFragment_refresh")||"refresh_data_update".equals(result)) {
+        if (result.equals("TaskDriverOutFragment_refresh") || "refresh_data_update".equals(result)) {
             currentPage = 1;
             getData();
         }
@@ -239,13 +240,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
         if (result.getTaskId() != null && (result.isCancelFlag() || result.isChangeWorkerUser())) {
             canCelTask(result.getTaskId());
-        } else if (result.isTransportTaskAutoDone()){
+        } else if (result.isTransportTaskAutoDone()) {
             getData();
-        }else {
-            List<AcceptTerminalTodoBean> list = result.getTaskData();
-            if (list != null){
-                for (AcceptTerminalTodoBean acceptTerminalTodoBean :listSearch){
-                    if (list.get(0).getTaskId().equals(acceptTerminalTodoBean.getTaskId())){
+        } else {
+            List <AcceptTerminalTodoBean> list = result.getTaskData();
+            if (list != null) {
+                for (AcceptTerminalTodoBean acceptTerminalTodoBean : listSearch) {
+                    if (list.get(0).getTaskId().equals(acceptTerminalTodoBean.getTaskId())) {
                         return;
                     }
                 }
@@ -304,7 +305,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
      * @param acceptTerminalTodoBeanList
      */
     @Override
-    public void acceptTerminalTodoResult(List<AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
+    public void acceptTerminalTodoResult(List <AcceptTerminalTodoBean> acceptTerminalTodoBeanList) {
         if (acceptTerminalTodoBeanList != null) {
 
             if (currentPage == 1) {
@@ -323,7 +324,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             //根据BeginAreaId分类 21 以下 用 else
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 acceptTerminalTodoBeanList.forEach(acceptTerminalTodoBean -> {
-                    acceptTerminalTodoBean.setUseTasks(new ArrayList<List<OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
+                    acceptTerminalTodoBean.setUseTasks(new ArrayList <List <OutFieldTaskBean>>(acceptTerminalTodoBean.getTasks().stream().collect(Collectors.groupingBy(OutFieldTaskBean::getBeginAreaCargoType)).values()));
                 });
             } else {
                 for (AcceptTerminalTodoBean mAcceptTerminalTodoBean : acceptTerminalTodoBeanList) {
@@ -368,7 +369,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             listSearch.addAll(list);
         } else {
             for (AcceptTerminalTodoBean item : list) {
-                if (item.getTasks()!=null&&item.getTasks().size()>0&&item.getTasks().get(0)!=null&&item.getTasks().get(0).getFlightNo()!=null&&item.getTasks().get(0).getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getTasks() != null && item.getTasks().size() > 0 && item.getTasks().get(0) != null && item.getTasks().get(0).getFlightNo() != null && item.getTasks().get(0).getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     listSearch.add(item);
                 }
             }
@@ -384,13 +385,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
      * @param mAcceptTerminalTodoBean
      * @return
      */
-    private List<List<OutFieldTaskBean>> getUseTasks(AcceptTerminalTodoBean mAcceptTerminalTodoBean) {
+    private List <List <OutFieldTaskBean>> getUseTasks(AcceptTerminalTodoBean mAcceptTerminalTodoBean) {
 
-        Map<String, List<OutFieldTaskBean>> map = new HashMap<>();
+        Map <String, List <OutFieldTaskBean>> map = new HashMap <>();
 
         for (OutFieldTaskBean task : mAcceptTerminalTodoBean.getTasks()) {
             if (map.get(task.getBeginAreaCargoType()) == null) {
-                List<OutFieldTaskBean> list = new ArrayList<>();
+                List <OutFieldTaskBean> list = new ArrayList <>();
                 list.add(task);
                 map.put(task.getBeginAreaCargoType(), list);
             } else {
@@ -398,18 +399,17 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             }
 
         }
-        List<List<OutFieldTaskBean>> OutFieldTaskBeans = new ArrayList<>(map.values());
+        List <List <OutFieldTaskBean>> OutFieldTaskBeans = new ArrayList <>(map.values());
 
         return OutFieldTaskBeans;
     }
 
     @Override
     public void toastView(String error) {
-        if (currentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -423,7 +423,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
     }
 
     @Override
-    public void loadAndUnloadTodoResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
+    public void loadAndUnloadTodoResult(List <LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
 
     }
 

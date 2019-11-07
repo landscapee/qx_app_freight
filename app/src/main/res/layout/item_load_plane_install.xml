@@ -31,7 +31,7 @@
 
         <Spinner
             android:id="@+id/sp_berth"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical|start"
             android:spinnerMode="dropdown"
@@ -45,13 +45,43 @@
 
         <Spinner
             android:id="@+id/sp_goods_position"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical|start"
             android:spinnerMode="dropdown"
             android:padding="0dp"
             />
+        <TextView
+            android:id="@+id/tv_destination"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="目的地"
+            android:textColor="@color/black_3" />
 
+        <TextView
+            android:id="@+id/tv_scooter_number"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="板车/ULD"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/tv_mailtype"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="类别"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="重量/体积"
+            android:textColor="@color/black_3" />
         <Button
             android:id="@+id/tv_pull"
             android:layout_width="40dp"
@@ -68,54 +98,6 @@
             android:text="拆"
             android:textColor="@color/white"
             android:textSize="15sp" />
-        <TextView
-            android:id="@+id/tv_scooter_number"
-            android:layout_width="85dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="板车"
-            android:textColor="@color/black_3" />
-
-        <TextView
-            android:id="@+id/tv_uld"
-            android:layout_width="109dp"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="uld号"
-            android:textColor="@color/black_3" />
-
-        <TextView
-            android:id="@+id/tv_destination"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="目的地"
-            android:textColor="@color/black_3" />
-
-        <TextView
-            android:id="@+id/tv_mailtype"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="类别"
-            android:textColor="@color/black_3" />
-
-        <TextView
-            android:id="@+id/tv_weight"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="重量"
-            android:textColor="@color/black_3" />
-        <TextView
-            android:id="@+id/tv_volume"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="体积"
-            android:textColor="@color/black_3" />
-
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

@@ -94,6 +94,7 @@ public class GetInfosByFlightIdBean implements Serializable {
         private double personUpdateValue;
         private double rePureWeight;
 
+        private String taskTypeCode;
         /**
          * 复重称重人id
          */

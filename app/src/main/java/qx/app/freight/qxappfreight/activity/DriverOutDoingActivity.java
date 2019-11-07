@@ -235,6 +235,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     private void deleteHandcar(TransportTodoListBean remove) {
         mPresenter = new TransportBeginPresenter(this);
         TransportEndEntity transportEndEntity = new TransportEndEntity();
+//        if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())){
+            transportEndEntity.setTpCargoType(remove.getTpCargoType());
+//        }
         transportEndEntity.setId(remove.getId());
         ((TransportBeginPresenter) mPresenter).scanScooterDelete(transportEndEntity);
     }
@@ -271,6 +274,12 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                     }
                     if (getClass().getSimpleName().equals(result.getFunctionFlag())) {
                         //根据扫一扫获取的板车信息查找板车内容
+                        for (TransportTodoListBean transportTodoListBean: listScooter){
+                            if (transportTodoListBean.getTpScooterCode().equals(result.getData())){
+                                ToastUtil.showToast("不能扫描同样的板车");
+                                return;
+                            }
+                        }
                         addScooterInfo(result.getData());
                     }
                 } else {
@@ -359,7 +368,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
              */
             if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
 
-                checkScooterCode(scooterCode);
+                getNumberInfo(scooterCode);
+//                checkScooterCode(scooterCode);
 
             } else {
                 mPresenter = new ScanScooterPresenter(this);
@@ -383,9 +393,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      * @param scooterCode
      */
     private void checkScooterCode(String scooterCode) {
-        mPresenter = new ScanScooterCheckUsedPresenter(this);
-        nowScooterCode = scooterCode;
-        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+//        mPresenter = new ScanScooterCheckUsedPresenter(this);
+//        nowScooterCode = scooterCode;
+//        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode,mAcceptTerminalTodoBean);
     }
 
     /**

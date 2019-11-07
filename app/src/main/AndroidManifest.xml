@@ -287,6 +287,15 @@
             android:taskAffinity=""
             android:theme="@style/FullScreenTheme"
              />
+        <activity
+            android:name=".activity.MsgDialogVisibleAct"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity=""
+            android:theme="@style/FullScreenTheme"
+            />
+
 
         <!-- 注册服务 -->
         <service android:name=".service.GPSService" />

@@ -180,6 +180,10 @@ public class Constants {
     public static final String TP_START = "CargoOutTransportStart";    //运输开始
     public static final String TP_END = "CargoOutTransportEnd";    //运输 结束
 
+
+    public static final int SCAN_UNLOAD = 3;//卸机扫版 类型
+    public static final int SCAN_XINGLI = 1;//行李上报扫版 类型
+    public static final int SCAN_HUOWU = 2;//卸货物上报扫版 类型
     /**
      *  * 待运区
      *  

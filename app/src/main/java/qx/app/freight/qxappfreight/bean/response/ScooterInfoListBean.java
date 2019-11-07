@@ -30,4 +30,5 @@ public class ScooterInfoListBean implements Serializable {
      * 0无效，1横向，2竖向
      */
     private int headingFlag;
+
 }

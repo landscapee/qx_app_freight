@@ -131,11 +131,10 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -166,19 +165,18 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
         loadData();
     }
 
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-        //因为没有分页，不做分页判断
-        mListTemp.clear();
         if (pageCurrent == 1) {
+            mListTemp.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
         }
+        pageCurrent++;
         mListTemp.addAll(flightLuggageBeans);
         if (mTaskFragment != null) {
             if (isShow)

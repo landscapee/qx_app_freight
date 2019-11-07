@@ -596,13 +596,10 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         if (loadInstall == 1)
             ToastUtil.showToast("暂无装机单");
 
-        if (mCurrentPage == 1) {
-            if (mMfrvData != null)
-                mMfrvData.finishRefresh();
-        } else {
-            if (mMfrvData != null)
-                mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

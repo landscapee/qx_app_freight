@@ -74,6 +74,8 @@ public class MyAgentListBean implements Serializable {
 
     private String iata;
     private String repName;
+    private String repId;
+    private String reservoirType;
     private String repPlaceNum;
     private String repPlaceStatus;
     private String reservoirName;

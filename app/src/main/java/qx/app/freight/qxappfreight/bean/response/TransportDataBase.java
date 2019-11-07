@@ -88,6 +88,8 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private Object originatingStation;
     private Object destinationStation;
 
+    private String storageType;
+
     private String consigneePostcode;
     private String consigneeAddress;
     private String specialCargoCode;
@@ -96,7 +98,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private String billingWeight;
     private String totalNumber;
     private String totalWeight;
-    private String totalVolume;
+    private double totalVolume;
     private String refrigeratedTemperature;
     private String activitiId;
     private Object internalTransferDate;
