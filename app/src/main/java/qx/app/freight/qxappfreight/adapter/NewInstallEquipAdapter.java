@@ -50,24 +50,11 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
     public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
     }
-
-    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn) {
-        this(data);
-        this.showReOpenBtn = showReOpenBtn;
-    }
-
-    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport) {
-        this(data);
-        this.showReOpenBtn = showReOpenBtn;
-//        this.showExReport = showExReport;
-        this.showLook = showExReport;
-    }
-
-    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport, boolean showPhoto) {
+    public NewInstallEquipAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport,boolean showLook ,boolean showPhoto) {
         this(data);
         this.showReOpenBtn = showReOpenBtn;
         this.showExReport = showExReport;
-        this.showLook = showExReport;
+        this.showLook = showLook;
         this.showPhoto = showPhoto;
     }
 

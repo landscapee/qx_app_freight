@@ -85,7 +85,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mPresenter = new LoadUnloadTaskHisPresenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList, true,false,true);
+        mAdapter = new NewInstallEquipAdapter(mList, true,true,false,true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override

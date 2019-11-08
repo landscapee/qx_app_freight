@@ -25,6 +25,8 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.BaggerListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
+import qx.app.freight.qxappfreight.bean.UnloadScooterListEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -99,6 +101,15 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
 //        mPresenter = new BaggageAreaSubPresenter(this);
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        //获取暂存板车数据
+        if (flightBean!=null&&flightBean.getFlightId() !=null){
+            if (ScooterMapSingle.getInstance().get(flightBean.getFlightId())!=null){
+                if (ScooterMapSingle.getInstance().get(flightBean.getFlightId()).getTransportTodoListBeans()!=null){
+                    mList.addAll(ScooterMapSingle.getInstance().get(flightBean.getFlightId()).getTransportTodoListBeans());
+                }
+            }
+        }
         mAdapter = new BaggerListAdapter(mList);
         mAdapter.setOnDeleteClickListener(new BaggerListAdapter.OnDeleteClickLister() {
             @Override
@@ -115,6 +126,17 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRV.setAdapter(mAdapter);
+        //返回键 监听 保存数据
+        setIsBack(true,()->{
+            UnloadScooterListEntity unloadScooterListEntity = new UnloadScooterListEntity();
+            for (TransportTodoListBean transportTodoListBean:mList){
+                if (!transportTodoListBean.isNotCanDelete())
+                    uploadList.add(transportTodoListBean);
+            }
+            unloadScooterListEntity.setTransportTodoListBeans(uploadList);
+            ScooterMapSingle.getInstance().put(flightBean.getFlightNo(),unloadScooterListEntity);
+            finish();
+        });
 
     }
 

@@ -236,11 +236,17 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         if (mCurrentTaskId !=null){
             if (ScooterMapSingle.getInstance().get(mCurrentTaskId)!=null){
                 if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods()!=null){
+                    for (ScooterInfoListBean scooterInfoListBean:ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods()){
+                        mTpScooterCodeList.add(scooterInfoListBean.getScooterCode());
+                    }
                     mListGoods.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods());
                     mSlideRvGoods.setVisibility(View.VISIBLE);
                     mScanGoodsAdapter.notifyDataSetChanged();
                 }
                 if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage()!=null){
+                    for (ScooterInfoListBean scooterInfoListBean:ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage()){
+                        mTpScooterCodeList.add(scooterInfoListBean.getScooterCode());
+                    }
                     mListPac.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage());
                     mSlideRvPac.setVisibility(View.VISIBLE);
                     mScanPacAdapter.notifyDataSetChanged();
@@ -280,6 +286,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
             entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
             entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
+            entity.setScSubCategory(3);
             if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
             {
                 infos.add(entity);
@@ -304,6 +311,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setBeginAreaId(mOutFieldTaskBean.getBeginAreaId());
             entity.setEndAreaType(mOutFieldTaskBean.getEndAreaType());
             entity.setEndAreaId(mOutFieldTaskBean.getEndAreaId());
+            entity.setScSubCategory(3);
             if (!bean.isNoticeTransport())//未通知运输的板车 才能再次提交
             {
                 infos.add(entity);
@@ -344,6 +352,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setTpType("进");
             entity.setTpState(0);
             entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+            entity.setScSubCategory(3);
             if (!bean.isNoticeTransport()){//记录本次通知运输的板车数据
                 infos.add(entity);
                 mListTempAlreadyNotify.add(bean);
@@ -366,6 +375,7 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             entity.setTpType("进");
             entity.setTpState(0);
             entity.setTaskId(mOutFieldTaskBean.getTaskId());//代办数据中的id
+            entity.setScSubCategory(3);
             if (!bean.isNoticeTransport()){//记录本次通知运输的板车数据
                 infos.add(entity);
                 mListTempAlreadyNotify.add(bean);

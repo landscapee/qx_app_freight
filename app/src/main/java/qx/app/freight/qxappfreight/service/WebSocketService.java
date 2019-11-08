@@ -17,6 +17,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.listener.BaggageClient;
 import qx.app.freight.qxappfreight.listener.BeforehandClient;
 import qx.app.freight.qxappfreight.listener.CollectionClient;
 import qx.app.freight.qxappfreight.listener.DeliveryClient;
@@ -141,6 +142,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&type=MT"
                             + "&role=beforehand_in");
                     break;
+                case "porter"://行李员
+                    BaggageClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=porter");
+                    break;
 //                case "report"://报载
 //                    NewspaperClient(HttpConstant.WEBSOCKETURL
 //                            + "userId=" + UserInfoSingle.getInstance().getUserId()
@@ -231,6 +239,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     public void NewspaperClient(String uri) {
         new NewspaperClient(uri, this);
+    }
+    public void BaggageClient(String uri) {
+        new BaggageClient(uri, this);
     }
 
     @Override

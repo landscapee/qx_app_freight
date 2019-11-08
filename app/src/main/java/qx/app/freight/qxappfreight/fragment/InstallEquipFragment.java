@@ -188,7 +188,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        mAdapter = new NewInstallEquipAdapter(mList, false, true, true);
+        mAdapter = new NewInstallEquipAdapter(mList, false, true, true,true);
         mMfrvData.setAdapter(mAdapter);
         mAdapter.setOnFlightSafeguardListenner(new NewInstallEquipAdapter.OnFlightSafeguardListenner() {
             @Override

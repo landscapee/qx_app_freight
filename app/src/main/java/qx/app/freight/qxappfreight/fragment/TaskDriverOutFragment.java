@@ -274,7 +274,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
                 break;
             }
         }
-        adapter.notifyDataSetChanged();
+        seachByText();
         Log.e("TaskDriverOutFragment", "取消任务");
 
     }

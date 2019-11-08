@@ -329,7 +329,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
         mData.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
         mData.setReWeighedTime(System.currentTimeMillis());
-        mData.setCurrentStep(mData.getTaskTypeCode());
+//        mData.setCurrentStep(mData.getTaskTypeCode());
         //提交弹窗
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")

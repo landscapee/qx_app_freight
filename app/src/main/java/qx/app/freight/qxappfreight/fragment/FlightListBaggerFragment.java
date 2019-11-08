@@ -97,7 +97,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mListTemp.size());
             if (searchToolbar!=null){
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachWithNum();
                 });

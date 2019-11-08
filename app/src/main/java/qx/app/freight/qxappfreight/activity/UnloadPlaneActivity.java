@@ -220,11 +220,17 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         if (mCurrentTaskId !=null){
             if (ScooterMapSingle.getInstance().get(mCurrentTaskId)!=null){
                 if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods()!=null){
+                    for (ScooterInfoListBean scooterInfoListBean : ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods()) {
+                        mTpScooterCodeList.add(scooterInfoListBean.getScooterCode());
+                    }
                     mListGoods.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListGoods());
                     mSlideRvGoods.setVisibility(View.VISIBLE);
                     mScanGoodsAdapter.notifyDataSetChanged();
                 }
                 if (ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage()!=null){
+                    for (ScooterInfoListBean scooterInfoListBean:ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage()){
+                        mTpScooterCodeList.add(scooterInfoListBean.getScooterCode());
+                    }
                     mListPac.addAll(ScooterMapSingle.getInstance().get(mCurrentTaskId).getMListBaggage());
                     mSlideRvPac.setVisibility(View.VISIBLE);
                     mScanPacAdapter.notifyDataSetChanged();

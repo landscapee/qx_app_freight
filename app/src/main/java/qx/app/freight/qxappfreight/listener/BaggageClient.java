@@ -20,16 +20,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
+import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
+import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
+import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -37,7 +41,13 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.provider.ConnectionProvider;
 
-public class OffSiteEscortClient extends StompClient {
+
+/****
+ *  行李员推送
+ *
+ */
+public class BaggageClient extends StompClient {
+
     public static final String TAG = "websocket";
     private Gson mGson = new Gson();
     private CompositeDisposable compositeDisposable;
@@ -45,7 +55,8 @@ public class OffSiteEscortClient extends StompClient {
     private Timer mTimer;
     private TimerTask mTimerTask;
 
-    public OffSiteEscortClient(String uri, Context mContext) {
+
+    public BaggageClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
         connect(uri);
@@ -68,14 +79,15 @@ public class OffSiteEscortClient extends StompClient {
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
                             sendMess(my, uri);
-                            Log.e(TAG, "webSocket  外场运输 打开");
+                            Log.e(TAG, "webSocket  行李员 打开");
                             break;
                         case ERROR:
-                            Log.e(TAG, "websocket 外场运输 出错", lifecycleEvent.getException());
+                            WebSocketService.mStompClient.remove(my);
                             WebSocketService.isTopic = false;
+                            Log.e(TAG, "websocket 行李员 出错", lifecycleEvent.getException());
                             break;
                         case CLOSED:
-                            Log.e(TAG, "websocket 外场运输 关闭");
+                            Log.e(TAG, "websocket 行李员 关闭");
                             WebSocketService.isTopic = false;
                             if (UserInfoSingle.getInstance().getUserId() == null || StringUtil.isEmpty(UserInfoSingle.getInstance().getUserId())) {
                                 if (mTimerTask != null) {
@@ -102,83 +114,69 @@ public class OffSiteEscortClient extends StompClient {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
+                        Log.e(TAG, topicMessage.getPayload());
                         // 消息回执
                         WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
-                        Log.e(TAG, topicMessage.getPayload());
-                        if (topicMessage.getPayload().contains("\"cancelFlag\":true")) {//任务取消的推送
-                            if (topicMessage.getPayload().contains("\"taskType\":1")) {//装卸机
-                                CommonJson4List <LoadAndUnloadTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("\"taskType\":2")) {//运输
-                                CommonJson4List <AcceptTerminalTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("\"taskType\":\"temp\"")) {//临时任务的取消
-                                CommonJson4List <AcceptTerminalTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            }
-                        } else {
-                            if (topicMessage.getPayload().contains("\"taskType\":1") || topicMessage.getPayload().contains("\"taskType\":2") || topicMessage.getPayload().contains("\"taskType\":3") || topicMessage.getPayload().contains("\"taskType\":5")) {//装卸机
-                                CommonJson4List <LoadAndUnloadTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("\"taskType\":0")) {//运输
-                                CommonJson4List <AcceptTerminalTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("\"transportTaskAutoDone\":true")) {//任务超时自动完成
-                                CommonJson4List <AcceptTerminalTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <AcceptTerminalTodoBean> data = gson.fromJson(topicMessage.getPayload(), AcceptTerminalTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            } else if (topicMessage.getPayload().contains("\"loadUnloadStatusChg\":true")) {//机位变更
-                                Gson gson = new Gson();
-                                SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
-                                pushFlightInfo(data);
-                            } else {
-                                CommonJson4List <LoadAndUnloadTodoBean> gson = new CommonJson4List <>();
-                                CommonJson4List <LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
-                                sendLoadUnLoadGroupBoard(data);
-                            }
+                        if (topicMessage.getPayload().contains("\"loadUnloadStatusChg\":true")) {//机位变更
+                            Gson gson = new Gson();
+                            SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
+                            pushFlightInfo(data);
                         }
                     }, throwable -> Log.e(TAG, "运输装卸机 订阅", throwable));
 
             compositeDisposable.add(dispTopic3);
+
+//            //订阅   待办
+//            Disposable dispTopic1 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + WebSocketService.ToList)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(topicMessage -> {
+//                        //
+//                        Log.e("msgId", topicMessage.getStompHeaders().get(0).getValue());
+//                        WebSocketUtils.pushReceipt(my, compositeDisposable, topicMessage.getStompHeaders().get(0).getValue());
+//                        Log.d(TAG, "结载websocket-->代办 " + topicMessage.getPayload());
+//                        WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
+//                        sendReshEventBus(mWebSocketBean);
+//                    }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
+//            compositeDisposable.add(dispTopic1);
+//            WebSocketService.subList.add(WebSocketService.ToList);
+//
+//            compositeDisposable.add(dispTopic1);
             //订阅  登录地址
-            Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topicMessage -> {
-                        Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
-                        if (null != topicMessage.getPayload()) {
-                            Tools.showDialog(mContext);
-                        }
-//                        Tools.wakeupScreen(mContext);//唤醒
-                    }, throwable -> {
-                        Log.e(TAG, "websocket-->登录失败", throwable);
-                    });
-            compositeDisposable.add(dispTopic);
-            //订阅   消息中心地址
-            Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topicMessage -> {
-                        Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
-                        WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
-                        sendMessageEventBus(mWebSocketMessBean);
-                    }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
-
-            compositeDisposable.add(dispTopic2);
+//            Disposable dispTopic = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/" + UserInfoSingle.getInstance().getUserToken() + "/MT/message")
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(topicMessage -> {
+//                        Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
+//                        if (null != topicMessage.getPayload()) {
+//                            Tools.showDialog(mContext);
+//                        }
+////                        Tools.wakeupScreen(mContext);//唤醒
+//                    }, throwable -> {
+//                        Log.e(TAG, "websocket-->登录失败", throwable);
+//                    });
+//            compositeDisposable.add(dispTopic);
+//            //订阅   消息中心地址
+//            Disposable dispTopic2 = my.topic("/user/" + UserInfoSingle.getInstance().getUserId() + "/MT/msMsg")
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(topicMessage -> {
+//                        Log.d(TAG, "websocket-->消息中心 " + topicMessage.getPayload());
+//                        WebSocketMessageBean mWebSocketMessBean = mGson.fromJson(topicMessage.getPayload(), WebSocketMessageBean.class);
+//                        if ("CLIPPING_WEIGHTER_ERROR_NOTICE".equals(mWebSocketMessBean.getMessageName())) { //负重异常
+//                            String string = mWebSocketMessBean.getContent().replace("\\", "");
+//                            AfterHeavyExceptionBean afterHeavyExceptionBean = mGson.fromJson(string, AfterHeavyExceptionBean.class);
+//                            sendMessageEventBus(afterHeavyExceptionBean);
+//                        } else {
+//                            sendMessageEventBus(mWebSocketMessBean);
+//                        }
+//
+//                    }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
+//
+//            compositeDisposable.add(dispTopic2);
         }
+        Log.e(TAG, "websocket-->行李员id：" + "/user/" + UserInfoSingle.getInstance().getUserId());
         my.connect();
-    }
-
-    private void resetSubscriptions() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-        }
-        compositeDisposable = new CompositeDisposable();
     }
 
     public void sendMess(StompClient my, String uri) {
@@ -213,6 +211,26 @@ public class OffSiteEscortClient extends StompClient {
         Log.e("websocket", "心跳失败 正在重连……");
     }
 
+
+    //用于代办刷新
+    public static void sendReshEventBus(WebSocketResultBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+
+    //用于通知结载 装机单 建议
+    public static void sendInstallEventBus(List <LoadingListBean.DataBean.ContentObjectBean> bean) {
+        NewInstallEventBusEntity newInstallEventBusEntity = new NewInstallEventBusEntity(bean);
+        EventBus.getDefault().post(newInstallEventBusEntity);
+    }
+
+
+    private void resetSubscriptions() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
+        compositeDisposable = new CompositeDisposable();
+    }
+
     public static class GetConnectionProvider implements ConnectionProvider {
 
         @Override
@@ -242,6 +260,11 @@ public class OffSiteEscortClient extends StompClient {
         EventBus.getDefault().post(bean);
     }
 
+    //用于装卸员任务人变换通知
+    public static void pushLoadUnLoadTask(LoadUnLoadTaskPushBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+
     //信息变更
     public static void pushFlightInfo(SeatChangeEntity bean) {
         EventBus.getDefault().post(bean);
@@ -251,6 +274,24 @@ public class OffSiteEscortClient extends StompClient {
     public void sendMessageEventBus(WebSocketMessageBean bean) {
         EventBus.getDefault().post(bean);
     }
+
+    //负重异常
+    public void sendMessageEventBus(AfterHeavyExceptionBean bean) {
+        EventBus.getDefault().post(bean);
+    }
+
+    private void sendLoadingListPush(String result) {
+        InstallChangeEntity installChangeEntity = new InstallChangeEntity();
+        installChangeEntity.setFlightNo(result);
+        EventBus.getDefault().post(installChangeEntity);
+        String flightNo = result.substring(0, result.indexOf(":"));
+        EventBus.getDefault().post(flightNo);
+    }
+
+    private void sendLoadingListPushNotify(InstallNotifyEventBusEntity result) {
+        EventBus.getDefault().post(result);
+    }
+
 
 //    private void showDialog() {
 //        CommonDialog dialog = new CommonDialog(mContext);
@@ -273,4 +314,5 @@ public class OffSiteEscortClient extends StompClient {
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        mContext.startActivity(intent);
 //    }
+
 }
