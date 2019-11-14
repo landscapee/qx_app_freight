@@ -156,8 +156,8 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
                     entity.setLoadUnloadDataId(bean.getId());
                     entity.setFlightId(Long.valueOf(bean.getFlightId()));
                     entity.setFlightTaskId(bean.getTaskId());
-                    entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                    entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                    entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+                    entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
                     if (bean.getTaskType() == 1) {
                         entity.setOperationCode("FreightLoadReceived");
                     } else if (bean.getTaskType() == 2 || bean.getTaskType() == 5) {
@@ -167,7 +167,7 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
                     }
                     entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
                     entity.setUserId(UserInfoSingle.getInstance().getUserId());
-                    entity.setUserName(bean.getWorkerName());
+                    entity.setUserName(UserInfoSingle.getInstance().getUsername());
                     entity.setCreateTime(System.currentTimeMillis());
                     mPresenter.slideTask(entity);
                 }

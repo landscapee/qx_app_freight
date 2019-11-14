@@ -93,15 +93,7 @@
                 android:layout_marginEnd="@dimen/dp_5"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" />
-            <!--TODO: 标签-->
-            <LinearLayout
-                android:id="@+id/layout_lable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/ll_flight_info_container"
-                android:orientation="horizontal">
-            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/tv_craft_number"
@@ -160,42 +152,32 @@
                 android:drawablePadding="@dimen/dp_5"
                 android:gravity="center_vertical"
                 android:text="13:12(4)" />
+            <!--TODO: 标签-->
+            <LinearLayout
+                android:id="@+id/layout_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ll_flight_info_container"
+                android:orientation="horizontal">
+            </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/tv_ctot"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/dp_5"
-                android:gravity="center_vertical"
-                android:text="CTOT - -"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/tv_xg"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/dp_5"
-                android:gravity="center_vertical"
-                android:text="协关 - -"
-                android:textStyle="bold"
-                />
             <TextView
                 android:id="@+id/tv_plane_type"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="宽体机"
                 android:textColor="#738598"
-                android:textSize="@dimen/sp_14" />
+                android:textSize="@dimen/sp_14"
+                android:visibility="gone"
+                />
         </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_15"
-        android:layout_marginBottom="13dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/tv_pre"
@@ -203,8 +185,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:drawablePadding="@dimen/dp_5"
-            android:gravity="center_vertical"
-            android:text="前飞 - -"
+            android:gravity="center"
+            android:text="前飞 \n- -"
             android:textStyle="bold"
             />
         <TextView
@@ -215,6 +197,31 @@
             android:drawablePadding="@dimen/dp_5"
             android:gravity="center_vertical"
             android:text="预达 - -"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=" | \n | "
+            />
+        <TextView
+            android:id="@+id/tv_ctot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:text="CTOT - -"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tv_xg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:text="协关 - -"
             android:textStyle="bold"
             />
     </LinearLayout>

@@ -308,6 +308,9 @@ public interface HttpApi {
     //航空公司资质
     @GET("service-bussiness-market/collectionRequire/get/{iata}")
     Observable<BaseEntity<List<MarketCollectionRequireBean>>> freightInfo(@Path("iata") String iata);
+    //获取卸机已扫板车数据
+    @GET("tp-task-his/transportTaskScooterQuery/{acdmDtoId}")
+    Observable<BaseEntity<List<TransportTodoListBean>>> getUnloadDoneScooter(@Path("acdmDtoId") String acdmDtoId);
 
     //货代资质
     @GET("service-bussiness-shipper/freightInfo/getById/{freightId}")
@@ -355,7 +358,7 @@ public interface HttpApi {
 
     //复重/获取板车信息
     @POST("service-product-cargoweighing/scooter/getScooterByScooterCode")
-    Observable<BaseEntity<GetInfosByFlightIdBean>> getScooterByScooterCode(@Body BaseFilterEntity model);
+    Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getScooterByScooterCode(@Body BaseFilterEntity model);
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")

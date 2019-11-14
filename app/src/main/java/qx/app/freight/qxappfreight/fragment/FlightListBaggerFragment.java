@@ -158,7 +158,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             loadData();
             dismissProgessDialog();
@@ -173,7 +173,6 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         } else {
             mMfrvData.finishLoadMore();
         }
-        pageCurrent++;
         mListTemp.addAll(flightLuggageBeans);
         if (mTaskFragment != null) {
             if (isShow)

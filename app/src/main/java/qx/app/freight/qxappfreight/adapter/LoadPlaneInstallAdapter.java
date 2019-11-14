@@ -1,26 +1,33 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.jwenfeng.library.pulltorefresh.util.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -40,9 +47,11 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
     private List <String> cargos = new ArrayList <>();
     private List <String> goods = new ArrayList <>();
-    SpinnerAdapter apsAdapter1;
-    SpinnerAdapter apsAdapter2;
 
+    private PopupWindow windowPopList;
+    private View listView;
+    private RecyclerView rcList;
+    private BerthAdapter berthAdapter;
 
     public LoadPlaneInstallAdapter(@Nullable List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> list, int widthairflag) {
         super(R.layout.item_load_plane_install, list);
@@ -67,8 +76,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 
     @Override
     protected void convert(BaseViewHolder helper, LoadingListBean.DataBean.ContentObjectBean.ScooterBean item) {
-        Spinner spBerth = helper.getView(R.id.sp_berth);
-        Spinner spGoodsPos = helper.getView(R.id.sp_goods_position);
+
+        LinearLayout llBerthDrop = helper.getView(R.id.ll_berth_drop); //舱位选择
+        LinearLayout llGoodsDrop = helper.getView(R.id.ll_goods_drop);//货位选择
+
         ImageView lock = helper.getView(R.id.iv_lock_status);
         if (showLock) {
             lock.setVisibility(View.VISIBLE);
@@ -76,27 +87,19 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             lock.setVisibility(View.INVISIBLE);
 
         helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
-//            if (item.isLocked()) {
-//                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
-//            } else {
-//                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
-//            }
-//            item.setLocked(!item.isLocked());
+            if(item.isSplit()){
+                ToastUtil.showToast("拆下的板车不能锁定");
+                return;
+            }
             onDataCheckListener.onLockClicked(helper.getAdapterPosition());
         });
         if (item.getLock() == 0 || item.getLock() == 3) {
             if (item.getLock() == 3) {
                 //数据发生变化 自动解锁
-
             }
             lock.setImageResource(R.mipmap.icon_unlock_data);
-            spBerth.setEnabled(true);
-            spGoodsPos.setEnabled(true);
-//            spBerth.setFocusableInTouchMode(true);
         } else {
             lock.setImageResource(R.mipmap.icon_lock_data);
-            spBerth.setEnabled(false);
-            spGoodsPos.setEnabled(false);
         }
         String weightAndVolume = "";
         if (item.getWeight() > 0) {
@@ -109,8 +112,10 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         } else {
             weightAndVolume = weightAndVolume + "--";
         }
-        helper.setText(R.id.tv_scooter_number, item.getSerialInd() != null ? item.getSerialInd() : item.getScooterCode() != null ? item.getScooterCode() : "--")
+        helper.setText(R.id.tv_scooter_number, !item.isSplit() && item.getSerialInd() != null ? item.getSerialInd() : item.getScooterCode() != null ? item.getScooterCode() : "--")
                 .setText(R.id.tv_destination, item.getDestinationStation() != null ? item.getDestinationStation() : "--")
+                .setText(R.id.tv_berth, item.getCargoName())
+                .setText(R.id.tv_goods, item.getLocation())
                 .setText(R.id.tv_weight, weightAndVolume);
 
         if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getWaybillCode() != null)
@@ -119,7 +124,11 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
 
         Button btnPull = helper.getView(R.id.tv_pull);
-        notShowPull = !"BY".equals(item.getType());
+        if ("C".equals(item.getType()) || "M".equals(item.getType()) || "X".equals(item.getType())) //只有 类型为 C，M,X的 板车 才能拉回
+            notShowPull = true;
+        else
+            notShowPull = false;
+
         if (notShowPull) {
             btnPull.setVisibility(View.VISIBLE);
             //设置 拉下的状态
@@ -156,7 +165,6 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.green_45b));
         }
 
-
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
         TextView tv3 = helper.getView(R.id.tv_weight);
         TextView tv7 = helper.getView(R.id.tv_mailtype);
@@ -183,103 +191,51 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 tv.setTextColor(Color.parseColor("#000000"));
             }
         }
-
-//        List<String> cargos = new ArrayList();
-//        cargos.add("1");
-//        cargos.add("2");
-//        cargos.add("3");
-//        cargos.add("4");
-//
-//        List<String> goods = new ArrayList <>();
-//        goods.add("13P");
-//        goods.add("12P");
-//        goods.add("21P");
-//        goods.add("22P");
-//        goods.add("23P");
-//        goods.add("33P");
-//        goods.add("32P");
-//        goods.add("31P");
-//        goods.add("42R");
-//        goods.add("43R");
-//        goods.add("44R");
-//        goods.add("43L");
-//        goods.add("44L");
-        if (item.isSplit())
-            spBerth.setVisibility(View.INVISIBLE);
-        else
-            spBerth.setVisibility(View.VISIBLE);
-//            if (item.isShowPull()) {
-//                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
-//            } else {
-        apsAdapter1 = new CargoSpinnerAdapter (mContext, R.layout.item_spinner_loading_list_normal, cargos);
-//            }
-        spBerth.setAdapter(apsAdapter1);
-//        apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
-        int k = apsAdapter1.getCount();
-        for (int i = 0; i < k; i++) {
-            if (Tools.compareFist(item.getCargoName(), apsAdapter1.getItem(i).toString())) {
-                spBerth.setSelection(i, true);// 默认选中项
-                break;
+        //调舱===========================
+        llBerthDrop.setOnClickListener(v -> {
+            if (item.getLock() == 1){
+                ToastUtil.showToast("该条数据已锁定");
+                return;
             }
-        }
-        spBerth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView <?> parent, View view, int position, long id) {
-                if (item.isSplit())
-                    return;
-                if (Tools.compareFist(item.getOldCargoName(), cargos.get(position))) {
-                    item.setChange(false);
-                } else {
-                    item.setCargoName(cargos.get(position));
-                    item.setChange(true);
-                    onDataCheckListener.onDataChecked(item.getScooterCode());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-
-            }
+            showPopList(cargos,item,1,llBerthDrop);
         });
-        if (TextUtils.isEmpty(item.getLocation())) {//没有有货位数据
-            if (mWidthairflag == 0)
-                spGoodsPos.setVisibility(View.INVISIBLE);
-            else
-                spGoodsPos.setVisibility(View.GONE);
-        } else {
-            if (item.isSplit())
-                spGoodsPos.setVisibility(View.INVISIBLE);
-            else
-                spGoodsPos.setVisibility(View.VISIBLE);
-//                if (item.isShowPull()) {
-//                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
-//                } else {
-            apsAdapter2 = new CargoSpinnerAdapter (mContext, R.layout.item_spinner_loading_list_normal, goods);
-            spGoodsPos.setAdapter(apsAdapter2);
-//            apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
-            int j = apsAdapter2.getCount();
-            for (int i = 0; i < j; i++) {
-                if (item.getLocation().equals(apsAdapter2.getItem(i).toString())) {
-                    spGoodsPos.setSelection(i, true);// 默认选中项
-                    break;
-                }
+        llGoodsDrop.setOnClickListener(v -> {
+            if (item.getLock() == 1){
+                ToastUtil.showToast("该条数据已锁定");
+                return;
             }
-            spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView <?> parent, View view, int position, long id) {
-                        if (item.getOldLocation().equals(goods.get(position))) {
-                            item.setChange(false);
-                        } else {
-                            item.setLocation(goods.get(position));
-                            item.setChange(true);
-                            onDataCheckListener.onDataChecked(item.getScooterCode());
+            if (!StringUtil.isEmpty(item.getCargoName())){
+                List <String> goodsTemp = new ArrayList <>();
+                String cargoFirst = item.getCargoName().substring(0,1);
+                for (String str :goods){
+                    if (!StringUtil.isEmpty(str)){
+                        String goodsFirst = str.substring(0,1);
+                        if (Tools.compareFist(cargoFirst,goodsFirst)){
+                            goodsTemp.add(str);
                         }
-                }
-                @Override
-                public void onNothingSelected(AdapterView <?> parent) {
+                    }
 
                 }
-            });
+                if (goodsTemp.size()>0)
+                    showPopList(goodsTemp,item,2,llGoodsDrop);
+                else
+                    ToastUtil.showToast("该舱位下没有货位信息");
+            }
+            else {
+                ToastUtil.showToast("请先选择舱位");
+            }
+
+
+        });
+
+        if (TextUtils.isEmpty(item.getLocation())) {//没有有货位数据
+            if (mWidthairflag == 0) {
+                helper.setVisible(R.id.ll_goods_drop, true);
+            } else {
+                helper.setGone(R.id.ll_goods_drop, false);
+            }
+        } else {
+            helper.setVisible(R.id.ll_goods_drop, true);
         }
         //展示 板车下的 运单
         RecyclerView rvBill = helper.getView(R.id.rv_all_bill);
@@ -312,6 +268,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         void onTakeSplit(int position);
 
         void onLockClicked(int position);
+
     }
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
@@ -336,4 +293,66 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
 //            apsAdapter2.notify();
 //        }
     }
+
+    private void showPopList(List<String> list,LoadingListBean.DataBean.ContentObjectBean.ScooterBean item,int flag,LinearLayout llClick){
+        if ( windowPopList == null) {
+            listView = ((Activity)mContext).getLayoutInflater().inflate(R.layout.popup_berth_list, null);
+            windowPopList = new PopupWindow(listView,
+                    DisplayUtil.dp2Px(mContext, 80),
+                    DisplayUtil.dp2Px(mContext, 200));
+        }
+        //软键盘不会挡着popupwindow
+        windowPopList.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        windowPopList.setBackgroundDrawable(getDrawable());//设置背景透明以便点击外部消失
+        windowPopList.setOutsideTouchable(true);//点击外部收起
+        windowPopList.setFocusable(true);
+        rcList = listView.findViewById(R.id.rc_berth);
+        rcList.setLayoutManager(new LinearLayoutManager(mContext));
+        berthAdapter = new BerthAdapter(list);
+        rcList.setAdapter(berthAdapter);
+        berthAdapter.setOnItemClickListener((adapter, view, position1) -> {
+            if (flag == 1){
+                if (!Tools.compareFist(item.getCargoName(),list.get(position1))){
+                    item.setCargoName(list.get(position1));
+                    item.setLocation("");
+                    //设置舱位是否发生改变
+                    if (item.getOldCargoName().equals(item.getCargoName())&&item.getOldLocation().equals(item.getLocation())) {
+                        item.setChange(false);
+                    }
+                    else {
+                        item.setChange(true);
+                    }
+                    onDataCheckListener.onDataChecked(item.getScooterCode());
+                }
+            }
+            else {
+                if (!item.getLocation().equals(list.get(position1))){
+                    item.setLocation(list.get(position1));
+                    //设置货位是否发生改变
+                    if (item.getOldCargoName().equals(item.getCargoName())&&item.getOldLocation().equals(item.getLocation())) {
+                        item.setChange(false);
+                    }
+                    else {
+                        item.setChange(true);
+                    }
+                    onDataCheckListener.onDataChecked(item.getScooterCode());
+                }
+            }
+            windowPopList.dismiss();
+            notifyDataSetChanged();
+        });
+        windowPopList.setAnimationStyle(R.style.animTranslate);
+        windowPopList.showAsDropDown(llClick,  0, 20);
+    }
+
+    /**
+     * 生成一个 透明的背景图片
+     * @return
+     */
+    private Drawable getDrawable() {
+        ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
+        bgdrawable.getPaint().setColor(mContext.getResources().getColor(android.R.color.transparent));
+        return bgdrawable;
+    }
+
 }

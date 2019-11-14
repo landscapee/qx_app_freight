@@ -479,6 +479,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<MarketCollectionRequireBean>> freightInfo(String iata) {
         return transform(getService().freightInfo(iata));
     }
+    /****
+     * 获取卸机已扫板车数据
+     * @param acdmDtoId
+     * @return
+     */
+    public Observable<List<TransportTodoListBean>> getUnloadDoneScooter(String acdmDtoId) {
+        return transform(getService().getUnloadDoneScooter(acdmDtoId));
+    }
 
     /****
      * 货代资质
@@ -901,7 +909,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<GetInfosByFlightIdBean> getScooterByScooterCode(BaseFilterEntity model) {
+    public Observable<List<GetInfosByFlightIdBean>> getScooterByScooterCode(BaseFilterEntity model) {
         return transform(getService().getScooterByScooterCode(model));
     }
 

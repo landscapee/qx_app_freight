@@ -319,7 +319,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

@@ -46,6 +46,7 @@ import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
@@ -445,6 +446,8 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             }
             checkedList.add(hasChecked);//总共有10条数据，则生产10条布尔值的list，出现了进过装机或卸机页面的话值就是true，监听中就去判断true作不再调步骤接口的操作
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
+
+                bean.getOperationStepObj().get(i).setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
                 if (i == 5) continue;//下标为5时，需要跳过，进入下一轮循环，对应的操作code为FreightUnloadFinish
                 if (i == 7) {//下标为7时，特殊处理
                     LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
@@ -483,6 +486,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                         entity1.setStepDoneDate("0".equals(times.get(listIndex)) ? "" : sdf.format(new Date(Long.valueOf(times.get(listIndex)))));
                     }
                 }
+
             }
             List <String> codeList = new ArrayList <>();
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
@@ -556,12 +560,12 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         entity.setLoadUnloadDataId(mList.get(bigPos).getId());
         entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
         entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
         entity.setOperationCode(code);
         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mList.get(bigPos).getWorkerName());
+        entity.setUserName(UserInfoSingle.getInstance().getUsername());
         entity.setCreateTime(System.currentTimeMillis());
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).slideTask(entity);
@@ -624,6 +628,11 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                 ToastUtil.showToast(result.getMessage());
             }
         }
+    }
+
+    @Override
+    public void getUnLoadDoneScooterResult(List <TransportTodoListBean> result) {
+
     }
 
     @Override

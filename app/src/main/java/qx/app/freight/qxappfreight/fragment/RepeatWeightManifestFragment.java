@@ -13,6 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightManifestAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -80,13 +81,19 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
 
     @Override
     public void getManifestResult(List<ManifestBillModel> result) {
+        double weight = 0;
+        list.clear();
         if (result!=null&&result.size()!=0){
             for (ManifestBillModel item:result) {
                 if (item.getWaybills()!=null) {
                     list.addAll(item.getWaybills());
                 }
             }
+            for (WaybillsBean waybillsBean:list){
+                weight +=waybillsBean.getInflightweight();
+            }
         }
+        ((AllocateScooterActivity)getActivity()).setTotalWeight(weight);
         adapter.notifyDataSetChanged();
     }
 

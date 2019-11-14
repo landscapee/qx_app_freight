@@ -26,17 +26,33 @@ import qx.app.freight.qxappfreight.activity.AssignInstallEquipMemberActivity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**
  * 装卸员小组长操作任务的代办适配器
  */
-public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseViewHolder> {
+public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTodoBean, BaseViewHolder> {
     private OnSlideStepListener onSlideStepListener;
     private OnClearSeatListener onClearSeatListener;
-    public InstallEquipLeaderAdapter(@Nullable List<LoadAndUnloadTodoBean> data) {
+
+    private boolean showReOpenBtn;
+    private boolean showExReport; //是否显示 异常上报按钮
+
+    private boolean showLook; //是否显示  装机单 卸机单
+
+    private boolean showPhoto;//是否显示 拍照记录
+
+    public InstallEquipLeaderAdapter(@Nullable List <LoadAndUnloadTodoBean> data) {
         super(R.layout.item_install_equip, data);
+    }
+    public InstallEquipLeaderAdapter(@Nullable List <LoadAndUnloadTodoBean> data, boolean showReOpenBtn, boolean showExReport,boolean showLook ,boolean showPhoto) {
+        this(data);
+        this.showReOpenBtn = showReOpenBtn;
+        this.showExReport = showExReport;
+        this.showLook = showLook;
+        this.showPhoto = showPhoto;
     }
 
     @Override
@@ -78,8 +94,59 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
 
         LinearLayout llLink = helper.getView(R.id.ll_link);
+
+        if (showLook) {
+
+            Button btnLookInstall = helper.getView(R.id.btn_look_install);
+            btnLookInstall.setText("查看装机单");
+            Button btnLookUnInstall = helper.getView(R.id.btn_look_un_install);
+            btnLookUnInstall.setText("查看卸机单");
+            if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
+                btnLookInstall.setVisibility(View.VISIBLE);
+                btnLookInstall.setOnClickListener(v -> {
+                    if (!Tools.isFastClick())
+                        return;
+                    onClearSeatListener.onLookLoadInstall(helper.getAdapterPosition());
+                });
+                btnLookUnInstall.setVisibility(View.VISIBLE);
+                btnLookUnInstall.setOnClickListener(v -> {
+                    if (!Tools.isFastClick())
+                        return;
+                    onClearSeatListener.onLookUnloadInstall(helper.getAdapterPosition());
+                });
+            } else {
+                if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
+                    btnLookUnInstall.setVisibility(View.VISIBLE);
+                    btnLookUnInstall.setOnClickListener(v -> {
+                        if (!Tools.isFastClick())
+                            return;
+                        onClearSeatListener.onLookUnloadInstall(helper.getAdapterPosition());
+                    });
+                    btnLookInstall.setVisibility(View.GONE);
+                } else {
+                    btnLookInstall.setVisibility(View.VISIBLE);
+                    btnLookInstall.setOnClickListener(v -> {
+                        if (!Tools.isFastClick())
+                            return;
+                        onClearSeatListener.onLookLoadInstall(helper.getAdapterPosition());
+                    });
+                    btnLookUnInstall.setVisibility(View.GONE);
+
+                }
+            }
+
+        }
+        if (showPhoto) {
+            Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
+            btnPhotoRecord.setVisibility(View.VISIBLE);
+            btnPhotoRecord.setOnClickListener(v -> {
+                if (!Tools.isFastClick())
+                    return;
+                onClearSeatListener.onUploadPhoto(helper.getAdapterPosition());
+            });
+        }
         //连班航班
-        if(item.getMovement() == 4&&item.getRelateInfoObj()!=null){
+        if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
             llLink.setVisibility(View.VISIBLE);
             ImageView ivTypeLink = helper.getView(R.id.iv_operate_type_link);
             helper.setText(R.id.tv_plane_type_link, item.getAircraftType());
@@ -108,14 +175,13 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
             tvTimeLink.setCompoundDrawablePadding(5);
             LinearLayout containerLink = helper.getView(R.id.ll_flight_info_container_link);
-            if (item.getRelateInfoObj().getFlightInfoList() != null){
+            if (item.getRelateInfoObj().getFlightInfoList() != null) {
                 FlightInfoLayout layoutLink = new FlightInfoLayout(mContext, item.getRelateInfoObj().getFlightInfoList());
                 LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 containerLink.removeAllViews();
                 containerLink.addView(layoutLink, paramsMain);
             }
-        }
-        else
+        } else
             llLink.setVisibility(View.GONE);
 
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -129,7 +195,7 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         rvStep.setAdapter(adapter);
         adapter.setOnSlideListener(pos -> {
             if (onSlideStepListener != null) {
-                if (pos == 0 && item.getAcceptTime()==0)
+                if (pos == 0 && item.getAcceptTime() == 0)
                     onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
                 else if (pos != 0)
                     onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
@@ -172,12 +238,12 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
         btnClear.setVisibility(View.VISIBLE);
         ImageView ivDone = helper.getView(R.id.iv_done); //已办图片
 
-        if (item.getOperationStepObj()!=null && item.getOperationStepObj().size()>0&&!StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
+        if (item.getOperationStepObj() != null && item.getOperationStepObj().size() > 0 && !StringUtil.isEmpty(item.getOperationStepObj().get(item.getOperationStepObj().size() - 1).getStepDoneDate())) {
             ivDone.setVisibility(View.VISIBLE);
         } else {
             ivDone.setVisibility(View.GONE);
         }
-        btnClear.setOnClickListener(v-> onClearSeatListener.onClearClicked(helper.getAdapterPosition()));
+        btnClear.setOnClickListener(v -> onClearSeatListener.onClearClicked(helper.getAdapterPosition()));
         btnFS.setOnClickListener(v -> onClearSeatListener.onFlightSafeguardClick(helper.getAdapterPosition()));
     }
 
@@ -188,9 +254,17 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter<LoadAndUnloadTod
     public void setOnSlideStepListener(OnSlideStepListener onSlideStepListener) {
         this.onSlideStepListener = onSlideStepListener;
     }
-    public interface OnClearSeatListener{
+
+    public interface OnClearSeatListener {
         void onClearClicked(int position);
+
         void onFlightSafeguardClick(int position);
+
+        void onUploadPhoto(int position);
+
+        void onLookUnloadInstall(int position);
+
+        void onLookLoadInstall(int position);
     }
 
     public void setOnClearSeatListener(OnClearSeatListener onClearSeatListener) {

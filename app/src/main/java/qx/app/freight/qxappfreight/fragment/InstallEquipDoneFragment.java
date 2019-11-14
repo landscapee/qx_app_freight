@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FlightPhotoRecordActivity;
+import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -104,7 +105,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
             @Override
             public void onLookUnloadInstall(int position) {
-
+                lookUnloadInstall(position);
             }
 
             @Override
@@ -116,6 +117,27 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             showDialog(pos);
         });
         loadData();
+    }
+    /**
+     * 查看卸机单
+     *
+     * @param position
+     */
+    private void lookUnloadInstall(int position) {
+
+        Intent intent = new Intent(mContext, UnloadPlaneActivity.class);
+        intent.putExtra("flight_type", mList.get(position).getFlightType());
+        intent.putExtra("plane_info", mList.get(position));
+        intent.putExtra("get_done_scooter", true);
+        mContext.startActivity(intent);
+//        loadInstall = 1;
+//        mPresenter = new GetUnLoadListBillPresenter(this);
+//        UnLoadRequestEntity entity = new UnLoadRequestEntity();
+//        entity.setUnloadingUser(UserInfoSingle.getInstance().getUserId());
+//        entity.setFlightId(mList.get(position).getFlightId());
+//        String userName = UserInfoSingle.getInstance().getUsername();
+//        entity.setOperationUserName((userName.contains("-")) ? userName.substring(0, userName.indexOf("-")) : userName);
+//        ((GetUnLoadListBillPresenter) mPresenter).getUnLoadingList(entity);
     }
 
     private void reOpenLoadTask(int pos,String remark){
@@ -302,6 +324,7 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
             bean.setAcceptTask(true);//已经领受过任务
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
                 LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
+                entity1.setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
                 entity1.setFlightType(bean.getFlightType());
                 entity1.setItemType(Constants.TYPE_STEP_OVER);
                 if (bean.getTaskType() == 1 || bean.getTaskType() == 2) {//装机或卸机

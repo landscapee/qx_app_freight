@@ -572,8 +572,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             step.setLoadUnloadDataId(mOutFieldTaskBean.getId());
             step.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
             step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-            step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-            step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+            step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+            step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
             step.setOperationCode(Constants.TP_START);
             step.setUserName(UserInfoSingle.getInstance().getUsername());
             step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
@@ -635,8 +635,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 step.setLoadUnloadDataId(mOutFieldTaskBean.getId());
                 step.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
                 step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-                step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+                step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
                 step.setOperationCode(Constants.TP_END);
                 step.setUserName(UserInfoSingle.getInstance().getUsername());
                 step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
@@ -698,8 +698,8 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 step.setLoadUnloadDataId(mOutFieldTaskBean.getId());
                 step.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
                 step.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-                step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-                step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+                step.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+                step.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
                 step.setOperationCode(Constants.TP_END);
                 step.setUserName(UserInfoSingle.getInstance().getUsername());
                 step.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));

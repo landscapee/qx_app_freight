@@ -15,9 +15,11 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.CargoSpinnerAdapter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -38,11 +40,9 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
 
     private Spinner spBerth;
     private List<String> cargos;
-    SpinnerAdapter apsAdapter1;
 
     private Spinner spGoods;
     private List<String> goods;
-    SpinnerAdapter apsAdapter2;
 
     private EditText etWeight;
 
@@ -146,13 +146,28 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
         if (!TextUtils.isEmpty(title)) {
             titleTxt.setText(title);
         }
-
-        apsAdapter1 = new ArrayAdapter <>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
+        List <String> goodsTemp = new ArrayList <>();
+        SpinnerAdapter apsAdapter1 = new ArrayAdapter <>(mContext, R.layout.item_spinner_loading_list_normal,cargos);
+        SpinnerAdapter apsAdapter2 = new ArrayAdapter <>(mContext, R.layout.item_spinner_loading_list_normal,goodsTemp);
         spBerth.setAdapter(apsAdapter1);
         for (int i = 0; i < apsAdapter1.getCount(); i++) {
             if (Tools.compareFist(oldBerth,apsAdapter1.getItem(i).toString())) {
                 spBerth.setSelection(i, true);// 默认选中项
                 strBerth = oldBerth;
+                if (!StringUtil.isEmpty(apsAdapter1.getItem(i).toString())) {
+                    goodsTemp.clear();
+                    for (String str : goods) {
+                        if (!StringUtil.isEmpty(str)){
+                            String firstCargo = apsAdapter1.getItem(i).toString().substring(0, 1);
+                            String firstGoods = str.substring(0, 1);
+                            if (firstCargo.equals(firstGoods)) {
+                                goodsTemp.add(str);
+                            }
+                        }
+                    }
+                    if (apsAdapter2!=null)
+                        ((ArrayAdapter) apsAdapter2).notifyDataSetChanged();
+                }
                 break;
             }
         }
@@ -160,6 +175,22 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 strBerth = cargos.get(position);
+                if (!StringUtil.isEmpty(cargos.get(position))) {
+                    goodsTemp.clear();
+                    for (String str : goods) {
+                        if (!StringUtil.isEmpty(str)) {
+                            String firstCargo = cargos.get(position).substring(0, 1);
+                            String firstGoods = str.substring(0, 1);
+                            if (firstCargo.equals(firstGoods)) {
+                                goodsTemp.add(str);
+                            }
+                        }
+                    }
+                    if (goodsTemp.size()>0)
+                        strGoods = goodsTemp.get(0);
+                    if (apsAdapter2 != null)
+                        ((ArrayAdapter) apsAdapter2).notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -175,7 +206,7 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
             spGoods.setVisibility(View.VISIBLE);
             tvTwo.setVisibility(View.VISIBLE);
 
-            apsAdapter2 = new ArrayAdapter <>(mContext, R.layout.item_spinner_loading_list_normal,goods);
+
             spGoods.setAdapter(apsAdapter2);
             for (int i = 0; i < apsAdapter2.getCount(); i++) {
                 if (Tools.compareFist(oldGoods,apsAdapter2.getItem(i).toString())) {

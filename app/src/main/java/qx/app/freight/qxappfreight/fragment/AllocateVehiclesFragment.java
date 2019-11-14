@@ -28,6 +28,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.AllocaaateHistoryActivity;
 import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
 import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
+import qx.app.freight.qxappfreight.activity.ModifyInportInfoActivity;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -40,6 +41,8 @@ import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
+import qx.app.freight.qxappfreight.dialog.ChooseFlightDialog;
+import qx.app.freight.qxappfreight.dialog.ChooseStorehouseDialog;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
@@ -290,10 +293,27 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-        if (getInfosByFlightIdBean != null) {
-            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+        if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
+            if (getInfosByFlightIdBeans.size() == 1){
+                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
+            }
+            else {
+                ChooseFlightDialog dialog = new ChooseFlightDialog();
+                dialog.setChooseDialogInterface(position -> {
+                    if (getInfosByFlightIdBeans.get(position) != null) {
+                        startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(position)));
+                    }
+                });
+                dialog.setData(getInfosByFlightIdBeans, getActivity());
+                dialog.show(getActivity().getSupportFragmentManager(), "123");
+            }
+
         }
+        else {
+            ToastUtil.showToast("没有查询到相应的板车");
+        }
+
     }
 
     @Override

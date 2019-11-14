@@ -103,10 +103,10 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         //获取暂存板车数据
-        if (flightBean!=null&&flightBean.getFlightId() !=null){
-            if (ScooterMapSingle.getInstance().get(flightBean.getFlightId())!=null){
-                if (ScooterMapSingle.getInstance().get(flightBean.getFlightId()).getTransportTodoListBeans()!=null){
-                    mList.addAll(ScooterMapSingle.getInstance().get(flightBean.getFlightId()).getTransportTodoListBeans());
+        if (flightBean!=null&&flightBean.getFlightNo() !=null){
+            if (ScooterMapSingle.getInstance().get(flightBean.getFlightNo())!=null){
+                if (ScooterMapSingle.getInstance().get(flightBean.getFlightNo()).getTransportTodoListBeans()!=null){
+                    mList.addAll(ScooterMapSingle.getInstance().get(flightBean.getFlightNo()).getTransportTodoListBeans());
                 }
             }
         }

@@ -83,17 +83,17 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 重量
      */
-    private int billingWeight;
+    private double billingWeight;
 
     /**
      * 总重量
      */
-    private int totalWeight;
+    private double totalWeight;
 
     /**
      * 总体积
      */
-    private int totalVolume;
+    private double totalVolume;
 
     /**
      * 冷藏温度

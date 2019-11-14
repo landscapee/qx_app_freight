@@ -45,9 +45,9 @@ public class GroupBoardToDoPresenter extends BasePresenter {
 
     public void getScooterByScooterCode(BaseFilterEntity airLineId) {
         mRequestView.showNetDialog();
-        ((GroupBoardToDoListModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter<GetInfosByFlightIdBean>() {
+        ((GroupBoardToDoListModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter<List<GetInfosByFlightIdBean>>() {
             @Override
-            public void onSuccess(GetInfosByFlightIdBean queryAviationRequireBeans) {
+            public void onSuccess(List<GetInfosByFlightIdBean> queryAviationRequireBeans) {
                 ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getScooterByScooterCodeResult(queryAviationRequireBeans);
                 mRequestView.dissMiss();
             }

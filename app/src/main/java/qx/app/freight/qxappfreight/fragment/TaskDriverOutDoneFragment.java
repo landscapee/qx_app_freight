@@ -163,8 +163,8 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
         entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
         entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
 
         if (step == 0)
             entity.setOperationCode(Constants.TP_START);//任务开始

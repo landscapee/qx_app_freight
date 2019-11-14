@@ -318,7 +318,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

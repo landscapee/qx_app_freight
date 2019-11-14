@@ -464,8 +464,8 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 if (data.getWidthAirFlag() == 0)
                                     splitScooter.setLocation(strGoos);
                                 splitScooter.setSplit(true);
-                                newScooters.add(position + 1, splitScooter);
                                 joinInstall(newScooters.get(position).getId(), splitScooter);
+                                newScooters.add(position + 1, splitScooter);
                                 adapter.notifyDataSetChanged();
                                 compareInstall();
                             } catch (Exception e) {

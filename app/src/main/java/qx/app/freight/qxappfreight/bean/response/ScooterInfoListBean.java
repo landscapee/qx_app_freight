@@ -31,4 +31,6 @@ public class ScooterInfoListBean implements Serializable {
      */
     private int headingFlag;
 
+    private String type;//卸机已办使用
+
 }

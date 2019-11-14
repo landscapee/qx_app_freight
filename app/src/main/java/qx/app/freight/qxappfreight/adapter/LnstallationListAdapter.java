@@ -84,7 +84,7 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                     .setText(R.id.tv_weight, StringUtil.isEmpty(item.getWeight()) ? "- -" : item.getWeight())
                     .setText(R.id.tv_total, !StringUtil.isEmpty(item.getSpecialCode())?Tools.getVolumeForSpCode(item.getSpecialCode()) : "--")
                     .setText(R.id.tv_special_number, !StringUtil.isEmpty(item.getSpecialCode()) ? Tools.getSpCodeForSpCode(item.getSpecialCode()) : "--")
-                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isChange() ? "调舱" : item.isSplit()?item.getType().endsWith("BY")?"拆舱":"拆箱":"- -");
+                    .setText(R.id.tv_pull_state, item.getExceptionFlag() == 1 ? "拉下" : item.isSplit()?item.getType().endsWith("BY")?"拆舱":"拆箱":item.isChange() ? "调舱" : "- -");
         }
 
 
@@ -116,11 +116,6 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                 for (TextView tv : tvList) {
                     tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
                 }
-            } else if (item.isChange()) {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
-                for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
-                }
             }
             else if (item.isSplit()) {
                 helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.gray_cc));
@@ -132,7 +127,13 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                 for (TextView tv : tvList) {
                     tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
                 }
+            }else if (item.isChange()) {
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
+                for (TextView tv : tvList) {
+                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                }
             }
+
             else {
                 if (item.getSpecialCode() != null && item.getSpecialCode().contains("AVI")) {//活体颜色标注
                     helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));

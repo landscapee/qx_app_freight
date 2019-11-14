@@ -101,6 +101,11 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
             SelectTaskMemberRvAdapter adapter = new SelectTaskMemberRvAdapter(result);
             mRvSelectMember.setLayoutManager(new GridLayoutManager(this, 3));
             mRvSelectMember.setAdapter(adapter);
+            adapter.setOnBoxClickListener(pos -> {
+
+                mMemberList.get(pos).setSelected(!mMemberList.get(pos).isSelected());
+//                adapter.notifyDataSetChanged();
+            });
         }
     }
 

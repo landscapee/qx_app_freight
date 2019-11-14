@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class AllocateScooterActivity extends BaseActivity {
     ViewPager mViewPager;
     @BindView(R.id.tablayout)
     TabLayout mTabLayout;
+    @BindView(R.id.tv_total_weight)
+    TextView tvTotalWeight;
 
     private List<Fragment> fragmentList;
     private List<String> list_Title;
@@ -64,6 +67,10 @@ public class AllocateScooterActivity extends BaseActivity {
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), this, fragmentList, list_Title));
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
+    }
+
+    public void setTotalWeight(double weight){
+        tvTotalWeight.setText("货邮总重量:"+weight+"kg");
     }
 
 

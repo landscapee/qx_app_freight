@@ -40,7 +40,6 @@ import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.activity.MsgDialogAct;
 import qx.app.freight.qxappfreight.activity.MsgDialogVisibleAct;
 import qx.app.freight.qxappfreight.app.MyApplication;
-import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -50,6 +49,7 @@ import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
 import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -96,12 +96,28 @@ public class Tools {
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getCnname());
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDeptcode());
 
-        //当前登录的账号
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, userBean.getLoginName());
-        //当前登录账号的密码
-//        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.get);
     }
 
+    public static void saveLoginNameAndPassword(String login, String password) {
+        //当前登录的账号
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, login);
+        //当前登录账号的密码
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, password);
+    }
+
+    public static String getLoginNameForLogin() {
+        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, "");
+        return loginName;
+    }
+    public static String getPassword() {
+        String password = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, "");
+        return password;
+    }
+
+    public static String getLoginName() {
+        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
+        return loginName;
+    }
 
     private static long lastClickTime;
 
@@ -237,7 +253,7 @@ public class Tools {
     /**
      * TODO: 保存基站位置信息
      */
-    public static void saveBSLocation(BSLoactionUtil.BSLocationBean bean) {
+    public static void saveBSLocation(qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil.BSLocationBean bean) {
         SaveUtils.getInstance().setValue(KEY_BSLoaction, bean);
     }
 
@@ -256,11 +272,6 @@ public class Tools {
     public static String getRealName() {
         String realName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
         return realName;
-    }
-
-    public static String getLoginName() {
-        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
-        return loginName;
     }
 
     /**
@@ -453,7 +464,7 @@ public class Tools {
      * @param context
      */
     public static void wakeupScreen(Context context) {
-        if (isBackground(context)||!isScreenOn(context)) {
+        if (isBackground(context) || !isScreenOn(context)) {
             if (isScreenOn(context)) {
                 wakeupApp(context);
                 return;
@@ -472,8 +483,7 @@ public class Tools {
                 if (isLocked(context)) {
                     MsgDialogAct.startActivity(context);
                 }
-            }
-            else {
+            } else {
                 if (isLocked(context)) {
                     MsgDialogVisibleAct.startActivity(context);
                 }
@@ -538,44 +548,45 @@ public class Tools {
             return flights.getFlightId();
 
     }
+
     public static int groupImlibUid(LoadAndUnloadTodoBean flights) {
-        if (flights.getMovement()==1 || flights.getMovement()==4) {
+        if (flights.getMovement() == 1 || flights.getMovement() == 4) {
             return Integer.valueOf(flights.getFlightId());
-        } else if (flights.getLoadingAndUnloadBean()!=null&&flights.getLoadingAndUnloadBean().getSuccessionId()!=null&&!StringUtil.isEmpty(flights.getLoadingAndUnloadBean().getSuccessionId())){
-            if (Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId()) > 0){
+        } else if (flights.getLoadingAndUnloadBean() != null && flights.getLoadingAndUnloadBean().getSuccessionId() != null && !StringUtil.isEmpty(flights.getLoadingAndUnloadBean().getSuccessionId())) {
+            if (Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId()) > 0) {
                 return Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId());
-            }
-            else
+            } else
                 return Integer.valueOf(flights.getFlightId());
-        }
-        else
+        } else
             return Integer.valueOf(flights.getFlightId());
     }
 
     /**
      * 通过特货代码 获取 体积
+     *
      * @param specialCode
      * @return
      */
     public static String getVolumeForSpCode(String specialCode) {
-        String volume= specialCode;
-        if (specialCode.contains("/")){
-            volume= specialCode.substring(0,specialCode.indexOf("/"));
+        String volume = specialCode;
+        if (specialCode.contains("/")) {
+            volume = specialCode.substring(0, specialCode.indexOf("/"));
         }
         return volume;
     }
+
     /**
      * 通过特货代码 获取 正确的特货代码
+     *
      * @param specialCode
      * @return
      */
     public static String getSpCodeForSpCode(String specialCode) {
-        String spCode= specialCode;
-        if (specialCode.contains("/")){
-            spCode= specialCode.substring(specialCode.indexOf("/"),specialCode.length()-1);
-        }
-        else
-            spCode="";
+        String spCode = specialCode;
+        if (specialCode.contains("/")) {
+            spCode = specialCode.substring(specialCode.indexOf("/"), specialCode.length() - 1);
+        } else
+            spCode = "";
         return spCode;
     }
 }

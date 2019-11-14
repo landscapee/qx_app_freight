@@ -46,7 +46,7 @@ public class WaybillsBean {
     private String waybillId;
     private String waybillCode;
     private int number;
-    private Object weight;
+    private double weight;
     private Object volume;
     private Object runTimeScooterId;
     private Object scooterId;

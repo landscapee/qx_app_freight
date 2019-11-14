@@ -146,7 +146,7 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 callTouch(false);
                 if (!mIsDragable)
                     return true;
-                if (mLocationX >= rightMax) {
+                if (mLocationX >= (rightMax*4/5)) { //设置为 4/5 触发。
                     mIsDragable = false;
                     mLocationX = 0;
                     invalidate();

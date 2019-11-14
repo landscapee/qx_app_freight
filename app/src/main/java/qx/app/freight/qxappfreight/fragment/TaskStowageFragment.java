@@ -290,7 +290,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

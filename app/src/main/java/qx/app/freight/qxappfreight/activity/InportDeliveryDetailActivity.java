@@ -322,7 +322,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

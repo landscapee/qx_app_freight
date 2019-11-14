@@ -101,8 +101,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkVersion();
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
 
-//        mEtUserName.setText("yuwenjing");
-//        mEtPassWord.setText("yuwenjing123");
+
+        mEtUserName.setText(Tools.getLoginNameForLogin());
+        mEtPassWord.setText(Tools.getPassword());
 
         mBtnLogin.setOnClickListener(v -> {
             if (!Tools.isFastClick())
@@ -302,7 +303,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     dismissProgessDialog();
                     UpdatePWDActivity.startActivity(this);
                 }
-                dismissProgessDialog();
                 toMainAct();
             }
         } else {
@@ -340,6 +340,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     private void toMainAct() {
         dismissProgessDialog();
+        Tools.saveLoginNameAndPassword(mEtUserName.getText().toString(),mEtPassWord.getText().toString());
         MainActivity.startActivity(this);
         finish();
     }
@@ -356,9 +357,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         Tools.setLoginUserBean(loginBean);
         IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
         IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getCnname(), loginBean.getToken());
-        MainActivity.startActivity(this);
-        finish();
-
+        toMainAct();
     }
 
     private void loginIm(LoginResponseBean loginBean) {

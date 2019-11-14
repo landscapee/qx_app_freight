@@ -95,6 +95,21 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
             public void onFlightSafeguardClick(int position) {
                 IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position))+"");
             }
+
+            @Override
+            public void onUploadPhoto(int position) {
+
+            }
+
+            @Override
+            public void onLookUnloadInstall(int position) {
+
+            }
+
+            @Override
+            public void onLookLoadInstall(int position) {
+
+            }
         });
         mMfrvData.setAdapter(mAdapter);
         loadData();
@@ -251,6 +266,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
                 entity1.setFlightType(bean.getFlightType());
                 entity1.setItemType(Constants.TYPE_STEP_OVER);
                 entity1.setStepDoneDate("0".equals(times.get(i)) ? "" : sdf.format(new Date(Long.valueOf(times.get(i)))));
+                entity1.setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
             }
             mCacheList.add(bean);
         }

@@ -163,7 +163,11 @@ public class InstallEquipClient extends StompClient {
                                 Gson gson = new Gson();
                                 SeatChangeEntity data = gson.fromJson(topicMessage.getPayload(), SeatChangeEntity.class);
                                 pushFlightInfo(data);
-                            } else {
+                            }
+                            else if (topicMessage.getPayload().contains("\"passengerLoadStatusChg\":true")) {//结载任务步骤 状态变更
+                                EventBus.getDefault().post("JunctionLoadFragment_refresh");
+                            }
+                            else {
                                 CommonJson4List <LoadAndUnloadTodoBean> gson = new CommonJson4List <>();
                                 CommonJson4List <LoadAndUnloadTodoBean> data = gson.fromJson(topicMessage.getPayload(), LoadAndUnloadTodoBean.class);
                                 sendLoadUnLoadGroupBoard(data);

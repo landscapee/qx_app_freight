@@ -183,7 +183,8 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     private void initServices() {
         //开启定位服务
-        GPSService.startGPSService(this);
+//        GPSService.startGPSService(this);
+        qx.app.freight.qxappfreight.service.GPSService.gpsStart(this);
         WebSocketService.startService(this);
     }
 
@@ -406,11 +407,11 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SeatChangeEntity result) {
-        if (!(result.getRemark()==null || result.getRemark().contains("CTOT") ||result.getRemark().contains("机位"))){
-            Log.e("dialog：","222222222222");
+//        if (!(result.getRemark()==null || result.getRemark().contains("CTOT") ||result.getRemark().contains("机位"))){
+//            Log.e("dialog：","222222222222");
             UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> {});
             updatePushDialog.show();
-        }
+//        }
         EventBus.getDefault().post("refresh_data_update");
     }
     @Subscribe(threadMode = ThreadMode.MAIN)

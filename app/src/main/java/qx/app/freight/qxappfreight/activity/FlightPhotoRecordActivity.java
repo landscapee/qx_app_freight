@@ -371,7 +371,7 @@ public class FlightPhotoRecordActivity extends BaseActivity implements UploadsCo
         if (result!=null)
             ToastUtil.showToast(this, "已保存");
         EventBus.getDefault().post("InstallEquipFragment_refresh");
-
+        EventBus.getDefault().post("InstallEquipLeaderFragment_refresh");
 
     }
 }

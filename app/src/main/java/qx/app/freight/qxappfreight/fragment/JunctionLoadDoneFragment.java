@@ -278,12 +278,12 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         entity.setLoadUnloadDataId(mList.get(bigPos).getId());
         entity.setFlightId(Long.valueOf(mList.get(bigPos).getFlightId()));
         entity.setFlightTaskId(mList.get(bigPos).getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
         entity.setOperationCode(code);
         entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
         entity.setUserId(UserInfoSingle.getInstance().getUserId());
-        entity.setUserName(mList.get(bigPos).getWorkerName());
+        entity.setUserName(UserInfoSingle.getInstance().getUsername());
         entity.setCreateTime(System.currentTimeMillis());
         ((EndInstallTodoPresenter) mPresenter).slideTask(entity);
     }
@@ -350,6 +350,7 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
                 }
                 entity1.setItemType(type);
                 entity1.setStepDoneDate("0".equals(times.get(i)) ? "" : sdf.format(new Date(Long.valueOf(times.get(i)))));
+                entity1.setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
             }
             mCacheList.add(bean);
         }

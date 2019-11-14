@@ -21,7 +21,7 @@ public class GroupBoardToDoContract {
 
     public interface GroupBoardToDoView extends IBaseView {
         void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans);
-        void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean);
+        void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean);
         void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans);
 
     }
