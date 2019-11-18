@@ -23,7 +23,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
 import qx.app.freight.qxappfreight.bean.LoadUnLoadTaskPushBean;
-import qx.app.freight.qxappfreight.bean.LockEventbusEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;

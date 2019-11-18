@@ -1,13 +1,11 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;

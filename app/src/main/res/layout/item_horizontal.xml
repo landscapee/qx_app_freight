@@ -26,7 +26,8 @@
             android:textColor="#136BEF"
             android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="12321" />
+            tools:text="12321"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_rerutn_good_info"

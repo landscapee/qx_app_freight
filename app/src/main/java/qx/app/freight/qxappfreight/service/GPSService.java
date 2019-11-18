@@ -20,8 +20,6 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-
 import qx.app.freight.qxappfreight.bean.PositionBean;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil;

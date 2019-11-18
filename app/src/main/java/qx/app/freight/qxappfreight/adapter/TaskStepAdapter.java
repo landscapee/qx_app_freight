@@ -2,16 +2,12 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -19,13 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.TestActivity;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldTaskMyBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.SlideLeftExecuteView;
 
 public class TaskStepAdapter extends BaseQuickAdapter<List<OutFieldTaskBean>, BaseViewHolder> {

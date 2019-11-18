@@ -21,12 +21,9 @@ import java.util.List;
 
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter2;
 import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapterForNet;
 import qx.app.freight.qxappfreight.app.BasePresenter;
-import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.contract.OverweightContract;
 import qx.app.freight.qxappfreight.presenter.OverweightPresenter;

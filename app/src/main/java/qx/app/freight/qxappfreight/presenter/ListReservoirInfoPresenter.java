@@ -5,12 +5,8 @@ import java.util.List;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
-import qx.app.freight.qxappfreight.bean.response.ReservoirAreaBean;
-import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
-import qx.app.freight.qxappfreight.contract.LoginContract;
 import qx.app.freight.qxappfreight.model.ListReservoirInfoModel;
-import qx.app.freight.qxappfreight.model.LoginModel;
 
 /**
  * Created by guohao on 2019/5/21 23：19

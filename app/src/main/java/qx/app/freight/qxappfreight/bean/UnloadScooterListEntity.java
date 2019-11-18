@@ -1,13 +1,11 @@
 package qx.app.freight.qxappfreight.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 
 @Getter

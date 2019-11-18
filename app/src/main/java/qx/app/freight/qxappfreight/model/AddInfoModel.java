@@ -1,13 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
-import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.contract.AddInfoContract;
-import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**
  * TODO : xxx

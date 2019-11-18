@@ -9,7 +9,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class FlightListCargoDoneAdapter extends BaseQuickAdapter<CargoReportHisBean, BaseViewHolder> {

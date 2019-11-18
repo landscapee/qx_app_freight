@@ -24,7 +24,6 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
 import qx.app.freight.qxappfreight.utils.SoundConfigUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.VibrationUtils;
 import qx.app.freight.qxappfreight.widget.CustomDividerItemDecoration;
 
 public class MsgDialogActivity extends BaseActivity {

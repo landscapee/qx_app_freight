@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

@@ -81,7 +81,6 @@ import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryBean;
 import qx.app.freight.qxappfreight.bean.response.InventoryQueryBean;
-import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
@@ -113,7 +112,6 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -404,7 +402,6 @@ public class UpdateRepository extends BaseRepository {
     public Observable<TransportListBean> searchTodoTask(BaseFilterEntity model) {
         return transform(getService().searchTodoTask(model));
     }
-
 
     /**
      * 收运编辑提交页面

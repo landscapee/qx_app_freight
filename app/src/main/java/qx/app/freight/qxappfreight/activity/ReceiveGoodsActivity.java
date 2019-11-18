@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -46,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
@@ -57,7 +57,6 @@ import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
@@ -468,6 +467,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     public void sendPrintMessageResult(String result) {
         isPrint = true;
         ToastUtil.showToast(result+"");
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
+
     }
 
     private void printWayBill() {

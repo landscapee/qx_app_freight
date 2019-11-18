@@ -32,8 +32,6 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 
 /**

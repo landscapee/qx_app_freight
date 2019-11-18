@@ -5,9 +5,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
-import qx.app.freight.qxappfreight.contract.IOManiFestContract;
 import qx.app.freight.qxappfreight.contract.SubmitIOManiFestContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 

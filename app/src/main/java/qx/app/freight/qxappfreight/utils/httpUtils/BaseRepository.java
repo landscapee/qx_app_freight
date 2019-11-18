@@ -4,7 +4,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.RespBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;

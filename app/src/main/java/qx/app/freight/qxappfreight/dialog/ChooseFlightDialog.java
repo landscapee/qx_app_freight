@@ -18,11 +18,8 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ChooseFlightAdapter;
-import qx.app.freight.qxappfreight.adapter.ChooseStoreroomAdapter;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
-import qx.app.freight.qxappfreight.model.TestBean;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 选择库区dialog

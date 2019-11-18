@@ -34,7 +34,6 @@ import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
-import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.contract.StevedoresTaskHisContract;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StevedoresTaskHisPresenter;

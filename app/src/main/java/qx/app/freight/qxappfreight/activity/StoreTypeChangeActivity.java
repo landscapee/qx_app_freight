@@ -45,7 +45,6 @@ import qx.app.freight.qxappfreight.presenter.ChangeStoragePresenter;
 import qx.app.freight.qxappfreight.presenter.SearchReservoirPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class StoreTypeChangeActivity extends BaseActivity implements ChangeStorageListContract.changeStorageListView, ChangeStorageContract.changeStorageView, SearchReservoirContract.searchReservoirView, BaseParamContract.baseParamView {

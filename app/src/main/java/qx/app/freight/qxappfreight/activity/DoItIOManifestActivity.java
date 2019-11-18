@@ -6,25 +6,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ChoiceUserAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
-import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.contract.SubmitIOManiFestContract;
 import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
 import qx.app.freight.qxappfreight.presenter.SubmitIOManifestPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 

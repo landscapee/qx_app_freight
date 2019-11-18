@@ -1,13 +1,9 @@
 package qx.app.freight.qxappfreight.presenter;
 
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
-import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.model.UpdateVersionModel;
 

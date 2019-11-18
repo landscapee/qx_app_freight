@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -21,13 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.DriverOutTaskAdapter;
-import qx.app.freight.qxappfreight.adapter.TaskStepAdapter;
 import qx.app.freight.qxappfreight.adapter.TaskTpDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
@@ -37,14 +33,9 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.bean.response.StepBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.AcceptTerminalTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.TransportTaskHisContract;
-import qx.app.freight.qxappfreight.dialog.TpPushDialog;
-import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;

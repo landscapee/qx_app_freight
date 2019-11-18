@@ -95,6 +95,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(mBean.getId());
+        myAgentListBean.setWaybillCode(mBean.getWaybillCode());
         myAgentListBean.setTaskTypeCode(mBean.getTaskTypeCode());
         baseFilterEntity.setSize(Constants.PAGE_SIZE);
         baseFilterEntity.setCurrent(pageCurrent);
@@ -207,6 +208,11 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void sendPrintMessageResult(String result) {
+
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
 
     }
 }

@@ -20,7 +20,6 @@ import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.FightScooterSubmitEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
-import qx.app.freight.qxappfreight.bean.request.GetIOManifestEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
@@ -49,7 +48,6 @@ import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.UnLoadRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
-import qx.app.freight.qxappfreight.bean.request.UserBean;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
@@ -87,7 +85,6 @@ import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
-import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.bean.response.MsMessageViewBean;
@@ -116,7 +113,6 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
@@ -197,8 +193,8 @@ public interface HttpApi {
     @GET("service-product-receivecargo/rc/sendPrintMessage/{waybillId}")
     Observable<BaseEntity<Object>> sendPrintMessage(@Path("waybillId") String waybillId);
 
-    //代办
-    @POST("service-product-receivecargo/todoTask/searchTodoTask")
+    //收运 代办
+    @POST("service-product-receivecargo/todoTask/searchTodoTaskByMT")
     Observable<BaseEntity<TransportListBean>> transportList(@Body BaseFilterEntity model);
 
     //预配组板获取代办数据
@@ -220,8 +216,9 @@ public interface HttpApi {
      * @param model
      * @return
      */
-    @POST("service-product-transportcheck/todoTask/searchTodoTask")
+    @POST("service-product-transportcheck/todoTask/searchTodoTaskByMT")
     Observable<BaseEntity<TransportListBean>> searchTodoTask(@Body BaseFilterEntity model);
+
 
     //编辑修改页面
     @GET("service-product-waybill/declare-waybill/getWayBillInfoById/{id}")

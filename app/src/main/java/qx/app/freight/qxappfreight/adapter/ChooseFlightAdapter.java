@@ -9,7 +9,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.model.TestBean;
 
 public class ChooseFlightAdapter extends BaseQuickAdapter<GetInfosByFlightIdBean, BaseViewHolder> {
 

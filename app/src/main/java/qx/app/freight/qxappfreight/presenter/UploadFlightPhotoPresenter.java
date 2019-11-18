@@ -2,11 +2,8 @@ package qx.app.freight.qxappfreight.presenter;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
-import qx.app.freight.qxappfreight.contract.AddInfoContract;
 import qx.app.freight.qxappfreight.contract.UpLoadFlightPhotoContract;
-import qx.app.freight.qxappfreight.model.AddInfoModel;
 import qx.app.freight.qxappfreight.model.UploadFlightPhotoModel;
 
 /**

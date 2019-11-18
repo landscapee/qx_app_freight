@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beidouapp.imlibapi.activity.ImLibSpecialHomeFragment;
-import com.qxkj.positionapp.GPSService;
 import com.qxkj.positionapp.LocationEntity;
 import com.qxkj.positionapp.observer.LocationObservable;
 

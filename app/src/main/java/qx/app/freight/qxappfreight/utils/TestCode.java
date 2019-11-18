@@ -2,13 +2,6 @@ package qx.app.freight.qxappfreight.utils;
 
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.Arrays;
-
-import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
-
 /**
  *  拷贝测试代码片段  到main方法内 第11行 绿色小按钮 可以运行 和debug 代码片段
  *  by zyy

@@ -36,8 +36,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FlightPhotoRecordActivity;
-import qx.app.freight.qxappfreight.activity.LoadPlaneActivity;
-import qx.app.freight.qxappfreight.activity.UnloadPlaneActivity;
 import qx.app.freight.qxappfreight.adapter.InstallEquipLeaderAdapter;
 import qx.app.freight.qxappfreight.adapter.LeaderInstallEquipStepAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;

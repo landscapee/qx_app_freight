@@ -1,16 +1,13 @@
 package qx.app.freight.qxappfreight.adapter;
 
-import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.util.Date;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.bean.response.SmInventorySummary;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 

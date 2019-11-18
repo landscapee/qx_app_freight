@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.ouyben.empty.EmptyLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.BaggageDoneListActivity;
-import qx.app.freight.qxappfreight.activity.BaggageListActivity;
 import qx.app.freight.qxappfreight.adapter.FlightListDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.BaggageSubHisContract;
 import qx.app.freight.qxappfreight.presenter.BaggageSubHisPresenter;

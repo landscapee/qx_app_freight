@@ -6,7 +6,6 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.contract.BaseParamContract;
 import qx.app.freight.qxappfreight.contract.BaseParamTypeContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 

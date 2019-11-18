@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.utils.Tools;
 
 /**

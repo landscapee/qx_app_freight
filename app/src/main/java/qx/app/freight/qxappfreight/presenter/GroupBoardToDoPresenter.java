@@ -8,11 +8,8 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
-import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.model.GetScooterByScooterCodeModel;
 import qx.app.freight.qxappfreight.model.GroupBoardToDoListModel;
 
 /**

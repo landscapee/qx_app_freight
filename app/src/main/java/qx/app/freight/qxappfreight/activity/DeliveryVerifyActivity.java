@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryVerifyAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;

@@ -1,13 +1,9 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
-import qx.app.freight.qxappfreight.app.MyApplication;
-import qx.app.freight.qxappfreight.utils.AutoLoginUtils;
-import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * TODO : 登录实体

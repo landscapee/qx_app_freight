@@ -23,7 +23,6 @@ import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
 import qx.app.freight.qxappfreight.presenter.SelectTaskMemberPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**

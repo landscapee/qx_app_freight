@@ -3,37 +3,29 @@ package qx.app.freight.qxappfreight.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.ouyben.empty.EmptyLayout;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.MessageAdapter;
 import qx.app.freight.qxappfreight.adapter.NoticeAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.response.NoticeBean;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
-import qx.app.freight.qxappfreight.bean.response.PageListBean;
 import qx.app.freight.qxappfreight.contract.FindUserNoticeByPageContract;
 import qx.app.freight.qxappfreight.presenter.FindUserNoticeByPagePresenter;
-import qx.app.freight.qxappfreight.presenter.MessagePresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
-import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
 
 public class NoticeActivity extends BaseActivity implements FindUserNoticeByPageContract.findUserNoticeByPageView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_notice)

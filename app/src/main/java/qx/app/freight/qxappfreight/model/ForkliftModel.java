@@ -8,7 +8,6 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.response.ForkliftWorkingCostBean;
-import qx.app.freight.qxappfreight.contract.AddInfoContract;
 import qx.app.freight.qxappfreight.contract.ForkliftCostContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 

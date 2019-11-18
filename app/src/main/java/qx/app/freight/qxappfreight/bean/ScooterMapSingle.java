@@ -1,11 +1,6 @@
 package qx.app.freight.qxappfreight.bean;
 
-import android.util.Log;
-
 import java.util.HashMap;
-
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
-import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 卸机板车存储单列

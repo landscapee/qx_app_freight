@@ -12,11 +12,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -41,12 +38,10 @@ import me.shaohui.advancedluban.OnMultiCompressListener;
 import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.ImageNetAndLocationAdapter;
-import qx.app.freight.qxappfreight.adapter.ImageRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ImageUrlEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.UpLoadFlightPhotoContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;

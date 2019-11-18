@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import qx.app.freight.qxappfreight.R;

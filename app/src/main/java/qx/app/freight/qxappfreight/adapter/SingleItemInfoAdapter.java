@@ -5,14 +5,10 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.util.Arrays;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.DeclareItem;
-import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**

@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
-import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 
 @Setter
 @Getter

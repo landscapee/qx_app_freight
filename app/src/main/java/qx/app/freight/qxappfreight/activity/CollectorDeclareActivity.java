@@ -24,6 +24,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.RecordsBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.BaseParamContract;
 import qx.app.freight.qxappfreight.contract.BaseParamTypeContract;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
@@ -218,6 +219,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     }
 
     @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
+
+    }
+
+    @Override
     public void toastView(String error) {
 
     }
@@ -345,11 +351,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         try {
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
             String weight = tvTotalWeight.getText().toString().trim();
-            int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
+            double volume = Double.valueOf(tvTotalVolume.getText().toString().trim());
 //            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
             mData.setTotalNumber(number);
-            mData.setTotalWeight(Integer.valueOf(weight));
+            mData.setTotalWeight(Double.valueOf(weight));
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
             mData.setStorageType(storageOption);

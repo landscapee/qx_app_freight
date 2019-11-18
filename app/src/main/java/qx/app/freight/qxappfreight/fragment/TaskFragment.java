@@ -117,6 +117,9 @@ public class TaskFragment extends BaseFragment {
     public void setTitleText(int size) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
     }
+    public void setTitleText() {
+        mToolBar.setMainTitle(Color.WHITE, "我的待办");
+    }
 
     public void goneTitle() {
         mToolBar.setVisibility(View.GONE);

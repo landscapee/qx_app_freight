@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;

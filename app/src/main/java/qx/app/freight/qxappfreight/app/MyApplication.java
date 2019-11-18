@@ -9,15 +9,11 @@ import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
 import com.liys.doubleclicklibrary.ViewDoubleHelper;
-import com.qxkj.positionapp.GPSService;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
-import qx.app.freight.qxappfreight.utils.AppIPConfig;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 
 public class MyApplication extends Application  {

@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 
 public class OverweightRecordAdapterForNet extends BaseQuickAdapter<OverweightBean, BaseViewHolder> {

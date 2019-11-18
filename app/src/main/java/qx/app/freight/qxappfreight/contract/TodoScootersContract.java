@@ -7,7 +7,6 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.GetTodoScootersBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 
 public class TodoScootersContract {

@@ -39,7 +39,6 @@ import qx.app.freight.qxappfreight.contract.AuditManifestContract;
 import qx.app.freight.qxappfreight.contract.GetLastReportInfoContract;
 import qx.app.freight.qxappfreight.contract.PrintRequestContract;
 import qx.app.freight.qxappfreight.dialog.SingerDialog;
-import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.HyFragment;
 import qx.app.freight.qxappfreight.fragment.ZdFragment;
 import qx.app.freight.qxappfreight.presenter.AuditManifestPresenter;

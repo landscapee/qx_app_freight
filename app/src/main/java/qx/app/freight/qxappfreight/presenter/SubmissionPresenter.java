@@ -3,7 +3,6 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
-import qx.app.freight.qxappfreight.bean.request.SubmissionEntity;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.model.SubmissionModel;
 

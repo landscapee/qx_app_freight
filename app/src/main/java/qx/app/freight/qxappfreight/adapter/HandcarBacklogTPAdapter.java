@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

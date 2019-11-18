@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 

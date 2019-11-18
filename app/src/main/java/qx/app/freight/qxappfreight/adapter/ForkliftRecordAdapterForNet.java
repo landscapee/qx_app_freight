@@ -9,7 +9,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.ForkliftWorkingCostBean;
-import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 
 public class ForkliftRecordAdapterForNet extends BaseQuickAdapter<ForkliftWorkingCostBean, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;

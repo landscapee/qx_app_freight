@@ -1,8 +1,5 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-import java.util.Map;
-
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;

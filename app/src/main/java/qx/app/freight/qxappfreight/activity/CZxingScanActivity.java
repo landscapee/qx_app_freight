@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import me.devilsen.czxing.ResultActivity;
-import me.devilsen.czxing.ScanActivity;
 import me.devilsen.czxing.ScannerManager;
 import me.devilsen.czxing.code.BarcodeFormat;
 import me.devilsen.czxing.compat.ActivityCompat;

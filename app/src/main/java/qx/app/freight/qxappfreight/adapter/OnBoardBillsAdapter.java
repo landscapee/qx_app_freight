@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.TextView;

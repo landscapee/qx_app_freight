@@ -9,25 +9,16 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.ChooseStoreroomAdapter;
 import qx.app.freight.qxappfreight.adapter.UnloadBillAdapter;
-import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
-import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
-import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 卸机单数据dialog

@@ -10,7 +10,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class VerifyFileAdapter extends BaseQuickAdapter<AddtionInvoicesBean.AddtionInvoices, BaseViewHolder> {
 

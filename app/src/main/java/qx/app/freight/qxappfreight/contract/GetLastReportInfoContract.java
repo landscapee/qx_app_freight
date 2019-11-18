@@ -7,7 +7,6 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LockScooterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
-import qx.app.freight.qxappfreight.bean.response.LastReportInfoListBean;
 
 public class GetLastReportInfoContract {
     public interface getLastReportInfoModel {

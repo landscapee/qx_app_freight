@@ -24,14 +24,12 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DynamicDetailsAcitvity;
 import qx.app.freight.qxappfreight.adapter.DynamicInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.doubleClickUtil.ClickFilter;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 public class DynamicInfoFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {

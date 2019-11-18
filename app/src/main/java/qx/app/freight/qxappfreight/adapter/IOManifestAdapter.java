@@ -9,10 +9,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
-import qx.app.freight.qxappfreight.utils.MapValue;
-import qx.app.freight.qxappfreight.utils.StringUtil;
-import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class IOManifestAdapter extends BaseQuickAdapter<SmInventoryEntryandexit, BaseViewHolder> {
 

@@ -84,4 +84,6 @@ public class BaseFilterEntity<T> {
     private String exceptionContent; //异常内容
 
     private int location; //1:最终装机单录入 2:预装机单录入
+
+    private String waybillCode;
 }

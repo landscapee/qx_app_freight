@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
 
 public class BerthAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
