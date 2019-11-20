@@ -12,7 +12,7 @@ public class ExceptionReportEntity {
 
     private long flightId;//
 
-    private String flightNum;//
+    private String flightNo;//
 
     private String reportTime;
 

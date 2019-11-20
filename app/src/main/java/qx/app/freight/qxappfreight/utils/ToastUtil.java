@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.utils;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 import qx.app.freight.qxappfreight.app.MyApplication;
 
@@ -42,6 +43,8 @@ public class ToastUtil {
     }
 
     public static void showToast( String s){
+        if (s == null)
+            return;
         Context context= MyApplication.getContext();
         if ("318".equals(s)){
            return;
@@ -52,6 +55,7 @@ public class ToastUtil {
             oneTime=System.currentTimeMillis();
 //            Log.e("toast==null",s);
         }else{
+            toast.setGravity(Gravity.CENTER,0,0); //居中
             twoTime=System.currentTimeMillis();
             if(s.equals(oldMsg)){
                 if(twoTime-oneTime>Toast.LENGTH_SHORT){

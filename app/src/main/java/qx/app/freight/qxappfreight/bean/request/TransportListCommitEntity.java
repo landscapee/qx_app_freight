@@ -3,10 +3,8 @@ package qx.app.freight.qxappfreight.bean.request;
 import java.util.List;
 
 import lombok.Data;
-import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
-import qx.app.freight.qxappfreight.bean.response.RcDeclareWaybill;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 
 /**

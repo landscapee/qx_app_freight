@@ -97,7 +97,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
             list.addAll(mCacheList);
         } else {
             for (TransportDataBase item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(mSearchText.toLowerCase())) {
                     list.add(item);
                 }
             }
@@ -250,10 +250,11 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void toastView(String error) {
         if (pageCurrent == 1) {
             mCacheList.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
         }
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -289,7 +290,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

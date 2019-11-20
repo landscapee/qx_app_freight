@@ -9,8 +9,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.AgentBean;
-import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.utils.MapValue;
 
@@ -34,7 +32,7 @@ public class ReturnGoodAdapter extends BaseQuickAdapter<ReturnBean, BaseViewHold
                 //件数
                 item.getNumber(),
                 //体积
-                item.getVolume(),
+                0,
                 //重量
                 item.getWeight()));
         //库区|库位

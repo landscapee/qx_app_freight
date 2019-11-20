@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="EU2448"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="B-2310"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <LinearLayout
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="132"
+            android:text=""
             android:textSize="@dimen/sp_12" />
     </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:drawableStart="@mipmap/take_off"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_time_fall_down"
@@ -79,14 +79,14 @@
             android:drawableStart="@mipmap/landfall"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="2018-11-24" />
+            android:text="" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,66 +97,104 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/white"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
+            <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:drawableStart="@mipmap/news_normal"-->
+            <!--android:drawablePadding="@dimen/dp_10"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:padding="@dimen/dp_10"-->
+            <!--android:text="货邮舱单"-->
+            <!--android:textColor="@color/grassgreen"-->
+            <!--android:textSize="@dimen/sp_12" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:background="@color/gray_8f"
-                android:drawableStart="@mipmap/news_normal"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical"
-                android:padding="@dimen/dp_10"
-                android:text="装机单"
-                android:textColor="@color/grassgreen"
-                android:textSize="@dimen/sp_12" />
-
-            <LinearLayout
-                android:id="@+id/ll_storage_version"
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_weight="1"
+                >
+            <RadioGroup
+                android:id="@+id/tb_title"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_dynamic_blue"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_version"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp_40"
-                    android:layout_weight="1"
-                    android:background="@color/gray_8f"
-                    android:gravity="center_vertical|right"
-                    android:padding="@dimen/dp_10"
-                    android:text="版本号："
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_12" />
-
-                <ImageView
+                <RadioButton
+                    android:id="@+id/rb_install"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/gray_8f"
-                    android:src="@mipmap/drop_slect_white" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="预装机单"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
-            <!--<LinearLayout-->
-            <!--android:layout_marginStart="10dp"-->
-            <!--android:id="@+id/ll_storage_type"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawablePadding="@dimen/dp_10"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="45dp">-->
-            <!--<TextView-->
+                <RadioButton
+                    android:id="@+id/rb_advise_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="监装调舱建议"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
-            <!--android:id="@+id/tv_storage_type"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center_vertical|end"-->
-            <!--android:spinnerMode="dropdown"-->
-            <!--style="@style/public_tv_16sp" />-->
+                <RadioButton
+                    android:id="@+id/rb_end_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="最终装机单"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
 
-            <!--</LinearLayout>-->
+                <RadioButton
+                    android:id="@+id/rb_end_advise_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="监装调舱建议"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
+
+            </RadioGroup>
+
+            </HorizontalScrollView>
+            <!--<ImageView-->
+            <!--android:layout_width="18dp"-->
+            <!--android:layout_height="18dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="@mipmap/icon_query" />-->
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_12" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/down" />
         </LinearLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -164,40 +202,82 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <HorizontalScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+                android:layout_height="match_parent">
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/mfrv_data"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
 
 
-            </HorizontalScrollView>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/mfrv_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:id="@+id/tv_sure_install"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent_half"
+                    android:gravity="center"
+                    android:text="确认按此装机"
+                    android:textColor="@color/red"
+                    android:textSize="50sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_confirm"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:visibility="gone"
-        android:gravity="center_vertical|right"
-        android:text="监装员:" />
+        android:padding="10dp"
+        >
 
-    <TextView
-        android:id="@+id/tv_confim_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_margin="15dp"
-        android:gravity="center_vertical|right"
-        android:text="发送时间:" />
+        <TextView
+            android:id="@+id/tv_confirm_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="结载员:"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录入时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm_jz"
+            />
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="监装员:"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
 
     <Space
         android:layout_width="0dp"
@@ -243,6 +323,7 @@
             android:background="@drawable/shape_dynamic_black"
             android:text="打印"
             android:textColor="@color/black" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"

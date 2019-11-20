@@ -6,13 +6,6 @@ import android.content.Context;
 
 import java.util.Stack;
 
-import qx.app.freight.qxappfreight.activity.AddReceiveGoodActivity;
-import qx.app.freight.qxappfreight.activity.CollectorDeclareActivity;
-import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
-import qx.app.freight.qxappfreight.activity.VerifyCargoActivity;
-import qx.app.freight.qxappfreight.activity.VerifyFileActivity;
-import qx.app.freight.qxappfreight.activity.VerifyStaffActivity;
-
 /**
  * activity 单列
  */

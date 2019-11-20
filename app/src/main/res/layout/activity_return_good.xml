@@ -114,7 +114,9 @@
             android:layout_weight="1"
             android:background="@drawable/shape_dynamic_black"
             android:text="拒绝"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone"
+            />
 
         <Space
             android:layout_width="0dp"

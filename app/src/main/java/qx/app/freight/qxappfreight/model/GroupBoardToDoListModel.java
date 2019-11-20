@@ -8,7 +8,6 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**

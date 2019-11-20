@@ -15,7 +15,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="13dp">
-
+            <TextView
+                android:id="@+id/tv_temp_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text=""
+                android:textColor="@color/blue_2e8"
+                android:visibility="gone"/>
+<LinearLayout
+    android:id="@+id/ll_flight_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_flight"
                 android:layout_width="match_parent"
@@ -45,9 +57,10 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/btn_blue_press"
                     android:text="航班保障组"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
             </LinearLayout>
-
+</LinearLayout>
             <RelativeLayout
                 android:id="@+id/rl_back_accept"
                 android:layout_width="match_parent"

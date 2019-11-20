@@ -10,5 +10,5 @@ public class SeatChangeEntity {
     private String remark;
     private String flightNo;
     private boolean loadUnloadStatusChg;
-
+    private boolean passengerLoadUnSend;
 }

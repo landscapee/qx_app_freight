@@ -17,6 +17,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
+import qx.app.freight.qxappfreight.listener.BaggageClient;
 import qx.app.freight.qxappfreight.listener.BeforehandClient;
 import qx.app.freight.qxappfreight.listener.CollectionClient;
 import qx.app.freight.qxappfreight.listener.DeliveryClient;
@@ -29,6 +30,7 @@ import qx.app.freight.qxappfreight.listener.WeighterClient;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import ua.naiksoftware.stomp.StompClient;
 
 public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
@@ -47,6 +49,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public static String ToList = "/taskTodo/taskTodoList";
     public static String Message = "/MT/msMsg";
     public static String Login = "/MT/message";
+    public static String Install = "/departure/installedAdvice";
+
     public static List<String> subList = new ArrayList<>();
 
     @Override
@@ -137,6 +141,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                             + "&taskAssignType=" + taskAssignType
                             + "&type=MT"
                             + "&role=beforehand_in");
+                    break;
+                case "porter"://行李员
+                    BaggageClient(HttpConstant.WEBSOCKETURL
+                            + "userId=" + UserInfoSingle.getInstance().getUserId()
+                            + "&taskAssignType=" + taskAssignType
+                            + "&type=MT"
+                            + "&role=porter");
                     break;
 //                case "report"://报载
 //                    NewspaperClient(HttpConstant.WEBSOCKETURL
@@ -229,6 +240,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public void NewspaperClient(String uri) {
         new NewspaperClient(uri, this);
     }
+    public void BaggageClient(String uri) {
+        new BaggageClient(uri, this);
+    }
 
     @Override
     public void onDestroy() {
@@ -271,6 +285,8 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     //停止连接 并关闭服务
     public static void stopServer(Context context) {
+        //顺便 关闭可能没关闭的声音 和震动
+        Tools.closeVibrator(context.getApplicationContext());
         closeLink();
         Intent startSrv = new Intent(context, WebSocketService.class);
         context.stopService(startSrv);

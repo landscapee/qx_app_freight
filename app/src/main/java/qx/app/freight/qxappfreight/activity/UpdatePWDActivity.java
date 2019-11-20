@@ -16,6 +16,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.UpdatePwdEntity;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
@@ -133,6 +134,7 @@ public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract
     public void updatePWDResult(String result) {
         ToastUtil.showToast("密码修改成功");
         UserInfoSingle.setUserNil();
+        ScooterMapSingle.getInstance().clear();
         ActManager.getAppManager().finishAllActivity();
         WebSocketService.stopServer(this);
         Intent intent = new Intent(this, LoginActivity.class);

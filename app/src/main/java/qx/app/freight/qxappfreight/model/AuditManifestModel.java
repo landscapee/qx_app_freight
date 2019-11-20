@@ -20,4 +20,15 @@ public class AuditManifestModel extends BaseModel implements AuditManifestContra
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void repartWriteLoading(BaseFilterEntity entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().repartWriteLoading(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

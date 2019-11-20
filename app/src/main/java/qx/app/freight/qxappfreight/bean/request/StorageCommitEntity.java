@@ -34,6 +34,8 @@ public class StorageCommitEntity {
     private int spotResult;
     private int insStatus;
     private String insUserId;
+
+    private String addOrderId;
     /**
      * 报检员名称
      */

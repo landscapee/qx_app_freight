@@ -24,7 +24,6 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.PushBaseBean;
 import qx.app.freight.qxappfreight.utils.SoundConfigUtils;
 import qx.app.freight.qxappfreight.utils.Tools;
-import qx.app.freight.qxappfreight.utils.VibrationUtils;
 import qx.app.freight.qxappfreight.widget.CustomDividerItemDecoration;
 
 public class MsgDialogActivity extends BaseActivity {
@@ -65,9 +64,10 @@ public class MsgDialogActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(getApplicationContext(),true,R.raw.ring);
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
     }
 
     @Override

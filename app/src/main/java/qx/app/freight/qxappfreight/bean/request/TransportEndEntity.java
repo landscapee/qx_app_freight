@@ -22,5 +22,9 @@ public class TransportEndEntity implements Serializable {
     private List<TransportTodoListBean> scooters;
     private List<TpFlightStep> steps;
     private String seat;
+    private String tpCargoType;//首件行李 删除用
+
     private boolean endUnloadTask=true;//false  宽体机卸机保障 传false 不完成卸机任务；结束卸机位置传true
+
+    private String taskTypeCode;//任务类型
 }

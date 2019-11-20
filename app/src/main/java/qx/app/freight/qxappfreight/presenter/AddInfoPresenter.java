@@ -1,15 +1,8 @@
 package qx.app.freight.qxappfreight.presenter;
 
-import java.util.List;
-
-import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.app.BasePresenter;
-import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.AddInfoEntity;
 import qx.app.freight.qxappfreight.contract.AddInfoContract;
-import qx.app.freight.qxappfreight.contract.UploadsContract;
 import qx.app.freight.qxappfreight.model.AddInfoModel;
-import qx.app.freight.qxappfreight.model.UploadsModel;
 
 /**
  * TODO : xxx

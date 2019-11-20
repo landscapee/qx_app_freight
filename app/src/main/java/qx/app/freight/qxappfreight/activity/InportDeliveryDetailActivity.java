@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +16,6 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryDetailAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -26,21 +23,18 @@ import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
-import qx.app.freight.qxappfreight.dialog.BaggerInputDialog;
+import qx.app.freight.qxappfreight.dialog.ForkliftCostDialogForNet;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
-import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -108,9 +102,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             finish();
         }
 //        serialNumber.setText(bean.getSerialNumber());
-        tvPickUpName.setText(bean.getConsignee());
-        tvPickUpPhone.setText(bean.getConsigneePhone());
-//        tvPickUpCard.setText(bean.getConsigneeIdentityCard());
+        tvPickUpName.setText(bean.getPickUpGoodsUser());
+        tvPickUpPhone.setText(bean.getPickUpGoodsUserPhone());
+        tvPickUpCard.setText(bean.getPickUpGoodsUserCardId());
 
 //        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE,"提货");
@@ -135,6 +129,20 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             public void inputOverWeight(int position) {
                 try {
                     SortingReturnGoodsDialogForNet dialog = new SortingReturnGoodsDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    dialog.setOnClickListener(text -> {
+                        getData();
+                    });
+                    dialog.show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void forkliftCost(int position) {
+                try {
+                    ForkliftCostDialogForNet dialog = new ForkliftCostDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
                     dialog.setOnClickListener(text -> {
                         getData();
                     });
@@ -307,14 +315,19 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 
     @Override
     public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
-        mList.clear();
-        mList.addAll(waybillsBeans);
-        mAdapter.notifyDataSetChanged();
+        if (waybillsBeans!=null && waybillsBeans.size()> 0){
+            mList.clear();
+            mList.addAll(waybillsBeans);
+            mAdapter.notifyDataSetChanged();
+        }
+        else
+            finish();
+
     }
 }

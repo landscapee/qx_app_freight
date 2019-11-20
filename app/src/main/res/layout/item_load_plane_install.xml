@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+
+        <ImageView
+            android:id="@+id/iv_lock_status"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@mipmap/icon_lock_data" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+
+        <LinearLayout
+            android:id="@+id/ll_berth_drop"
+            android:layout_width="81dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_berth"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/drop_select" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_divider"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#e5e5e5" />
+
+        <LinearLayout
+            android:id="@+id/ll_goods_drop"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_goods"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/drop_select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_destination"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="目的地"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/tv_scooter_number"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="板车/ULD"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/tv_mailtype"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="类别"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="重量/体积"
+            android:textColor="@color/black_3" />
+
+        <Button
+            android:id="@+id/tv_pull"
+            android:layout_width="40dp"
+            android:layout_height="38dp"
+            android:background="@drawable/shape_rect_gray_979797"
+            android:text="拉"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/tv_take"
+            android:layout_width="40dp"
+            android:layout_height="38dp"
+            android:background="@drawable/shape_rect_green_45b"
+            android:text="拆"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_all_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+</LinearLayout>

@@ -51,7 +51,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private String flightType;
     private int movement;//4 为装卸机 连班任务 1 单进 2单出 4连进 8连出
     private String taskId;
-    private int taskType;
+    private int taskType; //
     private long createTime;
     private long acceptTime;
     private long arrivalTime;
@@ -61,16 +61,33 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long startUnloadTime;
     private long endUnloadTime;
     private long closeDoorTime;
+    private long  passengerLoadSend;// 舱单送达时间
+
+    //用于监装监卸 不能再次 结束装机和卸机
+    private long endLoadTimeIn;
+    private long endUnloadTimeIn;
+
+
     private String aircraftno;
     private String seat;
     private long scheduleTime;
     private String route;
+
+    private String taskPic;//任务绑定的图片url json
     private Object actualTakeoffTime;
     private long actualArriveTime;
     private boolean cancelFlag;
     private Object cancelTime;
     private Object beginLoadUnloadTime;
     private RelateInfoObjBean relateInfoObj;
+    /**
+     * 结载使用数据 json
+     */
+    private String loadingAndUnloadExtJson;
+    /**
+     * 结载使用数据
+     */
+    private LoadingAndUnloadBean loadingAndUnloadBean;
     /**
      * 机型
      */
@@ -85,7 +102,7 @@ public class LoadAndUnloadTodoBean implements Serializable {
     private long etd;//预计离港时间
     private long atd;//实际离港时间
     private List<OperationStepObjBean> operationStepObj;
-    private int widthAirFlag;//0是宽体机，1是窄体机
+    private int widthAirFlag = 1;//0是宽体机，1是窄体机
     /*
      * 行李重量
      */
@@ -162,6 +179,8 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private long startUnloadTime;
         private long endUnloadTime;
         private long closeDoorTime;
+
+        private long  passengerLoadSend;// 舱单送达时间
         private String aircraftno;
         private String seat;
         private long scheduleTime;
@@ -190,6 +209,14 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private List<String> flightInfoList;//航线信息列表
         private List<String> stepCodeList;//航线信息列表
         private boolean showDetail;
+        /**
+         * 结载使用数据 json
+         */
+        private String loadingAndUnloadExtJson;
+        /**
+         * 结载使用数据
+         */
+        private LoadingAndUnloadBean loadingAndUnloadBean;
     }
 
     @Data
@@ -205,5 +232,6 @@ public class LoadAndUnloadTodoBean implements Serializable {
         private String stepDoneDate; //步骤时间
         private String flightType;   //航班类型，D，国内；I,国际；M，混合
         private String taskId;
+        private String planTime; //步骤计划时间
     }
 }

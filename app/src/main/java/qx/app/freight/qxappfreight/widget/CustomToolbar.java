@@ -148,4 +148,12 @@ public class CustomToolbar extends LinearLayout {
         }
 
     }
+    public void setleftIconViewVisiable(boolean isShow){
+        if (isShow){
+            mLeftIv.setVisibility(View.VISIBLE);
+        }else {
+            mLeftIv.setVisibility(View.GONE);
+        }
+
+    }
 }

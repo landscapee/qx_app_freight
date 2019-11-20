@@ -22,7 +22,8 @@
             android:background="@drawable/shape_circle_green"
             android:gravity="center"
             android:text=""
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -48,7 +49,6 @@
                 android:layout_height="wrap_content"
                 android:text="航班号： CZ3456"
                 android:textColor="@color/black_3"
-                android:singleLine="true"
                 />
 
             <LinearLayout
@@ -101,12 +101,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <qx.app.freight.qxappfreight.widget.CollapsableLinearLayout
-        android:id="@+id/coll_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+    <!--<qx.app.freight.qxappfreight.widget.CollapsableLinearLayout-->
+        <!--android:id="@+id/coll_listview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -120,6 +120,6 @@
             android:visibility="visible"/>
 
 
-    </qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>
+    <!--</qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>-->
 
 </LinearLayout>

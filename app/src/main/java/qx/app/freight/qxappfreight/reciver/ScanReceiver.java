@@ -9,8 +9,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
-import qx.app.freight.qxappfreight.bean.ScanLaserData;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.Tools;
 

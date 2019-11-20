@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -21,29 +20,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.adapter.DriverOutTaskAdapter;
-import qx.app.freight.qxappfreight.adapter.TaskStepAdapter;
 import qx.app.freight.qxappfreight.adapter.TaskTpDoneAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.bean.response.StepBean;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.AcceptTerminalTodoContract;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
 import qx.app.freight.qxappfreight.contract.TransportTaskHisContract;
-import qx.app.freight.qxappfreight.dialog.TpPushDialog;
-import qx.app.freight.qxappfreight.presenter.AcceptTerminalTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportTaskHisPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
@@ -120,11 +112,13 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
     private void getData() {
         mPresenter = new TransportTaskHisPresenter(this);
-//        BaseFilterEntity entity = new BaseFilterEntity();
-//        entity.setCurrent(currentPage);
-//        entity.setSize(Constants.PAGE_SIZE);
-//        entity.setUserId();
-        ((TransportTaskHisPresenter) mPresenter).transportTaskHis(UserInfoSingle.getInstance().getUserId());
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(currentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((TransportTaskHisPresenter) mPresenter).transportTaskHis(entity);
     }
 
     @Override
@@ -160,8 +154,8 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
         entity.setLoadUnloadDataId(mOutFieldTaskBean.getId());
         entity.setFlightId(Long.valueOf(mOutFieldTaskBean.getFlightId()));
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
-        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude());
-        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude());
+        entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
+        entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
 
         if (step == 0)
             entity.setOperationCode(Constants.TP_START);//任务开始
@@ -231,9 +225,9 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
             if (currentPage == 1) {
                 list.clear();
-            } else {
-                currentPage++;
             }
+            currentPage++;
+
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
 
@@ -277,11 +271,10 @@ public class TaskDriverOutDoneFragment extends BaseFragment implements MultiFunc
 
     @Override
     public void toastView(String error) {
-        if (currentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

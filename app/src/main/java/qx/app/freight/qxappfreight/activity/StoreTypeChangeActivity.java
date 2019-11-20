@@ -44,6 +44,7 @@ import qx.app.freight.qxappfreight.presenter.ChangeStorageListPresenter;
 import qx.app.freight.qxappfreight.presenter.ChangeStoragePresenter;
 import qx.app.freight.qxappfreight.presenter.SearchReservoirPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 public class StoreTypeChangeActivity extends BaseActivity implements ChangeStorageListContract.changeStorageListView, ChangeStorageContract.changeStorageView, SearchReservoirContract.searchReservoirView, BaseParamContract.baseParamView {
@@ -132,12 +133,16 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         mTvChange.setText("运单号:" + data.getWaybillCode());
         //接受申请
         mBtnAccept.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             if (mEntity != null) {
                 commit(1);
             }
         });
         //拒绝申请
         mBtnRefuse.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             if (mEntity != null) {
                 commit(0);
             }
@@ -335,7 +340,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         if (null != changeStorageBean) {
             if (changeStorageBean.getRecords().size() > 0)
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
-                    storageList.add(changeStorageBean.getRecords().get(i).getName());
+                    storageList.add(changeStorageBean.getRecords().get(i).getReservoirName());
                     resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
                 }
             initData();

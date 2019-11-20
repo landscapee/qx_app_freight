@@ -3,9 +3,7 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterOperateContract;
-import qx.app.freight.qxappfreight.model.ScooterInfoListModel;
 import qx.app.freight.qxappfreight.model.ScooterOperateModel;
 
 /**

@@ -3,13 +3,9 @@ package qx.app.freight.qxappfreight.model;
 
 import java.util.Map;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
-import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class UpdateVersionModel extends BaseModel implements UpdateVersionContract.updateModel {
     @Override

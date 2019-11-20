@@ -3,9 +3,7 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
-import qx.app.freight.qxappfreight.contract.DeleteCollectionInfoContract;
 import qx.app.freight.qxappfreight.contract.TransportListCommitContract;
-import qx.app.freight.qxappfreight.model.DeleteCollectionInfoModel;
 import qx.app.freight.qxappfreight.model.TransportListCommitModel;
 
 /**

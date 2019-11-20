@@ -6,14 +6,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ouyben.empty.EmptyLayout;
 
 import java.util.ArrayList;
@@ -24,17 +22,11 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.BaggageListActivity;
 import qx.app.freight.qxappfreight.adapter.FlightListAdapter;
-import qx.app.freight.qxappfreight.adapter.InPortDeliveryAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LookLUggageScannigFlightContract;
-import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.LookLUggageScannigFlightPresenter;
-import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -97,7 +89,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             if (mTaskFragment != null)
                 mTaskFragment.setTitleText(mListTemp.size());
             if (searchToolbar!=null){
-                searchToolbar.setHintAndListener("请输入板车号", text -> {
+                searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachWithNum();
                 });
@@ -115,7 +107,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
             mList.addAll(mListTemp);
         }else{
             for(FlightLuggageBean itemData: mListTemp){
-                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                if(itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
             }
@@ -140,11 +132,10 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -159,7 +150,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void onRetry() {
-        showProgessDialog("正在加载数据。。。。。。");
+        showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
             loadData();
             dismissProgessDialog();
@@ -168,9 +159,8 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void getDepartureFlightByAndroidResult(List<FlightLuggageBean> flightLuggageBeans) {
-        //因为没有分页，不做分页判断
-        mListTemp.clear();
         if (pageCurrent == 1) {
+            mListTemp.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
@@ -191,7 +181,7 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
+
         loadData();
     }
 }

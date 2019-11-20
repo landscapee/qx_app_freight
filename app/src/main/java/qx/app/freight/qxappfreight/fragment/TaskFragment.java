@@ -117,6 +117,9 @@ public class TaskFragment extends BaseFragment {
     public void setTitleText(int size) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
     }
+    public void setTitleText() {
+        mToolBar.setMainTitle(Color.WHITE, "我的待办");
+    }
 
     public void goneTitle() {
         mToolBar.setVisibility(View.GONE);
@@ -176,15 +179,17 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
-            } else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                //登录不成功的时候 手动添加 user
-//        LoginResponseBean loginResponseBean = new LoginResponseBean();
-//        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-//        UserInfoSingle.setUser(loginResponseBean);
-                fragmentList.add(new DriverInFragment());
-                list_Title.add("内场司机");
-                goneTitle();
-            } else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+            }
+//            else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+//                //登录不成功的时候 手动添加 user
+////        LoginResponseBean loginResponseBean = new LoginResponseBean();
+////        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
+////        UserInfoSingle.setUser(loginResponseBean);
+//                fragmentList.add(new DriverInFragment());
+//                list_Title.add("内场司机");
+//                goneTitle();
+//            }
+            else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskDriverOutFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
@@ -214,9 +219,9 @@ public class TaskFragment extends BaseFragment {
 
         if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
-            //如果第一个是结载就把搜索框隐藏
+            //如果第一个是结载就把扫码
             if (list_Title.get(0).equals("结载")){
-                mToolBar.setRightIconViewVisiable(false);
+                mToolBar.setleftIconViewVisiable(false);
             }
         }
         else
@@ -228,7 +233,7 @@ public class TaskFragment extends BaseFragment {
         else
             mTabLayout.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
-//        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 
     }

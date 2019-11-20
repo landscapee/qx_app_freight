@@ -25,6 +25,8 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.BaggerListAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
+import qx.app.freight.qxappfreight.bean.UnloadScooterListEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -59,7 +61,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
     Button btnNext;
 
     private BaggerListAdapter mAdapter;
-    private List<TransportTodoListBean> mList;
+    private List<TransportTodoListBean> mList = new ArrayList<>();
+    private List<TransportTodoListBean> uploadList = new ArrayList<>();
     private CustomToolbar toolbar;
 
     private List<String> mAbnormalList; //行李区列表
@@ -79,12 +82,17 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         Intent intent = getIntent();
         mData = (CargoReportHisBean) intent.getSerializableExtra("flightBean");
         mAbnormalList = new ArrayList<>();
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, mData.getFlightNo());
-        mList = mData.getMainInfos();
-
+        if (mData.getMainInfos()!=null)
+            mList.addAll(mData.getMainInfos());
+        for (TransportTodoListBean transportTodoListBean:mList){
+            transportTodoListBean.setNotCanDelete(true);
+        }
+        flightBean = mData.getMainInfos().get(0);
         initView();
     }
 
@@ -93,11 +101,23 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         ((GetAllRemoteAreaPresenter) mPresenter).getAllRemoteArea();
 //        mPresenter = new BaggageAreaSubPresenter(this);
         mSlideRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mList = new ArrayList<>();
+
+        //获取暂存板车数据
+        if (flightBean!=null&&flightBean.getFlightNo() !=null){
+            if (ScooterMapSingle.getInstance().get(flightBean.getFlightNo())!=null){
+                if (ScooterMapSingle.getInstance().get(flightBean.getFlightNo()).getTransportTodoListBeans()!=null){
+                    mList.addAll(ScooterMapSingle.getInstance().get(flightBean.getFlightNo()).getTransportTodoListBeans());
+                }
+            }
+        }
         mAdapter = new BaggerListAdapter(mList);
         mAdapter.setOnDeleteClickListener(new BaggerListAdapter.OnDeleteClickLister() {
             @Override
             public void onDeleteClick(View view, int position) {
+                if (mList.get(position).isNotCanDelete()){
+                    ToastUtil.showToast("已上传板车，不能删除");
+                    return;
+                }
                 mSlideRV.closeMenu();
                 mList.remove(position);
                 mAdapter.notifyDataSetChanged();
@@ -106,6 +126,17 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
         mSlideRV.setAdapter(mAdapter);
+        //返回键 监听 保存数据
+        setIsBack(true,()->{
+            UnloadScooterListEntity unloadScooterListEntity = new UnloadScooterListEntity();
+            for (TransportTodoListBean transportTodoListBean:mList){
+                if (!transportTodoListBean.isNotCanDelete())
+                    uploadList.add(transportTodoListBean);
+            }
+            unloadScooterListEntity.setTransportTodoListBeans(uploadList);
+            ScooterMapSingle.getInstance().put(flightBean.getFlightNo(),unloadScooterListEntity);
+            finish();
+        });
 
     }
 
@@ -115,12 +146,12 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             case R.id.ll_add:
                 mSlideRV.closeMenu();
                 flag = 0;
-                ScanManagerActivity.startActivity(this);
+                ScanManagerActivity.startActivity(this,"BaggageDoneListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();
                 flag = 1;
-                ScanManagerActivity.startActivity(this);
+                ScanManagerActivity.startActivity(this,"BaggageDoneListActivity_done");
                 break;
         }
     }
@@ -131,6 +162,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
             TransportTodoListBean bean = new TransportTodoListBean();
             bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
             bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+            bean.setHeadingFlag(scooterInfoListBeans.get(0).getHeadingFlag());
 
             bean.setFlightId(flightBean.getFlightId());
             bean.setFlightNo(flightBean.getFlightNo());
@@ -219,8 +251,8 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 ToastUtil.showToast("无该行李转盘");
 
             } else {
+//                isIncludeScooterCode(mScooterCode);
                 checkScooterCode(mScooterCode);
-
             }
 
         } else {
@@ -235,6 +267,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {
+//                    isIncludeScooterCode(mScooterCode);
                     checkScooterCode(mScooterCode);
                 } else {
                     ToastUtil.showToast("扫码数据为空请重新扫码");
@@ -243,6 +276,21 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
                 ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
+        if (result.getFunctionFlag().equals("BaggageDoneListActivity_done")) {
+            if (flag == 1) {
+                if ( result.getData()!=null){
+                    for (String item : mAbnormalList) {
+                        if (result.getData().equals(item)) {
+                            submitScooter(result.getData());
+                            return;
+                        }
+                    }
+                    ToastUtil.showToast("无该行李转盘");
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -289,8 +337,17 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
 
     //提交数据，现在改成下一步
     private void submitScooter(String turntableId) {
+        for (TransportTodoListBean transportTodoListBean:mList){
+            if (!transportTodoListBean.isNotCanDelete())
+                uploadList.add(transportTodoListBean);
+        }
 
-        for (TransportTodoListBean item : mList) {
+        if (uploadList.size() == 0){
+            ToastUtil.showToast("请先扫码添加板车");
+            return;
+        }
+        for (TransportTodoListBean item : uploadList) {
+            item.setScSubCategory(1);
             item.setBaggageTurntable(turntableId);
             item.setBaggageSubOperator(UserInfoSingle.getInstance().getUserId());
             item.setBaggageSubTerminal(UserInfoSingle.getInstance().getUsername());
@@ -301,7 +358,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
 //        entity.setFilter(mList);
 //        List<TransportTodoListBean> mList2 = new ArrayList<>();
         Intent intent = new Intent(this, BaggageListConfirmActivity.class)
-                .putExtra("listBean", (Serializable) mList)
+                .putExtra("listBean", (Serializable) uploadList)
                 .putExtra("flightNo", flightBean.getFlightNo())
                 .putExtra("turntableId", turntableId);
         startActivity(intent);
@@ -327,7 +384,7 @@ public class BaggageDoneListActivity extends BaseActivity implements BaggageArea
      */
     private void checkScooterCode(String scooterCode) {
         mPresenter = new ScanScooterCheckUsedPresenter(this);
-        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode,flightBean.getFlightId(),Constants.SCAN_XINGLI);
     }
 
     @Override

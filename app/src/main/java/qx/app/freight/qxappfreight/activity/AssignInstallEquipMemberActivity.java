@@ -22,6 +22,7 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
 import qx.app.freight.qxappfreight.presenter.SelectTaskMemberPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -57,7 +58,11 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
         mTaskId = getIntent().getStringExtra("task_id");
         mPresenter = new SelectTaskMemberPresenter(this);
         ((SelectTaskMemberPresenter) mPresenter).getLoadUnloadLeaderList(mTaskId);
-        mTvConfirm.setOnClickListener(v -> commitSelectMember());
+        mTvConfirm.setOnClickListener(v ->{
+            if (!Tools.isFastClick())
+                return;
+            commitSelectMember();
+        });
     }
 
     /**
@@ -95,6 +100,11 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
             SelectTaskMemberRvAdapter adapter = new SelectTaskMemberRvAdapter(result);
             mRvSelectMember.setLayoutManager(new GridLayoutManager(this, 3));
             mRvSelectMember.setAdapter(adapter);
+            adapter.setOnBoxClickListener(pos -> {
+
+                mMemberList.get(pos).setSelected(!mMemberList.get(pos).isSelected());
+//                adapter.notifyDataSetChanged();
+            });
         }
     }
 
@@ -107,7 +117,9 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
 
     @Override
     public void toastView(String error) {
-
+        if (error!=null){
+            ToastUtil.showToast(error);
+        }
     }
 
     @Override

@@ -14,11 +14,8 @@ import qx.app.freight.qxappfreight.adapter.InventoryInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
-import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ListInventoryDetailContract;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
-import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
 import qx.app.freight.qxappfreight.presenter.ListInventoryDetailPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 /**

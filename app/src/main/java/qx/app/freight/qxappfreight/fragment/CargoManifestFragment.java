@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,30 +29,22 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
-import qx.app.freight.qxappfreight.adapter.CargoManifestAdapter;
-import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
+import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
-import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
-import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
-import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
-import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -68,9 +60,9 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     CustomToolbar mToolBar;
     @BindView(R.id.search_toolbar)
     SearchToolbar mSearchBar;
-    private GoodsManifestAdapter adapter;
-    private List<LoadAndUnloadTodoBean> list1 = new ArrayList<>();
-    private List<LoadAndUnloadTodoBean> list = new ArrayList<>();
+    private JZLoadAdapter adapter;
+    private List <LoadAndUnloadTodoBean> list1 = new ArrayList <>();
+    private List <LoadAndUnloadTodoBean> list = new ArrayList <>();
     private int pageCurrent = 1;//页数
     private String seachString = "";
 
@@ -117,6 +109,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         initData();
         setUserVisibleHint(true);
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -127,16 +120,17 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             });
         }
     }
+
     private void gotoScan() {
         ScanManagerActivity.startActivity(getContext(), "MainActivity");
     }
 
     private void initData() {
-        adapter = new GoodsManifestAdapter(list);
-        adapter.setOnFlightSafeguardListenner(new GoodsManifestAdapter.OnFlightSafeguardListenner() {
+        adapter = new JZLoadAdapter(list);
+        adapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, list.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(list.get(position)) + "");
             }
 
             @Override
@@ -147,9 +141,15 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
-            intent.putExtra("data", list.get(position));
-            getContext().startActivity(intent);
+            if (!Tools.isFastClick())
+                return;
+            if (list != null && list.size() > 0) {
+                CargoManifestInfoActivity.startActivity(getContext(), list.get(position), 0);
+//                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+//                intent.putExtra("data", list.get(position));
+//                getContext().startActivity(intent);
+            }
+
         });
         getData();
     }
@@ -160,7 +160,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
             list.addAll(list1);
         } else {
             for (LoadAndUnloadTodoBean team : list1) {
-                if (team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo() != null && team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
@@ -173,7 +173,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("CargoHandlingActivity_refresh")) {
+        if (result.equals("CargoManifestFragment_refresh") || result.equals("refresh_data_update")) {
             pageCurrent = 1;
             getData();
         }
@@ -190,12 +190,28 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 //            chooseCode(daibanCode);
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
-            getData();
+        if (result != null && result.isNewStowage()) {
+
+            List <LoadAndUnloadTodoBean> loadAndUnloadTodoBeans = result.getTaskData();
+            if (loadAndUnloadTodoBeans != null && loadAndUnloadTodoBeans.size() > 0) {
+                UpdatePushDialog pushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, loadAndUnloadTodoBeans.get(0).getFlightNo() + "收到新的货邮舱单，请查看！", () -> {
+                    StringUtil.setFlightRoute(loadAndUnloadTodoBeans.get(0).getRoute(), loadAndUnloadTodoBeans.get(0));//设置航班航线信息
+                    CargoManifestInfoActivity.startActivity(getContext(), loadAndUnloadTodoBeans.get(0), 0);
+//                    Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
+//                    intent.putExtra("data", loadAndUnloadTodoBeans.get(0));
+//                    getContext().startActivity(intent);
+                });
+                pushDialog.show();
+                getData();
+                EventBus.getDefault().post("LnstallationFragment_refresh");
+            }
+
         }
     }
+
 
     private void getData() {
         mPresenter = new EndInstallTodoPresenter(this);
@@ -204,6 +220,8 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
         entity.setFilterAtd(true);
+        entity.setFilterHycd(true);
+
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 
@@ -218,16 +236,16 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 ////            turnToDetailActivity(CURRENT_TASK_BEAN);
 //        }
 //    }
-
     @Override
     public void toastView(String error) {
         if (pageCurrent == 1) {
             list.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
         }
-        if (error!=null)
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
+        if (error != null)
             ToastUtil.showToast(error);
     }
 
@@ -269,6 +287,13 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         }
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+            //结载单独使用数据 json 解析
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())) {
+                bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
+            if (bean.getRelateInfoObj() != null && !StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
+                bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+            }
         }
         list1.addAll(loadAndUnloadTodoBean);
 

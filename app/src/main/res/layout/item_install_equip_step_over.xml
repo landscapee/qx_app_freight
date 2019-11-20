@@ -19,7 +19,20 @@
             android:gravity="center_vertical"
             android:textSize="@dimen/sp_14"
             android:text="领受" />
-
+        <TextView
+            android:id="@+id/tv_step_plan_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center_vertical"
+            android:text="19:10" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center_vertical"
+            android:text=" | "
+            />
         <TextView
             android:id="@+id/tv_step_date"
             android:layout_width="wrap_content"

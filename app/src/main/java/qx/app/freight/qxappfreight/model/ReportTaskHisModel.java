@@ -5,12 +5,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.contract.ReportTaskHisContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class ReportTaskHisModel extends BaseModel implements ReportTaskHisContract.reportTaskHisModel {
     @Override
-    public void reportTaskHis(String operatorId, IResultLisenter lisenter) {
+    public void reportTaskHis(BaseFilterEntity operatorId, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().reportTaskHis(operatorId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

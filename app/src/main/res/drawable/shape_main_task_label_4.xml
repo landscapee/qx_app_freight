@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <!--TODO: 过站特殊颜色标签(客梯传送部门区分过站航班)-->
+    <corners android:radius="3dp"/>
+    <solid android:color="@color/blue"/>
+</shape>

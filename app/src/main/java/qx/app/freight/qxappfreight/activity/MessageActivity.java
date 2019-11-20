@@ -66,7 +66,8 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
     @Override
     protected void onResume() {
         super.onResume();
-        requestData(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        if (UserInfoSingle.getInstance().getRoleRS().size()> 0)
+            requestData(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
     }
 
     private void initTitle() {
@@ -132,6 +133,10 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
                 case "porter":
                     mList.add("行李员");
                     break;
+                case "stevedores":
+                    mList.add("装卸员");
+                    break;
+
             }
 
         }
@@ -200,6 +205,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.mes
                 break;
             case "行李员":
                 roleCode = "porter";
+                break;
+            case "装卸员":
+                mList.add("stevedores");
                 break;
         }
         BaseFilterEntity bean = new BaseFilterEntity();

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import qx.app.freight.qxappfreight.R;
 
 /**
- * 装卸机推送弹窗
+ * 下载进度框
  */
 public class ProgressDialog extends DialogFragment {
     private Context context;

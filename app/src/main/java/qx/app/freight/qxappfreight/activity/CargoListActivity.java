@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
@@ -171,7 +172,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         switch (view.getId()) {
             case R.id.ll_add:
                 mSlideRV.closeMenu();
-                ScanManagerActivity.startActivity(this);
+                ScanManagerActivity.startActivity(this,"CargoListActivity");
                 break;
             case R.id.btn_next:
                 mSlideRV.closeMenu();
@@ -237,6 +238,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
                 //板车号
                 mScooterCode = result.getData();
                 if (!"".equals(mScooterCode)) {
+//                    isIncludeScooterCode(mScooterCode);
                     checkScooterCode(mScooterCode);
                 } else {
                     ToastUtil.showToast("扫码数据为空请重新扫码");
@@ -288,6 +290,8 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         TransportTodoListBean bean = new TransportTodoListBean();
         bean.setTpScooterCode(scooterInfoListBeans.get(0).getScooterCode());
         bean.setTpScooterType(scooterInfoListBeans.get(0).getScooterType() + "");
+        bean.setHeadingFlag(scooterInfoListBeans.get(0).getHeadingFlag());
+
         bean.setFlightId(flightBean.getFlightId());
         bean.setFlightNo(flightBean.getFlightNo());
         bean.setTpFlightLocate(flightBean.getSeat());
@@ -295,7 +299,9 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         bean.setFlightInfoId(flightBean.getId());
         bean.setAsFlightId(flightBean.getSuccessionId());
         bean.setTpFlightType(flightBean.getTpFlightType());
-        bean.setFlightIndicator("I");
+        bean.setFlightIndicator(scooterInfoListBeans.get(0).getFlightType());
+
+        bean.setScSubCategory(2);
         mList.add(bean);
         mAdapter.notifyDataSetChanged();
     }
@@ -319,6 +325,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         super.onActivityResult(requestCode, resultCode, data);
         if (Constants.SCAN_RESULT == resultCode) {
             mScooterCode = data.getStringExtra(Constants.SACN_DATA);
+//            isIncludeScooterCode(mScooterCode);
             checkScooterCode(mScooterCode);
         } else {
             Log.e("resultCode", "收货页面不是200");
@@ -332,7 +339,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
      */
     private void checkScooterCode(String scooterCode) {
         mPresenter = new ScanScooterCheckUsedPresenter(this);
-        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode);
+        ((ScanScooterCheckUsedPresenter) mPresenter).checkScooterCode(scooterCode,flightBean.getFlightId(),Constants.SCAN_HUOWU);
     }
 
     @Override
@@ -370,6 +377,11 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
             }
         }
         Log.e("tagTest", "" + mGoodsWeight + mMailWeight + mBaggageWeight);
+    }
+
+    @Override
+    public void setFlightSpace(CargoCabinData result) {
+
     }
 
     @Override

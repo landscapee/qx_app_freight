@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.telephony.TelephonyManager;
 
 import java.util.HashMap;

@@ -40,7 +40,7 @@ import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.fragment.TaskFragment;
+import qx.app.freight.qxappfreight.dialog.ChooseFlightDialog;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -96,7 +96,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
-        setUserVisibleHint(true);
+        initTitle();
+//        setUserVisibleHint(true);
     }
 
     @Override
@@ -105,6 +106,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+            initTitle();
+        }
+    }
+
+    private void initTitle(){
             if (mTaskFragment == null){
                 mTaskFragment = (TaskFragment) getParentFragment();
 
@@ -120,7 +126,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                 });
             }
 
-        }
     }
 
     //根据条件筛选数据
@@ -130,7 +135,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             list.addAll(list1);
         } else {
             for (TransportDataBase item : list1) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }
@@ -285,10 +290,27 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
-        if (getInfosByFlightIdBean != null) {
-            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+        if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
+            if (getInfosByFlightIdBeans.size() == 1){
+                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
+            }
+            else {
+                ChooseFlightDialog dialog = new ChooseFlightDialog();
+                dialog.setChooseDialogInterface(position -> {
+                    if (getInfosByFlightIdBeans.get(position) != null) {
+                        startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(position)));
+                    }
+                });
+                dialog.setData(getInfosByFlightIdBeans, getActivity());
+                dialog.show(getActivity().getSupportFragmentManager(), "123");
+            }
+
         }
+        else {
+            ToastUtil.showToast("没有查询到相应的板车");
+        }
+
     }
 
     @Override

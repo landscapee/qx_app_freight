@@ -209,7 +209,7 @@ public class StringUtil {
     }
 
     private static boolean isBlank(String str) {
-        return (str == null || str.trim().length() == 0);
+        return (str == null || str.trim().length() == 0|| "null".equals(str));
     }
 
     /*** 半角转换为全角
@@ -391,6 +391,9 @@ public class StringUtil {
      * @return 结果
      */
     public static String getTimeTextByRegix(long timeMillions, String regix) {
+        if(timeMillions <= 0){
+            return "- -";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(regix, Locale.CHINESE);
         Date date = new Date(timeMillions);
         return sdf.format(date);

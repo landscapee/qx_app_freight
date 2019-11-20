@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -39,7 +38,7 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
         //航班号
         helper.setText(R.id.allocate_flightnumber,item.getFlightNo());
         //机位号
-        helper.setText(R.id.allocate_machinenumber,item.getTpFlightLocate());
+        helper.setText(R.id.allocate_machinenumber,item.getPlanePlace());
         // 时间
         helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getEtd())+"("+TimeUtils.getDay(item.getEtd())+")");
         //仓位

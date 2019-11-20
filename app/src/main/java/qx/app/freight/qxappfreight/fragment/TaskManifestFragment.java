@@ -17,11 +17,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CargoHandlingActivity;
 import qx.app.freight.qxappfreight.adapter.TaskManifestAdapter;
-import qx.app.freight.qxappfreight.adapter.TaskStowageAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /**

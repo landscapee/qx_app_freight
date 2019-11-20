@@ -261,7 +261,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="41dp"
-                android:text="今日已办"
+                android:text="我的已办"
                 android:textColor="@color/black" />
 
             <ImageView

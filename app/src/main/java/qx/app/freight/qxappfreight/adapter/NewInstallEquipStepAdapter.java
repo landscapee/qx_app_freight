@@ -25,6 +25,7 @@ public class NewInstallEquipStepAdapter extends BaseMultiItemQuickAdapter<LoadAn
 
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean.OperationStepObjBean item) {
+        helper.setText(R.id.tv_step_plan_date, item.getPlanTime());
         switch (helper.getItemViewType()) {
             case Constants.TYPE_STEP_OVER:
                 helper.setText(R.id.tv_step_name, item.getOperationName());

@@ -3,9 +3,11 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.CargoCabinData;
 import qx.app.freight.qxappfreight.bean.response.GetFlightCargoResBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.contract.GetFlightCargoResContract;
@@ -34,7 +36,22 @@ public class GetFlightCargoResPresenter extends BasePresenter {
             }
         });
     }
+    public void getFlightSpace(FlightIdBean entity) {
+        mRequestView.showNetDialog();
+        ((GetFlightCargoResModel) mRequestModel).getFlightSpace(entity, new IResultLisenter<CargoCabinData>() {
+            @Override
+            public void onSuccess(CargoCabinData result) {
+                ((GetFlightCargoResContract.getFlightCargoResView) mRequestView).setFlightSpace(result);
+                mRequestView.dissMiss();
+            }
 
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
     public void flightDoneInstall(GetFlightCargoResBean entity) {
         mRequestView.showNetDialog();
         ((GetFlightCargoResModel) mRequestModel).flightDoneInstall(entity, new IResultLisenter<String>() {

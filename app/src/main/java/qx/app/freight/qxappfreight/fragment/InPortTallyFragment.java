@@ -42,7 +42,6 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -148,7 +147,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             mList.addAll(mListTemp);
         }else{
             for(TransportDataBase itemData: mListTemp){
-                if(itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+                if(itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
                     mList.add(itemData);
                 }
             }
@@ -279,11 +278,10 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void toastView(String error) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -320,7 +318,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

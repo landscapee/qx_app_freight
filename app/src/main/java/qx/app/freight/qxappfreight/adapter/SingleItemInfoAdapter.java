@@ -5,14 +5,10 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.util.Arrays;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.DeclareItem;
-import qx.app.freight.qxappfreight.bean.response.MainListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
@@ -42,7 +38,7 @@ public class SingleItemInfoAdapter extends BaseQuickAdapter<TransportDataBase, B
         //重量
         helper.setText(R.id.tv_weight, StringUtil.formatStringDeleteDot(item.getTotalWeight()));
         //体积
-        helper.setText(R.id.tv_volume, StringUtil.formatStringDeleteDot(item.getTotalVolume()));
+        helper.setText(R.id.tv_volume, item.getTotalVolume()+"");
         //包装类型
         helper.setText(R.id.tv_package, item.getPackagingType());
 

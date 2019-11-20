@@ -55,6 +55,13 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
     private Integer tpState;//1 锁定（被扫描了）
     private String tpOperator;
     /**
+     * 0无效，1横向，竖向
+     */
+    private int headingFlag;
+
+    private int scSubCategory;//1行李  2货物  3卸机 4
+
+    /**
      * 作用一:用来对MQ接收的数据进行判断,判断值由MQ发送方填写
      * 作用二:手持端结束运输时传入该字段对应的值,根据值修改该板车的下个起始地以及运输目的地
      * 1-库区中的正常货物,需要设置该数据的起始位置为库区,目的地为待运区
@@ -105,7 +112,7 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
     private String planeType;
     private Long etd;
     private List<String> flightRoute;
-    private Integer num;//板车数量
+    private int num;//板车数量
     private String carType;//板车类型
 
 
@@ -141,6 +148,8 @@ public class TransportTodoListBean implements MultiItemEntity, Serializable {
     private double pullInWeight;//拉货上报输入的板车拉的重量
 
     private String taskPk;//子任务id
+
+    private boolean notCanDelete; // 是否不能滑动删除
 
     @Override
     public int getItemType() {

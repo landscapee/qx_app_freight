@@ -33,6 +33,8 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -52,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private IsBackListener mIsBackListener;
 
+    private ViewGroup viewGroup;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +63,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActManager.getAppManager().addActivity(this);
         initDialog();
         FrameLayout contentView = findViewById(android.R.id.content);
-        ViewGroup viewGroup = (ViewGroup) contentView.getChildAt(0);
+
+        if (contentView!=null)
+             viewGroup = (ViewGroup) contentView.getChildAt(0);
         mToolbar = new CustomToolbar(this);
-        viewGroup.addView(mToolbar, 0);
+        if (viewGroup!=null)
+            viewGroup.addView(mToolbar, 0);
         businessLogic(savedInstanceState);
     }
 
@@ -181,7 +187,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void checkPermissionsForWindow() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 26) {
             if (!Settings.canDrawOverlays(this)) {
                 Tools.applyCommonPermission(this);
             }
@@ -307,4 +313,24 @@ public abstract class BaseActivity extends AppCompatActivity {
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0)
+            outState.putSerializable("static_user", UserInfoSingle.getInstance());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (UserInfoSingle.getInstance().getRoleRS() == null || UserInfoSingle.getInstance().getRoleRS().size() == 0) {
+                UserInfoSingle.setUser((LoginResponseBean) savedInstanceState.getSerializable("static_user"));
+            }
+        }
+    }
+
+
 }

@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="EU2448"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="B-2310"
+            android:text=""
             android:textSize="@dimen/sp_12" />
 
         <LinearLayout
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="132"
+            android:text=""
             android:textSize="@dimen/sp_12" />
     </LinearLayout>
 
@@ -68,7 +68,7 @@
             android:drawableStart="@mipmap/take_off"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="--:--" />
 
         <TextView
             android:id="@+id/tv_time_fall_down"
@@ -78,14 +78,14 @@
             android:drawableStart="@mipmap/landfall"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="8:45" />
+            android:text="--:--" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="2018-11-24" />
+            android:text="" />
     </LinearLayout>
 
     <LinearLayout
@@ -93,47 +93,112 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:orientation="horizontal"
-            android:background="@color/gray_8f">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:drawableStart="@mipmap/news_normal"
-            android:drawablePadding="@dimen/dp_10"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_10"
-            android:text="货邮舱单"
-            android:textColor="@color/grassgreen"
-            android:textSize="@dimen/sp_12" />
-        <TextView
-            android:id="@+id/tv_version"
+
+        <HorizontalScrollView
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_40"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_10"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-        </LinearLayout>
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:layout_width="match_parent"
-            android:id="@+id/sr_refush"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
-            <HorizontalScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+                android:layout_height="@dimen/dp_40"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:drawableStart="@mipmap/news_normal"-->
+                <!--android:drawablePadding="@dimen/dp_10"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:padding="@dimen/dp_10"-->
+                <!--android:text="货邮舱单"-->
+                <!--android:textColor="@color/grassgreen"-->
+                <!--android:textSize="@dimen/sp_12" />-->
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/mfrv_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </HorizontalScrollView>
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <RadioGroup
+                    android:id="@+id/tb_title"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/shape_dynamic_blue"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_hy"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_blue_center_a"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="货邮舱单"
+                        android:textColor="@drawable/selector_text_blue_a" />
+
+                    <RadioButton
+                        android:id="@+id/rb_zd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_blue_center_a"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="装舱建议"
+                        android:textColor="@drawable/selector_text_blue_a" />
+
+                </RadioGroup>
+
+
+                <!--<ImageView-->
+                <!--android:layout_width="18dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:background="@mipmap/icon_query" />-->
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="@color/red"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:gravity="center_vertical|right"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginLeft="20dp"
+                    />
+            </LinearLayout>
+        </HorizontalScrollView>
+        <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:id="@+id/sr_refush"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<HorizontalScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
+
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/mfrv_data"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+        <!--</HorizontalScrollView>-->
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+        <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
     <Space
@@ -159,10 +224,19 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:background="@drawable/shape_dynamic_blue"
+            android:background="@color/gray_cc"
             android:text="释放"
             android:textColor="@color/white" />
 
+        <Button
+            android:id="@+id/bt_reload"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue_press"
+            android:text="重新载入"
+            android:textColor="@color/white" />
 
         <Space
             android:layout_width="0dp"

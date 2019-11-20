@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -7,7 +9,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class ScooterInfoListBean {
+public class ScooterInfoListBean implements Serializable {
 
 
     private String id;
@@ -19,6 +21,16 @@ public class ScooterInfoListBean {
     private String createUser;
     private long updateDate;
     private String updateUser;
+    /**
+     * 国际国内标记
+     */
     private String flightType;
     private boolean noticeTransport;
+    /**
+     * 0无效，1横向，2竖向
+     */
+    private int headingFlag;
+
+    private String type;//卸机已办使用
+
 }

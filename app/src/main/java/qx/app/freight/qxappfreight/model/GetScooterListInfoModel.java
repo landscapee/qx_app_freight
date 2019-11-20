@@ -1,10 +1,5 @@
 package qx.app.freight.qxappfreight.model;
 
-import com.google.gson.Gson;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;

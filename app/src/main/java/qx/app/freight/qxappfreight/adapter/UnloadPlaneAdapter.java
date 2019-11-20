@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.adapter.loadinglist.RightRvAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.RegularEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
@@ -28,7 +29,6 @@ import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
  */
 public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBean, BaseViewHolder> {
     private OnDataCheckListener onDataCheckListener;
-
     public UnloadPlaneAdapter(@Nullable List<LoadingListBean.DataBean> data) {
         super(R.layout.item_unload_plane_version, data);
     }
@@ -40,7 +40,8 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         } else {
             helper.setText(R.id.tv_version_type, "历史版本");
         }
-        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
+//        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name),item.getVersion()));
+        helper.setText(R.id.tv_version_name,"最新装机单");
         ImageView ivControl = helper.getView(R.id.iv_control);
         LinearLayout llControl = helper.getView(R.id.ll_controler);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
@@ -60,20 +61,27 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     left.setScooterId(scooterBean.getId());
                     left.setMoveSize((scooterBean.getWaybillList() == null) ? 0 : scooterBean.getWaybillList().size());
                     boolean hasLiveGoods = false;
+                    boolean hasGUNGoods = false;
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        if (bill.getSpecialCode().equals("AVI")) {
+                        if (bill.getSpecialCode()!=null && bill.getSpecialCode().equals("AVI")) {
                             hasLiveGoods = true;
+                            break;
+                        }
+                        if (bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER)) {
+                            hasGUNGoods = true;
                             break;
                         }
                     }
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        bill.setHasLiveGoods(bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
+                        bill.setHasLiveGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
+                        bill.setHasGUNGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER));
                     }
                     boolean shouldShowGoodsPos = !TextUtils.isEmpty(scooterBean.getLocation());
                     if (!goodsPosList.contains(scooterBean.getLocation()) && !TextUtils.isEmpty(scooterBean.getLocation())) {
                         goodsPosList.add(scooterBean.getLocation());
                     }
                     left.setHasLiveGoods(hasLiveGoods);
+                    left.setHasGUNGoods(hasGUNGoods);
                     if (shouldShowGoodsPos) {
                         left.setGoodsPosition(scooterBean.getLocation());
                     }
@@ -84,11 +92,16 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     right.setTarget(scooterBean.getDestinationStation());
                     right.setScooterId(scooterBean.getId());
                     right.setHasLiveGoods(hasLiveGoods);
+                    right.setHasGUNGoods(hasGUNGoods);
+
                     String type = "行李";
                     if ("M".equals(scooterBean.getType())) {
                         type = "邮件";
                     } else if ("C".equals(scooterBean.getType()) || "CT".equals(scooterBean.getType())) {
                         type = "货物";
+                    }
+                    else if ("X".equals(scooterBean.getType())) {
+                        type = "X";
                     }
                     right.setType(type);
                     right.setWeight(String.valueOf(scooterBean.getWeight()));
@@ -126,6 +139,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         }
         RecyclerView rvLeft = helper.getView(R.id.rv_regular);
         RecyclerView rvRight = helper.getView(R.id.rv_scroll_data);
+        //装机单左边适配器
         LeftRvAdapter leftRvAdapter = new LeftRvAdapter(leftData, onDataCheckListener);
         rvLeft.setLayoutManager(new LinearLayoutManager(mContext));
         rvLeft.setAdapter(leftRvAdapter);
@@ -134,8 +148,8 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
                 for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
                     if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
-                        lockStatus=!scooter.isLocked();
-                        scooter.setLocked(!scooter.isLocked());
+//                        lockStatus=!scooter.isLocked();
+//                        scooter.setLocked(!scooter.isLocked());
                         break;
                     }
                 }
@@ -161,6 +175,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             }
             for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {//遍历寻找选择的舱位，将该板车加到对应舱位上
                 if (content.getCargoName().equals(berth)) {
+                    operateScooter.setCargoName(berth);//并且修改 板车上的所属舱位 数据 -by zyy
                     content.getScooters().add(operateScooter);
                     break;
                 }
@@ -175,6 +190,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                 }
             }
         });
+        //装机单右边适配器
         RightRvAdapter rightRvAdapter = new RightRvAdapter(rightData, onDataCheckListener);
         rvRight.setLayoutManager(new LinearLayoutManager(mContext));
         rvRight.setAdapter(rightRvAdapter);
@@ -198,24 +214,24 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             ivControl.setImageResource(R.mipmap.down);
             llDetail.collapse();
         }
-        llControl.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
-            if (item.isShowDetail()) {
-                rvLeft.setVisibility(View.VISIBLE);
-                rvRight.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.right);
-                llDetail.expand();
-            } else {
-                rvLeft.setVisibility(View.GONE);
-                rvRight.setVisibility(View.GONE);
-                ivControl.setImageResource(R.mipmap.down);
-                llDetail.collapse();
-            }
-        });
+//        llControl.setOnClickListener(v -> {
+//            item.setShowDetail(!item.isShowDetail());
+//            if (item.isShowDetail()) {
+//                rvLeft.setVisibility(View.VISIBLE);
+//                rvRight.setVisibility(View.VISIBLE);
+//                ivControl.setImageResource(R.mipmap.right);
+//                llDetail.expand();
+//            } else {
+//                rvLeft.setVisibility(View.GONE);
+//                rvRight.setVisibility(View.GONE);
+//                ivControl.setImageResource(R.mipmap.down);
+//                llDetail.collapse();
+//            }
+//        });
     }
 
     public interface OnDataCheckListener {
-        void onDataChecked();
+        void onDataChecked(String scooterId);
     }
 
     public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {

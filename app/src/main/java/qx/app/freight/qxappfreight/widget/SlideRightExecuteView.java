@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import qx.app.freight.qxappfreight.R;
@@ -146,7 +145,7 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 callTouch(false);
                 if (!mIsDragable)
                     return true;
-                if (mLocationX >= rightMax) {
+                if (mLocationX >= (rightMax*4/5)) { //设置为 4/5 触发。
                     mIsDragable = false;
                     mLocationX = 0;
                     invalidate();

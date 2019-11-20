@@ -43,18 +43,20 @@ public class LoadingListBean implements Serializable {
 
         @Data
         public static class ContentObjectBean implements  Serializable{
+            private String flightNo;
             private String cargoName;
             private List<ScooterBean> scooters;
 
             @Data
             public static class ScooterBean implements  Serializable{
                 private String cargoName;
+                private String oldCargoName;//原舱位
                 private long createTime;
                 private String createUser;
                 private String destinationStation;//目的地
-                private int exceptionFlag;//1建议拉
                 private String flightInfoId;
                 private String id;
+                private String oldId;
                 private String reportInfoId;
                 private String scooterCode;
                 private int total;
@@ -62,10 +64,19 @@ public class LoadingListBean implements Serializable {
                 private int version;
                 private List<WaybillBean> waybillList;
                 private double weight;
+                private double volume;
                 //添加数据
-                private boolean locked;//是否锁定
+                private int lock;// 0 未锁定 1 已锁定 2
                 private String location;//货位
+                private String oldLocation;//原货位
                 private String serialInd;//ULD号
+
+                private boolean change;//是否修改
+                private int exceptionFlag;//1建议拉
+                private boolean split;//是否是被拆分 item
+
+                private String specialCode;//特货代码
+                private boolean show;
 
                 @Data
                 public static class WaybillBean  implements  Serializable{
@@ -91,6 +102,7 @@ public class LoadingListBean implements Serializable {
                     private String waybillCode;
                     private String specialCode;
                     private boolean hasLiveGoods;
+                    private boolean hasGUNGoods;
                 }
             }
         }

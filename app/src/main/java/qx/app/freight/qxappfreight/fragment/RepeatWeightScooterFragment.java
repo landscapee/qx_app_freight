@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**复重-板车列表
  * created by swd

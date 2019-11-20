@@ -29,4 +29,21 @@ public class AuditManifestPresenter extends BasePresenter {
 
         });
     }
+    public void repartWriteLoading(BaseFilterEntity entity) {
+        mRequestView.showNetDialog();
+        ((AuditManifestModel) mRequestModel).repartWriteLoading(entity, new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((AuditManifestContract.auditManifestView) mRequestView).repartWriteLoadingResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+
+        });
+    }
 }

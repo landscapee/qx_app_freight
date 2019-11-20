@@ -52,4 +52,6 @@ public class PerformTaskStepsEntity {
      */
     private int type;
     private String loadUnloadDataId;
+
+    private String taskType;
 }

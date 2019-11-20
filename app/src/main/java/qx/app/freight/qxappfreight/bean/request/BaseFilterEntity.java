@@ -13,6 +13,7 @@ public class BaseFilterEntity<T> {
     private String currentStep;
     private boolean androidFlag;
     private int current; // FIXME check this code
+    private int  currentVersion;//当前装机单版本
     private int size;
     private T filter;
     private String stepOwner;
@@ -59,9 +60,9 @@ public class BaseFilterEntity<T> {
     private String staffId;
     private String staffIds;
 
-    private int documentType;
+    private int documentType; //1 货邮舱单 2 预装机单 3 预装机单建议 4 卸机单 5 最终装机单 6 最终装机单建议
     //报载记录ID
-    private String reportInfoId;
+    private String reportInfoId;//货邮仓单ID/装机单ID
     //操作类型
     private String auditType;
     //退回报载原因
@@ -71,8 +72,18 @@ public class BaseFilterEntity<T> {
     private String operationUserName;
     private int sort;
     private boolean filterAtd;//true 货邮舱单 装机单 待办 false 结载待办
+    private boolean filterHycd;//true  货邮舱单 待办 这个字段传true
+    private boolean  filterZjd;//true 装机单待办
+
     /**
      * 备注
      */
     private String remark;
+    private int type;
+    private String printName;
+    private String exceptionContent; //异常内容
+
+    private int location; //1:最终装机单录入 2:预装机单录入
+
+    private String waybillCode;
 }

@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -23,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.activity.VerifyStaffActivity;
 import qx.app.freight.qxappfreight.adapter.MainListRvAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -42,8 +46,8 @@ import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.SearchTodoTaskPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -51,9 +55,16 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 出港-收验
  */
 public class TaskCollectVerifyFragment extends BaseFragment implements SearchTodoTaskContract.searchTodoTaskView, TaskLockContract.taskLockView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
-    @BindView(R.id.mfrv_data)
-    MultiFunctionRecylerView mMfrvData;
-    private MainListRvAdapter adapter;
+//    @BindView(R.id.mfrv_data)
+//    MultiFunctionRecylerView mMfrvData;
+//    private MainListRvAdapter adapter;
+
+    @BindView(R.id.btn_search)
+    Button btnSearch;
+    @BindView(R.id.et_waybill_code)
+    EditText etWaybillCode;
+    @BindView(R.id.iv_scan)
+    ImageView ivScan;
 
     private int pageCurrent = 1;
 
@@ -81,20 +92,23 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUserVisibleHint(true);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
-        mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
-        mMfrvData.setRefreshListener(this);
-        mMfrvData.setOnRetryLisenter(this);
+        mTaskFragment.getToolbar().setRightIconView(View.GONE,R.mipmap.search,v->{});
+        mTaskFragment.getToolbar().setLeftIconView(View.GONE, R.mipmap.richscan, v -> {});
+        mTaskFragment.setTitleText();
+//        mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
+//        mMfrvData.setRefreshListener(this);
+//        mMfrvData.setOnRetryLisenter(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         initData();
+//        initTitle();
     }
 
     @Override
@@ -103,6 +117,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
+//            initTitle();
+        }
+    }
+
+    private void initTitle(){
             if (mTaskFragment == null){
                 mTaskFragment = (TaskFragment) getParentFragment();
 
@@ -117,49 +136,60 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
                     seachWith();
                 });
             }
-        }
     }
-
+    private void searchWaybill(String toString) {
+        if (!StringUtil.isEmpty(toString)&&toString.length()>=4)
+            getData(toString);
+        else
+            ToastUtil.showToast("请输入至少4位运单号");
+    }
     public void seachWith() {
         transportListList.clear();
         if (TextUtils.isEmpty(seachString)) {
             transportListList.addAll(transportListList1);
         } else {
             for (TransportDataBase team : transportListList1) {
-                if (team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo()!=null&&team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     transportListList.add(team);
                 }
             }
         }
-        if (mMfrvData != null) {
-            mMfrvData.notifyForAdapter(adapter);
-        }
+//        if (mMfrvData != null) {
+//            mMfrvData.notifyForAdapter(adapter);
+//        }
 
     }
 
     private void initData() {
-        adapter = new MainListRvAdapter(transportListList);
-        mMfrvData.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            CURRENT_TASK_BEAN = transportListList.get(position);
-            mPresenter = new TaskLockPresenter(this);
-            TaskLockEntity entity = new TaskLockEntity();
-            List<String> taskIdList = new ArrayList<>();
-            taskIdList.add(transportListList.get(position).getTaskId());
-            entity.setTaskId(taskIdList);
-            entity.setUserId(UserInfoSingle.getInstance().getUserId());
-            entity.setRoleCode(Constants.RECEIVE);
-            ((TaskLockPresenter) mPresenter).taskLock(entity);
+//        adapter = new MainListRvAdapter(transportListList);
+//        mMfrvData.setAdapter(adapter);
+//        adapter.setOnItemClickListener((adapter, view, position) -> {
+//            CURRENT_TASK_BEAN = transportListList.get(position);
+//            mPresenter = new TaskLockPresenter(this);
+//            TaskLockEntity entity = new TaskLockEntity();
+//            List<String> taskIdList = new ArrayList<>();
+//            taskIdList.add(transportListList.get(position).getTaskId());
+//            entity.setTaskId(taskIdList);
+//            entity.setUserId(UserInfoSingle.getInstance().getUserId());
+//            entity.setRoleCode(Constants.RECEIVE);
+//            ((TaskLockPresenter) mPresenter).taskLock(entity);
+//        });
+//        getData();
+
+        btnSearch.setOnClickListener(v->{
+            searchWaybill(etWaybillCode.getText().toString());
         });
-        getData();
+        ivScan.setOnClickListener(v->{
+            ScanManagerActivity.startActivity(getContext(),"TaskCollectVerifyFragment");
+        });
     }
 
     //获取数据
-    private void getData() {
+    private void getData(String waybillCode) {
         mPresenter = new SearchTodoTaskPresenter(this);
         BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
         TransportDataBase tempBean = new TransportDataBase();
-        tempBean.setWaybillCode("");
+        tempBean.setWaybillCode(waybillCode);
         tempBean.setTaskStartTime("");
         tempBean.setTaskEndTime("");
         tempBean.setRole(Constants.RECEIVE);
@@ -189,11 +219,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("TaskCollectVerifyFragment")&&isShow) {
                 String[] parts = daibanCode.split("\\/");
                 List<String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
-                    chooseCode(strsToList.get(3));
+                    searchWaybill(strsToList.get(3));
+//                    chooseCode();
                 }
         }
     }
@@ -222,20 +253,20 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     @Override
     public void onRetry() {
-        pageCurrent = 1;
-        getData();
+//        pageCurrent = 1;
+//        getData();
     }
 
     @Override
     public void onRefresh() {
-        pageCurrent = 1;
-        getData();
+//        pageCurrent = 1;
+//        getData();
     }
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
-        getData();
+//        pageCurrent++;
+//        getData();
     }
 
     //刷新列表数据
@@ -251,41 +282,41 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     //收验接受到推送过来的数据，添加或者删除数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
-                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
-                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
-                transportListList1.addAll(mWebSocketResultBean.getChgData());
-                if (isShow) {
-                    mTaskFragment.setTitleText(transportListList1.size());
-                }
-            }
-            seachWith();
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            if (null != CURRENT_TASK_BEAN) {
-                if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
-                    ActManager.getAppManager().finishReceive();
-                    ToastUtil.showToast("当前收验任务已完成");
-                }
-            }
-            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
-                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
-                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
-                getData();
-            }
-        }
+//        if ("N".equals(mWebSocketResultBean.getFlag())) {
+//            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+//                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+//                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+//                transportListList1.addAll(mWebSocketResultBean.getChgData());
+//                if (isShow) {
+//                    mTaskFragment.setTitleText(transportListList1.size());
+//                }
+//            }
+//            seachWith();
+//        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+//            if (null != CURRENT_TASK_BEAN) {
+//                if (CURRENT_TASK_BEAN.getWaybillId().equals(mWebSocketResultBean.getChgData().get(0).getWaybillId())) {
+//                    ActManager.getAppManager().finishReceive();
+//                    ToastUtil.showToast("当前收验任务已完成");
+//                }
+//            }
+//            if ("reReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+//                    || "receive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())
+//                    ||"borrowReceive".equals(mWebSocketResultBean.getChgData().get(0).getTaskTypeCode())) {
+//                getData();
+//            }
+//        }
 
     }
 
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(getActivity(), "数据为空");
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
+        if (error!=null)
+            ToastUtil.showToast(getActivity(), error);
+//        if (mMfrvData != null)
+//            mMfrvData.finishLoadMore();
+//        if (mMfrvData != null)
+//            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -300,23 +331,37 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     @Override
     public void searchTodoTaskResult(TransportListBean transportListBean) {
-        if (transportListBean != null) {
-            if (pageCurrent == 1) {
-                transportListList1.clear();
-                mMfrvData.finishRefresh();
-            } else {
-                mMfrvData.finishLoadMore();
-            }
-            transportListList1.addAll(transportListBean.getRecords());
-            if (mTaskFragment != null) {
-                if (isShow) {
-                    mTaskFragment.setTitleText(transportListList1.size());
+
+        if (transportListBean!=null&&transportListBean.getRecords().size()>0){
+
+            //出现不相同运单号
+            String watbillCode =  transportListBean.getRecords().get(0).getWaybillCode();
+            for (TransportDataBase transportDataBase:transportListBean.getRecords()){
+                if (watbillCode!=null&& !watbillCode.equals(transportDataBase.getWaybillCode())){
+                    ToastUtil.showToast("请输入更加完整的运单号");
+                    return;
                 }
             }
-            seachWith();
-        } else {
-            ToastUtil.showToast(getActivity(), "数据为空");
+            etWaybillCode.setText("");
+            getTaskInfo(transportListBean.getRecords().get(0));
         }
+//        if (transportListBean != null) {
+//            if (pageCurrent == 1) {
+//                transportListList1.clear();
+//                mMfrvData.finishRefresh();
+//            } else {
+//                mMfrvData.finishLoadMore();
+//            }
+//            transportListList1.addAll(transportListBean.getRecords());
+//            if (mTaskFragment != null) {
+//                if (isShow) {
+//                    mTaskFragment.setTitleText(transportListList1.size());
+//                }
+//            }
+//            seachWith();
+//        } else {
+//            ToastUtil.showToast(getActivity(), "数据为空");
+//        }
     }
 
     @Override
@@ -333,6 +378,12 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void sendPrintMessageResult(String result) {
 
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
+        if (result!=null)
+            getTaskInfo(result);
     }
 
     /**

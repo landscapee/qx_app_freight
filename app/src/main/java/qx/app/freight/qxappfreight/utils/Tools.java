@@ -1,14 +1,17 @@
 package qx.app.freight.qxappfreight.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +26,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,11 +35,22 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
+import qx.app.freight.qxappfreight.activity.LoginActivity;
+import qx.app.freight.qxappfreight.activity.MainActivity;
+import qx.app.freight.qxappfreight.activity.MsgDialogAct;
+import qx.app.freight.qxappfreight.activity.MsgDialogVisibleAct;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.PositionBean;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.OutFieldFlightBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.fragment.IOManifestFragment;
+import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
@@ -50,6 +63,7 @@ public class Tools {
     public static String getFilePath() {
         return Objects.requireNonNull(Objects.requireNonNull(MyApplication.getContext()).getExternalCacheDir()).getAbsolutePath() + "/";
     }
+
     /**
      * 获取当前登录用户得角色名称
      *
@@ -82,12 +96,28 @@ public class Tools {
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.realName, userBean.getCnname());
         SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.deptcode, userBean.getDeptcode());
 
-        //当前登录的账号
-        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, userBean.getLoginName());
-        //当前登录账号的密码
-//        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, userBean.get);
     }
 
+    public static void saveLoginNameAndPassword(String login, String password) {
+        //当前登录的账号
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, login);
+        //当前登录账号的密码
+        SharedPreferencesUtil.setString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, password);
+    }
+
+    public static String getLoginNameForLogin() {
+        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, "");
+        return loginName;
+    }
+    public static String getPassword() {
+        String password = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, "");
+        return password;
+    }
+
+    public static String getLoginName() {
+        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
+        return loginName;
+    }
 
     private static long lastClickTime;
 
@@ -98,11 +128,11 @@ public class Tools {
      */
     public synchronized static boolean isFastClick() {
         long time = System.currentTimeMillis();
-        if (lastClickTime > 0 && time - lastClickTime < 1000) {
-            return true;
+        if (lastClickTime >= 0 && time - lastClickTime < 1000) {
+            return false;
         }
         lastClickTime = time;
-        return false;
+        return true;
     }
 
     /**
@@ -123,8 +153,8 @@ public class Tools {
         }
     }
 
-    public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
+    public static List <MultipartBody.Part> filesToMultipartBodyParts(List <File> files) {
+        List <MultipartBody.Part> parts = new ArrayList <>(files.size());
         for (File file : files) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             //"files"与后台 沟通后 确定的 接收 key
@@ -136,13 +166,14 @@ public class Tools {
 
     /**
      * clone 类
+     *
      * @param obj
      * @param <T>
      * @return
      * @throws ClassNotFoundException
      * @throws IOException
      */
-    public static <T extends Serializable> T IOclone(T obj) throws ClassNotFoundException, IOException{
+    public static <T extends Serializable> T IOclone(T obj) throws ClassNotFoundException, IOException {
         ByteArrayOutputStream bous = new ByteArrayOutputStream();
         ObjectOutputStream oos = null;
 
@@ -158,7 +189,7 @@ public class Tools {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 oos.close();
                 ojs.close();
@@ -167,18 +198,19 @@ public class Tools {
                 e.printStackTrace();
             }
         }
-        return (T)ojs.readObject();
+        return (T) ojs.readObject();
     }
 
     /**
      * 列表深拷贝
+     *
      * @param src
      * @param <T>
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
+    public static <T> ArrayList <T> deepCopy(ArrayList <T> src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -186,7 +218,7 @@ public class Tools {
         ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
         ObjectInputStream in = new ObjectInputStream(byteIn);
         @SuppressWarnings("unchecked")
-        ArrayList<T> dest = (ArrayList<T>) in.readObject();
+        ArrayList <T> dest = (ArrayList <T>) in.readObject();
         return dest;
     }
 
@@ -221,7 +253,7 @@ public class Tools {
     /**
      * TODO: 保存基站位置信息
      */
-    public static void saveBSLocation(BSLoactionUtil.BSLocationBean bean) {
+    public static void saveBSLocation(qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil.BSLocationBean bean) {
         SaveUtils.getInstance().setValue(KEY_BSLoaction, bean);
     }
 
@@ -231,19 +263,17 @@ public class Tools {
     public static BSLoactionUtil.BSLocationBean getBSLoaction() {
         return (BSLoactionUtil.BSLocationBean) SaveUtils.getInstance().getValue(KEY_BSLoaction);
     }
+
     public static String getToken() {
         String token = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.token, "");
         return token;
     }
+
     public static String getRealName() {
         String realName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
         return realName;
     }
 
-    public static String getLoginName() {
-        String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.realName, "");
-        return loginName;
-    }
     /**
      * 判断当前程序是否在后台运行
      *
@@ -253,7 +283,7 @@ public class Tools {
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+        List <ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
         if (appProcesses == null)
             return false;
@@ -280,6 +310,7 @@ public class Tools {
         }
         return false;
     }
+
     /**
      * TODO: 字符串为空返回 --
      */
@@ -293,9 +324,10 @@ public class Tools {
 
     /**
      * 自动生成 板车业务id
+     *
      * @return
      */
-    public static String generateUniqueKey(){
+    public static String generateUniqueKey() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
@@ -321,10 +353,11 @@ public class Tools {
      * 是否一直循环提醒
      * 指定铃音的资源id
      */
-    public static void startVibrator(Context context,boolean isforcedispose, int rawId) {
+    public static void startVibrator(Context context, boolean isforcedispose, int rawId) {
         SoundConfigUtils.getInstance(context).playMediaPlayer(0, isforcedispose, rawId);
         VibrationUtils.openVibrator(context.getApplicationContext(), isforcedispose);//开启震动提醒，长时间震动和短时间震动
     }
+
     /**
      * 开启短震动
      */
@@ -332,6 +365,7 @@ public class Tools {
         VibrationUtils.openShortVibrator(context.getApplicationContext());//开启震动提醒，短时间震动
         startShortSound(context);
     }
+
     /**
      * 短暂提示音
      */
@@ -348,14 +382,211 @@ public class Tools {
     }
 
     /**
-     * 是否在一秒类 连续点击 ，规避误操作
+     * 判断是否是生产环境
      *
      * @return
      */
-    public  static boolean isProduct() {
+    public static boolean isProduct() {
         if (BuildConfig.Model.equals("product"))
             return true;
         else
             return false;
+    }
+
+    /**
+     * 判断是否是生产环境
+     *
+     * @return
+     */
+    public static boolean compareFist(String first, String second) {
+        if (first != null && second != null) {
+            if (first.equals(second))
+                return true;
+            else {
+                if (first.length() > 0 && second.length() > 0) {
+                    first = first.substring(0, 1);
+                    second = second.substring(0, 1);
+                    if (first.equals(second))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+            }
+        } else
+            return false;
+    }
+
+
+    /**
+     * 登录被挤下线 dialog
+     *
+     * @param mContext
+     */
+    public static void showDialog(Context mContext) {
+
+        loginOut(mContext);
+
+        CommonDialog dialog = new CommonDialog(mContext);
+        dialog.setTitle("提示")
+                .setMessage("你的账号在其他地方登陆！请重新登陆")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog1, confirm) -> {
+                });
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> dialog.show());
+    }
+
+    //强制登出
+    public static void loginOut(Context mContext) {
+        UserInfoSingle.setUserNil();
+        ScooterMapSingle.getInstance().clear();
+        ActManager.getAppManager().finishAllActivity();
+        WebSocketService.stopServer(MyApplication.getContext());
+        IMUtils.imLoginout();
+        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mContext.startActivity(intent);
+
+        //清空 库房信息
+        if (IOManifestFragment.iOqrcodeEntity != null) {
+            IOManifestFragment.iOqrcodeEntity = null;
+        }
+
+    }
+
+    /**
+     * 唤醒屏幕
+     *
+     * @param context
+     */
+    public static void wakeupScreen(Context context) {
+        if (isBackground(context) || !isScreenOn(context)) {
+            if (isScreenOn(context)) {
+                wakeupApp(context);
+                return;
+            }
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            //获取电源管理器对象
+            @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+            //点亮屏幕
+            wl.acquire();
+            //释放
+            wl.release();
+            wakeupApp(context);
+            Log.e("屏幕：", "点亮");
+            if (Build.VERSION.SDK_INT >= 26) {
+                if (isLocked(context)) {
+                    MsgDialogAct.startActivity(context);
+                }
+            } else {
+                if (isLocked(context)) {
+                    MsgDialogVisibleAct.startActivity(context);
+                }
+            }
+        }
+    }
+
+    public static void wakeupApp(Context context) {
+//        Intent intent;
+//        intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+////        if (intent != null) {
+////            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////        }
+//        context.startActivity(intent);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(intent);
+        Log.e("屏幕：", "唤醒app");
+    }
+
+    /**
+     * 判断当前是否锁屏
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isLocked(Context context) {
+        KeyguardManager mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        return mKeyguardManager.inKeyguardRestrictedInputMode();
+    }
+
+    /**
+     * 判断当前屏幕是否亮着
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isScreenOn(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
+        return isScreenOn;
+    }
+
+    public static void unLock(Context context) {
+        //屏锁管理器
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+        //解锁
+        kl.disableKeyguard();
+        Log.e("屏幕：", "解锁");
+    }
+
+    public static int groupImlibUid(OutFieldFlightBean flights) {
+        if ("D".equals(flights.getMovement())) {
+            if (flights.getSuccessionId() != 0) {
+
+                return flights.getSuccessionId();
+            } else {
+                return flights.getFlightId();
+            }
+        } else
+            return flights.getFlightId();
+
+    }
+
+    public static int groupImlibUid(LoadAndUnloadTodoBean flights) {
+        if (flights.getMovement() == 1 || flights.getMovement() == 4) {
+            return Integer.valueOf(flights.getFlightId());
+        } else if (flights.getLoadingAndUnloadBean() != null && flights.getLoadingAndUnloadBean().getSuccessionId() != null && !StringUtil.isEmpty(flights.getLoadingAndUnloadBean().getSuccessionId())) {
+            if (Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId()) > 0) {
+                return Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId());
+            } else
+                return Integer.valueOf(flights.getFlightId());
+        } else
+            return Integer.valueOf(flights.getFlightId());
+    }
+
+    /**
+     * 通过特货代码 获取 体积
+     *
+     * @param specialCode
+     * @return
+     */
+    public static String getVolumeForSpCode(String specialCode) {
+        String volume = specialCode;
+        if (specialCode.contains("/")) {
+            volume = specialCode.substring(0, specialCode.indexOf("/"));
+        }
+        return volume;
+    }
+
+    /**
+     * 通过特货代码 获取 正确的特货代码
+     *
+     * @param specialCode
+     * @return
+     */
+    public static String getSpCodeForSpCode(String specialCode) {
+        String spCode = specialCode;
+        if (specialCode.contains("/")) {
+            spCode = specialCode.substring(specialCode.indexOf("/"), specialCode.length() - 1);
+        } else
+            spCode = "";
+        return spCode;
     }
 }

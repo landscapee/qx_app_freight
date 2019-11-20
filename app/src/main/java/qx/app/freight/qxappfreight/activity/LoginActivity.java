@@ -31,7 +31,6 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
-import qx.app.freight.qxappfreight.bean.response.LoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
@@ -85,10 +84,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         //防止 重新点击app 图标 重启这个activity
+
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
+
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
@@ -96,9 +97,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkVersion();
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
 
-        mEtPassWord.setText("");
-        mEtUserName.setText("");
+
+        mEtUserName.setText(Tools.getLoginNameForLogin());
+        mEtPassWord.setText(Tools.getPassword());
+
         mBtnLogin.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             login();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -115,20 +120,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkPermissionsForWindow();
 
         //输入法 下载安装
-        DownloadUtils downloadUtils = new DownloadUtils(this);
-        //是否按安装输入法
-        if (!downloadUtils.isInstall()) {
-            //是否已经下载
-            if (downloadUtils.isDownload()) {
-                //直接安装
-                downloadUtils.showDialogInstall();
-            } else {
-                //下载
-                downloadUtils.showDialogDownload();
-            }
-        } else {
-            Log.e("输入法：", "输入法已经安装！");
-        }
+//        DownloadUtils downloadUtils = new DownloadUtils(this);
+//        //是否按安装输入法
+//        if (!downloadUtils.isInstall()) {
+//            //是否已经下载
+//            if (downloadUtils.isDownload()) {
+//                //直接安装
+//                downloadUtils.showDialogInstall();
+//            } else {
+//                //下载
+//                downloadUtils.showDialogDownload();
+//            }
+//        } else {
+//            Log.e("输入法：", "输入法已经安装！");
+//        }
 
     }
 
@@ -273,7 +278,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 }
                 if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
                         Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
-                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())) {
+                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())||
+                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())
+                ) {
 //                    loginBean.setUserId(loginBean.getLoginid());
                     isNeedIm = true;
                     break;
@@ -295,6 +302,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 toMainAct();
             }
         } else {
+            dismissProgessDialog();
             ToastUtil.showToast(this, "数据错误");
         }
     }
@@ -328,6 +336,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     private void toMainAct() {
         dismissProgessDialog();
+        Tools.saveLoginNameAndPassword(mEtUserName.getText().toString(),mEtPassWord.getText().toString());
         MainActivity.startActivity(this);
         finish();
     }
@@ -344,9 +353,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         Tools.setLoginUserBean(loginBean);
         IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
         IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getCnname(), loginBean.getToken());
-        MainActivity.startActivity(this);
-        finish();
-
+        toMainAct();
     }
 
     private void loginIm(LoginResponseBean loginBean) {
@@ -414,6 +421,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                         } else {
                             downLoadFile(mVersionBean);
                         }
+                        dialog.dismiss();
                     }
                 })
                 .show();

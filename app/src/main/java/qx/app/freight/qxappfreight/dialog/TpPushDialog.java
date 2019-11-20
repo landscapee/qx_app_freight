@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,12 +23,11 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
 import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
-import qx.app.freight.qxappfreight.utils.MapValue;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
@@ -45,6 +45,8 @@ public class TpPushDialog extends Dialog {
     RecyclerView rcNewTask;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.tv_temp_intro)
+    TextView tvTemp ;
 
     private AcceptTerminalTodoBean mAcceptTerminalTodoBean;
     private  List<OutFieldTaskBean> list;
@@ -56,24 +58,17 @@ public class TpPushDialog extends Dialog {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Tools.closeVibrator(mContext.getApplicationContext());
-    }
 
     public TpPushDialog(@NonNull Context context, int themeResId, AcceptTerminalTodoBean mAcceptTerminalTodoBean, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
         this.mAcceptTerminalTodoBean = mAcceptTerminalTodoBean;
-        Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         convertView = getLayoutInflater().inflate(R.layout.popup_new_tp_task, null);
         setCancelable(false);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -94,6 +89,7 @@ public class TpPushDialog extends Dialog {
         Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
+        p.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
         getWindow().setAttributes(p);
     }
 
@@ -101,12 +97,23 @@ public class TpPushDialog extends Dialog {
 
         setCancelable(false);
         setCanceledOnTouchOutside(false);
-        //列表设置
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
-        rcNewTask.setLayoutManager(manager);
-        list = new ArrayList<>();
-        TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list);
-        rcNewTask.setAdapter(mTaskFlightAdapter);
+        if (!Constants.TP_TYPE_TEMP.equals(mAcceptTerminalTodoBean.getTaskType())){
+            //列表设置
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
+            rcNewTask.setLayoutManager(manager);
+            list = new ArrayList<>();
+            TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list);
+            rcNewTask.setAdapter(mTaskFlightAdapter);
+            setView();
+            tvTemp.setVisibility(View.GONE);
+            rcNewTask.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvTemp.setVisibility(View.VISIBLE);
+            rcNewTask.setVisibility(View.GONE);
+            tvTemp.setText(mAcceptTerminalTodoBean.getTasks().get(0).getTaskIntro());
+            tvTpType.setText(mAcceptTerminalTodoBean.getProjectName());
+        }
 
         btnSure.setOnClickListener(v -> {
 
@@ -116,8 +123,12 @@ public class TpPushDialog extends Dialog {
 
         });
 
-        setView();
+    }
 
+    @Override
+    public void show() {
+        Tools.wakeupScreen(mContext);
+        super.show();
     }
 
     private void setView() {
@@ -129,7 +140,7 @@ public class TpPushDialog extends Dialog {
             tvTpType.setText(mAcceptTerminalTodoBean.getProjectName());
             //把大任务的 运输板车类型赋值给子任务
             for (OutFieldTaskBean mOutFieldTaskBeans : mAcceptTerminalTodoBean.getTasks()){
-                mOutFieldTaskBeans.setTransfortType(mAcceptTerminalTodoBean.getTransfortType());
+                mOutFieldTaskBeans.setTransfortType(mAcceptTerminalTodoBean.getTransportTypeMapping());
             }
             list.addAll(mAcceptTerminalTodoBean.getTasks());
 
@@ -140,5 +151,24 @@ public class TpPushDialog extends Dialog {
 
             void onSureBtnCallBack(List<OutFieldTaskBean> list);
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+    }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+//    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
     }
 }

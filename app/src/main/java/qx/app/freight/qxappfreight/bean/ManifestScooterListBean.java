@@ -35,10 +35,12 @@ public class ManifestScooterListBean {
      * 缺的数据
      */
     private String toCity;
-    private String uldCode = "- -";
+    private String uldCode;
+    private String uldType;
+    private String iata;
     private String mailType;
-    private String goodsPosition = "- -";
-    private String specialNumber = "- -";
+    private String goodsPosition ;
+    private String specialNumber;
     private List<String> manifestList;
 
     private int scooterType;
@@ -60,6 +62,8 @@ public class ManifestScooterListBean {
     private String scooterCode;
     private int reDifference;
     private List<WaybillListBean> waybillList;
+
+    private boolean pull;//是否拉下状态
 
     @Data
     public static class WaybillListBean {
@@ -120,5 +124,9 @@ public class ManifestScooterListBean {
         private String waybillCode;
         private boolean liveBody;//是否是活体
         private String specialCode;
+        private String model; //型号
+        private String suggestRepository;//仓位
+        private String routeEn;//航线信息
+        private String info;//备注
     }
 }

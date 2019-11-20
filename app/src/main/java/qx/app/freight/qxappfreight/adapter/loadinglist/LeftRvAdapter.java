@@ -73,6 +73,12 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
             if (item.isHasLiveGoods()) {//有活体运单时背景设为桃红色
                 helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
             }
+            else if ((item.isHasGUNGoods())){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+            }
+            else
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
             helper.getView(R.id.iv_lock_status).setVisibility(View.VISIBLE);
             helper.getView(R.id.tv_lock).setVisibility(View.GONE);
             ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
@@ -108,12 +114,12 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (item.isLocked()) {
-                        ToastUtil.showToast("数据已锁定修改");
+                        ToastUtil.showToast("数据已锁定，无法修改");
                         spBerth.setSelection(pos, true);
                     } else {
                         pos = position;
                         onBerthChoseListener.onBerthChosed(helper.getAdapterPosition(), item.getBerthList().get(position));
-                        onDataCheckListener.onDataChecked();
+                        onDataCheckListener.onDataChecked(item.getScooterId());
                     }
                 }
 
@@ -141,15 +147,15 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 }
                 spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     int pos;
-
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (item.isLocked()) {
-                            ToastUtil.showToast("数据已锁定修改");
-                            spBerth.setSelection(pos, true);
+                            ToastUtil.showToast("数据已锁定，无法修改");
+                            spGoodsPos.setSelection(pos, true);
                         } else {
                             pos = position;
                             onGoodsPosChoseListener.onGoodsPosChosed(helper.getAdapterPosition(), item.getGoodsPosList().get(position));
+                            onDataCheckListener.onDataChecked(item.getScooterId());
                         }
                     }
 

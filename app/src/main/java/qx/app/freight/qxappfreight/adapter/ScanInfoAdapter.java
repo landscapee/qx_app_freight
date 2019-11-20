@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 

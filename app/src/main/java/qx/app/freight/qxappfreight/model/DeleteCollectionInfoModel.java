@@ -1,12 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
-import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.contract.DeleteCollectionInfoContract;
-import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class DeleteCollectionInfoModel extends BaseModel implements DeleteCollectionInfoContract.deleteCollectionInfoModel {
 //    @Override

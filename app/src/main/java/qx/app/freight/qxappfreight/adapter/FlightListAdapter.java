@@ -2,11 +2,9 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -14,7 +12,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
-import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.FlightInfoLayout;
 

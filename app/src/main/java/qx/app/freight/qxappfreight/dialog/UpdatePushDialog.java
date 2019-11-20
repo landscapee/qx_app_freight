@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Display;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
@@ -42,7 +44,11 @@ public class UpdatePushDialog extends Dialog {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
-        Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         convertView = getLayoutInflater().inflate(R.layout.popup_manifest_update, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
@@ -60,6 +66,7 @@ public class UpdatePushDialog extends Dialog {
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
         p.height = d.getHeight();
+        p.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
         getWindow().setAttributes(p);
     }
 
@@ -88,7 +95,33 @@ public class UpdatePushDialog extends Dialog {
         });
     }
 
+    @Override
+    public void show() {
+        super.show();
+        Tools.wakeupScreen(mContext);
+    }
+
     public interface OnTpPushListener {
         void onSureBtnCallBack();
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+
+    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+//    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
     }
 }

@@ -8,11 +8,8 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
-import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.model.GetScooterByScooterCodeModel;
 import qx.app.freight.qxappfreight.model.GroupBoardToDoListModel;
 
 /**
@@ -45,9 +42,9 @@ public class GroupBoardToDoPresenter extends BasePresenter {
 
     public void getScooterByScooterCode(BaseFilterEntity airLineId) {
         mRequestView.showNetDialog();
-        ((GroupBoardToDoListModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter<GetInfosByFlightIdBean>() {
+        ((GroupBoardToDoListModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter<List<GetInfosByFlightIdBean>>() {
             @Override
-            public void onSuccess(GetInfosByFlightIdBean queryAviationRequireBeans) {
+            public void onSuccess(List<GetInfosByFlightIdBean> queryAviationRequireBeans) {
                 ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getScooterByScooterCodeResult(queryAviationRequireBeans);
                 mRequestView.dissMiss();
             }

@@ -2,15 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/dp_40"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
    >
     <TextView
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:text="舱位"
         android:textColor="@color/white"
         android:id="@+id/tv_manifest"
         android:gravity="center"/>
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="调整舱位"
+        android:textColor="@color/white"
+        android:id="@+id/tv_adjust"
+        android:gravity="center"
+         android:visibility="gone"
+        />
     <!--<Spinner-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="match_parent"-->
@@ -21,56 +32,62 @@
 
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:id="@+id/tv_goods_position"
         android:gravity="center"/>
     <TextView
         android:layout_width="80dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="板车号"
         android:textColor="@color/white"
         android:id="@+id/tv_scooter_number"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="ULD号"
         android:textColor="@color/white"
         android:id="@+id/tv_uld_number"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="目的站"
         android:textColor="@color/white"
         android:id="@+id/tv_to_city"
         android:gravity="center"/>
     <TextView
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:text="类型"
         android:textColor="@color/white"
         android:id="@+id/tv_type"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="重量"
         android:textColor="@color/white"
         android:id="@+id/tv_weight"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="件数"
         android:textColor="@color/white"
         android:id="@+id/tv_total"
         android:gravity="center"/>
     <TextView
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:id="@+id/tv_special_number"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/tv_pull_state"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:gravity="center"/>
 </LinearLayout>

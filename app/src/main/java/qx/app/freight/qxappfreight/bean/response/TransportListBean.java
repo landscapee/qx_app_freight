@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * TODO : xxx

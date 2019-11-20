@@ -57,7 +57,17 @@
                     android:text="货物清场"
                     android:textColor="@color/white" />
             </LinearLayout>
-
+            <TextView
+                android:id="@+id/tv_temp_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_5"
+                android:textSize="16sp"
+                android:text="swdwd "
+                android:textColor="@color/blue_2e8"
+                android:background="@color/white"
+                android:visibility="gone"
+                />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rc_new_task"
                 android:layout_width="match_parent"

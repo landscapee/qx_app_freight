@@ -86,7 +86,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
     private ArrayList<OutFieldTaskBean> mFlightberList = null; //传过来的航班列表
     private ArrayList<String> mFlightNumberList = null; //传过来的航班号列表
     private String mCurrentTaskId;//当前任务ID
-    private String mFlightId;//被选中的 板车号
+    private String mFlightId;//被选中的
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -183,7 +183,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(ErrorReportActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
-                    model.setFlightNum(mFlightNumber);
+                    model.setFlightNo(mFlightNumber);
                     model.setFlightId(Long.valueOf(mFlightId));
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
@@ -200,7 +200,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
                     TransportEndEntity endEntity = new TransportEndEntity();
                     endEntity.setTaskId(mCurrentTaskId);
                     model.setTransportAppDto(endEntity);
-//                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
+                    ((ExceptionReportPresenter) mPresenter).exceptionReport(model);
                 } else {
                     pressImage(getNoAddPictureList());
                 }
@@ -340,7 +340,7 @@ public class ErrorReportActivity extends BaseActivity implements UploadsContract
             filePaths.add(entry.getKey());
         }
         ExceptionReportEntity model = new ExceptionReportEntity();
-        model.setFlightNum(mFlightNumber);
+        model.setFlightNo(mFlightNumber);
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
         model.setFlightId(Long.valueOf(mFlightId));

@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
@@ -153,7 +152,7 @@ public class SlideLeftExecuteView extends AppCompatTextView {
                 Log.e("tagSlide", "抬起手指");
                 if (!mIsDragable)
                     return true;
-                if (mLocationX <= 0) {
+                if (mLocationX <= (rightMax*1/5)) {
                     mIsDragable = false;
                     mLocationX = -1;
                     invalidate();

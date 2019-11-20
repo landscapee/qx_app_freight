@@ -20,11 +20,9 @@ import qx.app.freight.qxappfreight.bean.request.AllocaaateHitoryBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetHistoryContract;
 import qx.app.freight.qxappfreight.presenter.GetHistoryPresenter;
-import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 

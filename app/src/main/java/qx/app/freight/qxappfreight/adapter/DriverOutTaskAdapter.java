@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -37,14 +38,23 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 //        helper.setText(R.id.tv_task_id,"00"+(helper.getAdapterPosition()+1));
         helper.setText(R.id.tv_task_id, item.getTaskNumber());
 //        helper.setText(R.id.tv_task_num, "任务单号:" + item.getTaskId());
-        StringBuilder sb = new StringBuilder();
-        if (item.getTasks() != null && item.getTasks().size() != 0) {
-            for (OutFieldTaskBean task : item.getTasks()) {
-                sb.append(task.getFlightNo());
-                sb.append("&");
+
+        TextView tvFlightNo = helper.getView(R.id.tv_flight_number);
+        if (!Constants.TP_TYPE_TEMP.equals(item.getTaskType())){
+            StringBuilder sb = new StringBuilder();
+            if (item.getTasks() != null && item.getTasks().size() != 0) {
+                for (OutFieldTaskBean task : item.getTasks()) {
+                    sb.append(task.getFlightNo());
+                    sb.append("&");
+                }
             }
+            tvFlightNo.setTextColor(mContext.getResources().getColor(R.color.black_3));
+            tvFlightNo.setText("航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
         }
-        helper.setText(R.id.tv_flight_number, "航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
+        else {//临时任务的显示
+            tvFlightNo.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+            tvFlightNo.setText(item.getUseTasks().get(0).get(0).getTaskIntro());
+        }
         helper.setText(R.id.tv_task_type, item.getProjectName());
         helper.setText(R.id.tv_task_status, "#执行中#");
         //列表设置
@@ -56,30 +66,30 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
         TaskStepAdapter mTaskStepAdapter = new TaskStepAdapter(list1);
         mRecyclerView.setAdapter(mTaskStepAdapter);
         CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
-        collView.collapse();
+//        collView.collapse();
         mRecyclerView.setVisibility(View.GONE);
         ImageView imageExpand = helper.getView(R.id.iv_expand);
         View view = helper.getConvertView();
         view.setOnClickListener(v -> {
             if (item.isExpand()) {
                 mRecyclerView.setVisibility(View.GONE);
-                collView.collapse();
+//                collView.collapse();
                 item.setExpand(false);
                 imageExpand.setImageResource(R.mipmap.down);
             } else {
                 mRecyclerView.setVisibility(View.VISIBLE);
-                collView.expand();
+//                collView.expand();
                 item.setExpand(true);
                 imageExpand.setImageResource(R.mipmap.up);
             }
         });
         if (item.isExpand()) {
             mRecyclerView.setVisibility(View.VISIBLE);
-            collView.expand();
+//            collView.expand();
             imageExpand.setImageResource(R.mipmap.up);
         } else {
             mRecyclerView.setVisibility(View.GONE);
-            collView.collapse();
+//            collView.collapse();
             imageExpand.setImageResource(R.mipmap.down);
         }
         /**
@@ -159,6 +169,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
      */
     private void toLoadPlaneActivity(OutFieldTaskBean mOutFieldTaskBean) {
         Intent intent = new Intent(mContext, TPUnloadPlaneActivity.class);
+        intent.putExtra("flight_type", mOutFieldTaskBean.getFlights().getFlightIndicator());
         intent.putExtra("plane_info", mOutFieldTaskBean);
         mContext.startActivity(intent);
     }

@@ -1,13 +1,11 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -45,7 +43,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         //分拣件数 - 重量
 //        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
         //预期费用
-        holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
+//        holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
         holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getRqName(),"-"));
 
@@ -105,21 +103,27 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
             holder.setGone(R.id.btn_overweight,false);
+            holder.setGone(R.id.btn_forklift,false);
 
         }else {
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
             holder.setGone(R.id.btn_overweight,true);
+            holder.setGone(R.id.btn_forklift,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
 
-        if (bean.getOverweightCharge() > 0){
-            holder.setVisible(R.id.tv_overweight_money,true);
-            holder.setText(R.id.tv_overweight_money,"超重费用:"+bean.getOverweightCharge()+"元");
-        }
-        else
+//        if (bean.getDefermentCharge() > 0){
+//            holder.setVisible(R.id.tv_overweight_money,true);
+//            holder.setText(R.id.tv_overweight_money,"待收费:"+bean.getOverweightCharge()+"元");
+//        }
+//        else
             holder.setGone(R.id.tv_overweight_money,false);
 
+        Button btnForklift = holder.getView(R.id.btn_forklift);
+        btnForklift.setOnClickListener(v -> {
+            listener.forkliftCost(holder.getAdapterPosition());
+        });
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->
                 listener.outStorage(holder.getAdapterPosition(),bean.getId(),bean.getOutStorageUser())
@@ -133,5 +137,6 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
     public interface DeliveryDetailInterface{
         void outStorage(int position,String id,String outStorageUser);
         void inputOverWeight(int position);
+        void forkliftCost(int position);
     }
 }

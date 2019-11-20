@@ -5,12 +5,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.contract.CargoReportHisContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 public class CargoReportHisModel extends BaseModel implements CargoReportHisContract.cargoReportHisModel {
     @Override
-    public void cargoReportHis(String operatorId, IResultLisenter lisenter) {
+    public void cargoReportHis(BaseFilterEntity operatorId, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().cargoReportHis(operatorId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

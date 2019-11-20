@@ -4,7 +4,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.response.FreightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.MarketCollectionRequireBean;
 import qx.app.freight.qxappfreight.contract.FreightInfoContract;
 import qx.app.freight.qxappfreight.model.FreightInfoModel;

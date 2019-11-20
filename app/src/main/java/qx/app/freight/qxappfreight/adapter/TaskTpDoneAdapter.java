@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.adapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.SlideLeftExecuteView;
 
@@ -46,6 +48,7 @@ public class TaskTpDoneAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
         TextView tvAccept = helper.getView(R.id.tv_step_time_accept);
         TextView tvStart = helper.getView(R.id.tv_step_time_start);
         TextView tvEnd = helper.getView(R.id.tv_step_time_end);
+
 
 
         /**
@@ -100,15 +103,29 @@ public class TaskTpDoneAdapter extends BaseQuickAdapter<OutFieldTaskBean, BaseVi
             tvEnd.setVisibility(View.GONE);
         }
 
-        //列表设置
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
-        RecyclerView mRecyclerViewFlight = helper.getView(R.id.rv_flight);
-        mRecyclerViewFlight.setLayoutManager(manager);
+        LinearLayout llFlightInfo = helper.getView(R.id.ll_flight_info);
+        TextView tvTemp = helper.getView(R.id.tv_temp_intro);
+        if (!Constants.TP_TYPE_TEMP.equals(item.getCargoType())){
+            llFlightInfo.setVisibility(View.VISIBLE);
+            tvTemp.setVisibility(View.GONE);
+            //列表设置
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);
+            RecyclerView mRecyclerViewFlight = helper.getView(R.id.rv_flight);
+            mRecyclerViewFlight.setLayoutManager(manager);
 
-        List<OutFieldTaskBean> list1 = new ArrayList<>();
-        list1.add(item);
-        TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list1);
-        mRecyclerViewFlight.setAdapter(mTaskFlightAdapter);
+            List<OutFieldTaskBean> list1 = new ArrayList<>();
+            list1.add(item);
+            TaskFlightAdapter mTaskFlightAdapter = new TaskFlightAdapter(list1);
+            mRecyclerViewFlight.setAdapter(mTaskFlightAdapter);
+        }
+        else
+        {
+            llFlightInfo.setVisibility(View.GONE);
+            tvTemp.setVisibility(View.VISIBLE);
+            tvTemp.setText(item.getTaskIntro());
+
+        }
+
 
 //        Glide.with(mContext).load(R.mipmap.slide_do_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivLeftGif);
 //        mSlideLeftExecuteViewS.setVisibility(View.GONE);

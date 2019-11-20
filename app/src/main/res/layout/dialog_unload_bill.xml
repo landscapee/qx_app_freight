@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="50dp"
+    android:paddingBottom="50dp"
+    >
 
     <LinearLayout
         android:layout_width="300dp"
-        android:layout_height="244dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/shape_rect_white_3dp"
         android:gravity="center"
@@ -117,6 +120,28 @@
             android:layout_marginTop="@dimen/dp_15"
             android:background="@color/divider_line_grey" />
 
+        <TextView
+            android:id="@+id/tv_statistics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/black_3"
+            android:text="货物:20kg 邮件:20kg "
+            />
+        <TextView
+            android:id="@+id/tv_statistics_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/black_3"
+            android:text="行李:20kg 其他:20kg"
+            />
         <TextView
             android:id="@+id/tv_close_dialog"
             android:layout_width="match_parent"

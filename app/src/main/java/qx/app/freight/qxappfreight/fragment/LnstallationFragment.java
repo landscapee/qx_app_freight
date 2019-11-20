@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,34 +27,22 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.CargoManifestInfoActivity;
 import qx.app.freight.qxappfreight.activity.LnstallationInfoActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
-import qx.app.freight.qxappfreight.adapter.GoodsManifestAdapter;
-import qx.app.freight.qxappfreight.adapter.LnstallationAdapter;
-import qx.app.freight.qxappfreight.adapter.NewInstallEquipAdapter;
+import qx.app.freight.qxappfreight.adapter.JZLoadAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
-import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
-import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
-import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
-import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.contract.EndInstallToDoContract;
-import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
-import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.presenter.EndInstallTodoPresenter;
-import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
-import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
@@ -75,7 +63,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     private int mCurrentPage = 1;
     private int mCurrentSize = 10;
 
-    private GoodsManifestAdapter adapter;
+    private JZLoadAdapter adapter;
     private List<LoadAndUnloadTodoBean> list1 = new ArrayList<>();
     private List<LoadAndUnloadTodoBean> list = new ArrayList<>();
 
@@ -154,11 +142,11 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     }
 
     private void initData() {
-        adapter = new GoodsManifestAdapter(list);
-        adapter.setOnFlightSafeguardListenner(new GoodsManifestAdapter.OnFlightSafeguardListenner() {
+        adapter = new JZLoadAdapter(list);
+        adapter.setOnFlightSafeguardListenner(new JZLoadAdapter.OnFlightSafeguardListenner() {
             @Override
             public void onFlightSafeguardClick(int position) {
-                IMUtils.chatToGroup(mContext, list.get(position).getFlightId());
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(list.get(position))+"");
             }
 
             @Override
@@ -169,9 +157,12 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
-            intent.putExtra("data", list.get(position));
-            getContext().startActivity(intent);
+//            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
+//            intent.putExtra("data", list.get(position));
+//            getContext().startActivity(intent);
+            if (!Tools.isFastClick())
+                return;
+            LnstallationInfoActivity.startActivity(getContext(),list.get(position),0);
         });
         getData();
 
@@ -183,7 +174,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
             list.addAll(list1);
         } else {
             for (LoadAndUnloadTodoBean team : list1) {
-                if (team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getFlightNo()!=null&&team.getFlightNo().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
@@ -214,8 +205,15 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String result) {
+        if (result.equals("LnstallationFragment_refresh")||result.equals("refresh_data_update")) {
+            mCurrentPage = 1;
+            getData();
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CommonJson4List result) {
-        if (result != null) {
+        if (result != null && !result.isNewStowage()) {
            getData();
         }
     }
@@ -229,6 +227,7 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         entity.setCurrent(mCurrentPage);
         entity.setSize(mCurrentSize);
         entity.setFilterAtd(true);
+        entity.setFilterZjd(true);
         ((EndInstallTodoPresenter) mPresenter).getEndInstallTodo(entity);
     }
 
@@ -247,10 +246,11 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     public void toastView(String error) {
         if (mCurrentPage == 1) {
             list.clear();
-            mMfrvData.finishRefresh();
-        } else {
-            mMfrvData.finishLoadMore();
         }
+        if (mMfrvData != null)
+            mMfrvData.finishLoadMore();
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -289,7 +289,15 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         if (loadAndUnloadTodoBean != null) {
             for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
                 StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
+                //结载单独使用数据 json 解析
+                if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+                    bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+                }
+                if (bean.getRelateInfoObj() != null && !StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())) {
+                    bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+                }
             }
+
             if (mCurrentPage == 1) {
                 list1.clear();
                 mMfrvData.finishRefresh();

@@ -28,12 +28,13 @@ public class LeaderInstallEquipStepAdapter extends BaseMultiItemQuickAdapter<Loa
 
     @Override
     protected void convert(BaseViewHolder helper, LoadAndUnloadTodoBean.OperationStepObjBean item) {
+        helper.setText(R.id.tv_step_plan_date, item.getPlanTime());
         helper.itemView.setOnClickListener(v -> {
             boolean isJumped = false;//控制已领受过的任务，再次点击进去选择人员避免重复进入页面
             if (helper.getAdapterPosition() == 0) {
                 if (onSlideListener != null) {
                     isJumped = true;
-                    onSlideListener.onSlide(0);
+                    onSlideListener.onSlide(0); //zyy 注释。防止重复领受任务。
                 }
                 if (!isJumped) {
                     Intent intent = new Intent(mContext, AssignInstallEquipMemberActivity.class);

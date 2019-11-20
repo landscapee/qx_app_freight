@@ -8,18 +8,15 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
-import com.qxkj.positionapp.GPSService;
+import com.liys.doubleclicklibrary.ViewDoubleHelper;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
-import qx.app.freight.qxappfreight.utils.AppIPConfig;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 
-public class MyApplication extends Application {
+public class MyApplication extends Application  {
 
     private static Context appContext;
 
@@ -36,8 +33,10 @@ public class MyApplication extends Application {
         builder.detectFileUriExposure();
 
         Log.e("Application：运行模式>>>", BuildConfig.Model);
-
         CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
+
+        //处理点击事件重复点击问题
+        ViewDoubleHelper.init(this);
 
         initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -92,6 +91,4 @@ public class MyApplication extends Application {
     public static Context getContext() {
         return appContext;
     }
-
-
 }

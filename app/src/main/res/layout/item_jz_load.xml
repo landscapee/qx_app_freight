@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_10"
+    >
+
+    <!--TODO:角标-->
+    <cn.label.library.LabelView
+        android:id="@+id/task_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        app:backgroundColor="@color/deepskyblue"
+        app:labelBottomPadding="4dp"
+        app:labelTopDistance="8dp"
+        app:labelTopPadding="4dp"
+        app:orientation="rightTop"
+        app:textContent="已达"
+        app:textContentSize="10sp"/>
+    <ImageView
+        android:id="@+id/iv_done"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/icon_done"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/ll_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_operate_type"
+                    android:layout_width="@dimen/dp_18"
+                    android:layout_height="@dimen/dp_18"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/li" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_rect_blue_b3d1fb"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
+                android:layout_marginLeft="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/flight" />
+
+                <TextView
+                    android:id="@+id/tv_plane_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:gravity="center_vertical"
+                    android:text="3U8375(3U8376)"
+                    android:textColor="#136BEF"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_flight_info_container"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+
+
+            <TextView
+                android:id="@+id/tv_craft_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="@dimen/dp_25"
+                android:gravity="center_vertical"
+                android:textColor="@color/black_3"
+                android:textSize="@dimen/sp_14"
+                tools:text="B2310"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="13dp"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_atd"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:drawableStart="@mipmap/shi"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:gravity="center_vertical"
+                    android:text="101"
+                    android:textColor="#738598"
+                    android:textSize="@dimen/sp_14" />
+                <TextView
+                    android:id="@+id/tv_etd"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:drawableStart="@mipmap/yu"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:gravity="center_vertical"
+                    android:text="101"
+                    android:textColor="#738598"
+                    android:textSize="@dimen/sp_14" />
+
+
+            <TextView
+                android:id="@+id/tv_std"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@mipmap/ji"
+                android:drawablePadding="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:text="13:12(4)" />
+            <!--TODO: 标签-->
+            <LinearLayout
+                android:id="@+id/layout_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ll_flight_info_container"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_plane_type"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="宽体机"
+                android:textColor="#738598"
+                android:textSize="@dimen/sp_14"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_pre"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center"
+            android:text="前飞 \n- -"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tv_eta"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:text="预达 - -"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=" | \n | "
+            />
+        <TextView
+            android:id="@+id/tv_ctot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:text="CTOT - -"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tv_xg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:text="协关 - -"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/btn_task_item_layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            >
+            <TextView
+                android:id="@+id/item_tv_seat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@mipmap/icon_craftseat"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_boarding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_seat"
+                android:drawableLeft="@mipmap/icon_boarding"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_boarding"
+                android:drawableLeft="@mipmap/icon_fly"
+                android:drawablePadding="3dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/item_tv_xingli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/item_tv_type"
+                android:drawableLeft="@mipmap/icon_xingli"
+                android:drawablePadding="3dp"
+                android:text="-" />
+
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_rect_blue_b3d1fb"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="9dp"
+                    android:paddingEnd="9dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/flight" />
+
+                    <TextView
+                        android:id="@+id/tv_plane_info_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:gravity="center_vertical"
+                        android:text="3U8375"
+                        android:textColor="#136BEF"
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_flight_info_container_link"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+                <TextView
+                    android:id="@+id/tv_craft_number_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="12dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black_3"
+                    android:textSize="@dimen/sp_14"
+                    tools:text="B2310" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/btn_blue_press"
+                    android:gravity="center"
+                    android:text="连"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_marginBottom="13dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_operate_type_link"
+                        android:layout_width="@dimen/dp_18"
+                        android:layout_height="@dimen/dp_18"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/li" />
+
+                    <TextView
+                        android:id="@+id/tv_seat_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_5"
+                        android:drawableStart="@mipmap/placement"
+                        android:drawablePadding="@dimen/dp_6"
+                        android:gravity="center_vertical"
+                        android:text="101"
+                        android:textColor="#738598"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_time_link"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableStart="@mipmap/ji"
+                    android:drawablePadding="@dimen/dp_5"
+                    android:gravity="center_vertical"
+                    android:text="13:12(4)" />
+
+                <TextView
+                    android:id="@+id/tv_plane_type_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="宽体机"
+                    android:textColor="#738598"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_ex_report"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="偏离上报"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                />
+
+            <Button
+                android:id="@+id/btn_seat_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="发起清场"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"/>
+
+            <Button
+                android:id="@+id/btn_reopen_load_task"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="重新开启装机"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_flight_safeguard"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_blue_press"
+                android:text="航班保障组"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!--<qx.app.freight.qxappfreight.widget.CollapsableLinearLayout-->
+            <!--android:id="@+id/coll_listview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_step"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:visibility="gone" />
+        <!--</qx.app.freight.qxappfreight.widget.CollapsableLinearLayout>-->
+    </LinearLayout>
+</RelativeLayout>

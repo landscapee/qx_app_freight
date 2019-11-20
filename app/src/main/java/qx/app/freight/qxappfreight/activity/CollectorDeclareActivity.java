@@ -24,9 +24,12 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseParamBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.RecordsBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.contract.BaseParamContract;
+import qx.app.freight.qxappfreight.contract.BaseParamTypeContract;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.BaseParamPresenter;
+import qx.app.freight.qxappfreight.presenter.BaseParamTypePresenter;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -35,7 +38,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
 /**
  * 申报编辑信息
  */
-public class CollectorDeclareActivity extends BaseActivity implements GetWayBillInfoByIdContract.getWayBillInfoByIdView, BaseParamContract.baseParamView {
+public class CollectorDeclareActivity extends BaseActivity implements GetWayBillInfoByIdContract.getWayBillInfoByIdView, BaseParamContract.baseParamView, BaseParamTypeContract.baseParamTypeView {
 
     @BindView(R.id.waybill_id)
     TextView waybillId;
@@ -88,6 +91,9 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     @BindView(R.id.tv_type)
     TextView tvType;
 
+    @BindView(R.id.tv_storage_info)
+    TextView mTvStorageInfo;
+
     private String wayBillId;
     private String taskId;
     private String taskTypeCode;
@@ -102,7 +108,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private String storageOption;//选中得储存类型
     private List<String> resTypeList;
 
+    private List<String> infoList;
+    private List<String> infoTypeList;
+    private String infoType;
+
     private CustomToolbar toolbar;
+
+    private String storage;
 
     @Override
     public int getLayoutId() {
@@ -115,6 +127,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         wayBillId = getIntent().getStringExtra("wayBillId");
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
+        storage = getIntent().getStringExtra("storage");
         initVIew();
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(getIntent().getStringExtra("id"));
@@ -133,6 +146,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         baozhuangList.add("超大件");
         storageList = new ArrayList<>();
         resTypeList = new ArrayList<>();
+        infoList = new ArrayList<>();
+        infoTypeList = new ArrayList<>();
 //        storageList.add("CTU_GARGO_STORAGE_TYPE_001");
 //        storageList.add("CTU_GARGO_STORAGE_TYPE_001");
 //        storageList.add("CTU_GARGO_STORAGE_TYPE_001");
@@ -165,7 +180,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     }
 
-    @OnClick({R.id.btn_commit, R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature})
+    @OnClick({R.id.btn_commit, R.id.ll_baozhuang, R.id.ll_storage_type, R.id.ll_temperature,R.id.ll_storage_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_commit:
@@ -177,6 +192,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             case R.id.ll_storage_type:
                 showStoragePickView();
                 break;
+
+            case R.id.ll_storage_info:
+                showInfoPickView();
+                 break;
+
             case R.id.ll_temperature:
                 showtempretruePickView();
                 break;
@@ -195,6 +215,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @Override
     public void sendPrintMessageResult(String result) {
+
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
 
     }
 
@@ -226,6 +251,24 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         pickerView.show();
     }
 
+    private void showInfoPickView() {
+        OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                if (infoList.size()>0) {
+                    mTvStorageInfo.setText(infoList.get(options1));
+                    infoType = infoTypeList.get(options1);
+                }else {
+                    mTvStorageInfo.setText(null);
+                    ToastUtil.showToast("当前没有库区");
+                }
+            }
+        }).build();
+        pickerView.setPicker(infoList);
+        pickerView.setTitleText("库区");
+        pickerView.show();
+    }
+
     private void showStoragePickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
@@ -238,11 +281,24 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
                     llBaseTemperature.setVisibility(View.GONE);
                     tvTemperature.setText("");
                 }
+                getInfoTypeList(storageOption);
             }
         }).build();
         pickerView.setPicker(storageList);
         pickerView.setTitleText("储存类型");
         pickerView.show();
+    }
+
+    private void  getInfoTypeList(String str){
+        mPresenter = new BaseParamTypePresenter(CollectorDeclareActivity.this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setCurrent(1);
+        entity.setSize(20);
+        RecordsBean mBaseEntity = new RecordsBean();
+        mBaseEntity.setReservoirSaveType(str);
+        mBaseEntity.setCode("ctu_airport_cargo_00001");
+        entity.setFilter(mBaseEntity);
+        ((BaseParamTypePresenter) mPresenter).baseParamType(entity);
     }
 
     private void showtempretruePickView() {
@@ -288,19 +344,25 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 //            mData.setSpecialCargoCode(tvGoodsCode.getText().toString().trim());
             mData.setSpecialCode(tvGoodsCode.getText().toString().trim());
         }
+        if (TextUtils.isEmpty(infoType)){
+            ToastUtil.showToast("请选择库区后再进行下一步");
+            return;
+        }
         try {
             int number = Integer.parseInt(tvTotalNum.getText().toString().trim());
             String weight = tvTotalWeight.getText().toString().trim();
-            int volume = Integer.parseInt(tvTotalVolume.getText().toString().trim());
+            double volume = Double.valueOf(tvTotalVolume.getText().toString().trim());
 //            int jifeiWeight = Integer.parseInt(tvWeight.getText().toString().trim());
 
             mData.setTotalNumber(number);
-            mData.setTotalWeight(Integer.valueOf(weight));
+            mData.setTotalWeight(Double.valueOf(weight));
             mData.setTotalVolume(volume);
 //            mData.setBillingWeight(jifeiWeight);
             mData.setStorageType(storageOption);
             mData.setStorageTypeName(tvStorageType.getText().toString());
             mData.setBigFlag(baozhuangOption);
+            mData.setRepName(mTvStorageInfo.getText().toString());
+            mData.setReservoirType(infoType);
             if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")||storageOption.equals("冷藏")) {
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
             }else
@@ -321,7 +383,11 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         RecordsBean mBaseEntity = new RecordsBean();
         mBaseEntity.setOutletType("ctu_airport_cargo_00001");
         mBaseEntity.setType("11");
+//        mBaseEntity.setReservoirSaveType(storage);
+//        mBaseEntity.setCode("ctu_airport_cargo_00001");
+
         entity.setFilter(mBaseEntity);
+
         ((BaseParamPresenter) mPresenter).baseParam(entity);
     }
 
@@ -376,6 +442,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         tvVolume.setText(String.valueOf(mData.getTotalVolume()));
         tvType.setText(mData.getPackagingType());
 
+        if (!TextUtils.isEmpty(mData.getStorageType())){
+            infoType = mData.getStorageType();
+            getInfoTypeList(mData.getStorageType());
+        }
     }
 
     /**
@@ -384,12 +454,14 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
      * @param
      */
     private void turnToReceiveGoodsActivity() {
-        ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId);
+        ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId,infoType);
     }
 
 
     @Override
     public void baseParamResult(BaseParamBean changeStorageBean) {
+        storageList.clear();
+        resTypeList.clear();
         if (null != changeStorageBean) {
             if (changeStorageBean.getRecords().size() > 0)
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
@@ -397,5 +469,25 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
                     resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
                 }
         }
+    }
+
+    @Override
+    public void baseParamTypeResult(BaseParamBean changeStorageBean) {
+        infoList.clear();
+        infoTypeList.clear();
+        if (null != changeStorageBean) {
+            if (changeStorageBean.getRecords().size() > 0) {
+                mTvStorageInfo.setText(changeStorageBean.getRecords().get(0).getReservoirName());
+                infoType = changeStorageBean.getRecords().get(0).getReservoirSaveType();
+                for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
+                    infoList.add(changeStorageBean.getRecords().get(i).getReservoirName());
+                    infoTypeList.add(changeStorageBean.getRecords().get(i).getReservoirSaveType());
+                }
+            }else {
+                mTvStorageInfo.setText(null);
+                infoType = null;
+            }
+        }else
+            ToastUtil.showToast("数据为空");
     }
 }

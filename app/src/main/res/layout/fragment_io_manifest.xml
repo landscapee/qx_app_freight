@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <qx.app.freight.qxappfreight.widget.CustomToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前扫码库:"
+            android:textColor="@color/black_3"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/tv_warehouse_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="请扫描库房二维码"
+            android:textColor="@color/blue_2e8"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btn_switch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="更换"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_blue_press"
+            />
+    </LinearLayout>
+    <RadioGroup
+        android:id="@+id/tb_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_dynamic_blue"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_in"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_blue_center_a"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="进库单"
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
+
+        <RadioButton
+            android:id="@+id/rb_out"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_blue_center_a"
+            android:button="@null"
+            android:gravity="center"
+            android:text="出库单"
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
+        <RadioButton
+            android:id="@+id/rb_current"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_blue_center_a"
+            android:button="@null"
+            android:gravity="center"
+            android:text="当前库存"
+            android:textColor="@drawable/selector_text_blue_a"
+            android:textSize="14sp"/>
+
+    </RadioGroup>
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+
+
+</LinearLayout>

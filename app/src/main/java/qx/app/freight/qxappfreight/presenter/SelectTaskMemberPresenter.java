@@ -6,11 +6,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
-import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
-import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderContract;
 import qx.app.freight.qxappfreight.contract.SelectTaskMemberContract;
-import qx.app.freight.qxappfreight.model.LoadUnloadLeaderModel;
 import qx.app.freight.qxappfreight.model.SelectTaskMemberModel;
 
 /**

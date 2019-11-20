@@ -60,7 +60,9 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="@dimen/dp_5"
                     android:layout_marginEnd="@dimen/dp_5"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal"
+
+                    />
 
                 <TextView
                     android:id="@+id/tv_flight_1"
@@ -68,21 +70,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="CTU"
-                    android:textColor="@color/black_3" />
+                    android:textColor="@color/black_3"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:layout_marginRight="2dp"
                     android:layout_marginLeft="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/airlane" />
+                    android:src="@mipmap/airlane"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_flight_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MXP"
-                    android:textColor="@color/black_3" />
+                    android:textColor="@color/black_3"
+                    android:visibility="gone"/>
 
 
             </LinearLayout>

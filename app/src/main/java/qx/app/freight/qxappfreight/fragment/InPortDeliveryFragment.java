@@ -112,7 +112,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             mList.addAll(list1);
         } else {
             for (WaybillsBean item : list1) {
-                if (item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -253,7 +253,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
                 return;
             }
         }
-        ToastUtil.showToast("该运单号无效");
+//        ToastUtil.showToast("该运单号无效");
     }
 
     @Override
@@ -281,11 +281,10 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
@@ -319,7 +318,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     }
 
     @Override
-    public void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 

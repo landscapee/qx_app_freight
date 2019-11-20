@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.ouyben.empty.EmptyLayout;
 
 import java.text.SimpleDateFormat;
@@ -25,16 +27,21 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.InstallEquipLeaderAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.DoneTaskEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.bean.response.LoadingAndUnloadBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.LoadAndUnloadTodoContract;
-import qx.app.freight.qxappfreight.contract.LoadUnloadLeaderToDoContract;
 import qx.app.freight.qxappfreight.contract.StevedoresTaskHisContract;
 import qx.app.freight.qxappfreight.presenter.LoadAndUnloadTodoPresenter;
 import qx.app.freight.qxappfreight.presenter.StevedoresTaskHisPresenter;
+import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -46,7 +53,6 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     MultiFunctionRecylerView mMfrvData;
     private List<LoadAndUnloadTodoBean> mList = new ArrayList<>();
     private List<LoadAndUnloadTodoBean> mCacheList = new ArrayList<>();
-    private int mCurrentPage = 1;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private List<LoadAndUnloadTodoBean> mListCache = new ArrayList<>();//推送的缓存任务
     private InstallEquipLeaderAdapter mAdapter;
@@ -55,7 +61,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
     private TaskDoneFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
-
+    private int currentPage = 1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,8 +84,31 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
         mAdapter = new InstallEquipLeaderAdapter(mList);
-        mAdapter.setOnClearSeatListener(position -> {
-            startClearTask(position);
+        mAdapter.setOnClearSeatListener(new InstallEquipLeaderAdapter.OnClearSeatListener() {
+            @Override
+            public void onClearClicked(int position) {
+                showYesOrNoDialog("","确认通知押运清场?",position);
+            }
+
+            @Override
+            public void onFlightSafeguardClick(int position) {
+                IMUtils.chatToGroup(mContext, Tools.groupImlibUid(mList.get(position))+"");
+            }
+
+            @Override
+            public void onUploadPhoto(int position) {
+
+            }
+
+            @Override
+            public void onLookUnloadInstall(int position) {
+
+            }
+
+            @Override
+            public void onLookLoadInstall(int position) {
+
+            }
         });
         mMfrvData.setAdapter(mAdapter);
         loadData();
@@ -111,7 +140,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
             mList.addAll(mCacheList);
         } else {
             for (LoadAndUnloadTodoBean item : mCacheList) {
-                if (item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -123,7 +152,13 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     private void loadData() {
         mPresenter = new StevedoresTaskHisPresenter(this);
-        ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(UserInfoSingle.getInstance().getUserId());
+        BaseFilterEntity<DoneTaskEntity> entity = new BaseFilterEntity();
+        DoneTaskEntity doneTaskEntity = new DoneTaskEntity();
+        doneTaskEntity.setOperatorId(UserInfoSingle.getInstance().getUserId());
+        entity.setCurrent(currentPage);
+        entity.setSize(Constants.PAGE_SIZE);
+        entity.setFilter(doneTaskEntity);
+        ((StevedoresTaskHisPresenter) mPresenter).stevedoresTaskHis(entity);
     }
     /**
      * 发起清场任务
@@ -137,12 +172,39 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         mPresenter = new LoadAndUnloadTodoPresenter(this);
         ((LoadAndUnloadTodoPresenter) mPresenter).startClearTask(entity);
     }
+    /**
+     * 二次确认弹出框
+     *
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title, String msg, int flag) {
+        CommonDialog dialog = new CommonDialog(getActivity());
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            startClearTask(flag);
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
 
+    }
     @Override
     public void onRetry() {
         showProgessDialog("正在加载数据……");
         new Handler().postDelayed(() -> {
-            mCurrentPage = 1;
+            currentPage = 1;
             loadData();
             dismissProgessDialog();
         }, 2000);
@@ -150,7 +212,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void onRefresh() {
-        mCurrentPage = 1;
+        currentPage = 1;
         loadData();
     }
 
@@ -161,19 +223,26 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void stevedoresTaskHisResult(List<LoadAndUnloadTodoBean> loadAndUnloadTodoBean) {
-        mCacheList.clear();
-        if (mCurrentPage == 1) {
+
+        if (currentPage == 1) {
+            mCacheList.clear();
             mMfrvData.finishRefresh();
         } else {
             mMfrvData.finishLoadMore();
         }
-        mCurrentPage++;
+        currentPage++;
         for (LoadAndUnloadTodoBean bean : loadAndUnloadTodoBean) {
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
-            if (bean.getRelateInfoObj() !=null){
+            if (bean.getRelateInfoObj() != null) {
                 StringUtil.setTimeAndType(bean.getRelateInfoObj());//设置对应的时间和时间图标显示
                 StringUtil.setFlightRoute(bean.getRelateInfoObj().getRoute(), bean.getRelateInfoObj());//设置航班航线信息
+                if (!StringUtil.isEmpty(bean.getRelateInfoObj().getLoadingAndUnloadExtJson())){
+                    bean.getRelateInfoObj().setLoadingAndUnloadBean(JSON.parseObject(bean.getRelateInfoObj().getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
+                }
+            }
+            if (!StringUtil.isEmpty(bean.getLoadingAndUnloadExtJson())){
+                bean.setLoadingAndUnloadBean(JSON.parseObject(bean.getLoadingAndUnloadExtJson(), LoadingAndUnloadBean.class));
             }
             //将服务器返回的领受时间、到位时间、开舱门时间、开始装卸机-结束装卸机时间、关闭舱门时间用数组存储，遍历时发现“0”或包含“：0”出现，则对应的步骤数为当前下标
             List<String> times = new ArrayList<>();
@@ -196,6 +265,7 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
                 entity1.setFlightType(bean.getFlightType());
                 entity1.setItemType(Constants.TYPE_STEP_OVER);
                 entity1.setStepDoneDate("0".equals(times.get(i)) ? "" : sdf.format(new Date(Long.valueOf(times.get(i)))));
+                entity1.setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
             }
             mCacheList.add(bean);
         }
@@ -220,11 +290,10 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void toastView(String error) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override

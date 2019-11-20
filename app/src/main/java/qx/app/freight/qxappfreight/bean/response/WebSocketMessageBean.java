@@ -30,6 +30,6 @@ public class WebSocketMessageBean {
     private int readingStatus;
 
     private int specialFlag;// 2 特殊
-    private String messageName;// BEFOREHAND_IN_SCOOTER_NUMBER 代表 分拣板车入库数量变化
+    private String messageName;// BEFOREHAND_IN_SCOOTER_NUMBER 代表 分拣板车入库数量变化 //CLIPPING_WEIGHTER_ERROR_NOTICE 负重异常
 
 }

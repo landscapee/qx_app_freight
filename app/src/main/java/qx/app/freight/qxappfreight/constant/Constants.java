@@ -106,6 +106,9 @@ public class Constants {
     // 位置信息
     public static final String POSITION = "position";
 
+    // 平板车-状态值
+    public static final String SCOOTER_P = "9";
+
     //====================================================广播接收======================================================
     public static final String ACTION = "android.intent.ACTION_DECODE_DATA";
 
@@ -136,7 +139,7 @@ public class Constants {
     public static final String SACN_DATA = "scan_data";
 
     //===================================================分页数据获取条数======================================================
-    public static final int PAGE_SIZE = 100;//列表分页获取的单页最大的数量
+    public static final int PAGE_SIZE = 999;//列表分页获取的单页最大的数量
 
 
     public static final int SCOOTER_NO_LENGTH = 5;//板车号长度
@@ -165,7 +168,7 @@ public class Constants {
 
     public static final String TP_TYPE_CLEAR = "clear";//清场任务
 
-    public static final String TP_TYPE_TEMP = "temp_task";//临时任务
+    public static final String TP_TYPE_TEMP = "temp";//临时任务
 
     /**
      * 装卸机 运输 结载 步骤操作code
@@ -177,6 +180,10 @@ public class Constants {
     public static final String TP_START = "CargoOutTransportStart";    //运输开始
     public static final String TP_END = "CargoOutTransportEnd";    //运输 结束
 
+
+    public static final int SCAN_UNLOAD = 3;//卸机扫版 类型
+    public static final int SCAN_XINGLI = 1;//行李上报扫版 类型
+    public static final int SCAN_HUOWU = 2;//卸货物上报扫版 类型
     /**
      *  * 待运区
      *  
@@ -228,6 +235,21 @@ public class Constants {
     public static final int TYPE_PULL_BACK_FAILED = 2;
 
 
-    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";  //已到板车数量变化字段
+    /**
+     * //已到板车数量变化字段
+     */
+    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";
 
+    /**
+     * 新装机单更新
+     */
+    public static String NEW_INSTALL_UPDATE = "new_install_update";
+
+    public static final String DANGER = "DGR";// 危险品
+
+    public static final String YCS = "压舱沙";//压舱沙
+
+
+    //心跳时间
+    public static final int TIME_HEART = 10000;
 }

@@ -2,11 +2,7 @@ package qx.app.freight.qxappfreight.listener;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
@@ -24,14 +20,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import qx.app.freight.qxappfreight.activity.LoginActivity;
-import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketResultBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.ActManager;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
+import qx.app.freight.qxappfreight.utils.StringUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.WebSocketUtils;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
@@ -46,7 +42,6 @@ public class PreplanerClient extends StompClient {
     private Context mContext;
     private Timer mTimer;
     private TimerTask mTimerTask;
-
     public PreplanerClient(String uri, Context mContext) {
         super(new CollectionClient.GetConnectionProvider());
         this.mContext = mContext;
@@ -69,28 +64,31 @@ public class PreplanerClient extends StompClient {
                         case OPENED:
                             WebSocketService.isTopic = true;
                             WebSocketService.mStompClient.add(my);
-                            sendMess(my);
+                            sendMess(my,uri);
                             Log.e(TAG, "webSocket  组板 打开");
                             break;
                         case ERROR:
                             Log.e(TAG, "websocket 组板 出错", lifecycleEvent.getException());
-                            if (mTimer != null)
-                                mTimer.cancel();
+                            WebSocketService.mStompClient.remove(my);
                             WebSocketService.isTopic = false;
-                            connect(uri);
                             break;
                         case CLOSED:
                             Log.e(TAG, "websocket 组板 关闭");
-                            if (mTimer != null)
-                                mTimer.cancel();
                             WebSocketService.isTopic = false;
-                            resetSubscriptions();
-//                            connect(uri);
+                            if (UserInfoSingle.getInstance().getUserId() == null|| StringUtil.isEmpty(UserInfoSingle.getInstance().getUserId())){
+                                if (mTimerTask!= null){
+                                    mTimerTask.cancel();
+                                    mTimerTask= null;
+                                }
+                                if (mTimer != null){
+                                    mTimer.purge();
+                                    mTimer.cancel();
+                                    mTimer = null;
+                                }
+                            }
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(TAG, "Stomp failed server heartbeat");
-                            if (mTimer != null)
-                                mTimer.cancel();
                             WebSocketService.isTopic = false;
                             break;
                     }
@@ -103,6 +101,9 @@ public class PreplanerClient extends StompClient {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->代办 " + topicMessage.getPayload());
+                        // 消息回执
+                        WebSocketUtils.pushReceipt(my,compositeDisposable,topicMessage.getStompHeaders().get(0).getValue());
+
                         WebSocketResultBean mWebSocketBean = mGson.fromJson(topicMessage.getPayload(), WebSocketResultBean.class);
                         sendReshEventBus(mWebSocketBean);
                     }, throwable -> Log.e(TAG, "websocket-->代办失败", throwable));
@@ -115,7 +116,7 @@ public class PreplanerClient extends StompClient {
                     .subscribe(topicMessage -> {
                         Log.d(TAG, "websocket-->登录 " + topicMessage.getPayload());
                         if (null != topicMessage.getPayload()) {
-                            showDialog();
+                            Tools.showDialog(mContext);
                         }
                     }, throwable -> {
                         Log.e(TAG, "websocket-->登录失败", throwable);
@@ -141,17 +142,35 @@ public class PreplanerClient extends StompClient {
         EventBus.getDefault().post(bean);
     }
 
-    public void sendMess(StompClient my) {
+    public void sendMess(StompClient my,String uri) {
+        if (mTimerTask!= null){
+            mTimerTask.cancel();
+            mTimerTask= null;
+        }
+        if (mTimer != null){
+            mTimer.purge();
+            mTimer.cancel();
+            mTimer = null;
+        }
         mTimer = new Timer();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
+                if (!WebSocketService.isTopic){
+                    reConnect1(uri);
+                }
                 Log.e("websocket", "发送消息" + jsonObject.toJSONString());
+
             }
         };
-        mTimer.schedule(mTimerTask, 20000, 30000);
+        mTimer.schedule(mTimerTask, Constants.TIME_HEART, Constants.TIME_HEART);
+    }
+    public void reConnect1(String uri) {
+        WebSocketService.subList.clear();
+        connect(uri);
+        Log.e("websocket", "心跳失败 正在重连……");
     }
 
     private void resetSubscriptions() {
@@ -185,29 +204,7 @@ public class PreplanerClient extends StompClient {
         }
     }
 
-    private void showDialog() {
-        CommonDialog dialog = new CommonDialog(mContext);
-        dialog.setTitle("提示")
-                .setMessage("你的账号在其他地方登陆！请重新登陆")
-                .setNegativeButton("确定")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
-                .setOnClickListener((dialog1, confirm) -> loginOut());
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> dialog.show());
-    }
 
-    //强制登出
-    private void loginOut() {
-        UserInfoSingle.setUserNil();
-        ActManager.getAppManager().finishAllActivity();
-        WebSocketService.stopServer(MyApplication.getContext());
-        Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        mContext.startActivity(intent);
-
-    }
 
     //消息推送
     public void sendMessageEventBus(WebSocketMessageBean bean) {

@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -329,6 +327,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
         mData.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
         mData.setReWeighedTime(System.currentTimeMillis());
+//        mData.setCurrentStep(mData.getTaskTypeCode());
         //提交弹窗
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")
