@@ -162,24 +162,13 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     }
 
     private void searchWaybill(String toString) {
-        if (toString.contains("DN")){
-            if (!StringUtil.isEmpty(toString)&&toString.length()==11)
+            if (!StringUtil.isEmpty(toString)&&toString.length()>=4)
                 loadData(toString);
             else {
-                ToastUtil.showToast("请输入正确的运单号");
+                ToastUtil.showToast("请输入至少4位运单号");
                 list.clear();
                 adapter.notifyDataSetChanged();
             }
-        }
-        else {
-            if (!StringUtil.isEmpty(toString)&&toString.length()==12)
-                loadData(toString);
-            else {
-                ToastUtil.showToast("请输入正确的运单号");
-                list.clear();
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 
     private void trunToCollectorActivity(TransportDataBase bean) {
@@ -339,6 +328,16 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     @Override
     public void transportListContractResult(TransportListBean transportListBeans) {
         if (transportListBeans != null&&transportListBeans.getRecords().size()>0){
+
+            //出现不相同运单号
+            String watbillCode =  transportListBeans.getRecords().get(0).getWaybillCode();
+            for (TransportDataBase transportDataBase:transportListBeans.getRecords()){
+                if (watbillCode!=null&& !watbillCode.equals(transportDataBase.getWaybillCode())){
+                    ToastUtil.showToast("请输入更加完整的运单号");
+                    return;
+                }
+            }
+            etWaybillCode.setText("");
             if (transportListBeans.getRecords().size() == 1)
                 trunToCollectorActivity(transportListBeans.getRecords().get(0));
             else {

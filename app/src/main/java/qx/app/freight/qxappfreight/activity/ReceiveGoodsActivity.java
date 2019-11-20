@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
@@ -164,13 +166,46 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mBtnReceiveGood.setOnClickListener(v -> {
             if (!Tools.isFastClick())
                 return;
-            commit();
+            if ("普货".equals(mDeclare.getStorageTypeName()))
+                commit();
+            else
+                showYesOrNoDialog("提示","当前存储类型为"+mDeclare.getStorageTypeName()+"，确认提交？",0);
+
+
         });
         getAutoReservoir();
         initView();
         initPopupWindow();
     }
 
+    /**
+     * 二次确认弹出框
+     *
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title, String msg, int flag) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            commit();
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+
+    }
     public void getAutoReservoir() {
         mPresenter = new AgentTransportationListPresent(this);
         BaseFilterEntity entity = new BaseFilterEntity();

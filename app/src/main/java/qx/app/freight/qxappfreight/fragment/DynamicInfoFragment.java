@@ -91,6 +91,10 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
             strSearch = text;
             seachByText(strSearch);
         });
+        searchToolbar.getCloseView().setOnClickListener(v -> {
+            searchToolbar.getSearchView().setText("");
+//            seachByText("");
+        });
 
         type = getArguments().getString("type");
         movement = getArguments().getString("movement");

@@ -56,7 +56,7 @@ public class NoticeActivity extends BaseActivity implements FindUserNoticeByPage
     private void initTitle() {
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
-        toolbar.setMainTitle(Color.WHITE, "消息提醒");
+        toolbar.setMainTitle(Color.WHITE, "通知公告");
     }
 
     private void initView() {
