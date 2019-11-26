@@ -81,7 +81,7 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
     private int flightId;
     private String flightNo;
-    private List<MilepostBean> mList = new ArrayList<>();
+    private List <MilepostBean> mList = new ArrayList <>();
     private FlightFinishAdapter mAdapter;
 
     public static void startActivity(Activity context, int flightId, String flightNo) {
@@ -107,7 +107,7 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
             toolbar.setMainTitle(Color.WHITE, flightNo);
         else
             toolbar.setMainTitle(Color.WHITE, "航班号为空");
-        //点击新增跳转
+
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
 
         initView();
@@ -117,10 +117,18 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
     }
 
     private void initData() {
+        tvFlight.setText(flightNo + "");
         mPresenter = new FlightInfoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setFlightId(String.valueOf(flightId));
         ((FlightInfoPresenter) mPresenter).flightInfo(entity);
+
+    }
+
+    private void getMilepostData() {
+        mPresenter = new FlightInfoPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setFlightId(String.valueOf(flightId));
         ((FlightInfoPresenter) mPresenter).getMilepostData(entity);
     }
 
@@ -132,6 +140,7 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
     @Override
     public void flightInfoResult(FlightInfoBean flightInfoBean) {
+        getMilepostData();
         if (null != flightInfoBean) {
             //航空公司
             tvAirlinceCompany.setText(flightInfoBean.getAirlines());
@@ -139,7 +148,8 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
             tvOriginating.setText(flightInfoBean.getRoutes().get(0));
             //到达位置
             int despost = flightInfoBean.getRoutes().size();
-            tvDestination.setText(flightInfoBean.getRoutes().get(despost - 1));
+            if (despost > 1)
+                tvDestination.setText(flightInfoBean.getRoutes().get(despost - 1));
             // 进港 A- -  计划起飞 - 实际起飞    //进港行李， 离港登机口
             if ("A".equals(flightInfoBean.getMovement())) {
                 tvLuggage.setText("行李");
@@ -169,24 +179,27 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
                 tvEndTime.setText(String.format(getString(R.string.format_dynamic_info)
                         //预计起飞
-                        ,TimeUtils.date2Tasktime3(flightInfoBean.getEtd())
+                        , TimeUtils.date2Tasktime3(flightInfoBean.getEtd())
                         //预计到达
-                        ,TimeUtils.date2Tasktime3(flightInfoBean.getEta())));
+                        , TimeUtils.date2Tasktime3(flightInfoBean.getEta())));
             }
             //机位
             tvSeatNub.setText(StringUtil.isEmpty(flightInfoBean.getSeat()) ? "- -" : flightInfoBean.getSeat());
-            //跑道
-            tvRunwayNub.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getRvr()) ? "- -" : flightInfoBean.getWeather().getRvr());
-            //温度
-            tvTemperature.setText(flightInfoBean.getWeather().getTemperature() + "℃");
-            //能见度
-            tvVisibility.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getVisib()) ? "- -" : flightInfoBean.getWeather().getVisib());
-            //风速
-            tvWindspeed.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getWindSpeed()) ? "- -" : flightInfoBean.getWeather().getWindSpeed());
-            //风级
-            tvWindgrade.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getWindPower()) ? "- -" : flightInfoBean.getWeather().getWindPower());
-            //发布时间
-            tvReleasetime.setText("发布时间:" + flightInfoBean.getWeather().getReportTime());
+            if (flightInfoBean.getWeather() != null) {
+                //跑道
+                tvRunwayNub.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getRvr()) ? "- -" : flightInfoBean.getWeather().getRvr());
+                //温度
+                tvTemperature.setText(flightInfoBean.getWeather().getTemperature() + "℃");
+                //能见度
+                tvVisibility.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getVisib()) ? "- -" : flightInfoBean.getWeather().getVisib());
+                //风速
+                tvWindspeed.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getWindSpeed()) ? "- -" : flightInfoBean.getWeather().getWindSpeed());
+                //风级
+                tvWindgrade.setText(StringUtil.isEmpty(flightInfoBean.getWeather().getWindPower()) ? "- -" : flightInfoBean.getWeather().getWindPower());
+                //发布时间
+                tvReleasetime.setText("发布时间:" + flightInfoBean.getWeather().getReportTime());
+            }
+
         }
 
     }
@@ -209,7 +222,7 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
             }
         }
         mList.clear();
-        mList.addAll(flightServiceBean.getFlightMilepostlist());
+        mList.addAll(flightServiceBean.getFlightMilepostList());
         if (mAdapter == null) {
             mAdapter = new FlightFinishAdapter(this, mList, this);
             mListview.setAdapter(mAdapter);
@@ -254,3 +267,4 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
     }
 }
+

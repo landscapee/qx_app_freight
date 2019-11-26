@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class FlightServiceBean implements Serializable {
     private String completionDegree;
-    private List<MilepostBean> flightMilepostlist;
+    private List<MilepostBean> flightMilepostList;
 
 
 }

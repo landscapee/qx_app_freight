@@ -118,6 +118,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             if (mTaskFragment != null){
                 mTaskFragment.setTitleText(list1.size());
                 searchToolbar = mTaskFragment.getSearchView();
+                mTaskFragment.getToolbar().setRightIconViewVisiable(true);
+                mTaskFragment.getToolbar().setleftIconViewVisiable(true);
+                mTaskFragment.setTitleText();
             }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {

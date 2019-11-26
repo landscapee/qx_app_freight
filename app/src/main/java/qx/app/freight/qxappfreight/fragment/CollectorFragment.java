@@ -97,8 +97,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         super.onActivityCreated(savedInstanceState);
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
-        mTaskFragment.getToolbar().setRightIconView(View.GONE,R.mipmap.search,v->{});
-        mTaskFragment.getToolbar().setLeftIconView(View.GONE, R.mipmap.richscan, v -> {});
+        mTaskFragment.getToolbar().setleftIconViewVisiable(false);
+        mTaskFragment.getToolbar().setRightIconViewVisiable(false);
         mTaskFragment.setTitleText();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
 //        mMfrvData.setRefreshListener(this);
@@ -261,14 +261,27 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("CollectorFragment")&&isShow) {
-            String[] parts = daibanCode.split("\\/");
-            List<String> strsToList = Arrays.asList(parts);
-            if (strsToList.size() >= 4) {
-                searchWaybill(strsToList.get(3));
+        if (!TextUtils.isEmpty(result.getFunctionFlag())){
+            if (!TextUtils.isEmpty(result.getData()) &&(result.getFunctionFlag().equals("CollectorFragment")||result.getFunctionFlag().equals("MainActivity"))&&isShow) {
+                String[] parts = daibanCode.split("\\/");
+                List<String> strsToList = Arrays.asList(parts);
+                if (strsToList.size() >= 4) {
+                    searchWaybill(strsToList.get(3));
 //                chooseCode(strsToList.get(3));
+                }
             }
         }
+        else {
+            if (!TextUtils.isEmpty(result.getData())&&isShow) {
+                String[] parts = daibanCode.split("\\/");
+                List<String> strsToList = Arrays.asList(parts);
+                if (strsToList.size() >= 4) {
+                    searchWaybill(strsToList.get(3));
+//                chooseCode(strsToList.get(3));
+                }
+            }
+        }
+
     }
 
     //收运接受到推送增加或者删除数据
@@ -364,9 +377,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-//        if (isShow) {
-//            setSearchToolbar();
-//        }
+        if (isShow) {
+            setSearchToolbar();
+        }
     }
 
     public void setSearchToolbar(){
@@ -376,6 +389,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list1.size());
                 searchToolbar = mTaskFragment.getSearchView();
+                mTaskFragment.getToolbar().setleftIconViewVisiable(false);
+                mTaskFragment.getToolbar().setRightIconViewVisiable(false);
+                mTaskFragment.setTitleText();
             }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单号", text -> {

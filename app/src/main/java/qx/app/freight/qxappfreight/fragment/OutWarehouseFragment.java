@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -40,6 +43,10 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
 
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
+    @BindView(R.id.et_search)
+    EditText etSearch;
+    private String strSearch = "";
+    private List <SmInventoryEntryandexit> mListSearch = new ArrayList <>();
 
     private List <SmInventoryEntryandexit> mList = new ArrayList <>();
     private IOManifestAdapter ioManifestAdapter;
@@ -63,10 +70,27 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        ioManifestAdapter = new IOManifestAdapter(mList);
+        ioManifestAdapter = new IOManifestAdapter(mListSearch);
         mMfrvData.setAdapter(ioManifestAdapter);
         ioManifestAdapter.setOnDoitClickListener((view1, position) -> {
-            DoItIOManifestActivity.startActivity(getActivity(), mList.get(position));
+            DoItIOManifestActivity.startActivity(getActivity(), mListSearch.get(position));
+        });
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                strSearch = etSearch.getText().toString();
+                bySearchList(mList);
+            }
         });
         loadData(pageCurrent);
     }
@@ -116,7 +140,16 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
             loadData(1);
         }
     }
+    private void bySearchList(List <SmInventoryEntryandexit> mList){
+        mListSearch.clear();
+        for (SmInventoryEntryandexit smInventoryEntryandexit:mList){
+            if (smInventoryEntryandexit.getWaybillCode().contains(strSearch)){
+                mListSearch.add(smInventoryEntryandexit);
+            }
+        }
+        mMfrvData.notifyForAdapter(ioManifestAdapter);
 
+    }
     @Override
     public void setManifestResult(List <SmInventoryEntryandexit> result) {
 
@@ -130,7 +163,7 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
                 pageCurrent++;
             mList.addAll(result);
         }
-        mMfrvData.notifyForAdapter(ioManifestAdapter);
+        bySearchList(mList);
 
     }
 

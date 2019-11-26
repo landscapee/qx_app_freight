@@ -139,7 +139,7 @@ public class Constants {
     public static final String SACN_DATA = "scan_data";
 
     //===================================================分页数据获取条数======================================================
-    public static final int PAGE_SIZE = 999;//列表分页获取的单页最大的数量
+    public static final int PAGE_SIZE = 9999;//列表分页获取的单页最大的数量
 
 
     public static final int SCOOTER_NO_LENGTH = 5;//板车号长度
