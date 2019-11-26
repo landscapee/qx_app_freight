@@ -77,6 +77,17 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     LinearLayout llBottom;
     @BindView(R.id.gh_user)
     TextView GhUser;
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+
 
     private String mImageHead;//头像路径
     private String fileName;
@@ -115,6 +126,28 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
         initData();
+        setWaybillInfo(mBean);
+    }
+
+    private void setWaybillInfo(TransportDataBase mBean) {
+        if (mBean!=null){
+            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCargoCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCargoCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  "+mBean.getTotalNumber());
+            tvWeight.setText("重量:  "+mBean.getTotalWeight());
+        }
+        else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
+
     }
 
     private void initData() {

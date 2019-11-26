@@ -206,11 +206,25 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         initView();
         //提交
         mBtnCommit.setOnClickListener(v -> {
-            if ("".equals(mEdtNumber.getText().toString().trim())) {
+            if (StringUtil.isEmpty(mEdtNumber.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入件数");
-            } else if ("".equals(mEdtNumber.getText().toString().trim())) {
+            } else if (StringUtil.isEmpty(mTvWeight.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入重量");
             } else {
+                if (Integer.valueOf(mEdtNumber.getText().toString()) <= 0){
+                    ToastUtil.showToast(this, "件数不能为0");
+                    return;
+                }
+                if (StringUtil.isDouble(mTvWeight.getText().toString())){
+                    if (Double.valueOf(mTvWeight.getText().toString()) <= 0){
+                        ToastUtil.showToast(this, "重量不能为0");
+                        return;
+                    }
+                }
+                else {
+                    ToastUtil.showToast(this, "请输入合法的重量");
+                    return;
+                }
                 finishForResult();
             }
         });
@@ -352,7 +366,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         } else {
             mMyAgentListBean.setVolume(Double.valueOf(mEdtVolume.getText().toString().trim()));
         }
-        //重量
         if ("".equals(mTvWeight.getText().toString())) {
             mMyAgentListBean.setWeight(0);
         } else {

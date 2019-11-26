@@ -65,11 +65,11 @@ public class FlightFinishAdapter extends BaseAdapter {
             holder.mItemLayoutLeft.setVisibility(View.INVISIBLE);
             holder.mItemLayoutRight.setVisibility(View.VISIBLE);
             holder.mTvContentRight.setText(model.getMilestoneName());
-            holder.mTvTimeRight.setText(Tools.returnTime(model.getCreateTime()) + "|" + Tools.returnTime(model.getActualTime()));
+            holder.mTvTimeRight.setText(Tools.returnTime(model.getEstimatedTime()) + "|" + Tools.returnTime(model.getActualTime()));
             setBubbColor(holder.mTvContentRight, holder.mRound, model);
         } else {
             holder.mTvContentLeft.setText(model.getMilestoneName());
-            holder.mTvTimeLeft.setText(Tools.returnTime(model.getCreateTime()) + "|" + Tools.returnTime(model.getActualTime()));
+            holder.mTvTimeLeft.setText(Tools.returnTime(model.getEstimatedTime()) + "|" + Tools.returnTime(model.getActualTime()));
             holder.mItemLayoutLeft.setVisibility(View.VISIBLE);
             holder.mItemLayoutRight.setVisibility(View.INVISIBLE);
             setBubbColor(holder.mTvContentLeft, holder.mRound, model);

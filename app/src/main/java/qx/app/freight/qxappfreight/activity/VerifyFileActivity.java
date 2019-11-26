@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.presenter.AirlineRequirePresenter;
 import qx.app.freight.qxappfreight.presenter.SubmissionPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -56,7 +57,16 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     TextView mTvWenjian;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
 
     private VerifyFileAdapter mAdapter;
     private List<AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList<>();
@@ -102,6 +112,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     private void initData() {
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        setWaybillInfo(mBean);
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
         mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         mFilePath = getIntent().getStringExtra("filePath");
@@ -152,6 +163,26 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                     }
             );
         }
+    }
+    private void setWaybillInfo(TransportDataBase mBean) {
+        if (mBean!=null){
+            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCargoCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCargoCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  "+mBean.getTotalNumber());
+            tvWeight.setText("重量:  "+mBean.getTotalWeight());
+        }
+        else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
+
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
