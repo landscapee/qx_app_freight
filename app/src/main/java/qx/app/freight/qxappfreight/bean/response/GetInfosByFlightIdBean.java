@@ -104,6 +104,10 @@ public class GetInfosByFlightIdBean implements Serializable {
          * 复重称重完成时间
          */
         private long reWeighedTime;
+        /**
+         * 是否是宽体机
+         */
+        private String flightBody;
 
         /**
          *包含的运单数据

@@ -9,6 +9,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -62,6 +63,7 @@ import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
@@ -502,6 +504,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<AirlineRequireBean>> airlineRequire(BaseFilterEntity model) {
         return transform(getService().airlineRequire(model));
+    }
+    /****
+     * 根据品名id list 获取 证明清单
+     * @param goodsNames
+     * @return
+     */
+
+    public Observable<List<DocumentsBean>> getgetCommdityById(GoodsIdEntity goodsNames) {
+        return transform(getService().getgetCommdityById(goodsNames));
     }
 
     /*****

@@ -94,7 +94,7 @@
                 android:text="操作"
                 android:textColor="#737B8B"
                 android:textSize="13sp"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </LinearLayout>
 

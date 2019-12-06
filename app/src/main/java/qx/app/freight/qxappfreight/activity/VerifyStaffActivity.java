@@ -133,8 +133,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (mBean!=null){
             tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
             tvGoodsName.setText("品名:  "+mBean.getCargoCn());
-            if (!StringUtil.isEmpty(mBean.getSpecialCargoCode()))
-                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCargoCode());
+            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
             else
                 tvSpecialCode.setText("特货代码:  - -");
             tvNumber.setText("件数:  "+mBean.getTotalNumber());

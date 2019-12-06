@@ -138,6 +138,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             recyclerView.setAdapter(madapter);
         }
         switch (mData.getReWeightFinish()){
+            case 2:
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
                 tvNameFront.setText(mData.getScooterCode());
@@ -167,10 +168,6 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 break;
             case 1:
                 ToastUtil.showToast("该板车已复重");
-                finish();
-                break;
-            case 2:
-                ToastUtil.showToast("该板车复重异常");
                 finish();
                 break;
         }
@@ -204,7 +201,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 }else {
                     changeClicked(true);
                 }
-                if (StringUtil.isDouble(ss)){
+                if (TextUtils.isEmpty(ss)||StringUtil.isDouble(ss)){
                     calculateWeight();
                 }
             }
@@ -293,8 +290,12 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 保存班车信息
      */
     private void saveScooter() {
-        String textInfo;
 
+        if (crossWeight<mData.getScooterWeight()){
+            ToastUtil.showToast("毛重不能小于板车自重");
+            return;
+        }
+        String textInfo;
         if (-3>dRate||dRate>3){
             textInfo = "本板复重误差超过±3%，不予放行";
         }else {
@@ -413,8 +414,23 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         goodsWeight =CalculateUtil.doubleSave2(crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight));
         //复重差值 = 复重净重 - 组板净重
         dValue =CalculateUtil.doubleSave2(goodsWeight -mData.getWeight());
-        //复重差率=（（复重净重-组板净重）/组板净重）*100%
-        dRate =  CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
+
+        if (!TextUtils.isEmpty(mData.getUldCode()) && mData.getWeight() == 0){ //处理空箱 数据
+            dRate = 0;
+        }
+        else {
+            //复重差率=（（复重净重-组板净重）/组板净重）*100%
+            dRate =  CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
+        }
+
+        if ("ABC".contains(mData.getFlightBody())&&(dValue > 30||dValue< -30)){
+            tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
+        }
+        else if ("EF".contains(mData.getFlightBody())&&(dValue > 50||dValue<-50)){
+            tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
+        }
+        else
+            tvDvalueFront.setTextColor(getResources().getColor(R.color.black_3));
 
         //复磅差值
         tvDvalueFront.setText(dValue+"kg");

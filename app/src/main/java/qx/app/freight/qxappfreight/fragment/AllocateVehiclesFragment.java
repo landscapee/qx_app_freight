@@ -59,8 +59,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     private AllocateVehiclesAdapter adapter;
 
-    private List<TransportDataBase> list; //条件list
-    private List<TransportDataBase> list1; //原始list
+    private List <TransportDataBase> list; //条件list
+    private List <TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
     private String searchString = "";//条件搜索关键字
@@ -77,7 +77,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         return view;
     }
 
-//    @Override
+    //    @Override
 //    public void onResume() {
 //        super.onResume();
 //        getData();
@@ -96,6 +96,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
+
         initTitle();
 //        setUserVisibleHint(true);
     }
@@ -110,24 +111,26 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         }
     }
 
-    private void initTitle(){
-            if (mTaskFragment == null){
-                mTaskFragment = (TaskFragment) getParentFragment();
+    private void initTitle() {
+        if (!isShow)
+            return;
+        if (mTaskFragment == null) {
+            mTaskFragment = (TaskFragment) getParentFragment();
 
-            }
-            if (mTaskFragment != null){
-                mTaskFragment.setTitleText(list1.size());
-                searchToolbar = mTaskFragment.getSearchView();
-                mTaskFragment.getToolbar().setRightIconViewVisiable(true);
-                mTaskFragment.getToolbar().setleftIconViewVisiable(true);
-                mTaskFragment.setTitleText();
-            }
-            if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入航班号", text -> {
-                    searchString = text;
-                    seachWithNum();
-                });
-            }
+        }
+        if (mTaskFragment != null) {
+            mTaskFragment.setTitleText(list1.size());
+            searchToolbar = mTaskFragment.getSearchView();
+            mTaskFragment.getToolbar().setRightIconViewVisiable(true);
+            mTaskFragment.getToolbar().setleftIconViewVisiable(true);
+            mTaskFragment.setTitleText();
+        }
+        if (searchToolbar != null) {
+            searchToolbar.setHintAndListener("请输入航班号", text -> {
+                searchString = text;
+                seachWithNum();
+            });
+        }
 
     }
 
@@ -138,7 +141,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             list.addAll(list1);
         } else {
             for (TransportDataBase item : list1) {
-                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo() != null && item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }
@@ -175,8 +178,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     private void initData() {
-        list = new ArrayList<>();
-        list1 = new ArrayList<>();
+        list = new ArrayList <>();
+        list1 = new ArrayList <>();
         adapter = new AllocateVehiclesAdapter(list, getContext());
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setOnRetryLisenter(this);
@@ -202,7 +205,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //        {"stepOwner":"uef9de97d6c53428c946089d63cfaaa4c","undoType":2,"roleCode":"weighter","ascs":["ETD"]}
         entity.setRoleCode(Constants.WEIGHTER);
         entity.setUndoType(2);
-        List<String> ascs = new ArrayList<>();
+        List <String> ascs = new ArrayList <>();
         ascs.add("ETD");
         entity.setAscs(ascs);
         ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
@@ -267,15 +270,15 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
-                String daibanCode = result.getData();
-                getScooterByScooterCode(daibanCode);
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity") && isShow) {
+            String daibanCode = result.getData();
+            getScooterByScooterCode(daibanCode);
         }
 
     }
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
+    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
         //因为没有分页，不做分页判断
         list1.clear();
 
@@ -293,12 +296,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     @Override
-    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
-        if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
-            if (getInfosByFlightIdBeans.size() == 1){
+    public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+        if (getInfosByFlightIdBeans != null && getInfosByFlightIdBeans.size() > 0) {
+            if (getInfosByFlightIdBeans.size() == 1) {
                 startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
-            }
-            else {
+            } else {
                 ChooseFlightDialog dialog = new ChooseFlightDialog();
                 dialog.setChooseDialogInterface(position -> {
                     if (getInfosByFlightIdBeans.get(position) != null) {
@@ -309,8 +311,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                 dialog.show(getActivity().getSupportFragmentManager(), "123");
             }
 
-        }
-        else {
+        } else {
             ToastUtil.showToast("没有查询到相应的板车");
         }
 

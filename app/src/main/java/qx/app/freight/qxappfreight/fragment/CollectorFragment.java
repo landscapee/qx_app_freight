@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +48,6 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.contract.TransportListContract;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListPresenter;
-import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -58,7 +56,7 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
 /****
  * 收运
  */
-public class CollectorFragment extends BaseFragment implements TaskLockContract.taskLockView, TransportListContract.transportListContractView, GetWayBillInfoByIdContract.getWayBillInfoByIdView,MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class CollectorFragment extends BaseFragment implements TaskLockContract.taskLockView, TransportListContract.transportListContractView, GetWayBillInfoByIdContract.getWayBillInfoByIdView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     RecyclerView mMfrvData;
 
@@ -66,8 +64,8 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     ImageView ivScan;
 
     private MainListRvAdapter adapter;
-    private List<TransportDataBase> list1 = new ArrayList<>();
-    private List<TransportDataBase> list = new ArrayList<>();
+    private List <TransportDataBase> list1 = new ArrayList <>();
+    private List <TransportDataBase> list = new ArrayList <>();
     private int pageCurrent = 1;
     private String seachString = "";
     private TaskFragment mTaskFragment;
@@ -95,11 +93,11 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTaskFragment = (TaskFragment) getParentFragment();
-        searchToolbar = mTaskFragment.getSearchView();
-        mTaskFragment.getToolbar().setleftIconViewVisiable(false);
-        mTaskFragment.getToolbar().setRightIconViewVisiable(false);
-        mTaskFragment.setTitleText();
+//        mTaskFragment = (TaskFragment) getParentFragment();
+//        searchToolbar = mTaskFragment.getSearchView();
+//        mTaskFragment.getToolbar().setleftIconViewVisiable(false);
+//        mTaskFragment.getToolbar().setRightIconViewVisiable(false);
+//        mTaskFragment.setTitleText();
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
 //        mMfrvData.setRefreshListener(this);
 //        mMfrvData.setOnRetryLisenter(this);
@@ -110,7 +108,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //            seachWith();
 //        });
 //        setUserVisibleHint(true);
-//        setSearchToolbar();
+        setSearchToolbar();
     }
 
     private void seachWith() {
@@ -119,7 +117,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             list.addAll(list1);
         } else {
             for (TransportDataBase team : list1) {
-                if (team.getWaybillCode()!=null&&team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
+                if (team.getWaybillCode() != null && team.getWaybillCode().toLowerCase().contains(seachString.toLowerCase())) {
                     list.add(team);
                 }
             }
@@ -142,7 +140,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             CURRENT_TASK_BEAN = list.get(position);
             mPresenter = new TaskLockPresenter(this);
             TaskLockEntity entity = new TaskLockEntity();
-            List<String> taskIdList = new ArrayList<>();
+            List <String> taskIdList = new ArrayList <>();
             taskIdList.add(list.get(position).getTaskId());
             entity.setTaskId(taskIdList);
             entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -150,25 +148,25 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
             ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
-        btnSearch.setOnClickListener(v->{
+        btnSearch.setOnClickListener(v -> {
 
             searchWaybill(etWaybillCode.getText().toString());
 
 
         });
-        ivScan.setOnClickListener(v->{
-            ScanManagerActivity.startActivity(getContext(),"CollectorFragment");
+        ivScan.setOnClickListener(v -> {
+            ScanManagerActivity.startActivity(getContext(), "CollectorFragment");
         });
     }
 
     private void searchWaybill(String toString) {
-            if (!StringUtil.isEmpty(toString)&&toString.length()>=4)
-                loadData(toString);
-            else {
-                ToastUtil.showToast("请输入至少4位运单号");
-                list.clear();
-                adapter.notifyDataSetChanged();
-            }
+        if (!StringUtil.isEmpty(toString) && toString.length() >= 4)
+            loadData(toString);
+        else {
+            ToastUtil.showToast("请输入至少4位运单号");
+            list.clear();
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void trunToCollectorActivity(TransportDataBase bean) {
@@ -207,7 +205,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     //获取数据
     private void loadData(String waybillCode) {
         mPresenter = new TransportListPresenter(this);
-        BaseFilterEntity<TransportDataBase> entity = new BaseFilterEntity();
+        BaseFilterEntity <TransportDataBase> entity = new BaseFilterEntity();
         TransportDataBase tempBean = new TransportDataBase();
         tempBean.setWaybillCode(waybillCode);
         tempBean.setTaskStartTime("");
@@ -261,20 +259,19 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getFunctionFlag())){
-            if (!TextUtils.isEmpty(result.getData()) &&(result.getFunctionFlag().equals("CollectorFragment")||result.getFunctionFlag().equals("MainActivity"))&&isShow) {
+        if (!TextUtils.isEmpty(result.getFunctionFlag())) {
+            if (!TextUtils.isEmpty(result.getData()) && (result.getFunctionFlag().equals("CollectorFragment") || result.getFunctionFlag().equals("MainActivity")) && isShow) {
                 String[] parts = daibanCode.split("\\/");
-                List<String> strsToList = Arrays.asList(parts);
+                List <String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
                     searchWaybill(strsToList.get(3));
 //                chooseCode(strsToList.get(3));
                 }
             }
-        }
-        else {
-            if (!TextUtils.isEmpty(result.getData())&&isShow) {
+        } else {
+            if (!TextUtils.isEmpty(result.getData()) && isShow) {
                 String[] parts = daibanCode.split("\\/");
-                List<String> strsToList = Arrays.asList(parts);
+                List <String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
                     searchWaybill(strsToList.get(3));
 //                chooseCode(strsToList.get(3));
@@ -327,7 +324,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 CURRENT_TASK_BEAN = item;
                 mPresenter = new TaskLockPresenter(this);
                 TaskLockEntity entity = new TaskLockEntity();
-                List<String> taskIdList = new ArrayList<>();
+                List <String> taskIdList = new ArrayList <>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -340,12 +337,12 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 
     @Override
     public void transportListContractResult(TransportListBean transportListBeans) {
-        if (transportListBeans != null&&transportListBeans.getRecords().size()>0){
+        if (transportListBeans != null && transportListBeans.getRecords().size() > 0) {
 
             //出现不相同运单号
-            String watbillCode =  transportListBeans.getRecords().get(0).getWaybillCode();
-            for (TransportDataBase transportDataBase:transportListBeans.getRecords()){
-                if (watbillCode!=null&& !watbillCode.equals(transportDataBase.getWaybillCode())){
+            String watbillCode = transportListBeans.getRecords().get(0).getWaybillCode();
+            for (TransportDataBase transportDataBase : transportListBeans.getRecords()) {
+                if (watbillCode != null && !watbillCode.equals(transportDataBase.getWaybillCode())) {
                     ToastUtil.showToast("请输入更加完整的运单号");
                     return;
                 }
@@ -367,8 +364,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 //                    }
 //                }
             }
-        }
-         else {
+        } else {
             ToastUtil.showToast(getActivity(), "数据为空");
         }
     }
@@ -382,31 +378,32 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
         }
     }
 
-    public void setSearchToolbar(){
-            if (mTaskFragment == null){
-                mTaskFragment = (TaskFragment) getParentFragment();
-            }
-            if (mTaskFragment != null) {
-                mTaskFragment.setTitleText(list1.size());
-                searchToolbar = mTaskFragment.getSearchView();
-                mTaskFragment.getToolbar().setleftIconViewVisiable(false);
-                mTaskFragment.getToolbar().setRightIconViewVisiable(false);
-                mTaskFragment.setTitleText();
-            }
-            if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入运单号", text -> {
-                    seachString = text;
-                    seachWith();
-                });
-            }
+    public void setSearchToolbar() {
+        if (!isShow)
+            return;
+        if (mTaskFragment == null) {
+            mTaskFragment = (TaskFragment) getParentFragment();
+        }
+        if (mTaskFragment != null) {
+            mTaskFragment.setTitleText(list1.size());
+            searchToolbar = mTaskFragment.getSearchView();
+            mTaskFragment.getToolbar().setleftIconViewVisiable(false);
+            mTaskFragment.getToolbar().setRightIconViewVisiable(false);
+            mTaskFragment.setTitleText();
+        }
+        if (searchToolbar != null) {
+            searchToolbar.setHintAndListener("请输入运单号", text -> {
+                seachString = text;
+                seachWith();
+            });
+        }
 
     }
 
 
-
     @Override
     public void toastView(String error) {
-        if (error!=null)
+        if (error != null)
             ToastUtil.showToast(getActivity(), error);
 
 //        if (mMfrvData != null)

@@ -4,8 +4,10 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.model.AirlineRequireModel;
@@ -43,6 +45,22 @@ public class AirlineRequirePresenter extends BasePresenter {
             @Override
             public void onSuccess(ForwardInfoBean forwardInfoBean) {
                 ((AirlineRequireContract.airlineRequireView) mRequestView).forwardInfoResult(forwardInfoBean);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+    public void getgetCommdityById(GoodsIdEntity goodsNames) {
+        mRequestView.showNetDialog();
+        ((AirlineRequireModel) mRequestModel).getgetCommdityById(goodsNames, new IResultLisenter<List<DocumentsBean>>() {
+            @Override
+            public void onSuccess(List<DocumentsBean> forwardInfoBean) {
+                ((AirlineRequireContract.airlineRequireView) mRequestView).getgetCommdityByIdResult(forwardInfoBean);
                 mRequestView.dissMiss();
             }
 

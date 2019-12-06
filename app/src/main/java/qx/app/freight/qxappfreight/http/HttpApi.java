@@ -8,6 +8,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -61,6 +62,7 @@ import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
@@ -312,6 +314,10 @@ public interface HttpApi {
     //货代资质
     @GET("service-bussiness-shipper/freightInfo/getById/{freightId}")
     Observable<BaseEntity<ForwardInfoBean>> forwardInfo(@Path("freightId") String freightId);
+
+    //根据品名id list 获取 证明清单
+    @POST("service-bussiness-cargoname/cn/commodityName/getCommdityQualificationFileBatchByIds")
+    Observable<BaseEntity<List<DocumentsBean>>> getgetCommdityById(@Body GoodsIdEntity goodsNames);
 
 
     //航司资质

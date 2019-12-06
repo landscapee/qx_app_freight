@@ -96,11 +96,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTaskFragment = (TaskFragment) getParentFragment();
-        searchToolbar = mTaskFragment.getSearchView();
-        mTaskFragment.getToolbar().setleftIconViewVisiable(false);
-        mTaskFragment.getToolbar().setRightIconViewVisiable(false);
-        mTaskFragment.setTitleText();
+//        mTaskFragment = (TaskFragment) getParentFragment();
+//        searchToolbar = mTaskFragment.getSearchView();
+//        mTaskFragment.getToolbar().setleftIconViewVisiable(false);
+//        mTaskFragment.getToolbar().setRightIconViewVisiable(false);
+//        mTaskFragment.setTitleText();
 //        mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
 //        mMfrvData.setRefreshListener(this);
 //        mMfrvData.setOnRetryLisenter(this);
@@ -108,7 +108,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
             EventBus.getDefault().register(this);
         }
         initData();
-//        initTitle();
+        initTitle();
     }
 
     @Override
@@ -121,6 +121,8 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     }
 
     private void initTitle() {
+        if (!isShow)
+            return;
         if (mTaskFragment == null) {
             mTaskFragment = (TaskFragment) getParentFragment();
         }

@@ -109,8 +109,8 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
                     break;
             }
         }
-        if (item.getSpecialCargoCode() != null && !"".equals(item.getSpecialCargoCode())) {
-            coldStr = coldStr + "特货" + item.getSpecialCargoCode();
+        if (item.getSpecialCode() != null && !"".equals(item.getSpecialCode())) {
+            coldStr = coldStr + "特货" + item.getSpecialCode();
         }
         helper.setText(R.id.tv_store_info, coldStr);
 
