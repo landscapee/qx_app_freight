@@ -225,6 +225,23 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                     ToastUtil.showToast(this, "请输入合法的重量");
                     return;
                 }
+                int num = 0;
+                int weight = 0;
+                for (RcInfoOverweight rcInfoOverweight: rcInfoOverweight){
+                    num = num+rcInfoOverweight.getCount();
+                    weight= weight+rcInfoOverweight.getWeight();
+                }
+                if (Integer.valueOf(mEdtNumber.getText().toString()) < num){
+                    ToastUtil.showToast("超重件数不能超过收运件数");
+                    return;
+                }
+                if (StringUtil.isDouble(mTvWeight.getText().toString())){
+                    if (Double.valueOf(mTvWeight.getText().toString()) < weight){
+                        ToastUtil.showToast("超重重量不能超过收运重量");
+                        return;
+                    }
+                }
+
                 finishForResult();
             }
         });

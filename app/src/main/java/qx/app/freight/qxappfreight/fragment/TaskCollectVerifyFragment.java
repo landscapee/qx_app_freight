@@ -83,7 +83,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_stowage, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_verify, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
