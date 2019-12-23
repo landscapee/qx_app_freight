@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -200,6 +201,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void getData() {
         mPresenter = new GroupBoardToDoPresenter(this);
 
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"uef9de97d6c53428c946089d63cfaaa4c","undoType":2,"roleCode":"weighter","ascs":["ETD"]}
@@ -208,7 +210,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         List <String> ascs = new ArrayList <>();
         ascs.add("ETD");
         entity.setAscs(ascs);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+        baseFilterEntity.setFilter(entity);
+        baseFilterEntity.setCurrent(pageCurrent);
+        baseFilterEntity.setSize(Constants.PAGE_SIZE);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(baseFilterEntity);
 //
 //        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
 //        entity.setUserId("weighter");
@@ -261,7 +266,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
         getData();
     }
 
@@ -278,21 +282,28 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     @Override
-    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
-        //因为没有分页，不做分页判断
-        list1.clear();
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
+        if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
+            //因为没有分页，不做分页判断
 
-        if (pageCurrent == 1) {
-            mMfrvAllocateList.finishRefresh();
-        } else {
-            mMfrvAllocateList.finishLoadMore();
+            if (transportListBeans.getCurrent() == 1) {
+                list1.clear();
+                mMfrvAllocateList.finishRefresh();
+            } else {
+                mMfrvAllocateList.finishLoadMore();
+            }
+            pageCurrent = transportListBeans.getCurrent()+1;
+            list1.addAll(transportListBeans.getRecords());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
+            }
+            seachWithNum();
         }
-        list1.addAll(transportListBeans);
-        if (mTaskFragment != null) {
-            if (isShow)
-                mTaskFragment.setTitleText(list1.size());
+        else {
+            ToastUtil.showToast("无更多数据");
         }
-        seachWithNum();
+
     }
 
     @Override

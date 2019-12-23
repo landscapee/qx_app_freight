@@ -20,6 +20,7 @@ import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
@@ -310,7 +311,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     @Override
-    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
+    public void getGroupBoardToDoResult(FilterTransportDateBase  transportListBeans) {
 
     }
 

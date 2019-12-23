@@ -21,6 +21,7 @@ import qx.app.freight.qxappfreight.adapter.RepeatWeightScooterAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -145,7 +146,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     }
 
     @Override
-    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
 
     }
 

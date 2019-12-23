@@ -370,6 +370,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //
         mMyAgentListBean.setTaskTypeCode(taskTypeCode);
 
+        mMyAgentListBean.setRepId(mList.getRepId());
+
         mMyAgentListBean.setReservoirType(mList.getReservoirType());
 
         mMyAgentListBean.setWaybillCode(waybillCode);

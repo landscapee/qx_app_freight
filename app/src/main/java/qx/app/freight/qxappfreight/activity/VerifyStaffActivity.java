@@ -178,6 +178,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mPresenter = new SubmissionPresenter(this);
                     mStorageCommitEntity.setWaybillId(mBean.getId());
                     mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
+                    mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
                     mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
                     mStorageCommitEntity.setInsFile(filePath);
                     mStorageCommitEntity.setInsCheck(1);

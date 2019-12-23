@@ -29,6 +29,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -42,6 +43,7 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 /**
+ * ===================================================已弃用！！！！！
  * 理货
  * <p>
  * 出港-配载-组板
@@ -150,6 +152,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 //            entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
 //        }
 //        entity.setUndoType("2");
+
         GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
@@ -158,7 +161,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         List<String> ascs = new ArrayList<>();
         ascs.add("ETD");
         entity.setAscs(ascs);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+//        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -268,7 +271,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     }
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
         if (transportListBeans != null) {
             //未分页
 
@@ -279,7 +282,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
             } else {
                 mMfrvData.finishLoadMore();
             }
-            for (TransportDataBase mTransportListBean : transportListBeans) {
+            for (TransportDataBase mTransportListBean : transportListBeans.getRecords()) {
                 if (Constants.INSTALLSCOOTER.equals(mTransportListBean.getTaskTypeCode())) {
                     mCacheList.add(mTransportListBean);
                 }

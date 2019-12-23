@@ -64,6 +64,7 @@ import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
@@ -378,7 +379,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportDataBase>> getGroupBoardToDo(GroupBoardRequestEntity model) {
+    public Observable<FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
         return transform(getService().getGroupBoardToDo(model));
     }
 

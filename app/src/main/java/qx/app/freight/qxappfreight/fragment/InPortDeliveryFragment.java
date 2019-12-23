@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.adapter.DeliveryDetailIndexAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -296,7 +297,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 
 
     @Override
-    public void getGroupBoardToDoResult(List <TransportDataBase> transportListBeans) {
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
 //        //没有分页
 //        list1.clear();
 //        if (pageCurrent == 1) {

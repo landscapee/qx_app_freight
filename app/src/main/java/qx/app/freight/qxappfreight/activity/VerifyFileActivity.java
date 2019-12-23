@@ -219,6 +219,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mPresenter = new SubmissionPresenter(this);
                 StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
                 mStorageCommitEntity.setWaybillId(mBean.getId());
+                mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
                 mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                 mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
                 mStorageCommitEntity.setInsFile(mFilePath);
