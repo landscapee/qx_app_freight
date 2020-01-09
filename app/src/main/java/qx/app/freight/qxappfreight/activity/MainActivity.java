@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
 import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
@@ -440,6 +441,22 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
             UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
             });
             updatePushDialogInstall.show();
+        }
+    }
+    /**
+     * 消息提醒推送
+     *
+     * @param webSocketMessageBean
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketMessageBean webSocketMessageBean) {
+        if (webSocketMessageBean.getSpecialFlag() == 1) {
+            String remark = webSocketMessageBean.getContent();
+            if (remark != null && !StringUtil.isEmpty(remark)) {
+                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+                });
+                updatePushDialogInstall.show();
+            }
         }
     }
 

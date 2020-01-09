@@ -113,6 +113,9 @@ public class Constants {
     public static final String ACTION = "android.intent.ACTION_DECODE_DATA";
 
     public static final String BROAD_STRING = "barcode_string";
+
+    public static final String REWEIGHT_DONE = "ReWeight_Done";
+
     //====================================================图片保存地址======================================================
     public static final String CAMERA_PATH = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM + File.separator + "Camera" + File.separator;
 

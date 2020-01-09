@@ -78,8 +78,10 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())) {
-                    mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
-                    ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(), taskId);
+                    if (s.toString().length()>3){
+                        mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
+                        ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(), taskId);
+                    }
                 } else {
                     resultData.clear();
                     adapter.notifyDataSetChanged();

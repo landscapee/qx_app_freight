@@ -177,6 +177,13 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         }
 
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String postStr){
+        if (Constants.REWEIGHT_DONE.equals(postStr)){
+            pageCurrent = 1;
+            getData();
+        }
+    }
 
     private void initData() {
         list = new ArrayList <>();

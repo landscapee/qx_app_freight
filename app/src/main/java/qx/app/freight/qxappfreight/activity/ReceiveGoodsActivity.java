@@ -45,6 +45,7 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.RecordsBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -113,7 +114,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private int listPostion;
     private String storage;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId,String storage) {
+    private RecordsBean selectArea;//根据货物类型获取的库区
+
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId,String storage, RecordsBean selectArea) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
@@ -121,6 +124,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         starter.putExtra("id", id);
         starter.putExtra("wayBillId", wayBillId);
         starter.putExtra("storage", storage);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("selectArea", selectArea);
+        starter.putExtras(bundle);
         context.startActivityForResult(starter, 0);
     }
 
@@ -134,6 +140,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         setToolbarShow(View.VISIBLE);
         EventBus.getDefault().register(this);
         mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
+        selectArea = (RecordsBean) getIntent().getSerializableExtra("selectArea");
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         wayBillId = getIntent().getStringExtra("wayBillId");
@@ -173,7 +180,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
 
         });
-        getAutoReservoir();
+//        getAutoReservoir();
         initView();
         initPopupWindow();
     }
@@ -225,7 +232,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void startAct(MyAgentListBean myAgentListBean, int tag) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode,id);
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode,id,selectArea);
     }
 
 

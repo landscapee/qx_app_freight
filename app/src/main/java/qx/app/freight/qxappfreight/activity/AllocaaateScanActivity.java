@@ -19,6 +19,8 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +35,7 @@ import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
 import qx.app.freight.qxappfreight.presenter.GetScooterByScooterCodePresenter;
 import qx.app.freight.qxappfreight.utils.CalculateUtil;
@@ -528,6 +531,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     public void saveScooterResult(String result) {
         ToastUtil.showToast("保存成功");
         finish();
+        EventBus.getDefault().post(Constants.REWEIGHT_DONE);
 //        startActivity(new Intent(this,MainActivity.class));
     }
 

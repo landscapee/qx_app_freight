@@ -1,10 +1,12 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class RecordsBean {
+public class RecordsBean implements Serializable {
 
     private String id;
     private String  reservoirName;

@@ -151,8 +151,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                 chooseExcetionDialog.setChooseDialogInterface(new ChooseDialogInterface() {
                     @Override
                     public void confirm(int position2) {
-                        int[] intTypes = {2, 4, 10, 19, 16};
-                        counterUbnormalGoodsList.get(posstion).setUbnormalType(intTypes[position2]);
+//                        int[] intTypes = {2, 4, 10, 19, 16};
+                        counterUbnormalGoodsList.get(posstion).setUbnormalType(ExceptionUtils.testBeanList.get(position2).getType());
                         mAdapter.notifyDataSetChanged();
                     }
                 });

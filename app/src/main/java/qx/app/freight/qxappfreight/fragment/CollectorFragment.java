@@ -122,7 +122,6 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 }
             }
         }
-
         adapter.notifyDataSetChanged();
 //        if (mMfrvData != null) {
 //            mMfrvData.notifyForAdapter(adapter);
