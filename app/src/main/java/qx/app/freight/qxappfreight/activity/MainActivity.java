@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -55,6 +56,7 @@ import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
+import qx.app.freight.qxappfreight.reciver.ScanReceiver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -103,6 +105,8 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
     private MessageReciver mMessageReciver;//聊天消息广播接收器
     private ScreenStateReciver mScreenStateReciver;
 
+    private ScanReceiver ScanReceiver; //激光扫码 广播接受
+
     private boolean isJunctionLoad = false;//是否是结载角色
 
     public static void startActivity(Context context) {
@@ -128,9 +132,14 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         }
         initServices();
         setToolbarShow(View.GONE);
+
         mMessageReciver = new MessageReciver(this);
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
+
+        if(Build.VERSION.SDK_INT >= 26){
+            initBoardReceiver();
+        }
 //        mScreenStateReciver = new ScreenStateReciver();
 //        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
 //        registerReceiver(mScreenStateReciver, screenfilter);
@@ -374,6 +383,15 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 //        }
 //    }
 
+    /**
+     * android 8  版本（包含） 以上 动态注册广播Action 才能收到隐士广播
+     */
+    private void initBoardReceiver() {
+        ScanReceiver = new ScanReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION);
+        registerReceiver(ScanReceiver, filter);
+    }
     @Override
     public void onBackPressed() {
 //        quitApp();
@@ -385,6 +403,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
+            unregisterReceiver(ScanReceiver);
 //            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
             e.printStackTrace();

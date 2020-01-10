@@ -3,6 +3,8 @@ package qx.app.freight.qxappfreight.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -12,7 +14,9 @@ import com.liys.doubleclicklibrary.ViewDoubleHelper;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.BuildConfig;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.reciver.ScanReceiver;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 
 
@@ -23,10 +27,12 @@ public class MyApplication extends Application  {
     public static String currentView; //当前顶层View的类名
 
     public static boolean isNeedIm = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
         appContext = getApplicationContext();
+
         UnCatchHandler.getInstance(appContext).init();
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -76,6 +82,8 @@ public class MyApplication extends Application  {
             }
         });
     }
+
+
 
     public static void initIM() {
         try {
