@@ -137,9 +137,9 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
 
-        if(Build.VERSION.SDK_INT >= 26){
+//        if(Build.VERSION.SDK_INT >= 26){
             initBoardReceiver();
-        }
+//        }
 //        mScreenStateReciver = new ScreenStateReciver();
 //        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
 //        registerReceiver(mScreenStateReciver, screenfilter);
@@ -403,7 +403,8 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
-            unregisterReceiver(ScanReceiver);
+            if (ScanReceiver!=null)
+                unregisterReceiver(ScanReceiver);
 //            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
             e.printStackTrace();

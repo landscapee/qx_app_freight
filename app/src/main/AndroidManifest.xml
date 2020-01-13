@@ -302,14 +302,14 @@
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />
 
-        <receiver
-            android:name=".reciver.ScanReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.ACTION_DECODE_DATA" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".reciver.ScanReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.ACTION_DECODE_DATA" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <provider
             android:name="android.support.v4.content.FileProvider"
