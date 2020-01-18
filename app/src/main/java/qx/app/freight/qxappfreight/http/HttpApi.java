@@ -135,7 +135,8 @@ import retrofit2.http.Query;
  */
 public interface HttpApi {
     //登录接口
-    @POST("/service-base-sysmanage/auth/login")
+//    @POST("/service-base-sysmanage/auth/login")
+    @POST("/service-base-sysmanage/login")
     Observable<BaseEntity<LoginResponseBean>> login(@Body LoginEntity model);
 
     //修改密码

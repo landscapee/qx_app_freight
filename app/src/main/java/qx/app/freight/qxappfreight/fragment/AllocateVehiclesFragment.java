@@ -155,26 +155,26 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
-                list1.addAll(mWebSocketResultBean.getChgData());
-                seachWithNum();
-                if (isShow) {
-                    mTaskFragment.setTitleText(list1.size());
-                }
-            }
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            if (null != CURRENT_TASK_BEAN) {
-                if (CURRENT_TASK_BEAN.getFlightId().equals(mWebSocketResultBean.getChgData().get(0).getFlightId())) {
-                    ActManager.getAppManager().finishAllocate();
-                    ToastUtil.showToast("任务已完成");
-                }
-            }
-            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
-                getData();
-            }
-
-        }
+//        if ("N".equals(mWebSocketResultBean.getFlag())) {
+//            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+//                list1.addAll(mWebSocketResultBean.getChgData());
+//                seachWithNum();
+//                if (isShow) {
+//                    mTaskFragment.setTitleText(list1.size());
+//                }
+//            }
+//        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+//            if (null != CURRENT_TASK_BEAN) {
+//                if (CURRENT_TASK_BEAN.getFlightId().equals(mWebSocketResultBean.getChgData().get(0).getFlightId())) {
+//                    ActManager.getAppManager().finishAllocate();
+//                    ToastUtil.showToast("任务已完成");
+//                }
+//            }
+//            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+//                getData();
+//            }
+//
+//        }
 
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
