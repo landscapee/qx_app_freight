@@ -97,6 +97,7 @@ import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
+import qx.app.freight.qxappfreight.bean.response.PickGoodsRecordsBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -571,6 +572,15 @@ public interface HttpApi {
     //查询提货管理列表
     @POST("service-product-inwaybill/arrival-waybill/searchWaybillByWaybillCode")
     Observable<BaseEntity<WaybillsListBean>> searchWaybillByWaybillCode(@Body BaseFilterEntity model);
+
+    //查询提货分批出库记录
+    @GET("service-product-delivery/delivery/getOutboundList/{waybillId}")
+    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path( "waybillId") String waybillId);
+
+    //撤销 提货分批出库记录
+    @POST(" service-product-delivery/delivery/revokeInboundDelevery")
+    Observable<BaseEntity<Object>> revokeInboundDelevery(@Body PickGoodsRecordsBean model);
+
 
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")

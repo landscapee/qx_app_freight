@@ -60,7 +60,8 @@ public class GetInfosByFlightIdBean implements Serializable {
         private String destinationStation;
         private String suggestRepository;
         private String uldId;
-        private String createTime;
+        private long createTime;
+        private long shceduleTime;
         private String createUser;
         private String updateTime;
         private String updateUser;
@@ -114,7 +115,7 @@ public class GetInfosByFlightIdBean implements Serializable {
          */
         private List<WeightWayBillBean> groupScooters;
 
-
+        private int weightOver;
 
 
 

@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.ForkliftCostDialogForNet;
+import qx.app.freight.qxappfreight.dialog.PickGoodsRecordsDialogForNet;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
 import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
@@ -72,6 +73,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     private HashMap<String,String> areas = new HashMap <>();
 
+    private int waybillStatus = 5;//运单状态 必填 5 待提货 6 已经提货 必须填
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_inport_delivery_detail;
@@ -97,9 +100,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //        num2 = getIntent().getIntExtra("num2",0);
 
         bean = (WaybillsBean) getIntent().getSerializableExtra("DATA");
-
+        waybillStatus = getIntent().getIntExtra("waybillStatus",5);
         if (bean == null){
-
             finish();
         }
 //        serialNumber.setText(bean.getSerialNumber());
@@ -153,6 +155,21 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void outStorageRecords(int position) {
+                try {
+                    PickGoodsRecordsDialogForNet dialog = new PickGoodsRecordsDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    dialog.setOnClickListener(text -> {
+                        getData();
+                    });
+                    dialog.show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         });
 
         rView.setAdapter(mAdapter);
@@ -177,7 +194,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         entity.setSize(Constants.PAGE_SIZE);
         entity.setCurrent(1);
         WaybillsBean waybillsBean = new WaybillsBean();
-        waybillsBean.setWaybillStatus(5);
+        waybillsBean.setWaybillStatus(waybillStatus);
         waybillsBean.setWaybillCode(bean.getWaybillCode());
         entity.setFilter(waybillsBean);
         ((GroupBoardToDoPresenter) mPresenter).searchWaybillByWaybillCode(entity);

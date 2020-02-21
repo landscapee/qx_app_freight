@@ -153,24 +153,15 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     @Override
     public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
         if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
-            if (getInfosByFlightIdBeans.size() == 1){
-                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
-            }
-            else {
+//            if (getInfosByFlightIdBeans.size() == 1){
+//                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
+//            }
+//            else {
                 for (GetInfosByFlightIdBean getInfosByFlightIdBean:getInfosByFlightIdBeans){
                     if (flightId.equals(getInfosByFlightIdBean.getFlightInfoId())){
                         startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
-                        break;
+                        return;
                     }
-                }
-                ChooseFlightDialog dialog = new ChooseFlightDialog();
-//                dialog.setChooseDialogInterface(position -> {
-//                    if (getInfosByFlightIdBeans.get(position) != null) {
-//                        startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(position)));
-//                    }
-//                });
-//                dialog.setData(getInfosByFlightIdBeans, getActivity());
-//                dialog.show(getActivity().getSupportFragmentManager(), "123");
             }
 
         }

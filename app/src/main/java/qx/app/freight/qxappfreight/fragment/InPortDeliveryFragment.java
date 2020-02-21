@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -34,7 +36,6 @@ import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
@@ -46,9 +47,14 @@ import qx.app.freight.qxappfreight.widget.SearchToolbar;
  * 进港-交货页面
  * Created by swd
  */
-public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, TaskLockContract.taskLockView,  MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
+public class InPortDeliveryFragment extends BaseFragment implements GroupBoardToDoContract.GroupBoardToDoView, TaskLockContract.taskLockView, MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter {
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
+
+    @BindView(R.id.rg_todo)
+    RadioButton rgTodo;
+    @BindView(R.id.rg_done)
+    RadioButton rgDone;
 
     DeliveryDetailIndexAdapter mAdapter;
     List <WaybillsBean> mList; //adapter 绑定的条件list
@@ -62,10 +68,15 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private SearchToolbar searchToolbar;//父容器的输入框
     private boolean isShow = false;
 
+
     /**
      * 待办锁定 当前的任务bean
      */
     private TransportDataBase CURRENT_TASK_BEAN = null;
+
+    private boolean isScan = false;
+
+    private int waybillStatus = 5;
 
     @Nullable
     @Override
@@ -101,7 +112,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入运单", text -> {
                     searchString = text;
-                    seachWithNum();
+                    loadData(searchString);
                 });
             }
         }
@@ -113,7 +124,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             mList.addAll(list1);
         } else {
             for (WaybillsBean item : list1) {
-                if (item.getFlightNo()!=null&&item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo() != null && item.getWaybillCode().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(item);
                 }
             }
@@ -127,10 +138,31 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     public void onResume() {
         super.onResume();
         pageCurrent = 1;
-        loadData();
+        loadData(searchString);
     }
 
     private void initView() {
+        rgTodo.setChecked(true);
+        rgTodo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    waybillStatus = 5;
+                    loadData(searchString);
+
+                }
+
+            }
+        });
+        rgDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    waybillStatus = 6;
+                    loadData(searchString);
+                }
+            }
+        });
 //        mPresenter = new TransportListPresenter(this);
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
@@ -140,7 +172,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mAdapter = new DeliveryDetailIndexAdapter(mList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
-            turnToDetailActivity(mList.get(position));
+            turnToDetailActivity(mList.get(position), waybillStatus);
 //            CURRENT_TASK_BEAN = mList.get(position);
 //            mPresenter = new TaskLockPresenter(this);
 //            TaskLockEntity entity = new TaskLockEntity();
@@ -156,7 +188,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mMfrvData.setAdapter(mAdapter);
     }
 
-    private void loadData() {
+    private void loadData(String waybillCode) {
+//        if (rgTodo.isChecked())
+//            waybillStatus = 5;
+//        else
+//            waybillStatus = 6;
         mPresenter = new GroupBoardToDoPresenter(this);
 //        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
 //
@@ -171,11 +207,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //        ascs.add("lastUpdate_time");
 //
 //        entity.setAscs(ascs);
-        BaseFilterEntity<WaybillsBean> entity = new BaseFilterEntity();
-        entity.setSize(Constants.PAGE_SIZE);
+        BaseFilterEntity <WaybillsBean> entity = new BaseFilterEntity();
+        entity.setSize(20);
         entity.setCurrent(pageCurrent);
         WaybillsBean waybillsBean = new WaybillsBean();
-        waybillsBean.setWaybillStatus(5);
+        waybillsBean.setWaybillCode(waybillCode);
+        waybillsBean.setWaybillStatus(waybillStatus);
         entity.setFilter(waybillsBean);
         ((GroupBoardToDoPresenter) mPresenter).searchWaybillByWaybillCode(entity);
 
@@ -187,13 +224,14 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      *
      * @param bean
      */
-    private void turnToDetailActivity(WaybillsBean bean) {
+    private void turnToDetailActivity(WaybillsBean bean, int waybillStatus) {
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
 //                .putExtra("num1", bean.getOutboundNumber())
 //                .putExtra("num2", bean.getWaybillCount())
 //                .putExtra("taskId", bean.getTaskId())
 //                .putExtra("billId", bean.getSerialNumber())
+                .putExtra("waybillStatus", waybillStatus)
                 .putExtra("DATA", bean));
     }
 
@@ -203,12 +241,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
-                String[] parts = daibanCode.split("\\/");
-                List<String> strsToList = Arrays.asList(parts);
-                if (strsToList.size() >= 4) {
-                    chooseCode(strsToList.get(3));
-                }
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+            String[] parts = daibanCode.split("\\/");
+            List <String> strsToList = Arrays.asList(parts);
+            if (strsToList.size() >= 4) {
+                chooseCode(strsToList.get(3));
+            }
         }
     }
 
@@ -237,9 +275,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
      * @param daibanCode 代办号
      */
     private void chooseCode(String daibanCode) {
+        isScan = true;
+        loadData(daibanCode);
+
         for (WaybillsBean item : list1) {
             if (daibanCode.equals(item.getWaybillCode())) {
-                turnToDetailActivity(item);
+                turnToDetailActivity(item, waybillStatus);
 //                CURRENT_TASK_BEAN = item;
 //                mPresenter = new TaskLockPresenter(this);
 //                TaskLockEntity entity = new TaskLockEntity();
@@ -261,7 +302,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         showProgessDialog("加载数据中……");
         new Handler().postDelayed(() -> {
             pageCurrent = 1;
-            loadData();
+            loadData(searchString);
             dismissProgessDialog();
         }, 2000);
     }
@@ -269,13 +310,13 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void onRefresh() {
         pageCurrent = 1;
-        loadData();
+        loadData(searchString);
     }
 
     @Override
     public void onLoadMore() {
         pageCurrent++;
-        loadData();
+        loadData(searchString);
     }
 
     @Override
@@ -318,12 +359,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     }
 
     @Override
-    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 
     @Override
-    public void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans) {
+    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
 
         if (pageCurrent == 1) {
             list1.clear();
@@ -332,18 +373,28 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
             mMfrvData.finishLoadMore();
         }
         if (waybillsBeans != null && waybillsBeans.size() > 0) {
+            if (waybillsBeans.size() == 1 && isScan) {
+                turnToDetailActivity(waybillsBeans.get(0), waybillStatus);
+                return;
+            }
             list1.addAll(waybillsBeans);
         }
         seachWithNum();
         if (mTaskFragment != null) {
             if (isShow) {
-                mTaskFragment.setTitleText(list1.size());
+                if (waybillStatus == 5)
+                    mTaskFragment.setTitleText( "我的待办（" + list1.size() + "）");
+                else {
+                    mTaskFragment.setTitleText( "我的已办（" + list1.size() + "）");
+
+                }
             }
         }
     }
 
     /**
      * 待办锁定
+     *
      * @param result
      */
     @Override

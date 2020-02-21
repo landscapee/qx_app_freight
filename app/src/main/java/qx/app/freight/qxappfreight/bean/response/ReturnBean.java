@@ -19,6 +19,7 @@ public class ReturnBean {
         private String number;
         private String weight;
         private String volume;
+        private String repId;
         private String repName;
         private String repPlaceNum;
         private String scooterType;

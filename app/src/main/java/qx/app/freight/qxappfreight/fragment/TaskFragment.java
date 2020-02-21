@@ -117,6 +117,14 @@ public class TaskFragment extends BaseFragment {
     public void setTitleText(int size) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
     }
+    /**
+     * 设置中间文字显示
+     *
+     * @param str 待办数
+     */
+    public void setTitleText(String str) {
+        mToolBar.setMainTitle(Color.WHITE, str);
+    }
     public void setTitleText() {
         mToolBar.setMainTitle(Color.WHITE, "我的待办");
     }
@@ -202,8 +210,8 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
             } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港分拣");
+//                fragmentList.add(new InPortTallyFragment());
+//                list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");

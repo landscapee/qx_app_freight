@@ -97,6 +97,7 @@ import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
+import qx.app.freight.qxappfreight.bean.response.PickGoodsRecordsBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -1020,7 +1021,22 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<ForkliftWorkingCostBean>> getWaybillForklift(String waybillId) {
         return transform(getService().getWaybillForklift(waybillId));
     }
-
+    /****
+     * 进港-查询运单分批出库记录
+     * @param waybillId
+     * @return
+     */
+    public Observable<List<PickGoodsRecordsBean>> getOutboundList(String waybillId) {
+        return transform(getService().getOutboundList(waybillId));
+    }
+    /****
+     * 进港-撤销出库记录
+     * @param model
+     * @return
+     */
+    public Observable<String> revokeInboundDelevery(PickGoodsRecordsBean model) {
+        return nothingtransform(getService().revokeInboundDelevery(model));
+    }
     /****
      * 进港-添加单叉车使用费记录
      * @param model

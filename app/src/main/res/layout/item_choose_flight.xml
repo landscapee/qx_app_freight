@@ -22,6 +22,14 @@
             android:text="包装"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp_16" />
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="包装"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp_16" />
     </LinearLayout>
     <View
         style="@style/line_horizontal_979797"

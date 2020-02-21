@@ -72,6 +72,19 @@ public class TimeUtils {
         Log.e("time", "time2=" + format.format(date));
         return format.format(date);
     }
+    /**
+     * 年-月-日 时:分:秒
+     *
+     * @return
+     */
+    public static String getTimeForParam(long time) {
+        if (time == 0)
+            return "0";
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.e("time", "time2=" + format.format(date));
+        return format.format(date);
+    }
 
     /**
      * 年-月-日 时:分:秒
