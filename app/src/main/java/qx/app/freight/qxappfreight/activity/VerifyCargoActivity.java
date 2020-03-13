@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -77,6 +78,17 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     @BindView(R.id.ll_spot)
     LinearLayout mLlSpot;
 
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+
     private String insFile;  //报检员资质路径
     private int insCheck; //报检是否合格1合格 0不合格
     private int fileCheck;//资质是否合格1合格 0不合格
@@ -126,6 +138,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查货物");
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        setWaybillInfo(mBean);
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
         mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         insFile = getIntent().getStringExtra("insFile");
@@ -211,6 +224,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             mStorageCommitEntity.setType(1);
             mStorageCommitEntity.setTaskId(mBean.getTaskId());
             mStorageCommitEntity.setUserId(userId);
+            mStorageCommitEntity.setNumber(BigDecimal.valueOf(Double.valueOf(mBean.getTotalNumber())));
+            mStorageCommitEntity.setWeight(BigDecimal.valueOf(Double.valueOf(mBean.getTotalWeight())));
             //新加
             if (null != mAcTestInfoListBean.getFreightInfo()) {
                 mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
@@ -243,7 +258,26 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             }
         });
     }
+    private void setWaybillInfo(TransportDataBase mBean) {
+        if (mBean!=null){
+            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  "+mBean.getTotalNumber());
+            tvWeight.setText("重量:  "+mBean.getTotalWeight());
+        }
+        else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
 
+    }
     //货代公司资质
     @Override
     public void freightInfoResult(List<MarketCollectionRequireBean> beanList) {

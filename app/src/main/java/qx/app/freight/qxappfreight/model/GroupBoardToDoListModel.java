@@ -16,7 +16,7 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
  */
 public class GroupBoardToDoListModel extends BaseModel implements GroupBoardToDoContract.GroupBoardToDoModel {
     @Override
-    public void getGroupBoardToDo(GroupBoardRequestEntity model, IResultLisenter lisenter) {
+    public void getGroupBoardToDo(BaseFilterEntity model, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().getGroupBoardToDo(model)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

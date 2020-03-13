@@ -279,12 +279,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
                         Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
                         Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())||
-                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())
+                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())||
+                        Constants.INTERNATIONAL_GOODS.equals(mRoleRSBean.getRoleCode())||
+                        Constants.PORTER.equals(mRoleRSBean.getRoleCode())
                 ) {
-//                    loginBean.setUserId(loginBean.getLoginid());
-                    isNeedIm = true;
-                    break;
-
+                    ToastUtil.showToast(this, "站坪角色不能登录该应用");
+                    dismissProgessDialog();
+                    return;
+//                    isNeedIm = true;
+//                    break;
                 }
             }
 

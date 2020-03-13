@@ -6,6 +6,7 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
@@ -23,11 +24,11 @@ public class GroupBoardToDoPresenter extends BasePresenter {
         mRequestModel = new GroupBoardToDoListModel();
     }
 
-    public void getGroupBoardToDo(GroupBoardRequestEntity model) {
+    public void getGroupBoardToDo(BaseFilterEntity model) {
         mRequestView.showNetDialog();
-        ((GroupBoardToDoListModel) mRequestModel).getGroupBoardToDo(model, new IResultLisenter<List<TransportDataBase>>() {
+        ((GroupBoardToDoListModel) mRequestModel).getGroupBoardToDo(model, new IResultLisenter<FilterTransportDateBase>() {
             @Override
-            public void onSuccess(List<TransportDataBase> transportListBeans) {
+            public void onSuccess(FilterTransportDateBase transportListBeans) {
                 ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getGroupBoardToDoResult(transportListBeans);
                 mRequestView.dissMiss();
             }

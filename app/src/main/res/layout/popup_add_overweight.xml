@@ -94,7 +94,7 @@
                 android:text="操作"
                 android:textColor="#737B8B"
                 android:textSize="13sp"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </LinearLayout>
 
@@ -142,7 +142,6 @@
                 android:inputType="number"
                 android:singleLine="true"
                 android:maxLength="4"
-                android:nextFocusDown="@+id/et_volume"
                 />
             <EditText
                 android:id="@+id/et_volume"

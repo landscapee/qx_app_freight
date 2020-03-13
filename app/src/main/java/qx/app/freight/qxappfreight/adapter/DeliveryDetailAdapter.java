@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,6 +27,7 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
     @Override
     protected void convert(BaseViewHolder holder, WaybillsBean bean) {
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
+        Button btnOutRecords = holder.getView(R.id.btn_records);
 
         int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
         holder.setText(R.id.tv_put_num,"待出库: "+waitPutCargoNum+"件 / 已出库:"+bean.getOutboundNumber()+"件");
@@ -100,12 +102,17 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             else
                 holder.setText(R.id.tv_outStorage,"已出库");
 
+            btnOutRecords.setVisibility(View.VISIBLE);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
             holder.setGone(R.id.btn_overweight,false);
             holder.setGone(R.id.btn_forklift,false);
 
         }else {
+            if (bean.getOutboundNumber()>0)
+                btnOutRecords.setVisibility(View.VISIBLE);
+            else
+                btnOutRecords.setVisibility(View.GONE);
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
             holder.setGone(R.id.btn_overweight,true);
@@ -132,11 +139,16 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
         btnOverweight.setOnClickListener(v ->
                 listener.inputOverWeight(holder.getAdapterPosition())
         );
+
+        btnOutRecords.setOnClickListener(v ->
+                listener.outStorageRecords(holder.getAdapterPosition())
+        );
     }
 
     public interface DeliveryDetailInterface{
         void outStorage(int position,String id,String outStorageUser);
         void inputOverWeight(int position);
         void forkliftCost(int position);
+        void outStorageRecords(int position);
     }
 }

@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -25,6 +26,7 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
 
     @Override
     protected void convert(BaseViewHolder holder, WaybillsBean bean) {
+
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
 
         int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
@@ -105,6 +107,8 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
             holder.setGone(R.id.btn_overweight,false);
 
         }else {
+
+
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,false);
             holder.setGone(R.id.btn_overweight,false);
@@ -126,6 +130,8 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
         btnOverweight.setOnClickListener(v ->
                 listener.inputOverWeight(holder.getAdapterPosition())
         );
+
+
     }
 
     public interface DeliveryDetailInterface{

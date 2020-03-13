@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -40,6 +41,7 @@ import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
+import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
 import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
@@ -54,6 +56,7 @@ import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
+import qx.app.freight.qxappfreight.reciver.ScanReceiver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -62,7 +65,7 @@ import qx.app.freight.qxappfreight.utils.Tools;
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements LocationObservable , ScooterConfContract.scooterConfView{
+public class MainActivity extends BaseActivity implements LocationObservable, ScooterConfContract.scooterConfView {
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -102,13 +105,16 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     private MessageReciver mMessageReciver;//聊天消息广播接收器
     private ScreenStateReciver mScreenStateReciver;
 
+    private ScanReceiver ScanReceiver; //激光扫码 广播接受
+
     private boolean isJunctionLoad = false;//是否是结载角色
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
-    public static void startActivity(Context context,int wakeFlag) {
+
+    public static void startActivity(Context context, int wakeFlag) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
@@ -126,9 +132,14 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         }
         initServices();
         setToolbarShow(View.GONE);
+
         mMessageReciver = new MessageReciver(this);
         IntentFilter filter3 = new IntentFilter(Constants.IMLIB_BROADCAST_CHAT_NEWMESSAGE);
         registerReceiver(mMessageReciver, filter3);
+
+//        if(Build.VERSION.SDK_INT >= 26){
+            initBoardReceiver();
+//        }
 //        mScreenStateReciver = new ScreenStateReciver();
 //        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
 //        registerReceiver(mScreenStateReciver, screenfilter);
@@ -139,27 +150,25 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        mMineFragment = new MineFragment();
         //结载角色修改 底部tab 第二和第三项 货邮舱单 装机单
         isJunctionLoad = false;
-        for (LoginResponseBean.RoleRSBean roleRSBean: UserInfoSingle.getInstance().getRoleRS()){
-            if (Constants.JUNCTION_LOAD.equals(roleRSBean.getRoleCode())){
+        for (LoginResponseBean.RoleRSBean roleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
+            if (Constants.JUNCTION_LOAD.equals(roleRSBean.getRoleCode())) {
                 isJunctionLoad = true;
                 break;
             }
         }
 
-        if(isJunctionLoad){
-            fragment1 =  new TaskFragment();
+        if (isJunctionLoad) {
+            fragment1 = new TaskFragment();
             fragment2 = new CargoManifestFragment();
-            fragment3 =  new LnstallationFragment();
+            fragment3 = new LnstallationFragment();
             if (MyApplication.isNeedIm && Tools.isProduct())
                 fragment4 = new ImLibSpecialHomeFragment();
             else
                 fragment4 = new TestFragment();
             fragment5 = new MineFragment();
-        }
-        else
-        {
-            fragment1 =  new TaskFragment();
-            fragment2 =  new DynamicFragment();
+        } else {
+            fragment1 = new TaskFragment();
+            fragment2 = new DynamicFragment();
             fragment3 = new ClearStorageFragment();
             if (MyApplication.isNeedIm && Tools.isProduct())
                 fragment4 = new ImLibSpecialHomeFragment();
@@ -175,7 +184,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
      */
     private void getScooterConf() {
         mPresenter = new GetScooterConfPresenter(this);
-       ((GetScooterConfPresenter) mPresenter).getScooterConf("0");
+        ((GetScooterConfPresenter) mPresenter).getScooterConf("0");
 
     }
 
@@ -239,18 +248,17 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 
 
         nowFragment = fragment; //替换当前fragment
-        if (isJunctionLoad){
+        if (isJunctionLoad) {
             mIvTest.setImageResource(R.mipmap.mainfest);
             mTvTest.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvTest.setText("货邮舱单");
             mIvSearch.setImageResource(R.mipmap.load_list);
             mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvSearch.setText("装机单");
-        }
-        else {
+        } else {
             //判断 是否需要显示 清库 tab
             int rw = 0;
-            if (UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()!=0) {
+            if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() != 0) {
                 for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
                     if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                         rw = 1;
@@ -272,13 +280,11 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
         }
         mIvTask.setImageResource(R.mipmap.backlog_normal);
         mTvTask.setTextColor(getResources().getColor(R.color.main_tv_normal));
-        if (MyApplication.isNeedIm && Tools.isProduct()){
+        if (MyApplication.isNeedIm && Tools.isProduct()) {
             mIvMessgae.setImageResource(R.mipmap.news_normal);
             mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvMessge.setText("消息");
-        }
-        else
-        {
+        } else {
             mIvMessgae.setImageResource(R.mipmap.warehouse_press);
             mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_normal));
             mTvMessge.setText("库房管理");
@@ -293,29 +299,25 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
                 break;
             case 1:
                 mTvTest.setTextColor(getResources().getColor(R.color.main_tv_press));
-                if (isJunctionLoad){
+                if (isJunctionLoad) {
                     mIvTest.setImageResource(R.mipmap.mainfest_press);
-                }
-                else {
+                } else {
                     mIvTest.setImageResource(R.mipmap.dynamics_selected);
                 }
                 break;
             case 2:
                 mTvSearch.setTextColor(getResources().getColor(R.color.main_tv_press));
-                if (isJunctionLoad){
+                if (isJunctionLoad) {
                     mIvSearch.setImageResource(R.mipmap.load_list_press);
-                }
-                else {
+                } else {
                     mIvSearch.setImageResource(R.mipmap.clear_selected);
                 }
                 break;
             case 3:
-                if (MyApplication.isNeedIm && Tools.isProduct()){
+                if (MyApplication.isNeedIm && Tools.isProduct()) {
                     mIvMessgae.setImageResource(R.mipmap.news_selected);
                     mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
-                }
-                else
-                {
+                } else {
                     mIvMessgae.setImageResource(R.mipmap.warehouse);
                     mTvMessge.setTextColor(getResources().getColor(R.color.main_tv_press));
 
@@ -381,6 +383,15 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        }
 //    }
 
+    /**
+     * android 8  版本（包含） 以上 动态注册广播Action 才能收到隐士广播
+     */
+    private void initBoardReceiver() {
+        ScanReceiver = new ScanReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION);
+        registerReceiver(ScanReceiver, filter);
+    }
     @Override
     public void onBackPressed() {
 //        quitApp();
@@ -392,6 +403,8 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
+            if (ScanReceiver!=null)
+                unregisterReceiver(ScanReceiver);
 //            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
             e.printStackTrace();
@@ -408,52 +421,74 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     public void onEventMainThread(SeatChangeEntity result) {
 //        if (!(result.getRemark()==null || result.getRemark().contains("CTOT") ||result.getRemark().contains("机位"))){
 //            Log.e("dialog：","222222222222");
-            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> {});
-            updatePushDialog.show();
+        UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> {
+        });
+        updatePushDialog.show();
 //        }
         EventBus.getDefault().post("refresh_data_update");
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallChangeEntity result) {
         String remark = result.getFlightNo();
-        if (remark!=null&& !StringUtil.isEmpty(remark)){
-            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+        if (remark != null && !StringUtil.isEmpty(remark)) {
+            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+            });
             updatePushDialogInstall.show();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(InstallNotifyEventBusEntity result) {
         String remark = "";
-        if (result.getType() == 2){
-            remark = result.getFlightNo()+"监装已确认按此装机，版本："+result.getVersion();
+        if (result.getType() == 2) {
+            remark = result.getFlightNo() + "监装已确认按此装机，版本：" + result.getVersion();
+        } else if (result.getType() == 4) {
+            remark = result.getFlightNo() + "监装已确认最终装机单，版本：" + result.getVersion();
         }
-        else if (result.getType() == 4){
-            remark = result.getFlightNo()+"监装已确认最终装机单，版本："+result.getVersion();
-        }
-        if (remark!=null&& !StringUtil.isEmpty(remark)){
+        if (remark != null && !StringUtil.isEmpty(remark)) {
             UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
                 EventBus.getDefault().post("LoadInstall_Sure_Update");
             });
             updatePushDialogInstall.show();
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AfterHeavyExceptionBean result) {
-            String remark = "航班"+result.getFlightNo()+"出现复重异常, 异常板车"+result.getScooter()+"，请查看！";
-            if (remark!=null&& !StringUtil.isEmpty(remark)){
-                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {});
+        String remark = "航班" + result.getFlightNo() + "出现复重异常, 异常板车" + result.getScooter() + "，请查看！";
+        if (remark != null && !StringUtil.isEmpty(remark)) {
+            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+            });
+            updatePushDialogInstall.show();
+        }
+    }
+    /**
+     * 消息提醒推送
+     *
+     * @param webSocketMessageBean
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(WebSocketMessageBean webSocketMessageBean) {
+        if (webSocketMessageBean.getSpecialFlag() == 1) {
+            String remark = webSocketMessageBean.getContent();
+            if (remark != null && !StringUtil.isEmpty(remark)) {
+                UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
+                });
                 updatePushDialogInstall.show();
             }
+        }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(NewInstallEventBusEntity  result) {
-        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList<>();
-        List<LoadingListBean.DataBean.ContentObjectBean> objectBeans = result.getBeans();
-        if (objectBeans !=null && objectBeans.size()> 0){
-            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans){
+    public void onEventMainThread(NewInstallEventBusEntity result) {
+        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList <>();
+        List <LoadingListBean.DataBean.ContentObjectBean> objectBeans = result.getBeans();
+        if (objectBeans != null && objectBeans.size() > 0) {
+            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans) {
                 scooters.addAll(mContentObjectBean.getScooters());
             }
-            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters,objectBeans.get(0).getFlightNo(), () -> {
+            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters, objectBeans.get(0).getFlightNo(), () -> {
                 EventBus.getDefault().post("LoadInstall_Sure_Update");
                 EventBus.getDefault().post("refresh_data_update");
             });
@@ -465,19 +500,19 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
     @Override
     protected void onStart() {
         super.onStart();
-        if (ScooterConfiSingle.getInstance().isEmpty()){
-            Log.e("MainActivity","板车基础信息为空,从服务器请求板车基础数据");
+        if (ScooterConfiSingle.getInstance().isEmpty()) {
+            Log.e("MainActivity", "板车基础信息为空,从服务器请求板车基础数据");
             getScooterConf();
         }
 
     }
 
     @Override
-    public void getScooterConfResult(List<ScooterConfBean.ScooterConf> result) {
-        if (result!= null&& result.size() > 0){
-            HashMap<String,String> scooterMap = new HashMap <>();
-            for (ScooterConfBean.ScooterConf scooterConf:result){
-                scooterMap.put(scooterConf.getValue(),scooterConf.getName());
+    public void getScooterConfResult(List <ScooterConfBean.ScooterConf> result) {
+        if (result != null && result.size() > 0) {
+            HashMap <String, String> scooterMap = new HashMap <>();
+            for (ScooterConfBean.ScooterConf scooterConf : result) {
+                scooterMap.put(scooterConf.getValue(), scooterConf.getName());
             }
             if (!scooterMap.isEmpty())
                 ScooterConfiSingle.setScooterMap(scooterMap);
@@ -532,6 +567,7 @@ public class MainActivity extends BaseActivity implements LocationObservable , S
 //            }
 //        }
 //    }
+
     /**
      * 屏幕监听
      */

@@ -159,6 +159,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/xing_red"
                 android:layout_weight="1"
                 android:text="重量"
                 android:textColor="@color/black_3" />
@@ -197,7 +198,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="18dp"
-            android:paddingRight="18dp">
+            android:paddingRight="18dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -234,7 +236,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="18dp"
-            android:paddingRight="18dp">
+            android:paddingRight="18dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -261,7 +264,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="18dp"
-            android:paddingRight="18dp">
+            android:paddingRight="18dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -313,7 +317,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="18dp"
-            android:paddingRight="18dp">
+            android:paddingRight="18dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"

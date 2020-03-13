@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.request;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 /**
@@ -66,6 +68,14 @@ public class StorageCommitEntity {
      */
     private long insStartTime;
 
+    /**
+     * 件数
+     */
+    private BigDecimal number;
+    /**
+     * 重量
+     */
+    private BigDecimal weight;
 
 
 

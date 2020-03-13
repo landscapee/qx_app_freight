@@ -9,6 +9,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -62,6 +63,8 @@ import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
@@ -94,6 +97,7 @@ import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
+import qx.app.freight.qxappfreight.bean.response.PickGoodsRecordsBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -376,7 +380,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportDataBase>> getGroupBoardToDo(GroupBoardRequestEntity model) {
+    public Observable<FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
         return transform(getService().getGroupBoardToDo(model));
     }
 
@@ -502,6 +506,15 @@ public class UpdateRepository extends BaseRepository {
      */
     public Observable<List<AirlineRequireBean>> airlineRequire(BaseFilterEntity model) {
         return transform(getService().airlineRequire(model));
+    }
+    /****
+     * 根据品名id list 获取 证明清单
+     * @param goodsNames
+     * @return
+     */
+
+    public Observable<List<DocumentsBean>> getgetCommdityById(GoodsIdEntity goodsNames) {
+        return transform(getService().getgetCommdityById(goodsNames));
     }
 
     /*****
@@ -915,8 +928,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> saveScooter(GetInfosByFlightIdBean model) {
-        return nothingtransform(getService().saveScooter(model));
+    public Observable<GetInfosByFlightIdBean> saveScooter(GetInfosByFlightIdBean model) {
+        return transform(getService().saveScooter(model));
     }
 
     /****
@@ -1008,7 +1021,22 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<ForkliftWorkingCostBean>> getWaybillForklift(String waybillId) {
         return transform(getService().getWaybillForklift(waybillId));
     }
-
+    /****
+     * 进港-查询运单分批出库记录
+     * @param waybillId
+     * @return
+     */
+    public Observable<List<PickGoodsRecordsBean>> getOutboundList(String waybillId) {
+        return transform(getService().getOutboundList(waybillId));
+    }
+    /****
+     * 进港-撤销出库记录
+     * @param model
+     * @return
+     */
+    public Observable<String> revokeInboundDelevery(PickGoodsRecordsBean model) {
+        return nothingtransform(getService().revokeInboundDelevery(model));
+    }
     /****
      * 进港-添加单叉车使用费记录
      * @param model

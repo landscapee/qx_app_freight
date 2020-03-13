@@ -50,14 +50,16 @@ public class ForkliftCostDialogForNet extends Dialog implements ForkliftCostCont
     public BasePresenter mPresenter;
 
     private String waybillId;
+    private String waybillCode;
 
     public MaterialDialog mProgessbarDialog;
     public TextView mTextView = null;
 
-    public ForkliftCostDialogForNet(Context context, String waybillId) {
+    public ForkliftCostDialogForNet(Context context, String waybillId,String waybillCode) {
         super(context, R.style.CommomDialog);
         this.mContext = context;
         this.waybillId = waybillId;
+        this.waybillCode = waybillCode;
         setCanceledOnTouchOutside(false);
     }
 
@@ -124,12 +126,13 @@ public class ForkliftCostDialogForNet extends Dialog implements ForkliftCostCont
                 List<ForkliftWorkingCostBean> overweightBeans = new ArrayList <>();
                 ForkliftWorkingCostBean overweightBean = new ForkliftWorkingCostBean();
                 overweightBean.setNumber(Integer.valueOf(etNum.getText().toString()));
-//                overweightBean.setCharge(Double.valueOf(etWeight.getText().toString()));
+                overweightBean.setCharge(Double.valueOf(Integer.valueOf(etNum.getText().toString())*50));
 //                overweightBean.setVolume(Integer.valueOf(etVolume.getText().toString()));
 //                overweightBean.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
                 overweightBean.setCreateUser(UserInfoSingle.getInstance().getUserId());
                 overweightBean.setCreateUserName(UserInfoSingle.getInstance().getUsername());
                 overweightBean.setWaybillId(waybillId);
+                overweightBean.setWaybillCode(waybillCode);
                 overweightBeans.add(overweightBean);
                 addOverweight(overweightBeans);
                 etNum.setText("");
@@ -204,7 +207,7 @@ public class ForkliftCostDialogForNet extends Dialog implements ForkliftCostCont
         ((ForkLiftPresenter) mPresenter).getForklifts(waybillId);
     }
     /**
-     * 添加超重记录
+     * 添加叉车
      */
     public void addOverweight(List<ForkliftWorkingCostBean> forkliftWorkingCostBeans) {
         mPresenter = new ForkLiftPresenter(this);

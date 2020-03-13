@@ -29,7 +29,7 @@ public class MilepostBean {
     private int flightId;
     private String milestoneCode;
     private String milestoneName;
-    private String estimatedTime;
+    private long estimatedTime;
     private long actualTime;
     private long createTime;
     private String userId;

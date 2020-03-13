@@ -112,6 +112,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     private List<String> infoTypeList;
     private String infoType;
 
+    private List<RecordsBean> areaList = new ArrayList <>();// 根据货物类型获取的库区列表
+    private RecordsBean selectArea;//根据货物类型获取的库区
+
+
     private CustomToolbar toolbar;
 
     private String storage;
@@ -258,6 +262,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
                 if (infoList.size()>0) {
                     mTvStorageInfo.setText(infoList.get(options1));
                     infoType = infoTypeList.get(options1);
+                    selectArea = areaList.get(options1);
                 }else {
                     mTvStorageInfo.setText(null);
                     ToastUtil.showToast("当前没有库区");
@@ -454,7 +459,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
      * @param
      */
     private void turnToReceiveGoodsActivity() {
-        ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId,infoType);
+        ReceiveGoodsActivity.startActivity(this, taskId, mData, taskTypeCode, getIntent().getStringExtra("id"), wayBillId,infoType,selectArea);
     }
 
 
@@ -475,10 +480,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
     public void baseParamTypeResult(BaseParamBean changeStorageBean) {
         infoList.clear();
         infoTypeList.clear();
+        areaList.clear();
         if (null != changeStorageBean) {
             if (changeStorageBean.getRecords().size() > 0) {
+                areaList.addAll(changeStorageBean.getRecords());
                 mTvStorageInfo.setText(changeStorageBean.getRecords().get(0).getReservoirName());
                 infoType = changeStorageBean.getRecords().get(0).getReservoirSaveType();
+                selectArea = areaList.get(0);
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
                     infoList.add(changeStorageBean.getRecords().get(i).getReservoirName());
                     infoTypeList.add(changeStorageBean.getRecords().get(i).getReservoirSaveType());

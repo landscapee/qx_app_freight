@@ -30,8 +30,10 @@ import qx.app.freight.qxappfreight.adapter.InportTallyAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -42,6 +44,7 @@ import qx.app.freight.qxappfreight.contract.TaskLockContract;
 import qx.app.freight.qxappfreight.listener.InportTallyInterface;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TaskLockPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -52,14 +55,14 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List<TransportDataBase> mList = new ArrayList<>();  //筛选过后的数据
-    private List<TransportDataBase> mListTemp = new ArrayList<>(); // 原始数据
+    private List <TransportDataBase> mList = new ArrayList <>();  //筛选过后的数据
+    private List <TransportDataBase> mListTemp = new ArrayList <>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
     private TaskFragment mTaskFragment; //父容器fragment
     private SearchToolbar searchToolbar;//父容器的输入框
-    private boolean isShow =false;
+    private boolean isShow = false;
 
     /**
      * 待办锁定 当前的任务bean
@@ -93,7 +96,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
-                List<String> taskIdList = new ArrayList<>();
+                List <String> taskIdList = new ArrayList <>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -125,12 +128,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-        if (isVisibleToUser){
-            Log.e("111111", "setUserVisibleHint: "+ "展示");
+        if (isVisibleToUser) {
+            Log.e("111111", "setUserVisibleHint: " + "展示");
             if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mListTemp.size());
             }
-            if (searchToolbar!=null){
+            if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
                     seachWithNum();
@@ -143,44 +146,44 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     private void seachWithNum() {
         mList.clear();
         //搜索关键字为空，则不显示全部数据
-        if(TextUtils.isEmpty(searchString)){
+        if (TextUtils.isEmpty(searchString)) {
             mList.addAll(mListTemp);
-        }else{
-            for(TransportDataBase itemData: mListTemp){
-                if(itemData.getFlightNo()!=null&&itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())){
+        } else {
+            for (TransportDataBase itemData : mListTemp) {
+                if (itemData.getFlightNo() != null && itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     mList.add(itemData);
                 }
             }
         }
-        if (mMfrvData!=null){
+        if (mMfrvData != null) {
             mMfrvData.notifyForAdapter(mAdapter);
         }
     }
 
     private void initData() {
-        /*BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-        entity.setCurrent(mCurrentPage);
-        entity.setSize(Constants.PAGE_SIZE);
-        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-        entity.setUndoType("2");
-        entity.setRoleCode(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());*/
-        GroupBoardRequestEntity entity=new GroupBoardRequestEntity();
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
+        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
         entity.setRoleCode("beforehand_in");
         entity.setUndoType(2);
-        List<String> ascs=new ArrayList<>();
+        List <String> ascs = new ArrayList <>();
         ascs.add("ATA");
         ascs.add("STA");
         entity.setAscs(ascs);
+        baseFilterEntity.setFilter(entity);
+        baseFilterEntity.setSize(Constants.PAGE_SIZE);
+        baseFilterEntity.setCurrent(mCurrentPage);
         mPresenter = new GroupBoardToDoPresenter(this);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(baseFilterEntity);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUserVisibleHint(true);
     }
+
     /**
      * 跳转到代办详情
      *
@@ -199,7 +202,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData())&&result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
             chooseCode(daibanCode);
         }
     }
@@ -217,7 +220,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
-                List<String> taskIdList = new ArrayList<>();
+                List <String> taskIdList = new ArrayList <>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -240,12 +243,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void onRefresh() {
+        mCurrentPage = 1;
         initData();
     }
 
     @Override
     public void onLoadMore() {
-//        mCurrentPage++;
         mMfrvData.finishLoadMore();
     }
 
@@ -295,30 +298,35 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
-        if (mCurrentPage == 1) {
-            mMfrvData.finishRefresh();
-//            mListTemp.clear();
-        } else {
-            mMfrvData.finishLoadMore();
-        }
-        //看代码是没有做分页的，所以clear放这里
-        mListTemp.clear();
-        for (TransportDataBase item:transportListBeans){
-            if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")){
-                mListTemp.add(item);
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
+        if (transportListBeans != null && transportListBeans.getRecords() != null) {
+            if (transportListBeans.getCurrent() == 1) {
+                mListTemp.clear();
+                mMfrvData.finishRefresh();
+            } else {
+                mMfrvData.finishLoadMore();
+            }
+            mCurrentPage = transportListBeans.getCurrent()+1;
+            for (TransportDataBase item : transportListBeans.getRecords()) {
+                if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")) {
+                    mListTemp.add(item);
+                }
+            }
+            seachWithNum();
+            if (mTaskFragment != null) {
+                if (isShow) {
+                    mTaskFragment.setTitleText(mListTemp.size());
+                }
             }
         }
-        seachWithNum();
-        if (mTaskFragment != null) {
-            if (isShow) {
-                mTaskFragment.setTitleText(mListTemp.size());
-            }
+        else {
+            ToastUtil.showToast("无更多数据");
         }
+
     }
 
     @Override
-    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 
@@ -329,11 +337,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     /**
      * 待办锁定
+     *
      * @param result
      */
     @Override
     public void taskLockResult(String result) {
-        if(CURRENT_TASK_BEAN != null) {
+        if (CURRENT_TASK_BEAN != null) {
             turnToDetailActivity(CURRENT_TASK_BEAN);
         }
     }

@@ -92,7 +92,7 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
 
     private String consigneePostcode;
     private String consigneeAddress;
-    private String specialCargoCode;
+    private String specialCode;
     //存储类型
     private String coldStorage;
     private String billingWeight;
@@ -183,6 +183,8 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
     private String seat;
 
     private String aircraftNo;
+
+    private List<WaybillCommodities> spWaybillCommodities;
 
     @Override
     public int getItemType() {

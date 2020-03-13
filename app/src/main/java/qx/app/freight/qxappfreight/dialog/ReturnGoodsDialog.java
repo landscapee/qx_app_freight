@@ -31,6 +31,10 @@ public class ReturnGoodsDialog extends Dialog {
     private EditText etNum,etWeight,etVolume,etOverweight;
     private OverweightRecordAdapter overweightRecordAdapter;
 
+//    private int collectorNum;
+//    private int collectorWeight;
+
+
     List<RcInfoOverweight> rcInfoOverweight;
 
     public ReturnGoodsDialog(Context context) {
@@ -75,7 +79,14 @@ public class ReturnGoodsDialog extends Dialog {
         rlAdd.setOnClickListener((v) -> {
             RcInfoOverweight mRcInfoOverweight = new RcInfoOverweight();
             if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())){
-
+//                if (Integer.valueOf(etNum.getText().toString())>collectorNum){
+//                    ToastUtil.showToast("超重件数不能超过收运件数");
+//                    return;
+//                }
+//                if (Integer.valueOf(etWeight.getText().toString())>collectorWeight){
+//                    ToastUtil.showToast("超重重量不能超过收运重量");
+//                    return;
+//                }
                 mRcInfoOverweight.setCount(Integer.valueOf(etNum.getText().toString()));
                 mRcInfoOverweight.setWeight(Integer.valueOf(etWeight.getText().toString()));
 //                mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
@@ -145,6 +156,8 @@ public class ReturnGoodsDialog extends Dialog {
 
     public ReturnGoodsDialog setData(List<RcInfoOverweight> list){
         rcInfoOverweight = list;
+//        this.collectorNum = collectorNum;
+//        this.collectorWeight = collectorWeight;
         return this;
     }
 

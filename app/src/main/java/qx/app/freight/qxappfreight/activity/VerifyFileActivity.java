@@ -26,20 +26,24 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.VerifyFileAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.response.AddtionInvoicesBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
 import qx.app.freight.qxappfreight.bean.response.ForwardInfoBean;
 import qx.app.freight.qxappfreight.bean.response.HeChaBean;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
+import qx.app.freight.qxappfreight.bean.response.WaybillCommodities;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.AirlineRequireContract;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.presenter.AirlineRequirePresenter;
 import qx.app.freight.qxappfreight.presenter.SubmissionPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -56,10 +60,19 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     TextView mTvWenjian;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
 
     private VerifyFileAdapter mAdapter;
-    private List<AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList<>();
+    private List <AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList <>();
     private String mFilePath;
     private int insCheck; //报检是否合格1合格 0不合格
     private int mSpotResult;
@@ -102,6 +115,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     private void initData() {
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
+        setWaybillInfo(mBean);
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
         mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         mFilePath = getIntent().getStringExtra("filePath");
@@ -110,18 +124,10 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
         if (null != mDecBean.getSpWaybillFile()) {
 
-            if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && "[]".equals(mDecBean.getAdditionTypeArr())) {
-                llContent.setVisibility(View.GONE);
-                mTvWenjian.setVisibility(View.VISIBLE);
-            } else {
-                llContent.setVisibility(View.VISIBLE);
-                mTvWenjian.setVisibility(View.GONE);
-            }
-
             if ("[]".equals(mDecBean.getSpWaybillFile().getAddtionInvoices()) && !TextUtils.isEmpty(mDecBean.getSpWaybillFile().getAddtionInvoices())) {
                 Gson mGson = new Gson();
                 AddtionInvoicesBean.AddtionInvoices[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), AddtionInvoicesBean.AddtionInvoices[].class);
-                List<AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
+                List <AddtionInvoicesBean.AddtionInvoices> addtionInvoices1 = Arrays.asList(addtionInvoices);
                 mList.clear();
                 mList.addAll(addtionInvoices1);
                 mMfrvData.setLayoutManager(new LinearLayoutManager(this));
@@ -130,8 +136,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             } else if (!TextUtils.isEmpty(mDecBean.getAdditionTypeArr())) {
                 Gson mGson = new Gson();
                 HeChaBean[] addtionInvoices = mGson.fromJson(mDecBean.getSpWaybillFile().getAddtionInvoices(), HeChaBean[].class);
-                List<HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
-                List<AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList<>();
+                List <HeChaBean> heChaBeanList = Arrays.asList(addtionInvoices);
+                List <AddtionInvoicesBean.AddtionInvoices> addList = new ArrayList <>();
                 for (int i = 0; i < heChaBeanList.size(); i++) {
                     AddtionInvoicesBean.AddtionInvoices add = new AddtionInvoicesBean.AddtionInvoices();
                     add.setFileTypeName(heChaBeanList.get(i).getFileTypeName());
@@ -146,12 +152,52 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 ToastUtil.showToast("数据为空");
 
             mAdapter.setOnItemClickListener((adapter, view, position) -> {
-                        List<String> array = new ArrayList<>();
-                        array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
-                        ImgPreviewAct.startPreview(VerifyFileActivity.this, array, position);
-                    }
-            );
+                if (!StringUtil.isEmpty(mList.get(position).getFilePath())) {
+                    List <String> array = new ArrayList <>();
+                    array.add(HttpConstant.IMAGEURL + mList.get(position).getFilePath());
+                    ImgPreviewAct.startPreview(VerifyFileActivity.this, array, 0);
+                }
+            });
         }
+        getCommdityById(mBean);
+    }
+
+    private void getCommdityById(TransportDataBase transportDataBase) {
+        if (transportDataBase != null && transportDataBase.getSpWaybillCommodities() != null) {
+            mPresenter = new AirlineRequirePresenter(this);
+            List <String> goodsIds = new ArrayList <>();
+            for (WaybillCommodities waybillCommodities : transportDataBase.getSpWaybillCommodities()) {
+                goodsIds.add(waybillCommodities.getCargoId());
+            }
+            if (goodsIds.size() > 0) {
+                GoodsIdEntity goodsIdEntity = new GoodsIdEntity();
+                goodsIdEntity.setParam(goodsIds);
+                goodsIdEntity.setOutlet(1);
+                ((AirlineRequirePresenter) mPresenter).getgetCommdityById(goodsIdEntity);
+            }
+
+
+        }
+    }
+
+    private void setWaybillInfo(TransportDataBase mBean) {
+        if (mBean != null) {
+            tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  " + mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+                tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  " + mBean.getTotalNumber());
+            tvWeight.setText("重量:  " + mBean.getTotalWeight());
+        } else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
+
     }
 
     @OnClick({R.id.agree_tv, R.id.refuse_tv})
@@ -173,6 +219,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mPresenter = new SubmissionPresenter(this);
                 StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
                 mStorageCommitEntity.setWaybillId(mBean.getId());
+                mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
                 mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                 mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
                 mStorageCommitEntity.setInsFile(mFilePath);
@@ -230,7 +277,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
 
     @Override
-    public void airlineRequireResult(List<AirlineRequireBean> airlineRequireBeans) {
+    public void airlineRequireResult(List <AirlineRequireBean> airlineRequireBeans) {
         if (airlineRequireBeans != null) {
             for (int i = 0; i < airlineRequireBeans.size(); i++) {
                 mTvCollectRequire.setText(airlineRequireBeans.get(i).getRequire());
@@ -248,6 +295,34 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             mTvCollectRequire.setText(str);
         } else
             Log.e("核查证明文件空", "");
+    }
+
+    @Override
+    public void getgetCommdityByIdResult(List <DocumentsBean> goodsNames) {
+        if (goodsNames != null && goodsNames.size() > 0) {
+            for (DocumentsBean documentsBean : goodsNames) {
+                AddtionInvoicesBean.AddtionInvoices addtionInvoices = new AddtionInvoicesBean.AddtionInvoices();
+                addtionInvoices.setId(documentsBean.getId());
+                addtionInvoices.setFileTypeName(documentsBean.getName());
+                boolean ishave = false;
+                for (AddtionInvoicesBean.AddtionInvoices addtionInvoices1:mList){
+                    if (addtionInvoices1.getId().equals(documentsBean.getId())){
+                        ishave = true;
+                    }
+                }
+                if (!ishave)
+                    mList.add(addtionInvoices);
+            }
+            if (mList.size()==0) {
+                llContent.setVisibility(View.GONE);
+                mTvWenjian.setVisibility(View.VISIBLE);
+            } else {
+                llContent.setVisibility(View.VISIBLE);
+                mTvWenjian.setVisibility(View.GONE);
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

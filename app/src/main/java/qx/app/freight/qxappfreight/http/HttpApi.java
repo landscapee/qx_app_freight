@@ -8,6 +8,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
+import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -61,6 +62,8 @@ import qx.app.freight.qxappfreight.bean.response.CargoReportHisBean;
 import qx.app.freight.qxappfreight.bean.response.ChangeStorageBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareApplyForRecords;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
+import qx.app.freight.qxappfreight.bean.response.DocumentsBean;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
@@ -94,6 +97,7 @@ import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.bean.response.OverweightBean;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
+import qx.app.freight.qxappfreight.bean.response.PickGoodsRecordsBean;
 import qx.app.freight.qxappfreight.bean.response.QueryAviationRequireBean;
 import qx.app.freight.qxappfreight.bean.response.QueryContainerInfoBean;
 import qx.app.freight.qxappfreight.bean.response.QueryReservoirBean;
@@ -132,7 +136,8 @@ import retrofit2.http.Query;
  */
 public interface HttpApi {
     //登录接口
-    @POST("/service-base-sysmanage/auth/login")
+//    @POST("/service-base-sysmanage/auth/login")
+    @POST("/service-base-sysmanage/login")
     Observable<BaseEntity<LoginResponseBean>> login(@Body LoginEntity model);
 
     //修改密码
@@ -199,7 +204,7 @@ public interface HttpApi {
 
     //预配组板获取代办数据
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
-    Observable<BaseEntity<List<TransportDataBase>>> getGroupBoardToDo(@Body GroupBoardRequestEntity model);
+    Observable<BaseEntity<FilterTransportDateBase>> getGroupBoardToDo(@Body BaseFilterEntity model);
 
     //存储类型变更
     @POST("service-bussiness-baseparam/baseParam/list")
@@ -313,6 +318,10 @@ public interface HttpApi {
     @GET("service-bussiness-shipper/freightInfo/getById/{freightId}")
     Observable<BaseEntity<ForwardInfoBean>> forwardInfo(@Path("freightId") String freightId);
 
+    //根据品名id list 获取 证明清单
+    @POST("service-bussiness-cargoname/cn/commodityName/getCommdityQualificationFileBatchByIds")
+    Observable<BaseEntity<List<DocumentsBean>>> getgetCommdityById(@Body GoodsIdEntity goodsNames);
+
 
     //航司资质
     @POST("service-base-sysmanage/airlineRequire/list")
@@ -359,7 +368,7 @@ public interface HttpApi {
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
-    Observable<BaseEntity<Object>> saveScooter(@Body GetInfosByFlightIdBean model);
+    Observable<BaseEntity<GetInfosByFlightIdBean>> saveScooter(@Body GetInfosByFlightIdBean model);
 
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
@@ -563,6 +572,15 @@ public interface HttpApi {
     //查询提货管理列表
     @POST("service-product-inwaybill/arrival-waybill/searchWaybillByWaybillCode")
     Observable<BaseEntity<WaybillsListBean>> searchWaybillByWaybillCode(@Body BaseFilterEntity model);
+
+    //查询提货分批出库记录
+    @GET("service-product-delivery/delivery/getOutboundList/{waybillId}")
+    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path( "waybillId") String waybillId);
+
+    //撤销 提货分批出库记录
+    @POST(" service-product-delivery/delivery/revokeInboundDelevery")
+    Observable<BaseEntity<Object>> revokeInboundDelevery(@Body PickGoodsRecordsBean model);
+
 
     //查询运单超重记录
     @POST("service-product-delivery/delivery/getOverweightByWaybillId")

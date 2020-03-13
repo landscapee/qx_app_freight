@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -34,6 +35,7 @@ import qx.app.freight.qxappfreight.contract.ReturnTransportationListContract;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ReturnCargoCommitPresenter;
 import qx.app.freight.qxappfreight.presenter.ReturnTransportationListPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -49,6 +51,18 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     Button mBtSure;
     @BindView(R.id.btn_refuse)
     Button mBtRefuse;
+
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+
     private ReturnGoodAdapter adapter;
     private TransportDataBase mBean;
     private List<ReturnBean> list;
@@ -85,6 +99,27 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         mBean = (TransportDataBase) getIntent().getSerializableExtra("TransportListBean");
     }
 
+    private void setWaybillInfo(DeclareWaybillBean mBean) {
+        if (mBean!=null){
+            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  "+mBean.getTotalNumber());
+            tvWeight.setText("重量:  "+mBean.getTotalWeight());
+        }
+        else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
+
+    }
+
     private void getDataInfo() {
         mPresenter = new GetWayBillInfoByIdPresenter(this);
         ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getId());
@@ -115,6 +150,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     }
 
     private void pullData(int judge) {
+        
         mPresenter = new ReturnCargoCommitPresenter(this);
         entity.setJudge(judge);
         //1 是提交
@@ -193,7 +229,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
                 mMfrvAllocateList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             } else {
-                ToastUtil.showToast("数据为空");
+//                ToastUtil.showToast("数据为空");
             }
         }
     }
@@ -201,7 +237,12 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     @Override
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         if (null != result) {
+            if (StringUtil.isEmpty(result.getRefrigeratedTemperature()))
+                result.setRefrigeratedTemperature("0*0");
+
             entity.setWaybillInfo(result);
+
+            setWaybillInfo(result);
         }
 
     }

@@ -6,6 +6,8 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +37,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.BuildConfig;
+import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.activity.MsgDialogAct;
@@ -370,15 +373,16 @@ public class Tools {
      * 短暂提示音
      */
     public static void startShortSound(Context context) {
-//        try {
-//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//            Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
-//            r.play();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
-        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
+        try {
+            Uri  uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.beep);
+//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+//        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
     }
 
     /**

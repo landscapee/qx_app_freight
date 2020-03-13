@@ -26,15 +26,18 @@ public class RepeatWeightScooterAdapter extends BaseQuickAdapter<GetInfosByFligh
             helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTotal(), item.getWeight(), item.getVolume()));
 
             String scooterType;
+            helper.setTextColor(R.id.tv_scooter_type, mContext.getResources().getColor(R.color.gray_8f));
             switch (item.getReWeightFinish()) {
                 case 0:
                     scooterType = "待复重";
                     break;
                 case 1:
                     scooterType = "完成";
+                    helper.setTextColor(R.id.tv_scooter_type, mContext.getResources().getColor(R.color.green));
                     break;
                 case 2:
                     scooterType = "复重异常";
+                    helper.setTextColor(R.id.tv_scooter_type, mContext.getResources().getColor(R.color.red));
                     break;
                 default:
                     scooterType = "待复重";

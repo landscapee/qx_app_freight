@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
+import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
@@ -59,8 +60,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     private AllocateVehiclesAdapter adapter;
 
-    private List<TransportDataBase> list; //条件list
-    private List<TransportDataBase> list1; //原始list
+    private List <TransportDataBase> list; //条件list
+    private List <TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
     private String searchString = "";//条件搜索关键字
@@ -77,7 +78,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         return view;
     }
 
-//    @Override
+    //    @Override
 //    public void onResume() {
 //        super.onResume();
 //        getData();
@@ -96,6 +97,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         initData();
+
         initTitle();
 //        setUserVisibleHint(true);
     }
@@ -110,21 +112,26 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         }
     }
 
-    private void initTitle(){
-            if (mTaskFragment == null){
-                mTaskFragment = (TaskFragment) getParentFragment();
+    private void initTitle() {
+        if (!isShow)
+            return;
+        if (mTaskFragment == null) {
+            mTaskFragment = (TaskFragment) getParentFragment();
 
-            }
-            if (mTaskFragment != null){
-                mTaskFragment.setTitleText(list1.size());
-                searchToolbar = mTaskFragment.getSearchView();
-            }
-            if (searchToolbar != null) {
-                searchToolbar.setHintAndListener("请输入航班号", text -> {
-                    searchString = text;
-                    seachWithNum();
-                });
-            }
+        }
+        if (mTaskFragment != null) {
+            mTaskFragment.setTitleText(list1.size());
+            searchToolbar = mTaskFragment.getSearchView();
+            mTaskFragment.getToolbar().setRightIconViewVisiable(true);
+            mTaskFragment.getToolbar().setleftIconViewVisiable(true);
+            mTaskFragment.setTitleText();
+        }
+        if (searchToolbar != null) {
+            searchToolbar.setHintAndListener("请输入航班号", text -> {
+                searchString = text;
+                seachWithNum();
+            });
+        }
 
     }
 
@@ -135,7 +142,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             list.addAll(list1);
         } else {
             for (TransportDataBase item : list1) {
-                if (item.getFlightNo()!=null&&item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (item.getFlightNo() != null && item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
                     list.add(item);
                 }
             }
@@ -148,32 +155,40 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(WebSocketResultBean mWebSocketResultBean) {
-        if ("N".equals(mWebSocketResultBean.getFlag())) {
-            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
-                list1.addAll(mWebSocketResultBean.getChgData());
-                seachWithNum();
-                if (isShow) {
-                    mTaskFragment.setTitleText(list1.size());
-                }
-            }
-        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
-            if (null != CURRENT_TASK_BEAN) {
-                if (CURRENT_TASK_BEAN.getFlightId().equals(mWebSocketResultBean.getChgData().get(0).getFlightId())) {
-                    ActManager.getAppManager().finishAllocate();
-                    ToastUtil.showToast("任务已完成");
-                }
-            }
-            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
-                getData();
-            }
-
+//        if ("N".equals(mWebSocketResultBean.getFlag())) {
+//            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+//                list1.addAll(mWebSocketResultBean.getChgData());
+//                seachWithNum();
+//                if (isShow) {
+//                    mTaskFragment.setTitleText(list1.size());
+//                }
+//            }
+//        } else if ("D".equals(mWebSocketResultBean.getFlag())) {
+//            if (null != CURRENT_TASK_BEAN) {
+//                if (CURRENT_TASK_BEAN.getFlightId().equals(mWebSocketResultBean.getChgData().get(0).getFlightId())) {
+//                    ActManager.getAppManager().finishAllocate();
+//                    ToastUtil.showToast("任务已完成");
+//                }
+//            }
+//            if (null != mWebSocketResultBean.getChgData().get(0).getTaskTypeCode() && mWebSocketResultBean.getChgData().get(0).getTaskTypeCode().contains("checkWeight")) {
+//                getData();
+//            }
+//
+//        }
+        pageCurrent = 1;
+        getData();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String postStr){
+        if (Constants.REWEIGHT_DONE.equals(postStr)){
+            pageCurrent = 1;
+            getData();
         }
-
     }
 
     private void initData() {
-        list = new ArrayList<>();
-        list1 = new ArrayList<>();
+        list = new ArrayList <>();
+        list1 = new ArrayList <>();
         adapter = new AllocateVehiclesAdapter(list, getContext());
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setOnRetryLisenter(this);
@@ -194,15 +209,19 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void getData() {
         mPresenter = new GroupBoardToDoPresenter(this);
 
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
         entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
 //        {"stepOwner":"uef9de97d6c53428c946089d63cfaaa4c","undoType":2,"roleCode":"weighter","ascs":["ETD"]}
         entity.setRoleCode(Constants.WEIGHTER);
         entity.setUndoType(2);
-        List<String> ascs = new ArrayList<>();
+        List <String> ascs = new ArrayList <>();
         ascs.add("ETD");
         entity.setAscs(ascs);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(entity);
+        baseFilterEntity.setFilter(entity);
+        baseFilterEntity.setCurrent(pageCurrent);
+        baseFilterEntity.setSize(Constants.PAGE_SIZE);
+        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(baseFilterEntity);
 //
 //        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
 //        entity.setUserId("weighter");
@@ -255,7 +274,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     @Override
     public void onLoadMore() {
-        pageCurrent++;
         getData();
     }
 
@@ -264,38 +282,44 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")&&isShow) {
-                String daibanCode = result.getData();
-                getScooterByScooterCode(daibanCode);
+        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity") && isShow) {
+            String daibanCode = result.getData();
+            getScooterByScooterCode(daibanCode);
         }
 
     }
 
     @Override
-    public void getGroupBoardToDoResult(List<TransportDataBase> transportListBeans) {
-        //因为没有分页，不做分页判断
-        list1.clear();
+    public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
+        if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
+            //因为没有分页，不做分页判断
 
-        if (pageCurrent == 1) {
-            mMfrvAllocateList.finishRefresh();
-        } else {
-            mMfrvAllocateList.finishLoadMore();
-        }
-        list1.addAll(transportListBeans);
-        if (mTaskFragment != null) {
-            if (isShow)
-                mTaskFragment.setTitleText(list1.size());
-        }
-        seachWithNum();
-    }
-
-    @Override
-    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
-        if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
-            if (getInfosByFlightIdBeans.size() == 1){
-                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
+            if (transportListBeans.getCurrent() == 1) {
+                list1.clear();
+                mMfrvAllocateList.finishRefresh();
+            } else {
+                mMfrvAllocateList.finishLoadMore();
             }
-            else {
+            pageCurrent = transportListBeans.getCurrent()+1;
+            list1.addAll(transportListBeans.getRecords());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
+            }
+            seachWithNum();
+        }
+        else {
+            ToastUtil.showToast("无更多数据");
+        }
+
+    }
+
+    @Override
+    public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+        if (getInfosByFlightIdBeans != null && getInfosByFlightIdBeans.size() > 0) {
+            if (getInfosByFlightIdBeans.size() == 1) {
+                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
+            } else {
                 ChooseFlightDialog dialog = new ChooseFlightDialog();
                 dialog.setChooseDialogInterface(position -> {
                     if (getInfosByFlightIdBeans.get(position) != null) {
@@ -306,8 +330,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                 dialog.show(getActivity().getSupportFragmentManager(), "123");
             }
 
-        }
-        else {
+        } else {
             ToastUtil.showToast("没有查询到相应的板车");
         }
 

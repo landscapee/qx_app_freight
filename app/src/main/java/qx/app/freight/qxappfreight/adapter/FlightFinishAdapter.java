@@ -20,6 +20,7 @@ import qx.app.freight.qxappfreight.widget.BubbleTextVew;
 /**
  * TODO :  航班完成进度适配器
  * Created by pr
+ * change zyy 2019.11.25
  */
 public class FlightFinishAdapter extends BaseAdapter {
     private Context mContext;
@@ -64,11 +65,11 @@ public class FlightFinishAdapter extends BaseAdapter {
             holder.mItemLayoutLeft.setVisibility(View.INVISIBLE);
             holder.mItemLayoutRight.setVisibility(View.VISIBLE);
             holder.mTvContentRight.setText(model.getMilestoneName());
-            holder.mTvTimeRight.setText(Tools.returnTime(model.getCreateTime()) + "|" + Tools.returnTime(model.getActualTime()));
+            holder.mTvTimeRight.setText(Tools.returnTime(model.getEstimatedTime()) + "|" + Tools.returnTime(model.getActualTime()));
             setBubbColor(holder.mTvContentRight, holder.mRound, model);
         } else {
             holder.mTvContentLeft.setText(model.getMilestoneName());
-            holder.mTvTimeLeft.setText(Tools.returnTime(model.getCreateTime()) + "|" + Tools.returnTime(model.getActualTime()));
+            holder.mTvTimeLeft.setText(Tools.returnTime(model.getEstimatedTime()) + "|" + Tools.returnTime(model.getActualTime()));
             holder.mItemLayoutLeft.setVisibility(View.VISIBLE);
             holder.mItemLayoutRight.setVisibility(View.INVISIBLE);
             setBubbColor(holder.mTvContentLeft, holder.mRound, model);
@@ -78,10 +79,17 @@ public class FlightFinishAdapter extends BaseAdapter {
     }
 
     private void setBubbColor(BubbleTextVew v, View round, MilepostBean model) {
-        v.setTextColor(mContext.getResources().getColor(R.color.white));
-        round.setBackgroundResource(R.drawable.shape_white_dot);
-        v.setBubbleColor(mContext.getResources().getColor(R.color.white));
-        v.setTextColor(mContext.getResources().getColor(R.color.deepskyblue));
+        if (model.getActualTime()>0){
+            round.setBackgroundResource(R.drawable.shape_blue_dot);
+            v.setBubbleColor(mContext.getResources().getColor(R.color.deepskyblue));
+            v.setTextColor(mContext.getResources().getColor(R.color.white));
+        }
+        else {
+            round.setBackgroundResource(R.drawable.shape_white_dot);
+            v.setBubbleColor(mContext.getResources().getColor(R.color.white));
+            v.setTextColor(mContext.getResources().getColor(R.color.deepskyblue));
+        }
+
     }
 
     static class ViewHolder {

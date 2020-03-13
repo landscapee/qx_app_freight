@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -24,6 +27,7 @@ import qx.app.freight.qxappfreight.adapter.InventoryAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.GetIOManifestEntity;
+import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.bean.response.SmInventorySummary;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetInventoryContract;
@@ -39,7 +43,10 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
 
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
-
+    @BindView(R.id.et_search)
+    EditText etSearch;
+    private String strSearch = "";
+    private List <SmInventorySummary> mListSearch = new ArrayList <>();
     private List <SmInventorySummary> mList = new ArrayList <>();
     private InventoryAdapter ioManifestAdapter;
 
@@ -61,8 +68,25 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
         mMfrvData.setLayoutManager(new LinearLayoutManager(getContext()));
         mMfrvData.setRefreshListener(this);
         mMfrvData.setOnRetryLisenter(this);
-        ioManifestAdapter = new InventoryAdapter(mList);
+        ioManifestAdapter = new InventoryAdapter(mListSearch);
         mMfrvData.setAdapter(ioManifestAdapter);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                strSearch = etSearch.getText().toString();
+                bySearchList(mList);
+            }
+        });
         loadData(pageCurrent);
     }
 
@@ -127,7 +151,16 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
     public void dissMiss() {
 
     }
+    private void bySearchList(List <SmInventorySummary> mList){
+        mListSearch.clear();
+        for (SmInventorySummary smInventoryEntryandexit:mList){
+            if (smInventoryEntryandexit.getWaybillCode().contains(strSearch)){
+                mListSearch.add(smInventoryEntryandexit);
+            }
+        }
+        mMfrvData.notifyForAdapter(ioManifestAdapter);
 
+    }
     @Override
     public void setInventoryResult(List <SmInventorySummary> result) {
         if (pageCurrent == 1) {
@@ -140,6 +173,6 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
             pageCurrent++;
             mList.addAll(result);
         }
-        mMfrvData.notifyForAdapter(ioManifestAdapter);
+        bySearchList(mList);
     }
 }

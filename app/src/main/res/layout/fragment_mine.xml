@@ -230,14 +230,14 @@
                 android:layout_marginRight="17dp"
                 android:background="@mipmap/mind_info" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_today_done"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="3dp"
             android:background="@drawable/shape_mind_gray"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/ll_today_done"
@@ -263,6 +263,53 @@
                 android:layout_marginLeft="41dp"
                 android:text="我的已办"
                 android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"
+                android:background="@mipmap/mind_info" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_update_info"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/shape_mind_gray"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_update_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/changepsd" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="41dp"
+                android:text="更新内容"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_update_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="33dp" />
 
             <ImageView
                 android:layout_width="wrap_content"

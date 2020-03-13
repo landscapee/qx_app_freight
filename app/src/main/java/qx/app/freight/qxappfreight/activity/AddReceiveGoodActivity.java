@@ -47,6 +47,7 @@ import qx.app.freight.qxappfreight.bean.response.FtRuntimeFlightScooter;
 import qx.app.freight.qxappfreight.bean.response.LikePageBean;
 import qx.app.freight.qxappfreight.bean.response.ListByTypeBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.RecordsBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.FindAirlineAllContract;
@@ -120,6 +121,10 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     private ScooterInfoListBean scooterInfo;
     List <RcInfoOverweight> rcInfoOverweight; // 超重记录列表
     private MyAgentListBean mList;
+
+
+    private RecordsBean selectArea;//根据货物类型获取的库区
+
     private int tag;
     private String wayBillId;
     private String taskTypeCode;
@@ -163,7 +168,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
      * @param waybillCode //     * @param declareItemBean  品名列表 已取消
      * @param cargoCn     品名以逗号隔开
      */
-    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag, String wayBillId, String taskTypeCode, String id) {
+    public static void startActivity(Activity context, String waybillId, String waybillCode, String cargoCn, MyAgentListBean declareItem, int tag, String wayBillId, String taskTypeCode, String id,RecordsBean selectArea) {
         Intent starter = new Intent(context, AddReceiveGoodActivity.class);
         starter.putExtra("waybillId", waybillId);
 //        starter.putExtra("mScooterCode", mScooterCode);
@@ -175,6 +180,8 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         starter.putExtra("id", id);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable("MyAgentListBean", (Serializable) declareItem);
+        mBundle.putSerializable("selectArea", selectArea);
+
         starter.putExtras(mBundle);
         context.startActivityForResult(starter, 0);
     }
@@ -206,11 +213,42 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         initView();
         //提交
         mBtnCommit.setOnClickListener(v -> {
-            if ("".equals(mEdtNumber.getText().toString().trim())) {
+            if (StringUtil.isEmpty(mEdtNumber.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入件数");
-            } else if ("".equals(mEdtNumber.getText().toString().trim())) {
+            } else if (StringUtil.isEmpty(mTvWeight.getText().toString().trim())) {
                 ToastUtil.showToast(this, "请输入重量");
             } else {
+                if (Integer.valueOf(mEdtNumber.getText().toString()) <= 0){
+                    ToastUtil.showToast(this, "件数不能为0");
+                    return;
+                }
+                if (StringUtil.isDouble(mTvWeight.getText().toString())){
+                    if (Double.valueOf(mTvWeight.getText().toString()) <= 0){
+                        ToastUtil.showToast(this, "重量不能为0");
+                        return;
+                    }
+                }
+                else {
+                    ToastUtil.showToast(this, "请输入合法的重量");
+                    return;
+                }
+                int num = 0;
+                int weight = 0;
+                for (RcInfoOverweight rcInfoOverweight: rcInfoOverweight){
+                    num = num+rcInfoOverweight.getCount();
+                    weight= weight+rcInfoOverweight.getWeight();
+                }
+                if (Integer.valueOf(mEdtNumber.getText().toString()) < num){
+                    ToastUtil.showToast("超重件数不能超过收运件数");
+                    return;
+                }
+                if (StringUtil.isDouble(mTvWeight.getText().toString())){
+                    if (Double.valueOf(mTvWeight.getText().toString()) < weight){
+                        ToastUtil.showToast("超重重量不能超过收运重量");
+                        return;
+                    }
+                }
+
                 finishForResult();
             }
         });
@@ -251,6 +289,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         id = getIntent().getStringExtra("id");
         tag = getIntent().getIntExtra("tag", 0);
         mList = (MyAgentListBean) getIntent().getSerializableExtra("MyAgentListBean");
+        selectArea = (RecordsBean) getIntent().getSerializableExtra("selectArea");
         if (2 == tag) {
             if (mList != null) {
                 mEdtVolume.setText(mList.getVolume() + "");
@@ -330,6 +369,15 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     private void finishForResult() {
         //id
+        if (!StringUtil.isEmpty(mList.getRepId())){
+            mMyAgentListBean.setRepId(mList.getRepId());
+            mMyAgentListBean.setReservoirType(mList.getReservoirType());
+        }
+        else {
+            mMyAgentListBean.setRepId(selectArea.getId());
+            mMyAgentListBean.setReservoirType(selectArea.getReservoirType());
+        }
+
         mMyAgentListBean.setId(mList.getId());
         mMyAgentListBean.setScooterId(scooterId);
         mMyAgentListBean.setScooterType(scooterType);
@@ -339,7 +387,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         //
         mMyAgentListBean.setTaskTypeCode(taskTypeCode);
 
-        mMyAgentListBean.setReservoirType(mList.getReservoirType());
+
 
         mMyAgentListBean.setWaybillCode(waybillCode);
         //品名
@@ -352,7 +400,6 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         } else {
             mMyAgentListBean.setVolume(Double.valueOf(mEdtVolume.getText().toString().trim()));
         }
-        //重量
         if ("".equals(mTvWeight.getText().toString())) {
             mMyAgentListBean.setWeight(0);
         } else {

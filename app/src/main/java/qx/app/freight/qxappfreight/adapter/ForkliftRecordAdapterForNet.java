@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,6 +19,8 @@ public class ForkliftRecordAdapterForNet extends BaseQuickAdapter<ForkliftWorkin
 
     @Override
     protected void convert(BaseViewHolder helper,ForkliftWorkingCostBean item) {
+        RelativeLayout rlDelete = helper.getView(R.id.rl_delete);
+        rlDelete.setVisibility(View.GONE);
         helper.setText(R.id.tv_num, item.getNumber()+"");
         helper.setText(R.id.tv_weight, (item.getNumber()*50)+"");
     }
