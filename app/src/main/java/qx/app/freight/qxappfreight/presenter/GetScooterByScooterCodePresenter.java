@@ -53,9 +53,9 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void saveScooter(GetInfosByFlightIdBean getInfosByFlightIdBean) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter<String>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter<GetInfosByFlightIdBean>() {
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(GetInfosByFlightIdBean result) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).saveScooterResult(result);
                 mRequestView.dissMiss();
             }

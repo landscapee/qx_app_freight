@@ -78,7 +78,7 @@ public class WeightWayBillBean implements Serializable {
     private long updateTime;
     private int updateStatus;
     private int inFlight;
-    private int addWeight;
+    private double addWeight;
     private int infoType;
     private int addWeightStatus;
     private int groupScooterStatus;

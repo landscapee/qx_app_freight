@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +39,7 @@ import qx.app.freight.qxappfreight.presenter.ArrivalDeliveryInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -74,6 +77,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private HashMap<String,String> areas = new HashMap <>();
 
     private int waybillStatus = 5;//运单状态 必填 5 待提货 6 已经提货 必须填
+
+    private int currentNum = 0;// 本次成功出库件数
+    private int residueNum = 0;// 剩余出库件数
 
     @Override
     public int getLayoutId() {
@@ -145,7 +151,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             @Override
             public void forkliftCost(int position) {
                 try {
-                    ForkliftCostDialogForNet dialog = new ForkliftCostDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId());
+                    ForkliftCostDialogForNet dialog = new ForkliftCostDialogForNet(InportDeliveryDetailActivity.this,mList.get(position).getId(),mList.get(position).getWaybillCode());
                     dialog.setOnClickListener(text -> {
                         getData();
                     });
@@ -215,7 +221,10 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
                 entity.setOutboundNumber(data);
                 entity.setForkliftTruckNumber(carNum);
 //                entity.setOutStorageUser(outStorageUser);
+                currentNum = data;
+                residueNum = waitPutCargo - data;
                 ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
+
             }
         });
         dialog.show(getSupportFragmentManager(),"321");
@@ -292,9 +301,27 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //            mList.set(j,result);
 //        }
 //        mAdapter.notifyDataSetChanged();
-//        getData();
+        showDetailsDialog(this,"本次出库成功："+currentNum+"件，剩余："+residueNum+"件");
 
-        finish();
+    }
+
+    private void showDetailsDialog(Context context, String str) {
+        //提交弹窗
+        CommonDialog dialog = new CommonDialog(context);
+        dialog.setTitle("提示")
+                .setMessage(str)
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(true)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        currentNum = 0;
+                        residueNum = 0;
+                        getData();
+                    }
+                }).show();
     }
 
     @Override

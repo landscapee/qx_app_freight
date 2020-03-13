@@ -181,6 +181,7 @@ public class PickGoodsRecordsDialogForNet extends Dialog implements PickGoodsRec
     @Override
     public void revokeInboundDeleveryResult(String result) {
         ToastUtil.showToast("撤销成功");
+        listener.onClick("");
         loadData();
     }
 

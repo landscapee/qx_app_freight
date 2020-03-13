@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.activity.AllocaaateHisDetailsActivity;
 import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightScooterAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -32,6 +33,7 @@ import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**复重-板车列表
  * created by swd
@@ -89,7 +91,12 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         rlView.setLayoutManager(new LinearLayoutManager(getContext()));
         rlView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            getScooterByScooterCode(list.get(position).getScooterCode());
+            if (!Tools.isFastClick())
+                return;
+            if (list.get(position).getReWeightFinish() == 1)
+                startActivity(new Intent(getActivity(), AllocaaateHisDetailsActivity.class).putExtra("dataBean", list.get(position)));
+            else
+                getScooterByScooterCode(list.get(position).getScooterCode());
 //            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean",list.get(position)));
         });
 
@@ -131,12 +138,12 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 
     @Override
     public void showNetDialog() {
-//        showProgessDialog("数据加载中……");
+        showProgessDialog("数据加载中……");
     }
 
     @Override
     public void dissMiss() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
     }
 
     @Override
@@ -159,7 +166,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 //            else {
                 for (GetInfosByFlightIdBean getInfosByFlightIdBean:getInfosByFlightIdBeans){
                     if (flightId.equals(getInfosByFlightIdBean.getFlightInfoId())){
-                        startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
+                            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
                         return;
                     }
             }

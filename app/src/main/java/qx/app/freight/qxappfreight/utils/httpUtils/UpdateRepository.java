@@ -928,8 +928,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> saveScooter(GetInfosByFlightIdBean model) {
-        return nothingtransform(getService().saveScooter(model));
+    public Observable<GetInfosByFlightIdBean> saveScooter(GetInfosByFlightIdBean model) {
+        return transform(getService().saveScooter(model));
     }
 
     /****

@@ -368,7 +368,7 @@ public interface HttpApi {
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
-    Observable<BaseEntity<Object>> saveScooter(@Body GetInfosByFlightIdBean model);
+    Observable<BaseEntity<GetInfosByFlightIdBean>> saveScooter(@Body GetInfosByFlightIdBean model);
 
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")

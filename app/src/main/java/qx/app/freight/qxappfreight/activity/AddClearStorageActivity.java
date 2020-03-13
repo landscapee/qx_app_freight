@@ -267,6 +267,10 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         //清空添加列表
         counterUbnormalGoodsList.clear();
         mAdapter.notifyDataSetChanged();
+
+        tvId.setText("");
+        edtRealSortNum.setText("");
+        waybillId = null;
     }
 
     /**

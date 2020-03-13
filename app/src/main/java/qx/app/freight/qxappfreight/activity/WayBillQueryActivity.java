@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +24,7 @@ import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -34,6 +36,8 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     EditText mEtInputKey;
     @BindView(R.id.rv_search_result)
     RecyclerView mRvSearchResult;
+    @BindView(R.id.btn_sure)
+    Button btnSure;
 
     private List<ListWaybillCodeBean.DataBean> resultData = new ArrayList<>();
     private WaybillQueryResultAdapter adapter;
@@ -62,6 +66,15 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             EventBus.getDefault().post(new WayBillQueryBean(resultData.get(position).getWaybillCode(), resultData.get(position).getId()));
             finish();
 
+        });
+        btnSure.setOnClickListener(v -> {
+            if (!StringUtil.isEmpty(mEtInputKey.getText().toString())&&mEtInputKey.getText().toString().length()>= 11){
+                EventBus.getDefault().post(new WayBillQueryBean(mEtInputKey.getText().toString(), null));
+                finish();
+            }
+            else {
+                ToastUtil.showToast("请输入正确的运单号");
+            }
         });
 
         mEtInputKey.addTextChangedListener(new TextWatcher() {
@@ -121,11 +134,11 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("请求中......");
+//        showProgessDialog("请求中......");
     }
 
     @Override
     public void dissMiss() {
-        dismissProgessDialog();
+//        dismissProgessDialog();
     }
 }

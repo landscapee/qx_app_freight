@@ -175,7 +175,8 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //            }
 //
 //        }
-
+        pageCurrent = 1;
+        getData();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String postStr){

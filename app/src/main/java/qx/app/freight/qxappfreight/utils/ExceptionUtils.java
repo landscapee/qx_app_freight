@@ -56,22 +56,10 @@ public class ExceptionUtils {
      */
     public static String typeToString(int type) {
         String result = "未知类型";
-        switch (type) {
-            case 2:
-                result = "死亡";
-                break;
-            case 4:
-                result = "破损";
-                break;
-            case 10:
-                result = "腐烂";
-                break;
-            case 16:
-                result = "无标签";
-                break;
-            case 19:
-                result = "漏卸";
-                break;
+        for (TestBean testBean:testBeanList){
+            if (testBean.getType() == type){
+                result = testBean.getName();
+            }
         }
         return result;
     }

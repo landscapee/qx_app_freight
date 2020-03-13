@@ -24,6 +24,7 @@ public class ForkliftWorkingCostBean {
     private String createUserName;
     private long createTime;
     private double charge;
+    private String waybillCode;
 
 
 }

@@ -1,11 +1,13 @@
 package qx.app.freight.qxappfreight.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ouyben.empty.EmptyLayout;
 
 import java.util.ArrayList;
@@ -57,6 +59,11 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         mMfrvAllocateList.setOnRetryLisenter(this);
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(this,AllocaaateHisDetailsActivity.class);
+            intent.putExtra("dataBean",list.get(position));
+            startActivity(intent);
+        });
     }
 
     private void getData() {

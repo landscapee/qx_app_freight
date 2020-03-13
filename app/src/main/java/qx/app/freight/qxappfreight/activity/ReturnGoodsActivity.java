@@ -229,7 +229,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
                 mMfrvAllocateList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             } else {
-                ToastUtil.showToast("数据为空");
+//                ToastUtil.showToast("数据为空");
             }
         }
     }

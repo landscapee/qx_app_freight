@@ -192,6 +192,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                         .putExtra("taskTypeCode", bean.getTaskTypeCode()));
                 break;
             case "RR_collectReturn"://出港退货
+            case "borrowOut"://借货出库
                 ReturnGoodsActivity.startActivity(getActivity(), bean);
                 break;
 
@@ -245,11 +246,15 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-//        if (result.equals("collector_refresh")) {
+        if (result.equals("collector_refresh")) {
 //            pageCurrent = 1;
 //            Log.e("refresh", result);
 //            loadData();
-//        }
+            if (list!=null){
+                list.clear();
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     /**
