@@ -1,14 +1,11 @@
 package qx.app.freight.qxappfreight.model;
 
-import android.util.Log;
-
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
@@ -46,6 +43,17 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
     @Override
     public void deleteById(String id, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().deleteInWayBillRecordById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter:: onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
+
+    @Override
+    public void allGoodsArrived(InWaybillRecord data, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().allGoodsArrived(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter:: onSuccess, throwable -> {

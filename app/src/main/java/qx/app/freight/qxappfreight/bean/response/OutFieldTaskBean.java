@@ -21,6 +21,8 @@ public class OutFieldTaskBean implements Serializable {
 
         private String cargoType;
 
+        private String  taskIntro;//临时任务 描述
+
         private String beginAreaType;
 
         private String beginAreaId;

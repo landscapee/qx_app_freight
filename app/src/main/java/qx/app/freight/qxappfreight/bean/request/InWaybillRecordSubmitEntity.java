@@ -13,11 +13,12 @@ import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 @Data
 public class InWaybillRecordSubmitEntity {
     int flag;//  0.暂存; 1.提交
-    String flightId;// 航班业务id
-    String flightYLId;// 航班尤里id
-    String flightNum;// 航班号
+    String flightInfoId;// 航班业务id
+    String flightId;// 航班尤里id
+    String flightNo;// 航班号
     String taskId;// 任务id
     List<InWaybillRecord> list;//  InWaybillRecord 分拣运单实体类集合
     String userId;// 登录用户id
     String userName;// 登录人名
+    String charterReWeight; //包机货包重量
 }

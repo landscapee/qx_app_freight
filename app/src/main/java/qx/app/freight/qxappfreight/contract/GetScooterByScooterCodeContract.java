@@ -27,7 +27,7 @@ public class GetScooterByScooterCodeContract {
 
         void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean);
 
-        void saveScooterResult(String result);
+        void saveScooterResult(GetInfosByFlightIdBean result);
 
         void returnWeighingResult(String result);
 

@@ -9,16 +9,21 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import qx.app.freight.qxappfreight.bean.ScooterMapSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.contract.ExceptionContentContract;
+import qx.app.freight.qxappfreight.presenter.ExceptionContentPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 /**
  * 全局捕获异常类，实现Thread.UncaughtExceptionHandler
  *
  * @author hasee
  */
-public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
+public class UnCatchHandler implements Thread.UncaughtExceptionHandler, ExceptionContentContract.exceptionContentView {
     private static UnCatchHandler mUnCatchHandler;
     private Context context;
 
@@ -50,10 +55,14 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread t, Throwable ex) {
-        doSomething(t,ex);
+        ExceptionContentPresenter mPresenter = new ExceptionContentPresenter(this);
+        BaseFilterEntity entity = new BaseFilterEntity();
+        entity.setExceptionContent(ex.toString());
+        mPresenter.exceptionContent(entity);
+        doSomething(t, ex);
     }
 
-    private void doSomething(Thread thread, Throwable ex){
+    private void doSomething(Thread thread, Throwable ex) {
         boolean isHandle = handleException(ex);
         if (!isHandle && mUnCatchHandler != null) {
             // 如果我们没有处理则让系统默认的异常处理器来处理
@@ -65,8 +74,8 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
             } catch (InterruptedException e) {
                 Log.e("22222", "uncaughtException() InterruptedException:" + e);
             }
-
             UserInfoSingle.setUserNil();
+            ScooterMapSingle.getInstance().clear();
             ActManager.getAppManager().finishAllActivity();
             WebSocketService.stopServer(context);
             Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
@@ -74,6 +83,7 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
             AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent);
             android.os.Process.killProcess(android.os.Process.myPid());
+
 
         }
 
@@ -94,7 +104,6 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
                 try {
                     Looper.prepare();
                     Toast toast;
-
                     toast = Toast.makeText(context, "程序出现异常，即将退出", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
 
@@ -124,4 +133,23 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler {
     }
 
 
+    @Override
+    public void exceptionContentResult(String result) {
+        ToastUtil.showToast(result);
+    }
+
+    @Override
+    public void toastView(String error) {
+        ToastUtil.showToast(error);
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
+    }
 }

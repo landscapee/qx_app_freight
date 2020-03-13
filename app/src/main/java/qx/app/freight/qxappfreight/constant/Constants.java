@@ -5,8 +5,6 @@ import android.os.Environment;
 
 import java.io.File;
 
-import qx.app.freight.qxappfreight.R;
-
 public class Constants {
     //更新版本用的参数常量
     public static final String APP_NAME = "智慧货运_";
@@ -32,7 +30,7 @@ public class Constants {
      */
     public static String RECEIVE = "receive";
     /**
-     * 预配
+     * 预配-组板
      */
     public static String PREPLANER = "preplaner";
     /**
@@ -60,16 +58,18 @@ public class Constants {
      * 装卸机
      */
     public static String INSTALL_UNLOAD_EQUIP = "supervision";
+    /**
+     * 装卸员小组长
+     */
+    public static String INSTALL_EQUIP_LEADER = "stevedores";
 
     /**
      * 结载
-     *
      */
     public static String JUNCTION_LOAD = "clipping";
 
     /**
-     * 结载
-     *
+     * 国际货物
      */
     public static String INTERNATIONAL_GOODS = "international_goods";
 
@@ -83,7 +83,7 @@ public class Constants {
      */
     public static String INPORTDELIVERY = "delivery_in";
     /**
-     * 进港理货
+     * 进港分拣
      */
     public static String INPORTTALLY = "beforehand_in";
 
@@ -106,10 +106,16 @@ public class Constants {
     // 位置信息
     public static final String POSITION = "position";
 
+    // 平板车-状态值
+    public static final String SCOOTER_P = "9";
+
     //====================================================广播接收======================================================
     public static final String ACTION = "android.intent.ACTION_DECODE_DATA";
 
     public static final String BROAD_STRING = "barcode_string";
+
+    public static final String REWEIGHT_DONE = "ReWeight_Done";
+
     //====================================================图片保存地址======================================================
     public static final String CAMERA_PATH = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM + File.separator + "Camera" + File.separator;
 
@@ -136,8 +142,10 @@ public class Constants {
     public static final String SACN_DATA = "scan_data";
 
     //===================================================分页数据获取条数======================================================
-    public static final int PAGE_SIZE = 10;//列表分页获取的单页最大的数量
+    public static final int PAGE_SIZE = 9999;//列表分页获取的单页最大的数量
 
+
+    public static final int SCOOTER_NO_LENGTH = 5;//板车号长度
 
     //im加的字段常量
     public final static int NOTIFY_ID_PUSH_QUIET = 0x07;//静音通知id
@@ -157,40 +165,94 @@ public class Constants {
 
     public static final String TP_TYPE_UNLOAD_K = "unload";//宽体机 卸机保障
 
-    public static final String TP_TYPE_SINGLE = "first_baggage";//单板行李任务
+    public static final String TP_TYPE_SINGLE = "first_baggage";//首件行李任务
 
     public static final String TP_TYPE_BAGGAAGE = "baggage";//行李任务
 
-    /**
-     *  装卸机 运输 结载 步骤操作code
-     */
-    public static final String LOAD_ACCEPT = "PassengerLoadReceived";	//结载领受	R	1
-    public static final String LOAD_END = "PassengerLoadSend";	//结载 结束 （舱单送达）
-    public static final String TP_ACCEPT = "CargoOutTransportReceived";	//运输接受
-    public static final String TP_ARRIVED = "CargoOutTransportArrived";	//运输到位
-    public static final String TP_START = "CargoOutTransportStart";	//运输开始
-    public static final String TP_END = "CargoOutTransportEnd";	//运输 结束
+    public static final String TP_TYPE_CLEAR = "clear";//清场任务
+
+    public static final String TP_TYPE_TEMP = "temp";//临时任务
 
     /**
-      * 待运区
-      */
+     * 装卸机 运输 结载 步骤操作code
+     */
+    public static final String LOAD_ACCEPT = "PassengerLoadReceived";    //结载领受	R	1
+    public static final String LOAD_END = "PassengerLoadSend";    //结载 结束 （舱单送达）
+    public static final String TP_ACCEPT = "CargoOutTransportReceived";    //运输接受
+    public static final String TP_ARRIVED = "CargoOutTransportArrived";    //运输到位
+    public static final String TP_START = "CargoOutTransportStart";    //运输开始
+    public static final String TP_END = "CargoOutTransportEnd";    //运输 结束
+
+
+    public static final int SCAN_UNLOAD = 3;//卸机扫版 类型
+    public static final int SCAN_XINGLI = 1;//行李上报扫版 类型
+    public static final int SCAN_HUOWU = 2;//卸货物上报扫版 类型
+    /**
+     *  * 待运区
+     *  
+     */
     public static final int WAIT_AREA = 1;
-/**
-  * 临时区
-  */
+    /**
+     *  * 临时区
+     *  
+     */
     public static final int TEMP_AREA = 2;
-/**
-  * 行李区
-  */
+    /**
+     *  * 行李区
+     *  
+     */
     public static final int BAGGAGE_AREA = 3;
-/**
-  * 机下
-  */
+    /**
+     *  * 机下
+     *  
+     */
     public static final int OFF_BOX_AREA = 4;
 
-/**
-  * 库区
-  */
+    /**
+     *  * 库区
+     *  
+     */
     public static final int WAREHOUSE_AREA = 5;
 
+    //实际时间类型
+    public static final int TIME_TYPE_AUTUAL = 3;
+    //预计时间类型
+    public static final int TIME_TYPE_EXCEPT = 2;
+    //计划时间
+    public static final int TIME_TYPE_PLAN = 1;
+
+    //密码验证成功并且密码满足规范;
+    public static final String PSW_TYPE_YES = "0";
+    //密码不满足规范
+    public static final String PSW_TYPE_NO = "1";
+    //密码过期;其他密码验证失败
+    public static final String PSW_TYPE_OTHER = "2";
+
+    //滑动步骤类型，0，已操作；1，当前步骤；2，未执行操作
+    public static final int TYPE_STEP_OVER = 0;
+    public static final int TYPE_STEP_NOW = 1;
+    public static final int TYPE_STEP_NEXT = 2;
+    //货物拉回状态值
+    public static final int TYPE_PULL_BACK_NORMAL = 0;
+    public static final int TYPE_PULL_BACK_SUCCESS = 1;
+    public static final int TYPE_PULL_BACK_FAILED = 2;
+
+
+    /**
+     * //已到板车数量变化字段
+     */
+    public static final String  SCOOTER_ARRIVE_NUM_PUSH = "BEFOREHAND_IN_SCOOTER_NUMBER";
+
+    /**
+     * 新装机单更新
+     */
+    public static String NEW_INSTALL_UPDATE = "new_install_update";
+
+    public static final String DANGER = "DGR";// 危险品
+
+    public static final String YCS = "压舱沙";//压舱沙
+
+
+    //心跳时间
+    public static final int TIME_HEART = 10000;
 }

@@ -63,7 +63,7 @@ public class OutFieldFlightBean implements Serializable {
 
     private String successionFlightNo;
 
-    private int successionId;
+    private int successionId;// 航班保障组 id
 
     private int masterFlightId;
 

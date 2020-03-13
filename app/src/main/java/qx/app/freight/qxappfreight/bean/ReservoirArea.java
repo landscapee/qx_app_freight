@@ -18,5 +18,6 @@ public class ReservoirArea implements Serializable {
     private String code;
     private String reservoirName;
     private String reservoirType;
+    private String reservoirSaveType;
 
 }

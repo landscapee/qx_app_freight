@@ -29,5 +29,7 @@ public class WebSocketMessageBean {
     private Object createUser;
     private int readingStatus;
 
+    private int specialFlag;// /1强提醒 2 特殊
+    private String messageName;// BEFOREHAND_IN_SCOOTER_NUMBER 代表 分拣板车入库数量变化 //CLIPPING_WEIGHTER_ERROR_NOTICE 负重异常
 
 }

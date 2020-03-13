@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.presenter;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
@@ -57,6 +58,20 @@ public class InWaybillRecordPresenter extends BasePresenter {
             @Override
             public void onSuccess(Object o) {
                 ((InWaybillRecordContract.inWaybillRecordView)mRequestView).resultDeleteById(o);
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+    public void allGoodsArrived(InWaybillRecord data){
+        ((InWaybillRecordModel)mRequestModel).allGoodsArrived(data, new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String o) {
+                ((InWaybillRecordContract.inWaybillRecordView)mRequestView).allGoodsArrivedResult(o);
             }
 
             @Override

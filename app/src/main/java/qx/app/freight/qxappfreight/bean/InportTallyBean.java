@@ -95,7 +95,7 @@ public class InportTallyBean {
  /**
      * 运单总件数
      */
-    private int totalNumberPackages;
+    private int totalNumber;
 
     /**
      * 运单总重量

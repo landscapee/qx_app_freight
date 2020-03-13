@@ -13,8 +13,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -22,6 +22,7 @@ import qx.app.freight.qxappfreight.adapter.ChooseStoreroomAdapter;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.model.TestBean;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 
 /**
  * 选择异常类型dialog
@@ -34,13 +35,21 @@ public class ErrorTypeChooseDialog extends DialogFragment {
 
     private ChooseStoreroomAdapter adapter;
     private List<TestBean> mList;
+    private ArrayList<TestBean> temList;
     private Context context;
     private int selectorPosition = 10000;
 
     private ChooseDialogInterface listener;
 
     public void setData(List<TestBean> mList, Context context) {
-        this.mList = mList;
+
+        try {
+            temList = new ArrayList<>();
+            temList.addAll(mList);
+            this.mList  = Tools.deepCopy(temList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        this.selectorPosition = selectorPosition;
         this.context = context;
     }

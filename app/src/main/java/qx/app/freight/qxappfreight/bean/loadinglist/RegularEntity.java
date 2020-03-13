@@ -13,7 +13,10 @@ public class RegularEntity {
     private String lockTitle;
     private String berth;//舱位
     private String goodsPosition;//货位
-    private boolean showPull;//是否显示拉下
     private List<String> berthList;//当前航班的舱位信息列表
     private List<String> goodsPosList;//当前航班的货位信息列表
+    private String scooterId;//板车id
+    private boolean hasLiveGoods;//是否有活体
+    private boolean hasGUNGoods;//是否有枪支
+    private int moveSize;//左边数据显示下移的数量
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,6 +17,8 @@ import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter2;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
+import qx.app.freight.qxappfreight.bean.response.OverweightBean;
+import qx.app.freight.qxappfreight.contract.OverweightContract;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
@@ -25,7 +26,7 @@ import qx.app.freight.qxappfreight.utils.ToastUtil;
  * created by swd
  * 2019/5/23 13:07
  */
-public class SortingReturnGoodsDialog extends Dialog {
+public class SortingReturnGoodsDialog extends Dialog implements OverweightContract.OverweightView {
     private Context mContext;
     private OnClickListener listener;
 
@@ -37,6 +38,7 @@ public class SortingReturnGoodsDialog extends Dialog {
     private OverweightRecordAdapter2 overweightRecordAdapter;
 
     List<RcInfoOverweight> rcInfoOverweight;
+
 
     public SortingReturnGoodsDialog(Context context) {
         super(context, R.style.CommomDialog);
@@ -104,7 +106,6 @@ public class SortingReturnGoodsDialog extends Dialog {
             int overweight = 0;
             for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
                 overweight += mRcInfoOverweight.getOverWeight();
-
             }
             if (listener != null) {
                 listener.onClick(overweight+"kg");
@@ -119,7 +120,8 @@ public class SortingReturnGoodsDialog extends Dialog {
 //            }else {
 //                rcInfoOverweight.get(position).setDelFlag(1);
 //            }
-            rcInfoOverweight.get(position).setDelFlag(1);
+//            rcInfoOverweight.get(position).setDelFlag(1);
+            rcInfoOverweight.remove(position);
             overweightRecordAdapter.notifyDataSetChanged();
         });
     }
@@ -156,6 +158,42 @@ public class SortingReturnGoodsDialog extends Dialog {
     public SortingReturnGoodsDialog setData(List<RcInfoOverweight> list){
         rcInfoOverweight = list;
         return this;
+    }
+
+    public void loadData(){
+
+
+
+    }
+
+    @Override
+    public void getOverWeightResult(List <OverweightBean> result) {
+
+    }
+
+    @Override
+    public void addOverWeightResult(String result) {
+
+    }
+
+    @Override
+    public void deleteOverWeightResult(String result) {
+
+    }
+
+    @Override
+    public void toastView(String error) {
+
+    }
+
+    @Override
+    public void showNetDialog() {
+
+    }
+
+    @Override
+    public void dissMiss() {
+
     }
 
     public interface OnClickListener {

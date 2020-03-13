@@ -1,14 +1,11 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,7 +31,6 @@ import qx.app.freight.qxappfreight.utils.ExceptionUtils;
  */
 public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, BaseViewHolder> {
 
-    FragmentManager manager;
     private OnSlectPicListener onSlectPicListener;
     private OnExceptionChooseListener onExceptionChooseListener;
 
@@ -79,10 +75,10 @@ public class SortingAddAdapter extends BaseQuickAdapter<CounterUbnormalGoods, Ba
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString().trim())) {
                     item.setUbnormalNum(Integer.valueOf(s.toString().trim()));
-                    item.getUbnormalType().add(1);
+//                    item.getUbnormalType().add(1);
                 } else {
                     item.setUbnormalNum(0);
-                    item.getUbnormalType().remove((Integer) 1);
+//                    item.getUbnormalType().remove((Integer) 1);
                 }
             }
         });

@@ -13,22 +13,17 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.donkingliang.labels.LabelsView;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
-import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 
-/**行李上报，输入行李信息的弹窗
- *
+/**
+ *提货出库 弹窗
  * create by swd
  */
 public class PutCargoInputDialog extends DialogFragment {
@@ -41,6 +36,7 @@ public class PutCargoInputDialog extends DialogFragment {
     private TextView tvOverweightCount;
     private EditText etNumber;
     private EditText etCar;
+    private ImageView ivClose;
 
     private int num = 0;
     private int overWeightCount ;
@@ -77,12 +73,16 @@ public class PutCargoInputDialog extends DialogFragment {
         tvOverweightCount = dialog.findViewById(R.id.tv_overweight_count);
         etNumber = dialog.findViewById(R.id.et_number);
         etCar = dialog.findViewById(R.id.et_car);
+        ivClose = dialog.findViewById(R.id.iv_close);
         etNumber.setText(num+"");
         tvOverweight.setText(overWeight+"kg");
         tvOverweightCount.setText(overWeightCount+"件");
         //初始化点击事件
         tvConfirm.setOnClickListener(v -> {
             toConFirm();
+        });
+        ivClose.setOnClickListener(v -> {
+            dismiss();
         });
 
         return dialog;

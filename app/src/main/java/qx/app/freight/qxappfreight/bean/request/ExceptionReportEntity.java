@@ -12,7 +12,7 @@ public class ExceptionReportEntity {
 
     private long flightId;//
 
-    private String flightNum;//
+    private String flightNo;//
 
     private String reportTime;
 
@@ -44,6 +44,7 @@ public class ExceptionReportEntity {
     private String exceptionCode;//异常 操作code
 
     private String deptId;//部门id
+    private String taskPk;//id
 
     private List<TransportTodoListBean> scooters;//板车数据
     private List<TransportTodoListBean> waybillScooters;//运单数据

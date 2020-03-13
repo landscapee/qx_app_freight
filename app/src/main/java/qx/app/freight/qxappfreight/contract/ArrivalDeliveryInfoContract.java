@@ -4,7 +4,6 @@ import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
-import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 
 public class ArrivalDeliveryInfoContract {
     public interface arrivalDeliveryInfoModel {

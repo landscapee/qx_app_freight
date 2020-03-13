@@ -12,4 +12,5 @@ public class UnLoadRequestEntity {
 
     private String flightId;
     private String unloadingUser;
+    private String operationUserName;
 }

@@ -1,7 +1,9 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -21,26 +23,43 @@ import qx.app.freight.qxappfreight.utils.TimeUtils;
 public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;
     private LoadAndUnloadTodoBean mInfo;
+
     private ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data) {
-        super(R.layout.item_scan_info,data);
+        super(R.layout.item_scan_info, data);
     }
-    public ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data,LoadAndUnloadTodoBean info) {
+
+    public ScanInfoAdapter(@Nullable List<ScooterInfoListBean> data, LoadAndUnloadTodoBean info) {
         this(data);
-        mInfo=info;
+        mInfo = info;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, ScooterInfoListBean item) {
         View viewDelete = helper.getView(R.id.ll_delete);
-        if (item.getFlightType().equals("I")){
+        if (item.getFlightType().equals("I")) {
             helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
-        }else {
+        } else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
         }
-        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType())+item.getScooterCode());
-        helper.setText(R.id.tv_flight_type,mInfo.getFlightNo());
-        helper.setText(R.id.tv_seat,mInfo.getSeat());
-        helper.setText(R.id.tv_flight_arrive_time, StringUtil.toText(TimeUtils.getHMDay(mInfo.getArrivalTime())));
+        helper.setText(R.id.tv_board_number, MapValue.getCarTypeValue(item.getScooterType()) + item.getScooterCode());
+        helper.setText(R.id.tv_flight_type, mInfo.getFlightNo());
+        helper.setText(R.id.tv_seat, mInfo.getSeat());
+        TextView tvTime = helper.getView(R.id.tv_flight_arrive_time);
+        String time;
+        Drawable drawableLeft;
+        if (!StringUtil.isTimeNull(String.valueOf(mInfo.getAta()))) {
+            time = TimeUtils.getHMDay(mInfo.getAta());
+            drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+        } else if (!StringUtil.isTimeNull(String.valueOf(mInfo.getEta()))) {
+            time = TimeUtils.getHMDay(mInfo.getEta());
+            drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+        } else {
+            time = TimeUtils.getHMDay(mInfo.getSta());
+            drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+        }
+        tvTime.setText(time);
+        tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+        tvTime.setCompoundDrawablePadding(5);
         viewDelete.setTag(helper.getAdapterPosition());
         if (!viewDelete.hasOnClickListeners()) {
             viewDelete.setOnClickListener(v -> {
@@ -50,6 +69,7 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
             });
         }
     }
+
     public void setOnDeleteClickListener(OnDeleteClickLister listener) {
         this.mDeleteClickListener = listener;
     }

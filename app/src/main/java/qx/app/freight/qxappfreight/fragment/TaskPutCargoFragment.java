@@ -68,7 +68,7 @@ public class TaskPutCargoFragment extends BaseFragment implements MultiFunctionS
         mMfrvData.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             ToastUtil.showToast(getContext(), list.get(position));
-            CargoHandlingActivity.startActivity(mContext,"sss","");
+            CargoHandlingActivity.startActivity(mContext,"sss","","");
         });
     }
 

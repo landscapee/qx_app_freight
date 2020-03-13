@@ -28,6 +28,13 @@ public class MultiFunctionRecylerView extends LinearLayout {
         initView();
     }
 
+    public void setRefreshStyle(boolean loadMore) {
+        mRefreshView.setCanLoadMore(loadMore);
+//        mRefreshView.setc
+    }
+
+
+
     public MultiFunctionRecylerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
@@ -95,10 +102,12 @@ public class MultiFunctionRecylerView extends LinearLayout {
     public void setOnRetryLisenter(EmptyLayout.OnRetryLisenter lisenter) {
         mElEmpty.setOnRetryLisenter(lisenter);
     }
-    public void finishRefresh(){
+
+    public void finishRefresh() {
         mRefreshView.finishRefresh();
     }
-    public void finishLoadMore(){
+
+    public void finishLoadMore() {
 
         mRefreshView.finishLoadMore();
     }

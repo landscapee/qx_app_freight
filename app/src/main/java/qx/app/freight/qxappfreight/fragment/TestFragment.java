@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
 import qx.app.freight.qxappfreight.activity.ReceiveGoodsActivity;
 import qx.app.freight.qxappfreight.activity.TestActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
@@ -26,7 +25,6 @@ import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
-import qx.app.freight.qxappfreight.widget.PowerFullLayout;
 
 public class TestFragment extends BaseFragment {
     @BindView(R.id.toolbar)
@@ -52,7 +50,7 @@ public class TestFragment extends BaseFragment {
 
     private void setData() {
 
-        String content = "<font color='#FF0000'>" +"傻逼"+"</font>";
+        String content = "<font color='#FF0000'>" + "傻逼" + "</font>";
         btnTest.setText(Html.fromHtml(content));
 
     }
@@ -87,7 +85,7 @@ public class TestFragment extends BaseFragment {
                 break;
             case R.id.button_add_cargo: //新增
                 //全屏dialog
-                TpPushDialog tpPushDialog = new TpPushDialog(getContext(),R.style.custom_dialog, null, taskId -> {
+                TpPushDialog tpPushDialog = new TpPushDialog(getContext(), R.style.custom_dialog, null, taskId -> {
 
                 });
                 tpPushDialog.show();
@@ -97,7 +95,7 @@ public class TestFragment extends BaseFragment {
                 break;
             case R.id.button_select_warehouse_position: //选择仓位e
 
-                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog,"", s -> {
+                UpdatePushDialog updatePushDialog = new UpdatePushDialog(getContext(), R.style.custom_dialog, "", () -> {
 
                 });
                 updatePushDialog.show();
@@ -117,6 +115,6 @@ public class TestFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("TestFragment===========","onDestroy");
+        Log.e("TestFragment===========", "onDestroy");
     }
 }

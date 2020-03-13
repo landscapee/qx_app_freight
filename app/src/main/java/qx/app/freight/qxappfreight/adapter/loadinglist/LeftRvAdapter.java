@@ -2,11 +2,13 @@ package qx.app.freight.qxappfreight.adapter.loadinglist;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.UnloadPlaneAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.RegularEntity;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -28,15 +31,25 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
     private OnBerthChoseListener onBerthChoseListener;
     private OnGoodsPosChoseListener onGoodsPosChoseListener;
     private OnLockClickListener onLockClickListener;
+    private UnloadPlaneAdapter.OnDataCheckListener onDataCheckListener;
 
     public LeftRvAdapter(@Nullable List<RegularEntity> data) {
         super(R.layout.item_loading_list_left, data);
+    }
+    public LeftRvAdapter(@Nullable List<RegularEntity> data,UnloadPlaneAdapter.OnDataCheckListener onDataCheckListener) {
+        this(data);
+        this.onDataCheckListener=onDataCheckListener;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, RegularEntity item) {
         Spinner spBerth = helper.getView(R.id.sp_berth);
         Spinner spGoodsPos = helper.getView(R.id.sp_goods_position);
+        LinearLayout view = helper.getView(R.id.ll_container);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) view.getLayoutParams();
+        int size = (item.getMoveSize() == 0) ? 0 : (item.getMoveSize() + 1);
+        layoutParams.bottomMargin = view.getBottom() + 80 * size;
+        view.setLayoutParams(layoutParams);
         if (helper.getAdapterPosition() == 0) {//第一条数据是title，下拉view都隐藏
             helper.getView(R.id.tv_lock).setVisibility(View.VISIBLE);
             helper.getView(R.id.iv_lock_status).setVisibility(View.GONE);
@@ -57,23 +70,35 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
             helper.setText(R.id.tv_berth, StringUtil.toText(item.getBerth()));
             helper.setText(R.id.tv_goods_position, item.getGoodsPosition());
         } else {//真实数据
+            if (item.isHasLiveGoods()) {//有活体运单时背景设为桃红色
+                helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
+            }
+            else if ((item.isHasGUNGoods())){
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+            }
+            else
+                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
             helper.getView(R.id.iv_lock_status).setVisibility(View.VISIBLE);
             helper.getView(R.id.tv_lock).setVisibility(View.GONE);
             ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
             helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
-                ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
-                item.setLocked(true);
-                onLockClickListener.onLockClickd(helper.getAdapterPosition());
+                if (item.isLocked()) {
+                    ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_unlock_data);
+                } else {
+                    ((ImageView) helper.getView(R.id.iv_lock_status)).setImageResource(R.mipmap.icon_lock_data);
+                }
+                item.setLocked(!item.isLocked());
+                onLockClickListener.onLockClicked(helper.getAdapterPosition());
             });
             helper.getView(R.id.tv_berth).setVisibility(View.GONE);
             helper.getView(R.id.tv_goods_position).setVisibility(View.GONE);
             spBerth.setVisibility(View.VISIBLE);
-            ArrayAdapter<String> spinnerAdapter;
-            if (item.isShowPull()) {
-                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
-            } else {
-                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, item.getBerthList());
-            }
+//            if (item.isShowPull()) {
+//                spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getBerthList());
+//            } else {
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, item.getBerthList());
+//            }
             spBerth.setAdapter(spinnerAdapter);
             SpinnerAdapter apsAdapter1 = spBerth.getAdapter(); //得到SpinnerAdapter对象
             int k = apsAdapter1.getCount();
@@ -89,11 +114,12 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (item.isLocked()) {
-                        ToastUtil.showToast("数据已锁定修改");
+                        ToastUtil.showToast("数据已锁定，无法修改");
                         spBerth.setSelection(pos, true);
                     } else {
                         pos = position;
                         onBerthChoseListener.onBerthChosed(helper.getAdapterPosition(), item.getBerthList().get(position));
+                        onDataCheckListener.onDataChecked(item.getScooterId());
                     }
                 }
 
@@ -106,12 +132,10 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 spGoodsPos.setVisibility(View.GONE);
             } else {
                 spGoodsPos.setVisibility(View.VISIBLE);
-                ArrayAdapter<String> spGoodsAdapter;
-                if (item.isShowPull()) {
-                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
-                } else {
-                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, item.getGoodsPosList());
-                }
+//                if (item.isShowPull()) {
+//                    spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_red, item.getGoodsPosList());
+//                } else {
+                ArrayAdapter<String> spGoodsAdapter = new ArrayAdapter<>(mContext, R.layout.item_spinner_loading_list_normal, item.getGoodsPosList());
                 spGoodsPos.setAdapter(spGoodsAdapter);
                 SpinnerAdapter apsAdapter2 = spGoodsPos.getAdapter(); //得到SpinnerAdapter对象
                 int j = apsAdapter2.getCount();
@@ -123,15 +147,15 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 }
                 spGoodsPos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     int pos;
-
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (item.isLocked()) {
-                            ToastUtil.showToast("数据已锁定修改");
-                            spBerth.setSelection(pos, true);
+                            ToastUtil.showToast("数据已锁定，无法修改");
+                            spGoodsPos.setSelection(pos, true);
                         } else {
                             pos = position;
                             onGoodsPosChoseListener.onGoodsPosChosed(helper.getAdapterPosition(), item.getGoodsPosList().get(position));
+                            onDataCheckListener.onDataChecked(item.getScooterId());
                         }
                     }
 
@@ -153,7 +177,7 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
     }
 
     public interface OnLockClickListener {
-        void onLockClickd(int itemPos);
+        void onLockClicked(int itemPos);
     }
 
     public void setOnBerthChoseListener(OnBerthChoseListener onBerthChoseListener) {

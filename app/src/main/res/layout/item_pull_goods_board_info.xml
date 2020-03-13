@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/color_fff"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/dp_10">
-
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_container"
+                android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tv_board_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
                     android:background="@drawable/shape_rect_blue_cce4"
                     android:drawableStart="@mipmap/dray"
                     android:drawablePadding="@dimen/dp_10"
@@ -34,134 +37,44 @@
                     android:paddingTop="@dimen/dp_8"
                     android:paddingEnd="9dp"
                     android:paddingBottom="@dimen/dp_8"
-                    tools:text="大板0009"
                     android:textColor="@color/blue_093"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_goods_info"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|end"
-                    tools:text="@string/format_goods_info"
-                    android:textColor="@color/black_3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_flight_number"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawableStart="@mipmap/li"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:gravity="center_vertical"
-                    tools:text="3U9999" />
-
-                <TextView
-                    android:id="@+id/tv_place_number"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawableStart="@mipmap/placement"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:gravity="center_vertical"
-                    tools:text="101" />
-
-                <TextView
-                    android:id="@+id/tv_plan_time"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawableStart="@mipmap/ji"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:gravity="center_vertical"
-                    tools:text="13:12(4)" />
-
-                <TextView
-                    android:id="@+id/tv_cangwei_info"
-                    android:layout_width="@dimen/dp_60"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="1号舱位" />
-            </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@drawable/shape_gray_gap_line"
-                android:layerType="software" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
-                android:paddingTop="@dimen/dp_5"
-                android:paddingBottom="@dimen/dp_5"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="拉下件数:"
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/et_pull_number"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
-                    android:textColor="#f00"
-                    android:inputType="number"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:background="@drawable/shape_rect_gray_line"/>
+                    android:textStyle="bold"
+                    tools:text="大板0009" />
                 <Space
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="match_parent" />
-                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+                <qx.app.freight.qxappfreight.widget.RoundCheckBox
+                    android:id="@+id/cb_select"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="拉下质量:"
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/et_pull_weight"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="#f00"
-                    android:inputType="number|numberDecimal"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
-                    android:background="@drawable/shape_rect_gray_line"/>
+                    android:gravity="center" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_goods_info"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/dp_15"
+                android:gravity="center_vertical"
+                android:textColor="@color/black_3"
+                tools:text="@string/format_goods_info" />
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_bill_info"
+                android:visibility="gone"/>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#eff2f3"
-             />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/ll_delete"
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="match_parent"
-        android:background="@color/red"
-        android:gravity="center">
-
         <ImageView
+            android:id="@+id/iv_pull_type"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/delete_white" />
-    </LinearLayout>
-
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_pei" />
+    </FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#eff2f3" />
 </LinearLayout>

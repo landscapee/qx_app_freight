@@ -1,14 +1,12 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.PageListBean;
-import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 
 public class MessageAdapter extends BaseQuickAdapter<PageListBean.RecordsBean, BaseViewHolder>  {
@@ -23,7 +21,7 @@ public class MessageAdapter extends BaseQuickAdapter<PageListBean.RecordsBean, B
     protected void convert(BaseViewHolder helper, PageListBean.RecordsBean item) {
 
         helper.setText(R.id.tv_title,item.getContent())
-                .setText(R.id.tv_time, TimeUtils.date2Tasktime6(item.getCreateDate()));
+                .setText(R.id.tv_time, TimeUtils.date2Tasktime6(item.getCreateTime()));
 
         if (item.getReadingStatus() ==0){
             helper.setVisible(R.id.ll_red_point,true);

@@ -122,6 +122,15 @@
                 android:textSize="14sp"
                 android:text="200件 / 20kg"
                 />
+            <TextView
+                android:id="@+id/tv_overweight_money"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="#676C8B"
+                android:textSize="14sp"
+                android:text="超重费用:50元"
+                android:layout_marginLeft="18dp"
+                />
         </LinearLayout>
         <!--<TextView-->
             <!--android:layout_width="match_parent"-->
@@ -142,7 +151,9 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            >
 
             <TextView
                 android:singleLine="true"
@@ -150,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/black_3"
-                android:text="逾期费用：" />
+                android:text="预期费用：" />
             <TextView
                 android:id="@+id/tv_cost"
                 android:singleLine="true"
@@ -179,6 +190,24 @@
             android:textSize="14sp"
             />
         <Button
+            android:id="@+id/btn_forklift"
+            android:layout_width="60dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_green_05b"
+            android:text="叉车费用"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btn_overweight"
+            android:layout_width="60dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_green_05b"
+            android:text="录入超重"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+        <Button
             android:visibility="gone"
             android:id="@+id/btn_outStorage"
             android:layout_width="@dimen/dp_50"
@@ -186,6 +215,16 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/selector_green_05b"
             android:text="出库"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_records"
+            android:layout_width="60dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_green_05b"
+            android:text="出库记录"
             android:textSize="14sp"
             android:textColor="@color/white"/>
     </LinearLayout>

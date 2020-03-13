@@ -14,8 +14,8 @@ import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 public class ScanScooterCheckUsedModel extends BaseModel implements ScanScooterCheckUsedContract.ScanScooterCheckModel {
 
     @Override
-    public void checkScooterCode(String scooterCode, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().checkScooterCode(scooterCode)
+    public void checkScooterCode(String scooterCode,String flightId,String scSubCategory, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().checkScooterCode(scooterCode,flightId,scSubCategory)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

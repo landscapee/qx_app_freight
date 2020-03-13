@@ -9,7 +9,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
-import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
 
 public class OverweightRecordAdapter extends BaseQuickAdapter<RcInfoOverweight, BaseViewHolder> {
     private OnDeleteClickLister mDeleteClickListener;

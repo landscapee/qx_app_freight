@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import lombok.Data;
  * @description：
  */
 @Data
-public class TransportDataBase implements Serializable {
+public class TransportDataBase implements MultiItemEntity, Serializable {
 
     /**
      * taskId : 522660
@@ -86,14 +88,17 @@ public class TransportDataBase implements Serializable {
     private Object originatingStation;
     private Object destinationStation;
 
+    private String storageType;
+
     private String consigneePostcode;
     private String consigneeAddress;
-    private String specialCargoCode;
+    private String specialCode;
+    //存储类型
     private String coldStorage;
-    private String totalNumberPackages;
     private String billingWeight;
+    private String totalNumber;
     private String totalWeight;
-    private String totalVolume;
+    private double totalVolume;
     private String refrigeratedTemperature;
     private String activitiId;
     private Object internalTransferDate;
@@ -121,6 +126,7 @@ public class TransportDataBase implements Serializable {
     private String virtualFlag;
     private String otherFlag;
     private String flightId;
+    private String flightInfoId;
     private TransportListBean.DeclareWaybillAdditionBean declareWaybillAddition;
     private String flightNo;
     private int outboundNumber;
@@ -129,6 +135,8 @@ public class TransportDataBase implements Serializable {
     private Object associateAirport;
     private String spotFlag;
     private long etd;
+    private long scheduleTime;
+    private long ata;
     private List<DeclareItem> declareItem;
     private boolean isExpand = false; //是否展开
     private String freightName; //货代公司名字
@@ -148,6 +156,7 @@ public class TransportDataBase implements Serializable {
     private String consignee;
     private String consigneePhone;
     private String consigneeIdentityCard;
+    private String version;
     /**
      * 提货人名
      * */
@@ -162,5 +171,27 @@ public class TransportDataBase implements Serializable {
      * 提货人身份证
      * */
     private String receiverIdentityCard;
+
+    /**
+     * 复重代办新添加
+     * 航线   flightCourseByAndroid
+     * 机位号  seat
+     * 机尾号  aircraftNo
+     */
+    private List<String> flightCourseByAndroid;
+
+    private String seat;
+
+    private String aircraftNo;
+
+    private List<WaybillCommodities> spWaybillCommodities;
+
+    @Override
+    public int getItemType() {
+        if (flightCourseByAndroid !=null)
+            return flightCourseByAndroid.size();
+        else
+            return 2;
+    }
 
 }

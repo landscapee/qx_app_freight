@@ -1,1 +1,1 @@
-include ':app', ":gps_lib"
+include ':app', ":gps_lib",":LabelView"

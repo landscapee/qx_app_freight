@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.bean.response;
 
-import android.content.Intent;
-
 import java.io.Serializable;
 
 import lombok.Data;

@@ -35,7 +35,6 @@ import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
-import qx.app.freight.qxappfreight.utils.ToastUtil;
 
 public class TomorrowFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {
     @BindView(R.id.magic_indicator_tomor)

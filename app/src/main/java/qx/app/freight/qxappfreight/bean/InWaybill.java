@@ -1,12 +1,9 @@
 package qx.app.freight.qxappfreight.bean;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -68,7 +65,7 @@ public class InWaybill implements Serializable {
     /**
      * 运单总件数
      */
-    private Integer totalNumberPackages;
+    private Integer totalNumber;
 
     /**
      * 运单总重量

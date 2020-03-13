@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.DeliveryVerifyAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -140,7 +137,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         //旧订单号
         oldWayBillCodeTv.setText(String.format(getResources().getString(R.string.format_delivery_verify_no_origin), declareWaybillBean.getWaybillCode()));
         //航班号
-        flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNumber());
+        flightNoTv.setText("航班号:"+declareWaybillBean.getFlightNo());
         if(declareWaybillBean.getFlightDate() == null){
             flightDataTv.setText("航班日期: -");
         }else{
@@ -156,7 +153,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         postalTv.setText(declareWaybillBean.getConsigneePostcode());
         addrTv.setText(declareWaybillBean.getConsigneeAddress());
         //货物信息
-        goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCargoCode());
+        goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCode());
         String bigSize = "";
         if(declareWaybillBean.getBigFlag() == 1)
             bigSize = "小件";
@@ -166,7 +163,7 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
             bigSize = "超大件";
         goodsSizeTv.setText("包装大小:" + bigSize);
         goodsSaveTypeTv.setText("储存类型:" + getColdStorage(declareWaybillBean));
-        goodsNumTv.setText("总件数:" + declareWaybillBean.getTotalNumberPackages());
+        goodsNumTv.setText("总件数:" + declareWaybillBean.getTotalNumber());
         goodsWeightTv.setText("总重量:" + declareWaybillBean.getTotalWeight());
         getGoodsWeightWithMoneyTv.setText("计费总量:" + declareWaybillBean.getBillingWeight());
         //recylerview

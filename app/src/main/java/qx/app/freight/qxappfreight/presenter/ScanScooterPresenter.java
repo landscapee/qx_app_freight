@@ -52,9 +52,9 @@ public class ScanScooterPresenter extends BasePresenter {
         });
     }
 
-    public void scooterWithUser(String user,String flightId) {
+    public void scooterWithUser(String user,String flightId,String taskId) {
         mRequestView.showNetDialog();
-        ((ScanScooterModel) mRequestModel).scooterWithUser(user,flightId, new IResultLisenter<List<TransportTodoListBean>>() {
+        ((ScanScooterModel) mRequestModel).scooterWithUser(user,flightId,taskId, new IResultLisenter<List<TransportTodoListBean>>() {
             @Override
             public void onSuccess(List<TransportTodoListBean> result) {
                 ((ScanScooterContract.scanScooterView) mRequestView).scooterWithUserResult(result);
@@ -68,4 +68,23 @@ public class ScanScooterPresenter extends BasePresenter {
             }
         });
     }
+    public void scooterWithUserTask(String taskId) {
+        mRequestView.showNetDialog();
+        ((ScanScooterModel) mRequestModel).scooterWithUserTask(taskId, new IResultLisenter<List<TransportTodoListBean>>() {
+            @Override
+            public void onSuccess(List<TransportTodoListBean> result) {
+                ((ScanScooterContract.scanScooterView) mRequestView).scooterWithUserTaskResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+
+
+
 }

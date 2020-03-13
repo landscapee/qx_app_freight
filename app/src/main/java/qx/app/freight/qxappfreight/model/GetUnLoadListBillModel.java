@@ -20,4 +20,15 @@ public class GetUnLoadListBillModel extends BaseModel implements GetUnLoadListBi
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void getUnLoadDoneScooter(String entity, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getUnloadDoneScooter(entity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

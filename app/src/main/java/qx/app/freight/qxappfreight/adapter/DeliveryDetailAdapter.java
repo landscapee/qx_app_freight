@@ -1,13 +1,12 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -28,11 +27,12 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
     @Override
     protected void convert(BaseViewHolder holder, WaybillsBean bean) {
         holder.setText(R.id.waybill_code, bean.getWaybillCode());
+        Button btnOutRecords = holder.getView(R.id.btn_records);
 
         int waitPutCargoNum = bean.getTallyingTotal()-bean.getOutboundNumber();
         holder.setText(R.id.tv_put_num,"待出库: "+waitPutCargoNum+"件 / 已出库:"+bean.getOutboundNumber()+"件");
 
-        holder.setText(R.id.total_info,"录单: "+bean.getTotalNumberPackages()+"件 / 分拣:"+bean.getTallyingTotal()+"件");
+        holder.setText(R.id.total_info,"录单: "+bean.getTotalNumber()+"件 / 分拣:"+bean.getTallyingTotal()+"件");
         //录单 件数 - 重量
 //        holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
 //                ,bean.getTotalNumberPackages()+""
@@ -44,8 +44,8 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
 
         //分拣件数 - 重量
 //        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
-        //逾期费用
-        holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
+        //预期费用
+//        holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
         holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getRqName(),"-"));
 
@@ -89,24 +89,66 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
                 break;
         }
         //控制按钮显示
-        if (bean.getWaybillStatus() ==6){
+        if (bean.getWaybillStatus() ==6||bean.getOverweightCharge() > 0||bean.getDefermentCharge() > 0){
 //            holder.setVisible(R.id.tv_put_num,false);
+            if (bean.getOverweightCharge() > 0){
+                holder.setText(R.id.tv_status,"超重待补费");
+                holder.setText(R.id.tv_outStorage,"");
+            }
+            else if (bean.getDefermentCharge() > 0){
+                holder.setText(R.id.tv_status,"逾期待补费");
+                holder.setText(R.id.tv_outStorage,"");
+            }
+            else
+                holder.setText(R.id.tv_outStorage,"已出库");
+
+            btnOutRecords.setVisibility(View.VISIBLE);
             holder.setVisible(R.id.tv_outStorage,true);
             holder.setGone(R.id.btn_outStorage,false);
+            holder.setGone(R.id.btn_overweight,false);
+            holder.setGone(R.id.btn_forklift,false);
+
         }else {
+            if (bean.getOutboundNumber()>0)
+                btnOutRecords.setVisibility(View.VISIBLE);
+            else
+                btnOutRecords.setVisibility(View.GONE);
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
+            holder.setGone(R.id.btn_overweight,true);
+            holder.setGone(R.id.btn_forklift,true);
 //            holder.setVisible(R.id.tv_put_num,true);
         }
+
+//        if (bean.getDefermentCharge() > 0){
+//            holder.setVisible(R.id.tv_overweight_money,true);
+//            holder.setText(R.id.tv_overweight_money,"待收费:"+bean.getOverweightCharge()+"元");
+//        }
+//        else
+            holder.setGone(R.id.tv_overweight_money,false);
+
+        Button btnForklift = holder.getView(R.id.btn_forklift);
+        btnForklift.setOnClickListener(v -> {
+            listener.forkliftCost(holder.getAdapterPosition());
+        });
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->
                 listener.outStorage(holder.getAdapterPosition(),bean.getId(),bean.getOutStorageUser())
         );
+        Button btnOverweight = holder.getView(R.id.btn_overweight);
+        btnOverweight.setOnClickListener(v ->
+                listener.inputOverWeight(holder.getAdapterPosition())
+        );
 
+        btnOutRecords.setOnClickListener(v ->
+                listener.outStorageRecords(holder.getAdapterPosition())
+        );
     }
 
     public interface DeliveryDetailInterface{
         void outStorage(int position,String id,String outStorageUser);
-
+        void inputOverWeight(int position);
+        void forkliftCost(int position);
+        void outStorageRecords(int position);
     }
 }

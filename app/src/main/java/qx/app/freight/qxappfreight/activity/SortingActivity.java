@@ -12,13 +12,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,19 +28,21 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.SortingInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.InWaybill;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterArriveNumChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
+import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
+import qx.app.freight.qxappfreight.dialog.ChooseStoreroomDialog2;
 import qx.app.freight.qxappfreight.dialog.InputCodeDialog;
-import qx.app.freight.qxappfreight.dialog.InputDialog;
 import qx.app.freight.qxappfreight.presenter.InWaybillRecordPresenter;
+import qx.app.freight.qxappfreight.presenter.ListReservoirInfoPresenter;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
@@ -52,7 +56,7 @@ import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
  * <p>
  * create by guohao - 2019/4/26
  */
-public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView {
+public class SortingActivity extends BaseActivity implements InWaybillRecordContract.inWaybillRecordView, ListReservoirInfoContract.listReservoirInfoView {
 
     String flightNo = "";
     String arriveTime = "";
@@ -82,6 +86,11 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
+    @BindView(R.id.ll_re_weight)
+
+    LinearLayout llReWeight;
+    @BindView(R.id.edt_re_weight)
+    EditText edtReWeight;
 
     @BindView(R.id.tv_flight_no)
     TextView flightNoTv;
@@ -99,6 +108,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     //recycler 页脚
     TextView tvFoot;
+
+    List<ChooseStoreroomDialog2.TestBean> mTestBeanList = new ArrayList<>();
+    private int mConfirmPos = -1;
 
     @Override
     public int getLayoutId() {
@@ -140,14 +152,31 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
             intentAdd.putExtra("TYPE", TYPE_ADD);
             intentAdd.putExtra("FLIGHTNo", flightNo);
+            Bundle bundle = new Bundle();
+            if (mTestBeanList.size() > 0)
+                bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+            else {
+                ToastUtil.showToast("未获取到库区");
+                return;
+            }
+            intentAdd.putExtras(bundle);
             startActivityForResult(intentAdd, 1);
 //            showDialog();
         });
         //初始化presenter
-        mPresenter = new InWaybillRecordPresenter(this);
+
         //暂存，提交请求
         tempBtn.setOnClickListener(listener -> {
+            //如果是包机L  货包 H  必须输入整机复重重量
+            if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+                if (TextUtils.isEmpty(edtReWeight.getText().toString())){
+                    ToastUtil.showToast("请输入整机复重重量");
+                    return;
+                }
+                submitEntity.setCharterReWeight(edtReWeight.getText().toString());
+            }
 
+            mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
                     .setMessage("确认暂存吗？")
@@ -181,7 +210,16 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         });
         //提交请求
         doneBtn.setOnClickListener(listener -> {
+            //如果是包机L  货包 H  必须输入整机复重重量
+            if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+                if (TextUtils.isEmpty(edtReWeight.getText().toString())){
+                    ToastUtil.showToast("请输入整机复重重量");
+                    return;
+                }
+                submitEntity.setCharterReWeight(edtReWeight.getText().toString());
+            }
 
+            mPresenter = new InWaybillRecordPresenter(this);
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
                     .setMessage("确认提交？")
@@ -220,9 +258,10 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
     private void getData() {
         //初始化数据
+        mPresenter = new InWaybillRecordPresenter(this);
         InWaybillRecordGetEntity entity = new InWaybillRecordGetEntity();
         entity.setTaskFlag(0);
-        entity.setFlightId(transportListBean.getFlightId());
+        entity.setFlightInfoId(transportListBean.getFlightInfoId());
         ((InWaybillRecordPresenter) mPresenter).getList(entity);
     }
 
@@ -242,9 +281,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
                         if (confirm) {
 
                         } else {
-                            if (TextUtils.isEmpty(dialog1.getMessage())){
+                            if (TextUtils.isEmpty(dialog1.getMessage())) {
                                 ToastUtil.showToast("输入为空");
-                            }else {
+                            } else {
                                 turnToAddActivity(dialog1.getMessage());
                             }
 
@@ -262,9 +301,9 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //新增
             InWaybillRecord mInWaybillRecord = (InWaybillRecord) data.getSerializableExtra("DATA");
-            if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())){
-                for (InWaybillRecord item:mList){
-                    if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())){
+            if (!TextUtils.isEmpty(mInWaybillRecord.getWaybillCode())) {
+                for (InWaybillRecord item : mList) {
+                    if (mInWaybillRecord.getWaybillCode().equals(item.getWaybillCode())) {
                         ToastUtil.showToast("不能添加相同运单号");
                         return;
                     }
@@ -302,19 +341,32 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             resultBean.setList(mList);
         } else {
             for (InWaybillRecord item : resultBean.getList()) {
-                if(item.getDelFlag() == null || item.getDelFlag() == 0){
+                if (item.getDelFlag() == null || item.getDelFlag() == 0) {
                     mList.add(item);
-                }else if(item.getDelFlag() == 1){
+                } else if (item.getDelFlag() == 1) {
                     mListDel.add(item);
                 }
             }
             mList = resultBean.getList();
             Log.e("dime", "服务器的数据，分拣信息长度 = " + mList.size());
         }
+        //如果是包机L  货包 H  让输入框显示出来
+        if (resultBean.getFlightType().equals("L")||resultBean.getFlightType().equals("H")){
+            llReWeight.setVisibility(View.VISIBLE);
+            if (resultBean.getCharterReWeight() ==0){
+                edtReWeight.setText("");
+            }else {
+                edtReWeight.setText(resultBean.getCharterReWeight()+"");
+            }
+
+        }else {
+            llReWeight.setVisibility(View.GONE);
+        }
+
         //初始化提交实体类
-        submitEntity.setFlightId(transportListBean.getFlightId());
-        submitEntity.setFlightYLId(transportListBean.getFlightYLId());
-        submitEntity.setFlightNum(transportListBean.getFlightNumber());
+        submitEntity.setFlightInfoId(transportListBean.getFlightInfoId());
+        submitEntity.setFlightId(transportListBean.getFlightYLId());
+        submitEntity.setFlightNo(transportListBean.getFlightNo());
         submitEntity.setTaskId(transportListBean.getTaskId());
         submitEntity.setUserId(UserInfoSingle.getInstance().getUserId());
         submitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
@@ -341,6 +393,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             }
             intent.putExtra("DATA", updateInWaybillRecord);
             intent.putExtra("INDEX", position);
+            Bundle bundle = new Bundle();
+            if (mTestBeanList.size() > 0)
+                bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+            else {
+                ToastUtil.showToast("未获取到库区");
+                return;
+            }
+            intent.putExtras(bundle);
             //去修改
             SortingActivity.this.startActivityForResult(intent, 2);
         });
@@ -353,12 +413,18 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
 
         mAdapter.setFooterView(tvFoot);
         recyclerView.setAdapter(mAdapter);
-
+        mAdapter.setOnAllArriveNotifyListener((item, pos) -> {
+            mConfirmPos=pos;
+            mPresenter = new InWaybillRecordPresenter(SortingActivity.this);
+            item.setFlightInfoId(transportListBean.getFlightInfoId());
+            item.setCreateUserName(UserInfoSingle.getInstance().getUsername());
+            ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(item);
+        });
         mAdapter.setOnInWaybillRecordDeleteListener(position -> {
             //数据被删除了
             CURRENT_DELETE_POSITION = position;
             //更新总运单数，总件数
-            resultBean.setCount(resultBean.getCount()-1);
+            resultBean.setCount(resultBean.getCount() - 1);
             resultBean.setTotal(resultBean.getTotal() - mList.get(CURRENT_DELETE_POSITION).getTallyingTotal());
             tvFoot.setText("总运单数：" + resultBean.getCount() + " 总件数：" + resultBean.getTotal());
             //操作数据源
@@ -381,6 +447,23 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
             recyclerView.closeMenu();
         });
         recyclerView.closeMenu();
+        getReservoirAll();
+    }
+
+    /**
+     * 选择库区方法
+     */
+    private void getReservoirAll() {
+//        mPresenter = new ReservoirPresenter(this);
+//        BaseFilterEntity entity = new BaseFilterEntity();
+////        entity.setFilter("12");
+//        entity.setCurrent(1);
+//        entity.setSize(10);
+//        ((ReservoirPresenter) mPresenter).reservoir(entity);
+
+        mPresenter = new ListReservoirInfoPresenter(this);
+        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode(UserInfoSingle.getInstance().getDeptCode());
+//        ((ListReservoirInfoPresenter) mPresenter).listReservoirInfoByCode("wf_put_in");
     }
 
     @Override
@@ -398,6 +481,14 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         mList.remove(CURRENT_DELETE_POSITION);
         mAdapter.notifyDataSetChanged();
         CURRENT_DELETE_POSITION = -1;
+    }
+
+    @Override
+    public void allGoodsArrivedResult(String o) {
+
+        mList.get(mConfirmPos).setAllArrivedFlag(1);
+        mList.get(mConfirmPos).setId(String.valueOf(o));
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -420,51 +511,60 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
      * 激光扫码回调
      */
     private String newCode;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("SortingActivity")){
+        if (result.getFunctionFlag().equals("SortingActivity")) {
             newCode = "";
             String code = result.getData();
             Log.e("22222", "运单号" + code);
-            if (!TextUtils.isEmpty(code)&&code.length()>=10) {
-                if (code.startsWith("DN")){
-                    newCode = "DN-"+code.substring(2,10);
-                }else {
-                    if (code.length()>=11){
-                        newCode =editChange(code);
-                    }else {
+            if (!TextUtils.isEmpty(code) && code.length() >= 10) {
+                if (code.startsWith("DN")) {
+                    newCode = "DN-" + code.substring(2, 10);
+                } else {
+                    if (code.length() >= 11) {
+                        newCode = editChange(code);
+                    } else {
                         ToastUtil.showToast("无效的运单号");
                         return;
                     }
                 }
-            }else {
+            } else {
                 ToastUtil.showToast("无效的运单号");
                 return;
             }
             turnToAddActivity(newCode);
         }
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ScooterArriveNumChangeEntity result) {
+      if (result !=null && result.getFlightInfoId().equals(transportListBean.getFlightInfoId())){
+           handCarNumTv.setText(result.getArriveWarehouseNum()+"");
+            handCarTotalTv.setText("/"+result.getTotalScooterNum());
+      }
+    }
+
 
     /**
      * 跳转到新增界面
      */
-    private void turnToAddActivity(String code){
+    private void turnToAddActivity(String code) {
 
         recyclerView.closeMenu();
         boolean isEditChange;
         String[] parts = code.split("-");
         String ss = parts[1];
-        String s1=""; //后8位的前7位
-        String s2=""; //后8位的最后1位
-        s1 = ss.substring(0,7);
-        s2 = ss.substring(7,8);
-        if (StringUtil.isDouble(s1)&&StringUtil.isDouble(s2)){
-            isEditChange = Integer.parseInt(s1)%7 == Integer.parseInt(s2);
-        }else {
-            isEditChange=false;
+        String s1 = ""; //后8位的前7位
+        String s2 = ""; //后8位的最后1位
+        s1 = ss.substring(0, 7);
+        s2 = ss.substring(7, 8);
+        if (StringUtil.isDouble(s1) && StringUtil.isDouble(s2)) {
+            isEditChange = Integer.parseInt(s1) % 7 == Integer.parseInt(s2);
+        } else {
+            isEditChange = false;
         }
 
-        if (!isEditChange){
+        if (!isEditChange) {
             ToastUtil.showToast("无效的运单号");
             return;
         }
@@ -480,13 +580,33 @@ public class SortingActivity extends BaseActivity implements InWaybillRecordCont
         Intent intentAdd = new Intent(SortingActivity.this, SortingAddActivity.class);
         intentAdd.putExtra("TYPE", TYPE_ADD);
         intentAdd.putExtra("newCode", code);
+        Bundle bundle = new Bundle();
+        if (mTestBeanList.size() > 0)
+            bundle.putSerializable("mTestBeanList", (Serializable) mTestBeanList);
+        else {
+            ToastUtil.showToast("未获取到库区");
+            return;
+        }
+        intentAdd.putExtras(bundle);
         startActivityForResult(intentAdd, 1);
     }
 
     //判断运单号后缀是否符合规则
-    private String  editChange(String ss) {
-        String s0=ss.substring(0, 3); //前3位
-        String s00=ss.substring(3, 11); //后8位
-        return s0+"-"+s00;
+    private String editChange(String ss) {
+        String s0 = ss.substring(0, 3); //前3位
+        String s00 = ss.substring(3, 11); //后8位
+        return s0 + "-" + s00;
+    }
+
+    @Override
+    public void listReservoirInfoResult(List<ReservoirArea> acceptTerminalTodoBeanList) {
+        Log.e("dime", "库区信息\n" + acceptTerminalTodoBeanList.toString());
+        //显示库区选择面板
+        for (ReservoirArea item : acceptTerminalTodoBeanList) {
+            ChooseStoreroomDialog2.TestBean testBean = new ChooseStoreroomDialog2.TestBean(item.getId(), item.getReservoirName());
+            testBean.setName(item.getReservoirName());
+            mTestBeanList.add(testBean);
+        }
+
     }
 }

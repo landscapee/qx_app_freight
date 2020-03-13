@@ -3,11 +3,8 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
-import qx.app.freight.qxappfreight.contract.AddScooterContract;
 import qx.app.freight.qxappfreight.contract.SearchTodoTaskContract;
-import qx.app.freight.qxappfreight.model.AddScooterModel;
 import qx.app.freight.qxappfreight.model.SearchTodoTaskModel;
 
 /**

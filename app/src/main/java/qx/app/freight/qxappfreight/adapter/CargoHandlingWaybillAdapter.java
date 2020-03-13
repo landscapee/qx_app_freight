@@ -1,6 +1,5 @@
 package qx.app.freight.qxappfreight.adapter;
 
-import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;

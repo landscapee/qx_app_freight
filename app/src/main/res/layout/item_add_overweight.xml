@@ -35,7 +35,8 @@
         android:gravity="center"
         android:text="体积"
         android:textColor="@color/black_3"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tv_overweight"
@@ -45,17 +46,21 @@
         android:gravity="center"
         android:text="超重重量"
         android:textColor="@color/red"
-        android:textSize="13sp" />
-<RelativeLayout
-    android:id="@+id/rl_delete"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:gravity="center">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/delete_gray"/>
-</RelativeLayout>
+        android:textSize="13sp"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_delete"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/delete_gray" />
+    </RelativeLayout>
 
 </LinearLayout>

@@ -11,6 +11,25 @@
         <!--android:gravity="center_horizontal|center_vertical"-->
         <!--android:text="待执行" />-->
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50">
+        <TextView
+            android:id="@+id/tv_history"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_10"
+            android:layout_centerVertical="true"
+            android:text="复重历史"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_20"
+            android:background="@drawable/shape_rect_blue_2e81fd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
     <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_allocate_list"
         android:layout_width="match_parent"

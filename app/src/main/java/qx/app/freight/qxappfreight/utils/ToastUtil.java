@@ -1,9 +1,16 @@
 package qx.app.freight.qxappfreight.utils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+
 import qx.app.freight.qxappfreight.app.MyApplication;
+import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 /**
  * toast 统一管理类
@@ -42,16 +49,23 @@ public class ToastUtil {
     }
 
     public static void showToast( String s){
+        if (s == null)
+            return;
         Context context= MyApplication.getContext();
         if ("318".equals(s)){
            return;
+        }
+        if (s.contains("复重差值")){
+            showDialogWeightOver(context,s);
+            return;
         }
         if(toast==null){
             toast =Toast.makeText(context, s, Toast.LENGTH_SHORT);
             toast.show();
             oneTime=System.currentTimeMillis();
-            Log.e("toast==null",s);
+//            Log.e("toast==null",s);
         }else{
+            toast.setGravity(Gravity.CENTER,0,0); //居中
             twoTime=System.currentTimeMillis();
             if(s.equals(oldMsg)){
                 if(twoTime-oneTime>Toast.LENGTH_SHORT){
@@ -66,6 +80,22 @@ public class ToastUtil {
             }
         }
         oneTime=twoTime;
+    }
+
+    public static void showDialogWeightOver(Context context,String str) {
+        //提交弹窗
+        CommonDialog dialog = new CommonDialog(context);
+        dialog.setTitle("提示")
+                .setMessage(str)
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(true)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                    }
+                }).show();
     }
 
 

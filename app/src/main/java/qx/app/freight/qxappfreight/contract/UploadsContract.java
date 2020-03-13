@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.contract;
 
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.MultipartBody;
 import qx.app.freight.qxappfreight.app.IBaseView;

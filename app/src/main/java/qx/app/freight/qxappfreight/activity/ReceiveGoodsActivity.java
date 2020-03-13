@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -45,7 +45,9 @@ import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareItem;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.RecordsBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListBean;
+import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
 import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
@@ -56,6 +58,8 @@ import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CommonPopupWindow;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionSlideRecylerView;
@@ -108,14 +112,21 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     private String wayBillId;
     private int mTag;
     private int listPostion;
+    private String storage;
 
-    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId) {
+    private RecordsBean selectArea;//根据货物类型获取的库区
+
+    public static void startActivity(Activity context, String taskId, DeclareWaybillBean declareWaybillBean, String taskTypeCode, String id, String wayBillId,String storage, RecordsBean selectArea) {
         Intent starter = new Intent(context, ReceiveGoodsActivity.class);
         starter.putExtra("taskId", taskId);
         starter.putExtra("DeclareWaybillBean", declareWaybillBean);
         starter.putExtra("taskTypeCode", taskTypeCode);
         starter.putExtra("id", id);
         starter.putExtra("wayBillId", wayBillId);
+        starter.putExtra("storage", storage);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("selectArea", selectArea);
+        starter.putExtras(bundle);
         context.startActivityForResult(starter, 0);
     }
 
@@ -129,10 +140,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         setToolbarShow(View.VISIBLE);
         EventBus.getDefault().register(this);
         mDeclare = (DeclareWaybillBean) getIntent().getSerializableExtra("DeclareWaybillBean");
+        selectArea = (RecordsBean) getIntent().getSerializableExtra("selectArea");
         taskId = getIntent().getStringExtra("taskId");
         taskTypeCode = getIntent().getStringExtra("taskTypeCode");
         wayBillId = getIntent().getStringExtra("wayBillId");
         id = getIntent().getStringExtra("id");
+        storage = getIntent().getStringExtra("storage");
         waybillId = mDeclare.getId();
         waybillCode = mDeclare.getWaybillCode();
         reservoirType = mDeclare.getColdStorage() + "";
@@ -140,10 +153,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         mDeclareItemBeans = mDeclare.getDeclareItems();
         toolbar.setRightTextViewImage(this, View.VISIBLE, R.color.flight_a, "新增", R.mipmap.new_2, v -> {
             mTag = 1;
-            startAct(new MyAgentListBean(), 1);
+            MyAgentListBean mBean = new MyAgentListBean();
+            mBean.setReservoirType(storage);
+            startAct(mBean, 1);
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             String goodsName = mDeclare.getCargoCn();
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
@@ -153,12 +170,49 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             ReceiveGoodsActivity.this.startActivityForResult(intent, 123);
         });
         //提交
-        mBtnReceiveGood.setOnClickListener(v -> commit());
-        getAutoReservoir();
+        mBtnReceiveGood.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
+            if ("普货".equals(mDeclare.getStorageTypeName()))
+                commit();
+            else
+                showYesOrNoDialog("提示","当前存储类型为"+mDeclare.getStorageTypeName()+"，确认提交？",0);
+
+
+        });
+//        getAutoReservoir();
         initView();
         initPopupWindow();
     }
 
+    /**
+     * 二次确认弹出框
+     *
+     * @param title
+     * @param msg
+     * @param flag
+     */
+    private void showYesOrNoDialog(String title, String msg, int flag) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                            commit();
+                        } else {
+//                            ToastUtil.showToast("点击了右边的按钮");
+                        }
+                    }
+                })
+                .show();
+
+    }
     public void getAutoReservoir() {
         mPresenter = new AgentTransportationListPresent(this);
         BaseFilterEntity entity = new BaseFilterEntity();
@@ -178,7 +232,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     public void startAct(MyAgentListBean myAgentListBean, int tag) {
-        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode);
+        AddReceiveGoodActivity.startActivity(ReceiveGoodsActivity.this, waybillId, waybillCode, mDeclare.getCargoCn(), myAgentListBean, tag,wayBillId,taskTypeCode,id,selectArea);
     }
 
 
@@ -190,34 +244,22 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             transportListCommitEntity.setType("1");//1提交
             transportListCommitEntity.setTaskId(taskId);//当前任务id
             transportListCommitEntity.setUserId(UserInfoSingle.getInstance().getUserId());//当前操作人
+            transportListCommitEntity.setUserName(UserInfoSingle.getInstance().getUsername());
             transportListCommitEntity.setWaybillId(wayBillId);
+            transportListCommitEntity.setWaybillCode(mDeclare.getWaybillCode());
             transportListCommitEntity.setWaybillInfo(mDeclare);
             transportListCommitEntity.setSecurityResultList(mSecuriBean);
-            List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
-            for (MyAgentListBean mMyAgentListBean : list) {
-                TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
-                rcInfosEntity.setAddOrderId(id);
-                rcInfosEntity.setTaskTypeCode(taskTypeCode);
-                rcInfosEntity.setId(mMyAgentListBean.getId());
-                rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
-                rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
-                rcInfosEntity.setReservoirType(reservoirType);
-                rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
-                rcInfosEntity.setRepName(reservoirName);
-                rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
-                rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
-                rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
-                rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
-                rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
-                rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
-                rcInfosEntity.setRepType(mMyAgentListBean.getRepType());
-                rcInfosEntity.setRepPlaceId(mMyAgentListBean.getRepPlaceId());
-                mListRcInfosEntity.add(rcInfosEntity);
+
+            List<MyAgentListBean> myAgentListBeans = new ArrayList<>();
+//            for (MyAgentListBean mMyAgentListBean : list) {
+//                myAgentListBeans.add(mMyAgentListBean);
+//            }
+            for (int i = 0; i <list.size() ; i++) {
+                list.get(i).setRepName(mDeclare.getRepName());
+                list.get(i).setReservoirType(mDeclare.getReservoirType());
+                myAgentListBeans.add(list.get(i));
             }
-            transportListCommitEntity.setRcInfos(mListRcInfosEntity);
+            transportListCommitEntity.setRcInfos(myAgentListBeans);
             transportListCommitEntity.setTaskTypeCode(taskTypeCode);
             transportListCommitEntity.setAddOrderId(id);
             ((TransportListCommitPresenter) mPresenter).transportListCommit(transportListCommitEntity);
@@ -231,6 +273,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(waybillId);
+        myAgentListBean.setTaskTypeCode(taskTypeCode);
         baseFilterEntity.setSize(10);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
@@ -257,14 +300,15 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 mPresenter = new TransportListCommitPresenter(this);
                 mMfrvData.closeMenu();
                 ((TransportListCommitPresenter) mPresenter).deleteCollectionInfo(list.get(position).getId());
-                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ReceiveGoodsActivity.this, "当前删除：" + position, Toast.LENGTH_SHORT).show();
             }
         });
         mBtnPrinting.setOnClickListener(v -> {
-            if (list.size() > 0)
-                showPopWindowList();
-            else
-                ToastUtil.showToast("请先添加收运记录");
+            ToastUtil.showToast("暂未开放");
+//            if (list.size() > 0)
+//                showPopWindowList();
+//            else
+//                ToastUtil.showToast("请先添加收运记录");
         });
         upData();
     }
@@ -325,6 +369,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         if (!"".equals(result)) {
             EventBus.getDefault().post("collector_refresh");
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 
@@ -340,21 +385,20 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void toastView(String error) {
         Log.e("refresh", error);
-        if (pageCurrent == 1) {
-            mMfrvData.finishRefresh();
-        } else {
+        if (mMfrvData != null)
             mMfrvData.finishLoadMore();
-        }
+        if (mMfrvData != null)
+            mMfrvData.finishRefresh();
     }
 
     @Override
     public void showNetDialog() {
-//        showProgessDialog("提交中");
+        showProgessDialog("");
     }
 
     @Override
     public void dissMiss() {
-//        dismissProgessDialog();
+        dismissProgessDialog();
     }
 
 
@@ -378,12 +422,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     list.set(listPostion, mMyAgentListBean);
                 }
             } else if (mTag == 1) {
-                for (MyAgentListBean item : list) {
-                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
-                        ToastUtil.showToast("请勿添加重复的板车");
-                        return;
-                    }
-                }
+//                for (MyAgentListBean item : list) {
+//                    if (mMyAgentListBean.getScooterCode().equals(item.getScooterCode())) {
+//                        ToastUtil.showToast("请勿添加重复的板车");
+//                        return;
+//                    }
+//                }
                 list.add(mMyAgentListBean);
             }
             toolbar.setMainTitle(Color.WHITE, "出港收货" + "(" + list.size() + ")");
@@ -403,7 +447,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             if (!"".equals(mScooterCode)) {
                 getNumberInfo(mScooterCode);
             } else {
-                ToastUtil.showToast(ReceiveGoodsActivity.this, "扫码数据为空请重新扫码");
+                ToastUtil.showToast("扫码数据为空请重新扫码");
             }
         } else {
             Log.e("resultCode", "收货页面不是200");
@@ -442,6 +486,11 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     }
 
     @Override
+    public void scooterInfoListForReceiveResult(List <ScooterInfoListBean> scooterInfoListBeans) {
+
+    }
+
+    @Override
     public void existResult(MyAgentListBean existBean) {
     }
 
@@ -459,7 +508,12 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void sendPrintMessageResult(String result) {
         isPrint = true;
-        ToastUtil.showToast(result);
+        ToastUtil.showToast(result+"");
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
+
     }
 
     private void printWayBill() {
@@ -518,6 +572,8 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     }
                 });
                 btnPrint.setOnClickListener((v) -> {
+                    if (!Tools.isFastClick())
+                        return;
                     printWayBill();
                 });
             }

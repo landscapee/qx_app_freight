@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +19,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.LoginActivity;
 import qx.app.freight.qxappfreight.activity.MessageActivity;
 import qx.app.freight.qxappfreight.activity.NoticeActivity;
+import qx.app.freight.qxappfreight.activity.TaskDoneActivity;
+import qx.app.freight.qxappfreight.activity.UpdateInfoActivity;
+import qx.app.freight.qxappfreight.activity.UpdatePWDActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
+import qx.app.freight.qxappfreight.bean.request.UserBean;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
+import qx.app.freight.qxappfreight.bean.response.RespBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.NoReadCountContract;
 import qx.app.freight.qxappfreight.presenter.NoReadCountPresenter;
-import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -64,10 +69,16 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     ImageView ivNoticePoint;
     @BindView(R.id.ll_notice)
     LinearLayout llNotice;
+    @BindView(R.id.rl_message_change)
+    RelativeLayout llPsd;
+    @BindView(R.id.rl_today_done)
+    RelativeLayout llTodayDone;
+
     @BindView(R.id.tv_notice_num)
     TextView tvNoticeNum;
     @BindView(R.id.rl_notice)
     RelativeLayout rlNotice;
+
 
     @Nullable
     @Override
@@ -89,6 +100,17 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
         mPresenter = new NoReadCountPresenter(this);
         userName.setText(UserInfoSingle.getInstance().getLoginName());
         userRole.setText(UserInfoSingle.getInstance().getUsername());
+        for (LoginResponseBean.RoleRSBean roleRSBean :UserInfoSingle.getInstance().getRoleRS()){
+            if (Constants.INSTALL_UNLOAD_EQUIP.equals(roleRSBean.getRoleCode())||
+                    Constants.JUNCTION_LOAD.equals(roleRSBean.getRoleCode())||
+                    Constants.DRIVEROUT.equals(roleRSBean.getRoleCode())||
+                    Constants.PORTER.equals(roleRSBean.getRoleCode())||
+                    Constants.INTERNATIONAL_GOODS.equals(roleRSBean.getRoleCode())||
+                    Constants.INSTALL_EQUIP_LEADER.equals(roleRSBean.getRoleCode())) {
+                llTodayDone.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
 
@@ -132,14 +154,14 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
     private void requestNoReadMessage() {
         PageListEntity bean = new PageListEntity();
 
-        bean.setRole(UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode());
+        bean.setRole((UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()!=0)?UserInfoSingle.getInstance().getRoleRS().get(0).getRoleCode():"");
         bean.setUserId(UserInfoSingle.getInstance().getUserId());
         ((NoReadCountPresenter) mPresenter).noReadCount(bean);
 
         ((NoReadCountPresenter) mPresenter).noReadNoticeCount(UserInfoSingle.getInstance().getUserId());
     }
 
-    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice})
+    @OnClick({R.id.user_image, R.id.btn_login_out, R.id.rl_message, R.id.rl_notice,R.id.rl_message_change,R.id.rl_today_done,R.id.rl_update_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_image:
@@ -154,6 +176,17 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
             case R.id.rl_notice:
                 //跳转到通知公告
                 startActivity(new Intent(getContext(), NoticeActivity.class));
+                break;
+            case R.id.rl_message_change:
+                //密码修改
+                UpdatePWDActivity.startActivity(getActivity());
+                break;
+            case R.id.rl_today_done:
+                //我的已办
+                startActivity(new Intent(getActivity(), TaskDoneActivity.class));
+                break;
+            case R.id.rl_update_info:
+                startActivity(new Intent(getActivity(), UpdateInfoActivity.class));
                 break;
         }
     }
@@ -170,12 +203,12 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
-                            UserInfoSingle.setUserNil();
-                            ActManager.getAppManager().finishAllActivity();
-                            WebSocketService.stopServer(getContext());
-                            Intent intent = new Intent(getContext(), LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            Tools.saveLoginNameAndPassword("","");
+                            if (MyApplication.isNeedIm&& Tools.isProduct())
+                                ((NoReadCountPresenter) mPresenter).loginOut(new UserBean(UserInfoSingle.getInstance().getUserId()));
+                            else {
+                                Tools.loginOut(getContext());
+                            }
                         } else {
 //                            ToastUtil.showToast("点击了右边的按钮");
                         }
@@ -218,6 +251,18 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
             tvNoticeNum.setText("");
             ivNoticePoint.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void loginOutResult(RespBean respBean) {
+        if (respBean.isSucc()){
+            ToastUtil.showToast("签退成功");
+        }
+        else {
+            ToastUtil.showToast("签退失败");
+        }
+        Tools.loginOut(getContext());
+
     }
 
     @Override

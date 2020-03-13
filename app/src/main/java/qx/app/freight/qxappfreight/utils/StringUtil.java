@@ -8,14 +8,18 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import qx.app.freight.qxappfreight.bean.InstallEquipEntity;
+import qx.app.freight.qxappfreight.bean.response.LoadAndUnloadTodoBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 
 
 public class StringUtil {
@@ -39,7 +43,7 @@ public class StringUtil {
      */
     public static String toText(String response) {
         String result = "- -";
-        if (!TextUtils.isEmpty(response)) {
+        if (!TextUtils.isEmpty(response) && !"null".equals(response)) {
             result = response;
         }
         return result;
@@ -47,13 +51,14 @@ public class StringUtil {
 
     /**
      * 对字符串做非null 判断 返回想要的 默认值
+     *
      * @param response
      * @param defaultStr 默认值
      * @return
      */
-    public static String toText(String response,String defaultStr) {
+    public static String toText(String response, String defaultStr) {
         String result = defaultStr;
-        if (!TextUtils.isEmpty(response)&& !"null".equals(response)) {
+        if (!TextUtils.isEmpty(response) && !"null".equals(response)) {
             result = response;
         }
         return result;
@@ -61,13 +66,14 @@ public class StringUtil {
 
     /**
      * 改变文字的颜色 通过html标签
+     *
      * @param content 文字内容
-     * @param color 文字颜色 16进制值
+     * @param color   文字颜色 16进制值
      * @return 添加html颜色标签后的文字
      */
-    public static String changeTextColor(String content,String color){
+    public static String changeTextColor(String content, String color) {
 
-        content  = "<font color='" +color + "'>"+content+"</font>";
+        content = "<font color='" + color + "'>" + content + "</font>";
 
         return content;
     }
@@ -95,69 +101,74 @@ public class StringUtil {
         }
         return flag;
     }
-    public static SpannableStringBuilder getAutoColorText(String text){
-        String splitTexts[]=text.split(":");
+
+    public static SpannableStringBuilder getAutoColorText(String text) {
+        String splitTexts[] = text.split(":");
         SpannableStringBuilder builderText = new SpannableStringBuilder(text);
         ColorStateList blue = ColorStateList.valueOf(Color.parseColor("#31ccbd"));
         ColorStateList red = ColorStateList.valueOf(Color.RED);
-        if (splitTexts.length==2){
-            int index=text.indexOf(":");
-            boolean flag=text.substring(index+1,index+2).equals("Y");
+        if (splitTexts.length == 2) {
+            int index = text.indexOf(":");
+            boolean flag = text.substring(index + 1, index + 2).equals("Y");
             TextAppearanceSpan textAppearanceSpan;
-            if (flag){
+            if (flag) {
                 textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
-            }else {
+            } else {
                 textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
             }
-            builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             return builderText;
-        }else {
-            List<Integer> indexes=getIndex(text,":");
-            for (Integer index:indexes){
-                boolean flag=text.substring(index+1,index+2).equals("Y");
+        } else {
+            List<Integer> indexes = getIndex(text, ":");
+            for (Integer index : indexes) {
+                boolean flag = text.substring(index + 1, index + 2).equals("Y");
                 TextAppearanceSpan textAppearanceSpan;
-                if (flag){
+                if (flag) {
                     textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
-                }else {
+                } else {
                     textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, red, null);
                 }
-                builderText.setSpan(textAppearanceSpan, index+1,index+2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             }
             return builderText;
         }
     }
-    private static List<Integer> getIndex(String strings, String str){
-        List<Integer> list=new ArrayList<>();
-        int flag=0;
-        while (strings.contains(str)){
+
+    private static List<Integer> getIndex(String strings, String str) {
+        List<Integer> list = new ArrayList<>();
+        int flag = 0;
+        while (strings.contains(str)) {
             //截取包含自身在内的前边部分
-            String aa= strings.substring(0,strings.indexOf(str)+str.length());
-            flag=flag+aa.length();
-            list.add(flag-str.length());
-            strings=strings.substring(strings.indexOf(str)+str.length());
+            String aa = strings.substring(0, strings.indexOf(str) + str.length());
+            flag = flag + aa.length();
+            list.add(flag - str.length());
+            strings = strings.substring(strings.indexOf(str) + str.length());
         }
         return list;
     }
 
     /**
      * 转换为 保留两位小数的 字符串
+     *
      * @param value
      * @return
      */
-    public static String formatString2(Object value){
-        if(null == value)
+    public static String formatString2(Object value) {
+        if (null == value)
             return "0";
-        return  String.format("%.1f", value);
+        return String.format("%.1f", value);
     }
+
     /**
      * 去掉后面无用的零
+     *
      * @param value
      * @return
      */
-    public static String formatStringDeleteDot(String value){
-        if (value == null || "".equals(value))
+    public static String formatStringDeleteDot(String value) {
+        if (value == null || "".equals(value) || !isNumeric(value))
             return "0";
-        if(value.indexOf(".") > 0){
+        if (value.indexOf(".") > 0) {
             //正则表达
             value = value.replaceAll("0+?$", "");//去掉后面无用的零
 
@@ -167,12 +178,38 @@ public class StringUtil {
         return value;
     }
 
+    /**
+     *      * 匹配是否包含数字
+     *      * @param str 可能为中文，也可能是-19162431.1254，不使用BigDecimal的话，变成-1.91624311254E7
+     *      * @return
+     *      * @author yutao
+     *      * @date 2016年11月14日下午7:41:22
+     *      
+     */
+    public static boolean isNumeric(String str) {
+        // 该正则表达式可以匹配所有的数字 包括负数
+        Pattern pattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;//异常 说明包含非数字。
+        }
+
+        Matcher isNum = pattern.matcher(bigStr); // matcher是全匹配
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static boolean isEmpty(String str) {
         return (str == null || str.length() == 0) && isBlank(str);
     }
+
     private static boolean isBlank(String str) {
-        return (str == null || str.trim().length() == 0);
+        return (str == null || str.trim().length() == 0|| "null".equals(str));
     }
 
     /*** 半角转换为全角
@@ -193,7 +230,9 @@ public class StringUtil {
         return new String(c);
     }
 
-    /** * 去除特殊字符或将所有中文标号替换为英文标号
+    /**
+     * 去除特殊字符或将所有中文标号替换为英文标号
+     *
      * @param str
      * @return
      */
@@ -205,22 +244,112 @@ public class StringUtil {
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
     }
+
     public static boolean isContains(String str1, String str2) {
         if (isEmpty(str1))
             return false;
         else return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
     }
+
+    /**
+     * 解析航线数据，返回航站三字码列表
+     *
+     * @param route
+     * @return
+     */
+    public static List<String> getFlightList(String route) {
+        List<String> result = new ArrayList<>();
+        if (route != null) {
+            String[] placeArray = route.split(",");
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str : placeList) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                result.add(temp);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 判断时间字符串为空
+     *
+     * @param time 参数
+     * @return 结果
+     */
+    public static boolean isTimeNull(String time) {
+        boolean result = false;
+        if (time == null || "0".equals(time)) {
+            result = true;
+        }
+        return result;
+    }
+
+    /**
+     * 根据数据设置时间和时间显示类型
+     *
+     * @param bean 服务器传回的数据
+     */
+    public static void setTimeAndType(LoadAndUnloadTodoBean bean) {
+        String time;
+        int timeType;
+        if (bean.getMovement()==1||bean.getMovement()==4){//单进或连进任务
+            if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {//实际到达时间
+                time = TimeUtils.getHMDay(bean.getAta());
+                timeType = Constants.TIME_TYPE_AUTUAL;
+            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEta()))) {//预计到达时间
+                time = TimeUtils.getHMDay(bean.getEta());
+                timeType = Constants.TIME_TYPE_EXCEPT;
+            } else {//计划到达时间
+                time = TimeUtils.getHMDay(bean.getSta());
+                timeType = Constants.TIME_TYPE_PLAN;
+            }
+        }else {
+            if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
+                time = TimeUtils.getHMDay(bean.getAtd());
+                timeType = Constants.TIME_TYPE_AUTUAL;
+            } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
+                time = TimeUtils.getHMDay(bean.getEtd());
+                timeType = Constants.TIME_TYPE_EXCEPT;
+            } else {//计划时间
+                time = TimeUtils.getHMDay(bean.getStd());
+                timeType = Constants.TIME_TYPE_PLAN;
+            }
+        }
+        bean.setTimeForShow(time);
+        bean.setTimeType(timeType);
+    }
+
+    /**
+     * 根据数据设置时间和时间显示类型
+     *
+     * @param bean 服务器传回的数据
+     */
+    public static void setTimeAndType(LoadAndUnloadTodoBean.RelateInfoObjBean bean) {
+        String time;
+        int timeType;
+        if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
+            time = TimeUtils.getHMDay(bean.getAtd());
+            timeType = Constants.TIME_TYPE_AUTUAL;
+        } else if (!StringUtil.isTimeNull(String.valueOf(bean.getEtd()))) {//预计出港时间
+            time = TimeUtils.getHMDay(bean.getEtd());
+            timeType = Constants.TIME_TYPE_EXCEPT;
+        } else {//计划时间
+            time = TimeUtils.getHMDay(bean.getStd());
+            timeType = Constants.TIME_TYPE_PLAN;
+        }
+        bean.setTimeForShow(time);
+        bean.setTimeType(timeType);
+    }
+
     /**
      * 设置航线数据
      *
      * @param route  航线数据
      * @param entity 需要设置航线数据的实体
      */
-    public static void setFlightRoute(String route, InstallEquipEntity entity) {
+    public static void setFlightRoute(String route, LoadAndUnloadTodoBean.RelateInfoObjBean entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setStartPlace("");
-            entity.setMiddlePlace("");
-            entity.setEndPlace("");
+            entity.setFlightInfoList(new ArrayList<>());
         } else {
             String[] placeArray = route.split(",");
             List<String> resultList = new ArrayList<>();
@@ -229,15 +358,44 @@ public class StringUtil {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
             }
-            if (placeArray.length == 2) {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace("");
-                entity.setEndPlace(resultList.get(resultList.size() - 1));
-            } else {
-                entity.setStartPlace(resultList.get(0));
-                entity.setMiddlePlace(resultList.get(1));
-                entity.setEndPlace(resultList.get(2));
-            }
+            entity.setFlightInfoList(resultList);
         }
+    }
+
+    /**
+     * 设置航线数据
+     *
+     * @param route  航线数据
+     * @param entity 需要设置航线数据的实体
+     */
+    public static void setFlightRoute(String route, LoadAndUnloadTodoBean entity) {
+        if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
+            entity.setFlightInfoList(new ArrayList<>());
+        } else {
+            String[] placeArray = route.split(",");
+            List<String> resultList = new ArrayList<>();
+            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            for (String str : placeList) {
+                String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
+                resultList.add(temp);
+            }
+            entity.setFlightInfoList(resultList);
+        }
+    }
+
+    /**
+     * 根据格式字符串生成对应的时间字符串
+     *
+     * @param timeMillions 时间毫秒值
+     * @param regix        格式字符串
+     * @return 结果
+     */
+    public static String getTimeTextByRegix(long timeMillions, String regix) {
+        if(timeMillions <= 0){
+            return "- -";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(regix, Locale.CHINESE);
+        Date date = new Date(timeMillions);
+        return sdf.format(date);
     }
 }

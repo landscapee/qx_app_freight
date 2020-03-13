@@ -12,7 +12,7 @@ import lombok.Data;
  * Created by pr
  */
 @Data
-public class TransportTodoListBean implements MultiItemEntity , Serializable {
+public class TransportTodoListBean implements MultiItemEntity, Serializable {
     /**
      * id : aec574f5254c20c7fa9c04685293e581
      * tpScooterId : 123
@@ -45,8 +45,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private Integer tpCargoNumber;
     private Double tpCargoWeight;
     private Double tpCargoVolume;
-    private String tpFlightId;
-    private String tpFlightNumber;
+    private String flightId;
     private String tpFlightLocate;
     private Long tpFlightTime;
     private String tpFregihtSpace;
@@ -55,6 +54,13 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String tpType;
     private Integer tpState;//1 锁定（被扫描了）
     private String tpOperator;
+    /**
+     * 0无效，1横向，竖向
+     */
+    private int headingFlag;
+
+    private int scSubCategory;//1行李  2货物  3卸机 4
+
     /**
      * 作用一:用来对MQ接收的数据进行判断,判断值由MQ发送方填写
      * 作用二:手持端结束运输时传入该字段对应的值,根据值修改该板车的下个起始地以及运输目的地
@@ -106,7 +112,7 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String planeType;
     private Long etd;
     private List<String> flightRoute;
-    private Integer num;//板车数量
+    private int num;//板车数量
     private String carType;//板车类型
 
 
@@ -120,9 +126,9 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     //出港行李数据上传终端ID
     private String baggageSubTerminal;
     //
-    private String tpAsFlightId;
+    private String asFlightId;
     //业务id
-    private String tpFlightBusId;
+    private String flightInfoId;
     //
     private int tpFlightType; //航班类型,0 国内出港,1,国内进港 2国外出港 3国内进港
     //仓位
@@ -131,6 +137,9 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private String billNumber;
     //是板车下拉还是运单下拉type值
     private int infoType;
+    private boolean remoteData;//控制显示“配”和“监”
+    private int infoStatus = 0;//控制背景显示：0，默认；1，拉回成功；2、拉回失败
+    private boolean selected2Commit = true;//控制默认选择拉回
     private int maxBillNumber;
     private double maxBillWeight;
     private String billCode;
@@ -139,6 +148,8 @@ public class TransportTodoListBean implements MultiItemEntity , Serializable {
     private double pullInWeight;//拉货上报输入的板车拉的重量
 
     private String taskPk;//子任务id
+
+    private boolean notCanDelete; // 是否不能滑动删除
 
     @Override
     public int getItemType() {

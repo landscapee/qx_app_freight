@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.ouyben.empty.EmptyLayout;
 
@@ -23,16 +24,18 @@ import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportListCommitEntity;
-import qx.app.freight.qxappfreight.bean.response.AgentBean;
-import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.DeclareWaybillBean;
 import qx.app.freight.qxappfreight.bean.response.MyAgentListBean;
+import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.contract.AgentTransportationListContract;
+import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.contract.ReturnCargoCommitContract;
-import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
+import qx.app.freight.qxappfreight.contract.ReturnTransportationListContract;
+import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ReturnCargoCommitPresenter;
+import qx.app.freight.qxappfreight.presenter.ReturnTransportationListPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -41,16 +44,31 @@ import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
  * TODO : 出港退货
  * Created by pr
  */
-public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ReturnCargoCommitContract.returnCargoCommitView, AgentTransportationListContract.agentTransportationListView {
+public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRecylerView.OnRefreshListener, EmptyLayout.OnRetryLisenter, ReturnCargoCommitContract.returnCargoCommitView, ReturnTransportationListContract.returnTransportationListView, GetWayBillInfoByIdContract.getWayBillInfoByIdView {
     @BindView(R.id.mfrv_returngood_list)
     MultiFunctionRecylerView mMfrvAllocateList;
     @BindView(R.id.bt_sure)
     Button mBtSure;
+    @BindView(R.id.btn_refuse)
+    Button mBtRefuse;
+
+    @BindView(R.id.tv_waybill_code)
+    TextView tvWaybillCode;
+    @BindView(R.id.tv_goods_name)
+    TextView tvGoodsName;
+    @BindView(R.id.tv_special_code)
+    TextView tvSpecialCode;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+
     private ReturnGoodAdapter adapter;
     private TransportDataBase mBean;
-    private List<MyAgentListBean> list;
+    private List<ReturnBean> list;
     private CustomToolbar toolbar;
     private int pageCurrent = 1;
+    private TransportListCommitEntity entity = new TransportListCommitEntity();
 
 
     public static void startActivity(Activity context, TransportDataBase mBean) {
@@ -81,64 +99,70 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         mBean = (TransportDataBase) getIntent().getSerializableExtra("TransportListBean");
     }
 
+    private void setWaybillInfo(DeclareWaybillBean mBean) {
+        if (mBean!=null){
+            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
+            else
+                tvSpecialCode.setText("特货代码:  - -");
+            tvNumber.setText("件数:  "+mBean.getTotalNumber());
+            tvWeight.setText("重量:  "+mBean.getTotalWeight());
+        }
+        else {
+            tvWaybillCode.setText("运单号:   ");
+            tvGoodsName.setText("品名:  ");
+            tvSpecialCode.setText("特货代码:  ");
+            tvNumber.setText("件数:  ");
+            tvWeight.setText("重量:  ");
+        }
+
+    }
+
+    private void getDataInfo() {
+        mPresenter = new GetWayBillInfoByIdPresenter(this);
+        ((GetWayBillInfoByIdPresenter) mPresenter).getWayBillInfoById(mBean.getId());
+    }
+
     private void initData() {
-        mPresenter = new AgentTransportationListPresent(this);
+        mPresenter = new ReturnTransportationListPresenter(this);
         BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
         MyAgentListBean myAgentListBean = new MyAgentListBean();
         myAgentListBean.setWaybillId(mBean.getId());
+        myAgentListBean.setWaybillCode(mBean.getWaybillCode());
         myAgentListBean.setTaskTypeCode(mBean.getTaskTypeCode());
         baseFilterEntity.setSize(Constants.PAGE_SIZE);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setFilter(myAgentListBean);
-        ((AgentTransportationListPresent) mPresenter).agentTransportationList(baseFilterEntity);
+        ((ReturnTransportationListPresenter) mPresenter).returnTransportationList(baseFilterEntity);
         click();
     }
 
     private void click() {
         mBtSure.setOnClickListener(v -> {
-            if (list.size() <= 0) {
-                return;
-            }
-            mPresenter = new ReturnCargoCommitPresenter(this);
-            TransportListCommitEntity entity = new TransportListCommitEntity();
-            DeclareWaybillBean mDeclareBean = new DeclareWaybillBean();
-            //最外层
-            entity.setType("1");
-            entity.setTaskId(mBean.getTaskId());
-            entity.setUserId(UserInfoSingle.getInstance().getUserId());
-            entity.setWaybillId(mBean.getId());
-            //第一个实体
-            entity.setWaybillInfo(mDeclareBean);
-            //第二个实体
-            List<TransportListCommitEntity.RcInfosEntity> mListRcInfosEntity = new ArrayList<>();
-            if (list.size() > 0) {
-                for (MyAgentListBean mMyAgentListBean : list) {
-                    TransportListCommitEntity.RcInfosEntity rcInfosEntity = new TransportListCommitEntity.RcInfosEntity();
-                    rcInfosEntity.setId(mMyAgentListBean.getId());
-                    rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                    rcInfosEntity.setCargoCn(mMyAgentListBean.getCargoCn());
-                    rcInfosEntity.setReservoirName(mMyAgentListBean.getReservoirName());
-                    rcInfosEntity.setReservoirType(mBean.getColdStorage());
-                    rcInfosEntity.setWaybillId(mMyAgentListBean.getWaybillId());
-                    rcInfosEntity.setWaybillCode(mMyAgentListBean.getWaybillCode());
-                    rcInfosEntity.setCargoId(mMyAgentListBean.getCargoId());
-                    rcInfosEntity.setNumber(mMyAgentListBean.getNumber());
-                    rcInfosEntity.setWeight((int) mMyAgentListBean.getWeight());
-                    rcInfosEntity.setVolume(mMyAgentListBean.getVolume());
-                    rcInfosEntity.setPackagingType(mMyAgentListBean.getPackagingType());
-                    rcInfosEntity.setScooterId(mMyAgentListBean.getScooterId());
-                    rcInfosEntity.setUldId(mMyAgentListBean.getUldId());
-                    rcInfosEntity.setOverWeight(mMyAgentListBean.getOverWeight());
-                    rcInfosEntity.setRepType(mMyAgentListBean.getRepType());
-                    rcInfosEntity.setRepPlaceId(mMyAgentListBean.getRepPlaceId());
-                    mListRcInfosEntity.add(rcInfosEntity);
-                }
-            }
-            entity.setRcInfos(mListRcInfosEntity);
-            ((ReturnCargoCommitPresenter) mPresenter).returnCargoCommit(entity);
+            pullData(0);
+
         });
+        mBtRefuse.setOnClickListener(v -> {
+            pullData(1);
+        });
+    }
 
-
+    private void pullData(int judge) {
+        
+        mPresenter = new ReturnCargoCommitPresenter(this);
+        entity.setJudge(judge);
+        //1 是提交
+        entity.setType("1");
+        entity.setTaskId(mBean.getTaskId());
+        entity.setUserId(UserInfoSingle.getInstance().getUserId());
+        entity.setWaybillId(mBean.getWaybillId());
+        entity.setWaybillCode(mBean.getWaybillCode());
+        entity.setTaskTypeCode(mBean.getTaskTypeCode());
+        entity.setReturnInfoVO(list);
+        entity.setJudge(judge);
+        ((ReturnCargoCommitPresenter) mPresenter).returnCargoCommit(entity);
     }
 
     @Override
@@ -178,7 +202,7 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("提交中");
+        showProgessDialog("数据提交中……");
     }
 
     @Override
@@ -187,27 +211,49 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     }
 
     @Override
-    public void agentTransportationListResult(AgentBean myAgentListBean) {
-        if (myAgentListBean!=null) {
+    public void returnTransportationListResult(List<ReturnBean> addScooterBean) {
+        //获取运单详情
+        getDataInfo();
+
+        if (addScooterBean != null) {
+
             if (pageCurrent == 1) {
                 mMfrvAllocateList.finishRefresh();
             } else {
                 mMfrvAllocateList.finishLoadMore();
             }
-            toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + myAgentListBean.getRcInfo().size() + ")");
-            if (0 != myAgentListBean.getRcInfo().size()) {
-                list = myAgentListBean.getRcInfo();
-                adapter = new ReturnGoodAdapter(myAgentListBean.getRcInfo());
+            toolbar.setMainTitle(Color.WHITE, "出港退货" + "(" + addScooterBean.size() + ")");
+            if (0 != addScooterBean.size()) {
+                list = addScooterBean;
+                adapter = new ReturnGoodAdapter(addScooterBean);
                 mMfrvAllocateList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             } else {
-                ToastUtil.showToast("数据为空");
+//                ToastUtil.showToast("数据为空");
             }
         }
     }
 
     @Override
-    public void autoReservoirvResult(AutoReservoirBean myAgentListBean) {
+    public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
+        if (null != result) {
+            if (StringUtil.isEmpty(result.getRefrigeratedTemperature()))
+                result.setRefrigeratedTemperature("0*0");
+
+            entity.setWaybillInfo(result);
+
+            setWaybillInfo(result);
+        }
+
+    }
+
+    @Override
+    public void sendPrintMessageResult(String result) {
+
+    }
+
+    @Override
+    public void getWaybillStatusResult(TransportDataBase result) {
 
     }
 }

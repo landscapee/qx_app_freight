@@ -1,7 +1,5 @@
 package qx.app.freight.qxappfreight.model;
 
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -40,8 +38,18 @@ public class ScanScooterModel extends BaseModel implements ScanScooterContract.s
     }
 
     @Override
-    public void scooterWithUser(String user,String flightId, IResultLisenter lisenter) {
-        Disposable subscription = UpdateRepository.getInstance().scooterWithUser(user,flightId)
+    public void scooterWithUser(String user,String flightId,String taskId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scooterWithUser(user,flightId,taskId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
+    @Override
+    public void scooterWithUserTask(String taskId, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().scooterWithUserTask(taskId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

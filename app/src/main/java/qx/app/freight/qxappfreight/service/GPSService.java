@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.service;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -19,38 +18,23 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.concurrent.TimeUnit;
-
 import qx.app.freight.qxappfreight.bean.PositionBean;
-import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
-import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
-import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
-import qx.app.freight.qxappfreight.utils.BSLoactionUtil;
-import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.utils.loactionUtils.BSLoactionUtil;
 
 /**
  * TODO: GPS 获取地址
  */
-public class GPSService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
-    private static final String TAG = "tagGPS";
+public class GPSService extends Service {
+    private static final String TAG = "GPSService";
     private LocationManager locationManager = null;
     private String provider;
     private int time = 1000;
     private boolean isGetGPS;
     private BSLoactionUtil mBSLoactionUtil;
 
-    private GpsInfoEntity gpsInfoEntity;
-
-    private SaveGpsInfoPresenter saveGpsInfoPresenter;
-
-    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -58,9 +42,16 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
             if (isGetGPS) {
                 mHandler.postDelayed(mRunnable, time);
             }
+
         }
     };
-    Runnable mRunnable = () -> mHandler.obtainMessage(0).sendToTarget();
+
+    Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.obtainMessage(0).sendToTarget();
+        }
+    };
 
     /**
      * TODO: 保存上传位置
@@ -69,57 +60,23 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
         // 数据
         PositionBean bean = new PositionBean();
         if (l == null) {
-            bean.setAltitude(String.valueOf(0.0));//海拔
-            bean.setLongitude(String.valueOf(0.0));//经度
-            bean.setLatitude(String.valueOf(0.0));// 纬度
+            bean.setAltitude(0.0);//海拔
+            bean.setLongitude(0.0);//经度
+            bean.setLatitude(0.0);// 维度
             bean.setTime(-1);
         } else {
-            bean.setAltitude(String.valueOf(l.getAltitude()));//海拔
-            bean.setLongitude(String.valueOf(l.getLongitude()));//经度
-            bean.setLatitude(String.valueOf(l.getLatitude()));// 纬度
+            bean.setAltitude(l.getAltitude());//海拔
+            bean.setLongitude(l.getLongitude());//经度
+            bean.setLatitude(l.getLatitude());// 维度
             bean.setTime(l.getTime());
         }
         // 事件上报 使用最新的位置
         Tools.saveGPSPosition(bean);
-        EventBus.getDefault().post("经度"+bean.getLongitude()+"纬度:"+bean.getLatitude());
-        Log.e("saveGPSPosition====","经度"+bean.getLongitude()+"纬度:"+bean.getLatitude());
-
-        sendGps(bean);
-
-    }
-
-    /**
-     * 发送GPS
-     * @param bean
-     */
-    private void sendGps(PositionBean bean){
-
-        //临时使用 没有GPS 传0
-        PositionBean bean1 = new PositionBean();
-        bean1.setAltitude(String.valueOf(0.0));//海拔
-        bean1.setLongitude(String.valueOf(0.0));//经度
-        bean1.setLatitude(String.valueOf(0.0));// 纬度
-        bean1.setTime(-1);
-        // 事件上报 使用最新的位置
-        Tools.saveGPSPosition(bean1);
-
-        if(null == bean.getLatitude())
-        {
-            bean.setLatitude("102551.2");
-            bean.setLongitude("225412.3");
-        }
-        gpsInfoEntity.setLatitude(bean.getLatitude());
-        gpsInfoEntity.setLongitude(bean.getLongitude());
-        if (UserInfoSingle.getInstance() != null)
-            gpsInfoEntity.setUserId(UserInfoSingle.getInstance().getUserId());
-        else
-            gpsInfoEntity.setUserId("admin");
-        gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
-        saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
     }
 
     public static void gpsStart(Activity act) {
-        if (!isGpsEnabled((LocationManager) act.getSystemService(Context.LOCATION_SERVICE))) {
+        if (!isGpsEnabled((LocationManager) act
+                .getSystemService(Context.LOCATION_SERVICE))) {
             Toast.makeText(act, "GPS导航未开启，请设置！", Toast.LENGTH_SHORT).show();
             // 返回开启GPS导航设置界面
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -132,6 +89,8 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
 
     /**
      * 启动一个服务执行指定的方法
+     *
+     * @param ctx
      */
     private static void actionStart(Context ctx) {
         Intent i = new Intent(ctx, GPSService.class);
@@ -140,6 +99,8 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
 
     /**
      * 停止一个服务
+     *
+     * @param ctx
      */
     public static void actionStop(Context ctx) {
         Intent i = new Intent(ctx, GPSService.class);
@@ -151,7 +112,10 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean isOpenNetwork = locationManager
                 .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        return isOpenGPS || isOpenNetwork;
+        if (isOpenGPS || isOpenNetwork) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -182,39 +146,13 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
     @Override
     public void onCreate() {
         super.onCreate();
-        initSend();
-//        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
-
-        saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
-        gpsInfoEntity = new GpsInfoEntity();
+        mBSLoactionUtil = BSLoactionUtil.newInstance(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        在室内时 GPS 无法使用
-//        provider = LocationManager.NETWORK_PROVIDER;
         provider = getProvider();
         startLocation();
         Log.d(TAG, "--定位服务启动--");
-
-        //测试
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    sendGps(new PositionBean());
-//                    TimeUnit.SECONDS.sleep(30000);
-//
-//                }catch (Exception e){
-//
-//                }
-//
-//            }
-//        });
-//        thread.start();
-
-    }
-
-    private void initSend() {
-
-
+        //        isGetGPS = true;
+        //        mHandler.postDelayed(mRunnable, time);// 启动线程控制扫描
     }
 
     /**
@@ -250,13 +188,14 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
 
     private void startLocation() {
         // 启动基站定位
-//        mBSLoactionUtil.reGetBS();
+        mBSLoactionUtil.reGetBS();
         // 启动GPS定位
         if (ActivityCompat.checkSelfPermission(GPSService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         //TODO:  一秒 一米
-        locationManager.requestLocationUpdates(provider, time, 1, locationListener);
+        locationManager.requestLocationUpdates(provider, time, 1,
+                locationListener);
     }
 
     @Override
@@ -264,7 +203,7 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
         super.onDestroy();
         isGetGPS = false;
         mHandler.removeCallbacks(mRunnable);
-//        mBSLoactionUtil.destroyBS();
+        mBSLoactionUtil.destroyBS();
         if (locationManager != null && locationListener != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -275,29 +214,10 @@ public class GPSService extends Service implements SaveGpsInfoContract.saveGpsIn
         }
     }
 
-    @Override
-    public void saveGpsInfoResult(String result) {
-        Log.e("saveGpsInfoResult===",result);
-    }
-
-    @Override
-    public void toastView(String error) {
-
-    }
-
-    @Override
-    public void showNetDialog() {
-
-    }
-
-    @Override
-    public void dissMiss() {
-
-    }
-
     public class GPSBinder extends Binder {
         GPSService getService() {
             return GPSService.this;
         }
     }
+
 }

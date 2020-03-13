@@ -27,7 +27,8 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 航班号
      */
-    private String flightNumber;
+//    private String flightNumber;
+    private String flightNo;
 
     /**
      * 航班日期
@@ -67,7 +68,7 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 特货代码
      */
-    private String specialCargoCode;
+    private String specialCode;
 
     /**
      * 货物类别  1：贵重  2：危险 3：活体 4：冷藏 0：普货
@@ -77,22 +78,22 @@ public class DeclareWaybillBean implements Serializable {
     /**
      * 总件数
      */
-    private int totalNumberPackages;
+    private int totalNumber;
 
     /**
      * 重量
      */
-    private int billingWeight;
+    private double billingWeight;
 
     /**
      * 总重量
      */
-    private int totalWeight;
+    private double totalWeight;
 
     /**
      * 总体积
      */
-    private int totalVolume;
+    private double totalVolume;
 
     /**
      * 冷藏温度
@@ -108,6 +109,9 @@ public class DeclareWaybillBean implements Serializable {
      * 航班ID
      */
     private String flightId;
+
+
+    private String freightId;
 
     /**
      * 流程ID
@@ -200,6 +204,9 @@ public class DeclareWaybillBean implements Serializable {
      */
     private int receivecargoVolumn;
 
+    private String reservoirType;
+    private String repName;
+
     /**
      * 入库时间
      */
@@ -254,7 +261,7 @@ public class DeclareWaybillBean implements Serializable {
      */
     private String newWaybillCode;
 
-    private DeclareWaybillAddition declareWaybillAddition;
+    private DeclareWaybillAddition spWaybillFile;
 
     /**
      * 板车号
@@ -344,4 +351,9 @@ public class DeclareWaybillBean implements Serializable {
      *  * 剩余体积
      */
     private double surplusOfVolume;
+    private String storageTypeName;
+    private String storageType;
+
+
+
 }

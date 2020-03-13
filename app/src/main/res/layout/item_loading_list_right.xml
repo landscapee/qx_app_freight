@@ -3,7 +3,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e5e5e5" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -18,7 +21,6 @@
             android:id="@+id/tv_board_number"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:text="4929"
             android:textColor="#666" />
@@ -32,7 +34,6 @@
             android:id="@+id/tv_uld_number"
             android:layout_width="96dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:text="-"
             android:textColor="#666" />
@@ -46,7 +47,6 @@
             android:id="@+id/tv_target_name"
             android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:text="PEK"
             android:textColor="#666" />
@@ -60,7 +60,6 @@
             android:id="@+id/tv_type"
             android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:text="C"
             android:textColor="#666" />
@@ -74,7 +73,6 @@
             android:id="@+id/tv_weight"
             android:layout_width="43dp"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:gravity="center"
             android:text="15"
             android:textColor="#666" />
@@ -84,28 +82,24 @@
             android:layout_height="match_parent"
             android:background="#e5e5e5" />
 
-        <FrameLayout
-            android:layout_width="63dp"
-            android:visibility="gone"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_pull_title"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="拉下"
+            android:textColor="#666" />
 
-            <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:text="9999"
-                android:textColor="#666" />
+        <TextView
+            android:id="@+id/tv_pull"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_rect_gray_979797"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="拉下"
+            android:textColor="#666" />
 
-            <ImageView
-                android:id="@+id/iv_pull_down"
-                android:layout_width="@dimen/dp_25"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:src="@mipmap/icon_pull_down"
-                 />
-        </FrameLayout>
 
         <TextView
             android:layout_width="1px"
@@ -117,4 +111,10 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e5e5e5" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_all_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
 </LinearLayout>

@@ -24,23 +24,28 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.DynamicDetailsAcitvity;
 import qx.app.freight.qxappfreight.adapter.DynamicInfoAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
-import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
 import qx.app.freight.qxappfreight.bean.response.FlightEventBusBean;
 import qx.app.freight.qxappfreight.contract.FlightdynamicContract;
 import qx.app.freight.qxappfreight.presenter.FlightdynamicPresenter;
+import qx.app.freight.qxappfreight.utils.Tools;
+import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
 public class DynamicInfoFragment extends BaseFragment implements FlightdynamicContract.flightdynamicView {
     @BindView(R.id.rl_dynamic)
     RecyclerView rlDynamic;
+    @BindView(R.id.search_toolbar)
+    SearchToolbar searchToolbar;//父容器的输入框
 
     private String type;
     private String movement;
     private String day;
     private DynamicInfoAdapter mAdapter;
     private List<FlightBean.FlightsBean> mList;
+    private List<FlightBean.FlightsBean> mListSearch = new ArrayList <>();
 
+    private String strSearch="";
 
     public static DynamicInfoFragment getInstance(String type, String movement, String day) {
         DynamicInfoFragment fragment = new DynamicInfoFragment();
@@ -82,6 +87,14 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
 
     private void initView() {
         EventBus.getDefault().register(this);
+        searchToolbar.setHintAndListener("请输入航班号", text -> {
+            strSearch = text;
+            seachByText(strSearch);
+        });
+        searchToolbar.getCloseView().setOnClickListener(v -> {
+            searchToolbar.getSearchView().setText("");
+//            seachByText("");
+        });
 
         type = getArguments().getString("type");
         movement = getArguments().getString("movement");
@@ -95,9 +108,25 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
 
         mList = new ArrayList<>();
         rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new DynamicInfoAdapter(mList, type);
+        mAdapter = new DynamicInfoAdapter(mListSearch, type);
         rlDynamic.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo()));
+        mAdapter.setOnItemClickListener((adapter, view, position) ->
+                {
+                    if (!Tools.isFastClick())
+                        return;
+                    DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo());
+                }
+                );
+    }
+
+    private void seachByText(String str) {
+        mListSearch.clear();
+        for (FlightBean.FlightsBean flightsBean:mList){
+            if (flightsBean.getFlightNo().contains(str)){
+                mListSearch.add(flightsBean);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -166,7 +195,7 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
                     }
                 }
             }
-            mAdapter.notifyDataSetChanged();
+            seachByText(strSearch);
         }
     }
 

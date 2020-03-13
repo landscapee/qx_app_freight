@@ -20,8 +20,11 @@ public class PushDataUtil {
     public static void handlePushInfo(CommonJson4List result, String mCurrentTaskId, Context context) {
         if (result != null) {
             String taskId = result.getTaskId();
-            if (result.isCancelFlag()) {
-                if (taskId.equals(mCurrentTaskId)) {
+            if (result.isCancelFlag()&&taskId.equals(mCurrentTaskId)) {
+                if (!result.isConfirmTask()){
+                    ToastUtil.showToast("当前装卸机任务已取消保障");
+                    backToLastView(context);
+                }else  {
                     ToastUtil.showToast("当前装卸机任务已取消");
                     backToLastView(context);
                 }

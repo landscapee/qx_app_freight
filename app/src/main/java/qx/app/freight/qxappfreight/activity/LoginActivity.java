@@ -1,8 +1,10 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,38 +15,40 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
+import com.beidouapp.imlibapi.IMLIBContext;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
-import qx.app.freight.qxappfreight.bean.response.LoginBean;
+import qx.app.freight.qxappfreight.bean.request.ReqLoginBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean;
+import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
+import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
-import qx.app.freight.qxappfreight.contract.UpdateVersionContract;
 import qx.app.freight.qxappfreight.dialog.ProgressDialog;
 import qx.app.freight.qxappfreight.dialog.UpDateVersionDialog;
 import qx.app.freight.qxappfreight.http.HttpApi;
-import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
-import qx.app.freight.qxappfreight.service.DownloadFileService;
 import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.DownloadInstall;
 import qx.app.freight.qxappfreight.utils.DownloadUtils;
 import qx.app.freight.qxappfreight.utils.IMUtils;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
@@ -55,8 +59,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static qx.app.freight.qxappfreight.app.MyApplication.isNeedIm;
+
 /**
  * 登录页面
+ *   by 郭浩
  */
 public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
@@ -65,6 +72,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     EditText mEtPassWord;
     @BindView(R.id.et_username)
     EditText mEtUserName;
+    @BindView(R.id.tv_copyright_version)
+    TextView tvCopyVersion;
     private UpdateVersionBean2 mVersionBean;
 
     @Override
@@ -74,14 +83,27 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
+        //防止 重新点击app 图标 重启这个activity
+
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
+        tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
         checkVersion();
-        mEtPassWord.setText("");
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-        mEtUserName.setText("");
+
+
+        mEtUserName.setText(Tools.getLoginNameForLogin());
+        mEtPassWord.setText(Tools.getPassword());
+
         mBtnLogin.setOnClickListener(v -> {
+            if (!Tools.isFastClick())
+                return;
             login();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -98,20 +120,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         checkPermissionsForWindow();
 
         //输入法 下载安装
-        DownloadUtils downloadUtils = new DownloadUtils(this);
-        //是否按安装输入法
-        if(!downloadUtils.isInstall()){
-            //是否已经下载
-            if(downloadUtils.isDownload()){
-                //直接安装
-                downloadUtils.showDialogInstall();
-            }else{
-                //下载
-                downloadUtils.showDialogDownload();
-            }
-        }else{
-            Log.e("输入法：","输入法已经安装！");
-        }
+//        DownloadUtils downloadUtils = new DownloadUtils(this);
+//        //是否按安装输入法
+//        if (!downloadUtils.isInstall()) {
+//            //是否已经下载
+//            if (downloadUtils.isDownload()) {
+//                //直接安装
+//                downloadUtils.showDialogInstall();
+//            } else {
+//                //下载
+//                downloadUtils.showDialogDownload();
+//            }
+//        } else {
+//            Log.e("输入法：", "输入法已经安装！");
+//        }
 
     }
 
@@ -139,7 +161,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
                 }
-                if(1000 != updataBean.getResponseCode()){
+                if (1000 != updataBean.getResponseCode()) {
                     ToastUtil.showToast("获取应用更新信息失败");
                     return;
                 }
@@ -150,7 +172,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 if (appInfo != null) {
                     versionCode = appInfo.versionCode;
                 }
-                if (versionCode != mVersionBean.getData().getVersionCodeRS()) {
+                if (versionCode < mVersionBean.getData().getVersionCodeRS()) {
                     showAppUpdateDialog();
                 }
             }
@@ -177,6 +199,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         if (TextUtils.isEmpty(mEtUserName.getText().toString()) || TextUtils.isEmpty(mEtPassWord.getText().toString())) {
             ToastUtil.showToast("账号或者密码不能为空");
         } else {
+            showProgessDialog("正在登录……");
             mPresenter = new LoginPresenter(this);
             ((LoginPresenter) mPresenter).login(getLoginEntity());
         }
@@ -223,27 +246,66 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         return mLoginEntity;
     }
 
-    private LoginEntity getLoginQxAiEntity() {
-        LoginEntity mLoginEntity = new LoginEntity();
-        mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
-        mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
-        return mLoginEntity;
+    /**
+     * 获取登录智能调度请求体
+     * @return
+     */
+    private ReqLoginBean getLoginQxAiEntity() {
+        ReqLoginBean bean = new ReqLoginBean();
+        bean.setUserName(mEtUserName.getText().toString().trim());
+        bean.setPwd(mEtPassWord.getText().toString().trim());
+        bean.setPhoneNo(DeviceInfoUtil.getPhoneNumber(this));
+        bean.setDeviceId(StringUtil.isEmpty(DeviceInfoUtil.getIMEI(this)) ? UUID.randomUUID().toString() : DeviceInfoUtil.getIMEI(this));
+        // 设备类型
+        bean.setDeviceType("phone");
+
+        bean.setEptModel(StringUtil.isEmpty(Build.MODEL) ? "未获取到设备型号" : Build.MODEL);
+        bean.setSystemName("Android");
+        bean.setSystemCode(StringUtil.isEmpty(Build.VERSION.RELEASE) ? "未获取到版本信息" : Build.VERSION.RELEASE);
+        return bean;
     }
 
     @Override
     public void loginResult(LoginResponseBean loginBean) {
+        Log.e("isNeedIm","isNeedIm:"+isNeedIm);
         if (loginBean != null) {
-            Tools.setLoginUserBean(loginBean);
+            isNeedIm = false;
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())) {
-//                    loginBean.setUserId(loginBean.getLoginid());
-                    loginIm(loginBean);
+                if (Constants.PREPLANER.equals(mRoleRSBean.getRoleCode())) {
+                    ToastUtil.showToast(this, "组板只能使用PAD登录");
+                    dismissProgessDialog();
+                    return;
+                }
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
+                        Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
+                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())||
+                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())||
+                        Constants.INTERNATIONAL_GOODS.equals(mRoleRSBean.getRoleCode())||
+                        Constants.PORTER.equals(mRoleRSBean.getRoleCode())
+                ) {
+                    ToastUtil.showToast(this, "站坪角色不能登录该应用");
+                    dismissProgessDialog();
+                    return;
+//                    isNeedIm = true;
+//                    break;
                 }
             }
-            UserInfoSingle.setUser(loginBean);
-            toMainAct();
-            loginTpPC(loginBean);
+
+            if (isNeedIm&& Tools.isProduct()){
+                UserInfoSingle.setUser(loginBean);
+                loginIm(loginBean);
+            }
+            else {
+                UserInfoSingle.setUser(loginBean);
+                loginTpPC(loginBean);
+                if (Constants.PSW_TYPE_NO.equals(loginBean.getCode())) {
+                    dismissProgessDialog();
+                    UpdatePWDActivity.startActivity(this);
+                }
+                toMainAct();
+            }
         } else {
+            dismissProgessDialog();
             ToastUtil.showToast(this, "数据错误");
         }
     }
@@ -272,7 +334,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     }
 
+    /**
+     * 登录成功 跳转到主页
+     */
     private void toMainAct() {
+        dismissProgessDialog();
+        Tools.saveLoginNameAndPassword(mEtUserName.getText().toString(),mEtPassWord.getText().toString());
         MainActivity.startActivity(this);
         finish();
     }
@@ -285,22 +352,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 //    }
 
     @Override
-    public void loginQxAiResult(LoginBean loginBean) {
-
-        IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getUsername(), loginBean.getToken());
-        MainActivity.startActivity(this);
-        finish();
-
+    public void loginQxAiResult(RespLoginBean loginBean) {
+        Tools.setLoginUserBean(loginBean);
+        IMLIBContext.getInstance().setDeviceIdentify(DeviceInfoUtil.getIMEI(this));
+        IMUtils.imLibLogin(loginBean.getLoginName(), loginBean.getCnname(), loginBean.getToken());
+        toMainAct();
     }
 
     private void loginIm(LoginResponseBean loginBean) {
-//        if (loginBean == null)
-//            IMUtils.imLibLogin("lizhong", "李忠", "eyJhbGciOiJIUzI1NiJ9.eyJjcmVhdGVfdGltZSI6MTU1MzUwMTUwMDk1MCwidXNlcl9pbmZvIjoie1wiZGVwdENvZGVcIjpcImNzZ2xcIixcImRlcHRJZFwiOlwiN2IzMTZjYjhjMTgxNDhiOGFiYTUxNmRlODVmNzZlYWVcIixcImlkXCI6XCI2MjQwNjg4NzBjMGM0ZGNiOTUyYTRkNDAyZjdjZDg5N1wiLFwibG9naW5OYW1lXCI6XCJsaXpob25nXCIsXCJuYW1lXCI6XCLmnY7lv6BcIixcInJvbGVzXCI6W3tcImNvZGVcIjpcImdyb3VwX2xlYWRlclwiLFwiaWRcIjpcImYzZmEwNmM2ZmU3MDRhOTRiZWIxYzlmMDMxMjYyNDdhXCJ9LHtcImNvZGVcIjpcIlN5c3RlbU1hbmFnZXJcIixcImlkXCI6XCJTeXN0ZW1NYW5hZ2VyXCJ9LHtcImNvZGVcIjpcImFsbF9yZXBvcnRcIixcImlkXCI6XCI1ZWQ3OWUyY2NmMWQ0MWJhYTRhNTE3Nzg1MDdiMjFiN1wifSx7XCJjb2RlXCI6XCJBT0NfUkVBRFwiLFwiaWRcIjpcIjUyMmM3ODY5NjJkNzQzNGJhN2VhY2FmOTM2YjMzYzQ3XCJ9LHtcImNvZGVcIjpcIkFPQ19TRlwiLFwiaWRcIjpcIjExNDA5ZDhkODU1NjQ4NTRiZTk4ZTQxY2Y5MTAzZmY2XCJ9LHtcImNvZGVcIjpcIkFPQ19DWVwiLFwiaWRcIjpcIjg1ZmJiNjQ1NDA2OTQ4NzRiZGU3NDFjYjU3MjE2ODE5XCJ9LHtcImNvZGVcIjpcIkFPQ19XUklURVwiLFwiaWRcIjpcImY3NTdhYmQxNmExZDRkNzNhMTU2YmU0MjZmMmIzMmJlXCJ9LHtcImNvZGVcIjpcImRlcHRNYW5hZ2VyXCIsXCJpZFwiOlwiZGVwdE1hbmFnZXJcIn0se1wiY29kZVwiOlwiMVwiLFwiaWRcIjpcImFkODI4MjgwZDI4MzRjNzI4ODkxMmZjY2VlOTYyNTg0XCJ9LHtcImNvZGVcIjpcIkFQUEhUXCIsXCJpZFwiOlwiYjUwMTQ5NTEwODMxNDhlN2IzY2E3NjY5MjRjNzFiNTVcIn1dLFwic3RhdGVcIjpcIjFcIn0iLCJ1c2VyX25hbWUiOiLmnY7lv6AiLCJ1c2VyX2tleSI6IjQyODk5ODU0YmU2ZGRlYTA4OTVlNjMwNGYzMTE5OGQ2IiwidGltZW91dCI6Mjg4MDB9.uCx9MCGIfESaeKy5z4DnS70nfMz6fRWAGl52i2hJR5w");
-//        else
-//        {
-//            ((LoginPresenter) mPresenter).loginQxAi(getLoginQxAiEntity());
-//        }
-
+        ((LoginPresenter) mPresenter).loginQxAi(getLoginQxAiEntity());
     }
 
 
@@ -323,17 +383,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
 //        loginIm(null);
 //        MainActivity.startActivity(this);
+        dismissProgessDialog();
         ToastUtil.showToast(error);
     }
 
     @Override
     public void showNetDialog() {
-        showProgessDialog("正在登录……");
+
     }
 
     @Override
     public void dissMiss() {
-        dismissProgessDialog();
+
     }
 
     @Override
@@ -343,17 +404,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 弹出下载提示框
-     *   vtime.setText(appVersion.getData().getVersionCode());
-     *             vContent.setText(appVersion.getData().getUpdateMsg());
+     * vtime.setText(appVersion.getData().getVersionCode());
+     * vContent.setText(appVersion.getData().getUpdateMsg());
      */
     private void showAppUpdateDialog() {
         UpDateVersionDialog dialog = new UpDateVersionDialog(this);
 
+
         dialog.setTitle("版本更新")
-                .setMessage("更新版本："+mVersionBean.getData().getVersionCode()+"\n更新内容："+mVersionBean.getData().getUpdateMsg())
+                .setMessage("更新版本：" + mVersionBean.getData().getVersionCode() + "\n更新内容：" + mVersionBean.getData().getUpdateMsg())
                 .setNegativeButton("立即更新")
                 .isCanceledOnTouchOutside(false)
-                .isCanceled(true)
+                .isCanceled(false)
                 .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
@@ -362,6 +424,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                         } else {
                             downLoadFile(mVersionBean);
                         }
+                        dialog.dismiss();
                     }
                 })
                 .show();

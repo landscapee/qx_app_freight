@@ -16,9 +16,9 @@ public class ScanScooterCheckUsedPresenter extends BasePresenter {
         mRequestModel = new ScanScooterCheckUsedModel();
     }
 
-    public void checkScooterCode(String scooterCode) {
+    public void checkScooterCode(String scooterCode,String flightId,int scSubCategory) {
         mRequestView.showNetDialog();
-        ((ScanScooterCheckUsedModel) mRequestModel).checkScooterCode(scooterCode, new IResultLisenter<BaseEntity<Object>>() {
+        ((ScanScooterCheckUsedModel) mRequestModel).checkScooterCode(scooterCode, flightId, scSubCategory+"", new IResultLisenter<BaseEntity<Object>>() {
             @Override
             public void onSuccess(BaseEntity<Object> result) {
                 ((ScanScooterCheckUsedContract.ScanScooterCheckView) mRequestView).checkScooterCodeResult(result);

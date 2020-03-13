@@ -1,9 +1,15 @@
 package qx.app.freight.qxappfreight.model;
 
-public class TestBean {
+import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class TestBean implements Serializable {
     private int type;
     private int number;
-
     private String name;
     private boolean isChoose;
 
@@ -15,37 +21,11 @@ public class TestBean {
     public TestBean(String name, boolean isChoose) {
         this.name = name;
         this.isChoose = isChoose;
-    }
 
-    public int getType() {
-        return type;
     }
-
-    public void setType(int type) {
+    public TestBean(int type,String name, boolean isChoose) {
         this.type = type;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isChoose() {
-        return isChoose;
-    }
-
-    public void setChoose(boolean choose) {
-        isChoose = choose;
+        this.isChoose = isChoose;
     }
 }

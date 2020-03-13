@@ -2,10 +2,10 @@ package qx.app.freight.qxappfreight.app;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +15,8 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.Unbinder;
 import me.drakeet.materialdialog.MaterialDialog;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.bean.UserInfoSingle;
+import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 
 /**
  * Fragment基类
@@ -43,10 +45,10 @@ public class BaseFragment extends Fragment {
 
     public void initDialog() {
         mProgessbarDialog = new MaterialDialog(mContext);
-        if (mView == null) {
+//        if (mView == null) {
             mView = LayoutInflater.from(mContext).inflate(R.layout.dialog_progressbar, null);
             mTextView = mView.findViewById(R.id.progressbar_tv);
-        }
+//        }
         mProgessbarDialog.setCanceledOnTouchOutside(true);
         mProgessbarDialog.setContentView(mView);
     }
@@ -81,16 +83,34 @@ public class BaseFragment extends Fragment {
         }
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        MyApplication.currentView = getClass().getSimpleName();
+//        Log.e("========="+getClass().getSimpleName(),"onResume");
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Log.e("========="+getClass().getSimpleName(),"onPause");
+//    }
+
     @Override
-    public void onResume() {
-        super.onResume();
-        MyApplication.currentView = getClass().getSimpleName();
-        Log.e("========="+getClass().getSimpleName(),"onResume");
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0)
+            outState.putSerializable("static_user", UserInfoSingle.getInstance());
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("========="+getClass().getSimpleName(),"onPause");
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (UserInfoSingle.getInstance().getRoleRS() == null || UserInfoSingle.getInstance().getRoleRS().size() == 0) {
+                UserInfoSingle.setUser((LoginResponseBean) savedInstanceState.getSerializable("static_user"));
+            }
+        }
     }
+
 }

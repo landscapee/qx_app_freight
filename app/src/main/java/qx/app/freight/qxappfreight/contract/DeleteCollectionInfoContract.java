@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.contract;
 
 import qx.app.freight.qxappfreight.app.IBaseView;
-import qx.app.freight.qxappfreight.app.IResultLisenter;
 
 public class DeleteCollectionInfoContract {
     public interface deleteCollectionInfoModel {

@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class InWaybillRecordGetEntity implements Serializable {
-    String flightId;
+    String flightInfoId;
     /**
      * 1：已办， 0：待办
      */

@@ -7,7 +7,6 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.response.FlightCabinInfo;
-import qx.app.freight.qxappfreight.utils.StringUtil;
 
 public class CargoCabinAdapter extends BaseQuickAdapter<FlightCabinInfo.AircraftNoRSBean.CargosBean, BaseViewHolder> {
     public CargoCabinAdapter(List<FlightCabinInfo.AircraftNoRSBean.CargosBean> data) {

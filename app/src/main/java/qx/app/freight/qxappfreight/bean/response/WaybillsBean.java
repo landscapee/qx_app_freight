@@ -1,9 +1,11 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class WaybillsBean {
+public class WaybillsBean implements Serializable {
     /**
      * id : a2c4963e2e646e9e8660c03511282661
      * waybillCode : 082-90987876
@@ -61,7 +63,7 @@ public class WaybillsBean {
     private int flightId;
     private String mailType;
     private int documentDelivery;
-    private int totalNumberPackages;
+    private int totalNumber;
     private String totalWeight;
     private String specialCargoCode;
     private String commodityName;
@@ -90,7 +92,7 @@ public class WaybillsBean {
     private String outStorageUser;
     private Integer tallyingTotal;
     private String tallyingWeight;
-    private int waybillStatus;
+    private int waybillStatus;//运单状态 必填 5 待提货 6 已经提货 必须填
     private String waybillCodeScanUrl;
     private String commodityScanUrl;
     private String waybillScanUrl;
@@ -107,9 +109,17 @@ public class WaybillsBean {
      */
     private Integer outboundNumber;
     /**
-     * 逾期费用
+     * 预期费用
      */
     private int amountOfMoney;
+    /**
+     * 逾期费用
+     */
+    private double defermentCharge;
+    /**
+     * 超重费用
+     */
+    private double overweightCharge;
     /**
      * 超重数量
      */
@@ -119,4 +129,23 @@ public class WaybillsBean {
      * 超重重量
      */
     private double overWieght;
+
+    /**
+     * 提货人姓名
+     */
+    private String pickUpGoodsUser;
+
+    /**
+     * 提货人电话
+     *
+     * @date 2019/5/9 11:02 AM
+     */
+    private String pickUpGoodsUserPhone;
+
+    /**
+     * 提货人身份证号码
+     *
+     * @date 2019/5/9 11:09 AM
+     */
+    private String pickUpGoodsUserCardId;
 }

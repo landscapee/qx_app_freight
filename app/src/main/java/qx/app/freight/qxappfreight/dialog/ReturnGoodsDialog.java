@@ -12,14 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.OverweightRecordAdapter;
 import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
-import qx.app.freight.qxappfreight.widget.CommonDialog;
 
 public class ReturnGoodsDialog extends Dialog {
     private Context mContext;
@@ -31,6 +30,10 @@ public class ReturnGoodsDialog extends Dialog {
     private Button btnSure;
     private EditText etNum,etWeight,etVolume,etOverweight;
     private OverweightRecordAdapter overweightRecordAdapter;
+
+//    private int collectorNum;
+//    private int collectorWeight;
+
 
     List<RcInfoOverweight> rcInfoOverweight;
 
@@ -75,18 +78,25 @@ public class ReturnGoodsDialog extends Dialog {
 
         rlAdd.setOnClickListener((v) -> {
             RcInfoOverweight mRcInfoOverweight = new RcInfoOverweight();
-            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())&&!StringUtil.isEmpty(etVolume.getText().toString())&&!StringUtil.isEmpty(etOverweight.getText().toString())){
-
+            if (!StringUtil.isEmpty(etNum.getText().toString())&&!StringUtil.isEmpty(etWeight.getText().toString())){
+//                if (Integer.valueOf(etNum.getText().toString())>collectorNum){
+//                    ToastUtil.showToast("超重件数不能超过收运件数");
+//                    return;
+//                }
+//                if (Integer.valueOf(etWeight.getText().toString())>collectorWeight){
+//                    ToastUtil.showToast("超重重量不能超过收运重量");
+//                    return;
+//                }
                 mRcInfoOverweight.setCount(Integer.valueOf(etNum.getText().toString()));
                 mRcInfoOverweight.setWeight(Integer.valueOf(etWeight.getText().toString()));
-                mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
-                mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
+//                mRcInfoOverweight.setVolume(Integer.valueOf(etVolume.getText().toString()));
+//                mRcInfoOverweight.setOverWeight(Integer.valueOf(etOverweight.getText().toString()));
                 rcInfoOverweight.add(mRcInfoOverweight);
                 overweightRecordAdapter.notifyDataSetChanged();
                 etNum.setText("");
                 etWeight.setText("");
-                etVolume.setText("");
-                etOverweight.setText("");
+//                etVolume.setText("");
+//                etOverweight.setText("");
                 etNum.setFocusable(true);
 
             }
@@ -99,7 +109,7 @@ public class ReturnGoodsDialog extends Dialog {
         btnSure.setOnClickListener((v) -> {
             int overweight = 0;
             for (RcInfoOverweight mRcInfoOverweight:rcInfoOverweight){
-                overweight += mRcInfoOverweight.getOverWeight();
+                overweight += mRcInfoOverweight.getWeight();
 
             }
             if (listener != null) {
@@ -146,6 +156,8 @@ public class ReturnGoodsDialog extends Dialog {
 
     public ReturnGoodsDialog setData(List<RcInfoOverweight> list){
         rcInfoOverweight = list;
+//        this.collectorNum = collectorNum;
+//        this.collectorWeight = collectorWeight;
         return this;
     }
 

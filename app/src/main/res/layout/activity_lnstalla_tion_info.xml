@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_flight_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_plane_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="@dimen/sp_12" />
+
+        <LinearLayout
+            android:id="@+id/ll_flight_info_container"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:src="@mipmap/placement" />
+
+        <TextView
+            android:id="@+id/tv_seat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_time_take_off"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@mipmap/take_off"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tv_time_fall_down"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@mipmap/landfall"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:drawableStart="@mipmap/news_normal"-->
+            <!--android:drawablePadding="@dimen/dp_10"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:padding="@dimen/dp_10"-->
+            <!--android:text="货邮舱单"-->
+            <!--android:textColor="@color/grassgreen"-->
+            <!--android:textSize="@dimen/sp_12" />-->
+
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_weight="1"
+                >
+            <RadioGroup
+                android:id="@+id/tb_title"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_dynamic_blue"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="预装机单"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/rb_advise_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="监装调舱建议"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/rb_end_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="最终装机单"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/rb_end_advise_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_blue_center_a"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="监装调舱建议"
+                    android:textColor="@drawable/selector_text_blue_a"
+                    android:padding="10dp"/>
+
+            </RadioGroup>
+
+            </HorizontalScrollView>
+            <!--<ImageView-->
+            <!--android:layout_width="18dp"-->
+            <!--android:layout_height="18dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="@mipmap/icon_query" />-->
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_12" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/down" />
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/sr_refush"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/mfrv_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:id="@+id/tv_sure_install"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent_half"
+                    android:gravity="center"
+                    android:text="确认按此装机"
+                    android:textColor="@color/red"
+                    android:textSize="50sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_confirm_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="结载员:"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date_jz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录入时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm_jz"
+            />
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="监装员:"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_confim_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送时间:"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tv_confirm"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.01" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4">
+
+
+        <Button
+            android:id="@+id/bt_sure"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_blue"
+            android:text="通知录入"
+            android:textColor="@color/white" />
+
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Button
+            android:id="@+id/btn_refuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="打印"
+            android:textColor="@color/black" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Button
+            android:id="@+id/btn_reopen_task"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="重新开启装机"
+            android:textColor="@color/red" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

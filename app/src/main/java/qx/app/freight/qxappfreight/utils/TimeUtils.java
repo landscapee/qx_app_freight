@@ -11,6 +11,42 @@ import java.util.TimeZone;
  * Created by ouyangbin on 2015/9/23.
  */
 public class TimeUtils {
+
+    /**
+     *获取当前时间
+     *
+     * @return
+     */
+    public static Long getTime() {
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        return date.getTime();
+    }
+
+    /**
+     * 相差几天
+     *
+     * @return
+     */
+    public static String getMinToDay(int time) {
+        int day = 0;
+        int hour = 0;
+        int min = 0;
+        day = (int) time/(24*60);
+        hour = (int)(time - (day*24*60))/60;
+        min = time - (day*24*60) - (hour*60);
+        String date = "";
+        if (day > 0)
+            date = date+day+"d";
+        if (hour > 0)
+            date = date+hour+"h";
+        if (min > 0)
+            date = date+min+"m";
+        if (day == 0&& hour == 0&&min == 0)
+            date = "<1m";
+        return date;
+    }
+
     /**
      * yyyy年MM月dd日 HH时mm分ss秒 星期几
      *
@@ -31,6 +67,19 @@ public class TimeUtils {
      */
     public static String getTime2() {
         long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.e("time", "time2=" + format.format(date));
+        return format.format(date);
+    }
+    /**
+     * 年-月-日 时:分:秒
+     *
+     * @return
+     */
+    public static String getTimeForParam(long time) {
+        if (time == 0)
+            return "0";
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.e("time", "time2=" + format.format(date));
@@ -461,9 +510,29 @@ public class TimeUtils {
      * @param second
      * @return
      */
+    public static String datetimeTo4(long second) {
+        if (second <= 0) {
+            return "-";
+        }
+        String seconds = (second / 1000) + "";
+        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+            return "";
+        }
+        String format = "HHmm(dd)";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
+        return re;
+    }
+    /**
+     * 时间戳转换成年月日
+     *
+     * @param second
+     * @return
+     */
     public static String date2time(long second) {
         if (second <= 0) {
-            return "0";
+            return "-";
         }
         String seconds = (second / 1000) + "";
         if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {

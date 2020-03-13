@@ -13,17 +13,14 @@ public class RcInfoOverweight implements MultiItemEntity, Serializable  {
      * 超重记录
      */
     private String id;
-
     /**
      * 收运记录id
      */
     private String rcId;
-
     /**
      * 品名
      */
     private String cargoCn;
-
     /**
      * 件数
      */
@@ -49,6 +46,16 @@ public class RcInfoOverweight implements MultiItemEntity, Serializable  {
      */
     private int delFlag;
 
+    /**
+     * 节点名称
+     */
+    private String stepName;
+
+    /**
+     * 进港货物id
+     */
+    private String inWaybillRecordId;
+
     @Override
     public int getItemType() {
         if (delFlag==1){
@@ -57,4 +64,6 @@ public class RcInfoOverweight implements MultiItemEntity, Serializable  {
             return 0;
         }
     }
+
+
 }

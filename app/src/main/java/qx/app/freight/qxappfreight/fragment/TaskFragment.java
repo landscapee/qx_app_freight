@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,12 +23,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.AllocateVehiclesFragment;
-import qx.app.freight.qxappfreight.activity.ChooseWeighScanActivity;
 import qx.app.freight.qxappfreight.activity.ScanManagerActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -65,36 +61,45 @@ public class TaskFragment extends BaseFragment {
         });
         mSearchBar.setVisibility(View.GONE);
             mSearchBar.getCloseView().setOnClickListener(v->{
+
                 mSearchBar.getSearchView().setText("");
-                mToolBar.setVisibility(View.VISIBLE);
-                mSearchBar.setVisibility(View.GONE);
-                // 向左边移入
-                mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
-                // 向右边移出
-                mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
             });
         return view;
     }
     public SearchToolbar getSearchView(){
         return mSearchBar;
     }
+    public CustomToolbar getToolbar(){
+        return mToolBar;
+    }
     private void gotoScan() {
         if (TextUtils.isEmpty(nowRoleCode)){
             return;
         }
-        switch (nowRoleCode){
-            case "复重":
-                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
-                mContext.startActivity(intent);
-                break;
-//            case "":
+
+        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        switch (nowRoleCode){
+//            case "复重":
+//                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
+//                mContext.startActivity(intent);
 //                break;
-            default:
-//                ToastUtil.showToast(getContext(), "扫码");
-                ScanManagerActivity.startActivity(getContext(),"scan");
-        }
+////            case "":
+////                break;
+//            default:
+////                ToastUtil.showToast(getContext(), "扫码");
+//                ScanManagerActivity.startActivity(getContext(),"MainActivity");
+//        }
 
     }
 
@@ -111,6 +116,17 @@ public class TaskFragment extends BaseFragment {
      */
     public void setTitleText(int size) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
+    }
+    /**
+     * 设置中间文字显示
+     *
+     * @param str 待办数
+     */
+    public void setTitleText(String str) {
+        mToolBar.setMainTitle(Color.WHITE, str);
+    }
+    public void setTitleText() {
+        mToolBar.setMainTitle(Color.WHITE, "我的待办");
     }
 
     public void goneTitle() {
@@ -130,6 +146,18 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 nowRoleCode = list_Title.get(i);
+                if (View.VISIBLE ==mSearchBar.getVisibility()){
+                    mSearchBar.getSearchView().setText("");
+                    mToolBar.setVisibility(View.VISIBLE);
+                    mSearchBar.setVisibility(View.GONE);
+                    // 向左边移入
+                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+                    // 向右边移出
+                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
+                }
+
             }
 
             @Override
@@ -154,33 +182,36 @@ public class TaskFragment extends BaseFragment {
                 list_Title.add("收运");
             } else if (Constants.PREPLANER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskStowageFragment());
-                list_Title.add("理货");
+                list_Title.add("组板");
 
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
-            } else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                //登录不成功的时候 手动添加 user
-//        LoginResponseBean loginResponseBean = new LoginResponseBean();
-//        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-//        UserInfoSingle.setUser(loginResponseBean);
-                fragmentList.add(new DriverInFragment());
-                list_Title.add("内场司机");
-                goneTitle();
-            } else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+            }
+//            else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+//                //登录不成功的时候 手动添加 user
+////        LoginResponseBean loginResponseBean = new LoginResponseBean();
+////        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
+////        UserInfoSingle.setUser(loginResponseBean);
+//                fragmentList.add(new DriverInFragment());
+//                list_Title.add("内场司机");
+//                goneTitle();
+//            }
+            else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new TaskDriverOutFragment());
                 list_Title.add("外场运输");
             } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InstallEquipFragment());
                 list_Title.add("装卸机");
-//                fragmentList.add(new InPortTallyFragment());
-//                list_Title.add("进港理货");
+            }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+                fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment
+                list_Title.add("装卸机");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
             } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港理货");
+//                fragmentList.add(new InPortTallyFragment());
+//                list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");
@@ -188,13 +219,19 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new JunctionLoadFragment());
                 list_Title.add("结载");
             }else if(Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new InternationalCargoFragment());
-                list_Title.add("国际货物");
+                fragmentList.add(new CargoFragment());
+                list_Title.add("货物");
             }
 
         }
-        if(list_Title.size() > 0)
+
+        if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
+            //如果第一个是结载就把扫码
+            if (list_Title.get(0).equals("结载")){
+                mToolBar.setleftIconViewVisiable(false);
+            }
+        }
         else
             ToastUtil.showToast("该用户没有被分配角色");
 
@@ -204,6 +241,7 @@ public class TaskFragment extends BaseFragment {
         else
             mTabLayout.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
+        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 
     }
@@ -239,4 +277,5 @@ public class TaskFragment extends BaseFragment {
             return list_Title.get(position);
         }
     }
+
 }

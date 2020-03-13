@@ -1,43 +1,34 @@
 package qx.app.freight.qxappfreight.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
-import qx.app.freight.qxappfreight.activity.MainActivity;
-import qx.app.freight.qxappfreight.adapter.TaskFlightAdapter;
-import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.SlideRightExecuteView;
 
 /**
- * 外场运输待办推送
+ * 装机单和货邮舱单推送
  */
 public class UpdatePushDialog extends Dialog {
-
     private Context mContext;
     private View convertView;
     @BindView(R.id.tv_content)
@@ -46,32 +37,24 @@ public class UpdatePushDialog extends Dialog {
     SlideRightExecuteView mSlideRightExecuteView;
     @BindView(R.id.iv_start_gif)
     ImageView ivStartGif;
-
-    private String flightId;
-
+    private String title;
     private OnTpPushListener mOnTpPushListener;
 
-    public UpdatePushDialog(@NonNull Context context) {
-        super(context);
-
-    }
-
-    public UpdatePushDialog(@NonNull Context context, int themeResId,String flightId, OnTpPushListener mOnTpPushListener) {
+    public UpdatePushDialog(@NonNull Context context, int themeResId, String title, OnTpPushListener mOnTpPushListener) {
         super(context, themeResId);
         mContext = context;
         this.mOnTpPushListener = mOnTpPushListener;
-        Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {
+            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        else
+            Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         convertView = getLayoutInflater().inflate(R.layout.popup_manifest_update, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
-        ButterKnife.bind(this,convertView);
-        this.flightId = flightId;
-
+        ButterKnife.bind(this, convertView);
+        this.title = title;
         initViews();
-
-    }
-    protected UpdatePushDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
     }
 
     @Override
@@ -83,30 +66,25 @@ public class UpdatePushDialog extends Dialog {
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth(); //设置dialog的宽度为当前手机屏幕的宽度
         p.height = d.getHeight();
+        p.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED; //解决锁屏 dialog弹不出问题
         getWindow().setAttributes(p);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
-
         setCancelable(false);
         setCanceledOnTouchOutside(false);
-
+        TextView titleTv = convertView.findViewById(R.id.tv_content);
+        titleTv.setText(title);
         Glide.with(mContext).load(R.mipmap.swiperight_gif).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(ivStartGif);
-
-        ivStartGif.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                ivStartGif.setVisibility(View.GONE);
-
-                return false;
-            }
+        ivStartGif.setOnTouchListener((v, event) -> {
+            ivStartGif.setVisibility(View.GONE);
+            return false;
         });
-
         mSlideRightExecuteView.setLockListener(new SlideRightExecuteView.OnLockListener() {
             @Override
             public void onOpenLockSuccess() {
-                mOnTpPushListener.onSureBtnCallBack(flightId);
+                mOnTpPushListener.onSureBtnCallBack();
                 dismiss();
             }
 
@@ -115,18 +93,35 @@ public class UpdatePushDialog extends Dialog {
                 ivStartGif.setVisibility(View.VISIBLE);
             }
         });
-
-        setView();
-
     }
 
-    private void setView() {
-
+    @Override
+    public void show() {
+        super.show();
+        Tools.wakeupScreen(mContext);
     }
 
-    public interface OnTpPushListener{
+    public interface OnTpPushListener {
+        void onSureBtnCallBack();
+    }
 
-            void onSureBtnCallBack(String s);
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+
+    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+//    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Tools.closeVibrator(mContext.getApplicationContext());
     }
 }

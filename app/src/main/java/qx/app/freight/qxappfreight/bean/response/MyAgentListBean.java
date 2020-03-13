@@ -60,23 +60,27 @@ public class MyAgentListBean implements Serializable {
     private String scooterId;
     private String repType;
     private String repPlaceId;
-    private String uldId;
     private int overWeight;
     private int delFlag;
     private int isPrint;
     private String scooterCode;
     private String scooterWeight;
     private String scooterType;
+
     private String uldCode;
     private String uldType;
+    private String uldId;
     private int uldWeight;
+
     private String iata;
     private String repName;
+    private String repId;
+    private String reservoirType;
     private String repPlaceNum;
     private String repPlaceStatus;
     private String reservoirName;
     private List<String> packagingType;
-    private  List<RcInfoOverweight> rcInfoOverweight;
+    private  List<RcInfoOverweight> spOverweight;
     private String taskTypeCode;
     private String addOrderId;
 }

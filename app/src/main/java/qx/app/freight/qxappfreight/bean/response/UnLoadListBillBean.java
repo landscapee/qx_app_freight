@@ -11,7 +11,7 @@ public class UnLoadListBillBean {
      * status : 200
      * message : 正确
      * rowCount : null
-     * data : {"id":"2a8bfae4c938cfe5c7261c9e7085cbb4","flightId":"4c16467cdb9d4fbf9ad9927cbd89b7ce","version":"1","content":"","reviewStatus":0,"createDate":1559462807530,"createUser":"liuyuhan","updateDate":1559462840992,"updateUser":null,"documentType":4,"loadingAdvice":0,"loadingUser":null,"contentObject":[{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"642","restrictedCargo":""},{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"563","restrictedCargo":""}],"returnReason":null,"preContent":"","cgoContent":"","autoLoadInstalledSingle":1,"flightNo":"MU2219"}
+     * data : {"id":"2a8bfae4c938cfe5c7261c9e7085cbb4","flightId":"4c16467cdb9d4fbf9ad9927cbd89b7ce","version":"1","content":"","reviewStatus":0,"createDate":1559462807530,"createUser":"liuyuhan","updateDate":1559462840992,"updateUser":null,"documentType":4,"loadingAdvice":0,"loadingUser":null,"contentObject":[{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"642","specialCode":""},{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"563","specialCode":""}],"returnReason":null,"preContent":"","cgoContent":"","autoLoadInstalledSingle":1,"flightNo":"MU2219"}
      * flag : null
      */
 
@@ -36,7 +36,7 @@ public class UnLoadListBillBean {
          * documentType : 4
          * loadingAdvice : 0
          * loadingUser : null
-         * contentObject : [{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"642","restrictedCargo":""},{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"563","restrictedCargo":""}]
+         * contentObject : [{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"642","specialCode":""},{"dst":"","pos":"","pri":"1","estWgt":"642","serialInd":"","cont":"LD3","dest":"CTU","type":"B","actWgt":"563","specialCode":""}]
          * returnReason : null
          * preContent :
          * cgoContent :
@@ -45,11 +45,11 @@ public class UnLoadListBillBean {
          */
 
         private String id;
-        private String flightId;
+        private String flightInfoId;
         private String version;
         private String content;
         private int reviewStatus;
-        private long createDate;
+        private long createTime;
         private String createUser;
         private long updateDate;
         private Object updateUser;
@@ -75,7 +75,7 @@ public class UnLoadListBillBean {
              * dest : CTU
              * type : B
              * actWgt : 642
-             * restrictedCargo :
+             * specialCode :
              */
 
             private String dst;
@@ -87,7 +87,7 @@ public class UnLoadListBillBean {
             private String dest;
             private String type;
             private String actWgt;
-            private String restrictedCargo;
+            private String specialCode;
         }
     }
 }

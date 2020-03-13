@@ -7,6 +7,7 @@
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" /> <!-- 显示系统窗口权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 在 屏幕最顶部显示addview -->
+    <uses-permission android:name="android.permission.TYPE_APPLICATION_OVERLAY" /> <!-- 在 屏幕最顶部显示  版本号大于 23 -->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 运行权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -43,10 +44,44 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.StoreTypeChangeActivity"></activity>
-        <activity android:name=".activity.ClearStorageDetailActivity" />
+        <!--//解决 java.lang.NoClassDefFoundError:failed resolution of :Lorg/apache/http/ProtocolVersion-->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
-            android:name=".activity.InternationalCargoListActivity"
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.TaskDoneActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.AssignInstallEquipMemberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AllocaaateHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AllocateScooterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StoreTypeChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ClearStorageDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CargoListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BaggageListConfirmActivity"
@@ -88,6 +123,9 @@
             android:name=".activity.UnloadPlaneActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.UpdatePWDActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.TPUnloadPlaneActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -111,23 +149,11 @@
         <activity
             android:name=".activity.StoreGoodsActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activity.ImgPreviewAct"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.VerifyStaffActivity"
             android:screenOrientation="portrait" />
@@ -138,6 +164,12 @@
             android:name=".activity.VerifyCargoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.CargoDoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BaggageDoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ReceiveGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -145,7 +177,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddReceiveGoodActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ShowMainListActivity"
             android:screenOrientation="portrait" />
@@ -159,9 +192,20 @@
             android:name=".activity.ReturnGoodsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AllocaaateScanActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".activity.LnstallationInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CargoManifestInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AllocaaateScanActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.AllocaaateHisDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.SubPackageWaybillActivity"
             android:screenOrientation="portrait" />
@@ -226,19 +270,51 @@
             android:name=".activity.SortingAddActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" /> <!-- 注册服务 -->
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.DoItIOManifestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FlightPhotoRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activity.MsgDialogAct"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity=""
+            android:theme="@style/FullScreenTheme"
+             />
+        <activity
+            android:name=".activity.MsgDialogVisibleAct"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity=""
+            android:theme="@style/FullScreenTheme"
+            />
+
+
+        <!-- 注册服务 -->
         <service android:name=".service.GPSService" />
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />
 
-        <receiver
-            android:name=".reciver.ScanReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.ACTION_DECODE_DATA" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".reciver.ScanReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.ACTION_DECODE_DATA" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <provider
             android:name="android.support.v4.content.FileProvider"

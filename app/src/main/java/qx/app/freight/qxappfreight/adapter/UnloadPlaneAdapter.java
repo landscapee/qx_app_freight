@@ -4,14 +4,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -20,14 +21,14 @@ import qx.app.freight.qxappfreight.adapter.loadinglist.RightRvAdapter;
 import qx.app.freight.qxappfreight.bean.loadinglist.RegularEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.ScrollEntity;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
+import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.widget.CollapsableLinearLayout;
 
 /**
  * 装机版本列表适配器
  */
 public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBean, BaseViewHolder> {
-    private OnOverLoadListener onOverLoadListener;
-
+    private OnDataCheckListener onDataCheckListener;
     public UnloadPlaneAdapter(@Nullable List<LoadingListBean.DataBean> data) {
         super(R.layout.item_unload_plane_version, data);
     }
@@ -36,54 +37,86 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
     protected void convert(BaseViewHolder helper, LoadingListBean.DataBean item) {
         if (helper.getAdapterPosition() == 0) {
             helper.setText(R.id.tv_version_type, "最新版本");
-            helper.getView(R.id.tv_send_over).setVisibility(View.VISIBLE);
-            helper.getView(R.id.tv_send_over).setOnClickListener(v -> onOverLoadListener.onOverLoad(item));
         } else {
             helper.setText(R.id.tv_version_type, "历史版本");
-            helper.getView(R.id.tv_send_over).setVisibility(View.GONE);
         }
-        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name), item.getVersion()));
+//        helper.setText(R.id.tv_version_name, String.format(mContext.getString(R.string.format_version_name),item.getVersion()));
+        helper.setText(R.id.tv_version_name,"最新装机单");
         ImageView ivControl = helper.getView(R.id.iv_control);
+        LinearLayout llControl = helper.getView(R.id.ll_controler);
         CollapsableLinearLayout llDetail = helper.getView(R.id.cll_version_detail);
         List<RegularEntity> leftData = new ArrayList<>();
         List<ScrollEntity> rightData = new ArrayList<>();
-        boolean shouldShowGoodsPos;
-        List<String> berthList=new ArrayList<>();
-        List<String> goodsPosList=new ArrayList<>();
+        List<String> berthList = new ArrayList<>();
+        List<String> goodsPosList = new ArrayList<>();
+        if (item.getContentObject() != null && item.getContentObject().size() != 0) {
             for (LoadingListBean.DataBean.ContentObjectBean entity : item.getContentObject()) {
-                RegularEntity left = new RegularEntity();
-                if (!berthList.contains(entity.getPos())){
-                    berthList.add(entity.getPos());
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : entity.getScooters()) {
+                    RegularEntity left = new RegularEntity();
+                    if (!berthList.contains(scooterBean.getCargoName())) {
+                        berthList.add(scooterBean.getCargoName());
+                    }
+                    left.setBerth(scooterBean.getCargoName());
+                    left.setLocked(false);
+                    left.setScooterId(scooterBean.getId());
+                    left.setMoveSize((scooterBean.getWaybillList() == null) ? 0 : scooterBean.getWaybillList().size());
+                    boolean hasLiveGoods = false;
+                    boolean hasGUNGoods = false;
+                    for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
+                        if (bill.getSpecialCode()!=null && bill.getSpecialCode().equals("AVI")) {
+                            hasLiveGoods = true;
+                            break;
+                        }
+                        if (bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER)) {
+                            hasGUNGoods = true;
+                            break;
+                        }
+                    }
+                    for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
+                        bill.setHasLiveGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
+                        bill.setHasGUNGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER));
+                    }
+                    boolean shouldShowGoodsPos = !TextUtils.isEmpty(scooterBean.getLocation());
+                    if (!goodsPosList.contains(scooterBean.getLocation()) && !TextUtils.isEmpty(scooterBean.getLocation())) {
+                        goodsPosList.add(scooterBean.getLocation());
+                    }
+                    left.setHasLiveGoods(hasLiveGoods);
+                    left.setHasGUNGoods(hasGUNGoods);
+                    if (shouldShowGoodsPos) {
+                        left.setGoodsPosition(scooterBean.getLocation());
+                    }
+                    leftData.add(left);
+                    ScrollEntity right = new ScrollEntity();
+                    right.setBoardNumber(scooterBean.getScooterCode());
+                    right.setUldNumber(scooterBean.getSerialInd());
+                    right.setTarget(scooterBean.getDestinationStation());
+                    right.setScooterId(scooterBean.getId());
+                    right.setHasLiveGoods(hasLiveGoods);
+                    right.setHasGUNGoods(hasGUNGoods);
+
+                    String type = "行李";
+                    if ("M".equals(scooterBean.getType())) {
+                        type = "邮件";
+                    } else if ("C".equals(scooterBean.getType()) || "CT".equals(scooterBean.getType())) {
+                        type = "货物";
+                    }
+                    else if ("X".equals(scooterBean.getType())) {
+                        type = "X";
+                    }
+                    right.setType(type);
+                    right.setWeight(String.valueOf(scooterBean.getWeight()));
+                    right.setData(scooterBean.getWaybillList());
+                    rightData.add(right);
                 }
-                entity.setStartBerth(entity.getPos());
-                left.setBerth(entity.getPos());
-                left.setLocked(false);
-                left.setShowPull(entity.isShowPullDown());
-                shouldShowGoodsPos = !TextUtils.isEmpty(entity.getLocation());
-                if (!goodsPosList.contains(entity.getLocation())&&!TextUtils.isEmpty(entity.getLocation())){
-                    goodsPosList.add(entity.getLocation());
-                }
-                if (shouldShowGoodsPos) {
-                    left.setGoodsPosition(entity.getLocation());
-                }
-                leftData.add(left);
-                ScrollEntity right = new ScrollEntity();
-                right.setBoardNumber(entity.getTailer());
-                right.setUldNumber(entity.getUldNumber());
-                right.setTarget(entity.getDest());
-                right.setType("C".equals(entity.getType()) ? "cargo" : "mail");
-                right.setWeight(String.valueOf(entity.getActWgt()));
-                right.setNumber(String.valueOf(entity.getNumber()));
-                right.setShowPull(entity.isShowPullDown());
-                rightData.add(right);
             }
+        }
         RegularEntity titleLeft = new RegularEntity();
         titleLeft.setLockTitle("锁定");
         titleLeft.setBerth("舱位");
-        boolean showGoodPosTitle=false;//只要有一条数据有货位信息就应该显示货位那一列数据
-        for (RegularEntity entity:leftData){
-            if (!TextUtils.isEmpty(entity.getGoodsPosition())){
-                showGoodPosTitle=true;
+        boolean showGoodPosTitle = false;//只要有一条数据有货位信息就应该显示货位那一列数据
+        for (RegularEntity entity : leftData) {
+            if (!TextUtils.isEmpty(entity.getGoodsPosition())) {
+                showGoodPosTitle = true;
                 break;
             }
         }
@@ -95,32 +128,81 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
         titleRight.setBoardNumber("板号");
         titleRight.setUldNumber("ULD号");
         titleRight.setTarget("目的地");
-        titleRight.setType("类型");
+        titleRight.setType("类别");
         titleRight.setWeight("重量");
-//        titleRight.setNumber("件数");
+        List<LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean> titleBills = new ArrayList<>();
+        titleRight.setData(titleBills);
         rightData.add(0, titleRight);
-        for (RegularEntity left:leftData){
+        for (RegularEntity left : leftData) {
             left.setBerthList(berthList);
             left.setGoodsPosList(goodsPosList);
         }
         RecyclerView rvLeft = helper.getView(R.id.rv_regular);
         RecyclerView rvRight = helper.getView(R.id.rv_scroll_data);
-        LeftRvAdapter leftRvAdapter = new LeftRvAdapter(leftData);
+        //装机单左边适配器
+        LeftRvAdapter leftRvAdapter = new LeftRvAdapter(leftData, onDataCheckListener);
         rvLeft.setLayoutManager(new LinearLayoutManager(mContext));
         rvLeft.setAdapter(leftRvAdapter);
-        leftRvAdapter.setOnLockClickListener(itemPos -> item.getContentObject().get(itemPos-1).setLocked(true));
-        leftRvAdapter.setOnBerthChoseListener((itemPos, berth) -> {
-            if (berth.equals(item.getContentObject().get(itemPos-1).getStartBerth())){
-                item.getContentObject().get(itemPos-1).setCargoStatus(0);
-            }else {
-                item.getContentObject().get(itemPos-1).setCargoStatus(1);
+        leftRvAdapter.setOnLockClickListener(itemPos -> {
+            boolean lockStatus=false;
+            for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
+                    if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
+//                        lockStatus=!scooter.isLocked();
+//                        scooter.setLocked(!scooter.isLocked());
+                        break;
+                    }
+                }
             }
-            item.getContentObject().get(itemPos-1).setPos(berth);
+            for (ScrollEntity entity:rightData){
+                if (leftData.get(itemPos).getScooterId().equals(entity.getScooterId())){
+                    entity.setLocked(lockStatus);
+                }
+            }
         });
-        leftRvAdapter.setOnGoodsPosChoseListener((itemPos, goodsPos) ->  item.getContentObject().get(itemPos-1).setGoodsPosition(goodsPos));
-        RightRvAdapter rightRvAdapter = new RightRvAdapter(rightData);
+        leftRvAdapter.setOnBerthChoseListener((itemPos, berth) -> {
+            LoadingListBean.DataBean.ContentObjectBean.ScooterBean operateScooter = null;
+            for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
+                Iterator iterator = content.getScooters().iterator();
+                while (iterator.hasNext()) {//将原有的舱位上的板车数据删除掉
+                    LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter = (LoadingListBean.DataBean.ContentObjectBean.ScooterBean) iterator.next();
+                    if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
+                        operateScooter = scooter;
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+            for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {//遍历寻找选择的舱位，将该板车加到对应舱位上
+                if (content.getCargoName().equals(berth)) {
+                    operateScooter.setCargoName(berth);//并且修改 板车上的所属舱位 数据 -by zyy
+                    content.getScooters().add(operateScooter);
+                    break;
+                }
+            }
+        });
+        leftRvAdapter.setOnGoodsPosChoseListener((itemPos, goodsPos) -> {
+            for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
+                    if (leftData.get(itemPos).getScooterId().equals(scooter.getId())) {
+                        scooter.setLocation(goodsPos);
+                    }
+                }
+            }
+        });
+        //装机单右边适配器
+        RightRvAdapter rightRvAdapter = new RightRvAdapter(rightData, onDataCheckListener);
         rvRight.setLayoutManager(new LinearLayoutManager(mContext));
         rvRight.setAdapter(rightRvAdapter);
+        rightRvAdapter.setOnPullCheckListener((pos, checked) -> {
+            for (LoadingListBean.DataBean.ContentObjectBean content : item.getContentObject()) {
+                for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooter : content.getScooters()) {
+                    if (rightData.get(pos).getScooterId().equals(scooter.getId())) {
+                        scooter.setExceptionFlag((checked) ? 1 : 0);
+                    }
+                }
+            }
+        });
         if (item.isShowDetail()) {
             rvLeft.setVisibility(View.VISIBLE);
             rvRight.setVisibility(View.VISIBLE);
@@ -132,27 +214,27 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
             ivControl.setImageResource(R.mipmap.down);
             llDetail.collapse();
         }
-        ivControl.setOnClickListener(v -> {
-            item.setShowDetail(!item.isShowDetail());
-            if (item.isShowDetail()) {
-                rvLeft.setVisibility(View.VISIBLE);
-                rvRight.setVisibility(View.VISIBLE);
-                ivControl.setImageResource(R.mipmap.right);
-                llDetail.expand();
-            } else {
-                rvLeft.setVisibility(View.GONE);
-                rvRight.setVisibility(View.GONE);
-                ivControl.setImageResource(R.mipmap.down);
-                llDetail.collapse();
-            }
-        });
+//        llControl.setOnClickListener(v -> {
+//            item.setShowDetail(!item.isShowDetail());
+//            if (item.isShowDetail()) {
+//                rvLeft.setVisibility(View.VISIBLE);
+//                rvRight.setVisibility(View.VISIBLE);
+//                ivControl.setImageResource(R.mipmap.right);
+//                llDetail.expand();
+//            } else {
+//                rvLeft.setVisibility(View.GONE);
+//                rvRight.setVisibility(View.GONE);
+//                ivControl.setImageResource(R.mipmap.down);
+//                llDetail.collapse();
+//            }
+//        });
     }
 
-    public void setOnOverLoadListener(OnOverLoadListener onOverLoadListener) {
-        this.onOverLoadListener = onOverLoadListener;
+    public interface OnDataCheckListener {
+        void onDataChecked(String scooterId);
     }
 
-    public interface OnOverLoadListener {
-        void onOverLoad(LoadingListBean.DataBean entity);
+    public void setOnDataCheckListener(OnDataCheckListener onDataCheckListener) {
+        this.onDataCheckListener = onDataCheckListener;
     }
 }

@@ -1,7 +1,6 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -52,7 +51,6 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.ExceptionReportEntity;
 import qx.app.freight.qxappfreight.bean.request.TransportEndEntity;
 import qx.app.freight.qxappfreight.bean.response.GetAllRemoteAreaBean;
-import qx.app.freight.qxappfreight.bean.response.OutFieldTaskBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ExceptionReportContract;
 import qx.app.freight.qxappfreight.contract.GetAllRemoteAreaContract;
@@ -191,6 +189,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
                 if (getNoAddPictureList().size() == 0) {
                     mPresenter = new ExceptionReportPresenter(AbnormalEndActivity.this);
                     ExceptionReportEntity model = new ExceptionReportEntity();
+                    model.setTaskPk(mTransportEndEntity.getId());
                     model.setExceptionDesc(mEtDetailInfo.getText().toString());
                     model.setReOperator(UserInfoSingle.getInstance().getUserId());
                     model.setDeptId(UserInfoSingle.getInstance().getDepId());
@@ -328,7 +327,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         model.setExceptionDesc(mEtDetailInfo.getText().toString());
         model.setFiles(filePaths);
         model.setReOperator(UserInfoSingle.getInstance().getUserId());
-        model.setDeptId(UserInfoSingle.getInstance().getDepId());
+        model.setDeptId(UserInfoSingle.getInstance().getDeptCode());
         model.setReType(4);
         model.setArea(areaId);
         model.setExceptionCode(Constants.TP_END);
