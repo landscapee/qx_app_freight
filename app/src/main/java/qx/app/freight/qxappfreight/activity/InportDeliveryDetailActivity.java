@@ -81,6 +81,8 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     private int currentNum = 0;// 本次成功出库件数
     private int residueNum = 0;// 剩余出库件数
 
+
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_inport_delivery_detail;
@@ -331,8 +333,12 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 
     @Override
     public void toastView(String error) {
+        if (currentNum> 0){
+            ToastUtil.showErrorDialog("出库失败，稍后重试!");
+        }
+        else
+            ToastUtil.showErrorDialog(error);
 
-        ToastUtil.showToast(error);
     }
 
     @Override

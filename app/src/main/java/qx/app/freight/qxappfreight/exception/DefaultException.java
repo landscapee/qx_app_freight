@@ -7,7 +7,7 @@ package qx.app.freight.qxappfreight.exception;
         */
 public class DefaultException extends Exception {
 
-    public static final String DATA_NULL_EXCEPTION = "Response [data] null Exception";
+    public static final String DATA_NULL_EXCEPTION = "数据为空";
 
     public DefaultException(String message) {
         super(message);

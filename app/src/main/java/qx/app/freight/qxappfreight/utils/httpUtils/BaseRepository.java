@@ -46,7 +46,10 @@ public abstract class BaseRepository {
                 .map(baseEntity -> {
                     if (null != baseEntity && "200".equals(baseEntity.getStatus())) {
                         return baseEntity.getMessage();
-                    } else if (null != baseEntity && !"200".equals(baseEntity.getStatus())) {
+                    } else if ("500".equals(baseEntity.getStatus())) {
+                        throw new DefaultException("318");
+                    }
+                    else if (null != baseEntity && !"200".equals(baseEntity.getStatus())) {
                         ToastUtil.showToast(baseEntity.getMessage());
                         throw new DefaultException("318");
                     } else {
