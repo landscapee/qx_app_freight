@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -180,14 +181,14 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 //        ScanManagerActivity.startActivity(this);
         changeClicked(false);
 //        getScooterInfo(mScooterCode);
-        //品名
+        //备注类型
         mRemarksList = new ArrayList<>();
         mRemarksList.add("加雨棚");
         mRemarksList.add("加垫板");
         mRemarksList.add("集装器误差");
+        mRemarksList.add("连接杆");
+        mRemarksList.add("轻抛货");
         mRemarksList.add("其他");
-
-
 
         //负重重量
         tvGrossweightFront.addTextChangedListener(new TextWatcher() {
@@ -531,12 +532,18 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     }
 
     @Override
-    public void saveScooterResult(GetInfosByFlightIdBean result) {
-
+    public void saveScooterResult(OverWeightSaveResultBean result) {
+            String content = "";
+            if (result.getReDifferenceSum() > result.getThreshold()){
+                content ="<font color='yellow'>航班复重差值上限："+result.getThreshold()+"kg,当前复重差值："+result.getReDifferenceSum()+"kg。</font>";
+            }
+            else {
+                content ="航班复重差值上限："+result.getThreshold()+"kg,当前复重差值："+result.getReDifferenceSum()+"kg。";
+            }
             //提交弹窗
             CommonDialog dialog = new CommonDialog(this);
             dialog.setTitle("提示")
-                    .setMessage("航班阈值为："+result.getThreshold()+"kg,复重差值为："+result.getReDifferenceSum()+"kg。")
+                    .setMessage(content)
                     .setPositiveButton("取消")
                     .setNegativeButton("确定")
                     .isCanceledOnTouchOutside(true)

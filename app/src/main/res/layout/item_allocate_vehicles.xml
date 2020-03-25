@@ -64,7 +64,31 @@
 
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:textSize="13sp"
+                    android:text="板车复重时间:"
+                    android:textColor="@color/black_3"
+                    />
+                <TextView
+                    android:id="@+id/tv_reweight_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:textSize="13sp"
+                    android:text=""
+                    android:textColor="@color/black_3"
+                    />
 
+            </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
@@ -125,12 +149,11 @@
 
         <TextView
             android:id="@+id/tv_scooter_type"
-            android:layout_width="wrap_content"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="11sp"
-
             android:textColor="#999999"
             android:text="待复重" />
 

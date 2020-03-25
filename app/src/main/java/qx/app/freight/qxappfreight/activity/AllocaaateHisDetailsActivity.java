@@ -28,6 +28,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -539,8 +540,7 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
     }
 
     @Override
-    public void saveScooterResult(GetInfosByFlightIdBean result) {
-
+    public void saveScooterResult(OverWeightSaveResultBean result) {
         //提交弹窗
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")
@@ -560,8 +560,8 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
                         EventBus.getDefault().post(Constants.REWEIGHT_DONE);
                     }
                 }).show();
-//        startActivity(new Intent(this,MainActivity.class));
     }
+
 
     @Override
     public void returnWeighingResult(String result) {

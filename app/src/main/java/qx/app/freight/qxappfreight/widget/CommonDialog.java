@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -105,7 +106,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         positiveTv.setOnClickListener(this);
         negativeTv.setOnClickListener(this);
 
-        messageTv.setText(message);
+        messageTv.setText(Html.fromHtml(message));
         if (!TextUtils.isEmpty(positiveBtn)) {
             //有两个按钮
 //            View btnLine = findViewById(R.id.btnLine);

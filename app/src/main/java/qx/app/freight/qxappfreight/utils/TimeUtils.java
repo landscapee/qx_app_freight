@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.utils;
 
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -598,5 +599,20 @@ public class TimeUtils {
         int duration = (int) (start - end) / (1000 * 60);
         return duration;
     }
-
+    /**
+     * 日期转换为时间戳
+     */
+    public static long timeToStamp(String timers) {
+        Date d = new Date();
+        long timeStemp = 0;
+        try {
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+            d = sf.parse(timers);// 日期转换为时间戳
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        timeStemp = d.getTime();
+        return timeStemp;
+    }
 }

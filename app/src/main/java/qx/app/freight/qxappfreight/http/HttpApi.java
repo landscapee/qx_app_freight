@@ -10,6 +10,7 @@ import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
@@ -368,7 +369,7 @@ public interface HttpApi {
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
-    Observable<BaseEntity<GetInfosByFlightIdBean>> saveScooter(@Body GetInfosByFlightIdBean model);
+    Observable<BaseEntity<OverWeightSaveResultBean>> saveScooter(@Body GetInfosByFlightIdBean model);
 
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
