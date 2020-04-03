@@ -295,7 +295,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                 //开始上传图片
                 List<File> files = new ArrayList<>();
                 for (String str : photoList) {
-                    files.add(new File(str));
+                    if (str.contains("storage"))//没有上传过的 图片
+                        files.add(new File(str));
                 }
                 Luban.get(this).load(files)
                         .setMaxSize(150)
