@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
@@ -23,7 +25,8 @@ import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.model.WaybillsBean;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
 
-/**复重-舱单列表
+/**
+ * 复重-舱单列表
  * created by swd
  * 2019/7/2 11:24
  */
@@ -34,7 +37,9 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
     private String flightInfoId;
 
     private RepeatWeightManifestAdapter adapter;
-    private List<WaybillsBean> list;
+    private List <WaybillsBean> list;
+
+    private double weight = 0;
 
     public static RepeatWeightManifestFragment getInstance(String flightInfoId) {
         RepeatWeightManifestFragment fragment = new RepeatWeightManifestFragment();
@@ -60,8 +65,17 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
         initData();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (((AllocateScooterActivity) getActivity()) != null)
+                ((AllocateScooterActivity) getActivity()).setTotalWeight(weight, 1);
+        }
+    }
+
     private void initView() {
-        list = new ArrayList<>();
+        list = new ArrayList <>();
         adapter = new RepeatWeightManifestAdapter(list);
         rlView.setLayoutManager(new LinearLayoutManager(getContext()));
         rlView.setAdapter(adapter);
@@ -75,25 +89,25 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
     }
 
     @Override
-    public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
+    public void todoScootersResult(List <GetInfosByFlightIdBean> result) {
 
     }
 
     @Override
-    public void getManifestResult(List<ManifestBillModel> result) {
-        double weight = 0;
+    public void getManifestResult(List <ManifestBillModel> result) {
+
         list.clear();
-        if (result!=null&&result.size()!=0){
-            for (ManifestBillModel item:result) {
-                if (item.getWaybills()!=null) {
+        weight = 0;
+        if (result != null && result.size() != 0) {
+            for (ManifestBillModel item : result) {
+                if (item.getWaybills() != null) {
                     list.addAll(item.getWaybills());
                 }
             }
-            for (WaybillsBean waybillsBean:list){
-                weight +=waybillsBean.getInflightweight();
+            for (WaybillsBean waybillsBean : list) {
+                weight += waybillsBean.getInflightweight();
             }
         }
-        ((AllocateScooterActivity)getActivity()).setTotalWeight(weight);
         adapter.notifyDataSetChanged();
     }
 

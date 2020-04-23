@@ -116,10 +116,11 @@ public class GetInfosByFlightIdBean implements Serializable {
 
     private int weightOver;
 
-
     private double threshold;//机型 上限阈值
 
     private double reDifferenceSum;//差值总和
+
+    private String toCityEn;//目的站
 
 
 }

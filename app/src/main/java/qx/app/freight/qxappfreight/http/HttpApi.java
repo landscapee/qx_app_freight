@@ -380,7 +380,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
 
     //复重 / 获取航班舱单信息
-    @POST("service-product-stowage/stowage-waybill-info/getLodPrint")
+    @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
     Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
 
 
@@ -605,7 +605,7 @@ public interface HttpApi {
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")
-    Observable<BaseEntity<Object>> deliveryInWaybill(@Body BaseFilterEntity model);
+    Observable<BaseEntity<Object>> deliveryInWaybill(@Body List<BaseFilterEntity> model);
 
     //运单出库完成
     @POST("service-product-delivery/delivery/completDelivery")

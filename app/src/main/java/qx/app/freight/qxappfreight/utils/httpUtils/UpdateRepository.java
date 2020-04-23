@@ -981,7 +981,7 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /****
-     * 复重/获取板车信息
+     * 根据运单号 搜索运单
      * @param model
      * @return
      */
@@ -993,7 +993,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
+    public Observable<String> deliveryInWaybill(List<BaseFilterEntity> model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
 

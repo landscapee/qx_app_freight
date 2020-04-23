@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.model;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -22,7 +24,7 @@ public class ArrivalDeliveryInfoModel extends BaseModel implements ArrivalDelive
     }
 
     @Override
-    public void deliveryInWaybill(BaseFilterEntity entity, IResultLisenter lisenter) {
+    public void deliveryInWaybill(List <BaseFilterEntity> entity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().deliveryInWaybill(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

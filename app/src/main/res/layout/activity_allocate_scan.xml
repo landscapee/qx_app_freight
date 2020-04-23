@@ -29,10 +29,19 @@
                     style="@style/public_tv_16sp_2" />
                 <TextView
                     android:id="@+id/tv_flightid"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    style="@style/public_tv_16sp"/>
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    style="@style/public_tv_16sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_to_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    style="@style/public_tv_16sp"
+                   />
             </LinearLayout>
             <View
                 style="@style/line_horizontal_979797" />

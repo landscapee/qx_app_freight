@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,12 +27,14 @@ import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillArea;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.ArrivalDeliveryInfoContract;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.ListReservoirInfoContract;
 import qx.app.freight.qxappfreight.dialog.ForkliftCostDialogForNet;
+import qx.app.freight.qxappfreight.dialog.OutStoragePopWindow;
 import qx.app.freight.qxappfreight.dialog.PickGoodsRecordsDialogForNet;
 import qx.app.freight.qxappfreight.dialog.PutCargoInputDialog;
 import qx.app.freight.qxappfreight.dialog.SortingReturnGoodsDialogForNet;
@@ -127,13 +130,18 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mAdapter.setDeliveryDetailInterface(new DeliveryDetailAdapter.DeliveryDetailInterface() {
             @Override
             public void outStorage(int position, String id, String outStorageUser) {
-                deliveryInWaybill(
-                        position,
-                        id,
-                        outStorageUser,
-                        mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber(),
-                        mList.get(position).getOverWieght(),
-                        mList.get(position).getOverWieghtCount());
+                if (mList.get(position).getSmInventorySummaryList()!=null)
+                    showOutStorageListDialog(mList.get(position).getSmInventorySummaryList(),mList.get(position));
+                else {
+                    ToastUtil.showToast("没有库区信息，无法出库！");
+                }
+//                deliveryInWaybill(
+//                        position,
+//                        id,
+//                        outStorageUser,
+//                        mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber(),
+//                        mList.get(position).getOverWieght(),
+//                        mList.get(position).getOverWieghtCount());
             }
 
             @Override
@@ -208,31 +216,69 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         ((GroupBoardToDoPresenter) mPresenter).searchWaybillByWaybillCode(entity);
     }
     //出库
-    private void deliveryInWaybill(int position,String id, String outStorageUser,int waitPutCargo,double overWeight,int overWeightCount){
+    private void deliveryInWaybill(List<WaybillArea> result){
 
-        PutCargoInputDialog dialog = new PutCargoInputDialog();
-        dialog.setData(this,waitPutCargo,overWeight,overWeightCount);
-        dialog.setPutCargoInputListener(new PutCargoInputDialog.PutCargoInputListener() {
+
+//        PutCargoInputDialog dialog = new PutCargoInputDialog();
+//        dialog.setData(this,waitPutCargo,overWeight,overWeightCount);
+//        dialog.setPutCargoInputListener(new PutCargoInputDialog.PutCargoInputListener() {
+//            @Override
+//            public void onConfirm(int data,int carNum) {
+//                nowPosition = position;
+//                mPresenter = new  ArrivalDeliveryInfoPresenter (InportDeliveryDetailActivity.this);
+//                BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
+//                entity.setCreateUser(outStorageUser);
+//                entity.setWaybillId(id);
+//                entity.setOutboundNumber(data);
+//                entity.setForkliftTruckNumber(carNum);
+////                entity.setOutStorageUser(outStorageUser);
+//                currentNum = data;
+//                residueNum = waitPutCargo - data;
+//                ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
+//
+//            }
+//        });
+//        dialog.show(getSupportFragmentManager(),"321");
+//
+//        Log.e("22222","1111---->"+position);
+
+
+    }
+
+    /**
+     * @method
+     * @description 展示出库运单所在的 库区库位 列表
+     * @date: 2020/4/15 17:17
+     * @author: 张耀
+     * @param
+     * @return
+     */
+    private void showOutStorageListDialog(List<WaybillArea> result,WaybillsBean waybillsBean) {
+        OutStoragePopWindow outStoragePopWindow = new OutStoragePopWindow(this,result, new OutStoragePopWindow.OnItemSelectedLisener() {
             @Override
-            public void onConfirm(int data,int carNum) {
-                nowPosition = position;
-                mPresenter = new  ArrivalDeliveryInfoPresenter (InportDeliveryDetailActivity.this);
-                BaseFilterEntity<TransportListBean> entity = new BaseFilterEntity();
-                entity.setCreateUser(outStorageUser);
-                entity.setWaybillId(id);
-                entity.setOutboundNumber(data);
-                entity.setForkliftTruckNumber(carNum);
-//                entity.setOutStorageUser(outStorageUser);
-                currentNum = data;
-                residueNum = waitPutCargo - data;
-                ((ArrivalDeliveryInfoPresenter)mPresenter).deliveryInWaybill(entity);
-
+            public void resultData(List <WaybillArea> waybillAreaBeans) {
+                List<BaseFilterEntity> list = new ArrayList <>();
+                int total = 0;
+                for (WaybillArea waybillAreaBean: waybillAreaBeans){
+                    if (waybillAreaBean.getOutboundNumber()>waybillAreaBean.getNumber()){
+                        ToastUtil.showToast("出库件数不能大于待出库件数");
+                        return;
+                    }
+                    BaseFilterEntity outboundAreaInfoEntity = new BaseFilterEntity();
+                    outboundAreaInfoEntity.setOutboundNumber(waybillAreaBean.getOutboundNumber());
+                    outboundAreaInfoEntity.setWaybillId(waybillsBean.getId());
+                    outboundAreaInfoEntity.setAreaId(waybillAreaBean.getAreaId());
+                    outboundAreaInfoEntity.setCreateUser(UserInfoSingle.getInstance().getUserId());
+                    list.add(outboundAreaInfoEntity);
+                    currentNum += waybillAreaBean.getOutboundNumber();
+                    total += waybillAreaBean.getNumber();
+                }
+                residueNum = total - currentNum;
+                mPresenter = new ArrivalDeliveryInfoPresenter(InportDeliveryDetailActivity.this);
+                ((ArrivalDeliveryInfoPresenter) mPresenter).deliveryInWaybill(list);
             }
         });
-        dialog.show(getSupportFragmentManager(),"321");
-
-        Log.e("22222","1111---->"+position);
-
+        outStoragePopWindow.showAtLocation(tvPickUpCard, Gravity.BOTTOM,0,0);
 
     }
 //    //完成
@@ -312,7 +358,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle("提示")
                 .setMessage(str)
-                .setPositiveButton("取消")
                 .setNegativeButton("确定")
                 .isCanceledOnTouchOutside(true)
                 .isCanceled(true)

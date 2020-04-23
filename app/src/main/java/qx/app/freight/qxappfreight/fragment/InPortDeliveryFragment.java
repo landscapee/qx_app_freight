@@ -233,6 +233,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                .putExtra("billId", bean.getSerialNumber())
                 .putExtra("waybillStatus", waybillStatus)
                 .putExtra("DATA", bean));
+
+        isScan = false;
     }
 
     /**

@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
 import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.NFCDataEntity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -284,6 +285,17 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void onEventMainThread(ScanDataBean result) {
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity") && isShow) {
             String daibanCode = result.getData();
+            getScooterByScooterCode(daibanCode);
+        }
+
+    }
+    /**
+     * NFC回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(NFCDataEntity nfcDataEntity) {
+        if (!TextUtils.isEmpty(nfcDataEntity.getScooterCode()) &&isShow) {
+            String daibanCode = nfcDataEntity.getScooterCode();
             getScooterByScooterCode(daibanCode);
         }
 

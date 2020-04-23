@@ -53,6 +53,7 @@ public class BaseFilterEntity<T> {
     private String day;
 
     private String createUser;
+    private String areaId;// 库区id
     private int outboundNumber;
     private String  waybillId;
     private String  flightInfoId;

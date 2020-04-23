@@ -89,6 +89,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     Button btnConfirm;
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
+    @BindView(R.id.tv_to_city)
+    TextView tvToCity;
 
     private List <String> mRemarksList; //库区
     private String chenNum; //秤号
@@ -145,6 +147,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             case 2:
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
+                tvToCity.setText("目的站:"+mData.getToCityEn());
                 tvNameFront.setText(mData.getScooterCode());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
                 String mType, mCode, mIata;

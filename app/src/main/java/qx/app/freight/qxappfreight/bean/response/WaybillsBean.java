@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -148,4 +149,9 @@ public class WaybillsBean implements Serializable {
      * @date 2019/5/9 11:09 AM
      */
     private String pickUpGoodsUserCardId;
+
+    /**
+     * 运单存放的库区
+     */
+   private List<WaybillArea> smInventorySummaryList;
 }

@@ -31,6 +31,7 @@ import qx.app.freight.qxappfreight.contract.GetWayBillInfoByIdContract;
 import qx.app.freight.qxappfreight.presenter.BaseParamPresenter;
 import qx.app.freight.qxappfreight.presenter.BaseParamTypePresenter;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.SlideRecyclerView;
@@ -310,7 +311,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                if (options2 <= options1) {
+                if (options2 < options1) {
                     ToastUtil.showToast("请选择正确的温度");
                 } else {
                     tvTemperature.setText(temperatureList.get(options1) + "*" + temperatureList.get(options2));
@@ -369,9 +370,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             mData.setRepName(mTvStorageInfo.getText().toString());
             mData.setReservoirType(infoType);
             if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")||storageOption.equals("冷藏")) {
+                if (StringUtil.isEmpty(tvTemperature.getText().toString())){
+                    ToastUtil.showToast("选择冷藏必须选择温度！");
+                    return;
+                }
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
             }else
-                mData.setRefrigeratedTemperature("");
+                mData.setRefrigeratedTemperature(null);
 
             turnToReceiveGoodsActivity();
         } catch (Exception e) {
