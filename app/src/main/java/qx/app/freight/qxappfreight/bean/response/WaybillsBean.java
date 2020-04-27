@@ -110,6 +110,11 @@ public class WaybillsBean implements Serializable {
      */
     private Integer outboundNumber;
     /**
+     * 待提货件数
+     */
+    private Integer storageNumber;
+
+    /**
      * 预期费用
      */
     private int amountOfMoney;
