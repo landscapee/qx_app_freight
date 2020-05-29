@@ -57,7 +57,7 @@ public class UnCatchHandler implements Thread.UncaughtExceptionHandler, Exceptio
     public void uncaughtException(Thread t, Throwable ex) {
         ExceptionContentPresenter mPresenter = new ExceptionContentPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setExceptionContent(ex.toString());
+        entity.setExceptionContent(ex.getStackTrace().toString());
         mPresenter.exceptionContent(entity);
         doSomething(t, ex);
     }

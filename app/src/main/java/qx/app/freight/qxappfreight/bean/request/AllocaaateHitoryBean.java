@@ -9,4 +9,5 @@ import lombok.Data;
 @Data
 public class AllocaaateHitoryBean {
     private String reWeighedUserId;
+    private long searchTime;
 }

@@ -18,24 +18,24 @@ import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.AllocaaateHisDetailsActivity;
 import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
+import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightScooterAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.TodoScootersEntity;
 import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.GroupBoardToDoContract;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
-import qx.app.freight.qxappfreight.dialog.ChooseFlightDialog;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.presenter.TodoScootersPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 
-/**复重-板车列表
+/**
+ * 复重-板车列表
  * created by swd
  * 2019/7/2 11:25
  */
@@ -44,11 +44,10 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     RecyclerView rlView;
 
     private RepeatWeightScooterAdapter adapter;
-    private List<GetInfosByFlightIdBean> list;
-
+    private List <GetInfosByFlightIdBean> list;
     private String flightId;
     private String taskId;
-
+    private double weight = 0;
     public static RepeatWeightScooterFragment getInstance(String flightInfoId, String taskId) {
         RepeatWeightScooterFragment fragment = new RepeatWeightScooterFragment();
         Bundle bundle = new Bundle();
@@ -84,9 +83,16 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         entity.setFacility("1");
         ((TodoScootersPresenter) mPresenter).todoScooters(entity);
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (((AllocateScooterActivity) getActivity())!=null)
+                ((AllocateScooterActivity) getActivity()).setTotalWeight(weight, 0);
+        }
+    }
     private void initView() {
-        list = new ArrayList<>();
+        list = new ArrayList <>();
         adapter = new RepeatWeightScooterAdapter(list);
         rlView.setLayoutManager(new LinearLayoutManager(getContext()));
         rlView.setAdapter(adapter);
@@ -101,6 +107,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         });
 
     }
+
     /**
      * 根据板车号获取板车信息
      */
@@ -112,8 +119,9 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     }
 
     @Override
-    public void todoScootersResult(List<GetInfosByFlightIdBean> result) {
-        if (result!= null){
+    public void todoScootersResult(List <GetInfosByFlightIdBean> result) {
+        weight= 0;
+        if (result != null) {
 //            if (result.size() == 0){
 //                getActivity().finish();
 //                ToastUtil.showToast("该航班负重任务已完成");
@@ -122,12 +130,17 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
             list.clear();
             list.addAll(result);
             adapter.notifyDataSetChanged();
+
+            for (GetInfosByFlightIdBean getInfosByFlightIdBean : list) {
+                weight += getInfosByFlightIdBean.getWeight();
+            }
+            ((AllocateScooterActivity) getActivity()).setTotalWeight(weight,0);
         }
 
     }
 
     @Override
-    public void getManifestResult(List<ManifestBillModel> result) {
+    public void getManifestResult(List <ManifestBillModel> result) {
 
     }
 
@@ -158,21 +171,25 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     }
 
     @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
+    }
+
+    @Override
     public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
-        if (getInfosByFlightIdBeans!=null&&getInfosByFlightIdBeans.size()>0){
+        if (getInfosByFlightIdBeans != null && getInfosByFlightIdBeans.size() > 0) {
 //            if (getInfosByFlightIdBeans.size() == 1){
 //                startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBeans.get(0)));
 //            }
 //            else {
-                for (GetInfosByFlightIdBean getInfosByFlightIdBean:getInfosByFlightIdBeans){
-                    if (flightId.equals(getInfosByFlightIdBean.getFlightInfoId())){
-                            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
-                        return;
-                    }
+            for (GetInfosByFlightIdBean getInfosByFlightIdBean : getInfosByFlightIdBeans) {
+                if (flightId.equals(getInfosByFlightIdBean.getFlightInfoId())) {
+                    startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean", getInfosByFlightIdBean));
+                    return;
+                }
             }
 
-        }
-        else {
+        } else {
             ToastUtil.showToast("没有查询到相应的板车");
         }
     }

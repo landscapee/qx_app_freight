@@ -3,20 +3,16 @@ package qx.app.freight.qxappfreight.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 
 import com.beidouapp.imlibapi.IMLIBContext;
 import com.liys.doubleclicklibrary.ViewDoubleHelper;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import qx.app.freight.qxappfreight.BuildConfig;
-import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
-import qx.app.freight.qxappfreight.reciver.ScanReceiver;
+import qx.app.freight.qxappfreight.utils.CrashHandler;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 
 
@@ -33,15 +29,15 @@ public class MyApplication extends Application  {
         super.onCreate();
         appContext = getApplicationContext();
 
-        UnCatchHandler.getInstance(appContext).init();
+        CrashHandler.getsInstance().init(appContext);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
         Log.e("Application：运行模式>>>", BuildConfig.Model);
-        CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
+//        CrashReport.initCrashReport(getApplicationContext(), "5884b765c7", true); //bugly 异常统计
 
-        //处理点击事件重复点击问题
+           //处理点击事件重复点击问题
         ViewDoubleHelper.init(this);
 
         initIM();//初始化IM服务配置

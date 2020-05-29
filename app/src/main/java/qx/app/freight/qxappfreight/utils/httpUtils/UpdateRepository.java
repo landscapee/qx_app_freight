@@ -11,6 +11,7 @@ import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
@@ -383,6 +384,15 @@ public class UpdateRepository extends BaseRepository {
     public Observable<FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
         return transform(getService().getGroupBoardToDo(model));
     }
+    /********
+     * 复重任务代办数据
+     * @param model
+     * @return
+     */
+    public Observable<FilterTransportDateBase> getOverWeightToDo(BaseFilterEntity model) {
+        return transform(getService().getOverWeightToDo(model));
+    }
+
 
     /********
      * 代办收运列表
@@ -928,7 +938,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<GetInfosByFlightIdBean> saveScooter(GetInfosByFlightIdBean model) {
+    public Observable<OverWeightSaveResultBean> saveScooter(GetInfosByFlightIdBean model) {
         return transform(getService().saveScooter(model));
     }
 
@@ -980,7 +990,7 @@ public class UpdateRepository extends BaseRepository {
     }
 
     /****
-     * 复重/获取板车信息
+     * 根据运单号 搜索运单
      * @param model
      * @return
      */
@@ -992,7 +1002,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> deliveryInWaybill(BaseFilterEntity model) {
+    public Observable<String> deliveryInWaybill(List<BaseFilterEntity> model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
 

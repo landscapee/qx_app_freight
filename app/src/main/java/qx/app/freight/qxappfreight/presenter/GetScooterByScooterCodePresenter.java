@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -53,9 +54,9 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void saveScooter(GetInfosByFlightIdBean getInfosByFlightIdBean) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter<GetInfosByFlightIdBean>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter<OverWeightSaveResultBean>() {
             @Override
-            public void onSuccess(GetInfosByFlightIdBean result) {
+            public void onSuccess(OverWeightSaveResultBean result) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).saveScooterResult(result);
                 mRequestView.dissMiss();
             }

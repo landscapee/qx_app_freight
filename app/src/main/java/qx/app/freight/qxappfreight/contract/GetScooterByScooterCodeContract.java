@@ -4,6 +4,7 @@ import java.util.List;
 
 import qx.app.freight.qxappfreight.app.IBaseView;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
@@ -27,7 +28,7 @@ public class GetScooterByScooterCodeContract {
 
         void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean);
 
-        void saveScooterResult(GetInfosByFlightIdBean result);
+        void saveScooterResult(OverWeightSaveResultBean result);
 
         void returnWeighingResult(String result);
 

@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.presenter;
 
+import java.util.List;
+
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -30,7 +32,7 @@ public class ArrivalDeliveryInfoPresenter extends BasePresenter {
         });
     }
 
-    public void deliveryInWaybill(BaseFilterEntity model) {
+    public void deliveryInWaybill(List <BaseFilterEntity> model) {
         mRequestView.showNetDialog();
         ((ArrivalDeliveryInfoModel) mRequestModel).deliveryInWaybill(model, new IResultLisenter<String>() {
             @Override

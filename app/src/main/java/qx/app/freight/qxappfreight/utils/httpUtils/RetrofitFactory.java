@@ -35,6 +35,7 @@ class RetrofitFactory {
 
                     .addHeader("userName", UserInfoSingle.getInstance().getUsername()!= null?URLEncoder.encode(UserInfoSingle.getInstance().getUsername()):"")
                     .addHeader("userId", UserInfoSingle.getInstance().getUserId()!= null?UserInfoSingle.getInstance().getUserId().trim():"")
+                    .addHeader("identity","APP")
                     .header("Content-Type", "application/json")
                     .method(originalRequest.method(), originalRequest.body())
                     .build();

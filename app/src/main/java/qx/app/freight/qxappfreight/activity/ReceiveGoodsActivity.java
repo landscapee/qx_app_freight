@@ -57,6 +57,7 @@ import qx.app.freight.qxappfreight.presenter.AgentTransportationListPresent;
 import qx.app.freight.qxappfreight.presenter.GetWayBillInfoByIdPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.presenter.TransportListCommitPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
@@ -389,6 +390,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
             mMfrvData.finishLoadMore();
         if (mMfrvData != null)
             mMfrvData.finishRefresh();
+
+        if (!StringUtil.isEmpty(error))
+            ToastUtil.showToast(error);
     }
 
     @Override

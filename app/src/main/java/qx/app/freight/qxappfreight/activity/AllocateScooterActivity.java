@@ -68,8 +68,11 @@ public class AllocateScooterActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
     }
 
-    public void setTotalWeight(double weight){
-        tvTotalWeight.setText("货邮总重量:"+weight+"kg");
+    public void setTotalWeight(double weight,int flag){
+        if (flag == 0)
+            tvTotalWeight.setText("板车总重量:"+weight+"kg");
+        else
+            tvTotalWeight.setText("货邮总重量:"+weight+"kg");
     }
 
 

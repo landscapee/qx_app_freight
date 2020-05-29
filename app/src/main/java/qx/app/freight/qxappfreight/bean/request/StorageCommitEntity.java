@@ -77,6 +77,6 @@ public class StorageCommitEntity {
      */
     private BigDecimal weight;
 
-
+    private String remark;
 
 }

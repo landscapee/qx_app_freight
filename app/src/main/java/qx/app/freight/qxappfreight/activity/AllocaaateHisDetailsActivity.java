@@ -28,6 +28,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -87,7 +88,7 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
 
-    private List <String> mRemarksList; //库区
+    private List <String> mRemarksList; //备注
     private String chenNum; //秤号
     private String mScooterCode;//板车号
     private double dValue; //差值
@@ -190,6 +191,9 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
         mRemarksList = new ArrayList <>();
         mRemarksList.add("加雨棚");
         mRemarksList.add("加垫板");
+        mRemarksList.add("集装器误差");
+        mRemarksList.add("连接杆");
+        mRemarksList.add("轻抛货");
         mRemarksList.add("其他");
 
         tvGrossweightFront.setEnabled(false);
@@ -295,7 +299,6 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
         ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
 
         returnWeighingEntity.setScooter(mData);
-
         ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
 
     }
@@ -539,8 +542,7 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
     }
 
     @Override
-    public void saveScooterResult(GetInfosByFlightIdBean result) {
-
+    public void saveScooterResult(OverWeightSaveResultBean result) {
         //提交弹窗
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")
@@ -560,8 +562,8 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
                         EventBus.getDefault().post(Constants.REWEIGHT_DONE);
                     }
                 }).show();
-//        startActivity(new Intent(this,MainActivity.class));
     }
+
 
     @Override
     public void returnWeighingResult(String result) {

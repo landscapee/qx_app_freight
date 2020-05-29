@@ -1,64 +1,62 @@
-package qx.app.freight.qxappfreight.widget;
+package qx.app.freight.qxappfreight.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
+
 import qx.app.freight.qxappfreight.R;
 
-/**
- * 应用内普通样式对话框
- * Created by swd on 2019/3/1.
- */
-public class CommonDialog extends Dialog implements View.OnClickListener {
-
+public class InputForStrDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
     private String message;
     private String positiveBtn;
     private String negativeBtn;
     private String title;
-    protected OnClickListener listener;
+    private OnClickListener listener;
+    private EditText messageTv;
+    private TextView titleTxt;
+    private TextView positiveTv;
+    private TextView negativeTv;
 
-    public CommonDialog(Context context) {
+    public InputForStrDialog(Context context) {
         super(context, R.style.CommomDialog);
         this.mContext = context;
         setCanceledOnTouchOutside(false);
     }
 
-    public CommonDialog(Context context, int themeResId) {
-        super(context, themeResId);
-        this.mContext = context;
-        setCanceledOnTouchOutside(false);
-    }
-
-    public CommonDialog setTitle(String title) {
+    public InputForStrDialog setTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public CommonDialog setMessage(String message) {
+    public InputForStrDialog setHint(String message) {
         this.message = message;
         return this;
     }
 
-    public CommonDialog setPositiveButton(String name) {
+    public String getMessage() {
+        if (TextUtils.isEmpty(messageTv.getText().toString())) {
+            return "";
+        } else {
+            return messageTv.getText().toString();
+        }
+    }
+
+    public InputForStrDialog setPositiveButton(String name) {
         this.positiveBtn = name;
         return this;
     }
 
-    public CommonDialog setNegativeButton(String name) {
+    public InputForStrDialog setNegativeButton(String name) {
         this.negativeBtn = name;
         return this;
     }
 
-    public CommonDialog setOnClickListener(OnClickListener onClickListener) {
+    public InputForStrDialog setOnClickListener(OnClickListener onClickListener) {
         this.listener = onClickListener;
         return this;
     }
@@ -68,7 +66,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
      *
      * @param cancel
      */
-    public CommonDialog isCanceledOnTouchOutside(boolean cancel) {
+    public InputForStrDialog isCanceledOnTouchOutside(boolean cancel) {
         setCanceledOnTouchOutside(cancel);
         return this;
     }
@@ -78,35 +76,28 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
      *
      * @param cancel
      */
-    public CommonDialog isCanceled(boolean cancel) {
-        setCancelable(false);
+    public InputForStrDialog isCanceled(boolean cancel) {
+        setCancelable(cancel);
         return this;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_common);
-        Log.e("Build.VERSION.SDK_INT",Build.VERSION.SDK_INT+"");
-        if (Build.VERSION.SDK_INT >= 26) {
-            getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        }
-        else
-            getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        setContentView(R.layout.dialog_input);
         initView();
     }
 
     private void initView() {
-        TextView messageTv = findViewById(R.id.messageTv);
-        TextView titleTxt = findViewById(R.id.titleTv);
-        TextView positiveTv = findViewById(R.id.positiveTv);
-        TextView negativeTv = findViewById(R.id.negativeTv);
+        messageTv = findViewById(R.id.messageEt);
+        titleTxt = findViewById(R.id.titleTv);
+        positiveTv = findViewById(R.id.positiveTv);
+        negativeTv = findViewById(R.id.negativeTv);
 
         positiveTv.setOnClickListener(this);
         negativeTv.setOnClickListener(this);
 
-        messageTv.setText(Html.fromHtml(message));
+
         if (!TextUtils.isEmpty(positiveBtn)) {
             //有两个按钮
 //            View btnLine = findViewById(R.id.btnLine);
@@ -121,6 +112,9 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
             positiveTv.setVisibility(View.VISIBLE);
             positiveTv.setText(positiveBtn);
         }
+        if (!TextUtils.isEmpty(message)) {
+            messageTv.setHint(message);
+        }
 
         if (!TextUtils.isEmpty(negativeBtn)) {
             negativeTv.setText(negativeBtn);
@@ -133,30 +127,17 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     }
 
     @Override
-    public void show() {
-        if (mContext instanceof Activity){
-            if (!((Activity)mContext).isFinishing())
-                super.show();
-        }
-        else {
-            if (mContext!=null)
-                super.show();
-        }
-
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.negativeTv:
                 if (listener != null) {
-                    listener.onClick(this, false);
+                    listener.onClick(this, false, getMessage());
                 }
                 this.dismiss();
                 break;
             case R.id.positiveTv:
                 if (listener != null) {
-                    listener.onClick(this, true);
+                    listener.onClick(this, true, getMessage());
                 }
                 this.dismiss();
                 break;
@@ -164,6 +145,6 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     }
 
     public interface OnClickListener {
-        void onClick(Dialog dialog, boolean confirm);
+        void onClick(Dialog dialog, boolean confirm, String str);
     }
 }

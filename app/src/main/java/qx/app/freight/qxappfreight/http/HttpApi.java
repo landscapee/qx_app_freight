@@ -10,6 +10,7 @@ import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
@@ -206,6 +207,10 @@ public interface HttpApi {
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<FilterTransportDateBase>> getGroupBoardToDo(@Body BaseFilterEntity model);
 
+    //复重任务代办数据
+    @POST("service-product-cargoweighing/api/selectTodoList")
+    Observable<BaseEntity<FilterTransportDateBase>> getOverWeightToDo(@Body BaseFilterEntity model);
+
     //存储类型变更
     @POST("service-bussiness-baseparam/baseParam/list")
     Observable<BaseEntity<BaseParamBean>> baseParam(@Body BaseFilterEntity model);
@@ -368,7 +373,7 @@ public interface HttpApi {
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
-    Observable<BaseEntity<GetInfosByFlightIdBean>> saveScooter(@Body GetInfosByFlightIdBean model);
+    Observable<BaseEntity<OverWeightSaveResultBean>> saveScooter(@Body GetInfosByFlightIdBean model);
 
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
@@ -379,7 +384,7 @@ public interface HttpApi {
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
 
     //复重 / 获取航班舱单信息
-    @POST("service-product-stowage/stowage-waybill-info/getLodPrint")
+    @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
     Observable<BaseEntity<List<ManifestBillModel>>> getManifest(@Body BaseFilterEntity model);
 
 
@@ -604,7 +609,7 @@ public interface HttpApi {
 
     //国内进港运单-出库
     @POST("service-product-delivery/delivery/deliveryInWaybill")
-    Observable<BaseEntity<Object>> deliveryInWaybill(@Body BaseFilterEntity model);
+    Observable<BaseEntity<Object>> deliveryInWaybill(@Body List<BaseFilterEntity> model);
 
     //运单出库完成
     @POST("service-product-delivery/delivery/completDelivery")

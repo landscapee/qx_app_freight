@@ -233,6 +233,8 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                .putExtra("billId", bean.getSerialNumber())
                 .putExtra("waybillStatus", waybillStatus)
                 .putExtra("DATA", bean));
+
+        isScan = false;
     }
 
     /**
@@ -356,6 +358,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
 //                mTaskFragment.setTitleText(list1.size());
 //            }
 //        }
+    }
+
+    @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
     }
 
     @Override

@@ -2,7 +2,6 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
@@ -35,35 +32,27 @@ import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.constant.Constants;
-import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.GetPhoneParametersContract;
 import qx.app.freight.qxappfreight.contract.LoginContract;
-import qx.app.freight.qxappfreight.dialog.ProgressDialog;
-import qx.app.freight.qxappfreight.dialog.UpDateVersionDialog;
-import qx.app.freight.qxappfreight.http.HttpApi;
 import qx.app.freight.qxappfreight.presenter.GetPhoneParametersPresenter;
 import qx.app.freight.qxappfreight.presenter.LoginPresenter;
+import qx.app.freight.qxappfreight.utils.AppRestartUtils;
 import qx.app.freight.qxappfreight.utils.AppUtil;
+import qx.app.freight.qxappfreight.utils.CrashHandler;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
-import qx.app.freight.qxappfreight.utils.DownloadInstall;
-import qx.app.freight.qxappfreight.utils.DownloadUtils;
 import qx.app.freight.qxappfreight.utils.IMUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CommonDialog;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import qx.pad.utils.VersionUtils;
 
 import static qx.app.freight.qxappfreight.app.MyApplication.isNeedIm;
 
 /**
  * 登录页面
- *   by 郭浩
+ * by 郭浩
  */
 public class LoginActivity extends BaseActivity implements LoginContract.loginView, GetPhoneParametersContract.getPhoneParametersView {
     @BindView(R.id.btn_login)
@@ -83,21 +72,19 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        //防止 重新点击app 图标 重启这个activity
+        AppRestartUtils.init(this);
 
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            finish();
-            return;
-        }
+        CrashHandler.getsInstance().uploadExceptionToServer();
 
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "登录");
         tvCopyVersion.setText(" @成都双流国际机场版权所有（v" + BuildConfig.VERSION_NAME + "）");
-        checkVersion();
+        //版本升级
+        VersionUtils versionUtils = new VersionUtils();
+        versionUtils.checkVersion(this, AppUtil.getPackageInfo(this), "newphone2", Constants.APP_NAME);
+
         mEtUserName.setText(UserInfoSingle.getInstance().getLoginName());
-
-
         mEtUserName.setText(Tools.getLoginNameForLogin());
         mEtPassWord.setText(Tools.getPassword());
 
@@ -137,52 +124,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     }
 
-    private void checkVersion() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
-            //打印retrofit日志
-            Log.e("tagRetrofit", "msg = " + message);
-        });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
-                .addInterceptor(loggingInterceptor)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(HttpConstant.UPDATE_CHECK_VERSION_URL)
-                .client(client)//此client是为了打印信息
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        HttpApi httpService = retrofit.create(HttpApi.class);
-        Call<UpdateVersionBean2> call = httpService.updateVersion("newphone2");
-        call.enqueue(new Callback<UpdateVersionBean2>() {
-            @Override
-            public void onResponse(Call<UpdateVersionBean2> call, Response<UpdateVersionBean2> response) {
-                UpdateVersionBean2 updataBean = response.body();
-                if (updataBean == null) {
-                    ToastUtil.showToast("获取应用更新信息失败");
-                    return;
-                }
-                if (1000 != updataBean.getResponseCode()) {
-                    ToastUtil.showToast("获取应用更新信息失败");
-                    return;
-                }
-
-                mVersionBean = updataBean;
-                PackageInfo appInfo = AppUtil.getPackageInfo(LoginActivity.this);
-                int versionCode = 0;
-                if (appInfo != null) {
-                    versionCode = appInfo.versionCode;
-                }
-                if (versionCode < mVersionBean.getData().getVersionCodeRS()) {
-                    showAppUpdateDialog();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UpdateVersionBean2> call, Throwable t) {
-                Log.e("tagUpdate", "更新版本出错");
-            }
-        });
-    }
 
 //    private void getDeviceInfo(){
 //        Log.e("22222", "getDeviceInfo: "+ DeviceInfoUtil.getDeviceInfo(this));
@@ -239,7 +180,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
         mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
         mLoginEntity.setType("MT");
-        List<String> syss = new ArrayList<>();
+        List <String> syss = new ArrayList <>();
         syss.add("10040000");//外场
         syss.add("10080000");//货运
         mLoginEntity.setSysCode(syss);
@@ -248,6 +189,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     /**
      * 获取登录智能调度请求体
+     *
      * @return
      */
     private ReqLoginBean getLoginQxAiEntity() {
@@ -267,7 +209,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
 
     @Override
     public void loginResult(LoginResponseBean loginBean) {
-        Log.e("isNeedIm","isNeedIm:"+isNeedIm);
+        Log.e("isNeedIm", "isNeedIm:" + isNeedIm);
         if (loginBean != null) {
             isNeedIm = false;
             for (LoginResponseBean.RoleRSBean mRoleRSBean : loginBean.getRoleRS()) {
@@ -276,11 +218,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                     dismissProgessDialog();
                     return;
                 }
-                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode())||
-                        Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode())||
-                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode())||
-                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode())||
-                        Constants.INTERNATIONAL_GOODS.equals(mRoleRSBean.getRoleCode())||
+                if (Constants.INSTALL_UNLOAD_EQUIP.equals(mRoleRSBean.getRoleCode()) ||
+                        Constants.JUNCTION_LOAD.equals(mRoleRSBean.getRoleCode()) ||
+                        Constants.DRIVEROUT.equals(mRoleRSBean.getRoleCode()) ||
+                        Constants.INSTALL_EQUIP_LEADER.equals(mRoleRSBean.getRoleCode()) ||
+                        Constants.INTERNATIONAL_GOODS.equals(mRoleRSBean.getRoleCode()) ||
                         Constants.PORTER.equals(mRoleRSBean.getRoleCode())
                 ) {
                     ToastUtil.showToast(this, "站坪角色不能登录该应用");
@@ -291,11 +233,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
                 }
             }
 
-            if (isNeedIm&& Tools.isProduct()){
+            if (isNeedIm && Tools.isProduct()) {
                 UserInfoSingle.setUser(loginBean);
                 loginIm(loginBean);
-            }
-            else {
+            } else {
                 UserInfoSingle.setUser(loginBean);
                 loginTpPC(loginBean);
                 if (Constants.PSW_TYPE_NO.equals(loginBean.getCode())) {
@@ -339,7 +280,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     private void toMainAct() {
         dismissProgessDialog();
-        Tools.saveLoginNameAndPassword(mEtUserName.getText().toString(),mEtPassWord.getText().toString());
+        Tools.saveLoginNameAndPassword(mEtUserName.getText().toString(), mEtPassWord.getText().toString());
         MainActivity.startActivity(this);
         finish();
     }
@@ -401,81 +342,5 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
     public void onBackPressed() {
         quitApp();
     }
-
-    /**
-     * 弹出下载提示框
-     * vtime.setText(appVersion.getData().getVersionCode());
-     * vContent.setText(appVersion.getData().getUpdateMsg());
-     */
-    private void showAppUpdateDialog() {
-        UpDateVersionDialog dialog = new UpDateVersionDialog(this);
-
-
-        dialog.setTitle("版本更新")
-                .setMessage("更新版本：" + mVersionBean.getData().getVersionCode() + "\n更新内容：" + mVersionBean.getData().getUpdateMsg())
-                .setNegativeButton("立即更新")
-                .isCanceledOnTouchOutside(false)
-                .isCanceled(false)
-                .setOnClickListener(new CommonDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog, boolean confirm) {
-                        if (mVersionBean.getData().getDownloadUrl() == null || mVersionBean.getData().getDownloadUrl().length() == 0) {
-                            ToastUtil.showToast("下载地址获取有误");
-                        } else {
-                            downLoadFile(mVersionBean);
-                        }
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
-
-//        final AppUpdateDailog appUpdateDailog = new AppUpdateDailog(this);
-//        appUpdateDailog.setAppUpdateDialogData(mVersionBean,
-//                new AppUpdateDailog.AppUpdateLinstener() {
-//                    @Override
-//                    public void sure() {
-//                        // 下载app
-//                        if (mVersionBean.getData().getDownloadUrl() == null || mVersionBean.getData().getDownloadUrl().length() == 0) {
-//                            ToastUtil.showToast("下载地址获取有误");
-//                        } else {
-//                            downLoadFile(mVersionBean);
-//                        }
-//                        appUpdateDailog.dismiss();
-//                    }
-//
-//                    @Override
-//                    public void cancel() {
-//                        appUpdateDailog.dismiss();
-//                    }
-//                });
-//        appUpdateDailog.show();
-    }
-
-    /**
-     * 下载apk
-     * http://10.16.23.156:9082/acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7
-     */
-    public void downLoadFile(UpdateVersionBean2 version) {
-//        ToastUtil.showToast("程序更新中...");
-//        String wholeUrl = version.getData().getDownloadUrl();
-////        String base = wholeUrl.substring(0, wholeUrl.lastIndexOf("/") + 1);
-////        String left = wholeUrl.substring(wholeUrl.lastIndexOf("/") + 1);
-//        String base = "http://10.16.23.156:9082";
-//        String left = "acdm-api/sys/api/download/todownloadflie.json?name=84ed15bf10e641d186fd562b62610796&filePath=/root/uploadfile/3426b22648f348a6987b0796cdb716e7";
-        String saveFilePath = Tools.getFilePath() + Constants.APP_NAME + version.getData().getVersionCode() + ".apk";
-//        DownloadFileService.startService(this, base, left, Constants.APP_NAME + version.getData().getVersionCode() + ".apk", Tools.getFilePath());
-
-
-        ProgressDialog progressDialog = new ProgressDialog();
-        progressDialog.setData(this, null);
-        DownloadInstall downloadInstall = new DownloadInstall.Builder()
-                .Context(this)
-                .downloadUrl(version.getData().getDownloadUrl())
-                .saveFilePath(saveFilePath)
-                .progressDialog(progressDialog).build();
-        downloadInstall.start();
-    }
-
 
 }

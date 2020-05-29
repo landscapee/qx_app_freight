@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
+import qx.app.freight.qxappfreight.bean.NFCDataEntity;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
@@ -58,6 +60,7 @@ import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.reciver.ScanReceiver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
+import qx.app.freight.qxappfreight.utils.NfcUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -130,6 +133,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
         initServices();
         setToolbarShow(View.GONE);
 
@@ -148,6 +152,8 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 //        mCSFragment = new ClearStorageFragment();
 //        testFragment = new TestFragment();
 //        mMineFragment = new MineFragment();
+
+//        new NfcUtils(this);// 初始化 NFC 工具
         //结载角色修改 底部tab 第二和第三项 货邮舱单 装机单
         isJunctionLoad = false;
         for (LoginResponseBean.RoleRSBean roleRSBean : UserInfoSingle.getInstance().getRoleRS()) {
@@ -178,7 +184,41 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         }
         initFragment();
     }
+    /**
+     * NFC 数据接收
+     *
+     * @param intent
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //当该Activity接收到NFC标签时，运行该方法
+        //调用工具方法，读取NFC数据
+//        try {
+//            String str = NfcUtils.readNFCFromTag(intent);
+//            if (!StringUtil.isEmpty(str) && str.length() >= 7) {
+//                String scooterCode = str.substring(3);
+//                NFCDataEntity nfcDataEntity = new NFCDataEntity();
+//                nfcDataEntity.setScooterCode(scooterCode);
+//                EventBus.getDefault().post(nfcDataEntity);
+//            }
+////            Toast.makeText(this,"读取到的数据是："+str,Toast.LENGTH_LONG).show();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
+    }
     /**
      * 获取 板车基础配置
      */

@@ -4,126 +4,163 @@
     android:layout_height="match_parent"
     android:background="#EFF2F3"
     android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_waybill_code"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textColor="@color/black_3"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_special_code"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:text=""
+                        android:textColor="@color/black_3"
+                        android:textSize="15sp" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/black_3"
+                    android:textSize="15sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textColor="@color/black_3"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_weight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textColor="@color/black_3"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_wenjian"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="暂无核查证明文件"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/ll_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mfrv_verify"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#EFF2F3"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp_15"
+                    android:paddingTop="13dp"
+                    android:paddingRight="@dimen/dp_15"
+                    android:paddingBottom="17dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@mipmap/reminder"
+                        android:drawablePadding="2dp"
+                        android:text="货代公司托运资质："
+                        android:textColor="@color/blue_5d9"
+                        android:textSize="@dimen/sp_16" />
+
+                    <TextView
+                        android:id="@+id/tv_collect_require"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:text="1.可以托运危险品;\n2.可以托运贵重物品;\n3.可以托运活体动物；"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        >
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <TextView
-            android:id="@+id/tv_waybill_code"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="备注"
             android:textColor="@color/black_3"
-            android:textSize="15sp"
-            android:text=""
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_goods_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black_3"
-                android:textSize="15sp"
-                android:text=""
-                />
-            <TextView
-                android:id="@+id/tv_special_code"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black_3"
-                android:textSize="15sp"
-                android:text=""
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black_3"
-                android:textSize="15sp"
-                android:text=""
-                />
-            <TextView
-                android:id="@+id/tv_weight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black_3"
-                android:textSize="15sp"
-                android:text=""
-                />
-        </LinearLayout>
+            android:textSize="@dimen/sp_16" />
 
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_wenjian"
-        android:layout_width="match_parent"
-        android:text="暂无核查证明文件"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
-
-    <LinearLayout
-        android:id="@+id/ll_content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingLeft="18dp"
-        android:paddingRight="18dp"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mfrv_verify"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/et_remark"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/white" />
-
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="14dp"
-            android:background="#EFF2F3"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp_15"
-            android:paddingTop="13dp"
-            android:paddingRight="@dimen/dp_15"
-            android:paddingBottom="17dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@mipmap/reminder"
-                android:drawablePadding="2dp"
-                android:text="货代公司托运资质："
-                android:textColor="@color/blue_5d9"
-                android:textSize="@dimen/sp_16" />
-
-            <TextView
-                android:id="@+id/tv_collect_require"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5"
-                android:text="1.可以托运危险品;\n2.可以托运贵重物品;\n3.可以托运活体动物；"
-                android:textColor="@color/gray" />
-        </LinearLayout>
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray_line"
+            android:maxLength="100"
+            android:maxLines="5"
+            android:padding="5dp" />
     </LinearLayout>
 
     <View style="@style/line_horizontal" />

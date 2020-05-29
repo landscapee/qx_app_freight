@@ -49,6 +49,9 @@ public class AllocaaateHistoryAdapter extends BaseQuickAdapter<GetInfosByFlightI
         helper.setText(R.id.allocate_flightnumber,item.getFlightNo());
         //机位号
         helper.setText(R.id.allocate_machinenumber, item.getSeat());
+        //复重完成时间
+        helper.setText(R.id.tv_reweight_time, TimeUtils.getHMDay(item.getReWeighedTime()));
+
         //预计起飞时间~仓位
         //航班预计起飞时间
         String mString;

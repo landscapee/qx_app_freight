@@ -8,6 +8,12 @@ import java.io.File;
 public class Constants {
     //更新版本用的参数常量
     public static final String APP_NAME = "智慧货运_";
+
+
+    /**
+     * 异常日志上传url
+     */
+    public static final String EX_UPLOAD_URL ="http://173.101.2.8/service-product-transport/tp-main-info/exceptionUpload";
     //====================================================角色分类======================================================
     /**
      * 安检

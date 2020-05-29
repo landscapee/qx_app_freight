@@ -5,12 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import qx.app.freight.qxappfreight.R;
 
-public class InputDialog extends Dialog implements View.OnClickListener {
+public class InputDialog extends Dialog implements OnClickListener {
     private Context mContext;
     private String message;
     private String positiveBtn;

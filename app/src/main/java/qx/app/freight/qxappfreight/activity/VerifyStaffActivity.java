@@ -1,11 +1,15 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -37,6 +41,7 @@ import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.contract.SubmissionContract;
 import qx.app.freight.qxappfreight.contract.TestInfoContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
+import qx.app.freight.qxappfreight.dialog.InputForStrDialog;
 import qx.app.freight.qxappfreight.presenter.SubmissionPresenter;
 import qx.app.freight.qxappfreight.presenter.TestInfoPresenter;
 import qx.app.freight.qxappfreight.presenter.UploadsPresenter;
@@ -88,6 +93,8 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
     @BindView(R.id.tv_weight)
     TextView tvWeight;
 
+    @BindView(R.id.et_remark)
+    EditText etRemark;
 
     private String mImageHead;//头像路径
     private String fileName;
@@ -125,22 +132,43 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         mTvCertificateInDate.setText(text);
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+
+        etRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!StringUtil.isEmpty(etRemark.getText().toString())){
+                    mBean.setRemark(etRemark.getText().toString());
+                }
+                else {
+                    mBean.setRemark("");
+                }
+            }
+        });
         initData();
         setWaybillInfo(mBean);
     }
 
     private void setWaybillInfo(TransportDataBase mBean) {
-        if (mBean!=null){
-            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
-            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+        if (mBean != null) {
+            tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  " + mBean.getCargoCn());
             if (!StringUtil.isEmpty(mBean.getSpecialCode()))
-                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
+                tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
             else
                 tvSpecialCode.setText("特货代码:  - -");
-            tvNumber.setText("件数:  "+mBean.getTotalNumber());
-            tvWeight.setText("重量:  "+mBean.getTotalWeight());
-        }
-        else {
+            tvNumber.setText("件数:  " + mBean.getTotalNumber());
+            tvWeight.setText("重量:  " + mBean.getTotalWeight());
+        } else {
             tvWaybillCode.setText("运单号:   ");
             tvGoodsName.setText("品名:  ");
             tvSpecialCode.setText("特货代码:  ");
@@ -175,7 +203,29 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 break;
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
-                    mPresenter = new SubmissionPresenter(this);
+
+//                    InputForStrDialog inputForStrDialog = new InputForStrDialog(this);
+//                    inputForStrDialog.isCanceledOnTouchOutside(false);
+//                    inputForStrDialog.isCanceled(true)
+//                            .setTitle("备注")
+//                            .setHint("输入备注（或者不填写）")
+//                            .setPositiveButton("确定")
+//                            .setNegativeButton("取消");
+//                    inputForStrDialog.setOnClickListener(new InputForStrDialog.OnClickListener() {
+//                        @Override
+//                        public void onClick(Dialog dialog, boolean confirm, String result) {
+//                            if (!confirm)
+//                                return;
+//                            if (!StringUtil.isEmpty(result)) {
+//                                mStorageCommitEntity.setRemark(result);
+//                            } else {
+//                                mStorageCommitEntity.setRemark(null);
+//                            }
+//
+//                        }
+//                    });
+//                    inputForStrDialog.show();
+                    mPresenter = new SubmissionPresenter(VerifyStaffActivity.this);
                     mStorageCommitEntity.setWaybillId(mBean.getId());
                     mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
                     mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
@@ -187,6 +237,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setType(1);
                     mStorageCommitEntity.setTaskId(mBean.getTaskId());
                     mStorageCommitEntity.setUserId(mDecBean.getFlightNo());
+                    mStorageCommitEntity.setRemark(mBean.getRemark());
                     ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
                 } else
                     ToastUtil.showToast(this, "请先上传照片");
@@ -226,7 +277,7 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case 66:
-                    ArrayList<String> images = (ArrayList<String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
+                    ArrayList <String> images = (ArrayList <String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
                     if (images != null && images.size() > 0) {
                         mImageHead = images.get(0);
                         pressImage(new File(mImageHead));
@@ -287,9 +338,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             @Override
             public void onSuccess(File file) {
                 Glide.with(VerifyStaffActivity.this).load(file).into(mIvStaffNow);
-                List<File> files = new ArrayList<>();
+                List <File> files = new ArrayList <>();
                 files.add(file);
-                List<MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(files);
+                List <MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(files);
                 ((UploadsPresenter) mPresenter).uploads(upFiles);
                 llBottom.setVisibility(View.VISIBLE);
 //                btnTakePhoto.setVisibility(View.GONE);
@@ -311,10 +362,10 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
 //            btnTakePhoto.setVisibility(View.GONE);
 //            tvTakePhoto.setVisibility(View.VISIBLE);
             //key是地址，value是名字
-            Map<String, String> map = new HashMap<>();
-            map = (Map<String, String>) result;
-            Set<Map.Entry<String, String>> entries = map.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
+            Map <String, String> map = new HashMap <>();
+            map = (Map <String, String>) result;
+            Set <Map.Entry <String, String>> entries = map.entrySet();
+            for (Map.Entry <String, String> entry : entries) {
                 fileName = entry.getValue();
                 filePath = entry.getKey();
             }

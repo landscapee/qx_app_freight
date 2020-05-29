@@ -30,6 +30,7 @@ import qx.app.freight.qxappfreight.activity.AllocaaateScanActivity;
 import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.AllocateVehiclesAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
+import qx.app.freight.qxappfreight.bean.NFCDataEntity;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -221,7 +222,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         baseFilterEntity.setFilter(entity);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setSize(Constants.PAGE_SIZE);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(baseFilterEntity);
+        ((GroupBoardToDoPresenter) mPresenter).getOverWeightToDo(baseFilterEntity);
 //
 //        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
 //        entity.setUserId("weighter");
@@ -288,7 +289,22 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         }
 
     }
+    /**
+     * NFC回调
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(NFCDataEntity nfcDataEntity) {
+        if (!TextUtils.isEmpty(nfcDataEntity.getScooterCode()) &&isShow) {
+            String daibanCode = nfcDataEntity.getScooterCode();
+            getScooterByScooterCode(daibanCode);
+        }
 
+    }
+
+    /**
+     * 废弃
+     * @param transportListBeans
+     */
     @Override
     public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
         if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
@@ -312,6 +328,30 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             ToastUtil.showToast("无更多数据");
         }
 
+    }
+
+    @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+        if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
+            //因为没有分页，不做分页判断
+
+            if (transportListBeans.getCurrent() == 1) {
+                list1.clear();
+                mMfrvAllocateList.finishRefresh();
+            } else {
+                mMfrvAllocateList.finishLoadMore();
+            }
+            pageCurrent = transportListBeans.getCurrent()+1;
+            list1.addAll(transportListBeans.getRecords());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
+            }
+            seachWithNum();
+        }
+        else {
+            ToastUtil.showToast("无更多数据");
+        }
     }
 
     @Override

@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -88,8 +89,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     Button btnConfirm;
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
+    @BindView(R.id.tv_to_city)
+    TextView tvToCity;
 
-    private List<String> mRemarksList; //库区
+    private List <String> mRemarksList; //库区
     private String chenNum; //秤号
     private String mScooterCode;//板车号
     private double dValue; //差值
@@ -97,11 +100,11 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private double reviseWeight; //修订重量
     private double crossWeight; //毛重
     private double goodsWeight; //复重净重
-    private int selectorOption = 10;
+    private int selectorOption = -1;
     private GetInfosByFlightIdBean mData;
     private CustomToolbar toolbar;
     //运单列表相关
-    private List<WeightWayBillBean> wayBillBeanList;
+    private List <WeightWayBillBean> wayBillBeanList;
 
     private WeightWayBillBeanAdapter madapter;
 
@@ -129,45 +132,46 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private void initData() {
         mData = (GetInfosByFlightIdBean) getIntent().getSerializableExtra("dataBean");
 
-        if (mData == null){
+        if (mData == null) {
             ToastUtil.showToast("无该板车信息");
             finish();
             return;
         }
         wayBillBeanList = mData.getGroupScooters();
-        if (wayBillBeanList!=null){
+        if (wayBillBeanList != null) {
             madapter = new WeightWayBillBeanAdapter(wayBillBeanList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(madapter);
         }
-        switch (mData.getReWeightFinish()){
+        switch (mData.getReWeightFinish()) {
             case 2:
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
+                tvToCity.setText("目的站:"+mData.getToCityEn());
                 tvNameFront.setText(mData.getScooterCode());
-                tvDeadweightFront.setText(mData.getScooterWeight()+"kg");
-                String mType,mCode,mIata;
+                tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
+                String mType, mCode, mIata;
 
-                if (TextUtils.isEmpty(mData.getUldType())){
+                if (TextUtils.isEmpty(mData.getUldType())) {
                     mType = "-";
-                }else {
+                } else {
                     mType = mData.getUldType();
                 }
-                if (TextUtils.isEmpty(mData.getUldCode())){
+                if (TextUtils.isEmpty(mData.getUldCode())) {
                     mCode = "-";
-                }else {
+                } else {
                     mCode = mData.getUldCode();
                 }
-                if (TextUtils.isEmpty(mData.getIata())){
+                if (TextUtils.isEmpty(mData.getIata())) {
                     mIata = "-";
-                }else {
+                } else {
                     mIata = mData.getIata();
                 }
 
-                tvUld.setText(mType+" "+mCode+" "+mIata);
-                tvUldSelf.setText(mData.getUldWeight()+"kg");
+                tvUld.setText(mType + " " + mCode + " " + mIata);
+                tvUldSelf.setText(mData.getUldWeight() + "kg");
                 //收运净重
-                tvNetweightFront.setText(mData.getWeight()+"kg");
+                tvNetweightFront.setText(mData.getWeight() + "kg");
                 break;
             case 1:
                 ToastUtil.showToast("该板车已复重");
@@ -180,14 +184,14 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 //        ScanManagerActivity.startActivity(this);
         changeClicked(false);
 //        getScooterInfo(mScooterCode);
-        //品名
-        mRemarksList = new ArrayList<>();
+        //备注类型
+        mRemarksList = new ArrayList <>();
         mRemarksList.add("加雨棚");
         mRemarksList.add("加垫板");
         mRemarksList.add("集装器误差");
+        mRemarksList.add("连接杆");
+        mRemarksList.add("轻抛货");
         mRemarksList.add("其他");
-
-
 
         //负重重量
         tvGrossweightFront.addTextChangedListener(new TextWatcher() {
@@ -202,12 +206,12 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             @Override
             public void afterTextChanged(Editable s) {
                 String ss = s.toString();
-                if (TextUtils.isEmpty(ss)){
+                if (TextUtils.isEmpty(ss)) {
                     changeClicked(false);
-                }else {
+                } else {
                     changeClicked(true);
                 }
-                if (TextUtils.isEmpty(ss)||StringUtil.isDouble(ss)){
+                if (TextUtils.isEmpty(ss) || StringUtil.isDouble(ss)) {
                     calculateWeight();
                 }
             }
@@ -225,10 +229,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             @Override
             public void afterTextChanged(Editable s) {
                 String ss = s.toString();
-                if (TextUtils.isEmpty(ss)){
-                    ss ="0";
+                if (TextUtils.isEmpty(ss)) {
+                    ss = "0";
                 }
-                if (StringUtil.isDouble(ss)){
+                if (StringUtil.isDouble(ss)) {
                     calculateWeight();
                 }
             }
@@ -240,7 +244,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_read:
-                if (mData!=null){
+                if (mData != null) {
                     ((GetScooterByScooterCodePresenter) mPresenter).getWeight("pb1");
                 }
                 break;
@@ -260,7 +264,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 获取板车列表信息
      */
     private void getScooterInfo(String scooterCode) {
-        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
+        BaseFilterEntity <GetInfosByFlightIdBean> entity = new BaseFilterEntity();
 //        entity.setUserId(UserInfoSingle.getInstance().getUserId());
         entity.setUserId("weighter");
         ((GetScooterByScooterCodePresenter) mPresenter).getInfosByFlightId(entity);
@@ -270,13 +274,13 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 退回板车
      */
     private void returnScooter() {
-        if (-3<dRate&&dRate<3){
+        if (-3 < dRate && dRate < 3) {
             ToastUtil.showToast("复重差率合格,不能退回");
             return;
         }
-        if (selectorOption ==2){
+        if (selectorOption == 5) {
             mData.setRemark(etOther.getText().toString());
-        }else {
+        } else {
             mData.setRemark(tvScan.getText().toString());
         }
         mData.setReWeight(crossWeight);
@@ -297,31 +301,31 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      */
     private void saveScooter() {
 
-        if (crossWeight<mData.getScooterWeight()){
+        if (crossWeight < mData.getScooterWeight()) {
             ToastUtil.showToast("毛重不能小于板车自重");
             return;
         }
         String textInfo;
-        if (-3>dRate||dRate>3){
+        if (-3 > dRate || dRate > 3) {
             textInfo = "本板复重误差超过±3%，不予放行";
-        }else {
+        } else {
             textInfo = "本次复重正常，是否提交？";
         }
 
-        if (reviseWeight!=0){
-            if (selectorOption ==10){
+        if (reviseWeight != 0) {
+            if (selectorOption == -1) {
                 ToastUtil.showToast("人工干预的情况下备注不能为空");
                 return;
-            }else if (selectorOption ==2){
-                if (TextUtils.isEmpty(etOther.getText().toString())){
-                    ToastUtil.showToast("人工干预的情况下备注不能为空");
-                    return;
-                }else {
+            } else {
+                if (selectorOption == 5) {
+                    if (TextUtils.isEmpty(etOther.getText().toString())){
+                        ToastUtil.showToast("人工干预的情况下备注不能为空");
+                        return;
+                    }
                     mData.setRemark(etOther.getText().toString());
-                    mData.setPersonUpdateValue(reviseWeight);
+                } else {
+                    mData.setRemark(tvScan.getText().toString());
                 }
-            }else {
-                mData.setRemark(tvScan.getText().toString());
                 mData.setPersonUpdateValue(reviseWeight);
             }
         }
@@ -358,18 +362,21 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     /**
      * 备注选择
      */
-    private void showPickView(){
+    private void showPickView() {
         OptionsPickerView pickerView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvScan.setText(mRemarksList.get(options1));
                 selectorOption = options1;
-                switch (options1){
+                switch (options1) {
                     case 0:
                     case 1:
+                    case 2:
+                    case 3:
+                    case 4:
                         llOther.setVisibility(View.GONE);
                         break;
-                    case 2:
+                    case 5:
                         llOther.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -380,122 +387,120 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         pickerView.show();
     }
 
-    /**控制确定按钮是否能够点击
+    /**
+     * 控制确定按钮是否能够点击
      *
      * @param canClick 能否点击
      */
-    private void changeClicked(boolean canClick){
+    private void changeClicked(boolean canClick) {
         btnReturn.setEnabled(canClick);
         btnConfirm.setEnabled(canClick);
-        if (canClick){
+        if (canClick) {
             btnReturn.setTextColor(Color.parseColor("#333333"));
             btnConfirm.setBackgroundColor(Color.parseColor("#2e81fd"));
-        }else {
+        } else {
             btnReturn.setTextColor(Color.parseColor("#bcbcbc"));
             btnConfirm.setBackgroundColor(Color.parseColor("#bcbcbc"));
         }
     }
 
-    /**计算差值差率
-     *
+    /**
+     * 计算差值差率
      */
-    private void calculateWeight(){
+    private void calculateWeight() {
         //获取复磅毛重
         String s1 = tvGrossweightFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s1)){
-            crossWeight =0;
-        }else {
+        if (TextUtils.isEmpty(s1)) {
+            crossWeight = 0;
+        } else {
             crossWeight = Double.valueOf(s1);
         }
         //获取人工干预值
         String s2 = tvReviseFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s2)){
-            reviseWeight =0;
-        }else {
+        if (TextUtils.isEmpty(s2)) {
+            reviseWeight = 0;
+        } else {
             reviseWeight = Double.valueOf(s2);
         }
 
         //复重净重=本次复磅毛重-板车自重-ULD自重-人工干预
 //        goodsWeight = crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight);
-        goodsWeight =CalculateUtil.doubleSave2(crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight));
+        goodsWeight = CalculateUtil.doubleSave2(crossWeight - (mData.getScooterWeight() + mData.getUldWeight() + reviseWeight));
         //复重差值 = 复重净重 - 组板净重
-        dValue =CalculateUtil.doubleSave2(goodsWeight -mData.getWeight());
+        dValue = CalculateUtil.doubleSave2(goodsWeight - mData.getWeight());
 
-        if (!TextUtils.isEmpty(mData.getUldCode()) && mData.getWeight() == 0){ //处理空箱 数据
+        if (!TextUtils.isEmpty(mData.getUldCode()) && mData.getWeight() == 0) { //处理空箱 数据
             dRate = 0;
-        }
-        else {
+        } else {
             //复重差率=（（复重净重-组板净重）/组板净重）*100%
-            dRate =  CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
+            dRate = CalculateUtil.calculateGradient(2, dValue, mData.getWeight());
         }
 
-        if ("ABC".contains(mData.getFlightBody())&&(dValue > 30||dValue< -30)){
+        if ("ABC".contains(mData.getFlightBody()) && (dValue > 30 || dValue < -30)) {
             tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
-        }
-        else if ("EF".contains(mData.getFlightBody())&&(dValue > 50||dValue<-50)){
+        } else if ("EF".contains(mData.getFlightBody()) && (dValue > 50 || dValue < -50)) {
             tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
-        }
-        else
+        } else
             tvDvalueFront.setTextColor(getResources().getColor(R.color.black_3));
 
         //复磅差值
-        tvDvalueFront.setText(dValue+"kg");
+        tvDvalueFront.setText(dValue + "kg");
         //复磅差率
-        tvGradientFront.setText(dRate+"%");
-        if (-3<dRate&&dRate<3){
+        tvGradientFront.setText(dRate + "%");
+        if (-3 < dRate && dRate < 3) {
             tvGradientFront.setTextColor(Color.parseColor("#333333"));
-        }else{
+        } else {
             tvGradientFront.setTextColor(Color.parseColor("#FF0000"));
         }
         //复重净重
-        tvetNweightFz.setText(goodsWeight+"kg");
+        tvetNweightFz.setText(goodsWeight + "kg");
 
 //        //收运净重
 //        tvNetweightFront.setText(goodsWeight+"kg");
     }
 
     @Override
-    public void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+    public void getInfosByFlightIdResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
 
         for (GetInfosByFlightIdBean getInfosByFlightIdBean : getInfosByFlightIdBeans) {
 
-            if (Objects.equals(mScooterCode, getInfosByFlightIdBean.getScooterCode())){
+            if (Objects.equals(mScooterCode, getInfosByFlightIdBean.getScooterCode())) {
                 mData = getInfosByFlightIdBean;
                 break;
             }
         }
-        if (mData == null){
+        if (mData == null) {
             ToastUtil.showToast("无该板车信息");
             finish();
             return;
         }
-        switch (mData.getReWeightFinish()){
+        switch (mData.getReWeightFinish()) {
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
                 tvNameFront.setText(mData.getScooterCode());
-                tvDeadweightFront.setText(mData.getScooterWeight()+"kg");
-                String mType,mCode,mIata;
+                tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
+                String mType, mCode, mIata;
 
-                if (TextUtils.isEmpty(mData.getUldType())){
+                if (TextUtils.isEmpty(mData.getUldType())) {
                     mType = "-";
-                }else {
+                } else {
                     mType = mData.getUldType();
                 }
-                if (TextUtils.isEmpty(mData.getUldCode())){
+                if (TextUtils.isEmpty(mData.getUldCode())) {
                     mCode = "-";
-                }else {
+                } else {
                     mCode = mData.getUldCode();
                 }
-                if (TextUtils.isEmpty(mData.getIata())){
+                if (TextUtils.isEmpty(mData.getIata())) {
                     mIata = "-";
-                }else {
+                } else {
                     mIata = mData.getIata();
                 }
 
-                tvUld.setText(mType+" "+mCode+" "+mIata);
-                tvUldSelf.setText(mData.getUldWeight()+"kg");
+                tvUld.setText(mType + " " + mCode + " " + mIata);
+                tvUldSelf.setText(mData.getUldWeight() + "kg");
                 //收运净重
-                tvNetweightFront.setText(mData.getWeight()+"kg");
+                tvNetweightFront.setText(mData.getWeight() + "kg");
                 break;
             case 1:
                 ToastUtil.showToast("该板车已复重");
@@ -511,6 +516,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
     /**
      * 未使用
+     *
      * @param bean
      */
     @SuppressLint("SetTextI18n")
@@ -531,27 +537,32 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     }
 
     @Override
-    public void saveScooterResult(GetInfosByFlightIdBean result) {
-
-            //提交弹窗
-            CommonDialog dialog = new CommonDialog(this);
-            dialog.setTitle("提示")
-                    .setMessage("航班阈值为："+result.getThreshold()+"kg,复重差值为："+result.getReDifferenceSum()+"kg。")
-                    .setPositiveButton("取消")
-                    .setNegativeButton("确定")
-                    .isCanceledOnTouchOutside(true)
-                    .isCanceled(true)
-                    .setOnClickListener(new CommonDialog.OnClickListener() {
-                        @Override
-                        public void onClick(Dialog dialog, boolean confirm) {
-                            if (confirm) {
-                            } else {
-                            }
-                            ToastUtil.showToast("保存成功");
-                            finish();
-                            EventBus.getDefault().post(Constants.REWEIGHT_DONE);
+    public void saveScooterResult(OverWeightSaveResultBean result) {
+        String content = "";
+        if (result.getReDifferenceSum() > result.getThreshold()) {
+            content = "<font color='yellow'>航班复重差值上限：" + result.getThreshold() + "kg,当前复重差值：" + result.getReDifferenceSum() + "kg。</font>";
+        } else {
+            content = "航班复重差值上限：" + result.getThreshold() + "kg,当前复重差值：" + result.getReDifferenceSum() + "kg。";
+        }
+        //提交弹窗
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitle("提示")
+                .setMessage(content)
+                .setPositiveButton("取消")
+                .setNegativeButton("确定")
+                .isCanceledOnTouchOutside(true)
+                .isCanceled(true)
+                .setOnClickListener(new CommonDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog, boolean confirm) {
+                        if (confirm) {
+                        } else {
                         }
-                    }).show();
+                        ToastUtil.showToast("保存成功");
+                        finish();
+                        EventBus.getDefault().post(Constants.REWEIGHT_DONE);
+                    }
+                }).show();
 //        startActivity(new Intent(this,MainActivity.class));
     }
 
@@ -572,7 +583,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
-        Log.e("2222", "toastView: "+error );
+        Log.e("2222", "toastView: " + error);
     }
 
     @Override
