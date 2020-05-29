@@ -5,13 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import qx.app.freight.qxappfreight.R;
 
-public class InputDialog extends Dialog implements OnClickListener {
+public class InputForStrDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
     private String message;
     private String positiveBtn;
@@ -23,41 +22,41 @@ public class InputDialog extends Dialog implements OnClickListener {
     private TextView positiveTv;
     private TextView negativeTv;
 
-    public InputDialog(Context context) {
+    public InputForStrDialog(Context context) {
         super(context, R.style.CommomDialog);
         this.mContext = context;
         setCanceledOnTouchOutside(false);
     }
 
-    public InputDialog setTitle(String title) {
+    public InputForStrDialog setTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public InputDialog setHint(String message) {
+    public InputForStrDialog setHint(String message) {
         this.message = message;
         return this;
     }
 
     public String getMessage() {
-        if (TextUtils.isEmpty(messageTv.getText().toString())){
+        if (TextUtils.isEmpty(messageTv.getText().toString())) {
             return "";
-        }else {
+        } else {
             return messageTv.getText().toString();
         }
     }
 
-    public InputDialog setPositiveButton(String name) {
+    public InputForStrDialog setPositiveButton(String name) {
         this.positiveBtn = name;
         return this;
     }
 
-    public InputDialog setNegativeButton(String name) {
+    public InputForStrDialog setNegativeButton(String name) {
         this.negativeBtn = name;
         return this;
     }
 
-    public InputDialog setOnClickListener(OnClickListener onClickListener) {
+    public InputForStrDialog setOnClickListener(OnClickListener onClickListener) {
         this.listener = onClickListener;
         return this;
     }
@@ -67,7 +66,7 @@ public class InputDialog extends Dialog implements OnClickListener {
      *
      * @param cancel
      */
-    public InputDialog isCanceledOnTouchOutside(boolean cancel) {
+    public InputForStrDialog isCanceledOnTouchOutside(boolean cancel) {
         setCanceledOnTouchOutside(cancel);
         return this;
     }
@@ -77,7 +76,7 @@ public class InputDialog extends Dialog implements OnClickListener {
      *
      * @param cancel
      */
-    public InputDialog isCanceled(boolean cancel) {
+    public InputForStrDialog isCanceled(boolean cancel) {
         setCancelable(cancel);
         return this;
     }
@@ -132,13 +131,13 @@ public class InputDialog extends Dialog implements OnClickListener {
         switch (v.getId()) {
             case R.id.negativeTv:
                 if (listener != null) {
-                    listener.onClick(this, false);
+                    listener.onClick(this, false, getMessage());
                 }
                 this.dismiss();
                 break;
             case R.id.positiveTv:
                 if (listener != null) {
-                    listener.onClick(this, true);
+                    listener.onClick(this, true, getMessage());
                 }
                 this.dismiss();
                 break;
@@ -146,6 +145,6 @@ public class InputDialog extends Dialog implements OnClickListener {
     }
 
     public interface OnClickListener {
-        void onClick(Dialog dialog, boolean confirm);
+        void onClick(Dialog dialog, boolean confirm, String str);
     }
 }

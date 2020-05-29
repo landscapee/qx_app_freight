@@ -89,6 +89,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
     @BindView(R.id.tv_weight)
     TextView tvWeight;
 
+    @BindView(R.id.et_remark)
+    EditText etRemark;
+
+
     private String insFile;  //报检员资质路径
     private int insCheck; //报检是否合格1合格 0不合格
     private int fileCheck;//资质是否合格1合格 0不合格
@@ -149,11 +153,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         mSportResult = getIntent().getIntExtra("spotResult", -1);
         //货代信息
         mPresenter = new FreightInfoPresenter(this);
-        if (!StringUtil.isEmpty(mDecBean.getFlightName())){
+        if (!StringUtil.isEmpty(mDecBean.getFlightName())) {
             ((FreightInfoPresenter) mPresenter).freightInfo(mDecBean.getFlightName());
             llCollectRequire.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             llCollectRequire.setVisibility(View.GONE);
         }
 
@@ -198,6 +201,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         });
 
         BtnReceiveGood.setOnClickListener(v -> {
+
             mPresenter = new SubmissionPresenter(this);
             if (CbPack.isChecked()) {
                 isPack = 0;
@@ -238,7 +242,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
                 mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
                 mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
             }
+            mStorageCommitEntity.setRemark(etRemark.getText().toString());
             ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
+
+
         });
 
         etReason.addTextChangedListener(new TextWatcher() {
@@ -257,19 +264,42 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
                 mTvStrLength.setText(s.length() + "/50");
             }
         });
+
+        etRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!StringUtil.isEmpty(etRemark.getText().toString())){
+                    mBean.setRemark(etRemark.getText().toString());
+                }
+                else {
+                    mBean.setRemark("");
+                }
+            }
+        });
     }
+
     private void setWaybillInfo(TransportDataBase mBean) {
-        if (mBean!=null){
-            tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
-            tvGoodsName.setText("品名:  "+mBean.getCargoCn());
+        if (mBean != null) {
+            tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
+            tvGoodsName.setText("品名:  " + mBean.getCargoCn());
             if (!StringUtil.isEmpty(mBean.getSpecialCode()))
-                tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
+                tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
             else
                 tvSpecialCode.setText("特货代码:  - -");
-            tvNumber.setText("件数:  "+mBean.getTotalNumber());
-            tvWeight.setText("重量:  "+mBean.getTotalWeight());
-        }
-        else {
+            tvNumber.setText("件数:  " + mBean.getTotalNumber());
+            tvWeight.setText("重量:  " + mBean.getTotalWeight());
+            etRemark.setText(mBean.getRemark());
+        } else {
             tvWaybillCode.setText("运单号:   ");
             tvGoodsName.setText("品名:  ");
             tvSpecialCode.setText("特货代码:  ");
@@ -278,9 +308,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         }
 
     }
+
     //货代公司资质
     @Override
-    public void freightInfoResult(List<MarketCollectionRequireBean> beanList) {
+    public void freightInfoResult(List <MarketCollectionRequireBean> beanList) {
         if (beanList != null) {
             String str = "";
             for (MarketCollectionRequireBean bean : beanList) {
@@ -306,7 +337,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     @Override
     public void toastView(String error) {
-        ToastUtil.showToast(this, error);
+        if (!StringUtil.isEmpty(error))
+            ToastUtil.showToast(error);
     }
 
     @Override

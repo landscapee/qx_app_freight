@@ -53,7 +53,7 @@ public class ToastUtil {
             return;
         }
         if (s.contains("复重差值")) {
-            showDialogWeightOver(context, s);
+            showDialogToast(context, s);
             return;
         }
         if (toast == null) {
@@ -83,16 +83,16 @@ public class ToastUtil {
         if (s == null)
             return;
 
-        showDialogWeightOver(MyApplication.getContext(), s);
+        showDialogToast(MyApplication.getContext(), s);
         return;
     }
 
-    public static void showDialogWeightOver(Context context, String str) {
+    public static void showDialogToast(Context context, String str) {
         //提交弹窗
         CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle("提示")
                 .setMessage(str)
-                .setPositiveButton("取消")
+//                .setPositiveButton("取消")
                 .setNegativeButton("确定")
                 .isCanceledOnTouchOutside(true)
                 .isCanceled(true)

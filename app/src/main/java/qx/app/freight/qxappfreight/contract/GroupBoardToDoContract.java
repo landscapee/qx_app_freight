@@ -18,10 +18,13 @@ public class GroupBoardToDoContract {
         void getGroupBoardToDo(BaseFilterEntity model, IResultLisenter lisenter);
         void getScooterByScooterCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
         void searchWaybillByWaybillCode(BaseFilterEntity baseFilterEntity, IResultLisenter lisenter);
+        void getOverWeightToDo(BaseFilterEntity model, IResultLisenter lisenter);
+
     }
 
     public interface GroupBoardToDoView extends IBaseView {
         void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans);
+        void getOverWeightToDoResult(FilterTransportDateBase transportListBeans);
         void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean);
         void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans);
 

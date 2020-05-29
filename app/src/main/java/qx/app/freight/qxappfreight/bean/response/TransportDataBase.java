@@ -182,6 +182,8 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
 
     private String seat;
 
+    private String remark;
+
     private String aircraftNo;
 
     private List<WaybillCommodities> spWaybillCommodities;

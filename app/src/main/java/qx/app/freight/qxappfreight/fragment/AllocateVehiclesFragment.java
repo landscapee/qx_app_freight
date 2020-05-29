@@ -222,7 +222,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         baseFilterEntity.setFilter(entity);
         baseFilterEntity.setCurrent(pageCurrent);
         baseFilterEntity.setSize(Constants.PAGE_SIZE);
-        ((GroupBoardToDoPresenter) mPresenter).getGroupBoardToDo(baseFilterEntity);
+        ((GroupBoardToDoPresenter) mPresenter).getOverWeightToDo(baseFilterEntity);
 //
 //        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
 //        entity.setUserId("weighter");
@@ -301,6 +301,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     }
 
+    /**
+     * 废弃
+     * @param transportListBeans
+     */
     @Override
     public void getGroupBoardToDoResult(FilterTransportDateBase transportListBeans) {
         if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
@@ -324,6 +328,30 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             ToastUtil.showToast("无更多数据");
         }
 
+    }
+
+    @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+        if (transportListBeans!=null&&transportListBeans.getRecords()!=null){
+            //因为没有分页，不做分页判断
+
+            if (transportListBeans.getCurrent() == 1) {
+                list1.clear();
+                mMfrvAllocateList.finishRefresh();
+            } else {
+                mMfrvAllocateList.finishLoadMore();
+            }
+            pageCurrent = transportListBeans.getCurrent()+1;
+            list1.addAll(transportListBeans.getRecords());
+            if (mTaskFragment != null) {
+                if (isShow)
+                    mTaskFragment.setTitleText(list1.size());
+            }
+            seachWithNum();
+        }
+        else {
+            ToastUtil.showToast("无更多数据");
+        }
     }
 
     @Override

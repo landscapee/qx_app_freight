@@ -384,6 +384,15 @@ public class UpdateRepository extends BaseRepository {
     public Observable<FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
         return transform(getService().getGroupBoardToDo(model));
     }
+    /********
+     * 复重任务代办数据
+     * @param model
+     * @return
+     */
+    public Observable<FilterTransportDateBase> getOverWeightToDo(BaseFilterEntity model) {
+        return transform(getService().getOverWeightToDo(model));
+    }
+
 
     /********
      * 代办收运列表

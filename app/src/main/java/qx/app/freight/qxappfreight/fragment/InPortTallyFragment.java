@@ -326,6 +326,11 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
+    }
+
+    @Override
     public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }

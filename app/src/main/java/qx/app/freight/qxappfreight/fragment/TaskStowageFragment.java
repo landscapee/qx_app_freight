@@ -293,6 +293,11 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     }
 
     @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
+    }
+
+    @Override
     public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }

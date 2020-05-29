@@ -207,6 +207,10 @@ public interface HttpApi {
     @POST("service-base-taskassign/todoCenter/task-todo-info/selectTodoList")
     Observable<BaseEntity<FilterTransportDateBase>> getGroupBoardToDo(@Body BaseFilterEntity model);
 
+    //复重任务代办数据
+    @POST("service-product-cargoweighing/api/selectTodoList")
+    Observable<BaseEntity<FilterTransportDateBase>> getOverWeightToDo(@Body BaseFilterEntity model);
+
     //存储类型变更
     @POST("service-bussiness-baseparam/baseParam/list")
     Observable<BaseEntity<BaseParamBean>> baseParam(@Body BaseFilterEntity model);

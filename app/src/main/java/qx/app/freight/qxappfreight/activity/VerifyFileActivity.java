@@ -8,9 +8,12 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -71,6 +74,10 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
     @BindView(R.id.tv_weight)
     TextView tvWeight;
 
+    @BindView(R.id.et_remark)
+    EditText etRemark;
+
+
     private VerifyFileAdapter mAdapter;
     private List <AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList <>();
     private String mFilePath;
@@ -121,6 +128,28 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
         insCheck = getIntent().getIntExtra("insCheck", 0);
+
+        etRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!StringUtil.isEmpty(etRemark.getText().toString())){
+                    mBean.setRemark(etRemark.getText().toString());
+                }
+                else {
+                    mBean.setRemark("");
+                }
+            }
+        });
 
         if (null != mDecBean.getSpWaybillFile()) {
 
@@ -190,6 +219,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 tvSpecialCode.setText("特货代码:  - -");
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
+            etRemark.setText(mBean.getRemark());
         } else {
             tvWaybillCode.setText("运单号:   ");
             tvGoodsName.setText("品名:  ");
@@ -216,8 +246,56 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 );
                 break;
             case R.id.refuse_tv:
-                mPresenter = new SubmissionPresenter(this);
+//                InputForStrDialog inputForStrDialog = new InputForStrDialog(this);
+//                inputForStrDialog.isCanceledOnTouchOutside(false);
+//                inputForStrDialog.isCanceled(true)
+//                        .setTitle("备注")
+//                        .setHint("输入备注（或者不填写）")
+//                        .setPositiveButton("确定")
+//                        .setNegativeButton("取消");
+//                inputForStrDialog.setOnClickListener(new InputForStrDialog.OnClickListener() {
+//                    @Override
+//                    public void onClick(Dialog dialog, boolean confirm, String result) {
+//                        if (!confirm)
+//                            return;
+//                        mPresenter = new SubmissionPresenter(VerifyFileActivity.this);
+//                        StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
+//                        if (!StringUtil.isEmpty(result)) {
+//                            mStorageCommitEntity.setRemark(result);
+//                        } else {
+//                            mStorageCommitEntity.setRemark(null);
+//                        }
+//                        mStorageCommitEntity.setWaybillId(mBean.getId());
+//                        mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
+//                        mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
+//                        mStorageCommitEntity.setInsUserId(UserInfoSingle.getInstance().getUserId());
+//                        mStorageCommitEntity.setInsFile(mFilePath);
+//                        mStorageCommitEntity.setInsCheck(1);
+//                        mStorageCommitEntity.setFileCheck(1);
+//                        mStorageCommitEntity.setTaskTypeCode(mBean.getTaskTypeCode());
+//                        mStorageCommitEntity.setType(1);
+//                        mStorageCommitEntity.setTaskId(mBean.getTaskId());
+//                        mStorageCommitEntity.setUserId(mDecBean.getFlightNo());
+//                        //新加
+//                        if (null != mAcTestInfoListBean.getFreightInfo()) {
+//                            mStorageCommitEntity.setInsUserHead(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionHead());
+//                            mStorageCommitEntity.setInsUserName(mAcTestInfoListBean.getFreightInfo().get(0).getInspectionName());
+//                            mStorageCommitEntity.setInsUserId(mAcTestInfoListBean.getFreightInfo().get(0).getId());
+//                            mStorageCommitEntity.setInsDangerStart(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookStart());
+//                            mStorageCommitEntity.setInsDangerEnd(mAcTestInfoListBean.getFreightInfo().get(0).getDangerBookEnd());
+//                        }
+//                        if (null != mAcTestInfoListBean.getInsInfo()) {
+//                            mStorageCommitEntity.setInsStartTime(mAcTestInfoListBean.getInsInfo().getInsStartTime());
+//                            mStorageCommitEntity.setInsEndTime(mAcTestInfoListBean.getInsInfo().getInsEndTime());
+//                        }
+//                        ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
+//                    }
+//                });
+//                inputForStrDialog.show();
+
+                mPresenter = new SubmissionPresenter(VerifyFileActivity.this);
                 StorageCommitEntity mStorageCommitEntity = new StorageCommitEntity();
+                mStorageCommitEntity.setRemark(mBean.getRemark());
                 mStorageCommitEntity.setWaybillId(mBean.getId());
                 mStorageCommitEntity.setAddOrderId(mBean.getId());//少了这行代码
                 mStorageCommitEntity.setWaybillCode(mBean.getWaybillCode());
@@ -305,15 +383,15 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 addtionInvoices.setId(documentsBean.getId());
                 addtionInvoices.setFileTypeName(documentsBean.getName());
                 boolean ishave = false;
-                for (AddtionInvoicesBean.AddtionInvoices addtionInvoices1:mList){
-                    if (addtionInvoices1.getId().equals(documentsBean.getId())){
+                for (AddtionInvoicesBean.AddtionInvoices addtionInvoices1 : mList) {
+                    if (addtionInvoices1.getId().equals(documentsBean.getId())) {
                         ishave = true;
                     }
                 }
                 if (!ishave)
                     mList.add(addtionInvoices);
             }
-            if (mList.size()==0) {
+            if (mList.size() == 0) {
                 llContent.setVisibility(View.GONE);
                 mTvWenjian.setVisibility(View.VISIBLE);
             } else {

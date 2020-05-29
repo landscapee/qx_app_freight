@@ -361,6 +361,11 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     }
 
     @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
+    }
+
+    @Override
     public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }

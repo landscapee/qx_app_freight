@@ -171,6 +171,11 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     }
 
     @Override
+    public void getOverWeightToDoResult(FilterTransportDateBase transportListBeans) {
+
+    }
+
+    @Override
     public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
         if (getInfosByFlightIdBeans != null && getInfosByFlightIdBeans.size() > 0) {
 //            if (getInfosByFlightIdBeans.size() == 1){

@@ -40,6 +40,22 @@ public class GroupBoardToDoPresenter extends BasePresenter {
             }
         });
     }
+    public void getOverWeightToDo(BaseFilterEntity model) {
+        mRequestView.showNetDialog();
+        ((GroupBoardToDoListModel) mRequestModel).getOverWeightToDo(model, new IResultLisenter<FilterTransportDateBase>() {
+            @Override
+            public void onSuccess(FilterTransportDateBase transportListBeans) {
+                ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getGroupBoardToDoResult(transportListBeans);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
 
     public void getScooterByScooterCode(BaseFilterEntity airLineId) {
         mRequestView.showNetDialog();
