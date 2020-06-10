@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,9 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     TextView tvDateStart;
     @BindView(R.id.ll_select_date)
     LinearLayout llSelectTime;
+
+    @BindView(R.id.et_flight_no)
+    EditText etFlightNo;
 
     private AllocaaateHistoryAdapter mAdapter;
     private List <GetInfosByFlightIdBean> list;
@@ -84,6 +88,11 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
 
         llSelectTime.setOnClickListener(v -> {
             showDatePickerDialog(this, 2, 0, Calendar.getInstance());
+        });
+
+        //模糊搜索航班号
+        etFlightNo.setOnClickListener(v -> {
+
         });
     }
 

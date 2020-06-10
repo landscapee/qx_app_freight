@@ -369,7 +369,11 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //            mList.set(j,result);
 //        }
 //        mAdapter.notifyDataSetChanged();
-        showDetailsDialog(this, "本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
+        ToastUtil.showToast("本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
+        currentNum = 0;
+        residueNum = 0;
+        getData();
+//        showDetailsDialog(this, "本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
 
     }
 

@@ -5,36 +5,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.AllocaaateHistoryActivity">
+
     <LinearLayout
         android:id="@+id/ll_select_date"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
         android:background="@drawable/shape_rect_gray"
-        android:gravity="center_vertical|right"
-        android:paddingRight="15dp"
-        >
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="15dp">
+
+        <EditText
+            android:id="@+id/et_flight_no"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/shape_rect_gray_line"
+            android:hint="请输入航班号" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/calendar"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:src="@mipmap/calendar" />
+
         <TextView
             android:id="@+id/tv_date_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:textColor="@color/black_3"
-            android:text=""
-            android:hint="请选择开始日期"
             android:layout_marginLeft="5dp"
-            />
+            android:hint="请选择开始日期"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black_3"
+            android:textSize="18sp" />
     </LinearLayout>
+
     <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
         android:id="@+id/mfrv_allocate_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
