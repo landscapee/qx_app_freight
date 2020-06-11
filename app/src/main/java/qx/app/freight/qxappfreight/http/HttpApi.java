@@ -13,6 +13,7 @@ import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SearchFilghtEntity;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
@@ -24,7 +25,6 @@ import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
@@ -108,10 +108,10 @@ import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
+import qx.app.freight.qxappfreight.bean.response.SearchFlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
@@ -315,6 +315,7 @@ public interface HttpApi {
     //航空公司资质
     @GET("service-bussiness-market/collectionRequire/get/{iata}")
     Observable<BaseEntity<List<MarketCollectionRequireBean>>> freightInfo(@Path("iata") String iata);
+
     //获取卸机已扫板车数据
     @GET("tp-task-his/transportTaskScooterQuery/{acdmDtoId}")
     Observable<BaseEntity<List<TransportTodoListBean>>> getUnloadDoneScooter(@Path("acdmDtoId") String acdmDtoId);
@@ -392,6 +393,12 @@ public interface HttpApi {
     @POST("service-product-cargoweighing/scooter/getHistoryScootersPage")
     Observable<BaseEntity<GetHistoryBean>> getHistoryScootersPage(@Body BaseFilterEntity model);
 
+
+    //根据关键字搜索关联航班号列表
+    @POST("service-base-flight/f-flight/searchFlightByParam")
+    Observable<BaseEntity<List<SearchFlightInfoBean>>> searchFlightsByKey(@Body SearchFilghtEntity entity);
+
+
     /***********************运输*****************************/
 
     //扫描板车并锁定 (首件行李  通知运输使用)
@@ -416,7 +423,7 @@ public interface HttpApi {
 
     //扫描板车查询
     @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}/{taskId}")
-    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId,@Path("taskId") String taskId);
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId, @Path("taskId") String taskId);
 
     //进入运输任务 获取该任务下可拉板车的列表
     @GET("service-product-transport/tp-main-info/scooterWithTask/{taskId}")
@@ -504,7 +511,7 @@ public interface HttpApi {
 
     //判断板车是否被扫描上传过
     @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}/{flightId}/{scSubCategory}")
-    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode,@Path("flightId") String flightId,@Path("scSubCategory") String scSubType);
+    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode, @Path("flightId") String flightId, @Path("scSubCategory") String scSubType);
 
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")
@@ -580,7 +587,7 @@ public interface HttpApi {
 
     //查询提货分批出库记录
     @GET("service-product-delivery/delivery/getOutboundList/{waybillId}")
-    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path( "waybillId") String waybillId);
+    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path("waybillId") String waybillId);
 
     //撤销 提货分批出库记录
     @POST(" service-product-delivery/delivery/revokeInboundDelevery")
@@ -597,7 +604,7 @@ public interface HttpApi {
 
     //查询运单叉车使用费记录
     @GET("service-product-delivery/forklift_trunk/listForkliftTrunkInfo/{waybillId}")
-    Observable<BaseEntity<List<ForkliftWorkingCostBean>>> getWaybillForklift(@Path( "waybillId") String waybillId);
+    Observable<BaseEntity<List<ForkliftWorkingCostBean>>> getWaybillForklift(@Path("waybillId") String waybillId);
 
     //添加运单叉车使用费记录
     @POST("service-product-delivery/forklift_trunk/savaForkliftTrunkInfo")
@@ -735,6 +742,7 @@ public interface HttpApi {
     //清库运单模糊查询
     @GET("service-bussiness-warehouse/inventory/listWaybillCode")
     Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
+
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
@@ -818,6 +826,7 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/releaseFlightByFlightId")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+
     /**
      * 重新写入离港系统
      *
@@ -826,7 +835,7 @@ public interface HttpApi {
     @POST("service-product-finishloading/stowage-report-info/repartWriteLoadingInfo")
     Observable<BaseEntity<Object>> repartWriteLoading(@Body BaseFilterEntity entity);
 
-  /**
+    /**
      * 获取装机单或货邮舱单数据
      *
      * @return
@@ -844,7 +853,6 @@ public interface HttpApi {
      */
     @POST("service-product-transport/tp-main-info/restartUnloadTask")
     Observable<BaseEntity<Object>> reOpenLoadTask(@Body BaseFilterEntity entity);
-
 
 
     /****************************已办***********************************/
@@ -886,14 +894,14 @@ public interface HttpApi {
     //获取 出入库列表
     @POST("service-bussiness-warehouse/storage/pageByType")
     Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
+
     //获取 库存列表
     @POST("service-bussiness-warehouse/storage/listAreaInfo")
     Observable<BaseEntity<InventoryBean>> getInventory(@Body BaseFilterEntity entity);
+
     //提交出库入库 单
     @POST("service-bussiness-warehouse/storage/affirmInventory")
     Observable<BaseEntity<Object>> submitIOManifestList(@Body SmInventoryEntryandexit entity);
-
-
 
 
 }

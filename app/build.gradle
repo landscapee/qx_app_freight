@@ -213,7 +213,7 @@ dependencies {
     //自动升级
     api(name: 'VersionUpdateUtils-release', ext: 'aar')
     implementation 'com.jwenfeng.pulltorefresh:library:1.0.3'
-    compileOnly 'org.projectlombok:lombok:1.18.4'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
     implementation files('libs/afinal_0.5.1_bin.jar')
 //    implementation 'com.alibaba:fastjson:1.2.44'
     implementation files('libs/autobahn-0.5.0.jar')

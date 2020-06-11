@@ -13,20 +13,18 @@
         android:background="@drawable/shape_rect_gray"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingRight="15dp">
+        android:paddingHorizontal="10dp">
 
         <EditText
             android:id="@+id/et_flight_no"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
             android:background="@drawable/shape_rect_gray_line"
-            android:hint="请输入航班号" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:hint="请输入航班号"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingHorizontal="@dimen/dp_10" />
 
         <ImageView
             android:layout_width="wrap_content"
