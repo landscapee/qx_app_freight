@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.AllocaaateHistoryActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_select_date"
@@ -18,12 +16,10 @@
         <EditText
             android:id="@+id/et_flight_no"
             android:layout_width="0dp"
-            android:layout_height="40dp"
             android:layout_weight="1"
+            android:layout_height="40dp"
             android:background="@drawable/shape_rect_gray_line"
             android:hint="请输入航班号"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
             android:paddingHorizontal="@dimen/dp_10" />
 
         <ImageView
