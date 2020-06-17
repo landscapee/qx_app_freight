@@ -17,7 +17,6 @@ public class InventoryInfoAdapter extends BaseQuickAdapter<InventoryDetailEntity
     private InventoryInfoListener listener;
     private int num;
     public InventoryInfoAdapter(@Nullable List<InventoryDetailEntity> data,int num) {
-
         super(R.layout.item_inventory_info, data);
         this.num = num;
     }

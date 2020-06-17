@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -18,6 +20,7 @@ import qx.app.freight.qxappfreight.contract.ListInventoryDetailContract;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
 import qx.app.freight.qxappfreight.presenter.ListInventoryDetailPresenter;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
+
 /**
  * 清库-完成-详情
  * Created by swd
@@ -30,7 +33,8 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
     InventoryInfoAdapter infoAdapter; //异常列表数据适配器
     private String taskId;  //任务id
     private String taskTitle; //标题
-    List<InventoryDetailEntity> inventoryDetailEntityList;//提交的异常数组
+    List<InventoryDetailEntity> inventoryDetailEntityList = new ArrayList<>();//提交的异常数组
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_clear_storage_detail;
@@ -55,14 +59,14 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
     private void initView() {
         //第二个列表的初始化
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList,1);
+        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList, 1);
         infoAdapter.setInventoryInfoListener(new InventoryInfoAdapter.InventoryInfoListener() {
             @Override
             public void onLook(int position) {
                 ExceptionDetailDialog detailDialog = new ExceptionDetailDialog.Builder()
                         .inventoryDetailEntity(inventoryDetailEntityList
                                 .get(position)).context(ClearStorageDetailActivity.this).build();
-                detailDialog.show(getSupportFragmentManager(),"222");
+                detailDialog.show(getSupportFragmentManager(), "222");
             }
 
             @Override
@@ -75,7 +79,7 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
 
     private void initData() {
         BaseFilterEntity entity = new BaseFilterEntity();
-        entity.setTaskId(taskId);
+        entity.setInventoryTaskId(taskId);
         ((ListInventoryDetailPresenter) mPresenter).listInventoryDetail(entity);
     }
 
@@ -88,7 +92,7 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
 
     @Override
     public void toastView(String error) {
-
+        Log.d("toastView:", error);
     }
 
     @Override
@@ -98,6 +102,6 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
 
     @Override
     public void dissMiss() {
-            dismissProgessDialog();
+        dismissProgessDialog();
     }
 }

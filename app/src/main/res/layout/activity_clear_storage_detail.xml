@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.ClearStorageDetailActivity">
 
     <!--异常情况列表-->
@@ -66,19 +66,19 @@
             android:background="@color/gray_eff" />
 
         <TextView
-            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="操作"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFEFF2F3">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 
