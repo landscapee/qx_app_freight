@@ -236,10 +236,12 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             }
         }
 
-//        if (counterUbnormalGoodsList.size() ==0){
-//            ToastUtil.showToast("请先新增异常");
-//            return;
-//        }
+        for (InventoryUbnormalGoods bean:counterUbnormalGoodsList){
+            if (bean.getUbnormalNumber()==0){
+                ToastUtil.showToast("请输入异常件数！");
+                return;
+            }
+        }
         if (TextUtils.isEmpty(edtRealSortNum.getText().toString().trim())) {
             ToastUtil.showToast("请输入实际分拣数！");
             return;
@@ -259,7 +261,6 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         } catch (Exception e) {
 
         }
-
 
         //刷新异常上报列表
         inventoryDetailEntityList.add(detailEntity);
