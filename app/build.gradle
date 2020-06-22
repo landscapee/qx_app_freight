@@ -188,7 +188,8 @@ dependencies {
 //    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 //    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
 
-    implementation 'me.devilsen:CZXing:0.9.3'
+//    implementation 'me.devilsen:CZXing:0.9.3'
+    implementation 'me.devilsen:czxing:1.0.11'
 //    implementation 'com.google.zxing:core:3.3.3'
 //    implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
 //    implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
