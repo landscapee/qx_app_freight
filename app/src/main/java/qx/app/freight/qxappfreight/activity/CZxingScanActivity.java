@@ -154,7 +154,7 @@ public class CZxingScanActivity extends Activity implements ScanListener, View.O
         mSoundPoolUtil.play();
 
         if (scanDelegate != null) {
-            scanDelegate.onScanResult(result, format);
+            scanDelegate.onScanResult(this,result, format);
         } else {
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra("result", result);

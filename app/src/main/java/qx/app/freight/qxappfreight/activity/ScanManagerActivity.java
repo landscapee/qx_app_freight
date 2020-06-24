@@ -1,10 +1,13 @@
 package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,9 +45,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  * <p>
  * 2019/2/26
  */
-public class ScanManagerActivity extends BaseActivity  implements ScanListener {
-
-
+public class ScanManagerActivity extends BaseActivity implements ScanListener, SensorEventListener {
     @BindView(R.id.zx_view)
     ScanView mScanView;
     @BindView(R.id.btn_open_flash_light)
@@ -59,16 +60,14 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
     ImageView flashlightClose;
     @BindView(R.id.tv_special)
     TextView tvSpecial;
-
     private Boolean isOpen = false;
-
     private String flag = null;
     //特殊字符，显示在上面
     private String special = null;
-
     private boolean laserAndZxing;//是否是从激光扫描界面过来的
-
     private ScanActivityDelegate.OnScanDelegate scanDelegate;
+    private SensorManager mSensroMgr;//传感器管理类
+
     /**
      * 普通启动
      */
@@ -101,8 +100,7 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
      */
     public static void startActivityFromLaser(Context mContext, String flag) {
         Intent starter = new Intent(mContext, ScanManagerActivity.class);
-        starter.putExtra("flag", flag)
-                .putExtra("laserAndZxing", true);
+        starter.putExtra("flag", flag).putExtra("laserAndZxing", true);
         mContext.startActivity(starter);
     }
 
@@ -118,11 +116,10 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
     }
 
     private void initView() {
-
+        mSensroMgr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "普通扫码");
-
         flag = getIntent().getStringExtra("flag");
         special = getIntent().getStringExtra("special");
         laserAndZxing = getIntent().getBooleanExtra("laserAndZxing", false);
@@ -131,7 +128,6 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
         if (!TextUtils.isEmpty(special)) {
             tvSpecial.setText(special);
         }
-
         btnOpen.setOnClickListener(v -> {
             if (isOpen) {
                 isOpen = false;
@@ -151,26 +147,18 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
                 btnOpen.setText("关闭闪光灯");
             }
         });
-
-        llZxing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //如果laserAndZxing 是true 就是从激光扫码跳转过来的，就直接关闭 回到激光扫码界面
-                if (laserAndZxing) {
-                    finish();
-                } else {
-                    LaserScanActivity.startActivityFromZxing(ScanManagerActivity.this, flag);
-                }
-
+        llZxing.setOnClickListener(v -> {
+            //如果laserAndZxing 是true 就是从激光扫码跳转过来的，就直接关闭 回到激光扫码界面
+            if (laserAndZxing) {
+                finish();
+            } else {
+                LaserScanActivity.startActivityFromZxing(ScanManagerActivity.this, flag);
             }
         });
-        llInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mScanView.onAnalysisBrightness(true);
-                mScanView.onFlashLightClick();
-                showDialog();
-            }
+        llInput.setOnClickListener(v -> {
+            mScanView.onAnalysisBrightness(true);
+            mScanView.onFlashLightClick();
+            showDialog();
         });
     }
 
@@ -185,27 +173,23 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
                 .setNegativeButton("确定")
                 .isCanceledOnTouchOutside(false)
                 .isCanceled(true)
-                .setOnClickListener(new InputDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog, boolean confirm) {
-                        if (confirm) {
+                .setOnClickListener((dialog, confirm) -> {
+                    if (confirm) {
 
+                    } else {
+                        if (TextUtils.isEmpty(dialog1.getMessage())) {
+                            ToastUtil.showToast("输入为空");
                         } else {
-                            if (TextUtils.isEmpty(dialog1.getMessage())) {
-                                ToastUtil.showToast("输入为空");
-                            } else {
-                                getBackMessage(dialog1.getMessage());
-                            }
-
+                            getBackMessage(dialog1.getMessage());
                         }
                     }
-                })
-                .show();
+                }).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mSensroMgr.registerListener(this, mSensroMgr.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_NORMAL);//开启监听传感器
         mScanView.openCamera(); // 打开后置摄像头开始预览，但是并未开始识别
         mScanView.startScan();  // 显示扫描框，并开始识别
     }
@@ -215,6 +199,7 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
         super.onPause();
         mScanView.stopScan();
         mScanView.closeCamera(); // 关闭摄像头预览，并且隐藏扫描框
+        mSensroMgr.unregisterListener(this);//断开监听传感器
     }
 
     @Override
@@ -225,8 +210,9 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
 
     @Override
     public void onScanSuccess(String result, BarcodeFormat format) {
-        if (result!=null)
+        if (result != null) {
             getBackMessage(result);
+        }
         finish();
     }
 
@@ -244,7 +230,6 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
     private void getBackMessage(String result) {
         if (laserAndZxing) {
             EventBus.getDefault().post(new LaserAndZxingBean(result, "laser"));
-
         } else {
             if (flag == null) {
                 Intent intent = new Intent();
@@ -261,12 +246,32 @@ public class ScanManagerActivity extends BaseActivity  implements ScanListener {
         finish();
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
         if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("scan")) {
             getBackMessage(result.getData());
         }
 //        ToastUtil.showToast("扫码数据为空请重新扫码");
+    }
+
+    private boolean openedLight = false;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+            float lightStrength = event.values[0];//光线强度
+            if (lightStrength < 10 && !openedLight) {
+                Log.e("tagTest", "亮度==" + lightStrength + ";打开闪光灯");
+                mScanView.getCameraSurface().openFlashlight();
+                openedLight = true;
+            } else {
+                Log.e("tagTest", "亮度==" + lightStrength + ";关闭闪光灯");
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
