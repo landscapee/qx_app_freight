@@ -45,4 +45,15 @@ public class AddInventoryDetailModel extends BaseModel implements AddInventoryDe
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void getWaybillCode(IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getWaybillCode()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }

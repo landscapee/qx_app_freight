@@ -67,4 +67,20 @@ public class AddInventoryDetailPresenter extends BasePresenter {
             }
         });
     }
+    public void getWaybillCode() {
+        mRequestView.showNetDialog();
+        ((AddInventoryDetailModel) mRequestModel).getWaybillCode( new IResultLisenter<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((AddInventoryDetailContract.addInventoryDetailView) mRequestView).getWaybillCodeResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
 }

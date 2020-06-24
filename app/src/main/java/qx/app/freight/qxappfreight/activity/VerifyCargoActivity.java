@@ -278,10 +278,9 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!StringUtil.isEmpty(etRemark.getText().toString())){
+                if (!StringUtil.isEmpty(etRemark.getText().toString())) {
                     mBean.setRemark(etRemark.getText().toString());
-                }
-                else {
+                } else {
                     mBean.setRemark("");
                 }
             }
@@ -337,8 +336,15 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     @Override
     public void toastView(String error) {
-        if (!StringUtil.isEmpty(error))
-            ToastUtil.showToast(error);
+
+        if (!StringUtil.isEmpty(error)) {
+            if ("318".equals(error)) {
+                setResult(404);
+                finish();
+            } else
+                ToastUtil.showToast(error);
+        }
+
     }
 
     @Override

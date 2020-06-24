@@ -37,6 +37,16 @@
             android:textColor="@color/white"
             android:background="@drawable/btn_blue_press"
             />
+
+        <Button
+            android:id="@+id/btn_no_flag"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:text="无标签"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_blue_press"
+            />
     </LinearLayout>
 
     <TextView

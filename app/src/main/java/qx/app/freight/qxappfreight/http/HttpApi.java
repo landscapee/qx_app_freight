@@ -742,7 +742,9 @@ public interface HttpApi {
     //清库运单模糊查询
     @GET("service-bussiness-warehouse/inventory/listWaybillCode")
     Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
-
+    //从服务器 获取 运单号
+    @GET("service-product-inwaybill/arrival-waybill/generateWBQWaybillCode")
+    Observable<BaseEntity<Object>> getWaybillCode();
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")

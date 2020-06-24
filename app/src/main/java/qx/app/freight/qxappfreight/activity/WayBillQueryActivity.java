@@ -38,8 +38,10 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     RecyclerView mRvSearchResult;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.btn_no_flag)
+    Button btnNoFlag;
 
-    private List<ListWaybillCodeBean.DataBean> resultData = new ArrayList<>();
+    private List <ListWaybillCodeBean.DataBean> resultData = new ArrayList <>();
     private WaybillQueryResultAdapter adapter;
 
     private String taskId;
@@ -68,13 +70,17 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
         });
         btnSure.setOnClickListener(v -> {
-            if (!StringUtil.isEmpty(mEtInputKey.getText().toString())&&mEtInputKey.getText().toString().length()>= 11){
+            if (!StringUtil.isEmpty(mEtInputKey.getText().toString()) && mEtInputKey.getText().toString().length() >= 11) {
                 EventBus.getDefault().post(new WayBillQueryBean(mEtInputKey.getText().toString(), null));
                 finish();
-            }
-            else {
+            } else {
                 ToastUtil.showToast("请输入正确的运单号");
             }
+        });
+
+        btnNoFlag.setOnClickListener(v -> {
+            mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
+            ((AddInventoryDetailPresenter) mPresenter).getWaybillCode();
         });
 
         mEtInputKey.addTextChangedListener(new TextWatcher() {
@@ -91,7 +97,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())) {
-                    if (s.toString().length()>3){
+                    if (s.toString().length() > 3) {
                         mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
                         ((AddInventoryDetailPresenter) mPresenter).listWaybillCode(s.toString(), taskId);
                     }
@@ -117,7 +123,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     public void listWaybillCodeResult(ListWaybillCodeBean listWaybillCodeBean) {
         if ("200".equals(listWaybillCodeBean.getStatus())) {
             resultData.clear();
-            List<ListWaybillCodeBean.DataBean> result = listWaybillCodeBean.getData();
+            List <ListWaybillCodeBean.DataBean> result = listWaybillCodeBean.getData();
             if (result == null || result.size() == 0) {
                 ToastUtil.showToast("未查询到对应的运单数据");
             } else {
@@ -125,6 +131,12 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             }
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void getWaybillCodeResult(String result) {
+        EventBus.getDefault().post(new WayBillQueryBean(result, null));
+        finish();
     }
 
     @Override

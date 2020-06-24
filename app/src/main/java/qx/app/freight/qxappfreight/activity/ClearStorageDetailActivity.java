@@ -59,7 +59,7 @@ public class ClearStorageDetailActivity extends BaseActivity implements ListInve
     private void initView() {
         //第二个列表的初始化
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList, 1);
+        infoAdapter = new InventoryInfoAdapter(inventoryDetailEntityList, 2);
         infoAdapter.setInventoryInfoListener(new InventoryInfoAdapter.InventoryInfoListener() {
             @Override
             public void onLook(int position) {

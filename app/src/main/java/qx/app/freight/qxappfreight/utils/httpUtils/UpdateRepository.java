@@ -1335,6 +1335,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<ListWaybillCodeBean> listWaybillCode(String code, String taskId) {
         return getService().listWaybillCode(code, taskId);
     }
+    /**
+     *  //从服务器 获取 运单号
+     *
+     * @return 成功/失败
+     */
+    public Observable<String> getWaybillCode() {
+        return  nothingDatatransform(getService().getWaybillCode());
+    }
 
     /**
      * 清库列表

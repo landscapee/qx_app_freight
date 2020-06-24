@@ -29,13 +29,14 @@ import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InventoryQueryContract;
 import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
+import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
 /*****
  * 清库功能
  */
-public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView{
+public class ClearStorageFragment extends BaseFragment implements InventoryQueryContract.inventoryQueryView {
     @BindView(R.id.toolbar)
     CustomToolbar mToolBar;
     @BindView(R.id.mfrv_data)
@@ -47,14 +48,16 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     //新的任务
     private ClearStorageAdapter mCSadapter;
-    private List<InventoryQueryBean.RecordsBean> mCSlist;
+    private List <InventoryQueryBean.RecordsBean> mCSlist;
 
     //历史任务
     private ClearHistoryAdapter mCHadapter;
-    private List<InventoryQueryBean.RecordsBean> mCHlist;
+    private List <InventoryQueryBean.RecordsBean> mCHlist;
 
     private int mCurrentPage1 = 1;
     private int mCurrentPage2 = 1;
+
+    private String currentTaskId = null;
 
     @Nullable
     @Override
@@ -70,7 +73,7 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         int rw = 0;
-        if (UserInfoSingle.getInstance().getRoleRS()!=null&&UserInfoSingle.getInstance().getRoleRS().size()!=0) {
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() != 0) {
             for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
                 if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                     rw = 1;
@@ -118,7 +121,9 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         initView();
         //新的任务
         mCSadapter.setOnItemClickListener((adapter, view13, position) -> {
-            interNewAct(position);
+            currentTaskId = mCSlist.get(position).getId();
+            mCurrentPage1 = 1;
+            initData1();
         });
         //历史任务
         mCHadapter.setOnItemClickListener((adapter, view12, position) -> {
@@ -138,22 +143,25 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
                 .putExtra("taskId", mCHlist.get(position).getId()));
     }
 
-    private void interNewAct(int position) {
+    private void interNewAct(InventoryQueryBean.RecordsBean bean) {
         String titleName;
-        if (mCSlist.get(position).getTaskType() == 1) {
+        if (bean.getTaskType() == 1) {
             titleName = "全仓清库";
         } else {
             titleName = "鲜活清库";
         }
+        currentTaskId = null;
         startActivity(new Intent(getContext(), AddClearStorageActivity.class)
                 .putExtra("taskTitle", titleName)
-                .putExtra("taskId", mCSlist.get(position).getId()));
+                .putExtra("taskId", bean.getId()));
+
+
     }
 
 
     private void initView() {
-        mCSlist = new ArrayList<>();
-        mCHlist = new ArrayList<>();
+        mCSlist = new ArrayList <>();
+        mCHlist = new ArrayList <>();
 
         mCSadapter = new ClearStorageAdapter(mCSlist);
         mCHadapter = new ClearHistoryAdapter(mCHlist);
@@ -202,6 +210,19 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
             }
             mCSlist.addAll(inventoryQueryBean.getRecords());
             mCSadapter.notifyDataSetChanged();
+            if (currentTaskId != null) {
+                InventoryQueryBean.RecordsBean selectRecordsBean = null;
+                for (InventoryQueryBean.RecordsBean recordsBean : mCSlist) {
+                    if (currentTaskId.equals(recordsBean.getId())) {
+                        selectRecordsBean = recordsBean;
+                        break;
+                    }
+                }
+                if (selectRecordsBean != null)
+                    interNewAct(selectRecordsBean);
+                else
+                    ToastUtil.showToast("该任务已经完成");
+            }
         }
     }
 

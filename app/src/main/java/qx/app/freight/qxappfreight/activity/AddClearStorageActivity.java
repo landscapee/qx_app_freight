@@ -351,6 +351,11 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     }
 
     @Override
+    public void getWaybillCodeResult(String result) {
+
+    }
+
+    @Override
     public void toastView(String error) {
          ToastUtil.showErrorDialog(error);
     }
