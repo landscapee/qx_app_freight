@@ -155,6 +155,8 @@ public class WaybillsBean implements Serializable {
      */
     private String pickUpGoodsUserCardId;
 
+    private long chargeTime; //缴费时间
+
     /**
      * 运单存放的库区
      */

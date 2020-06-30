@@ -14,7 +14,7 @@ import java.util.TimeZone;
 public class TimeUtils {
 
     /**
-     *获取当前时间
+     * 获取当前时间
      *
      * @return
      */
@@ -33,17 +33,17 @@ public class TimeUtils {
         int day = 0;
         int hour = 0;
         int min = 0;
-        day = (int) time/(24*60);
-        hour = (int)(time - (day*24*60))/60;
-        min = time - (day*24*60) - (hour*60);
+        day = (int) time / (24 * 60);
+        hour = (int) (time - (day * 24 * 60)) / 60;
+        min = time - (day * 24 * 60) - (hour * 60);
         String date = "";
         if (day > 0)
-            date = date+day+"d";
+            date = date + day + "d";
         if (hour > 0)
-            date = date+hour+"h";
+            date = date + hour + "h";
         if (min > 0)
-            date = date+min+"m";
-        if (day == 0&& hour == 0&&min == 0)
+            date = date + min + "m";
+        if (day == 0 && hour == 0 && min == 0)
             date = "<1m";
         return date;
     }
@@ -73,6 +73,7 @@ public class TimeUtils {
         Log.e("time", "time2=" + format.format(date));
         return format.format(date);
     }
+
     /**
      * 年-月-日 时:分:秒
      *
@@ -128,6 +129,7 @@ public class TimeUtils {
 
     /**
      * 将时间戳转为年月日
+     *
      * @param time 毫秒数
      * @return 年-月-日
      */
@@ -200,8 +202,9 @@ public class TimeUtils {
 
     /**
      * 时间戳转换成4位数时间
-     *
+     * <p>
      * HHmm
+     *
      * @param second
      * @return
      */
@@ -255,14 +258,15 @@ public class TimeUtils {
 
     /**
      * 时间戳转换成4位数时间
-     *
+     * <p>
      * HH:mm
+     *
      * @param second 时分间带冒号
      * @return
      */
     public static String date2Tasktime3(Long second) {
 
-        if (second == null||second <= 0) {
+        if (second == null || second <= 0) {
             return "--:--";
         }
         String seconds = (second / 1000) + "";
@@ -316,6 +320,7 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+
     /**
      * 时间戳转换成6位数时间
      *
@@ -385,7 +390,7 @@ public class TimeUtils {
      * @return
      */
     public static String getDay(Long second) {
-        if (second == null||second <= 0) {
+        if (second == null || second <= 0) {
             return "-";
         }
         String seconds = (second / 1000) + "";
@@ -398,6 +403,7 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+
     /**
      * 时间戳获取12:34(05)
      *
@@ -525,6 +531,7 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+
     /**
      * 时间戳转换成年月日
      *
@@ -545,6 +552,7 @@ public class TimeUtils {
         String re = sdf.format(new Date(Long.valueOf(seconds + "000")));
         return re;
     }
+
     /**
      * 年-月-日
      *
@@ -599,6 +607,7 @@ public class TimeUtils {
         int duration = (int) (start - end) / (1000 * 60);
         return duration;
     }
+
     /**
      * 日期转换为时间戳
      */
@@ -614,5 +623,20 @@ public class TimeUtils {
         }
         timeStemp = d.getTime();
         return timeStemp;
+    }
+
+    /**
+     * 日期转换为时间戳
+     */
+    public static long timeToStamp(String timers, String format) {
+        Date d = new Date();
+        try {
+            SimpleDateFormat sf = new SimpleDateFormat(format);
+            d = sf.parse(timers);// 日期转换为时间戳
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return d.getTime();
     }
 }

@@ -56,6 +56,7 @@ public class BaseFilterEntity<T> {
     private String createUser;
     private String areaId;// 库区id
     private int outboundNumber;
+    private long outStorageTime; // 出库时间
     private String  waybillId;
     private String  flightInfoId;
     private String facility;

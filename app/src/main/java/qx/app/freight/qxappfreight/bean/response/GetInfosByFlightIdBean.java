@@ -121,6 +121,8 @@ public class GetInfosByFlightIdBean implements Serializable {
     private double reDifferenceSum;//差值总和
 
     private String toCityEn;//目的站
-
-
+    /**
+     * 航班转运(整板转运): 0. 非航班转运; 1.国际出港转国内出港; 2.国际进港转国内出港; (defualt: 0)
+     */
+    private Integer flightTranssit;
 }

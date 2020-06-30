@@ -210,8 +210,8 @@ public class TaskFragment extends BaseFragment {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
             } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-//                fragmentList.add(new InPortTallyFragment());
-//                list_Title.add("进港分拣");
+                fragmentList.add(new InPortTallyFragment());
+                list_Title.add("进港分拣");
             } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new FlightListBaggerFragment());
                 list_Title.add("行李");
