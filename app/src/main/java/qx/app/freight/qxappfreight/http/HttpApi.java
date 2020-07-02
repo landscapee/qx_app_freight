@@ -27,7 +27,7 @@ import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
-import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
@@ -39,6 +39,7 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
@@ -54,6 +55,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -656,7 +658,7 @@ public interface HttpApi {
      * @return 成功/失败
      */
     @POST("/service-product-cargotallying/sorting/submit")
-    Observable<BaseEntity<Object>> submitWillbillRecord(@Body InWaybillRecordSubmitEntity params);
+    Observable<BaseEntity<Object>> submitWillbillRecord(@Body InWaybillRecordSubmitNewEntity params);
 
     /**
      * 删除分拣信息中的某一条信息 - guohao
@@ -742,9 +744,11 @@ public interface HttpApi {
     //清库运单模糊查询
     @GET("service-bussiness-warehouse/inventory/listWaybillCode")
     Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
+
     //从服务器 获取 运单号
     @GET("service-product-inwaybill/arrival-waybill/generateWBQWaybillCode")
     Observable<BaseEntity<Object>> getWaybillCode();
+
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
@@ -905,5 +909,7 @@ public interface HttpApi {
     @POST("service-bussiness-warehouse/storage/affirmInventory")
     Observable<BaseEntity<Object>> submitIOManifestList(@Body SmInventoryEntryandexit entity);
 
-
+    //根据运单号查数据库，如果库里有此运单号，返回的运单数据
+    @POST("service-product-cargotallying/sorting/getCargoInfoByWaybillCode")
+    Observable<BaseEntity<ArrivalCargoInfoBean>> getWaybillInfoByCode(@Body QueryWaybillInfoEntity entity);
 }

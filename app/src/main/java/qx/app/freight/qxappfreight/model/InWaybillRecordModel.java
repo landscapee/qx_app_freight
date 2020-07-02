@@ -7,13 +7,13 @@ import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
-import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
 /**
  * 进港分拣
- *
+ * <p>
  * create by guohao - 2019/4/25
  */
 public class InWaybillRecordModel extends BaseModel implements InWaybillRecordContract.inWaybillRecordModel {
@@ -23,18 +23,18 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
         Disposable subscription = UpdateRepository.getInstance().getInWaybillRecrodList(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lisenter::onSuccess,throwable->{
+                .subscribe(lisenter::onSuccess, throwable -> {
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);
     }
 
     @Override
-    public void submit(InWaybillRecordSubmitEntity entity, IResultLisenter lisenter) {
+    public void submit(InWaybillRecordSubmitNewEntity entity, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().submitWillbillRecord(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lisenter:: onSuccess, throwable -> {
+                .subscribe(lisenter::onSuccess, throwable -> {
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);
@@ -45,7 +45,7 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
         Disposable subscription = UpdateRepository.getInstance().deleteInWayBillRecordById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lisenter:: onSuccess, throwable -> {
+                .subscribe(lisenter::onSuccess, throwable -> {
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);
@@ -56,7 +56,7 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
         Disposable subscription = UpdateRepository.getInstance().allGoodsArrived(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lisenter:: onSuccess, throwable -> {
+                .subscribe(lisenter::onSuccess, throwable -> {
                     lisenter.onFail(throwable.getMessage());
                 });
         mDisposableList.add(subscription);

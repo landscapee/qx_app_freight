@@ -209,7 +209,7 @@ public class StringUtil {
     }
 
     private static boolean isBlank(String str) {
-        return (str == null || str.trim().length() == 0|| "null".equals(str));
+        return (str == null || str.trim().length() == 0 || "null".equals(str));
     }
 
     /*** 半角转换为全角
@@ -292,7 +292,7 @@ public class StringUtil {
     public static void setTimeAndType(LoadAndUnloadTodoBean bean) {
         String time;
         int timeType;
-        if (bean.getMovement()==1||bean.getMovement()==4){//单进或连进任务
+        if (bean.getMovement() == 1 || bean.getMovement() == 4) {//单进或连进任务
             if (!StringUtil.isTimeNull(String.valueOf(bean.getAta()))) {//实际到达时间
                 time = TimeUtils.getHMDay(bean.getAta());
                 timeType = Constants.TIME_TYPE_AUTUAL;
@@ -303,7 +303,7 @@ public class StringUtil {
                 time = TimeUtils.getHMDay(bean.getSta());
                 timeType = Constants.TIME_TYPE_PLAN;
             }
-        }else {
+        } else {
             if (!StringUtil.isTimeNull(String.valueOf(bean.getAtd()))) {//实际出港时间
                 time = TimeUtils.getHMDay(bean.getAtd());
                 timeType = Constants.TIME_TYPE_AUTUAL;
@@ -391,7 +391,7 @@ public class StringUtil {
      * @return 结果
      */
     public static String getTimeTextByRegix(long timeMillions, String regix) {
-        if(timeMillions <= 0){
+        if (timeMillions <= 0) {
             return "- -";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(regix, Locale.CHINESE);

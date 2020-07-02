@@ -6,6 +6,8 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
+import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.utils.httpUtils.UpdateRepository;
 
@@ -25,6 +27,18 @@ public class ReservoirModel extends BaseModel implements ReservoirContract.reser
     @Override
     public void getAirWaybillPrefix(String iata, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().getAirWaybillPrefix(iata)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+
+        mDisposableList.add(subscription);
+    }
+
+    @Override
+    public void getWaybillInfoByCode(QueryWaybillInfoEntity entity, IResultLisenter<ArrivalCargoInfoBean> lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().getWaybillInfoByCode(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lisenter::onSuccess, throwable -> {

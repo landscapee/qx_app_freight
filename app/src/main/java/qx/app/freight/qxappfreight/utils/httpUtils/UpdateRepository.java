@@ -28,7 +28,7 @@ import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
-import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
@@ -40,6 +40,7 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
@@ -55,6 +56,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -1266,7 +1268,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 所有数据
      * @return 成功/失败
      */
-    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitEntity entity) {
+    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitNewEntity entity) {
         return nothingtransform(getService().submitWillbillRecord(entity));
     }
 
@@ -1335,13 +1337,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<ListWaybillCodeBean> listWaybillCode(String code, String taskId) {
         return getService().listWaybillCode(code, taskId);
     }
+
     /**
-     *  //从服务器 获取 运单号
+     * //从服务器 获取 运单号
      *
      * @return 成功/失败
      */
     public Observable<String> getWaybillCode() {
-        return  nothingDatatransform(getService().getWaybillCode());
+        return nothingDatatransform(getService().getWaybillCode());
     }
 
     /**
@@ -1489,6 +1492,10 @@ public class UpdateRepository extends BaseRepository {
 
     public Observable<String> submitIOManifestList(SmInventoryEntryandexit exceptionContent) {
         return nothingtransform(getService().submitIOManifestList(exceptionContent));
+    }
+
+    public Observable<ArrivalCargoInfoBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
+        return transform(getService().getWaybillInfoByCode(entity));
     }
 }
 

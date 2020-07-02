@@ -4,14 +4,14 @@ import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
-import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
 import qx.app.freight.qxappfreight.model.InWaybillRecordModel;
 
 /**
  * 进港分拣
- *
+ * <p>
  * create by guohao - 2019/4/25
  */
 public class InWaybillRecordPresenter extends BasePresenter {
@@ -21,12 +21,12 @@ public class InWaybillRecordPresenter extends BasePresenter {
         mRequestModel = new InWaybillRecordModel();
     }
 
-    public void getList(InWaybillRecordGetEntity entity){
+    public void getList(InWaybillRecordGetEntity entity) {
         mRequestView.showNetDialog();
-        ((InWaybillRecordModel)mRequestModel).getList(entity, new IResultLisenter<InWaybillRecordBean>() {
+        ((InWaybillRecordModel) mRequestModel).getList(entity, new IResultLisenter<InWaybillRecordBean>() {
             @Override
             public void onSuccess(InWaybillRecordBean bean) {
-                ((InWaybillRecordContract.inWaybillRecordView)mRequestView).resultGetList(bean);
+                ((InWaybillRecordContract.inWaybillRecordView) mRequestView).resultGetList(bean);
                 mRequestView.dissMiss();
             }
 
@@ -38,11 +38,11 @@ public class InWaybillRecordPresenter extends BasePresenter {
         });
     }
 
-    public void submit(InWaybillRecordSubmitEntity entity){
-        ((InWaybillRecordModel)mRequestModel).submit(entity, new IResultLisenter() {
+    public void submit(InWaybillRecordSubmitNewEntity entity) {
+        ((InWaybillRecordModel) mRequestModel).submit(entity, new IResultLisenter() {
             @Override
             public void onSuccess(Object o) {
-                ((InWaybillRecordContract.inWaybillRecordView)mRequestView).resultSubmit(o);
+                ((InWaybillRecordContract.inWaybillRecordView) mRequestView).resultSubmit(o);
             }
 
             @Override
@@ -53,11 +53,11 @@ public class InWaybillRecordPresenter extends BasePresenter {
         });
     }
 
-    public void deleteById(String id){
-        ((InWaybillRecordModel)mRequestModel).deleteById(id, new IResultLisenter() {
+    public void deleteById(String id) {
+        ((InWaybillRecordModel) mRequestModel).deleteById(id, new IResultLisenter() {
             @Override
             public void onSuccess(Object o) {
-                ((InWaybillRecordContract.inWaybillRecordView)mRequestView).resultDeleteById(o);
+                ((InWaybillRecordContract.inWaybillRecordView) mRequestView).resultDeleteById(o);
             }
 
             @Override
@@ -67,11 +67,12 @@ public class InWaybillRecordPresenter extends BasePresenter {
             }
         });
     }
-    public void allGoodsArrived(InWaybillRecord data){
-        ((InWaybillRecordModel)mRequestModel).allGoodsArrived(data, new IResultLisenter<String>() {
+
+    public void allGoodsArrived(InWaybillRecord data) {
+        ((InWaybillRecordModel) mRequestModel).allGoodsArrived(data, new IResultLisenter<String>() {
             @Override
             public void onSuccess(String o) {
-                ((InWaybillRecordContract.inWaybillRecordView)mRequestView).allGoodsArrivedResult(o);
+                ((InWaybillRecordContract.inWaybillRecordView) mRequestView).allGoodsArrivedResult(o);
             }
 
             @Override
