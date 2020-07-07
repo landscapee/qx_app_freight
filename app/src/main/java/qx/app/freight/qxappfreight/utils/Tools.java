@@ -1,24 +1,28 @@
 package qx.app.freight.qxappfreight.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.jwenfeng.library.pulltorefresh.util.DisplayUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -112,6 +116,7 @@ public class Tools {
         String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, "");
         return loginName;
     }
+
     public static String getPassword() {
         String password = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, "");
         return password;
@@ -156,8 +161,8 @@ public class Tools {
         }
     }
 
-    public static List <MultipartBody.Part> filesToMultipartBodyParts(List <File> files) {
-        List <MultipartBody.Part> parts = new ArrayList <>(files.size());
+    public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
+        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
         for (File file : files) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             //"files"与后台 沟通后 确定的 接收 key
@@ -213,7 +218,7 @@ public class Tools {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static <T> ArrayList <T> deepCopy(ArrayList <T> src) throws IOException, ClassNotFoundException {
+    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -221,7 +226,7 @@ public class Tools {
         ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
         ObjectInputStream in = new ObjectInputStream(byteIn);
         @SuppressWarnings("unchecked")
-        ArrayList <T> dest = (ArrayList <T>) in.readObject();
+        ArrayList<T> dest = (ArrayList<T>) in.readObject();
         return dest;
     }
 
@@ -286,7 +291,7 @@ public class Tools {
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(ACTIVITY_SERVICE);
-        List <ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
         if (appProcesses == null)
             return false;
@@ -374,7 +379,7 @@ public class Tools {
      */
     public static void startShortSound(Context context) {
         try {
-            Uri  uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.beep);
+            Uri uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.beep);
 //            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
             r.play();
@@ -592,5 +597,45 @@ public class Tools {
         } else
             spCode = "";
         return spCode;
+    }
+
+    /**
+     * 用于展示指示器的RecylerView始终居中显示
+     *
+     * @param num  list的size,也就是多少个item
+     * @param view recyclerView
+     */
+    public static void setRecyclerViewCenterHor(Activity context, int num, View view) {
+        int interval = DisplayUtil.dp2Px(context, 20);//每个item之间的间隔宽度(px)，可以随便写值
+        int itemWidth = DisplayUtil.dp2Px(context, 30);//每个item之间的间隔宽度(px)，可以随便写值
+        WindowManager wm = context.getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();
+        if (num < 6) {
+            int padding = (width - num * (interval + itemWidth)) / 2 - 30;
+            view.setPadding(padding, 0, padding, 0);
+        }
+    }
+
+    /**
+     * 快速定位到第几条数据
+     *
+     * @param view 控件
+     * @param n    位置
+     */
+    public static void scroll2Position(RecyclerView view, int n) {
+        LinearLayoutManager manager = (LinearLayoutManager) view.getLayoutManager();
+        if (manager == null) {
+            return;
+        }
+        int firstItem = manager.findFirstVisibleItemPosition();
+        int lastItem = manager.findLastVisibleItemPosition();
+        if (n <= firstItem) {
+            view.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = view.getChildAt(n - firstItem).getTop();
+            view.scrollBy(0, top);
+        } else {
+            view.scrollToPosition(n);
+        }
     }
 }

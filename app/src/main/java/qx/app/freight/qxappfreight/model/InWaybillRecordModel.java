@@ -5,7 +5,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
-import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.contract.InWaybillRecordContract;
@@ -52,7 +51,7 @@ public class InWaybillRecordModel extends BaseModel implements InWaybillRecordCo
     }
 
     @Override
-    public void allGoodsArrived(InWaybillRecord data, IResultLisenter lisenter) {
+    public void allGoodsArrived(InWaybillRecordSubmitNewEntity.SingleLineBean data, IResultLisenter lisenter) {
         Disposable subscription = UpdateRepository.getInstance().allGoodsArrived(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.presenter;
 import qx.app.freight.qxappfreight.app.BasePresenter;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
@@ -52,9 +53,9 @@ public class ReservoirPresenter extends BasePresenter {
 
     public void getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
         mRequestView.showNetDialog();
-        ((ReservoirModel) mRequestModel).getWaybillInfoByCode(entity, new IResultLisenter<ArrivalCargoInfoBean>() {
+        ((ReservoirModel) mRequestModel).getWaybillInfoByCode(entity, new IResultLisenter<InWaybillRecordSubmitNewEntity.SingleLineBean>() {
             @Override
-            public void onSuccess(ArrivalCargoInfoBean result) {
+            public void onSuccess(InWaybillRecordSubmitNewEntity.SingleLineBean result) {
                 ((ReservoirContract.reservoirView) mRequestView).getWaybillInfoByCodeResult(result);
                 mRequestView.dissMiss();
             }

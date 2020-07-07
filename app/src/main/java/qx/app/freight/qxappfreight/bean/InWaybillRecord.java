@@ -22,9 +22,6 @@ import lombok.Data;
  */
 @Data
 public class InWaybillRecord implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
     /**
      * 进港运单记录ID
      */
@@ -77,7 +74,7 @@ public class InWaybillRecord implements Serializable {
 
     /**
      * ?
-     * 特货代码
+     * 特货代码======================================================
      */
     private String specialCargoCode;
 
@@ -107,25 +104,25 @@ public class InWaybillRecord implements Serializable {
 
     /**
      * ?
-     * 代理人(货代公司)ID
+     * 代理人(货代公司)ID============
      */
     private String forwarderId;
 
     /**
      * ?
-     * 代理人(货代公司) 代码
+     * 代理人(货代公司) 代码==============
      */
     private String forwarderCode;
 
     /**
      * ?
-     * 代理人(货代公司)名称
+     * 代理人(货代公司)名称===============
      */
     private String forwarderName;
 
     /**
      * ?
-     * 代理人(货代公司)电话
+     * 代理人(货代公司)电话==============
      */
     private String forwarderPhone;
 
@@ -256,12 +253,12 @@ public class InWaybillRecord implements Serializable {
     private BigDecimal tallyingWeight;
 
     /**
-     * 运单状态
+     * 运单状态===============
      */
     private Integer waybillStatus;
 
     /**
-     * 运单号扫描图图片URL
+     * 运单号扫描图图片URL===========
      */
     private String waybillCodeScanUrl;
 

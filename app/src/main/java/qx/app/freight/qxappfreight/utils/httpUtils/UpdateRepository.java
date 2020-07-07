@@ -10,7 +10,6 @@ import okhttp3.RequestBody;
 import qx.app.freight.qxappfreight.bean.CargoUploadBean;
 import qx.app.freight.qxappfreight.bean.GetWaybillInfoByIdDataBean;
 import qx.app.freight.qxappfreight.bean.GoodsIdEntity;
-import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
@@ -119,6 +118,7 @@ import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillQuickGetBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -1268,8 +1268,8 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 所有数据
      * @return 成功/失败
      */
-    public Observable<String> submitWillbillRecord(InWaybillRecordSubmitNewEntity entity) {
-        return nothingtransform(getService().submitWillbillRecord(entity));
+    public Observable<BaseEntity<Object>> submitWillbillRecord(InWaybillRecordSubmitNewEntity entity) {
+        return getService().submitWillbillRecord(entity);
     }
 
     /**
@@ -1288,8 +1288,8 @@ public class UpdateRepository extends BaseRepository {
      * @param data 需要通知已全部到齐的数据
      * @return 成功/失败
      */
-    public Observable<String> allGoodsArrived(InWaybillRecord data) {
-        return nothingDatatransform(getService().allGoodsArrived(data));
+    public Observable<WaybillQuickGetBean> allGoodsArrived(InWaybillRecordSubmitNewEntity.SingleLineBean data) {
+        return getService().allGoodsArrived(data);
     }
 
     /**
@@ -1494,7 +1494,7 @@ public class UpdateRepository extends BaseRepository {
         return nothingtransform(getService().submitIOManifestList(exceptionContent));
     }
 
-    public Observable<ArrivalCargoInfoBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
+    public Observable<InWaybillRecordSubmitNewEntity.SingleLineBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
         return transform(getService().getWaybillInfoByCode(entity));
     }
 }

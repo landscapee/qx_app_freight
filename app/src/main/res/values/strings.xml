@@ -49,4 +49,7 @@
     <string name="format_return_name_number">%1$s|%2$d件</string>
     <string name="format_return_reason">原因： %1$s</string>
     <string name="alphabet_and_number">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-</string>
+    <string name="format_inbound_sorting_title">%1$s理货\n%2$s</string>
+    <string name="format_waybill_total_info">总运单数：%1$d 总件数：%2$d</string>
+    <string name="format_inbound_sorting_total">货物总计:件数:%1$d重量:%2$1.1f分拣件数:%3$d分拣重量:%4$1.1f\n邮件总计:件数:%5$d重量:%6$1.1f分拣件数:%7$d分拣重量:%8$1.1f\n总计:件数：%9$d重量:%10$1.1f分拣件数:%11$d分拣重量:%12$1.1f</string>
 </resources>

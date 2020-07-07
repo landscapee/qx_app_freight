@@ -26,7 +26,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <EditText
@@ -55,6 +55,16 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="8" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/dp_3"
+            android:text="+无运单"
+            android:gravity="center"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:id="@+id/tv_add_nowaybill_goods"/>
     </LinearLayout>
 
     <!-- 实际分拣数量 -->
@@ -137,7 +147,7 @@
                 android:background="@color/transparent"
                 android:gravity="end"
                 android:hint="请输入"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLength="5" />
         </LinearLayout>
     </LinearLayout>
@@ -192,6 +202,7 @@
         android:background="@drawable/shape_rect_gray_bottom"
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_13"
+        android:visibility="gone"
         android:paddingRight="@dimen/dp_13"
         android:paddingBottom="@dimen/dp_13">
 

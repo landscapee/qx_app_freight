@@ -21,7 +21,6 @@ public class ListReservoirInfoPresenter extends BasePresenter {
     }
 
     public void listReservoirInfoByCode(String deptCode){
-
         mRequestView.showNetDialog();
         ((ListReservoirInfoModel)mRequestModel).listReservoirInfo(deptCode, new IResultLisenter<List<ReservoirArea>>() {
             @Override

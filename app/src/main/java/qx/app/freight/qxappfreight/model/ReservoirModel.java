@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers;
 import qx.app.freight.qxappfreight.app.BaseModel;
 import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
@@ -37,7 +38,7 @@ public class ReservoirModel extends BaseModel implements ReservoirContract.reser
     }
 
     @Override
-    public void getWaybillInfoByCode(QueryWaybillInfoEntity entity, IResultLisenter<ArrivalCargoInfoBean> lisenter) {
+    public void getWaybillInfoByCode(QueryWaybillInfoEntity entity, IResultLisenter<InWaybillRecordSubmitNewEntity.SingleLineBean> lisenter) {
         Disposable subscription = UpdateRepository.getInstance().getWaybillInfoByCode(entity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

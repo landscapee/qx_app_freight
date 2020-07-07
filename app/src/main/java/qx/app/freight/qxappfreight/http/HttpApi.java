@@ -120,6 +120,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.WaybillQuickGetBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
@@ -676,7 +677,7 @@ public interface HttpApi {
      * @return 成功/失败
      */
     @POST("service-product-cargotallying/sorting/saveRecord")
-    Observable<BaseEntity<Object>> allGoodsArrived(@Body InWaybillRecord data);
+    Observable<WaybillQuickGetBean> allGoodsArrived(@Body InWaybillRecordSubmitNewEntity.SingleLineBean data);
 
 
     /***********************消息中心*****************************/
@@ -911,5 +912,5 @@ public interface HttpApi {
 
     //根据运单号查数据库，如果库里有此运单号，返回的运单数据
     @POST("service-product-cargotallying/sorting/getCargoInfoByWaybillCode")
-    Observable<BaseEntity<ArrivalCargoInfoBean>> getWaybillInfoByCode(@Body QueryWaybillInfoEntity entity);
+    Observable<BaseEntity<InWaybillRecordSubmitNewEntity.SingleLineBean>> getWaybillInfoByCode(@Body QueryWaybillInfoEntity entity);
 }

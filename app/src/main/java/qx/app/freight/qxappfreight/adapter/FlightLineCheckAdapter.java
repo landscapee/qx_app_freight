@@ -27,10 +27,10 @@ public class FlightLineCheckAdapter extends BaseQuickAdapter<FlightLineBean, Bas
         TextView textView = helper.getView(R.id.tv_flight_line);
         textView.setText(item.getLine());
         if (item.isCheck()) {
-            textView.setBackgroundColor(Color.RED);
+            textView.setBackgroundColor(Color.GREEN);
             textView.setTextColor(Color.WHITE);
         } else {
-            textView.setBackgroundColor(Color.GRAY);
+            textView.setBackgroundColor(Color.RED);
             textView.setTextColor(Color.BLACK);
         }
     }

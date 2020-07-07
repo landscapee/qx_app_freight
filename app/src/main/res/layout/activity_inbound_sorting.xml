@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_flight_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_gravity="center_vertical" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/main_line" />
+
+    <TextView
+        android:id="@+id/tv_total_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dp_5"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_10"
+        tools:text="@string/format_inbound_sorting_total" />
+
+    <LinearLayout
+        android:id="@+id/ll_re_weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_13"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_13"
+            android:text=" * "
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="整机复重重量"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edt_re_weight"
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="end"
+                android:hint="请输入"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:singleLine="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/main_line" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_waybill_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginVertical="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="match_parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_slide_index"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:fadeScrollbars="true"
+                    android:scrollbarSize="@dimen/dp_1"
+                    android:scrollbarThumbVertical="@color/blue"
+                    android:scrollbars="horizontal" />
+
+                <Space
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_data_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无数据" />
+
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_4">
+
+        <Button
+            android:id="@+id/btn_temp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="暂存并同步录单数据"
+            android:textColor="@color/black" />
+
+        <Space
+            android:layout_width="@dimen/dp_5"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_dynamic_blue"
+            android:text="提交"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>
