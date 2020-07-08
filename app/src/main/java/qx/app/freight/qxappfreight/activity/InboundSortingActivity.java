@@ -34,7 +34,6 @@ import qx.app.freight.qxappfreight.adapter.InboundSortingAdapter;
 import qx.app.freight.qxappfreight.adapter.PagedIndexAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.FlightLineBean;
-import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.PagedIndexBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -99,6 +98,7 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
     private PagedIndexAdapter indexAdapter;
     private String changedWaybillCode;
     private boolean showFinishActivity = false;
+    private int currentPos = -1;
 
     @Override
     public int getLayoutId() {
@@ -115,6 +115,8 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         setListener();
         getBaseData();
     }
+
+    private boolean showStore = false;
 
     /**
      * 设置暂存和提交按钮监听
@@ -167,7 +169,8 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
                     .isCanceled(true)
                     .setOnClickListener((dialog12, confirm) -> {
                         if (confirm) {
-                            requestEntity.setFlag(1);
+                            showStore = true;
+                            requestEntity.setFlag(0);
                             showFinishActivity = true;
                             ((InWaybillRecordPresenter) mPresenter).submit(requestEntity);
                         }
@@ -184,62 +187,36 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         rvWaybillList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvWaybillList.setAdapter(adapter);
         setEmptyShow();
-        adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (resultBean.getCloseFlag() == 1) {
-                ToastUtil.showToast("运单已经关闭，无法编辑！");
-                return;
-            }
-            Intent intent = new Intent(InboundSortingActivity.this, SortingAddActivity.class);
-            intent.putExtra("type", TYPE_UPDATE_WAYBILL);
-            intent.putExtra("flight_info_id", baseData.getFlightInfoId());
-            InWaybillRecordSubmitNewEntity.SingleLineBean updateInWaybillRecord = showWaybillList.get(position);
-            changedWaybillCode = updateInWaybillRecord.getWaybillCode();
-            intent.putExtra("data", updateInWaybillRecord);
-            Bundle bundle = new Bundle();
-            if (reservoirList.size() > 0) {
-                bundle.putSerializable("reservoir_list", (Serializable) reservoirList);
-            } else {
-                ToastUtil.showToast("未获取到库区");
-                return;
-            }
-            intent.putExtras(bundle);
-            InboundSortingActivity.this.startActivityForResult(intent, 2);
-        });
-        adapter.setOnChildClickListener((pos, isDelete) -> {
-            if (isDelete) {
-                CommonDialog dialog = new CommonDialog(InboundSortingActivity.this);
-                dialog.setTitle("提示")
-                        .setMessage("确认删除？")
-                        .setPositiveButton("确定")
-                        .setNegativeButton("取消")
-                        .isCanceledOnTouchOutside(false)
-                        .isCanceled(true)
-                        .setOnClickListener((dialog12, confirm) -> {
-                            if (confirm) {
-                                InWaybillRecordSubmitNewEntity.SingleLineBean data = showWaybillList.remove(pos);
-                                setTotalSelectShow(true, data);
-                                List<InWaybillRecordSubmitNewEntity.SingleLineBean> changedList = requestEntity.getCargos().get(selectLine);
-                                Objects.requireNonNull(changedList).remove(data);
-                                setDataShow();
-                            }
-                        })
-                        .show();
-            } else {
-                CommonDialog dialog = new CommonDialog(InboundSortingActivity.this);
-                dialog.setTitle("提示")
-                        .setMessage("确定单票快提吗？")
-                        .setPositiveButton("确定")
-                        .setNegativeButton("取消")
-                        .isCanceledOnTouchOutside(false)
-                        .isCanceled(true)
-                        .setOnClickListener((dialog12, confirm) -> {
-                            if (confirm) {
-                                mPresenter = new InWaybillRecordPresenter(InboundSortingActivity.this);
-                                InWaybillRecordSubmitNewEntity.SingleLineBean entity = showWaybillList.get(pos);
-                                ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(entity);
-                            }
-                        })
-                        .show();
+        adapter.setOnChildClickListener((pos, type) -> {
+            switch (type) {
+                case InboundSortingAdapter.CLICK_TYPE_COMMIT:
+                    showMultiDialog(pos, InboundSortingAdapter.CLICK_TYPE_COMMIT);
+                    break;
+                case InboundSortingAdapter.CLICK_TYPE_DELETE:
+                    showMultiDialog(pos, InboundSortingAdapter.CLICK_TYPE_DELETE);
+                    break;
+                case InboundSortingAdapter.CLICK_TYPE_MODIFY:
+                default:
+                    if (resultBean.getCloseFlag() == 1) {
+                        ToastUtil.showToast("运单已经关闭，无法编辑！");
+                        return;
+                    }
+                    Intent intent = new Intent(InboundSortingActivity.this, SortingAddActivity.class);
+                    intent.putExtra("type", TYPE_UPDATE_WAYBILL);
+                    intent.putExtra("flight_info_id", baseData.getFlightInfoId());
+                    InWaybillRecordSubmitNewEntity.SingleLineBean updateInWaybillRecord = showWaybillList.get(pos);
+                    changedWaybillCode = updateInWaybillRecord.getWaybillCode();
+                    intent.putExtra("data", updateInWaybillRecord);
+                    Bundle bundle = new Bundle();
+                    if (reservoirList.size() > 0) {
+                        bundle.putSerializable("reservoir_list", (Serializable) reservoirList);
+                    } else {
+                        ToastUtil.showToast("未获取到库区");
+                        return;
+                    }
+                    intent.putExtras(bundle);
+                    InboundSortingActivity.this.startActivityForResult(intent, 2);
+                    break;
             }
         });
         for (int i = 1; i <= showWaybillList.size(); i++) {
@@ -261,6 +238,7 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
                         index.setChecked(false);
                     }
                     slideIndexList.get(position).setChecked(true);
+                    currentPos = position;
                     indexAdapter.notifyDataSetChanged();
                     Tools.scroll2Position(rvSlideIndex, position);
                 }));
@@ -272,6 +250,57 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
             indexAdapter.notifyDataSetChanged();
             Tools.scroll2Position(rvWaybillList, position);
         });
+    }
+
+    /**
+     * 点击单票快提和删除按钮弹窗,接口返回弹窗
+     *
+     * @param pos  操作数据下标
+     * @param type 操作的类型值
+     */
+    private void showMultiDialog(int pos, int type) {
+        CommonDialog dialogCommit = new CommonDialog(InboundSortingActivity.this);
+        String title = null;
+        switch (type) {
+            case InboundSortingAdapter.CLICK_TYPE_COMMIT:
+                title = "确定单票快提吗？";
+                break;
+            case InboundSortingAdapter.CLICK_TYPE_DELETE:
+                title = "确认删除？";
+                break;
+            case -1:
+                title = "确认退出？";
+                break;
+        }
+        dialogCommit.setTitle("提示")
+                .setMessage(title)
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
+                .isCanceledOnTouchOutside(false)
+                .isCanceled(true)
+                .setOnClickListener((dialog12, confirm) -> {
+                    if (confirm) {
+                        switch (type) {
+                            case InboundSortingAdapter.CLICK_TYPE_COMMIT:
+                                mPresenter = new InWaybillRecordPresenter(InboundSortingActivity.this);
+                                InWaybillRecordSubmitNewEntity.SingleLineBean entity = showWaybillList.get(pos);
+                                ((InWaybillRecordPresenter) mPresenter).allGoodsArrived(entity);
+                                break;
+                            case InboundSortingAdapter.CLICK_TYPE_DELETE:
+                                InWaybillRecordSubmitNewEntity.SingleLineBean data = showWaybillList.remove(pos);
+                                setTotalSelectShow(true, data);
+                                List<InWaybillRecordSubmitNewEntity.SingleLineBean> changedList = requestEntity.getCargos().get(selectLine);
+                                Objects.requireNonNull(changedList).remove(data);
+                                setDataShow();
+                                break;
+                            case -1:
+                            default:
+                                InboundSortingActivity.this.finish();
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -421,13 +450,15 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
                 for (int i = 0; i < sortedList.size(); i++) {
                     FlightLineBean lineBean = new FlightLineBean();
                     lineBean.setLine(bean.getRoute().get(i));
-                    lineBean.setCheck(i == 0);
+                    lineBean.setCheck((TextUtils.isEmpty(selectLine) ? (i == 0) : selectLine.equals(lineBean.getLine())));
                     list.add(lineBean);
                 }
                 rvFlightLine.setLayoutManager(new LinearLayoutManager(InboundSortingActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 FlightLineCheckAdapter adapter = new FlightLineCheckAdapter(list);
                 rvFlightLine.setAdapter(adapter);
-                selectLine = list.get(0).getLine();
+                if (TextUtils.isEmpty(selectLine)) {
+                    selectLine = list.get(0).getLine();
+                }
                 adapter.setOnItemClickListener((adapter1, view, position) -> {
                     selectLine = list.get(position).getLine();
                     for (FlightLineBean bean1 : list) {
@@ -463,7 +494,7 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         for (int i = 1; i <= showWaybillList.size(); i++) {
             PagedIndexBean pageBean = new PagedIndexBean();
             pageBean.setIndex(String.valueOf(i));
-            pageBean.setChecked(i == 1);
+            pageBean.setChecked((currentPos == -1) ? (i == 1) : (currentPos + 1 == i));
             slideIndexList.add(pageBean);
         }
         indexAdapter.notifyDataSetChanged();
@@ -481,12 +512,12 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         int goodsTotalNum = 0, goodsSelectedNum = 0, mailTotalNum = 0, mailSelectedNum = 0;
         double goodsTotalWeight = 0, goodsSelectedWeight = 0, mailTotalWeight = 0, mailSelectedWeight = 0;
         HashMap<String, List<InWaybillRecordSubmitNewEntity.SingleLineBean>> cargo = requestEntity.getCargos();
-        if (cargo!=null){
-            for (String key:cargo.keySet()){
+        if (cargo != null) {
+            for (String key : cargo.keySet()) {
                 List<InWaybillRecordSubmitNewEntity.SingleLineBean> lineDataList = cargo.get(key);
-                if (lineDataList!=null) {
+                if (lineDataList != null) {
                     for (InWaybillRecordSubmitNewEntity.SingleLineBean record : lineDataList) {
-                        if ("C".equals(record.getMailType())||TextUtils.isEmpty(record.getMailType())) {
+                        if ("C".equals(record.getMailType()) || TextUtils.isEmpty(record.getMailType())) {
                             goodsTotalNum += record.getTotalNumber();
                             goodsTotalWeight += record.getTotalWeight();
                             goodsSelectedNum += record.getTallyingTotal();
@@ -534,18 +565,23 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
     @Override
     public void resultSubmit(BaseEntity<Object> o) {
         Log.e("tagTest", "提交/暂存，返回值：" + o.toString());
-        if ("200".equals(o.getStatus())){
-            ToastUtil.showToast("成功");
-            EventBus.getDefault().post("InPortTallyFragment_refresh");//发送消息让前一个页面刷新
-            getBaseData();
-            if (showFinishActivity) {
-                finish();
+        if (showStore) {
+            requestEntity.setFlag(1);
+            showStore = false;
+            ((InWaybillRecordPresenter) mPresenter).submit(requestEntity);
+        } else {
+            if ("200".equals(o.getStatus())) {
+                ToastUtil.showToast("成功");
+                getBaseData();
+                if (showFinishActivity) {
+                    showMultiDialog(-1, -1);
+                }
+            } else {
+                ToastUtil.showToast(o.getMessage());
+                showMultiDialog(-1, -1);
             }
-        }else {
-            ToastUtil.showToast(o.getMessage());
-            finish();
+            EventBus.getDefault().post("InPortTallyFragment_refresh");//发送消息让前一个页面刷新
         }
-
     }
 
     @Override

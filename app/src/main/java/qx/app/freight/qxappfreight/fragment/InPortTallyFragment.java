@@ -253,6 +253,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("InPortTallyFragment_refresh")) {
+            mCurrentPage=1;
             initData();
         }
     }

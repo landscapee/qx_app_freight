@@ -613,6 +613,8 @@ public class Tools {
         if (num < 6) {
             int padding = (width - num * (interval + itemWidth)) / 2 - 30;
             view.setPadding(padding, 0, padding, 0);
+        } else {
+            view.setPadding(0, 0, 0, 0);
         }
     }
 

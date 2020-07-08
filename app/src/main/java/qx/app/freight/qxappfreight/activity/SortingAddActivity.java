@@ -604,6 +604,6 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         String[] newCode = result.split("-");
         idEdt.setText(newCode[0]);
         idEdt2.setText(newCode[1]);
-        tvAddNoBillGoods.setEnabled(false);
+        tvAddNoBillGoods.setVisibility(View.GONE);
     }
 }

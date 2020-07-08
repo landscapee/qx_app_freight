@@ -18,6 +18,9 @@ import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
  * @文档说明: 翻页模式展示运单数据适配器
  */
 public class InboundSortingAdapter extends BaseQuickAdapter<InWaybillRecordSubmitNewEntity.SingleLineBean, BaseViewHolder> {
+    public static final int CLICK_TYPE_COMMIT = 1;
+    public static final int CLICK_TYPE_DELETE = 2;
+    public static final int CLICK_TYPE_MODIFY = 3;
     private OnChildClickListener onChildClickListener;
 
     public InboundSortingAdapter(@Nullable List<InWaybillRecordSubmitNewEntity.SingleLineBean> data) {
@@ -40,21 +43,22 @@ public class InboundSortingAdapter extends BaseQuickAdapter<InWaybillRecordSubmi
         Button btnArrival = helper.getView(R.id.btn_ticket_commit);
         if (item.getAllArrivedFlag() == 0) {
             btnArrival.setEnabled(true);
-            btnArrival.setOnClickListener(v -> onChildClickListener.onChildClicked(helper.getAdapterPosition(), false));
+            btnArrival.setOnClickListener(v -> onChildClickListener.onChildClicked(helper.getAdapterPosition(), CLICK_TYPE_COMMIT));
         } else {
             btnArrival.setEnabled(false);
         }
         Button btnDelete = helper.getView(R.id.btn_delete);
         if (item.isCanModify()) {
             btnDelete.setEnabled(true);
-            btnDelete.setOnClickListener(v -> onChildClickListener.onChildClicked(helper.getAdapterPosition(), true));
+            btnDelete.setOnClickListener(v -> onChildClickListener.onChildClicked(helper.getAdapterPosition(), CLICK_TYPE_DELETE));
         } else {
             btnDelete.setEnabled(false);
         }
+        helper.getView(R.id.tv_modify).setOnClickListener(v -> onChildClickListener.onChildClicked(helper.getAdapterPosition(), CLICK_TYPE_MODIFY));
     }
 
     public interface OnChildClickListener {
-        void onChildClicked(int pos, boolean isDelete);
+        void onChildClicked(int pos, int type);
     }
 
     public void setOnChildClickListener(OnChildClickListener onChildClickListener) {

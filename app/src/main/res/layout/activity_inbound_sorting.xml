@@ -10,19 +10,18 @@
         android:id="@+id/rv_flight_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_5"
         android:layout_gravity="center_vertical" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/main_line" />
+        android:layout_height="1dp"
+        android:background="@color/lable_blue" />
 
     <TextView
         android:id="@+id/tv_total_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_10"

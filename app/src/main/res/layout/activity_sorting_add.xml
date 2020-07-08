@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/dp_3"
-            android:text="+无运单"
+            android:text="+无标签"
             android:gravity="center"
             android:background="@color/blue"
             android:textColor="@color/white"
