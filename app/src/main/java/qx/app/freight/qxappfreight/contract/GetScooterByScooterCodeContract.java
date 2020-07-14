@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 
 public class GetScooterByScooterCodeContract {
@@ -21,10 +22,12 @@ public class GetScooterByScooterCodeContract {
         void returnWeighing(ReturnWeighingEntity returnWeighingEntity, IResultLisenter lisenter);
 
         void getWeight(String pbName, IResultLisenter lisenter);
+
+        void returnGroupScooterTask(GetInfosByFlightIdBean scooter,IResultLisenter lisenter);
     }
 
     public interface GetScooterByScooterCodeView extends IBaseView {
-        void getInfosByFlightIdResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans);
+        void getInfosByFlightIdResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans);
 
         void getScooterByScooterCodeResult(GetInfosByFlightIdBean getInfosByFlightIdBean);
 
@@ -33,6 +36,8 @@ public class GetScooterByScooterCodeContract {
         void returnWeighingResult(String result);
 
         void getWeightResult(String result);
+
+        void returnGroupScooterTaskResult(BaseEntity <Object> scooter);
     }
 
 }

@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
@@ -577,6 +578,11 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
         tvGrossweightFront.setText(result);
         changeClicked(true);
         calculateWeight();
+    }
+
+    @Override
+    public void returnGroupScooterTaskResult(BaseEntity <Object> scooter) {
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -78,6 +80,8 @@ public class OutStoragePopWindow extends PopupWindow {
         tvTime.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 showDatePicker();
+            } else {
+                showDatePickerLow();
             }
         });
 
@@ -105,6 +109,28 @@ public class OutStoragePopWindow extends PopupWindow {
                 time = TimeUtils.timeToStamp(year + "-" + (month + 1) + "-" + dayOfMonth + "");
             }
         });
+        DatePicker datePicker = datePickerDialog.getDatePicker();
+        datePicker.setMaxDate(new Date().getTime());
+        datePicker.setMinDate(waybillsBean.getChargeTime());
+        datePickerDialog.show();
+    }
+
+    @SuppressLint("ResourceType")
+    private void showDatePickerLow() {
+        Calendar calendar = Calendar.getInstance();
+        // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
+        // 绑定监听器(How the parent is notified that the date is set.)
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, 2, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                tvTime.setText(year + "-" + (month + 1) + "-" + dayOfMonth + " ");
+                time = TimeUtils.timeToStamp(year + "-" + (month + 1) + "-" + dayOfMonth + "");
+            }
+        }
+                // 设置初始日期
+                , calendar.get(Calendar.YEAR)
+                , calendar.get(Calendar.MONTH)
+                , calendar.get(Calendar.DAY_OF_MONTH));
         DatePicker datePicker = datePickerDialog.getDatePicker();
         datePicker.setMaxDate(new Date().getTime());
         datePicker.setMinDate(waybillsBean.getChargeTime());

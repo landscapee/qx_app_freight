@@ -19,6 +19,8 @@ import qx.app.freight.qxappfreight.activity.AllocateScooterActivity;
 import qx.app.freight.qxappfreight.adapter.RepeatWeightManifestAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoAndScootersBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.TodoScootersContract;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
@@ -89,7 +91,7 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
     }
 
     @Override
-    public void todoScootersResult(List <GetInfosByFlightIdBean> result) {
+    public void todoScootersResult(FlightInfoAndScootersBean result) {
 
     }
 
@@ -109,6 +111,11 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void returnGroupScooterTaskResult(BaseEntity <Object> scooter) {
+
     }
 
     @Override

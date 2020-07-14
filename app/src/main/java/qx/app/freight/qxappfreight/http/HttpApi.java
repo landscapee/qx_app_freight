@@ -70,6 +70,7 @@ import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoAndScootersBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
@@ -375,6 +376,10 @@ public interface HttpApi {
     @POST("service-product-cargoweighing/scooter/getScooterByScooterCode")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getScooterByScooterCode(@Body BaseFilterEntity model);
 
+    // 复重板车退回 组板
+    @POST("service-product-cargoweighing/scooter/returnGroupScooterTask")
+    Observable<BaseEntity<Object>> returnGroupScooterTask(@Body GetInfosByFlightIdBean model);
+
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
     Observable<BaseEntity<OverWeightSaveResultBean>> saveScooter(@Body GetInfosByFlightIdBean model);
@@ -385,7 +390,7 @@ public interface HttpApi {
 
     //复重 / 获取航班所有板车
     @POST("service-product-cargoweighing/scooter/getTodoScooters")
-    Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
+    Observable<BaseEntity<FlightInfoAndScootersBean>> getTodoScooters(@Body TodoScootersEntity model);
 
     //复重 / 获取航班舱单信息
     @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")

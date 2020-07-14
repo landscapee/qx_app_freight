@@ -238,6 +238,8 @@ dependencies {
 
 
     implementation 'com.github.liys666666:DoubleClick:V1.0.4'  // 利用 hook 处理重复点击
+
+    implementation 'com.contrarywind:Android-PickerView:3.2.7'
 }
 
 build.doLast {

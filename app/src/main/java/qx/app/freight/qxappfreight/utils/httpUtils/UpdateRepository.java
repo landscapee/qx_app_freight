@@ -70,6 +70,7 @@ import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoAndScootersBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
@@ -942,6 +943,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable<List<GetInfosByFlightIdBean>> getScooterByScooterCode(BaseFilterEntity model) {
         return transform(getService().getScooterByScooterCode(model));
     }
+    /****
+     * 复重/获取板车信息
+     * @param model
+     * @return
+     */
+    public Observable<BaseEntity<Object>> returnGroupScooterTask(GetInfosByFlightIdBean model) {
+        return getService().returnGroupScooterTask(model);
+    }
 
     /****
      * 复重/保存
@@ -967,7 +976,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<GetInfosByFlightIdBean>> getTodoScooters(TodoScootersEntity model) {
+    public Observable<FlightInfoAndScootersBean> getTodoScooters(TodoScootersEntity model) {
         return transform(getService().getTodoScooters(model));
     }
 

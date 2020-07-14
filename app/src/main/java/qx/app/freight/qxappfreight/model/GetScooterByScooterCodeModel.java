@@ -67,4 +67,15 @@ public class GetScooterByScooterCodeModel extends BaseModel implements GetScoote
                 });
         mDisposableList.add(subscription);
     }
+
+    @Override
+    public void returnGroupScooterTask(GetInfosByFlightIdBean scooter, IResultLisenter lisenter) {
+        Disposable subscription = UpdateRepository.getInstance().returnGroupScooterTask(scooter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lisenter::onSuccess, throwable -> {
+                    lisenter.onFail(throwable.getMessage());
+                });
+        mDisposableList.add(subscription);
+    }
 }
