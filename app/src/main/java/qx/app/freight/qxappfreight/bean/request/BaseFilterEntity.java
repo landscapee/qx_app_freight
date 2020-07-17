@@ -31,6 +31,7 @@ public class BaseFilterEntity<T> {
     private String counterbillId;
     private String taskId;
     private String inventoryTaskId;
+    private String handler;
     private String completeUser;
     private int forkliftTruckNumber; //叉车数量
     //复重

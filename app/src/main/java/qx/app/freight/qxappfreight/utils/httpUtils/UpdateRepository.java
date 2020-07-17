@@ -120,6 +120,7 @@ import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillQuickGetBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.http.HttpApi;
@@ -1325,8 +1326,8 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<String> addInventoryDetail(List<InventoryDetailEntity> entity) {
-        return nothingtransform(getService().addInventoryDetail(entity));
+    public Observable<BaseEntity> addInventoryDetail(List<InventoryDetailEntity> entity) {
+        return getService().addInventoryDetail(entity);
     }
 
     /**
@@ -1506,5 +1507,9 @@ public class UpdateRepository extends BaseRepository {
     public Observable<InWaybillRecordSubmitNewEntity.SingleLineBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
         return transform(getService().getWaybillInfoByCode(entity));
     }
+    public Observable<WaybillsBean> getWaybillInfoByWaybillCode(String waybillCode) {
+        return transform(getService().getWaybillInfoByWaybillCode(waybillCode));
+    }
+
 }
 

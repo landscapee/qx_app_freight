@@ -42,8 +42,10 @@ import qx.app.freight.qxappfreight.bean.RcInfoOverweight;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
 import qx.app.freight.qxappfreight.bean.response.ReservoirBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.contract.ReservoirContract;
 import qx.app.freight.qxappfreight.contract.UploadsContract;
@@ -579,7 +581,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
     }
 
     @Override
-    public void addInventoryDetailResult(String result) {
+    public void addInventoryDetailResult(BaseEntity result) {
 
     }
 
@@ -605,5 +607,15 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
         idEdt.setText(newCode[0]);
         idEdt2.setText(newCode[1]);
         tvAddNoBillGoods.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getWaybillInfoByWaybillCodeResult(WaybillsBean result) {
+
+    }
+
+    @Override
+    public void getWaybillInfoByWaybillCodeResultFail() {
+
     }
 }

@@ -32,7 +32,6 @@ import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.constant.Constants;
@@ -184,6 +183,16 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
         }
     }
 
+    /**
+     * 退回到组板
+     *
+     * @param scooter
+     */
+    private void returnGroupScooterTask(GetInfosByFlightIdBean scooter) {
+        mPresenter = new GetScooterByScooterCodePresenter(this);
+        ((GetScooterByScooterCodePresenter) mPresenter).returnGroupScooterTask(scooter);
+    }
+
     private void initView() {
 //        ScanManagerActivity.startActivity(this);
         changeClicked(false);
@@ -283,25 +292,25 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
      * 退回板车
      */
     private void returnScooter() {
-        if (-3 < dRate && dRate < 3) {
-            ToastUtil.showToast("复重差率合格,不能退回");
-            return;
-        }
-        if (selectorOption == 2) {
-            mData.setRemark(etOther.getText().toString());
-        } else {
-            mData.setRemark(tvScan.getText().toString());
-        }
-        mData.setReWeight(crossWeight);
-        mData.setReDifference(dValue);
-        mData.setReDifferenceRate(dRate);
-//        mData.setWeight(goodsWeight);
-        mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
-        ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
-
-        returnWeighingEntity.setScooter(mData);
-        ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
-
+//        if (-3 < dRate && dRate < 3) {
+//            ToastUtil.showToast("复重差率合格,不能退回");
+//            return;
+//        }
+//        if (selectorOption == 2) {
+//            mData.setRemark(etOther.getText().toString());
+//        } else {
+//            mData.setRemark(tvScan.getText().toString());
+//        }
+//        mData.setReWeight(crossWeight);
+//        mData.setReDifference(dValue);
+//        mData.setReDifferenceRate(dRate);
+////        mData.setWeight(goodsWeight);
+//        mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
+//        ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
+//
+//        returnWeighingEntity.setScooter(mData);
+//        ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
+        returnGroupScooterTask(mData);
     }
 
     /**
@@ -399,13 +408,13 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
      */
     private void changeClicked(boolean canClick) {
         canClick = false;//复重历史默认为false
-        btnReturn.setEnabled(canClick);
+//        btnReturn.setEnabled(canClick);
         btnConfirm.setEnabled(canClick);
         if (canClick) {
-            btnReturn.setTextColor(Color.parseColor("#333333"));
+//            btnReturn.setTextColor(Color.parseColor("#333333"));
             btnConfirm.setBackgroundColor(Color.parseColor("#2e81fd"));
         } else {
-            btnReturn.setTextColor(Color.parseColor("#bcbcbc"));
+//            btnReturn.setTextColor(Color.parseColor("#bcbcbc"));
             btnConfirm.setBackgroundColor(Color.parseColor("#bcbcbc"));
         }
     }
@@ -582,7 +591,15 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
 
     @Override
     public void returnGroupScooterTaskResult(BaseEntity <Object> scooter) {
-
+        if ("318".equals(scooter.getStatus())) {
+            ToastUtil.showToast("该航班已经没有组板任务，请稍后重试");
+            finish();
+            EventBus.getDefault().post("RepeatWeightScooterFragment_refresh");
+        } else {
+            ToastUtil.showToast("退回组板成功");
+            finish();
+            EventBus.getDefault().post(Constants.REWEIGHT_DONE);
+        }
     }
 
     @Override

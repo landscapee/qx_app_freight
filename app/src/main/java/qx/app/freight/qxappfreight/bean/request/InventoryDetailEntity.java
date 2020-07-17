@@ -60,5 +60,4 @@ public class InventoryDetailEntity {
      * 异常详情
      */
     private List<InventoryUbnormalGoods> smInventoryUbnormalGoods;
-
 }

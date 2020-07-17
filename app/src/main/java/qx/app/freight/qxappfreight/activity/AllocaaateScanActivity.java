@@ -558,7 +558,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                             }
                         }).show();
             } else {
-                returnGroupScooterTask(result.getScooter());
+                showHintThreshold(result);
             }
         }
 

@@ -161,8 +161,8 @@ public class Tools {
         }
     }
 
-    public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
+    public static List <MultipartBody.Part> filesToMultipartBodyParts(List <File> files) {
+        List <MultipartBody.Part> parts = new ArrayList <>(files.size());
         for (File file : files) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             //"files"与后台 沟通后 确定的 接收 key
@@ -218,7 +218,7 @@ public class Tools {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static <T> ArrayList<T> deepCopy(ArrayList<T> src) throws IOException, ClassNotFoundException {
+    public static <T> ArrayList <T> deepCopy(ArrayList <T> src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -226,7 +226,7 @@ public class Tools {
         ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
         ObjectInputStream in = new ObjectInputStream(byteIn);
         @SuppressWarnings("unchecked")
-        ArrayList<T> dest = (ArrayList<T>) in.readObject();
+        ArrayList <T> dest = (ArrayList <T>) in.readObject();
         return dest;
     }
 
@@ -291,7 +291,7 @@ public class Tools {
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+        List <ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
         if (appProcesses == null)
             return false;
@@ -639,5 +639,56 @@ public class Tools {
         } else {
             view.scrollToPosition(n);
         }
+    }
+
+    /**
+     * 0.暂存数据运单; 1.运单录入完成; 2.理货入库完成; 3.舱单核对完成; 4.已提货通知; 5.已缴费; 6.已提货; 7.逾期待补费; 8.已转运; -1退单退货(返航); -2.扣货(公安扣货); -10.运单作废
+     *
+     * @param status
+     * @return
+     */
+    public static String getWaybillStatus(int status) {
+        String strStatus = "未知";
+        switch (status) {
+            case 0:
+                strStatus = "暂存数据运单";
+                break;
+            case 1:
+                strStatus = "运单录入完成";
+                break;
+            case 2:
+                strStatus = "理货入库完成";
+                break;
+            case 3:
+                strStatus = "舱单核对完成";
+                break;
+            case 4:
+                strStatus = "已提货通知";
+                break;
+            case 5:
+                strStatus = "已缴费";
+                break;
+            case 6:
+                strStatus = "已提货";
+                break;
+            case 7:
+                strStatus = "逾期待补费";
+                break;
+            case 8:
+                strStatus = "已转运";
+                break;
+            case -1:
+                strStatus = "退单退货";
+                break;
+            case -2:
+                strStatus = "扣货";
+                break;
+            case -10:
+                strStatus = "运单作废";
+                break;
+
+
+        }
+        return strStatus;
     }
 }

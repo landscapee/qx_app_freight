@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.NumberKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,11 +22,15 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.WaybillQueryResultAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
+import qx.app.freight.qxappfreight.utils.MyKeyListener;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.TransInformation;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
 /**
@@ -70,9 +75,17 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
 
         });
         btnSure.setOnClickListener(v -> {
-            if (!StringUtil.isEmpty(mEtInputKey.getText().toString()) && mEtInputKey.getText().toString().length() >= 11) {
-                EventBus.getDefault().post(new WayBillQueryBean(mEtInputKey.getText().toString(), null));
-                finish();
+            if (!StringUtil.isEmpty(mEtInputKey.getText().toString())) {
+                if (mEtInputKey.getText().toString().startsWith("DN") && mEtInputKey.getText().toString().length() == 11) {
+                    EventBus.getDefault().post(new WayBillQueryBean(mEtInputKey.getText().toString(), null));
+                    finish();
+                } else if (mEtInputKey.getText().toString().length() == 12) {
+                    EventBus.getDefault().post(new WayBillQueryBean(mEtInputKey.getText().toString(), null));
+                    finish();
+                } else {
+                    ToastUtil.showToast("请输入正确的运单号");
+                }
+
             } else {
                 ToastUtil.showToast("请输入正确的运单号");
             }
@@ -82,7 +95,8 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
             mPresenter = new AddInventoryDetailPresenter(WayBillQueryActivity.this);
             ((AddInventoryDetailPresenter) mPresenter).getWaybillCode();
         });
-
+        mEtInputKey.setTransformationMethod(new TransInformation());
+        mEtInputKey.setKeyListener(new MyKeyListener());
         mEtInputKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -110,7 +124,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     }
 
     @Override
-    public void addInventoryDetailResult(String result) {
+    public void addInventoryDetailResult(BaseEntity result) {
 
     }
 
@@ -137,6 +151,20 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
     public void getWaybillCodeResult(String result) {
         EventBus.getDefault().post(new WayBillQueryBean(result, null));
         finish();
+    }
+
+    /**
+     * 运单 内容返回
+     * @param result
+     */
+    @Override
+    public void getWaybillInfoByWaybillCodeResult(WaybillsBean result) {
+
+    }
+
+    @Override
+    public void getWaybillInfoByWaybillCodeResultFail() {
+
     }
 
     @Override

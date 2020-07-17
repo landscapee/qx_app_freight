@@ -122,6 +122,7 @@ import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
 import qx.app.freight.qxappfreight.bean.response.WaybillQuickGetBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
@@ -741,7 +742,7 @@ public interface HttpApi {
 
     //清库提交
     @POST("service-bussiness-warehouse/inventory/addInventoryDetail")
-    Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
+    Observable<BaseEntity> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
     //清库详情
     @POST("service-bussiness-warehouse/inventory/listInventoryDetail")
@@ -918,4 +919,13 @@ public interface HttpApi {
     //根据运单号查数据库，如果库里有此运单号，返回的运单数据
     @POST("service-product-cargotallying/sorting/getCargoInfoByWaybillCode")
     Observable<BaseEntity<InWaybillRecordSubmitNewEntity.SingleLineBean>> getWaybillInfoByCode(@Body QueryWaybillInfoEntity entity);
+
+    /**
+     * 获取运单 基本信息
+     *
+     * @return
+     */
+    @GET("service-bussiness-warehouse/inventory/getWaybillInfoByWaybillCode/{waybillId}")
+    Observable<BaseEntity<WaybillsBean>> getWaybillInfoByWaybillCode(@Path("waybillId") String waybillCode);
+
 }

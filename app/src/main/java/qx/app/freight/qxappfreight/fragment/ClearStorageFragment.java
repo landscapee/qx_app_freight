@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +66,7 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_clearstorage, container, false);
         unbinder = ButterKnife.bind(this, view);
         //标题
@@ -71,6 +76,9 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         super.onViewCreated(view, savedInstanceState);
         int rw = 0;
         if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() != 0) {
@@ -129,6 +137,14 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         mCHadapter.setOnItemClickListener((adapter, view12, position) -> {
             interHistoryAct(position);
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(String str) {
+        if ("ClearStorageFragment_refresh".equals(str)){
+            mCurrentPage1 = 1;
+            initData1();
+        }
     }
 
     private void interHistoryAct(int position) {

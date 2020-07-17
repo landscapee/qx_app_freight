@@ -93,6 +93,9 @@ public class WaybillsBean implements Serializable {
     private String outStorageUser;
     private Integer tallyingTotal;
     private String tallyingWeight;
+    /**
+     * * 运单状态: 0.暂存数据运单; 1.运单录入完成; 2.理货入库完成; 3.舱单核对完成; 4.已提货通知; 5.已缴费; 6.已提货; 7.逾期待补费; 8.已转运; -1退单退货(返航); -2.扣货(公安扣货); -10.运单作废
+     */
     private int waybillStatus;//运单状态 必填 5 待提货 6 已经提货 必须填
     private String waybillCodeScanUrl;
     private String commodityScanUrl;
