@@ -30,5 +30,8 @@ public class ListWaybillCodeBean {
 
         private String id;
         private String waybillCode;
+        private int totalNumber;
+        private int storageNum;
+        private int waybillStatus;
     }
 }

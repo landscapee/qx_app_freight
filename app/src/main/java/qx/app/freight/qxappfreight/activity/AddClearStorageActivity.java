@@ -97,7 +97,6 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private String taskTitle; //标题
     private String waybillId;//运单号id
 
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_add_clear_storage;
@@ -122,14 +121,14 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     public void onEventMainThread(WayBillQueryBean data) {
         tvId.setText(data.getWayBillCode());
         waybillId = data.getId();
-        if (waybillId != null)
-            getWayBillInfo();
-        else {
-            ToastUtil.showToast("无该运单信息");
-            tvNum.setText("件数: - -");
-            tvWeight.setText("重量: - -");
-            tvStatus.setText("状态: - -");
-        }
+//        if (waybillId != null)
+//            getWayBillInfo();
+//        else {
+//            ToastUtil.showToast("无该运单信息");
+//            tvNum.setText("件数: - -");
+//            tvWeight.setText("重量: - -");
+//            tvStatus.setText("状态: - -");
+//        }
     }
 
     private void getWayBillInfo() {
@@ -206,7 +205,20 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         recyclerView1.setAdapter(infoAdapter);
 
         loadData();
+
+        setIsBack(true, () -> submitBack());
     }
+
+    private void submitBack() {
+        if (inventoryDetailEntityList.size() == 0) {
+            finish();
+            return;
+        }
+        mPresenter = new AddInventoryDetailPresenter(this);
+        ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
+
+    }
+
 
     private void loadData() {
         mPresenter = new ListInventoryDetailPresenter(this);
