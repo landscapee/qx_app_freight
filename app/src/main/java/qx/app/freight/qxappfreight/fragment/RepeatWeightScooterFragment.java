@@ -121,7 +121,7 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
             if (list.get(position).getReWeightFinish() == 1)
                 startActivity(new Intent(getActivity(), AllocaaateHisDetailsActivity.class).putExtra("dataBean", list.get(position)));
             else
-                getScooterByScooterCode(list.get(position).getScooterCode());
+                getScooterByScooterCode(list.get(position).getScooterCode(),list.get(position).getGroundAgentCode());
 //            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean",list.get(position)));
         });
         adapter.setOnReturnClickListener(new RepeatWeightScooterAdapter.OnReturnClickListener() {
@@ -141,10 +141,12 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     /**
      * 根据板车号获取板车信息
      */
-    public void getScooterByScooterCode(String scooterCode) {
+    public void getScooterByScooterCode(String scooterCode,String groundAgentCode) {
         mPresenter = new GroupBoardToDoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setScooterCode(scooterCode);
+        entity.setGroundAgentCode(groundAgentCode);
+        entity.setFlightInfoId(flightId);
         ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
     }
 

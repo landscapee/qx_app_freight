@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterTransitBean;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
@@ -82,6 +83,7 @@ import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GroundAgentBean;
 import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
@@ -1510,6 +1512,11 @@ public class UpdateRepository extends BaseRepository {
     public Observable<WaybillsBean> getWaybillInfoByWaybillCode(String waybillCode) {
         return transform(getService().getWaybillInfoByWaybillCode(waybillCode));
     }
-
+    public Observable <List<GroundAgentBean>> getAllAgent() {
+        return transform(getService().getAllAgent());
+    }
+    public Observable <String> newScooter(ScooterTransitBean entity) {
+        return nothingtransform(getService().newScooter(entity));
+    }
 }
 

@@ -121,6 +121,7 @@ public class WayBillQueryActivity extends BaseActivity implements AddInventoryDe
                 }
             }
         });
+        mEtInputKey.requestFocus();
     }
 
     @Override

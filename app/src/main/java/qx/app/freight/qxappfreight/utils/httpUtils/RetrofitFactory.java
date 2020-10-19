@@ -18,7 +18,7 @@ class RetrofitFactory {
 
     RetrofitFactory(String url, Converter.Factory factory) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(5, TimeUnit.SECONDS);//连接超时时间
+        builder.connectTimeout(300, TimeUnit.SECONDS);//连接超时时间
         builder.writeTimeout(10, TimeUnit.SECONDS);//写操作 超时时间
         builder.readTimeout(10, TimeUnit.SECONDS);//读操作超时时间
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {

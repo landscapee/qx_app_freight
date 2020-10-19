@@ -148,7 +148,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
                 tvToCity.setText("目的站:" + mData.getToCityEn());
-                tvNameFront.setText(mData.getScooterCode());
+                tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
                 String mType, mCode, mIata;
 

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +21,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,18 +31,19 @@ import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
-import qx.app.freight.qxappfreight.bean.NFCDataEntity;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
 import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
 import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
+import qx.app.freight.qxappfreight.bean.response.GroundAgentBean;
 import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.constant.Constants;
+import qx.app.freight.qxappfreight.contract.GroundAgentContract;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
 import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
@@ -57,10 +56,10 @@ import qx.app.freight.qxappfreight.fragment.MineFragment;
 import qx.app.freight.qxappfreight.fragment.TaskFragment;
 import qx.app.freight.qxappfreight.fragment.TestFragment;
 import qx.app.freight.qxappfreight.presenter.GetScooterConfPresenter;
+import qx.app.freight.qxappfreight.presenter.GroundAgentPresenter;
 import qx.app.freight.qxappfreight.reciver.MessageReciver;
 import qx.app.freight.qxappfreight.reciver.ScanReceiver;
 import qx.app.freight.qxappfreight.service.WebSocketService;
-import qx.app.freight.qxappfreight.utils.NfcUtils;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -68,7 +67,7 @@ import qx.app.freight.qxappfreight.utils.Tools;
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements LocationObservable, ScooterConfContract.scooterConfView {
+public class MainActivity extends BaseActivity implements LocationObservable, ScooterConfContract.scooterConfView, GroundAgentContract.GroundAgentView {
     //    @BindView(R.id.view_pager)
 //    ViewPager mViewPager;
     @BindView(R.id.iv_task)
@@ -112,6 +111,9 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 
     private boolean isJunctionLoad = false;//是否是结载角色
 
+    //地面代理列表
+    public static List <GroundAgentBean> groundAgentBeans = new ArrayList <>();
+
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
@@ -142,7 +144,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         registerReceiver(mMessageReciver, filter3);
 
 //        if(Build.VERSION.SDK_INT >= 26){
-            initBoardReceiver();
+        initBoardReceiver();
 //        }
 //        mScreenStateReciver = new ScreenStateReciver();
 //        IntentFilter screenfilter = new IntentFilter(Intent.ACTION_USER_PRESENT);
@@ -183,7 +185,16 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
             fragment5 = new MineFragment();
         }
         initFragment();
+        getScooterConf();
+        getAllAgent();
     }
+
+    private void getAllAgent() {
+        mPresenter = new GroundAgentPresenter(this);
+        ((GroundAgentPresenter) mPresenter).getAllAgent();
+
+    }
+
     /**
      * NFC 数据接收
      *
@@ -219,6 +230,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         super.onPause();
 //        NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
     }
+
     /**
      * 获取 板车基础配置
      */
@@ -432,6 +444,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         filter.addAction(Constants.ACTION);
         registerReceiver(ScanReceiver, filter);
     }
+
     @Override
     public void onBackPressed() {
 //        quitApp();
@@ -443,7 +456,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 //        GetIdUtil.getSingleInstance().unRegisterIfAready(this);
         try {
             unregisterReceiver(mMessageReciver);
-            if (ScanReceiver!=null)
+            if (ScanReceiver != null)
                 unregisterReceiver(ScanReceiver);
 //            unregisterReceiver(mScreenStateReciver);
         } catch (Exception e) {
@@ -503,6 +516,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
             updatePushDialogInstall.show();
         }
     }
+
     /**
      * 消息提醒推送
      *
@@ -573,6 +587,37 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
     @Override
     public void dissMiss() {
 
+    }
+
+    @Override
+    public void newScooterResult() {
+
+    }
+
+    @Override
+    public void getAllAgentResult(List <GroundAgentBean> groundAgentBeans) {
+        if (groundAgentBeans != null && groundAgentBeans.size() > 0) {
+            MainActivity.groundAgentBeans.clear();
+            MainActivity.groundAgentBeans.addAll(groundAgentBeans);
+        }
+    }
+
+    public static String getAgentCode(String s) {
+        for (GroundAgentBean groundAgentBean : MainActivity.groundAgentBeans) {
+            if (s.equals(groundAgentBean.getShortName())) {
+                return groundAgentBean.getAgentCode();
+            }
+        }
+        return "";
+    }
+
+    public static String getAgentName(String s) {
+        for (GroundAgentBean groundAgentBean : MainActivity.groundAgentBeans) {
+            if (s.equals(groundAgentBean.getAgentCode())) {
+                return groundAgentBean.getShortName();
+            }
+        }
+        return "";
     }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)

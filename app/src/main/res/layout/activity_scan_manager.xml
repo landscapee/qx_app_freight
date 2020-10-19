@@ -83,7 +83,34 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_agent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="85dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="15dp"
+            android:paddingRight="5dp"
+            android:background="@color/black_3">
+            <TextView
+                android:id="@+id/tv_agent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="请选择"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
+            <ImageView
+                android:id="@+id/iv_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/drop_select"
+                />
+
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/ll_input"
             android:orientation="vertical"

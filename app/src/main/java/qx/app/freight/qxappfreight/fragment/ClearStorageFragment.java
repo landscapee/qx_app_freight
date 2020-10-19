@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.InventoryQueryContract;
 import qx.app.freight.qxappfreight.presenter.InventoryQueryPresenter;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
@@ -129,12 +130,16 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         initView();
         //新的任务
         mCSadapter.setOnItemClickListener((adapter, view13, position) -> {
+            if (!Tools.isFastClick())
+                return;
             currentTaskId = mCSlist.get(position).getId();
             mCurrentPage1 = 1;
             initData1();
         });
         //历史任务
         mCHadapter.setOnItemClickListener((adapter, view12, position) -> {
+            if (!Tools.isFastClick())
+                return;
             interHistoryAct(position);
         });
     }

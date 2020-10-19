@@ -16,7 +16,7 @@ if (!RELEASE_PROPERTIES_EXIST) {
 }
 
 static def getVersionName() {
-    def sdf = new SimpleDateFormat("yyMMddHH")
+    def sdf = new SimpleDateFormat("yyyyMMddHH")
     return sdf.format(new Date())
 }
 
@@ -28,7 +28,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 80//app根据此数字进行版本自动迭代 2020/7/17 1
+        versionCode 82//app根据此数字进行版本自动迭代 2020/7/18
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {

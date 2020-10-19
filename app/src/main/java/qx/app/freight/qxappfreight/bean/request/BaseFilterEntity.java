@@ -36,6 +36,10 @@ public class BaseFilterEntity<T> {
     private int forkliftTruckNumber; //叉车数量
     //复重
     private String scooterCode;
+    /**
+     * 板车所属 地面代理
+     */
+    private String groundAgentCode;
     //航班锁定
     private String flightId;
     private String minutes;

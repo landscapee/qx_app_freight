@@ -97,6 +97,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private String taskTitle; //标题
     private String waybillId;//运单号id
 
+    private boolean isFinish;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_add_clear_storage;
@@ -214,6 +216,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             finish();
             return;
         }
+        isFinish = true;
         mPresenter = new AddInventoryDetailPresenter(this);
         ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
 
@@ -333,6 +336,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             ToastUtil.showToast("提交数据不能为空");
             return;
         }
+        isFinish = false;
         mPresenter = new AddInventoryDetailPresenter(this);
         ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
 
@@ -386,7 +390,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         } else {
             ToastUtil.showToast("暂存成功");
         }
-        finish();
+        if (isFinish)
+            finish();
     }
 
     @Override

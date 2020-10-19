@@ -88,7 +88,7 @@ public class TaskFragment extends BaseFragment {
             return;
         }
 
-        ScanManagerActivity.startActivity(getContext(),"MainActivity");
+        ScanManagerActivity.startActivityForAgent(getContext(),"MainActivity");
 //        switch (nowRoleCode){
 //            case "复重":
 //                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);

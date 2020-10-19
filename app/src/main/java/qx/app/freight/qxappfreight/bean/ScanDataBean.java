@@ -15,4 +15,6 @@ public class ScanDataBean {
     private String data;
 
     private boolean isLaser;//true 激光扫码  默认 为false 普通扫码
+
+    private String groundAgentCode;
 }

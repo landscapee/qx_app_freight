@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
+import qx.app.freight.qxappfreight.activity.MainActivity;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 @Data
 public class GetInfosByFlightIdBean implements Serializable {
@@ -72,6 +74,23 @@ public class GetInfosByFlightIdBean implements Serializable {
     private double reDifferenceRate;
     private int reWeightFinish;
     private String scooterCode;
+    /**
+     * 板车所属 地面代理
+     */
+    private String groundAgentCode;
+
+    public String getScooterCodeName() {
+        if (StringUtil.isEmpty(groundAgentCode)) {
+            return scooterCode;
+        }
+        if (MainActivity.getAgentName(groundAgentCode).startsWith("地"))
+            return scooterCode;
+        String str = scooterCode;
+        if (MainActivity.getAgentName(groundAgentCode).length() >= 1)
+            str = scooterCode + "(" + MainActivity.getAgentName(groundAgentCode).substring(0, 1) + ")";
+        return str;
+    }
+
     private int scooterType;
     private String uldCode;
     private String uldType;

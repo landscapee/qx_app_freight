@@ -143,7 +143,7 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
             case 0:
             case 1:
                 tvFlightid.setText(mData.getFlightNo());
-                tvNameFront.setText(mData.getScooterCode());
+                tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
                 String mType, mCode, mIata;
 

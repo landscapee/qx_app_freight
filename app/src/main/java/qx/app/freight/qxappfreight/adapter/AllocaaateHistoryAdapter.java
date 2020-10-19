@@ -42,7 +42,7 @@ public class AllocaaateHistoryAdapter extends BaseQuickAdapter<GetInfosByFlightI
         //板车类型~板车号
         helper.setText(R.id.tv_scooter_type, scooterType);
         //板车类型~板车号
-        helper.setText(R.id.allocate_address,  MapValue.getCarTypeValue(item.getScooterType()+"")+item.getScooterCode());
+        helper.setText(R.id.allocate_address,  MapValue.getCarTypeValue(item.getScooterType()+"")+item.getScooterCodeName());
         //件数~重量~体积
         helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), item.getTotal(), item.getWeight(), item.getVolume()));
         //航班号

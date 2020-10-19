@@ -43,6 +43,7 @@ import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterTransitBean;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
@@ -82,6 +83,7 @@ import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GroundAgentBean;
 import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
@@ -928,4 +930,17 @@ public interface HttpApi {
     @GET("service-bussiness-warehouse/inventory/getWaybillInfoByWaybillCode/{waybillId}")
     Observable<BaseEntity<WaybillsBean>> getWaybillInfoByWaybillCode(@Path("waybillId") String waybillCode);
 
+    /**
+     * 获取地面代理列表接口详情
+     * @return
+     */
+    @GET(" service-bussiness-shipper/ground-agent/getAll")
+    Observable<BaseEntity<List<GroundAgentBean>>> getAllAgent();
+    /**
+     * 新增基础板车接口详情
+     *
+     * @return
+     */
+    @POST("/service-bussiness-facility/bd/saveOrUpdate")
+    Observable<BaseEntity<Object>> newScooter(@Body ScooterTransitBean entity);
 }
