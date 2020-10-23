@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -30,13 +31,26 @@ public class TestCode {
 //        System.out.println(Arrays.toString(arr));
 //        System.out.println("次数"+count);
 //    }
+
+
+
     public static void main(String[] args) {
-        String string = "装机单 →第三代";
-        if (!(string==null|| string.contains("CTOT") || string.contains("机位"))){
-            Log.e("dialog：","222222222222");
-//            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
-//            updatePushDialog.show();
+
+        //获取人工干预值
+        double reviseWeight = 0;
+        String s2 ="";
+        if (TextUtils.isEmpty(s2)) {
+            reviseWeight = 0;
+        } else {
+            reviseWeight = Double.valueOf(s2);
         }
+        System.out.println(reviseWeight);
+//        String string = "装机单 →第三代";
+//        if (!(string==null|| string.contains("CTOT") || string.contains("机位"))){
+//            Log.e("dialog：","222222222222");
+////            UpdatePushDialog updatePushDialog = new UpdatePushDialog(this, R.style.custom_dialog, result.getRemark(), () -> EventBus.getDefault().post("refresh_data_update"));
+////            updatePushDialog.show();
+//        }
 
     }
     /**
@@ -60,4 +74,6 @@ public class TestCode {
             date = date+min+"m";
         return date;
     }
+
+
 }

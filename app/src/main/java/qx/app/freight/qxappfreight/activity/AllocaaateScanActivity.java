@@ -407,14 +407,14 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private void calculateWeight() {
         //获取复磅毛重
         String s1 = tvGrossweightFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s1)) {
+        if (!StringUtil.isDouble(s1)) {
             crossWeight = 0;
         } else {
             crossWeight = Double.valueOf(s1);
         }
         //获取人工干预值
         String s2 = tvReviseFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s2)) {
+        if (!StringUtil.isDouble(s2)) {
             reviseWeight = 0;
         } else {
             reviseWeight = Double.valueOf(s2);
