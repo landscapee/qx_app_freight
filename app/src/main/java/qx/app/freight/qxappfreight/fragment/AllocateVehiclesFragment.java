@@ -233,10 +233,11 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     /**
      * 根据板车号获取板车信息
      */
-    public void getScooterByScooterCode(String scooterCode) {
+    public void getScooterByScooterCode(String scooterCode,String groundAgentCode) {
         mPresenter = new GroupBoardToDoPresenter(this);
         BaseFilterEntity entity = new BaseFilterEntity();
         entity.setScooterCode(scooterCode);
+        entity.setGroundAgentCode(groundAgentCode);
         ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
     }
 
@@ -285,7 +286,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void onEventMainThread(ScanDataBean result) {
         if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity") && isShow) {
             String daibanCode = result.getData();
-            getScooterByScooterCode(daibanCode);
+            getScooterByScooterCode(daibanCode,result.getGroundAgentCode());
         }
 
     }
@@ -296,7 +297,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     public void onEventMainThread(NFCDataEntity nfcDataEntity) {
         if (!TextUtils.isEmpty(nfcDataEntity.getScooterCode()) &&isShow) {
             String daibanCode = nfcDataEntity.getScooterCode();
-            getScooterByScooterCode(daibanCode);
+            getScooterByScooterCode(daibanCode,"");
         }
 
     }

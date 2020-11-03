@@ -110,7 +110,6 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                 llTodayDone.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
 

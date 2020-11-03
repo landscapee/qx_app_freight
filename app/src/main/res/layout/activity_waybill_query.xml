@@ -6,7 +6,12 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="*新增有货无单，请直接输入完整运单号，点击确认按钮！"
+        android:textColor="@color/red"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,9 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_40"
             android:background="#fff"
-            android:digits="@string/alphabet_and_number"
             android:hint="请输入运单关键字"
-            android:inputType="number"
             android:paddingStart="@dimen/dp_16"
             android:paddingEnd="@dimen/dp_16"
             android:textColor="#666666"
@@ -37,13 +40,51 @@
             android:textColor="@color/white"
             android:background="@drawable/btn_blue_press"
             />
+
+        <Button
+            android:id="@+id/btn_no_flag"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:text="无标签"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_blue_press"
+            />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/divider_line_grey" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="运单号"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="运单件数"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="库存件数"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="运单状态"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_search_result"
         android:layout_width="match_parent"

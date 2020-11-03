@@ -275,9 +275,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
      * @author: 张耀
      */
     private void showOutStorageListDialog(List <WaybillArea> result, WaybillsBean waybillsBean) {
-        OutStoragePopWindow outStoragePopWindow = new OutStoragePopWindow(this, result, new OutStoragePopWindow.OnItemSelectedLisener() {
+        OutStoragePopWindow outStoragePopWindow = new OutStoragePopWindow(this, result,waybillsBean, new OutStoragePopWindow.OnItemSelectedLisener() {
             @Override
-            public void resultData(List <WaybillArea> waybillAreaBeans) {
+            public void resultData(List <WaybillArea> waybillAreaBeans,long time) {
                 List <BaseFilterEntity> list = new ArrayList <>();
                 int total = 0;
                 for (WaybillArea waybillAreaBean : waybillAreaBeans) {
@@ -290,6 +290,7 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
                     outboundAreaInfoEntity.setWaybillId(waybillsBean.getId());
                     outboundAreaInfoEntity.setAreaId(waybillAreaBean.getAreaId());
                     outboundAreaInfoEntity.setCreateUser(UserInfoSingle.getInstance().getUserId());
+                    outboundAreaInfoEntity.setOutStorageTime(time);
                     list.add(outboundAreaInfoEntity);
                     currentNum += waybillAreaBean.getOutboundNumber();
                     total += waybillAreaBean.getNumber();
@@ -369,7 +370,11 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
 //            mList.set(j,result);
 //        }
 //        mAdapter.notifyDataSetChanged();
-        showDetailsDialog(this, "本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
+        ToastUtil.showToast("本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
+        currentNum = 0;
+        residueNum = 0;
+        getData();
+//        showDetailsDialog(this, "本次出库成功：" + currentNum + "件，剩余：" + residueNum + "件");
 
     }
 

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/dp_5"
+    android:background="@drawable/shape_shadow_bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_waybill_code"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/lable_blue"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold"
+            tools:text="099-222222222" />
+
+        <TextView
+            android:id="@+id/tv_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center"
+            android:padding="@dimen/dp_5"
+            android:layout_margin="@dimen/dp_5"
+            android:background="@drawable/shape_dynamic_black"
+            android:text="编辑"
+            android:textColor="@color/black" />
+    </FrameLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:background="@color/main_line"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="运单件数" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_number"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="运单重量" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_weight"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="分拣件数" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_select_number"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="分拣重量" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_select_weight"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="库区" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_store_area"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="是否错运" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_wrong_transport"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="品名" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_goods_name"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="特货代码" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_goods_special_code"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="备注" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_goods_remark"
+                style="@style/style_tab_waybill_data"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="1000" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_25"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/style_tab_waybill_title"
+                android:layout_margin="0.5dip"
+                android:background="@color/white"
+                android:text="收货人" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/dp_25"
+                android:background="@color/main_line" />
+
+            <TextView
+                android:id="@+id/tv_accept_user"
+                style="@style/style_tab_waybill_data"
+                tools:text="1000" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_25"
+        android:layout_margin="@dimen/dp_10"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <Button
+            android:id="@+id/btn_ticket_commit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:layout_weight="3"
+            android:background="@drawable/shape_rect_gray_888"
+            android:text="单票快提" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/shape_rect_gray_888"
+            android:text="删除" />
+    </LinearLayout>
+</LinearLayout>

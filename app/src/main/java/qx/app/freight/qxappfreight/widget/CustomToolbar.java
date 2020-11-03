@@ -90,6 +90,17 @@ public class CustomToolbar extends LinearLayout {
         mTitleTv.setTextColor(color);
         mTitleTv.setText(text);
     }
+    /**
+     * 设置中间标题,字体大小
+     *
+     * @param color 文字颜色
+     * @param text  文字内容
+     */
+    public void setMainTitle(int color, String text,float size) {
+        mTitleTv.setTextColor(color);
+        mTitleTv.setText(text);
+        mTitleTv.setTextSize(size);
+    }
 
     /**
      * 设置右边文字

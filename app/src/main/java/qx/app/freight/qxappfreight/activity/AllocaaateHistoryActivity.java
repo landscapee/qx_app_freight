@@ -2,13 +2,21 @@ package qx.app.freight.qxappfreight.activity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,18 +31,24 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.AllocaaateHistoryAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
+import qx.app.freight.qxappfreight.bean.SearchFilghtEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.AllocaaateHitoryBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
+import qx.app.freight.qxappfreight.bean.response.SearchFlightInfoBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetHistoryContract;
+import qx.app.freight.qxappfreight.popwindow.EditPopWindow;
 import qx.app.freight.qxappfreight.presenter.GetHistoryPresenter;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 
+/**
+ * 复重历史搜索页面
+ */
 public class AllocaaateHistoryActivity extends BaseActivity implements GetHistoryContract.getHistoryView, EmptyLayout.OnRetryLisenter, MultiFunctionRecylerView.OnRefreshListener {
     @BindView(R.id.mfrv_allocate_list)
     MultiFunctionRecylerView mMfrvAllocateList;
@@ -42,12 +56,30 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     TextView tvDateStart;
     @BindView(R.id.ll_select_date)
     LinearLayout llSelectTime;
-
+    @BindView(R.id.et_flight_no)
+    EditText etFlightNo;
     private AllocaaateHistoryAdapter mAdapter;
-    private List <GetInfosByFlightIdBean> list;
+    private List<GetInfosByFlightIdBean> list;
     private int pageCurrent = 1;
-
     private long searchTime;
+    private SearchFlightInfoBean mSearchFlightInfoBean;
+    private EditPopWindow editPopWindow;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String key = (String) msg.obj;
+            if (TextUtils.isEmpty(key) || key.length() > 6) {
+                return;
+            }
+            long time = (searchTime == 0) ? System.currentTimeMillis() : searchTime;
+            SearchFilghtEntity entity = new SearchFilghtEntity();
+            entity.setFlightNo(key);
+            Log.e("tagTest", "搜索key========" + key);
+            entity.setFlightDate(TimeUtils.getTime2_1(time));
+            ((GetHistoryPresenter) mPresenter).searchFlightsByKey(entity);
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -61,16 +93,12 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     }
 
     private void initView() {
-
-
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "复重历史");
-
         searchTime = new Date(System.currentTimeMillis()).getTime();
         tvDateStart.setText(TimeUtils.getTime2_1(searchTime));
-
-        list = new ArrayList <>();
+        list = new ArrayList<>();
         mAdapter = new AllocaaateHistoryAdapter(list);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(this));
         mMfrvAllocateList.setOnRetryLisenter(this);
@@ -81,10 +109,58 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
             intent.putExtra("dataBean", list.get(position));
             startActivity(intent);
         });
-
         llSelectTime.setOnClickListener(v -> {
             showDatePickerDialog(this, 2, 0, Calendar.getInstance());
         });
+        //模糊搜索航班号,点击搜索按钮开始模糊搜索
+        etFlightNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mSearchFlightInfoBean = (SearchFlightInfoBean) etFlightNo.getTag(R.id.search_flight_by_key_result);
+                if (mSearchFlightInfoBean != null) {
+                    etFlightNo.setTag(R.id.search_flight_by_key_result, null);
+                    return;
+                }
+                handler.removeCallbacksAndMessages(null);
+                mPresenter.interruptHttp();
+                Message message = handler.obtainMessage();
+                message.obj = etFlightNo.getText().toString().trim().toUpperCase();
+                handler.sendMessageDelayed(message, 400);
+            }
+        });
+        etFlightNo.setOnClickListener(v -> {
+            etFlightNo.setFocusable(true);
+            etFlightNo.setFocusableInTouchMode(true);
+            etFlightNo.requestFocus();
+            InputMethodManager imm = (InputMethodManager) AllocaaateHistoryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+        });
+    }
+
+    @Override
+    public void searchFlightsByKeyResult(List<SearchFlightInfoBean> result) {
+        if (editPopWindow == null) {
+            editPopWindow = new EditPopWindow(this, result, etFlightNo);
+            editPopWindow.showAsDropDown(etFlightNo);
+        } else {
+            if (editPopWindow.isShowing()) {
+                editPopWindow.update(result);
+            } else {
+                editPopWindow.update(result);
+                editPopWindow.showAsDropDown(etFlightNo);
+            }
+        }
+        editPopWindow.setOnFlightCheckListener(() -> getData(searchTime));
     }
 
     private void getData(long time) {
@@ -93,6 +169,7 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         AllocaaateHitoryBean bean = new AllocaaateHitoryBean();
         bean.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
         bean.setSearchTime(time);
+        bean.setFlightNo(etFlightNo.getText().toString().trim().toUpperCase());//将航班号加入搜索条件
         entity.setFilter(bean);
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
@@ -113,17 +190,14 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
 
     @Override
     public void toastView(String error) {
-
     }
 
     @Override
     public void showNetDialog() {
-
     }
 
     @Override
     public void dissMiss() {
-
     }
 
     @Override
@@ -169,13 +243,12 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
                 } else {
                     month = (monthOfYear + 1) + "";
                 }
-                if (dayOfMonth < 10)
+                if (dayOfMonth < 10) {
                     day = "0" + dayOfMonth;
-                else
+                } else {
                     day = "" + dayOfMonth;
-
+                }
                 strDate = year + "-" + month + "-" + day;
-
                 if (flag == 0) {//开始时间
                     tvDateStart.setText(strDate);
                     searchTime = TimeUtils.timeToStamp(strDate);

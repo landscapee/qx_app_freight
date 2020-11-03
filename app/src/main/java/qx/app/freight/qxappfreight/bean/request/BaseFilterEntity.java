@@ -30,10 +30,16 @@ public class BaseFilterEntity<T> {
     private String outStorageUser;
     private String counterbillId;
     private String taskId;
+    private String inventoryTaskId;
+    private String handler;
     private String completeUser;
     private int forkliftTruckNumber; //叉车数量
     //复重
     private String scooterCode;
+    /**
+     * 板车所属 地面代理
+     */
+    private String groundAgentCode;
     //航班锁定
     private String flightId;
     private String minutes;
@@ -55,6 +61,7 @@ public class BaseFilterEntity<T> {
     private String createUser;
     private String areaId;// 库区id
     private int outboundNumber;
+    private long outStorageTime; // 出库时间
     private String  waybillId;
     private String  flightInfoId;
     private String facility;

@@ -34,7 +34,7 @@ import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
-import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
@@ -147,8 +147,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             case 2:
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
-                tvToCity.setText("目的站:"+mData.getToCityEn());
-                tvNameFront.setText(mData.getScooterCode());
+                tvToCity.setText("目的站:" + mData.getToCityEn());
+                tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
                 String mType, mCode, mIata;
 
@@ -274,26 +274,26 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * 退回板车
      */
     private void returnScooter() {
-        if (-3 < dRate && dRate < 3) {
-            ToastUtil.showToast("复重差率合格,不能退回");
-            return;
-        }
-        if (selectorOption == 5) {
-            mData.setRemark(etOther.getText().toString());
-        } else {
-            mData.setRemark(tvScan.getText().toString());
-        }
-        mData.setReWeight(crossWeight);
-        mData.setReDifference(dValue);
-        mData.setReDifferenceRate(dRate);
-//        mData.setWeight(goodsWeight);
-        mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
-        ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
-
-        returnWeighingEntity.setScooter(mData);
-
-        ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
-
+//        if (-3 < dRate && dRate < 3) {
+//            ToastUtil.showToast("复重差率合格,不能退回");
+//            return;
+//        }
+//        if (selectorOption == 5) {
+//            mData.setRemark(etOther.getText().toString());
+//        } else {
+//            mData.setRemark(tvScan.getText().toString());
+//        }
+//        mData.setReWeight(crossWeight);
+//        mData.setReDifference(dValue);
+//        mData.setReDifferenceRate(dRate);
+////        mData.setWeight(goodsWeight);
+//        mData.setLogUserId(UserInfoSingle.getInstance().getUserId());
+//        ReturnWeighingEntity returnWeighingEntity = new ReturnWeighingEntity();
+//
+//        returnWeighingEntity.setScooter(mData);
+//
+//        ((GetScooterByScooterCodePresenter) mPresenter).returnWeighing(returnWeighingEntity);
+        returnGroupScooterTask(mData);
     }
 
     /**
@@ -318,7 +318,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 return;
             } else {
                 if (selectorOption == 5) {
-                    if (TextUtils.isEmpty(etOther.getText().toString())){
+                    if (TextUtils.isEmpty(etOther.getText().toString())) {
                         ToastUtil.showToast("人工干预的情况下备注不能为空");
                         return;
                     }
@@ -343,17 +343,17 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         CommonDialog dialog = new CommonDialog(this);
         dialog.setTitle("提示")
                 .setMessage(textInfo)
-                .setPositiveButton("取消")
-                .setNegativeButton("确定")
+                .setPositiveButton("确定")
+                .setNegativeButton("取消")
                 .isCanceledOnTouchOutside(true)
                 .isCanceled(true)
                 .setOnClickListener(new CommonDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
-
-                        } else {
                             ((GetScooterByScooterCodePresenter) mPresenter).saveScooter(mData);
+                        } else {
+
                         }
                     }
                 }).show();
@@ -393,13 +393,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
      * @param canClick 能否点击
      */
     private void changeClicked(boolean canClick) {
-        btnReturn.setEnabled(canClick);
         btnConfirm.setEnabled(canClick);
         if (canClick) {
-            btnReturn.setTextColor(Color.parseColor("#333333"));
             btnConfirm.setBackgroundColor(Color.parseColor("#2e81fd"));
         } else {
-            btnReturn.setTextColor(Color.parseColor("#bcbcbc"));
             btnConfirm.setBackgroundColor(Color.parseColor("#bcbcbc"));
         }
     }
@@ -410,14 +407,14 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private void calculateWeight() {
         //获取复磅毛重
         String s1 = tvGrossweightFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s1)) {
+        if (!StringUtil.isDouble(s1)) {
             crossWeight = 0;
         } else {
             crossWeight = Double.valueOf(s1);
         }
         //获取人工干预值
         String s2 = tvReviseFront.getText().toString().trim();
-        if (TextUtils.isEmpty(s2)) {
+        if (!StringUtil.isDouble(s2)) {
             reviseWeight = 0;
         } else {
             reviseWeight = Double.valueOf(s2);
@@ -538,6 +535,47 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
     @Override
     public void saveScooterResult(OverWeightSaveResultBean result) {
+
+        //如果 板车复重异常 提示用户 是否 退回 组板
+        if (result != null && result.getScooter() != null) {
+            if (Math.abs(result.getScooter().getReDifferenceRate()) > 3 && result.isHasGroupScooterTask()) { //误差率 超过 3% 并且航班任务 还存在
+                //提交弹窗
+                CommonDialog dialog = new CommonDialog(this);
+                dialog.setTitle("提示")
+                        .setMessage("板车" + result.getScooter().getScooterCode() + "已经复重异常，是否退回到组板？")
+                        .setPositiveButton("确定")
+                        .setNegativeButton("取消")
+                        .isCanceledOnTouchOutside(true)
+                        .isCanceled(true)
+                        .setOnClickListener(new CommonDialog.OnClickListener() {
+                            @Override
+                            public void onClick(Dialog dialog, boolean confirm) {
+                                if (confirm) {
+                                    returnGroupScooterTask(result.getScooter());
+                                } else {
+                                    showHintThreshold(result);
+                                }
+                            }
+                        }).show();
+            } else {
+                showHintThreshold(result);
+            }
+        }
+
+//        startActivity(new Intent(this,MainActivity.class));
+    }
+
+    /**
+     * 退回到组板
+     *
+     * @param scooter
+     */
+    private void returnGroupScooterTask(GetInfosByFlightIdBean scooter) {
+        mPresenter = new GetScooterByScooterCodePresenter(this);
+        ((GetScooterByScooterCodePresenter) mPresenter).returnGroupScooterTask(scooter);
+    }
+
+    private void showHintThreshold(OverWeightSaveResultBean result) {
         String content = "";
         if (result.getReDifferenceSum() > result.getThreshold()) {
             content = "<font color='yellow'>航班复重差值上限：" + result.getThreshold() + "kg,当前复重差值：" + result.getReDifferenceSum() + "kg。</font>";
@@ -563,7 +601,6 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                         EventBus.getDefault().post(Constants.REWEIGHT_DONE);
                     }
                 }).show();
-//        startActivity(new Intent(this,MainActivity.class));
     }
 
     @Override
@@ -578,6 +615,24 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         tvGrossweightFront.setText(result);
         changeClicked(true);
         calculateWeight();
+    }
+
+    /**
+     * 返回复重 成功
+     *
+     * @param entity
+     */
+    @Override
+    public void returnGroupScooterTaskResult(BaseEntity <Object> entity) {
+        if ("318".equals(entity.getStatus())) {
+            ToastUtil.showToast("该航班已经没有组板任务，请稍后重试");
+            finish();
+            EventBus.getDefault().post("RepeatWeightScooterFragment_refresh");
+        } else {
+            ToastUtil.showToast("退回组板成功");
+            finish();
+            EventBus.getDefault().post(Constants.REWEIGHT_DONE);
+        }
     }
 
     @Override

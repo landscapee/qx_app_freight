@@ -37,15 +37,21 @@ import qx.app.freight.qxappfreight.adapter.SortingAddAdapter2;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.WayBillQueryBean;
+import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryUbnormalGoods;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.ListWaybillCodeBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.contract.AddInventoryDetailContract;
+import qx.app.freight.qxappfreight.contract.ListInventoryDetailContract;
 import qx.app.freight.qxappfreight.dialog.ErrorTypeChooseDialog;
 import qx.app.freight.qxappfreight.dialog.ExceptionDetailDialog;
 import qx.app.freight.qxappfreight.listener.ChooseDialogInterface;
 import qx.app.freight.qxappfreight.presenter.AddInventoryDetailPresenter;
+import qx.app.freight.qxappfreight.presenter.ListInventoryDetailPresenter;
 import qx.app.freight.qxappfreight.utils.ExceptionUtils;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
@@ -55,7 +61,7 @@ import qx.app.freight.qxappfreight.widget.CustomToolbar;
  * 清库-新增
  * Created by swd
  */
-public class AddClearStorageActivity extends BaseActivity implements AddInventoryDetailContract.addInventoryDetailView {
+public class AddClearStorageActivity extends BaseActivity implements AddInventoryDetailContract.addInventoryDetailView, ListInventoryDetailContract.listInventoryDetailView {
     @BindView(R.id.tv_id)
     TextView tvId;
     @BindView(R.id.edt_real_sort_num)
@@ -73,10 +79,17 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     @BindView(R.id.btn_clear)
     Button btnClear;
 
+    @BindView(R.id.tv_num)
+    TextView tvNum;
+    @BindView(R.id.tv_weight)
+    TextView tvWeight;
+    @BindView(R.id.tv_status)
+    TextView tvStatus;
+
     SortingAddAdapter2 mAdapter;//异常情况选择列表适配器
     InventoryInfoAdapter infoAdapter; //异常列表数据适配器
-    ArrayList<InventoryUbnormalGoods> counterUbnormalGoodsList;//异常数组
-    List<InventoryDetailEntity> inventoryDetailEntityList;//提交的异常数组
+    ArrayList <InventoryUbnormalGoods> counterUbnormalGoodsList;//异常数组
+    List <InventoryDetailEntity> inventoryDetailEntityList;//提交的异常数组
 
     int CURRENT_PHOTO_INDEX;
 
@@ -84,6 +97,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     private String taskTitle; //标题
     private String waybillId;//运单号id
 
+    private boolean isFinish;
 
     @Override
     public int getLayoutId() {
@@ -109,15 +123,28 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     public void onEventMainThread(WayBillQueryBean data) {
         tvId.setText(data.getWayBillCode());
         waybillId = data.getId();
+//        if (waybillId != null)
+//            getWayBillInfo();
+//        else {
+//            ToastUtil.showToast("无该运单信息");
+//            tvNum.setText("件数: - -");
+//            tvWeight.setText("重量: - -");
+//            tvStatus.setText("状态: - -");
+//        }
+    }
+
+    private void getWayBillInfo() {
+        mPresenter = new AddInventoryDetailPresenter(this);
+        if (!StringUtil.isEmpty(waybillId))
+            ((AddInventoryDetailPresenter) mPresenter).getWaybillInfoByWaybillCode(waybillId);
     }
 
     private void initData() {
         tvId.setOnClickListener(v -> {
-            startActivity(new Intent(this, WayBillQueryActivity.class).putExtra("taskId",taskId));
+            startActivity(new Intent(this, WayBillQueryActivity.class).putExtra("taskId", taskId));
         });
-        counterUbnormalGoodsList = new ArrayList<>();
-        inventoryDetailEntityList = new ArrayList<>();
-        mPresenter = new AddInventoryDetailPresenter(this);
+        counterUbnormalGoodsList = new ArrayList <>();
+        inventoryDetailEntityList = new ArrayList <>();
         //初始化recyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new SortingAddAdapter2(this, counterUbnormalGoodsList);
@@ -128,7 +155,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                 Log.e("dime", "选择图片：" + position);
                 CURRENT_PHOTO_INDEX = position;
                 //将数组转为List
-                List<String> originList = new ArrayList<>();
+                List <String> originList = new ArrayList <>();
                 if (counterUbnormalGoodsList.get(position).getUploadFilePath() != null) {
                     for (String url : counterUbnormalGoodsList.get(position).getUploadFilePath()) {
                         originList.add(url);
@@ -138,7 +165,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                         .showCamera(true) // 是否显示相机. 默认为显示
                         .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                         .multi() // 多选模式, 默认模式;
-                        .origin((ArrayList<String>) originList) // 默认已选择图片. 只有在选择模式为多选时有效
+                        .origin((ArrayList <String>) originList) // 默认已选择图片. 只有在选择模式为多选时有效
                         .start(AddClearStorageActivity.this, 1002);
             }
         });
@@ -178,6 +205,30 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             }
         });
         recyclerView1.setAdapter(infoAdapter);
+
+        loadData();
+
+        setIsBack(true, () -> submitBack());
+    }
+
+    private void submitBack() {
+        if (inventoryDetailEntityList.size() == 0) {
+            finish();
+            return;
+        }
+        isFinish = true;
+        mPresenter = new AddInventoryDetailPresenter(this);
+        ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
+
+    }
+
+
+    private void loadData() {
+        mPresenter = new ListInventoryDetailPresenter(this);
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
+        baseFilterEntity.setInventoryTaskId(taskId);
+        baseFilterEntity.setHandler(UserInfoSingle.getInstance().getUserId());
+        ((ListInventoryDetailPresenter) mPresenter).listInventoryDetail(baseFilterEntity);
     }
 
     @OnClick({R.id.btn_add_item, R.id.btn_info_commit, R.id.btn_commit, R.id.btn_clear})
@@ -211,7 +262,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         inventoryUbnormalGoods.setCreateTime(System.currentTimeMillis());
         inventoryUbnormalGoods.setCreateUser(UserInfoSingle.getInstance().getUserId());
         inventoryUbnormalGoods.setCreateUserName(UserInfoSingle.getInstance().getUsername());
-        inventoryUbnormalGoods.setUploadFilePath(new ArrayList<>());
+        inventoryUbnormalGoods.setUploadFilePath(new ArrayList <>());
         //填运单号
         if (TextUtils.isEmpty(tvId.getText().toString().trim())) {
             inventoryUbnormalGoods.setWaybillCode(null);
@@ -236,10 +287,12 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             }
         }
 
-//        if (counterUbnormalGoodsList.size() ==0){
-//            ToastUtil.showToast("请先新增异常");
-//            return;
-//        }
+        for (InventoryUbnormalGoods bean : counterUbnormalGoodsList) {
+            if (bean.getUbnormalNumber() == 0) {
+                ToastUtil.showToast("请输入异常件数！");
+                return;
+            }
+        }
         if (TextUtils.isEmpty(edtRealSortNum.getText().toString().trim())) {
             ToastUtil.showToast("请输入实际分拣数！");
             return;
@@ -254,12 +307,11 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         detailEntity.setHandlerName(UserInfoSingle.getInstance().getUsername());
         detailEntity.setInventoryNumber(edtRealSortNum.getText().toString().trim());
         try {
-            List<InventoryUbnormalGoods> goodsList = Tools.deepCopy(counterUbnormalGoodsList);
+            List <InventoryUbnormalGoods> goodsList = Tools.deepCopy(counterUbnormalGoodsList);
             detailEntity.setSmInventoryUbnormalGoods(goodsList);
         } catch (Exception e) {
 
         }
-
 
         //刷新异常上报列表
         inventoryDetailEntityList.add(detailEntity);
@@ -270,6 +322,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
         tvId.setText("");
         edtRealSortNum.setText("");
+        tvNum.setText("件数: - -");
+        tvWeight.setText("重量: - -");
+        tvStatus.setText("状态: - -");
         waybillId = null;
     }
 
@@ -281,6 +336,8 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
             ToastUtil.showToast("提交数据不能为空");
             return;
         }
+        isFinish = false;
+        mPresenter = new AddInventoryDetailPresenter(this);
         ((AddInventoryDetailPresenter) mPresenter).addInventoryDetail(inventoryDetailEntityList);
 
     }
@@ -290,10 +347,10 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1002) {//异常上报相机事件
-                List<String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);//选择好的图片
+                List <String> photoList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);//选择好的图片
 //                counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).setUploadPath(photoList);
                 //开始上传图片
-                List<File> files = new ArrayList<>();
+                List <File> files = new ArrayList <>();
                 for (String str : photoList) {
                     if (str.contains("storage"))//没有上传过的 图片
                         files.add(new File(str));
@@ -309,8 +366,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                     }
 
                     @Override
-                    public void onSuccess(List<File> fileList) {
-                        List<MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
+                    public void onSuccess(List <File> fileList) {
+                        List <MultipartBody.Part> upFiles = Tools.filesToMultipartBodyParts(fileList);
+                        mPresenter = new AddInventoryDetailPresenter(AddClearStorageActivity.this);
                         ((AddInventoryDetailPresenter) mPresenter).uploads(upFiles);
                         showProgessDialog("正在上传，请稍候...");
                     }
@@ -325,17 +383,23 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     }
 
     @Override
-    public void addInventoryDetailResult(String result) {
-        ToastUtil.showToast("提交成功");
-        finish();
+    public void addInventoryDetailResult(BaseEntity result) {
+        if ("318".equals(result.getStatus())) {
+            ToastUtil.showToast(result.getMessage());
+            EventBus.getDefault().post("ClearStorageFragment_refresh");
+        } else {
+            ToastUtil.showToast("暂存成功");
+        }
+        if (isFinish)
+            finish();
     }
 
     @Override
     public void uploadsResult(Object result) {
 //        Log.e("dime", "添加前长度：" + counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadPath().size());
-        Map<String, String> map = (Map<String, String>) result;
-        Set<Map.Entry<String, String>> entries = map.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
+        Map <String, String> map = (Map <String, String>) result;
+        Set <Map.Entry <String, String>> entries = map.entrySet();
+        for (Map.Entry <String, String> entry : entries) {
             counterUbnormalGoodsList.get(CURRENT_PHOTO_INDEX).getUploadFilePath().add(entry.getKey());
         }
 
@@ -350,8 +414,34 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     }
 
     @Override
+    public void getWaybillCodeResult(String result) {
+
+    }
+
+    /**
+     * 运单 内容返回
+     *
+     * @param result
+     */
+    @Override
+    public void getWaybillInfoByWaybillCodeResult(WaybillsBean result) {
+        if (result != null) {
+            //todo
+            tvNum.setText("件数: " + result.getTotalNumber());
+            tvWeight.setText("重量: " + result.getTotalWeight());
+            tvStatus.setText("状态: " + Tools.getWaybillStatus(result.getWaybillStatus()));
+            waybillId = result.getId();
+        }
+    }
+
+    @Override
+    public void getWaybillInfoByWaybillCodeResultFail() {
+        ToastUtil.showToast("未查询到该运单");
+    }
+
+    @Override
     public void toastView(String error) {
-         ToastUtil.showErrorDialog(error);
+        ToastUtil.showToast(error);
     }
 
     @Override
@@ -362,5 +452,19 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
     @Override
     public void dissMiss() {
         dismissProgessDialog();
+    }
+
+    /**
+     * 已经清库的内容反显
+     *
+     * @param
+     */
+    @Override
+    public void listInventoryDetailResult(List <InventoryDetailEntity> entityList) {
+        if (entityList != null) {
+            inventoryDetailEntityList.clear();
+            inventoryDetailEntityList.addAll(entityList);
+        }
+        infoAdapter.notifyDataSetChanged();
     }
 }

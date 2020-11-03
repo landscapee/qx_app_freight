@@ -7,6 +7,7 @@ import qx.app.freight.qxappfreight.app.IResultLisenter;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
+import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
 import qx.app.freight.qxappfreight.model.GetScooterByScooterCodeModel;
@@ -20,9 +21,9 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void getInfosByFlightId(BaseFilterEntity entity) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).getInfosByFlightId(entity, new IResultLisenter<List<GetInfosByFlightIdBean>>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).getInfosByFlightId(entity, new IResultLisenter <List <GetInfosByFlightIdBean>>() {
             @Override
-            public void onSuccess(List<GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
+            public void onSuccess(List <GetInfosByFlightIdBean> getInfosByFlightIdBeans) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).getInfosByFlightIdResult(getInfosByFlightIdBeans);
                 mRequestView.dissMiss();
             }
@@ -37,7 +38,7 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void getScooterByScooterCode(BaseFilterEntity airLineId) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter<GetInfosByFlightIdBean>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).getScooterByScooterCode(airLineId, new IResultLisenter <GetInfosByFlightIdBean>() {
             @Override
             public void onSuccess(GetInfosByFlightIdBean queryAviationRequireBeans) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).getScooterByScooterCodeResult(queryAviationRequireBeans);
@@ -54,7 +55,7 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void saveScooter(GetInfosByFlightIdBean getInfosByFlightIdBean) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter<OverWeightSaveResultBean>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).saveScooter(getInfosByFlightIdBean, new IResultLisenter <OverWeightSaveResultBean>() {
             @Override
             public void onSuccess(OverWeightSaveResultBean result) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).saveScooterResult(result);
@@ -71,7 +72,7 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void returnWeighing(ReturnWeighingEntity getInfosByFlightIdBean) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).returnWeighing(getInfosByFlightIdBean, new IResultLisenter<String>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).returnWeighing(getInfosByFlightIdBean, new IResultLisenter <String>() {
             @Override
             public void onSuccess(String result) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).returnWeighingResult(result);
@@ -88,10 +89,31 @@ public class GetScooterByScooterCodePresenter extends BasePresenter {
 
     public void getWeight(String pbName) {
         mRequestView.showNetDialog();
-        ((GetScooterByScooterCodeModel) mRequestModel).getWeight(pbName, new IResultLisenter<String>() {
+        ((GetScooterByScooterCodeModel) mRequestModel).getWeight(pbName, new IResultLisenter <String>() {
             @Override
             public void onSuccess(String result) {
                 ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).getWeightResult(result);
+                mRequestView.dissMiss();
+            }
+
+            @Override
+            public void onFail(String error) {
+                mRequestView.toastView(error);
+                mRequestView.dissMiss();
+            }
+        });
+    }
+
+    /**
+     * 退回组板
+     * @param scooter
+     */
+    public void returnGroupScooterTask(GetInfosByFlightIdBean scooter) {
+        mRequestView.showNetDialog();
+        ((GetScooterByScooterCodeModel) mRequestModel).returnGroupScooterTask(scooter, new IResultLisenter <BaseEntity>() {
+            @Override
+            public void onSuccess(BaseEntity result) {
+                ((GetScooterByScooterCodeContract.GetScooterByScooterCodeView) mRequestView).returnGroupScooterTaskResult(result);
                 mRequestView.dissMiss();
             }
 

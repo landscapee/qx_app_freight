@@ -1,24 +1,28 @@
 package qx.app.freight.qxappfreight.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.jwenfeng.library.pulltorefresh.util.DisplayUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -112,6 +116,7 @@ public class Tools {
         String loginName = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_NAME, "");
         return loginName;
     }
+
     public static String getPassword() {
         String password = SharedPreferencesUtil.getString(MyApplication.getContext(), Constants.KEY_LOGIN_PWD, "");
         return password;
@@ -374,7 +379,7 @@ public class Tools {
      */
     public static void startShortSound(Context context) {
         try {
-            Uri  uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.beep);
+            Uri uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.beep);
 //            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
             r.play();
@@ -592,5 +597,98 @@ public class Tools {
         } else
             spCode = "";
         return spCode;
+    }
+
+    /**
+     * 用于展示指示器的RecylerView始终居中显示
+     *
+     * @param num  list的size,也就是多少个item
+     * @param view recyclerView
+     */
+    public static void setRecyclerViewCenterHor(Activity context, int num, View view) {
+        int interval = DisplayUtil.dp2Px(context, 20);//每个item之间的间隔宽度(px)，可以随便写值
+        int itemWidth = DisplayUtil.dp2Px(context, 30);//每个item之间的间隔宽度(px)，可以随便写值
+        WindowManager wm = context.getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();
+        if (num < 6) {
+            int padding = (width - num * (interval + itemWidth)) / 2 - 30;
+            view.setPadding(padding, 0, padding, 0);
+        } else {
+            view.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    /**
+     * 快速定位到第几条数据
+     *
+     * @param view 控件
+     * @param n    位置
+     */
+    public static void scroll2Position(RecyclerView view, int n) {
+        LinearLayoutManager manager = (LinearLayoutManager) view.getLayoutManager();
+        if (manager == null) {
+            return;
+        }
+        int firstItem = manager.findFirstVisibleItemPosition();
+        int lastItem = manager.findLastVisibleItemPosition();
+        if (n <= firstItem) {
+            view.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = view.getChildAt(n - firstItem).getTop();
+            view.scrollBy(0, top);
+        } else {
+            view.scrollToPosition(n);
+        }
+    }
+
+    /**
+     * 0.暂存数据运单; 1.运单录入完成; 2.理货入库完成; 3.舱单核对完成; 4.已提货通知; 5.已缴费; 6.已提货; 7.逾期待补费; 8.已转运; -1退单退货(返航); -2.扣货(公安扣货); -10.运单作废
+     *
+     * @param status
+     * @return
+     */
+    public static String getWaybillStatus(int status) {
+        String strStatus = "未知";
+        switch (status) {
+            case 0:
+                strStatus = "暂存数据运单";
+                break;
+            case 1:
+                strStatus = "运单录入完成";
+                break;
+            case 2:
+                strStatus = "理货入库完成";
+                break;
+            case 3:
+                strStatus = "舱单核对完成";
+                break;
+            case 4:
+                strStatus = "已提货通知";
+                break;
+            case 5:
+                strStatus = "已缴费";
+                break;
+            case 6:
+                strStatus = "已提货";
+                break;
+            case 7:
+                strStatus = "逾期待补费";
+                break;
+            case 8:
+                strStatus = "已转运";
+                break;
+            case -1:
+                strStatus = "退单退货";
+                break;
+            case -2:
+                strStatus = "扣货";
+                break;
+            case -10:
+                strStatus = "运单作废";
+                break;
+
+
+        }
+        return strStatus;
     }
 }

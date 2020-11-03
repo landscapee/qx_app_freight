@@ -7,9 +7,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
         android:layout_weight="1"
+        android:background="@color/white"
         android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_flight_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,8 +31,8 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="航班号" />
+                android:text="航班号"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_flight_no"
@@ -52,8 +58,8 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="实际到达时间" />
+                android:text="实际到达时间"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_arrive_time"
@@ -79,8 +85,8 @@
                 style="@style/public_tv_16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="已到板车数" />
+                android:text="已到板车数"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_handcar_num"
@@ -102,20 +108,20 @@
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ll_re_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/dp_13">
+            android:paddingTop="@dimen/dp_13"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/dp_13"
-                android:textStyle="bold"
                 android:text=" * "
-                android:textColor="@color/red" />
+                android:textColor="@color/red"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -130,21 +136,21 @@
                     style="@style/public_tv_16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="整机复重重量" />
+                    android:text="整机复重重量"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/edt_re_weight"
                     style="@style/public_tv_16sp_3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/transparent"
                     android:layout_weight="1"
+                    android:background="@color/transparent"
                     android:gravity="end"
-                    android:maxLength="10"
                     android:hint="请输入"
                     android:inputType="numberDecimal"
-                    android:singleLine="true"/>
+                    android:maxLength="10"
+                    android:singleLine="true" />
             </LinearLayout>
 
 
@@ -197,6 +203,7 @@
                 android:text="库位"
                 android:textColor="#FF737B8B"
                 android:textSize="13sp" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -210,7 +217,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_8"/>
+            android:paddingTop="@dimen/dp_8" />
 
     </LinearLayout>
 

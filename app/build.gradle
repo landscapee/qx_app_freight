@@ -16,7 +16,7 @@ if (!RELEASE_PROPERTIES_EXIST) {
 }
 
 static def getVersionName() {
-    def sdf = new SimpleDateFormat("yyMMddHH")
+    def sdf = new SimpleDateFormat("yyyyMMddHH")
     return sdf.format(new Date())
 }
 
@@ -28,7 +28,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 75//app根据此数字进行版本自动迭代 2020/5/29
+        versionCode 83//app根据此数字进行版本自动迭代 2020/10/21
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
@@ -188,7 +188,8 @@ dependencies {
 //    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 //    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
 
-    implementation 'me.devilsen:CZXing:0.9.3'
+//    implementation 'me.devilsen:CZXing:0.9.3'
+    implementation 'me.devilsen:czxing:1.0.11'
 //    implementation 'com.google.zxing:core:3.3.3'
 //    implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
 //    implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
@@ -213,7 +214,7 @@ dependencies {
     //自动升级
     api(name: 'VersionUpdateUtils-release', ext: 'aar')
     implementation 'com.jwenfeng.pulltorefresh:library:1.0.3'
-    compileOnly 'org.projectlombok:lombok:1.18.4'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
     implementation files('libs/afinal_0.5.1_bin.jar')
 //    implementation 'com.alibaba:fastjson:1.2.44'
     implementation files('libs/autobahn-0.5.0.jar')
@@ -237,6 +238,8 @@ dependencies {
 
 
     implementation 'com.github.liys666666:DoubleClick:V1.0.4'  // 利用 hook 处理重复点击
+
+    implementation 'com.contrarywind:Android-PickerView:3.2.7'
 }
 
 build.doLast {

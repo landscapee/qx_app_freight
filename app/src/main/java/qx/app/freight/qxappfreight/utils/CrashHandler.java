@@ -52,8 +52,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String FILE_NAME = "crash";
 
     private static final String FILE_NAME_SUFFIX = ".txt";
-//    private String uploadUrl = "http://10.16.23.156:6080/service-product-transport/tp-main-info/exceptionUpload";
-    private String uploadUrl = "http://173.101.2.8/service-product-transport/tp-main-info/exceptionUpload";
+    private String uploadUrl = "http://10.16.23.156:6080/service-product-transport/tp-main-info/exceptionUpload";
+//    private String uploadUrl = "http://173.101.2.8/service-product-transport/tp-main-info/exceptionUpload";
     public void setUploadUrl(String uploadUrl) {
         this.uploadUrl = uploadUrl;
     }

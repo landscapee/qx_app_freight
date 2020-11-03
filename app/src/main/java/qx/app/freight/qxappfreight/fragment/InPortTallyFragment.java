@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.activity.FFMActivity;
-import qx.app.freight.qxappfreight.activity.SortingActivity;
+import qx.app.freight.qxappfreight.activity.InboundSortingActivity;
 import qx.app.freight.qxappfreight.adapter.InportTallyAdapter;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.bean.ScanDataBean;
@@ -55,8 +55,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @BindView(R.id.mfrv_data)
     MultiFunctionRecylerView mMfrvData;
     private int mCurrentPage = 1;
-    private List <TransportDataBase> mList = new ArrayList <>();  //筛选过后的数据
-    private List <TransportDataBase> mListTemp = new ArrayList <>(); // 原始数据
+    private List<TransportDataBase> mList = new ArrayList<>();  //筛选过后的数据
+    private List<TransportDataBase> mListTemp = new ArrayList<>(); // 原始数据
     private InportTallyAdapter mAdapter;
 
     private String searchString = "";//条件搜索关键字
@@ -93,17 +93,14 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             @Override
             public void toDetail(TransportDataBase item) {
                 CURRENT_TASK_BEAN = item;
-
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
-                List <String> taskIdList = new ArrayList <>();
+                List<String> taskIdList = new ArrayList<>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
                 entity.setRoleCode(Constants.INPORTTALLY);
-
                 ((TaskLockPresenter) mPresenter).taskLock(entity);
-
             }
 
             @Override
@@ -150,7 +147,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             mList.addAll(mListTemp);
         } else {
             for (TransportDataBase itemData : mListTemp) {
-                if (itemData.getFlightNo() != null && itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+                if (itemData.getFlightNo() != null && itemData.getFlightNo().toLowerCase().contains(searchString.toLowerCase()) && !mList.contains(itemData)) {
                     mList.add(itemData);
                 }
             }
@@ -167,7 +164,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 //        {"stepOwner":"u27f95c83a0d24f19a592d16ebdf28fe3","undoType":2,"roleCode":"preplaner","ascs":["ETD"]}
         entity.setRoleCode("beforehand_in");
         entity.setUndoType(2);
-        List <String> ascs = new ArrayList <>();
+        List<String> ascs = new ArrayList<>();
         ascs.add("ATA");
         ascs.add("STA");
         entity.setAscs(ascs);
@@ -190,7 +187,8 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
      * @param bean
      */
     private void turnToDetailActivity(TransportDataBase bean) {
-        Intent intent = new Intent(mContext, SortingActivity.class);
+//        Intent intent = new Intent(mContext, SortingActivity.class);
+        Intent intent = new Intent(mContext, InboundSortingActivity.class);
         intent.putExtra("TASK_INFO", bean);
         mContext.startActivity(intent);
     }
@@ -220,7 +218,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
                 mPresenter = new TaskLockPresenter(InPortTallyFragment.this);
                 TaskLockEntity entity = new TaskLockEntity();
-                List <String> taskIdList = new ArrayList <>();
+                List<String> taskIdList = new ArrayList<>();
                 taskIdList.add(item.getTaskId());
                 entity.setTaskId(taskIdList);
                 entity.setUserId(UserInfoSingle.getInstance().getUserId());
@@ -255,6 +253,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.equals("InPortTallyFragment_refresh")) {
+            mCurrentPage=1;
             initData();
         }
     }
@@ -306,7 +305,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             } else {
                 mMfrvData.finishLoadMore();
             }
-            mCurrentPage = transportListBeans.getCurrent()+1;
+            mCurrentPage = transportListBeans.getCurrent() + 1;
             for (TransportDataBase item : transportListBeans.getRecords()) {
                 if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")) {
                     mListTemp.add(item);
@@ -318,8 +317,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
                     mTaskFragment.setTitleText(mListTemp.size());
                 }
             }
-        }
-        else {
+        } else {
             ToastUtil.showToast("无更多数据");
         }
 
@@ -331,12 +329,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     }
 
     @Override
-    public void getScooterByScooterCodeResult(List <GetInfosByFlightIdBean> getInfosByFlightIdBean) {
+    public void getScooterByScooterCodeResult(List<GetInfosByFlightIdBean> getInfosByFlightIdBean) {
 
     }
 
     @Override
-    public void searchWaybillByWaybillCodeResult(List <WaybillsBean> waybillsBeans) {
+    public void searchWaybillByWaybillCodeResult(List<WaybillsBean> waybillsBeans) {
 
     }
 

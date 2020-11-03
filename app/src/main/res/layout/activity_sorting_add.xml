@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_13"
         android:background="@drawable/shape_rect_gray_bottom"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_13"
         android:paddingRight="@dimen/dp_13"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:paddingBottom="@dimen/dp_13">
 
         <TextView
@@ -23,38 +23,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运单号" />
+
         <View
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="1dp"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/edt_id"
             style="@style/public_tv_16sp_3"
-            android:background="@drawable/shape_dynamic_black"
             android:layout_width="60dp"
             android:layout_height="@dimen/dp_30"
+            android:background="@drawable/shape_dynamic_black"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="3"
-            android:gravity="center" />
+            android:maxLength="3" />
+
         <TextView
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:text="-"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="-" />
+
         <EditText
             android:id="@+id/edt_id_1"
             style="@style/public_tv_16sp_3"
-            android:background="@drawable/shape_dynamic_black"
             android:layout_width="120dp"
             android:layout_height="@dimen/dp_30"
+            android:background="@drawable/shape_dynamic_black"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="8"
-            android:gravity="center" />
+            android:maxLength="8" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/dp_3"
+            android:text="+无标签"
+            android:gravity="center"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:id="@+id/tv_add_nowaybill_goods"/>
     </LinearLayout>
 
-    <!-- 实际分拣 -->
+    <!-- 实际分拣数量 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,15 +101,55 @@
                 style="@style/public_tv_16sp_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent"
                 android:layout_weight="1"
+                android:background="@color/transparent"
                 android:gravity="end"
-                android:maxLength="5"
                 android:hint="请输入"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:maxLength="5" />
         </LinearLayout>
+    </LinearLayout>
+    <!-- 实际分拣重量 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_13">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_13"
+            android:text=" * "
+            android:textColor="@color/red" />
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rect_gray_bottom"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/dp_13"
+            android:paddingBottom="@dimen/dp_13">
+
+            <TextView
+                style="@style/public_tv_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="实际分拣重量" />
+
+            <EditText
+                android:id="@+id/edt_real_sort_weight"
+                style="@style/public_tv_16sp_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="end"
+                android:hint="请输入"
+                android:inputType="numberDecimal"
+                android:maxLength="5" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- 库区 -->
@@ -145,12 +198,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_13"
         android:background="@drawable/shape_rect_gray_bottom"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/dp_13"
-        android:paddingBottom="@dimen/dp_13"
+        android:paddingTop="@dimen/dp_13"
+        android:visibility="gone"
         android:paddingRight="@dimen/dp_13"
-        android:paddingTop="@dimen/dp_13">
+        android:paddingBottom="@dimen/dp_13">
 
         <TextView
             style="@style/public_tv_16sp"
@@ -167,21 +221,20 @@
             android:drawableRight="@mipmap/drop_select"
             android:gravity="right"
             android:text="请选择库位 "
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
+
         <EditText
             android:id="@+id/et_location"
             style="@style/public_tv_16sp_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:maxLength="20"
-            android:text=""
             android:background="@color/transparent"
-            />
+            android:ellipsize="end"
+            android:gravity="right"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:text="" />
 
 
     </LinearLayout>
@@ -191,17 +244,44 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="13dp"
         android:background="@drawable/shape_rect_gray_bottom"
-        android:paddingBottom="@dimen/dp_13"
-        android:paddingRight="@dimen/dp_13"
         android:paddingTop="@dimen/dp_13"
-        android:visibility="gone"
-        >
+        android:paddingRight="@dimen/dp_13"
+        android:paddingBottom="@dimen/dp_13"
+        android:visibility="visible">
+
+        <TextView
+            style="@style/public_tv_16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="是否错运" />
+
+        <TextView
+            android:id="@+id/tv_wrong_transport"
+            style="@style/public_tv_16sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@mipmap/drop_select"
+            android:gravity="right"
+            android:text="否" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:background="@drawable/shape_rect_gray_bottom"
+        android:paddingTop="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_13"
+        android:paddingBottom="@dimen/dp_13"
+        android:visibility="gone">
 
         <TextView
             style="@style/public_tv_16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="是否转关" />
+
         <TextView
             android:id="@+id/tv_is_transit"
             style="@style/public_tv_16sp"
@@ -214,28 +294,29 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/shape_rect_gray_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="13dp"
-        android:paddingBottom="@dimen/dp_13"
+        android:background="@drawable/shape_rect_gray_bottom"
+        android:paddingTop="@dimen/dp_13"
         android:paddingRight="@dimen/dp_13"
-        android:paddingTop="@dimen/dp_13">
+        android:paddingBottom="@dimen/dp_13">
 
         <TextView
             style="@style/public_tv_16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="备注" />
+
         <EditText
             android:id="@+id/tv_remark"
             style="@style/public_tv_16sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLength="200"
             android:background="@color/transparent"
-            android:gravity="right" />
+            android:gravity="right"
+            android:maxLength="200" />
     </LinearLayout>
 
     <LinearLayout
@@ -248,6 +329,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="超重情况" />
+
         <TextView
             android:id="@+id/tv_overweight"
             style="@style/public_tv_16sp"
@@ -257,7 +339,7 @@
             android:background="@color/transparent"
             android:gravity="right" />
     </LinearLayout>
-    
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_7"
@@ -269,29 +351,31 @@
         android:padding="@dimen/dp_13">
 
         <TextView
+            style="@style/public_tv_16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/public_tv_16sp"
-            android:text="异常情况  "/>
+            android:text="异常情况  " />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="(可多选)"/>
+            android:text="(可多选)" />
+
         <Button
             android:id="@+id/btn_add_item"
             android:layout_width="@dimen/dp_60"
             android:layout_height="@dimen/dp_27"
             android:background="@mipmap/add_2_bg"
-            android:gravity="center"/>
+            android:gravity="center" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#FFEFF2F3"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#FFEFF2F3">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -301,12 +385,12 @@
 
         <Button
             android:id="@+id/btn_submit"
+            style="@style/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="提交"
-            android:textSize="18sp"
             android:textColor="@color/white"
-            style="@style/btn_submit"/>
+            android:textSize="18sp" />
 
     </LinearLayout>
 

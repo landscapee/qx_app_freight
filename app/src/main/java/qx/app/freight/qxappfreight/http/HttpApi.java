@@ -13,6 +13,7 @@ import qx.app.freight.qxappfreight.bean.InWaybillRecord;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
 import qx.app.freight.qxappfreight.bean.PullGoodsInfoBean;
 import qx.app.freight.qxappfreight.bean.ReservoirArea;
+import qx.app.freight.qxappfreight.bean.SearchFilghtEntity;
 import qx.app.freight.qxappfreight.bean.SelectTaskMemberEntity;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.request.ChangeWaybillEntity;
@@ -24,10 +25,9 @@ import qx.app.freight.qxappfreight.bean.request.FlightIdBean;
 import qx.app.freight.qxappfreight.bean.request.FlightPhotoEntity;
 import qx.app.freight.qxappfreight.bean.request.GetScooterListInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
-import qx.app.freight.qxappfreight.bean.request.GroupBoardRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.InPortTallyCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.InWaybillRecordGetEntity;
-import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.InWaybillRecordSubmitNewEntity;
 import qx.app.freight.qxappfreight.bean.request.InventoryDetailEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListRequestEntity;
 import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
@@ -39,9 +39,11 @@ import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
 import qx.app.freight.qxappfreight.bean.request.PullGoodsEntity;
 import qx.app.freight.qxappfreight.bean.request.QueryContainerInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.QueryWaybillInfoEntity;
 import qx.app.freight.qxappfreight.bean.request.ReturnWeighingEntity;
 import qx.app.freight.qxappfreight.bean.request.SaveOrUpdateEntity;
 import qx.app.freight.qxappfreight.bean.request.ScooterSubmitEntity;
+import qx.app.freight.qxappfreight.bean.request.ScooterTransitBean;
 import qx.app.freight.qxappfreight.bean.request.StorageCommitEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskClearEntity;
 import qx.app.freight.qxappfreight.bean.request.TaskLockEntity;
@@ -54,6 +56,7 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
+import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -68,6 +71,7 @@ import qx.app.freight.qxappfreight.bean.response.FilterTransportDateBase;
 import qx.app.freight.qxappfreight.bean.response.FindAirlineAllBean;
 import qx.app.freight.qxappfreight.bean.response.FlightAllReportInfo;
 import qx.app.freight.qxappfreight.bean.response.FlightBean;
+import qx.app.freight.qxappfreight.bean.response.FlightInfoAndScootersBean;
 import qx.app.freight.qxappfreight.bean.response.FlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.FlightLuggageBean;
 import qx.app.freight.qxappfreight.bean.response.FlightServiceBean;
@@ -79,6 +83,7 @@ import qx.app.freight.qxappfreight.bean.response.GetHistoryBean;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
 import qx.app.freight.qxappfreight.bean.response.GetQualificationsBean;
 import qx.app.freight.qxappfreight.bean.response.GetScooterListInfoBean;
+import qx.app.freight.qxappfreight.bean.response.GroundAgentBean;
 import qx.app.freight.qxappfreight.bean.response.IOManifestBean;
 import qx.app.freight.qxappfreight.bean.response.InPortResponseBean;
 import qx.app.freight.qxappfreight.bean.response.InWaybillRecordBean;
@@ -108,16 +113,18 @@ import qx.app.freight.qxappfreight.bean.response.RespLoginBean;
 import qx.app.freight.qxappfreight.bean.response.ReturnBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterInfoListDataBean;
+import qx.app.freight.qxappfreight.bean.response.SearchFlightInfoBean;
 import qx.app.freight.qxappfreight.bean.response.SearchReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.SmInventoryEntryandexit;
 import qx.app.freight.qxappfreight.bean.response.TestInfoListBean;
-import qx.app.freight.qxappfreight.bean.response.TransportDataBase;
 import qx.app.freight.qxappfreight.bean.response.TransportListBean;
 import qx.app.freight.qxappfreight.bean.response.TransportTodoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldInfoListBean;
 import qx.app.freight.qxappfreight.bean.response.UldLikeBean;
 import qx.app.freight.qxappfreight.bean.response.UnLoadListBillBean;
 import qx.app.freight.qxappfreight.bean.response.UpdateVersionBean2;
+import qx.app.freight.qxappfreight.bean.response.WaybillQuickGetBean;
+import qx.app.freight.qxappfreight.bean.response.WaybillsBean;
 import qx.app.freight.qxappfreight.bean.response.WaybillsListBean;
 import qx.app.freight.qxappfreight.model.ManifestBillModel;
 import retrofit2.Call;
@@ -315,6 +322,7 @@ public interface HttpApi {
     //航空公司资质
     @GET("service-bussiness-market/collectionRequire/get/{iata}")
     Observable<BaseEntity<List<MarketCollectionRequireBean>>> freightInfo(@Path("iata") String iata);
+
     //获取卸机已扫板车数据
     @GET("tp-task-his/transportTaskScooterQuery/{acdmDtoId}")
     Observable<BaseEntity<List<TransportTodoListBean>>> getUnloadDoneScooter(@Path("acdmDtoId") String acdmDtoId);
@@ -371,6 +379,10 @@ public interface HttpApi {
     @POST("service-product-cargoweighing/scooter/getScooterByScooterCode")
     Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getScooterByScooterCode(@Body BaseFilterEntity model);
 
+    // 复重板车退回 组板
+    @POST("service-product-cargoweighing/scooter/returnGroupScooterTask")
+    Observable<BaseEntity<Object>> returnGroupScooterTask(@Body GetInfosByFlightIdBean model);
+
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
     Observable<BaseEntity<OverWeightSaveResultBean>> saveScooter(@Body GetInfosByFlightIdBean model);
@@ -381,7 +393,7 @@ public interface HttpApi {
 
     //复重 / 获取航班所有板车
     @POST("service-product-cargoweighing/scooter/getTodoScooters")
-    Observable<BaseEntity<List<GetInfosByFlightIdBean>>> getTodoScooters(@Body TodoScootersEntity model);
+    Observable<BaseEntity<FlightInfoAndScootersBean>> getTodoScooters(@Body TodoScootersEntity model);
 
     //复重 / 获取航班舱单信息
     @POST("service-product-stowage/stowage-waybill-info/getStowagePrint")
@@ -391,6 +403,12 @@ public interface HttpApi {
     //复重 / 复重历史
     @POST("service-product-cargoweighing/scooter/getHistoryScootersPage")
     Observable<BaseEntity<GetHistoryBean>> getHistoryScootersPage(@Body BaseFilterEntity model);
+
+
+    //根据关键字搜索关联航班号列表
+    @POST("service-base-flight/f-flight/searchFlightByParam")
+    Observable<BaseEntity<List<SearchFlightInfoBean>>> searchFlightsByKey(@Body SearchFilghtEntity entity);
+
 
     /***********************运输*****************************/
 
@@ -416,7 +434,7 @@ public interface HttpApi {
 
     //扫描板车查询
     @GET("service-product-transport/tp-main-info/scooterWithUser/{user}/{flightId}/{taskId}")
-    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId,@Path("taskId") String taskId);
+    Observable<BaseEntity<List<TransportTodoListBean>>> scooterWithUser(@Path("user") String user, @Path("flightId") String flightId, @Path("taskId") String taskId);
 
     //进入运输任务 获取该任务下可拉板车的列表
     @GET("service-product-transport/tp-main-info/scooterWithTask/{taskId}")
@@ -504,7 +522,7 @@ public interface HttpApi {
 
     //判断板车是否被扫描上传过
     @GET("service-product-transport/tp-main-info/checkDeviceScooterExists/{scooterCode}/{flightId}/{scSubCategory}")
-    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode,@Path("flightId") String flightId,@Path("scSubCategory") String scSubType);
+    Observable<BaseEntity<Object>> checkScooterCode(@Path("scooterCode") String scooterCode, @Path("flightId") String flightId, @Path("scSubCategory") String scSubType);
 
     //结束装机
     @POST("service-product-transport/tp-main-info/flightDoneInstall")
@@ -580,7 +598,7 @@ public interface HttpApi {
 
     //查询提货分批出库记录
     @GET("service-product-delivery/delivery/getOutboundList/{waybillId}")
-    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path( "waybillId") String waybillId);
+    Observable<BaseEntity<List<PickGoodsRecordsBean>>> getOutboundList(@Path("waybillId") String waybillId);
 
     //撤销 提货分批出库记录
     @POST(" service-product-delivery/delivery/revokeInboundDelevery")
@@ -597,7 +615,7 @@ public interface HttpApi {
 
     //查询运单叉车使用费记录
     @GET("service-product-delivery/forklift_trunk/listForkliftTrunkInfo/{waybillId}")
-    Observable<BaseEntity<List<ForkliftWorkingCostBean>>> getWaybillForklift(@Path( "waybillId") String waybillId);
+    Observable<BaseEntity<List<ForkliftWorkingCostBean>>> getWaybillForklift(@Path("waybillId") String waybillId);
 
     //添加运单叉车使用费记录
     @POST("service-product-delivery/forklift_trunk/savaForkliftTrunkInfo")
@@ -649,7 +667,7 @@ public interface HttpApi {
      * @return 成功/失败
      */
     @POST("/service-product-cargotallying/sorting/submit")
-    Observable<BaseEntity<Object>> submitWillbillRecord(@Body InWaybillRecordSubmitEntity params);
+    Observable<BaseEntity<Object>> submitWillbillRecord(@Body InWaybillRecordSubmitNewEntity params);
 
     /**
      * 删除分拣信息中的某一条信息 - guohao
@@ -667,7 +685,7 @@ public interface HttpApi {
      * @return 成功/失败
      */
     @POST("service-product-cargotallying/sorting/saveRecord")
-    Observable<BaseEntity<Object>> allGoodsArrived(@Body InWaybillRecord data);
+    Observable<WaybillQuickGetBean> allGoodsArrived(@Body InWaybillRecordSubmitNewEntity.SingleLineBean data);
 
 
     /***********************消息中心*****************************/
@@ -726,7 +744,7 @@ public interface HttpApi {
 
     //清库提交
     @POST("service-bussiness-warehouse/inventory/addInventoryDetail")
-    Observable<BaseEntity<Object>> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
+    Observable<BaseEntity> addInventoryDetail(@Body List<InventoryDetailEntity> entity);
 
     //清库详情
     @POST("service-bussiness-warehouse/inventory/listInventoryDetail")
@@ -735,6 +753,11 @@ public interface HttpApi {
     //清库运单模糊查询
     @GET("service-bussiness-warehouse/inventory/listWaybillCode")
     Observable<ListWaybillCodeBean> listWaybillCode(@Query("code") String code, @Query("inventoryTaskId") String inventoryTaskId);
+
+    //从服务器 获取 运单号
+    @GET("service-product-inwaybill/arrival-waybill/generateWBQWaybillCode")
+    Observable<BaseEntity<Object>> getWaybillCode();
+
     /*********************国际货物***************************/
 
     @POST(" service-product-transport/tp-main-info/internationalCargoReport")
@@ -818,6 +841,7 @@ public interface HttpApi {
      */
     @POST("service-product-finishloading/stowage-report-info/releaseFlightByFlightId")
     Observable<BaseEntity<Object>> auditManifest(@Body BaseFilterEntity entity);
+
     /**
      * 重新写入离港系统
      *
@@ -826,7 +850,7 @@ public interface HttpApi {
     @POST("service-product-finishloading/stowage-report-info/repartWriteLoadingInfo")
     Observable<BaseEntity<Object>> repartWriteLoading(@Body BaseFilterEntity entity);
 
-  /**
+    /**
      * 获取装机单或货邮舱单数据
      *
      * @return
@@ -844,7 +868,6 @@ public interface HttpApi {
      */
     @POST("service-product-transport/tp-main-info/restartUnloadTask")
     Observable<BaseEntity<Object>> reOpenLoadTask(@Body BaseFilterEntity entity);
-
 
 
     /****************************已办***********************************/
@@ -886,14 +909,38 @@ public interface HttpApi {
     //获取 出入库列表
     @POST("service-bussiness-warehouse/storage/pageByType")
     Observable<BaseEntity<IOManifestBean>> getIOManifestList(@Body BaseFilterEntity entity);
+
     //获取 库存列表
     @POST("service-bussiness-warehouse/storage/listAreaInfo")
     Observable<BaseEntity<InventoryBean>> getInventory(@Body BaseFilterEntity entity);
+
     //提交出库入库 单
     @POST("service-bussiness-warehouse/storage/affirmInventory")
     Observable<BaseEntity<Object>> submitIOManifestList(@Body SmInventoryEntryandexit entity);
 
+    //根据运单号查数据库，如果库里有此运单号，返回的运单数据
+    @POST("service-product-cargotallying/sorting/getCargoInfoByWaybillCode")
+    Observable<BaseEntity<InWaybillRecordSubmitNewEntity.SingleLineBean>> getWaybillInfoByCode(@Body QueryWaybillInfoEntity entity);
 
+    /**
+     * 获取运单 基本信息
+     *
+     * @return
+     */
+    @GET("service-bussiness-warehouse/inventory/getWaybillInfoByWaybillCode/{waybillId}")
+    Observable<BaseEntity<WaybillsBean>> getWaybillInfoByWaybillCode(@Path("waybillId") String waybillCode);
 
-
+    /**
+     * 获取地面代理列表接口详情
+     * @return
+     */
+    @GET(" service-bussiness-shipper/ground-agent/getAll")
+    Observable<BaseEntity<List<GroundAgentBean>>> getAllAgent();
+    /**
+     * 新增基础板车接口详情
+     *
+     * @return
+     */
+    @POST("/service-bussiness-facility/bd/saveOrUpdate")
+    Observable<BaseEntity<Object>> newScooter(@Body ScooterTransitBean entity);
 }
