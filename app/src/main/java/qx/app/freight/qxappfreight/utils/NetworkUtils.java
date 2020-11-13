@@ -36,8 +36,9 @@ public class NetworkUtils {
         if(networkInfo!=null && networkInfo.isAvailable()){
             isAvailable = true;
         }
-        if (!isAvailable)
+        if (!isAvailable) {
             Log.e("NetworkUtils","network_error");
+        }
         return isAvailable;
     }
 
@@ -52,10 +53,11 @@ public class NetworkUtils {
         }
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         // cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting())
+        if (cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()) {
             return NetworkUtils.WIFI;
-        else
+        } else {
             return NetworkUtils.NO_WIFI;
+        }
     }
 
     /**

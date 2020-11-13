@@ -67,8 +67,9 @@ public class NoticeActivity extends BaseActivity implements FindUserNoticeByPage
         mfrvNotice.setRefreshListener(this);
         mfrvNotice.setOnRetryLisenter(this);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
                 readMessage(position);
                 nowPosition = position;
         });

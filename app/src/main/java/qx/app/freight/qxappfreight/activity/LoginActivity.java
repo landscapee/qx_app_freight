@@ -89,8 +89,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
         mEtPassWord.setText(Tools.getPassword());
 
         mBtnLogin.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             login();
         });
         mEtPassWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {

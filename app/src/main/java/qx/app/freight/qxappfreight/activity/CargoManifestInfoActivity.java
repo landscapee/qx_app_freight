@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -151,10 +152,11 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         mBtPrint.setOnClickListener(v -> {
 
             String intro = "";
-            if (printFlag == 1)
+            if (printFlag == 1) {
                 intro = "打印【版本号" + currentVersion + "】货邮舱单";
-            else if (printFlag == 3)
+            } else if (printFlag == 3) {
                 intro = "打印【版本号" + currentVersion + "】舱位建议";
+            }
 
             SingerDialog singerDialog = new SingerDialog(this, intro);
             singerDialog.isCanceledOnTouchOutside(false)
@@ -212,8 +214,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             entity.setFlightId(mBaseData.getFlightId());
             entity.setReturnReason("手持端退回请求");
             ((AuditManifestPresenter) mPresenter).auditManifest(entity);
-        } else
+        } else {
             ToastUtil.showToast("未获取到货邮舱单，无法释放航班");
+        }
     }
 
     private void repartWriteLoading() {
@@ -222,8 +225,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             BaseFilterEntity entity = new BaseFilterEntity();
             entity.setFlightInfoId(flightInfoId);
             ((AuditManifestPresenter) mPresenter).repartWriteLoading(entity);
-        } else
+        } else {
             ToastUtil.showToast("未写入离港系统，无法重新载入");
+        }
 
     }
 
@@ -273,8 +277,9 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
         if (flag == 1) {
             mRgTitle.check(R.id.rb_zd);
             showFragment(mZdFragment);
-        } else
+        } else {
             showFragment(mHYragment);
+        }
     }
 
     /**
@@ -328,15 +333,15 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             mTvVersion.setText("版本号:" + result.getVersion());
 
             if (result.getWriteResult() != null && result.getWriteResult().contains("成功")) {
-                mTvStatus.setTextColor(getResources().getColor(R.color.green));
+                mTvStatus.setTextColor(ContextCompat.getColor(this,R.color.green));
                 mTvStatus.setText("离港系统" + result.getWriteResult());
                 mTvStatus.getPaint().setFakeBoldText(false);
             } else if (result.getWriteResult() != null && result.getWriteResult().contains("失败")) {
-                mTvStatus.setTextColor(getResources().getColor(R.color.red));
+                mTvStatus.setTextColor(ContextCompat.getColor(this,R.color.red));
                 mTvStatus.setText("离港系统" + result.getWriteResult());
                 mTvStatus.getPaint().setFakeBoldText(false);
             } else {
-                mTvStatus.setTextColor(getResources().getColor(R.color.gray_8f));
+                mTvStatus.setTextColor(ContextCompat.getColor(this,R.color.gray_8f));
                 mTvStatus.setText("离港系统 待写入");
                 mTvStatus.getPaint().setFakeBoldText(true);
             }
@@ -346,7 +351,7 @@ public class CargoManifestInfoActivity extends BaseActivity implements MultiFunc
             EventBus.getDefault().post(cargoManifestEventBusEntity);
             //是否能释放航班
             if (!results.get(0).isCanRelease()) {
-                mBtShifang.setBackgroundColor(getResources().getColor(R.color.gray_cc));
+                mBtShifang.setBackgroundColor(ContextCompat.getColor(this,R.color.gray_cc));
                 mBtShifang.setEnabled(false);
             } else {
                 mBtShifang.setBackgroundResource(R.drawable.shape_dynamic_blue);

@@ -24,18 +24,18 @@ public class FlightLuggageBean implements MultiItemEntity, Serializable {
     private int tpFlightType;
 
     public int getTpFlightType(){
-        if (movement.equals("A")){
-            if (flightIndicator.equals("D")){
+        if ("A".equals(movement)){
+            if ("D".equals(flightIndicator)){
                 return 1;
-            }else if (flightIndicator.equals("I")){
+            }else if ("I".equals(flightIndicator)){
                 return 3;
             }else {
                 return 0;
             }
-        }else if (movement.equals("D")){
-            if (flightIndicator.equals("D")){
+        }else if ("D".equals(movement)){
+            if ("D".equals(flightIndicator)){
                 return 2;
-            }else if (flightIndicator.equals("I")){
+            }else if ("I".equals(flightIndicator)){
                 return 4;
             }else {
                 return 0;
@@ -47,10 +47,11 @@ public class FlightLuggageBean implements MultiItemEntity, Serializable {
     }
     @Override
     public int getItemType() {
-        if (flightCourseByAndroid !=null)
+        if (flightCourseByAndroid !=null) {
             return flightCourseByAndroid.size();
-        else
+        } else {
             return 2;
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.response.NoticeViewBean;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -87,7 +88,7 @@ public class NoticeDetailActivity extends BaseActivity {
         tvName.setText("发布单位："+mData.getCreateOrg());
         tvTime.setText( TimeUtils.date2Tasktime6(mData.getCreateDate()));
         tvContent.setMovementMethod(LinkMovementMethod.getInstance());//设置超链接可以打开网页
-        tvContent.setText(Html.fromHtml(mData.getContent()));
+        tvContent.setText(StringUtil.transformHtmlFromhtml(mData.getContent()));
 //        tvContent.setText(mData.getContent());
         tvCreatPerson.setText(mData.getCreateUser());
     }

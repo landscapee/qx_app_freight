@@ -180,6 +180,7 @@ public abstract class TCPClientBase implements Runnable {
         }
     }
 
+    @Override
     public void run() {
 
         synchronized (receiverT) {
@@ -373,6 +374,7 @@ public abstract class TCPClientBase implements Runnable {
     public abstract void onPushMessage(Message message);
 
     class Worker implements Runnable {
+        @Override
         public void run() {
             synchronized (workerT) {
                 workerT.notifyAll();

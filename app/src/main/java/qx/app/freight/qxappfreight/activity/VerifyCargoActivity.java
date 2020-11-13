@@ -161,7 +161,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         }
 
         Log.e("dime", "spotFlat=" + mDecBean.getSpotFlag() + ", spotResult=" + mSportResult);
-        if (mDecBean.getSpotFlag().equals("0")) {
+        if ("0".equals(mDecBean.getSpotFlag())) {
             //抽查，显示抽查操作按钮
             mLlSpot.setVisibility(View.VISIBLE);
         }
@@ -192,10 +192,11 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             if (1 == mSportResult) {
                 ToastUtil.showToast("不需要抽检，默认通过");
             } else if (0 == mSportResult) {
-                if ("通过".equals(mTvCheck.getText()))
+                if ("通过".equals(mTvCheck.getText())) {
                     initPop1(true);
-                else
+                } else {
                     initPop1(false);
+                }
             }
 
         });
@@ -291,10 +292,11 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         if (mBean != null) {
             tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
             tvGoodsName.setText("品名:  " + mBean.getCargoCn());
-            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+            if (!StringUtil.isEmpty(mBean.getSpecialCode())) {
                 tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
-            else
+            } else {
                 tvSpecialCode.setText("特货代码:  - -");
+            }
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
             etRemark.setText(mBean.getRemark());
@@ -341,8 +343,9 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             if ("318".equals(error)) {
                 setResult(404);
                 finish();
-            } else
+            } else {
                 ToastUtil.showToast(error);
+            }
         }
 
     }
@@ -394,18 +397,21 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         CheckBox cb_adopt = view.findViewById(R.id.cb_adopt);
         CheckBox cb_notpass = view.findViewById(R.id.cb_notpass);
         Button bt_commit = view.findViewById(R.id.btn_commit);
-        if (tag)
+        if (tag) {
             cb_adopt.setChecked(true);
-        else
+        } else {
             cb_notpass.setChecked(true);
+        }
 
         cb_adopt.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
+            if (isChecked) {
                 cb_notpass.setChecked(false);
+            }
         });
         cb_notpass.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
+            if (isChecked) {
                 cb_adopt.setChecked(false);
+            }
         });
         bt_commit.setOnClickListener(v -> {
             if (cb_notpass.isChecked()) {
@@ -424,8 +430,9 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         tv_cancel.setOnClickListener(v -> {
             if (cb_adopt.isChecked() == false && cb_notpass.isChecked() == false) {
                 ToastUtil.showToast(this, "请选择");
-            } else
+            } else {
                 popupWindow.dismiss();
+            }
         });
     }
 

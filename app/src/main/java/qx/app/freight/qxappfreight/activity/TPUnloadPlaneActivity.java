@@ -61,6 +61,7 @@ import qx.app.freight.qxappfreight.presenter.ScanScooterPresenter;
 import qx.app.freight.qxappfreight.presenter.ScooterInfoListPresenter;
 import qx.app.freight.qxappfreight.utils.CommonJson4List;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -184,9 +185,9 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         }
         mTvArriveTime.setText(TimeUtils.getHMDay(arrive));
         String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
-        mTvScanGoods.setText(Html.fromHtml(scanGoods));
+        mTvScanGoods.setText(StringUtil.transformHtmlFromhtml(scanGoods));
         String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";
-        mTvScanPac.setText(Html.fromHtml(scanPac));
+        mTvScanPac.setText(StringUtil.transformHtmlFromhtml(scanPac));
         mSlideRvGoods.setLayoutManager(new LinearLayoutManager(this));
         mScanGoodsAdapter = new TpScanInfoAdapter(mListGoods, mOutFieldTaskBean.getFlights());
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
@@ -513,8 +514,9 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
             myAgentListBean.setScooterCode(scooterCode);
             baseFilterEntity.setFilter(myAgentListBean);
             ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
-        } else
+        } else {
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");
+        }
     }
 
     @Override
@@ -594,12 +596,13 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
 
-        if (step == 0)
+        if (step == 0) {
             entity.setOperationCode(Constants.TP_START);//任务开始
-        else if (step == 1)
+        } else if (step == 1) {
             entity.setOperationCode(Constants.TP_END);//任务结束
-        else
+        } else {
             entity.setOperationCode(Constants.TP_ACCEPT);//任务领受
+        }
 
         entity.setUserName(UserInfoSingle.getInstance().getUsername());
 
@@ -622,8 +625,9 @@ public class TPUnloadPlaneActivity extends BaseActivity implements ScooterInfoLi
 
     @Override
     public void toastView(String error) {
-        if (error!=null)
+        if (error!=null) {
             ToastUtil.showToast(error);
+        }
         mListTempAlreadyNotify.clear();
         Log.e("tagError", "error========" + error);
     }

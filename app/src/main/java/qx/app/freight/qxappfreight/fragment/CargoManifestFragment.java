@@ -141,8 +141,9 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         mMfrvData.setAdapter(adapter);
         //跳转到详情页面
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             if (list != null && list.size() > 0) {
                 CargoManifestInfoActivity.startActivity(getContext(), list.get(position), 0);
 //                Intent intent = new Intent(getContext(), CargoManifestInfoActivity.class);
@@ -173,7 +174,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("CargoManifestFragment_refresh") || result.equals("refresh_data_update")) {
+        if ("CargoManifestFragment_refresh".equals(result) || "refresh_data_update".equals(result)) {
             pageCurrent = 1;
             getData();
         }
@@ -186,7 +187,7 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag())) {
 //            chooseCode(daibanCode);
         }
     }
@@ -241,12 +242,15 @@ public class CargoManifestFragment extends BaseFragment implements EndInstallToD
         if (pageCurrent == 1) {
             list.clear();
         }
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
-        if (error != null)
+        }
+        if (error != null) {
             ToastUtil.showToast(error);
+        }
     }
 
     @Override

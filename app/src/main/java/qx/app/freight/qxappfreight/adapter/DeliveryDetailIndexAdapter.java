@@ -57,8 +57,9 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
             holder.setVisible(R.id.tv_complete_time,true);
             holder.setText(R.id.tv_complete_time, TimeUtils.date2Tasktime6(bean.getOutStorageTime()));
         }
-        else
+        else {
             holder.setGone(R.id.tv_complete_time,false);
+        }
 
         //运单状态
         switch (bean.getWaybillStatus()){
@@ -98,8 +99,9 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
                 holder.setText(R.id.tv_status,"逾期待补费");
                 holder.setText(R.id.tv_outStorage,"");
             }
-            else
+            else {
                 holder.setText(R.id.tv_outStorage,"已出库");
+            }
 
             holder.setVisible(R.id.tv_outStorage,false);
             holder.setGone(R.id.btn_outStorage,false);
@@ -118,8 +120,9 @@ public class DeliveryDetailIndexAdapter extends BaseQuickAdapter<WaybillsBean, B
             holder.setVisible(R.id.tv_overweight_money,false);
             holder.setText(R.id.tv_overweight_money,"超重费用:"+bean.getOverweightCharge()+"元");
         }
-        else
+        else {
             holder.setGone(R.id.tv_overweight_money,false);
+        }
 
         Button btnOutStorage = holder.getView(R.id.btn_outStorage);
         btnOutStorage.setOnClickListener(v ->

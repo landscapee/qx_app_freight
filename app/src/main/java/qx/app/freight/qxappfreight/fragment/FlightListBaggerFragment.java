@@ -86,8 +86,9 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser){
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
             if (searchToolbar!=null){
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -132,10 +133,12 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -167,8 +170,9 @@ public class FlightListBaggerFragment extends BaseFragment implements LookLUggag
         }
         mListTemp.addAll(flightLuggageBeans);
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
         }
         seachWithNum();
     }

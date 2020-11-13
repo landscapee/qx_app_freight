@@ -161,8 +161,9 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
                             }
                         }
                     }
-                    if (apsAdapter2!=null)
+                    if (apsAdapter2!=null) {
                         ((ArrayAdapter) apsAdapter2).notifyDataSetChanged();
+                    }
                 }
                 break;
             }
@@ -182,10 +183,12 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
                             }
                         }
                     }
-                    if (goodsTemp.size()>0)
+                    if (goodsTemp.size()>0) {
                         strGoods = goodsTemp.get(0);
-                    if (apsAdapter2 != null)
+                    }
+                    if (apsAdapter2 != null) {
                         ((ArrayAdapter) apsAdapter2).notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -235,9 +238,9 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
             case R.id.positiveTv:
                 if (listener != null) {
                     if (widthAirFlag == 1){
-                        if (Tools.compareFist(strBerth,oldBerth))
+                        if (Tools.compareFist(strBerth,oldBerth)) {
                             ToastUtil.showToast("不能拆分到相同的舱位/货位");
-                        else if(!StringUtil.isEmpty(etWeight.getText().toString()) &&Double.valueOf(etWeight.getText().toString())> 0&&Double.valueOf(etWeight.getText().toString())<oldWeight){
+                        } else if(!StringUtil.isEmpty(etWeight.getText().toString()) &&Double.valueOf(etWeight.getText().toString())> 0&&Double.valueOf(etWeight.getText().toString())<oldWeight){
                             listener.onClick(this, true,strBerth,strGoods,Double.valueOf(etWeight.getText().toString()));
                             this.dismiss();
                         }
@@ -246,9 +249,9 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
                         }
                     }
                     else {
-                        if (Tools.compareFist(strGoods,oldGoods))
+                        if (Tools.compareFist(strGoods,oldGoods)) {
                             ToastUtil.showToast("不能拆分到相同的舱位/货位");
-                        else if(!StringUtil.isEmpty(etWeight.getText().toString())&&Double.valueOf(etWeight.getText().toString())> 0&&Double.valueOf(etWeight.getText().toString())<oldWeight){
+                        } else if(!StringUtil.isEmpty(etWeight.getText().toString())&&Double.valueOf(etWeight.getText().toString())> 0&&Double.valueOf(etWeight.getText().toString())<oldWeight){
                             listener.onClick(this, true,strBerth,strGoods,Double.valueOf(etWeight.getText().toString()));
                             this.dismiss();
                         }
@@ -258,8 +261,9 @@ public class TakeSpiltDialog extends Dialog implements View.OnClickListener {
                     }
 
                 }
-                else
+                else {
                     this.dismiss();
+                }
                 break;
         }
     }

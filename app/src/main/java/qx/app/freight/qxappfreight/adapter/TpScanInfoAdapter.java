@@ -31,7 +31,7 @@ public class TpScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, Bas
     @Override
     protected void convert(BaseViewHolder helper, ScooterInfoListBean item) {
         View viewDelete = helper.getView(R.id.ll_delete);
-        if (item.getFlightType().equals("I")){
+        if ("I".equals(item.getFlightType())){
             helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
         }else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);

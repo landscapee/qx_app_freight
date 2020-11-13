@@ -69,7 +69,7 @@ public class IOManifestFragment extends BaseFragment {
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("daibanCode", daibanCode + "");
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("IOManifestFragment")) {
+        if (!TextUtils.isEmpty(result.getData()) && "IOManifestFragment".equals(result.getFunctionFlag())) {
 
             IOqrcodeEntity iOqrcodeEntity1 = JSON.parseObject(daibanCode, IOqrcodeEntity.class);
             if (iOqrcodeEntity1 != null) {
@@ -112,8 +112,9 @@ public class IOManifestFragment extends BaseFragment {
             showFragment(nowFragment);
         });
         btnSwitch.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             ScanManagerActivity.startActivity(getContext(), "IOManifestFragment");
         });
         initFragment();

@@ -59,8 +59,9 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
         mPresenter = new SelectTaskMemberPresenter(this);
         ((SelectTaskMemberPresenter) mPresenter).getLoadUnloadLeaderList(mTaskId);
         mTvConfirm.setOnClickListener(v ->{
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             commitSelectMember();
         });
     }
@@ -87,8 +88,9 @@ public class AssignInstallEquipMemberActivity extends BaseActivity implements Se
                     entity.setStaffIds(members);
                     ((SelectTaskMemberPresenter) mPresenter).selectMember(entity);
                 }
-            } else
+            } else {
                 ToastUtil.showToast("至少得选择一个任务人");
+            }
         }
     }
 

@@ -101,8 +101,9 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
 
     private void initView() {
         data = (TransportDataBase) getIntent().getSerializableExtra("TransportDataBase");
-        if (data == null)
+        if (data == null) {
             return;
+        }
         storageList = new ArrayList<>();
         resTypeList = new ArrayList<>();
 //        storageList.add("普货");
@@ -133,16 +134,18 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
         mTvChange.setText("运单号:" + data.getWaybillCode());
         //接受申请
         mBtnAccept.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             if (mEntity != null) {
                 commit(1);
             }
         });
         //拒绝申请
         mBtnRefuse.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             if (mEntity != null) {
                 commit(0);
             }
@@ -155,7 +158,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
             return;
         }
         ChangeStorageBean entity = new ChangeStorageBean();
-        if (!data.getMailType().equals("")) {
+        if (!"".equals(data.getMailType())) {
             switch (data.getMailType()) {
                 case "C":
                     entity.setMailType("货物");
@@ -198,7 +201,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
                     mTvType.setText(storageList.get(i));
                 }
             }
-            if (result.getStorage().equals("CTU_GARGO_STORAGE_TYPE_004")) {
+            if ("CTU_GARGO_STORAGE_TYPE_004".equals(result.getStorage())) {
                 llBaseTemperature.setVisibility(View.VISIBLE);
                 mTvLengCang.setText(result.getRefrigeratedTemperature());
             }
@@ -252,7 +255,7 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
                 mEntity.setStorageTypeName(storageList.get(options1));
                 getShowStorage(resTypeList.get(options1));
                 storageOption = options1;
-                if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {
+                if ("CTU_GARGO_STORAGE_TYPE_004".equals(resTypeList.get(options1))) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
                 } else {
                     llBaseTemperature.setVisibility(View.GONE);
@@ -330,19 +333,21 @@ public class StoreTypeChangeActivity extends BaseActivity implements ChangeStora
                     reservoirList.add(searchReservoirBeanList.getRecords().get(i).getReservoirName());
                 }
                 mTvStorage.setText(searchReservoirBeanList.getRecords().get(0).getReservoirName());
-            } else
+            } else {
                 mTvStorage.setText("");
+            }
         }
     }
 
     @Override
     public void baseParamResult(BaseParamBean changeStorageBean) {
         if (null != changeStorageBean) {
-            if (changeStorageBean.getRecords().size() > 0)
+            if (changeStorageBean.getRecords().size() > 0) {
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
                     storageList.add(changeStorageBean.getRecords().get(i).getReservoirName());
                     resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
                 }
+            }
             initData();
         }
     }

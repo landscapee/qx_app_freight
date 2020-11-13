@@ -94,8 +94,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         mTaskFragment = (TaskFragment) getParentFragment();
         searchToolbar = mTaskFragment.getSearchView();
         mToolBar = mTaskFragment.getToolbar();
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
         initData();
         setUserVisibleHint(true);
     }
@@ -153,8 +154,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(list.size());
+            }
             if (mToolBar != null) {
 //                mToolBar.setRightIconViewVisiable(false);
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
@@ -184,12 +186,13 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
         entity.setFlightTaskId(mOutFieldTaskBean.getTaskId());
         entity.setLatitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLatitude()+"");
         entity.setLongitude((Tools.getGPSPosition() == null) ? "" : Tools.getGPSPosition().getLongitude()+"");
-        if (step == 0)
+        if (step == 0) {
             entity.setOperationCode(Constants.TP_START);//任务开始
-        else if (step == 1)
+        } else if (step == 1) {
             entity.setOperationCode(Constants.TP_END);//任务结束
-        else
+        } else {
             entity.setOperationCode(Constants.TP_ACCEPT);//任务领受
+        }
 
         entity.setUserName(UserInfoSingle.getInstance().getUsername());
 
@@ -223,7 +226,7 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("TaskDriverOutFragment_refresh") || "refresh_data_update".equals(result)) {
+        if ("TaskDriverOutFragment_refresh".equals(result) || "refresh_data_update".equals(result)) {
             currentPage = 1;
             getData();
         }
@@ -334,8 +337,9 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
             seachByText();
             setListStatus();
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list.size());
+                }
             }
 
         } else {
@@ -405,10 +409,12 @@ public class TaskDriverOutFragment extends BaseFragment implements MultiFunction
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

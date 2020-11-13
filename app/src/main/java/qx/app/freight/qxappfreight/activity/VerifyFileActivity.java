@@ -177,8 +177,9 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                 mMfrvData.setLayoutManager(new LinearLayoutManager(this));
                 mAdapter = new VerifyFileAdapter(mList);
                 mMfrvData.setAdapter(mAdapter);
-            } else
+            } else {
                 ToastUtil.showToast("数据为空");
+            }
 
             mAdapter.setOnItemClickListener((adapter, view, position) -> {
                 if (!StringUtil.isEmpty(mList.get(position).getFilePath())) {
@@ -213,10 +214,11 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         if (mBean != null) {
             tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
             tvGoodsName.setText("品名:  " + mBean.getCargoCn());
-            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+            if (!StringUtil.isEmpty(mBean.getSpecialCode())) {
                 tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
-            else
+            } else {
                 tvSpecialCode.setText("特货代码:  - -");
+            }
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
             etRemark.setText(mBean.getRemark());
@@ -371,8 +373,9 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             String str = Arrays.toString(forwardInfoBean.getFreightAptitudeName());
             str = str.replaceAll(",", "\n");
             mTvCollectRequire.setText(str);
-        } else
+        } else {
             Log.e("核查证明文件空", "");
+        }
     }
 
     @Override
@@ -388,8 +391,9 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
                         ishave = true;
                     }
                 }
-                if (!ishave)
+                if (!ishave) {
                     mList.add(addtionInvoices);
+                }
             }
             if (mList.size() == 0) {
                 llContent.setVisibility(View.GONE);

@@ -160,8 +160,9 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
 //            Intent intent = new Intent(getContext(), LnstallationInfoActivity.class);
 //            intent.putExtra("data", list.get(position));
 //            getContext().startActivity(intent);
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             LnstallationInfoActivity.startActivity(getContext(),list.get(position),0);
         });
         getData();
@@ -200,13 +201,13 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag())) {
 //            chooseCode(daibanCode);
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("LnstallationFragment_refresh")||result.equals("refresh_data_update")) {
+        if ("LnstallationFragment_refresh".equals(result) || "refresh_data_update".equals(result)) {
             mCurrentPage = 1;
             getData();
         }
@@ -247,10 +248,12 @@ public class LnstallationFragment extends BaseFragment implements EndInstallToDo
         if (mCurrentPage == 1) {
             list.clear();
         }
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

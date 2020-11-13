@@ -216,18 +216,20 @@ public class TaskDoneFragment extends BaseFragment {
         if(list_Title.size() > 0){
             nowRoleCode = list_Title.get(0);
             //如果第一个是外场运输就把搜索框隐藏
-            if (list_Title.get(0).equals("外场运输")){
+            if ("外场运输".equals(list_Title.get(0))){
                 mToolBar.setRightIconViewVisiable(false);
             }
         }
-        else
+        else {
             ToastUtil.showToast("该用户没有被分配角色");
+        }
 
 
-        if (fragmentList.size() == 1)
+        if (fragmentList.size() == 1) {
             mTabLayout.setVisibility(View.GONE);
-        else
+        } else {
             mTabLayout.setVisibility(View.VISIBLE);
+        }
         mViewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext(), fragmentList, list_Title));
         mTabLayout.setupWithViewPager(mViewPager);//此方法就是让tablayout和ViewPager联动
 

@@ -34,7 +34,7 @@ public class BaggerListAdapter extends BaseQuickAdapter<TransportTodoListBean, B
         helper.setText(R.id.allocate_info, String.format(mContext.getString(R.string.format_allocate_info), StringUtil.toText(item.getTpCargoNumber()+"","0") ,StringUtil.toText(item.getTpCargoWeight()+"","0"), StringUtil.toText(item.getTpCargoVolume()+"","0")));
 
         //是否隐藏国际图标
-        if (item.getFlightIndicator().equals("I")){
+        if ("I".equals(item.getFlightIndicator())){
             helper.setVisible(R.id.iv_international,true);
         }else {
             helper.setVisible(R.id.iv_international,false);

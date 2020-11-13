@@ -103,10 +103,11 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
 
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
-        if (!StringUtil.isEmpty(flightNo))
+        if (!StringUtil.isEmpty(flightNo)) {
             toolbar.setMainTitle(Color.WHITE, flightNo);
-        else
+        } else {
             toolbar.setMainTitle(Color.WHITE, "航班号为空");
+        }
 
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> finish());
 
@@ -148,8 +149,9 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
             tvOriginating.setText(flightInfoBean.getRoutes().get(0));
             //到达位置
             int despost = flightInfoBean.getRoutes().size();
-            if (despost > 1)
+            if (despost > 1) {
                 tvDestination.setText(flightInfoBean.getRoutes().get(despost - 1));
+            }
             // 进港 A- -  计划起飞 - 实际起飞    //进港行李， 离港登机口
             if ("A".equals(flightInfoBean.getMovement())) {
                 tvLuggage.setText("行李");
@@ -226,8 +228,9 @@ public class DynamicDetailsAcitvity extends BaseActivity implements FlightInfoCo
         if (mAdapter == null) {
             mAdapter = new FlightFinishAdapter(this, mList, this);
             mListview.setAdapter(mAdapter);
-        } else
+        } else {
             mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -119,8 +119,9 @@ public class CargoDoneListActivity extends BaseActivity implements International
         setToolbarShow(View.VISIBLE);
         toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "货物上报");
-        if (mData.getMainInfos()!=null)
-        mList.addAll(mData.getMainInfos());
+        if (mData.getMainInfos()!=null) {
+            mList.addAll(mData.getMainInfos());
+        }
         for (TransportTodoListBean transportTodoListBean:mList){
             transportTodoListBean.setNotCanDelete(true);
         }
@@ -226,8 +227,9 @@ public class CargoDoneListActivity extends BaseActivity implements International
     private void submitScooter() {
         for (int i = 0; i < mList.size(); i++) {
             for (int j = 0; j < mData.getMainInfos().size(); j++) {
-                if (mList.get(i).equals(mData.getMainInfos().get(j)))
+                if (mList.get(i).equals(mData.getMainInfos().get(j))) {
                     mList.remove(i);
+                }
             }
         }
         if (mList.size() == 0) {
@@ -246,8 +248,9 @@ public class CargoDoneListActivity extends BaseActivity implements International
 //            entity.setMailWeight(2.22);
 //            entity.setCargoWeight(3.33);
             for (TransportTodoListBean transportTodoListBean:mList){
-                if (!transportTodoListBean.isNotCanDelete())
+                if (!transportTodoListBean.isNotCanDelete()) {
                     uploadList.add(transportTodoListBean);
+                }
             }
             entity.setData(uploadList);
             entity.setMovement(mList.get(0).getFlightIndicator());
@@ -260,7 +263,7 @@ public class CargoDoneListActivity extends BaseActivity implements International
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("CargoDoneListActivity")) {
+        if ("CargoDoneListActivity".equals(result.getFunctionFlag())) {
             if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //板车号
                 mScooterCode = result.getData();
@@ -380,7 +383,9 @@ public class CargoDoneListActivity extends BaseActivity implements International
         mGoodsWeight = 0;
         mMailWeight = 0;
         mBaggageWeight = 0;
-        if (result.getData() == null || result.getData().size() == 0) return;
+        if (result.getData() == null || result.getData().size() == 0) {
+            return;
+        }
         for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
             for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : dataBean.getScooters()) {
                 switch (scooterBean.getType()) {

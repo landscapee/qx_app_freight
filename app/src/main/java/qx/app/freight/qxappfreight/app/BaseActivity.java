@@ -64,11 +64,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         initDialog();
         FrameLayout contentView = findViewById(android.R.id.content);
 
-        if (contentView!=null)
-             viewGroup = (ViewGroup) contentView.getChildAt(0);
+        if (contentView!=null) {
+            viewGroup = (ViewGroup) contentView.getChildAt(0);
+        }
         mToolbar = new CustomToolbar(this);
-        if (viewGroup!=null)
+        if (viewGroup!=null) {
             viewGroup.addView(mToolbar, 0);
+        }
         businessLogic(savedInstanceState);
     }
 
@@ -94,9 +96,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (show == View.VISIBLE) {
                 mToolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v ->
                 {
-                    if (!isBack)
+                    if (!isBack) {
                         this.finish();
-                    else {
+                    } else {
                         mIsBackListener.interceptBack();
                     }
                 });
@@ -127,16 +129,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgessDialog(String message) {
-        if (!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message)) {
             mTextView.setText(message);
-        else {
+        } else {
             mTextView.setText("加载中……");}
         mProgessbarDialog.show();
     }
 
     public void setProgressText(String message){
-        if (!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message)) {
             mTextView.setText(message);
+        }
     }
 
     public void dismissProgessDialog() {
@@ -250,6 +253,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 this.mQuitTimer = new Timer();
             }
             this.mQuitTimer.schedule(new TimerTask() {
+                @Override
                 public void run() {
                     BaseActivity.this.isFirstBack = 0;
                 }
@@ -318,8 +322,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0)
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
             outState.putSerializable("static_user", UserInfoSingle.getInstance());
+        }
     }
 
     @Override

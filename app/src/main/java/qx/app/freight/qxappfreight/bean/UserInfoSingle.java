@@ -20,8 +20,9 @@ public class UserInfoSingle {
     public static LoginResponseBean getInstance() {
 
         synchronized (UserInfoSingle.class) {
-            if (user == null)
+            if (user == null) {
                 return new LoginResponseBean();
+            }
         }
         return user;
     }

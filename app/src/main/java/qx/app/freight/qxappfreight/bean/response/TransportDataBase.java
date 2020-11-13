@@ -190,10 +190,11 @@ public class TransportDataBase implements MultiItemEntity, Serializable {
 
     @Override
     public int getItemType() {
-        if (flightCourseByAndroid !=null)
+        if (flightCourseByAndroid !=null) {
             return flightCourseByAndroid.size();
-        else
+        } else {
             return 2;
+        }
     }
 
 }

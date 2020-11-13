@@ -88,9 +88,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             //默认 弹出 出库 列表
-            if (bean.getSmInventorySummaryList() != null)
+            if (bean.getSmInventorySummaryList() != null) {
                 showOutStorageListDialog(bean.getSmInventorySummaryList(), bean);
-            else {
+            } else {
                 ToastUtil.showDialogToast(InportDeliveryDetailActivity.this, "分批货物，目前入库货物已全部提走，暂无新货物入库，请稍后再试。");
             }
         }
@@ -140,9 +140,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mAdapter.setDeliveryDetailInterface(new DeliveryDetailAdapter.DeliveryDetailInterface() {
             @Override
             public void outStorage(int position, String id, String outStorageUser) {
-                if (mList.get(position).getSmInventorySummaryList() != null)
+                if (mList.get(position).getSmInventorySummaryList() != null) {
                     showOutStorageListDialog(mList.get(position).getSmInventorySummaryList(), mList.get(position));
-                else {
+                } else {
                     ToastUtil.showDialogToast(InportDeliveryDetailActivity.this, "分批货物，目前入库货物已全部提走，暂无新货物入库，请稍后再试。");
                 }
 //                deliveryInWaybill(
@@ -324,8 +324,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
         mAdapter.notifyDataSetChanged();
         int already = 0;
         for (WaybillsBean mWaybillsBean : mList) {
-            if (mWaybillsBean.getWaybillStatus() == 6)
+            if (mWaybillsBean.getWaybillStatus() == 6) {
                 already++;
+            }
         }
         isAllOut = true;
         for (WaybillsBean mWaybillsBean : mList) {
@@ -405,8 +406,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     public void toastView(String error) {
         if (currentNum > 0) {
             ToastUtil.showErrorDialog("出库失败，稍后重试!");
-        } else
+        } else {
             ToastUtil.showErrorDialog(error);
+        }
 
     }
 
@@ -450,8 +452,9 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
             mList.clear();
             mList.addAll(waybillsBeans);
             mAdapter.notifyDataSetChanged();
-        } else
+        } else {
             finish();
+        }
 
     }
 }

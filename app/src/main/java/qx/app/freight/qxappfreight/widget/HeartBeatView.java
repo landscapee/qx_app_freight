@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -75,9 +76,9 @@ public class HeartBeatView extends View {
         //获取绘制的View的高度
         int height = getHeight() - paddingTop - paddingBottom;
         //绘制View，左上角坐标（0+paddingLeft,0+paddingTop），右下角坐标（width+paddingLeft,height+paddingTop）
-        mPaint.setColor(getResources().getColor(R.color.blue_2e8));
+        mPaint.setColor(ContextCompat.getColor(getContext(),R.color.blue_2e8));
         canvas.drawRect(0 + paddingLeft, 0 + paddingTop, width + paddingLeft, height + paddingTop, mPaint);
-        mPaint.setColor(getResources().getColor(R.color.red));
+        mPaint.setColor(ContextCompat.getColor(getContext(),R.color.red));
         //绘制自定义图片
         canvas.drawCircle(width/2+paddingLeft,height/2+paddingTop,width/2,mPaint);
 //        int i, j;

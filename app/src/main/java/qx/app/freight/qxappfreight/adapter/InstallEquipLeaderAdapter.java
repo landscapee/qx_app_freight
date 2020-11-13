@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -77,13 +78,13 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
         }
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                 break;
             case Constants.TIME_TYPE_EXCEPT:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                 break;
             case Constants.TIME_TYPE_PLAN:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                 break;
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
@@ -104,30 +105,34 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
             if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
                 btnLookInstall.setVisibility(View.VISIBLE);
                 btnLookInstall.setOnClickListener(v -> {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     onClearSeatListener.onLookLoadInstall(helper.getAdapterPosition());
                 });
                 btnLookUnInstall.setVisibility(View.VISIBLE);
                 btnLookUnInstall.setOnClickListener(v -> {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     onClearSeatListener.onLookUnloadInstall(helper.getAdapterPosition());
                 });
             } else {
                 if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
                     btnLookUnInstall.setVisibility(View.VISIBLE);
                     btnLookUnInstall.setOnClickListener(v -> {
-                        if (!Tools.isFastClick())
+                        if (!Tools.isFastClick()) {
                             return;
+                        }
                         onClearSeatListener.onLookUnloadInstall(helper.getAdapterPosition());
                     });
                     btnLookInstall.setVisibility(View.GONE);
                 } else {
                     btnLookInstall.setVisibility(View.VISIBLE);
                     btnLookInstall.setOnClickListener(v -> {
-                        if (!Tools.isFastClick())
+                        if (!Tools.isFastClick()) {
                             return;
+                        }
                         onClearSeatListener.onLookLoadInstall(helper.getAdapterPosition());
                     });
                     btnLookUnInstall.setVisibility(View.GONE);
@@ -140,8 +145,9 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
             Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
             btnPhotoRecord.setVisibility(View.VISIBLE);
             btnPhotoRecord.setOnClickListener(v -> {
-                if (!Tools.isFastClick())
+                if (!Tools.isFastClick()) {
                     return;
+                }
                 onClearSeatListener.onUploadPhoto(helper.getAdapterPosition());
             });
         }
@@ -163,13 +169,13 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
             Drawable drawableLeftLink = null;
             switch (item.getRelateInfoObj().getTimeType()) {
                 case Constants.TIME_TYPE_AUTUAL:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.shi);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                     break;
                 case Constants.TIME_TYPE_EXCEPT:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.yu);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                     break;
                 case Constants.TIME_TYPE_PLAN:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.ji);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                     break;
             }
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
@@ -181,8 +187,9 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
                 containerLink.removeAllViews();
                 containerLink.addView(layoutLink, paramsMain);
             }
-        } else
+        } else {
             llLink.setVisibility(View.GONE);
+        }
 
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         container.removeAllViews();
@@ -195,10 +202,11 @@ public class InstallEquipLeaderAdapter extends BaseQuickAdapter <LoadAndUnloadTo
         rvStep.setAdapter(adapter);
         adapter.setOnSlideListener(pos -> {
             if (onSlideStepListener != null) {
-                if (pos == 0 && item.getAcceptTime() == 0)
+                if (pos == 0 && item.getAcceptTime() == 0) {
                     onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
-                else if (pos != 0)
+                } else if (pos != 0) {
                     onSlideStepListener.onSlideStep(helper.getAdapterPosition(), adapter, pos);
+                }
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.CHINESE);
                 item.getOperationStepObj().get(pos).setStepDoneDate(sdf.format(new Date()));

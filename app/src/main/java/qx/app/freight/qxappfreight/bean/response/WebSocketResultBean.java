@@ -17,8 +17,9 @@ public class WebSocketResultBean implements Serializable {
 
     public List<TransportDataBase> getChgData(){
         if (chgData !=null&&chgData.size()>0){
-            if (StringUtil.isEmpty(chgData.get(0).getWaybillId()))
+            if (StringUtil.isEmpty(chgData.get(0).getWaybillId())) {
                 chgData.get(0).setWaybillId(chgData.get(0).getId());
+            }
 //            if (StringUtil.isEmpty(chgData.get(0).getCargoCn())&&chgData.get(0).getDeclareItem()!=null &&chgData.get(0).getDeclareItem().size()>0){
 //                String cargoName = "";
 //                String packagingType = "";

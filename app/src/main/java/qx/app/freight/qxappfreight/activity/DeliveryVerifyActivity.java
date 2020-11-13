@@ -155,12 +155,13 @@ public class DeliveryVerifyActivity extends BaseActivity implements DeliveryVeri
         //货物信息
         goodsCodeTv.setText("特货代码:" + declareWaybillBean.getSpecialCode());
         String bigSize = "";
-        if(declareWaybillBean.getBigFlag() == 1)
+        if(declareWaybillBean.getBigFlag() == 1) {
             bigSize = "小件";
-        else if(declareWaybillBean.getBigFlag() == 2)
+        } else if(declareWaybillBean.getBigFlag() == 2) {
             bigSize = "大件";
-        else
+        } else {
             bigSize = "超大件";
+        }
         goodsSizeTv.setText("包装大小:" + bigSize);
         goodsSaveTypeTv.setText("储存类型:" + getColdStorage(declareWaybillBean));
         goodsNumTv.setText("总件数:" + declareWaybillBean.getTotalNumber());

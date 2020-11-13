@@ -80,8 +80,9 @@ public class StoreGoodsActivity extends BaseActivity implements MultiFunctionRec
     }
 
     private void initData(int size) {
-        if (list == null)
+        if (list == null) {
             list = new ArrayList <>();
+        }
         for (int i = 0; i < size; i++) {
             ArrayList<MainListBean.DataBean.SingeDataBean> list1 = getIntent().getParcelableArrayListExtra("data");
             list.addAll(list1);

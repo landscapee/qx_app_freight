@@ -32,7 +32,7 @@ public class FlightListCargoDoneAdapter extends BaseQuickAdapter<CargoReportHisB
 //        }else {
 //            helper.setGone(R.id.iv_lock,true);
 ////        }
-        if (item.getFlightIndicator().equals("D")) {
+        if ("D".equals(item.getFlightIndicator())) {
             helper.setGone(R.id.iv_lock, false);
         } else {
             helper.setGone(R.id.iv_lock, true);

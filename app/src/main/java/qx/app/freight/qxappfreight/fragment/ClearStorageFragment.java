@@ -130,16 +130,18 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
         initView();
         //新的任务
         mCSadapter.setOnItemClickListener((adapter, view13, position) -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             currentTaskId = mCSlist.get(position).getId();
             mCurrentPage1 = 1;
             initData1();
         });
         //历史任务
         mCHadapter.setOnItemClickListener((adapter, view12, position) -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             interHistoryAct(position);
         });
     }
@@ -239,10 +241,11 @@ public class ClearStorageFragment extends BaseFragment implements InventoryQuery
                         break;
                     }
                 }
-                if (selectRecordsBean != null)
+                if (selectRecordsBean != null) {
                     interNewAct(selectRecordsBean);
-                else
+                } else {
                     ToastUtil.showToast("该任务已经完成");
+                }
             }
         }
     }

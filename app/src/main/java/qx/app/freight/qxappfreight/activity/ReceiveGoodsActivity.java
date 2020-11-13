@@ -160,8 +160,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         mTvNotTransport.setText(String.valueOf(mSecuriBean.size()));
         mLlNotTransport.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             String goodsName = mDeclare.getCargoCn();
             Intent intent = new Intent(ReceiveGoodsActivity.this, NotTransportListActivity.class);
             intent.putExtra("goods_name", goodsName);
@@ -172,12 +173,14 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         });
         //提交
         mBtnReceiveGood.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
-            if ("普货".equals(mDeclare.getStorageTypeName()))
+            }
+            if ("普货".equals(mDeclare.getStorageTypeName())) {
                 commit();
-            else
+            } else {
                 showYesOrNoDialog("提示","当前存储类型为"+mDeclare.getStorageTypeName()+"，确认提交？",0);
+            }
 
 
         });
@@ -224,7 +227,7 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("ReceiveGoodsActivity")) {
+        if ("ReceiveGoodsActivity".equals(result.getFunctionFlag())) {
             mTag = 1;
             startAct(new MyAgentListBean(), 1);
         } else {
@@ -344,8 +347,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 number += myAgentListBean1.getNumber();
                 weight += myAgentListBean1.getWeight();
                 volume += myAgentListBean1.getVolume();
-                if (!"".equals(reservoirName))
+                if (!"".equals(reservoirName)) {
                     myAgentListBean1.setReservoirName(reservoirName);
+                }
             }
             mTvTotalNumber.setText("总件数:" + number + "");
             mTvTotalVolume.setText("总体积:" + volume + "m³");
@@ -361,8 +365,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
         if (null != myAgentListBean) {
             reservoirName = myAgentListBean.getReservoirName();
 
-        } else
+        } else {
             ToastUtil.showToast("数据为空");
+        }
     }
 
     @Override
@@ -386,13 +391,16 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
     @Override
     public void toastView(String error) {
         Log.e("refresh", error);
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
 
-        if (!StringUtil.isEmpty(error))
+        if (!StringUtil.isEmpty(error)) {
             ToastUtil.showToast(error);
+        }
     }
 
     @Override
@@ -439,8 +447,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                 number += list.get(i).getNumber();
                 weight += list.get(i).getWeight();
                 volume += list.get(i).getVolume();
-                if (!"".equals(reservoirName))
+                if (!"".equals(reservoirName)) {
                     mMyAgentListBean.setReservoirName(reservoirName);
+                }
             }
             mTvTotalNumber.setText("总件数:" + number + "");
             mTvTotalVolume.setText("总体积:" + volume + "m³");
@@ -576,8 +585,9 @@ public class ReceiveGoodsActivity extends BaseActivity implements AgentTransport
                     }
                 });
                 btnPrint.setOnClickListener((v) -> {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     printWayBill();
                 });
             }

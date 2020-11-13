@@ -3,6 +3,7 @@ package qx.app.freight.qxappfreight.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +93,7 @@ public class FlightInfoLayout extends LinearLayout {
                 });
                 // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
                 // 我觉得这里是API的一个bug
-                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.shape_rectangle_gray));
+                popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.shape_rectangle_gray));
                 // 设置好参数之后再show
                 popupWindow.showAsDropDown(view);
             });

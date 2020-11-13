@@ -47,8 +47,9 @@ public class UpdatePushDialog extends Dialog {
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
-        else
+        else {
             Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         convertView = getLayoutInflater().inflate(R.layout.popup_manifest_update, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(convertView);
@@ -109,8 +110,9 @@ public class UpdatePushDialog extends Dialog {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
+        if (hasFocus) {
             Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+        }
 
     }
 //    @Override

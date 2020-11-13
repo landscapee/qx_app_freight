@@ -144,7 +144,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mPhotoPath.get(position).equals("111")) {
+                if ("111".equals(mPhotoPath.get(position))) {
                     choosePictrue();
                 } else {
                     previewPictrue(position);
@@ -217,7 +217,7 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
             originList.addAll(mPhotoPath);
             originList.remove(originList.size() - 1);
         }
-        MultiImageSelector.create(AbnormalEndActivity.this)
+        MultiImageSelector.create()
                 .showCamera(true) // 是否显示相机. 默认为显示
                 .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                 .multi() // 多选模式, 默认模式;
@@ -283,8 +283,9 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
      * @param paths 文件路径集合
      */
     private void pressImage(List<String> paths) {
-        if (paths == null || paths.size() == 0)
+        if (paths == null || paths.size() == 0) {
             return;
+        }
         List<File> files = new ArrayList<>();
         for (String path : paths) {
             files.add(new File(path));
@@ -371,12 +372,14 @@ public class AbnormalEndActivity extends BaseActivity implements UploadsContract
     public void getAllRemoteAreaResult(List<GetAllRemoteAreaBean> getAllRemoteAreaBean) {
         if (null !=getAllRemoteAreaBean){
             for (int i = 0; i < getAllRemoteAreaBean.size(); i++) {
-                if (Constants.WAIT_AREA == getAllRemoteAreaBean.get(i).getAreaType() || Constants.TEMP_AREA == getAllRemoteAreaBean.get(i).getAreaType())
-                        mAbnormalList.add(getAllRemoteAreaBean.get(i).getAreaId());
+                if (Constants.WAIT_AREA == getAllRemoteAreaBean.get(i).getAreaType() || Constants.TEMP_AREA == getAllRemoteAreaBean.get(i).getAreaType()) {
+                    mAbnormalList.add(getAllRemoteAreaBean.get(i).getAreaId());
+                }
             }
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,R.layout.item_spinner_general, mAbnormalList);
             mAbnormalSpinner.setAdapter(spinnerAdapter);
-        }else
+        }else {
             ToastUtil.showToast("数据为空");
+        }
     }
 }

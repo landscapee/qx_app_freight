@@ -89,8 +89,9 @@ public class BubbleDrawable extends Drawable {
                 mPaint.setColor(bubbleColor);
                 break;
             case BITMAP:
-                if (bubbleBitmap == null)
+                if (bubbleBitmap == null) {
                     return;
+                }
                 if (mBitmapShader == null) {
                     mBitmapShader = new BitmapShader(bubbleBitmap,
                             Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);

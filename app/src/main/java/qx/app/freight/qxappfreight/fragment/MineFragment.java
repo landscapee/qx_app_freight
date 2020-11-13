@@ -203,9 +203,9 @@ public class MineFragment extends BaseFragment implements NoReadCountContract.no
                     public void onClick(Dialog dialog, boolean confirm) {
                         if (confirm) {
                             Tools.saveLoginNameAndPassword("","");
-                            if (MyApplication.isNeedIm&& Tools.isProduct())
+                            if (MyApplication.isNeedIm&& Tools.isProduct()) {
                                 ((NoReadCountPresenter) mPresenter).loginOut(new UserBean(UserInfoSingle.getInstance().getUserId()));
-                            else {
+                            } else {
                                 Tools.loginOut(getContext());
                             }
                         } else {

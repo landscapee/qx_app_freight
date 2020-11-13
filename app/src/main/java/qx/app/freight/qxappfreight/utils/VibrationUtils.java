@@ -23,10 +23,11 @@ public class VibrationUtils {
      * 开启震动
      */
     public static void openVibrator(Context context, boolean isForce) {
-        if (isForce)
+        if (isForce) {
             vibrate(context, new long[]{1000, 2000}, 0);
-        else
+        } else {
             vibrate(context, new long[]{1000, 3000}, -1);
+        }
     }
     /**
      * 开启震动

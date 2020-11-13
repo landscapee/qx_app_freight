@@ -103,10 +103,11 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
         if (mBean!=null){
             tvWaybillCode.setText("运单号:   "+mBean.getWaybillCode());
             tvGoodsName.setText("品名:  "+mBean.getCargoCn());
-            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+            if (!StringUtil.isEmpty(mBean.getSpecialCode())) {
                 tvSpecialCode.setText("特货代码:  "+mBean.getSpecialCode());
-            else
+            } else {
                 tvSpecialCode.setText("特货代码:  - -");
+            }
             tvNumber.setText("件数:  "+mBean.getTotalNumber());
             tvWeight.setText("重量:  "+mBean.getTotalWeight());
         }
@@ -237,8 +238,9 @@ public class ReturnGoodsActivity extends BaseActivity implements MultiFunctionRe
     @Override
     public void getWayBillInfoByIdResult(DeclareWaybillBean result) {
         if (null != result) {
-            if (StringUtil.isEmpty(result.getRefrigeratedTemperature()))
+            if (StringUtil.isEmpty(result.getRefrigeratedTemperature())) {
                 result.setRefrigeratedTemperature("0*0");
+            }
 
             entity.setWaybillInfo(result);
 

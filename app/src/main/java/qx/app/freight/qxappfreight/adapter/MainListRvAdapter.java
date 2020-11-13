@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.annotation.SuppressLint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -51,7 +52,7 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
         ivFlag.setVisibility(View.GONE);
         switch (item.getTaskTypeCode()) {
 //            case "changeApply":
-//                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+//                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
 //                tvStatusName.setText("换单审核");
 //                ivFlag.setVisibility(View.VISIBLE);
 //                ivFlag.setImageResource(R.mipmap.collect_switch);
@@ -59,30 +60,30 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
 //                tvOldWayBillCode.setText(item.getExchangeWaybillBefore());
 //                break;
             case "collection":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
                 break;
             case "reCollection":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
                 break;
             case "RR_collectReturn":
                 ivFlag.setVisibility(View.VISIBLE);
                 ivFlag.setImageResource(R.mipmap.collect_wait);
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.orange_D67));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.orange_D67));
                 break;
             case "receive":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 break;
             case "reReceive":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 break;
             case "changeCollection":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.red));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.red));
                 break;
             case "borrowReceive":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 break;
             case "borrowCollection":
-                tvStatusName.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                tvStatusName.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 break;
 
         }
@@ -117,7 +118,7 @@ public class MainListRvAdapter extends BaseQuickAdapter<TransportDataBase, BaseV
 //        helper.setText(R.id.tv_store_info, String.format(mContext.getString(R.string.format_store_info),item.getColdStorage().equals("0") ? "不冷藏" : "冷藏", 10, 321));
         //计费重量
         String weight = "计费重量:  <font color='#FF0000'>" + item.getBillingWeight() + "kg</font>";
-        helper.setText(R.id.tv_weight_judge, Html.fromHtml(weight));
+        helper.setText(R.id.tv_weight_judge,StringUtil.transformHtmlFromhtml(weight));
         helper.getView(R.id.tv_weight_judge).setVisibility(View.GONE);
         //航班号
         helper.setText(R.id.tv_flight_number, item.getFlightNo());

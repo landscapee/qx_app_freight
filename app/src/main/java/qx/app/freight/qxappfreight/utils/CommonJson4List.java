@@ -31,12 +31,15 @@ public class CommonJson4List<T> implements Serializable {
     }
     static ParameterizedType type(final Class raw, final Type... args) {
         return new ParameterizedType() {
+            @Override
             public Type getRawType() {
                 return raw;
             }
+            @Override
             public Type[] getActualTypeArguments() {
                 return args;
             }
+            @Override
             public Type getOwnerType() {
                 return null;
             }

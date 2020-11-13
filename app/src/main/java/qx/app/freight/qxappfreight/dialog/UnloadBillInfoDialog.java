@@ -57,17 +57,22 @@ public class UnloadBillInfoDialog extends DialogFragment {
         for (UnLoadListBillBean.DataBean.ContentObjectBean objectBean:list){
             if (StringUtil.isDouble(objectBean.getActWgt())){
                 if ("C".equals(objectBean.getType()))//货物
+                {
                     c+=Double.valueOf(objectBean.getActWgt());
-                else if ("M".equals(objectBean.getType()))//邮件
+                } else if ("M".equals(objectBean.getType()))//邮件
+                {
                     m+=Double.valueOf(objectBean.getActWgt());
-                else if ("BY".equals(objectBean.getType()))//行李
+                } else if ("BY".equals(objectBean.getType()))//行李
+                {
                     b+=Double.valueOf(objectBean.getActWgt());
-                else if ("T".equals(objectBean.getType()))
+                } else if ("T".equals(objectBean.getType())) {
                     b+=Double.valueOf(objectBean.getActWgt());
-                else if ("BY".equals(objectBean.getType()))
+                } else if ("BY".equals(objectBean.getType())) {
                     b+=Double.valueOf(objectBean.getActWgt());
-                else//其他
+                } else//其他
+                {
                     o+=Double.valueOf(objectBean.getActWgt());
+                }
             }
         }
         tvStatistics.setText("货物:"+c+"kg 邮件:"+m+"kg" );

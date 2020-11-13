@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 
 /**
  * 应用内普通样式对话框
@@ -92,8 +93,9 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
-        else
+        else {
             getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         initView();
     }
 
@@ -106,7 +108,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         positiveTv.setOnClickListener(this);
         negativeTv.setOnClickListener(this);
 
-        messageTv.setText(Html.fromHtml(message));
+        messageTv.setText(StringUtil.transformHtmlFromhtml(message));
         if (!TextUtils.isEmpty(positiveBtn)) {
             //有两个按钮
 //            View btnLine = findViewById(R.id.btnLine);
@@ -135,12 +137,14 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
     @Override
     public void show() {
         if (mContext instanceof Activity){
-            if (!((Activity)mContext).isFinishing())
+            if (!((Activity)mContext).isFinishing()) {
                 super.show();
+            }
         }
         else {
-            if (mContext!=null)
+            if (mContext!=null) {
                 super.show();
+            }
         }
 
     }

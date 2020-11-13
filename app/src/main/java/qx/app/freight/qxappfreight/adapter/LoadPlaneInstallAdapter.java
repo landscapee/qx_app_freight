@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -80,8 +81,9 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         ImageView lock = helper.getView(R.id.iv_lock_status);
         if (showLock) {
             lock.setVisibility(View.VISIBLE);
-        } else
+        } else {
             lock.setVisibility(View.INVISIBLE);
+        }
 
         helper.getView(R.id.iv_lock_status).setOnClickListener(v -> {
             if(item.isSplit()){
@@ -115,16 +117,19 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                 .setText(R.id.tv_goods, item.getLocation())
                 .setText(R.id.tv_weight, weightAndVolume);
 
-        if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getWaybillCode() != null)
+        if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getWaybillCode() != null) {
             helper.setText(R.id.tv_mailtype, item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getType() != null ? item.getType() : "--");
-        else
+        } else {
             helper.setText(R.id.tv_mailtype, item.getType() != null ? item.getType() : "--");
+        }
 
         Button btnPull = helper.getView(R.id.tv_pull);
         if ("C".equals(item.getType()) || "M".equals(item.getType()) || "X".equals(item.getType())) //只有 类型为 C，M,X的 板车 才能拉回
+        {
             notShowPull = true;
-        else
+        } else {
             notShowPull = false;
+        }
 
         if (notShowPull) {
             btnPull.setVisibility(View.VISIBLE);
@@ -132,34 +137,35 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             btnPull.setOnClickListener(v -> {
                 if (item.getExceptionFlag() == 1) {
                     item.setExceptionFlag(0);
-                    btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
+                    btnPull.setBackgroundColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
                 } else {
                     item.setExceptionFlag(1);
-                    btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
+                    btnPull.setBackgroundColor(ContextCompat.getColor(mContext,R.color.gray_8f));
                 }
                 onDataCheckListener.onDataChecked(item.getScooterCode());
             });
             if (item.getExceptionFlag() == 1) {
-                btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
+                btnPull.setBackgroundColor(ContextCompat.getColor(mContext,R.color.gray_8f));
             } else {
-                btnPull.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
+                btnPull.setBackgroundColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
             }
         } else {
             btnPull.setVisibility(View.INVISIBLE);
         }
         Button btnTake = helper.getView(R.id.tv_take);
         btnTake.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             onDataCheckListener.onTakeSplit(helper.getAdapterPosition());
 
         });
         if (item.isSplit()) {
             btnTake.setText("X");
-            btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.gray_8f));
+            btnTake.setBackgroundColor(ContextCompat.getColor(mContext,R.color.gray_8f));
         } else {
             btnTake.setText("拆");
-            btnTake.setBackgroundColor(mContext.getResources().getColor(R.color.green_45b));
+            btnTake.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green_45b));
         }
 
         TextView tv1 = helper.getView(R.id.tv_scooter_number);
@@ -167,18 +173,18 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
         TextView tv7 = helper.getView(R.id.tv_mailtype);
 //            TextView tv7 = helper.getView(R.id.tv_volume);
         TextView[] tvList = {tv1, tv3, tv7};
-        if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
+        if (item.getSpecialCode() != null && "AVI".equals(item.getSpecialCode())) {//活体颜色标注
             helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
             }
         } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)) {//枪支
-            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+            helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.orangered));
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
             }
         } else if (item.getWaybillList() != null && item.getWaybillList().size() > 0 && item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
-            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+            helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
             for (TextView tv : tvList) {
                 tv.setTextColor(Color.parseColor("#000000"));
             }
@@ -213,10 +219,11 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
                     }
 
                 }
-                if (goodsTemp.size()>0)
+                if (goodsTemp.size()>0) {
                     showPopList(goodsTemp,item,2,llGoodsDrop);
-                else
+                } else {
                     ToastUtil.showToast("该舱位下没有货位信息");
+                }
             }
             else {
                 ToastUtil.showToast("请先选择舱位");
@@ -245,18 +252,20 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
             rvBill.setAdapter(new OnBoardBillsAdapter(data));
         }
         helper.itemView.setOnClickListener(v -> {
-            if (item.isShow())
+            if (item.isShow()) {
                 rvBill.setVisibility(View.GONE);
-            else
+            } else {
                 rvBill.setVisibility(View.VISIBLE);
+            }
 
             item.setShow(!item.isShow());
         });
 
-        if (item.isShow())
+        if (item.isShow()) {
             rvBill.setVisibility(View.VISIBLE);
-        else
+        } else {
             rvBill.setVisibility(View.GONE);
+        }
     }
 
     public interface OnDataCheckListener {
@@ -348,7 +357,7 @@ public class LoadPlaneInstallAdapter extends BaseQuickAdapter <LoadingListBean.D
      */
     private Drawable getDrawable() {
         ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
-        bgdrawable.getPaint().setColor(mContext.getResources().getColor(android.R.color.transparent));
+        bgdrawable.getPaint().setColor(ContextCompat.getColor(mContext,android.R.color.transparent));
         return bgdrawable;
     }
 

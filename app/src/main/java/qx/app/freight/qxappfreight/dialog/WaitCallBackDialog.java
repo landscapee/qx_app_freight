@@ -32,8 +32,9 @@ public class WaitCallBackDialog extends Dialog {
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
-        else
+        else {
             Objects.requireNonNull(getWindow()).setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         View view = getLayoutInflater().inflate(R.layout.dialog_wait_callback, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(view);

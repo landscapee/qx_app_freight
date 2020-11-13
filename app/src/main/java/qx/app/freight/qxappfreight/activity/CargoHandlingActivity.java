@@ -218,8 +218,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
         });
         mCargoHandlingAdapter.setOnSpinnerClickLister((view, position) ->
                 {
-                    if (!isPopWindow)
+                    if (!isPopWindow) {
                         showPopWindowListCabin(position);
+                    }
 
                 });
         mCargoHandlingAdapter.setOnLockClickListener((view, position) -> {
@@ -242,10 +243,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                     }
                     List<FtGroupScooter> listRcInfo = new ArrayList<>();
                     for (FtGroupScooter mFtGroupScooter : listHandcar.get(position).getGroupScooters()) {
-                        if (mFtGroupScooter.getInFlight() == 1)
+                        if (mFtGroupScooter.getInFlight() == 1) {
                             listDeleteNo.add(mFtGroupScooter);
-                        else
+                        } else {
                             listRcInfo.add(mFtGroupScooter);
+                        }
                     }
 //                    slideRecyclerView.closeMenu();
                     listHandcar.remove(position);
@@ -260,10 +262,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             nowHandcarPosition = position;
             //弹出popwindow后 板车列表的点击事件
             if (isPopWindow) {
-                if (flag == 0)
+                if (flag == 0) {
                     subpackage(position);
-                else
+                } else {
                     allIn(position);
+                }
 
                 dismissPopWindows();
             } else {
@@ -474,10 +477,11 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
                         break;
                     }
                 }
-                if (isOK)
+                if (isOK) {
                     submitData();
-                else
+                } else {
                     ToastUtil.showToast( "板车上还有不属于该航段的数据，请拉下后再提交！");
+                }
                 break;
             case R.id.btn_sure_cargo_return:
                 //回退操作
@@ -693,9 +697,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             //根据运单id 判断
             String key = info1.getWaybillId();
 
-            if (null == mapTemp.get(key))
+            if (null == mapTemp.get(key)) {
                 mapTemp.put(key, info1);
-            else {
+            } else {
                 int baseCount = mapTemp.get(key).getNumber();
                 double baseWeight = mapTemp.get(key).getWeight();
                 double baseVolume = mapTemp.get(key).getVolume();
@@ -729,8 +733,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
             listHandcar_ORIGIN = scooterListInfoBean.getScooters();
             //为无板运单增加 inFlight 默认值
             for (FtGroupScooter mFtGroupScooter:scooterListInfoBean.getWithoutScootereRcInfos()){
-                if (mFtGroupScooter.getInFlight() == null)
+                if (mFtGroupScooter.getInFlight() == null) {
                     mFtGroupScooter.setInFlight((short)0);
+                }
 //                mFtGroupScooter.setNumber(5);
 //                mFtGroupScooter.setWeight(50d);
 //                mFtGroupScooter.setVolume(20d);
@@ -759,8 +764,9 @@ public class CargoHandlingActivity extends BaseActivity implements GetScooterLis
 //            mCargoHandlingAdapter.notifyDataSetChanged();
             //仓位信息
             mCargoCabinAdapter.notifyDataSetChanged();
-            if (flightInfo != null)
+            if (flightInfo != null) {
                 setFlightInfo(flightInfo);
+            }
         }
     }
 

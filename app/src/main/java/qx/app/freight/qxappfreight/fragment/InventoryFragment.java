@@ -98,9 +98,9 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
         pageCurrent = pageCurrent1;
         entityBaseFilterEntity.setSize(Constants.PAGE_SIZE);
 
-        if (IOManifestFragment.iOqrcodeEntity !=null && !StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getDepotID()))
+        if (IOManifestFragment.iOqrcodeEntity !=null && !StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getDepotID())) {
             getIOManifestEntity.setAreaId(IOManifestFragment.iOqrcodeEntity.getDepotID());
-        else{
+        } else{
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
             return;
@@ -126,7 +126,7 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String msg) {
-        if (msg!=null && (msg.equals("inventory_refresh_out")||msg.equals("inventory_refresh_in"))){
+        if (msg!=null && ("inventory_refresh_out".equals(msg) || "inventory_refresh_in".equals(msg))){
             loadData(1);
         }
     }
@@ -134,12 +134,15 @@ public class InventoryFragment extends BaseFragment implements MultiFunctionRecy
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
-        if (error!=null)
+        }
+        if (error!=null) {
             ToastUtil.showToast(error);
+        }
     }
 
     @Override

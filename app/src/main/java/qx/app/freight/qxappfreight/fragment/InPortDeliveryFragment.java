@@ -243,7 +243,7 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag())) {
             String[] parts = daibanCode.split("\\/");
             List <String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
@@ -324,10 +324,12 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(getActivity(), error);
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -389,9 +391,9 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         seachWithNum();
         if (mTaskFragment != null) {
             if (isShow) {
-                if (waybillStatus == 5)
+                if (waybillStatus == 5) {
                     mTaskFragment.setTitleText( "我的待办（" + list1.size() + "）");
-                else {
+                } else {
                     mTaskFragment.setTitleText( "我的已办（" + list1.size() + "）");
 
                 }

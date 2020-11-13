@@ -160,6 +160,7 @@ public class GPSService extends Service {
      */
     private LocationListener locationListener = new LocationListener() {
         // 位置发生改变后调用
+        @Override
         public void onLocationChanged(Location l) {
             Log.d(TAG, "onLocationChanged: ");
             if (l != null) {
@@ -169,12 +170,14 @@ public class GPSService extends Service {
         }
 
         // provider 被用户关闭后调用
+        @Override
         public void onProviderDisabled(String provider) {
             Log.d(TAG, "onProviderDisabled: 用户关闭");
 //            EventBus.getDefault().post(new EventGPSBean("open_gps", "打开GPS"));
         }
 
         // provider 被用户开启后调用
+        @Override
         public void onProviderEnabled(String provider) {
             startLocation();
             Log.d(TAG, "onProviderEnabled: 用户开启");

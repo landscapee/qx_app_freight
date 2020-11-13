@@ -198,8 +198,9 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入板车号", text -> {
                     searchString = text;
@@ -268,10 +269,12 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -371,8 +374,9 @@ public class InstallEquipDoneFragment extends BaseFragment implements MultiFunct
         }
         seachByText();
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 

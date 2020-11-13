@@ -150,8 +150,9 @@ public class DownloadInstall {
             else if (values[0] == -2){
                 progressDialog.hidePro();
             }
-            else
+            else {
                 progressDialog.setProgress(values[0]);
+            }
 
         }
     }

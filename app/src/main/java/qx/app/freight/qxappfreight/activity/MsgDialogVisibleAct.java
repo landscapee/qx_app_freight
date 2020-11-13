@@ -42,8 +42,9 @@ public class MsgDialogVisibleAct extends BaseActivity {
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         mContext = this;
         ButterKnife.bind(this);
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
         initView();
     }
 
@@ -77,8 +78,9 @@ public class MsgDialogVisibleAct extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if ("MsgDialogAct_finish".equals(result)){
-            if (Tools.isLocked(MyApplication.getContext()))
+            if (Tools.isLocked(MyApplication.getContext())) {
                 Tools.unLock(MyApplication.getContext());
+            }
             finish();
         }
 

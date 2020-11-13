@@ -31,8 +31,9 @@ public class SaveUtils {
      * void
      */
     void setValue(String key, Object o) {
-        if (strInfo == null)
+        if (strInfo == null) {
             utils = new SaveUtils();
+        }
         strInfo.put(key, o);
     }
 

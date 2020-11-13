@@ -77,7 +77,7 @@ public class BaggerInputDialog extends DialogFragment {
         //板车类型~板车号
         tvBoardNumber.setText("板车："+String.format(context.getString(R.string.format_allocate_ddress_info), MapValue.getCarTypeValue(bean.getTpScooterType()), bean.getTpScooterCode()));
 
-        if (flightIndicator.equals("M")){
+        if ("M".equals(flightIndicator)){
                 //初始化标签栏
                 flightList =new ArrayList<>();
                 flightList.add("国内");

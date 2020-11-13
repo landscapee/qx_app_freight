@@ -200,7 +200,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag())) {
             chooseCode(daibanCode);
         }
     }
@@ -252,7 +252,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("InPortTallyFragment_refresh")) {
+        if ("InPortTallyFragment_refresh".equals(result)) {
             mCurrentPage=1;
             initData();
         }
@@ -280,10 +280,12 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -307,7 +309,7 @@ public class InPortTallyFragment extends BaseFragment implements MultiFunctionRe
             }
             mCurrentPage = transportListBeans.getCurrent() + 1;
             for (TransportDataBase item : transportListBeans.getRecords()) {
-                if (item.getTaskTypeCode().equals("DA_tallyAndInStorage")) {
+                if ("DA_tallyAndInStorage".equals(item.getTaskTypeCode())) {
                     mListTemp.add(item);
                 }
             }

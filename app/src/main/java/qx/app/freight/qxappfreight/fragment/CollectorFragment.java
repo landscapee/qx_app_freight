@@ -159,9 +159,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     }
 
     private void searchWaybill(String toString) {
-        if (!StringUtil.isEmpty(toString) && toString.length() >= 4)
+        if (!StringUtil.isEmpty(toString) && toString.length() >= 4) {
             loadData(toString);
-        else {
+        } else {
             ToastUtil.showToast("请输入至少4位运单号");
             list.clear();
             adapter.notifyDataSetChanged();
@@ -246,7 +246,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("collector_refresh")) {
+        if ("collector_refresh".equals(result)) {
 //            pageCurrent = 1;
 //            Log.e("refresh", result);
 //            loadData();
@@ -264,7 +264,7 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         if (!TextUtils.isEmpty(result.getFunctionFlag())) {
-            if (!TextUtils.isEmpty(result.getData()) && (result.getFunctionFlag().equals("CollectorFragment") || result.getFunctionFlag().equals("MainActivity")) && isShow) {
+            if (!TextUtils.isEmpty(result.getData()) && ("CollectorFragment".equals(result.getFunctionFlag()) || "MainActivity".equals(result.getFunctionFlag())) && isShow) {
                 String[] parts = daibanCode.split("\\/");
                 List <String> strsToList = Arrays.asList(parts);
                 if (strsToList.size() >= 4) {
@@ -352,9 +352,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
                 }
             }
             etWaybillCode.setText("");
-            if (transportListBeans.getRecords().size() == 1)
+            if (transportListBeans.getRecords().size() == 1) {
                 trunToCollectorActivity(transportListBeans.getRecords().get(0));
-            else {
+            } else {
                 list1.clear();
                 for (TransportDataBase record : transportListBeans.getRecords()) {
                     if (!"changeApply".equals(record.getTaskTypeCode())) {
@@ -383,8 +383,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
     }
 
     public void setSearchToolbar() {
-        if (!isShow)
+        if (!isShow) {
             return;
+        }
         if (mTaskFragment == null) {
             mTaskFragment = (TaskFragment) getParentFragment();
         }
@@ -407,8 +408,9 @@ public class CollectorFragment extends BaseFragment implements TaskLockContract.
 
     @Override
     public void toastView(String error) {
-        if (error != null)
+        if (error != null) {
             ToastUtil.showToast(getActivity(), error);
+        }
 
 //        if (mMfrvData != null)
 //            mMfrvData.finishLoadMore();

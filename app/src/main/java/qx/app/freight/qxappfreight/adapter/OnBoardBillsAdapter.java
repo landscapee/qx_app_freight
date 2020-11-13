@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -35,21 +36,21 @@ public class OnBoardBillsAdapter extends BaseQuickAdapter<LoadingListBean.DataBe
 
             TextView[] tvList = {tv1, tv2, tv3, tv4};
             if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red_avi));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red_avi));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
                 }
             }
             else if ((item.isHasGUNGoods())){
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
                 }
             }
             else{
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 }
             }
         }

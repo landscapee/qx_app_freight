@@ -281,7 +281,7 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 tvStorageType.setText(storageList.get(options1));
                 storageOption = resTypeList.get(options1);
-                if (resTypeList.get(options1).equals("CTU_GARGO_STORAGE_TYPE_004")) {
+                if ("CTU_GARGO_STORAGE_TYPE_004".equals(resTypeList.get(options1))) {
                     llBaseTemperature.setVisibility(View.VISIBLE);
                 } else {
                     llBaseTemperature.setVisibility(View.GONE);
@@ -369,14 +369,15 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
             mData.setBigFlag(baozhuangOption);
             mData.setRepName(mTvStorageInfo.getText().toString());
             mData.setReservoirType(infoType);
-            if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")||storageOption.equals("冷藏")) {
+            if ("CTU_GARGO_STORAGE_TYPE_004".equals(storageOption) || "冷藏".equals(storageOption)) {
                 if (StringUtil.isEmpty(tvTemperature.getText().toString())){
                     ToastUtil.showToast("选择冷藏必须选择温度！");
                     return;
                 }
                 mData.setRefrigeratedTemperature(tvTemperature.getText().toString());
-            }else
+            }else {
                 mData.setRefrigeratedTemperature(null);
+            }
 
             turnToReceiveGoodsActivity();
         } catch (Exception e) {
@@ -437,12 +438,13 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         baozhuangOption = mData.getBigFlag();
         storageOption = mData.getStorageType();
 
-        if (storageOption.equals("CTU_GARGO_STORAGE_TYPE_004")) {
+        if ("CTU_GARGO_STORAGE_TYPE_004".equals(storageOption)) {
             llBaseTemperature.setVisibility(View.VISIBLE);
             tvTemperature.setText(mData.getRefrigeratedTemperature());
         }
-        else
+        else {
             tvTemperature.setText("");
+        }
 
 
         tvStorageType.setText(mData.getStorageTypeName());
@@ -473,11 +475,12 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         storageList.clear();
         resTypeList.clear();
         if (null != changeStorageBean) {
-            if (changeStorageBean.getRecords().size() > 0)
+            if (changeStorageBean.getRecords().size() > 0) {
                 for (int i = 0; i < changeStorageBean.getRecords().size(); i++) {
                     storageList.add(changeStorageBean.getRecords().get(i).getName());
                     resTypeList.add(changeStorageBean.getRecords().get(i).getValue());
                 }
+            }
         }
     }
 
@@ -500,7 +503,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
                 mTvStorageInfo.setText(null);
                 infoType = null;
             }
-        }else
+        }else {
             ToastUtil.showToast("数据为空");
+        }
     }
 }

@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class CargoSpinnerAdapter extends ArrayAdapter <String> {
         TextView tv = (TextView) convertView.findViewById(R.id.tv_content);
         tv.setText(mStringArray.get(position));
         tv.setTextSize(14f);
-        tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+        tv.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
         return convertView;
     }
 }

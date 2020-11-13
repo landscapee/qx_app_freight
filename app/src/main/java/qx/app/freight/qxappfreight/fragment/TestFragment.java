@@ -23,6 +23,7 @@ import qx.app.freight.qxappfreight.activity.TestActivity;
 import qx.app.freight.qxappfreight.app.BaseFragment;
 import qx.app.freight.qxappfreight.dialog.TpPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -51,7 +52,7 @@ public class TestFragment extends BaseFragment {
     private void setData() {
 
         String content = "<font color='#FF0000'>" + "傻逼" + "</font>";
-        btnTest.setText(Html.fromHtml(content));
+        btnTest.setText(StringUtil.transformHtmlFromhtml(content));
 
     }
 

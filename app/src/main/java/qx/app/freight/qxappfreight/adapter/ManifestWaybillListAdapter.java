@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -48,19 +49,19 @@ public class ManifestWaybillListAdapter extends BaseQuickAdapter<ManifestScooter
                 tv.setTextColor(Color.parseColor("#ffffff"));
             }
         } else {
-            if (item.getSpecialCode() != null && item.getSpecialCode().equals("AVI")) {//活体颜色标注
+            if (item.getSpecialCode() != null && "AVI".equals(item.getSpecialCode())) {//活体颜色标注
                 helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }
             } else if (item.getSpecialCode() != null && item.getSpecialCode().equals(Constants.DANGER)){//枪支
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.orangered));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }
             }
             else if (item.getCargoCn() != null && item.getCargoCn().equals(Constants.YCS)){//压舱沙
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
                 for (TextView tv : tvList) {
                     tv.setTextColor(Color.parseColor("#000000"));
                 }

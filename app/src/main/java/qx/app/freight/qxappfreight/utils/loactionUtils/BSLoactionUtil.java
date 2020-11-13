@@ -24,8 +24,9 @@ public class BSLoactionUtil {
     private TelephonyManager telephonyManager;
 
     public static BSLoactionUtil newInstance(Context context) {
-        if (mLoactionUtil == null)
+        if (mLoactionUtil == null) {
             mLoactionUtil = new BSLoactionUtil(context);
+        }
         return mLoactionUtil;
     }
 

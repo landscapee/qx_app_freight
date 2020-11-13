@@ -101,8 +101,9 @@ public class SlideRightExecuteView extends AppCompatTextView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (mIsDragable)
+        if (mIsDragable) {
             getParent().requestDisallowInterceptTouchEvent(true);
+        }
         return super.dispatchTouchEvent(event);
     }
 
@@ -130,21 +131,24 @@ public class SlideRightExecuteView extends AppCompatTextView {
                 return true;
             case MotionEvent.ACTION_CANCEL://手势被取消了
                 callTouch(false);
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 resetLock();
                 break;
             case MotionEvent.ACTION_MOVE://移动
                 // 如果不在焦点
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 resetLocationX(event.getX(), rightMax);
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP://抬起了手指
                 callTouch(false);
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 if (mLocationX >= (rightMax*4/5)) { //设置为 4/5 触发。
                     mIsDragable = false;
                     mLocationX = 0;
@@ -170,8 +174,9 @@ public class SlideRightExecuteView extends AppCompatTextView {
      * TODO: 返回是否在触摸该控件
      */
     private void callTouch(boolean isTouch) {
-        if (mOnTouchListener != null)
+        if (mOnTouchListener != null) {
             mOnTouchListener.onTouch(isTouch);
+        }
     }
 
     /**

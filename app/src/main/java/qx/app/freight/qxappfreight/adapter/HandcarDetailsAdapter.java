@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -38,26 +39,26 @@ public class HandcarDetailsAdapter extends BaseQuickAdapter<FtGroupScooter, Base
         ImageView imgDelete = helper.getView(R.id.iv_delete);
         //不是本航班
         if (item.getInFlight()!=null && item.getInFlight() == 1){
-            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.red));
+            helper.setTextColor(R.id.tv_num, ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_waybill_number,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_waybill_count,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.red));
             imgDelete.setImageResource(R.mipmap.delete);
 
         }//不是本航段的
         else if(item.getInFlightCourse()!=null && item.getInFlightCourse() == 0){
-            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_num,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_waybill_number,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_waybill_count,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.yellow));
             imgDelete.setImageResource(R.mipmap.drop_down);
         }
         else
         {
-            helper.setTextColor(R.id.tv_num,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_waybill_number,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_waybill_count,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_num,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_waybill_number,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_waybill_count,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.text_color));
             imgDelete.setImageResource(R.mipmap.drop_down);
         }
 

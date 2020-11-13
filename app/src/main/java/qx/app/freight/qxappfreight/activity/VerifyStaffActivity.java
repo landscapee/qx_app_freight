@@ -162,10 +162,11 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
         if (mBean != null) {
             tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
             tvGoodsName.setText("品名:  " + mBean.getCargoCn());
-            if (!StringUtil.isEmpty(mBean.getSpecialCode()))
+            if (!StringUtil.isEmpty(mBean.getSpecialCode())) {
                 tvSpecialCode.setText("特货代码:  " + mBean.getSpecialCode());
-            else
+            } else {
                 tvSpecialCode.setText("特货代码:  - -");
+            }
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
         } else {
@@ -198,8 +199,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                             mAcTestInfoListBean
                     );
 
-                } else
+                } else {
                     ToastUtil.showToast(this, "请先上传照片");
+                }
                 break;
             case R.id.refuse_tv:
                 if (!"".equals(filePath)) {
@@ -239,8 +241,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                     mStorageCommitEntity.setUserId(mDecBean.getFlightNo());
                     mStorageCommitEntity.setRemark(mBean.getRemark());
                     ((SubmissionPresenter) mPresenter).submission(mStorageCommitEntity);
-                } else
+                } else {
                     ToastUtil.showToast(this, "请先上传照片");
+                }
                 break;
             case R.id.iv_staff_photo_now:
                 ImageSelectorActivity.start(VerifyStaffActivity.this,
@@ -251,8 +254,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
             case R.id.gh_user:
                 if (null == mAcTestInfoListBean.getFreightInfo()) {
                     ToastUtil.showToast("没有可以选择的角色，请先添加");
-                } else
+                } else {
                     ChoiceUserActivity.startActivity(this, mAcTestInfoListBean);
+                }
                 break;
 
 //            case R.id.btn_take_photo_re:
@@ -323,8 +327,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
      */
     private void pressImage(File file) {
         mPresenter = new UploadsPresenter(this);
-        if (file == null)
+        if (file == null) {
             return;
+        }
         int size = 150;
         Luban.get(this).load(file)
                 .setMaxSize(size)
@@ -369,8 +374,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 fileName = entry.getValue();
                 filePath = entry.getKey();
             }
-        } else
+        } else {
             ToastUtil.showToast(this, "图片返回为空");
+        }
     }
 
     @Override
@@ -381,8 +387,9 @@ public class VerifyStaffActivity extends BaseActivity implements UploadsContract
                 //获取抽验结果
                 if (mAcTestInfoListBean.getInsInfo() == null) {
                     mSpotResult = 0;
-                } else
+                } else {
                     mSpotResult = mAcTestInfoListBean.getInsInfo().getSpotResult();
+                }
                 //报检员姓名
 //                tvBaoJianYuan.setText(testInfoListBeanList.getFreightInfo().get(0).getInspectionName());
                 //报检开始时间

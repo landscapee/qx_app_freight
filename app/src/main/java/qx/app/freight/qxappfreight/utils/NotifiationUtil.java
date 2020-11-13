@@ -87,13 +87,16 @@ public class NotifiationUtil {
                     uri = Uri.parse("android.resource://" + MyApplication.getContext().getPackageName() + "/" + R.raw.im_special);
                     break;
             }
-            if (uri != null)
+            if (uri != null) {
                 notifyBuilder.setSound(uri).setDefaults(Notification.DEFAULT_VIBRATE);
-            else if (id == Constants.NOTIFY_ID_PUSH_QUIET)//eta变更，通知不给声音和震动提示
+            } else if (id == Constants.NOTIFY_ID_PUSH_QUIET)//eta变更，通知不给声音和震动提示
+            {
                 notifyBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
-            else
+            } else
                 // 向通知添加声音、闪灯和振动效果的最简单
+            {
                 notifyBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_ALL | Notification.DEFAULT_SOUND);
+            }
         } catch (Exception e) {
             notifyBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_ALL | Notification.DEFAULT_SOUND);
         }

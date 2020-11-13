@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,8 +57,9 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
         if (showAdjust){
             tvAdjust.setVisibility(View.VISIBLE);
         }
-        else
+        else {
             tvAdjust.setVisibility(View.GONE);
+        }
 
         if (helper.getAdapterPosition() == 0) {
 
@@ -103,34 +105,34 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
 
         if (helper.getAdapterPosition() == 0) {
 //            helper.getView(R.id.sp_berth).setVisibility(View.GONE);
-            helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_2e8));
+            helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
             for (TextView tv : tvList) {
-                tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
+                tv.setTextColor(ContextCompat.getColor(mContext,R.color.login_txt));
             }
         } else {
             tv1.setVisibility(View.VISIBLE);
             tv2.setVisibility(View.VISIBLE);
             tv3.setVisibility(View.VISIBLE);
             if (item.getExceptionFlag() == 1) {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.login_txt));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.login_txt));
                 }
             }
             else if (item.isSplit()) {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.gray_cc));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.gray_cc));
                 if (helper.getPosition() != 0){
                     tv1.setVisibility(View.INVISIBLE);
                     tv2.setVisibility(View.INVISIBLE);
                     tv3.setVisibility(View.INVISIBLE);
                 }
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 }
             }else if (item.isChange()) {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.yellow));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 }
             }
 
@@ -141,20 +143,20 @@ public class LnstallationListAdapter extends BaseQuickAdapter <LnstallationInfoB
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 } else if (item.getSpecialCode() != null && item.getSpecialCode().contains(Constants.DANGER)) {//枪支
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.orangered));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }
                 else if (item.getWaybillList() != null &&item.getWaybillList().size()>0&&item.getWaybillList().get(0)!=null&&item.getWaybillList().get(0).getCargoCn()!=null&& item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)){//压舱沙
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }else {
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
                     for (TextView tv : tvList) {
-                        tv.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                        tv.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                     }
                 }
             }

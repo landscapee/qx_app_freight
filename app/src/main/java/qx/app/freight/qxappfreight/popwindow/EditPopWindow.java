@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.popwindow;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class EditPopWindow extends PopupWindow {
         int lineHeight = DisplayUtil.dip2px(mContext, 1);//线的高度
         int height = mData.size() < 5 ? (mEditText.getHeight() + lineHeight) * mData.size() - lineHeight : (mEditText.getHeight() + lineHeight) * 5 + mEditText.getHeight() / 3;
         this.setHeight(height);
-        this.setBackgroundDrawable(new ColorDrawable(mContext.getResources().getColor(R.color.transparent)));
+        this.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(mContext,R.color.transparent)));
         this.setOutsideTouchable(true);
         this.setFocusable(false);
         // 点击其他地方隐藏键盘 popupWindow

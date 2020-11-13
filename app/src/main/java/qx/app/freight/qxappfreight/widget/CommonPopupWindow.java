@@ -87,16 +87,20 @@ public abstract  class CommonPopupWindow {
         }
 
         public int getHoriParam() {
-            for(int i=0x1; i<=0x100; i=i<<2)
-                if(isParamFit(i))
+            for(int i=0x1; i<=0x100; i=i<<2) {
+                if(isParamFit(i)) {
                     return i;
+                }
+            }
             return ALIGN_LEFT;
         }
 
         public int getVertParam() {
-            for(int i=0x2; i<=0x200; i=i<<2)
-                if(isParamFit(i))
+            for(int i=0x2; i<=0x200; i=i<<2) {
+                if(isParamFit(i)) {
                     return i;
+                }
+            }
             return TO_BOTTOM;
         }
 
@@ -107,10 +111,12 @@ public abstract  class CommonPopupWindow {
             int winWidth=window.getWidth();
             int winHeight=window.getHeight();
             View view=window.getContentView();
-            if(winWidth<=0)
+            if(winWidth<=0) {
                 winWidth=view.getWidth();
-            if(winHeight<=0)
+            }
+            if(winHeight<=0) {
                 winHeight=view.getHeight();
+            }
 
             int xoff=0;
             int yoff=0;

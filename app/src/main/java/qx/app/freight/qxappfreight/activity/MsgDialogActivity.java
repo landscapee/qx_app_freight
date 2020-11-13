@@ -66,8 +66,9 @@ public class MsgDialogActivity extends BaseActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
+        if (hasFocus) {
             Tools.startVibrator(mContext.getApplicationContext(),true,R.raw.ring);
+        }
     }
 
     @Override
@@ -97,10 +98,11 @@ public class MsgDialogActivity extends BaseActivity {
 
 
     private void setView() {
-        if (pushList.size() > 1)
+        if (pushList.size() > 1) {
             mTvNum.setVisibility(View.VISIBLE);
-        else
+        } else {
             mTvNum.setVisibility(View.GONE);
+        }
         mTvNum.setText(pushList.size() + "");
     }
 

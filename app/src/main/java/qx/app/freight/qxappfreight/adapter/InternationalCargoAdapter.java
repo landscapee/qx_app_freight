@@ -33,7 +33,7 @@ public class InternationalCargoAdapter extends BaseQuickAdapter<TransportTodoLis
         helper.setText(R.id.allocate_address, String.format(mContext.getString(R.string.format_allocate_ddress_info), MapValue.getCarTypeValue(item.getTpScooterType()), item.getTpScooterCode()));
 
         //是否隐藏国际图标
-        if (item.getFlightIndicator().equals("I")){
+        if ("I".equals(item.getFlightIndicator())){
             helper.setVisible(R.id.iv_international,true);
         }else {
             helper.setVisible(R.id.iv_international,false);

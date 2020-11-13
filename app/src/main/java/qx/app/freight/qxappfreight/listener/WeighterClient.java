@@ -143,8 +143,9 @@ public class WeighterClient extends StompClient {
                 WebSocketService.subList.add(WebSocketService.Message);
             }
         }
-        if (NetworkUtils.isNetWorkAvailable(mContext))
+        if (NetworkUtils.isNetWorkAvailable(mContext)) {
             my.connect();
+        }
     }
 
     //用于代办刷新
@@ -166,6 +167,7 @@ public class WeighterClient extends StompClient {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
                 if (!WebSocketService.isTopic){

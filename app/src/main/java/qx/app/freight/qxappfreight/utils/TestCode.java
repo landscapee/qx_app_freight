@@ -66,12 +66,15 @@ public class TestCode {
         hour = (int)(time - (day*24*60))/60;
         min = time - (day*24*60) - (hour*60);
         String date = "";
-        if (day > 0)
+        if (day > 0) {
             date = date+day+"d";
-        if (hour > 0)
+        }
+        if (hour > 0) {
             date = date+hour+"h";
-        if (min > 0)
+        }
+        if (min > 0) {
             date = date+min+"m";
+        }
         return date;
     }
 

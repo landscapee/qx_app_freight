@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -77,8 +78,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
             btnReopen.setVisibility(View.VISIBLE);
             btnReopen.setOnClickListener(v -> {
                 if (onReOpenLoadTaskListener != null) {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     onReOpenLoadTaskListener.onReOpenLoadTask(helper.getAdapterPosition());
                 }
             });
@@ -91,8 +93,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
         if (showExReport) {
             btnExReport.setVisibility(View.VISIBLE);
             btnExReport.setOnClickListener(b -> {
-                if (!Tools.isFastClick())
+                if (!Tools.isFastClick()) {
                     return;
+                }
                 Intent intent = new Intent(mContext, ErrorReportActivity.class);
                 intent.putExtra("task_id", item.getTaskId());//任务id
                 intent.putExtra("area_id", item.getSeat());//area_id
@@ -134,23 +137,26 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
 
         Button btnFS = helper.getView(R.id.btn_flight_safeguard);
         btnFS.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             onFlightSafeguardListenner.onFlightSafeguardClick(helper.getAdapterPosition());
         });
         Button btnClear = helper.getView(R.id.btn_seat_clear);
         btnClear.setVisibility(View.GONE);
         btnClear.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             onFlightSafeguardListenner.onClearClick(helper.getAdapterPosition());
         });
         if (showPhoto) {
             Button btnPhotoRecord = helper.getView(R.id.btn_photo_record);
             btnPhotoRecord.setVisibility(View.VISIBLE);
             btnPhotoRecord.setOnClickListener(v -> {
-                if (!Tools.isFastClick())
+                if (!Tools.isFastClick()) {
                     return;
+                }
                 onFlightSafeguardListenner.onUploadPhoto(helper.getAdapterPosition());
             });
         }
@@ -162,30 +168,34 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
             if (item.getMovement() == 4 && item.getRelateInfoObj() != null) {
                 btnLookInstall.setVisibility(View.VISIBLE);
                 btnLookInstall.setOnClickListener(v -> {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
                 });
                 btnLookUnInstall.setVisibility(View.VISIBLE);
                 btnLookUnInstall.setOnClickListener(v -> {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                 });
             } else {
                 if (item.getMovement() == 1 || item.getMovement() == 4) {//卸机
                     btnLookUnInstall.setVisibility(View.VISIBLE);
                     btnLookUnInstall.setOnClickListener(v -> {
-                        if (!Tools.isFastClick())
+                        if (!Tools.isFastClick()) {
                             return;
+                        }
                         onFlightSafeguardListenner.onLookUnloadInstall(helper.getAdapterPosition());
                     });
                     btnLookInstall.setVisibility(View.GONE);
                 } else {
                     btnLookInstall.setVisibility(View.VISIBLE);
                     btnLookInstall.setOnClickListener(v -> {
-                        if (!Tools.isFastClick())
+                        if (!Tools.isFastClick()) {
                             return;
+                        }
                         onFlightSafeguardListenner.onLookLoadInstall(helper.getAdapterPosition());
                     });
                     btnLookUnInstall.setVisibility(View.GONE);
@@ -204,13 +214,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
         }
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                 break;
             case Constants.TIME_TYPE_EXCEPT:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                 break;
             case Constants.TIME_TYPE_PLAN:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                 break;
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
@@ -236,13 +246,13 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
             Drawable drawableLeftLink = null;
             switch (item.getRelateInfoObj().getTimeType()) {
                 case Constants.TIME_TYPE_AUTUAL:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.shi);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                     break;
                 case Constants.TIME_TYPE_EXCEPT:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.yu);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                     break;
                 case Constants.TIME_TYPE_PLAN:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.ji);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                     break;
             }
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
@@ -254,8 +264,9 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
                 containerLink.removeAllViews();
                 containerLink.addView(layoutLink, paramsMain);
             }
-        } else
+        } else {
             llLink.setVisibility(View.GONE);
+        }
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -279,38 +290,38 @@ public class NewInstallEquipAdapter extends BaseQuickAdapter <LoadAndUnloadTodoB
             helper.setText(R.id.tv_eta, "预达 " + TimeUtils.datetimeTo4(item.getEta() > 0 ? item.getEta() : 0));
 
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getFlightStatus())) {
-                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("已达"))// 已达
+                if ("已达".equals(item.getLoadingAndUnloadBean().getFlightStatus()))// 已达
                 {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_a));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("正常")) {//正常
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_a));
+                } else if ("正常".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//正常
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.lightgreen));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.lightgreen));
+                } else if ("起飞".equals(item.getLoadingAndUnloadBean().getFlightStatus())) // 起飞
                 {
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_d));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("前起")) {//前起
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_d));
+                } else if ("前起".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//前起
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_pre_atd));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("允登")) {
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_pre_atd));
+                } else if ("允登".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_yundeng));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("登机")) {
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_yundeng));
+                } else if ("登机".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_dengji));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")) {//完成登机
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_dengji));
+                } else if ("完登".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//完成登机
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_wanchengdengji));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("撤轮档")) {//撤轮档
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_wanchengdengji));
+                } else if ("撤轮档".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//撤轮档
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.imlib_yellowa));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("推出")) {//飞机推出
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.imlib_yellowa));
+                } else if ("推出".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//飞机推出
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.red));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.red));
                 }
-                else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("入位")) {//入位
+                else if ("入位".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//入位
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.indianred));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.indianred));
                 }
                 mLabelView.setTextContent(item.getLoadingAndUnloadBean().getFlightStatus());
             }

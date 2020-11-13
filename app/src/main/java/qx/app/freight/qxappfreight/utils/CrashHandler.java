@@ -295,7 +295,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         SharedPreferences sp = mContext.getSharedPreferences("crash", Context.MODE_PRIVATE);
         String exception = sp.getString("exception", "");
 
-        if (TextUtils.isEmpty(exception.trim())) return;
+        if (TextUtils.isEmpty(exception.trim())) {
+            return;
+        }
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor()).build();
         Map<String, String> map = new HashMap<>();

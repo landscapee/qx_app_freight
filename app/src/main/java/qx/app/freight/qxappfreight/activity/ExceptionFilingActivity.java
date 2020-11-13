@@ -136,7 +136,7 @@ public class ExceptionFilingActivity extends BaseActivity implements UploadsCont
             } else {
                 originList.addAll(mPhotoPath);
             }
-            MultiImageSelector.create(ExceptionFilingActivity.this)
+            MultiImageSelector.create()
                     .showCamera(true) // 是否显示相机. 默认为显示
                     .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                     .multi() // 多选模式, 默认模式;
@@ -176,8 +176,9 @@ public class ExceptionFilingActivity extends BaseActivity implements UploadsCont
      * @param paths 文件路径集合
      */
     private void pressImage(List<String> paths) {
-        if (paths == null || paths.size() == 0)
+        if (paths == null || paths.size() == 0) {
             return;
+        }
         List<File> files = new ArrayList<>();
         for (String path : paths) {
             files.add(new File(path));

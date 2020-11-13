@@ -140,8 +140,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
                         mDialog.show();//显示新任务弹窗
                     }
                 } else {//刷新任务弹出框中的数据显示
-                    if (mDialog != null)
+                    if (mDialog != null) {
                         mDialog.refreshData();
+                    }
                 }
             }
         }
@@ -200,8 +201,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     mSearchText = text;
@@ -290,8 +292,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
             if (bean.getPassengerLoadSend() > 0) {
                 posNow = 2;
                 times.add(String.valueOf(bean.getPassengerLoadSend()));
-            } else
+            } else {
                 times.add("0");
+            }
 
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
             if (posNow > 0) {
@@ -317,8 +320,9 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
         seachByText();
         setSlideListener();
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 
@@ -362,10 +366,12 @@ public class JunctionLoadFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

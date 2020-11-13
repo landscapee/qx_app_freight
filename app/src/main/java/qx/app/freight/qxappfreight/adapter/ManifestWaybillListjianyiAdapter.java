@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -46,10 +47,11 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                     .setText(R.id.tv_volume, item.getVolume() != null ? item.getVolume() + "" : "--")
                     .setText(R.id.tv_weight, item.getWeight() != null ? item.getWeight() + "" : "--")
                     .setText(R.id.tv_specialCode, item.getSpecialNumber() != null ? item.getSpecialNumber() : "--");
-            if (item.getWaybillList() != null && item.getWaybillList().size() > 0)
+            if (item.getWaybillList() != null && item.getWaybillList().size() > 0) {
                 helper.setText(R.id.tv_mailtype, item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getWaybillCode().contains("xxx") ? "X" : item.getMailType() != null ? item.getMailType() : "--");
-            else
+            } else {
                 helper.setText(R.id.tv_mailtype, item.getMailType() != null ? item.getMailType() : "--");
+            }
             Button btnPull = helper.getView(R.id.tv_pull);
             if (notShowPull){
                 btnPull.setVisibility(View.VISIBLE);
@@ -57,17 +59,17 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                 btnPull.setOnClickListener(v -> {
                     item.setPull(!item.isPull());
                     if (item.isPull()){
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                        btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.red));
                     }
                     else{
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                        btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                     }
                 });
                 if (item.isPull()){
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                    btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.red));
                 }
                 else{
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                    btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                 }
             }
             else {
@@ -91,18 +93,18 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                     tv.setTextColor(Color.parseColor("#ffffff"));
                 }
             } else {
-                if (item.getSpecialNumber() != null && item.getSpecialNumber().equals("AVI")) {//活体颜色标注
+                if (item.getSpecialNumber() != null && "AVI".equals(item.getSpecialNumber())) {//活体颜色标注
                     helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 } else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals(Constants.DANGER)) {//枪支
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.orangered));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.orangered));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 } else if (item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
@@ -129,19 +131,19 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                 //设置 拉下的状态
                 btnPull.setOnClickListener(v -> {
                     if (item.isPull()){
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                        btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.red));
                     }
                     else{
-                        btnPull.setTextColor(mContext.getResources().getColor(R.color.black_3));
+                        btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
                     }
                     item.setPull(!item.isPull());
 
                 });
                 if (item.isPull()){
-                    btnPull.setTextColor(mContext.getResources().getColor(R.color.red));
+                    btnPull.setTextColor(ContextCompat.getColor(mContext,R.color.red));
                 }
                 else{
-                    btnPull.setTextColor (mContext.getResources().getColor(R.color.black_3));
+                    btnPull.setTextColor (ContextCompat.getColor(mContext,R.color.black_3));
                 }
             }
             else {
@@ -172,19 +174,19 @@ public class ManifestWaybillListjianyiAdapter extends BaseQuickAdapter <Manifest
                         .setText(R.id.tv_weight, item.getWeight() != null ? item.getWeight() + "" : "--")
                         .setText(R.id.tv_specialCode, item.getSpecialNumber() != null ? item.getSpecialNumber() : "--")
                         .setText(R.id.tv_mailtype, item.getMailType() != null ? item.getMailType() : "--");
-                if (item.getSpecialNumber() != null && item.getSpecialNumber().equals("AVI")) {//活体颜色标注
+                if (item.getSpecialNumber() != null && "AVI".equals(item.getSpecialNumber())) {//活体颜色标注
                     helper.itemView.setBackgroundColor(Color.parseColor("#c68a9e"));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 } else if (item.getSpecialNumber() != null && item.getSpecialNumber().equals(Constants.DANGER)) {//枪支
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }
                 }
                 else if (item.getWaybillList()!=null&&item.getWaybillList().size()>0&&item.getWaybillList().get(0).getCargoCn() != null && item.getWaybillList().get(0).getCargoCn().equals(Constants.YCS)) {//压舱沙
-                    helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                    helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
                     for (TextView tv : tvList) {
                         tv.setTextColor(Color.parseColor("#000000"));
                     }

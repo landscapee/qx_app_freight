@@ -103,8 +103,9 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
                         @Override
                         public void run() {
                             //soundPool播放
-                            if (sources == null)
+                            if (sources == null) {
                                 initSoundPool();
+                            }
                             try {
                                 Thread.sleep(500);   //线程休眠1秒,为系统加载音乐资源文件
                             } catch (InterruptedException e) {
@@ -138,8 +139,9 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
                 @Override
                 public void run() {
                     //soundPool播放
-                    if (sources == null)
+                    if (sources == null) {
                         initSoundPool();
+                    }
                     try {
                         Thread.sleep(500);   //线程休眠0.5秒,为系统加载音乐资源文件
                     } catch (InterruptedException e) {
@@ -236,8 +238,9 @@ public class SoundConfigUtils implements OnBufferingUpdateListener, OnPreparedLi
             //直接读取raw中的文件
             case 0: {
                 try {
-                    if (mediaPlayer == null)
+                    if (mediaPlayer == null) {
                         mediaPlayer = MediaPlayer.create(context, rawId);
+                    }
                     mediaPlayer.setLooping(isLoop);
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();

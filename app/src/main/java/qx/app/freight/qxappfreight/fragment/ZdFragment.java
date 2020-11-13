@@ -98,8 +98,9 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
             if (StringUtil.isEmpty(result.get(0).getContent())){
                 tvNoData.setVisibility(View.VISIBLE);
                 mSrRefush.setVisibility(View.GONE);
-                if (result.get(0)!=null)
+                if (result.get(0)!=null) {
                     tvName.setText("配载员：" + result.get(0).getCreateUserName());
+                }
                 return;
             }
             tvNoData.setVisibility(View.GONE);
@@ -138,8 +139,9 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                             }
                         }
 //                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
-                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
+                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0) {
                             datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
+                        }
                     }
                     mList.addAll(datas[i].getCargos().get(j).getScooters());
                 }
@@ -149,11 +151,13 @@ public class ZdFragment extends BaseFragment implements MultiFunctionRecylerView
                 for (int j = 0;j<mList.get(i).getWaybillList().size();j++){
                     //TODO C 货物
                     if (!"".equals(mList.get(i).getWaybillList().get(j).getWeight())) {
-                        if ("C".equals(mList.get(i).getWaybillList().get(j).getMailType()))
+                        if ("C".equals(mList.get(i).getWaybillList().get(j).getMailType())) {
                             cagnWeight += Double.valueOf(mList.get(i).getWaybillList().get(j).getWeight());
+                        }
                             //TODO M 邮件
-                        else if ("M".equals(mList.get(i).getWaybillList().get(j).getMailType()))
+                        else if ("M".equals(mList.get(i).getWaybillList().get(j).getMailType())) {
                             emailWeight += Double.valueOf(mList.get(i).getWaybillList().get(j).getWeight());
+                        }
                     }
                 }
 

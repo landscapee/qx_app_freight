@@ -46,7 +46,7 @@ public class InPortTallyListAdapter extends BaseQuickAdapter<InPortTallyListEnti
         helper.setText(R.id.tv_store_info, String.format(mContext.getString(R.string.format_inport_tally_store_info), item.getStoreName(), item.getStoreNumber()));
         if (!"无异常".equals(item.getExceptionSituation())) {
             String content = "<font color='red'>" + item.getExceptionSituation() + "</font>";
-            helper.setText(R.id.tv_exception, Html.fromHtml(content));
+            helper.setText(R.id.tv_exception, StringUtil.transformHtmlFromhtml(content));
         }
         TextView tvModify = helper.getView(R.id.tv_modify);
         tvModify.setOnClickListener(v -> {

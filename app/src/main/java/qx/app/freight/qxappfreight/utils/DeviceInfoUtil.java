@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DeviceInfoUtil {
-//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @SuppressLint({"MissingPermission", "HardwareIds"})
     public static Map<String, String> getDeviceInfo(Context context) {
         Map<String, String> result = new HashMap<>();

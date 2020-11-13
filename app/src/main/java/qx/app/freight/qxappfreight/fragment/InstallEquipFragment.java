@@ -145,8 +145,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     }
 
     private void showTaskDialog() {
-        if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0)
+        if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0) {
             return;
+        }
         if (mDialog == null) {
             mDialog = new PushLoadUnloadDialog(getContext(), R.style.custom_dialog, mListCache, success -> {
                 if (success) {//成功领受后吐司提示，
@@ -256,9 +257,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
         Intent intent = new Intent(mContext, LoadPlaneActivity.class);
         intent.putExtra("plane_info", mList.get(position));
-        if ( mList.get(position).getTaskType() == 5)
+        if ( mList.get(position).getTaskType() == 5) {
             intent.putExtra("position", 5);
-        else {
+        } else {
             intent.putExtra("position", 3);
         }
         mContext.startActivity(intent);
@@ -308,8 +309,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -342,8 +344,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
         if (result.contains("InstallEquipFragment_refresh") || "refresh_data_update".equals(result)) {
-            if (result.contains("@"))
+            if (result.contains("@")) {
                 mSpecialTaskId = result.split("@")[1];
+            }
             mCurrentPage = 1;
             loadData();
         }
@@ -432,7 +435,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     posNow = i;
                     break;
                 } else if (timeNow.contains(":0")) {//至少跳转到装机或卸机页面去过，不过没有点击结束装机或卸机
-                    if (!timeNow.equals("0:0")) {//timeNow的格式为“1990000:0”，说明进过装机或卸机页面，但是按返回按钮等退出页面了
+                    if (!"0:0".equals(timeNow)) {//timeNow的格式为“1990000:0”，说明进过装机或卸机页面，但是按返回按钮等退出页面了
                         hasChecked = true;
                     }
                     posNow = i;
@@ -448,7 +451,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {
 
                 bean.getOperationStepObj().get(i).setPlanTime(bean.getOperationStepObj().get(i).getPlanTime()==null||"0".equals(bean.getOperationStepObj().get(i).getPlanTime()) ? "" : sdf.format(new Date(Long.valueOf(bean.getOperationStepObj().get(i).getPlanTime()))));
-                if (i == 5) continue;//下标为5时，需要跳过，进入下一轮循环，对应的操作code为FreightUnloadFinish
+                if (i == 5) {
+                    continue;//下标为5时，需要跳过，进入下一轮循环，对应的操作code为FreightUnloadFinish
+                }
                 if (i == 7) {//下标为7时，特殊处理
                     LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(i);
                     entity1.setFlightType(bean.getFlightType());
@@ -457,7 +462,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
                     }
                 } else {
                     int index = i;
-                    if (bean.getOperationStepObj().get(i).getOperationCode().equals("FreightUnloadFinish") || bean.getOperationStepObj().get(i).getOperationCode().equals("FreightLoadFinish")) {
+                    if ("FreightUnloadFinish".equals(bean.getOperationStepObj().get(i).getOperationCode()) || "FreightLoadFinish".equals(bean.getOperationStepObj().get(i).getOperationCode())) {
                         index++;//筛选卸机结束和装机结束的步骤项
                     }
                     LoadAndUnloadTodoBean.OperationStepObjBean entity1 = bean.getOperationStepObj().get(index);
@@ -491,7 +496,7 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
             List <String> codeList = new ArrayList <>();
             for (int i = 0; i < bean.getOperationStepObj().size(); i++) {//不管哪种类型的代办，都需要将对应的操作步骤code记录成一个列表存在对应的item中
                 String code = bean.getOperationStepObj().get(i).getOperationCode();
-                if (!code.equals("FreightUnloadFinish") && !code.equals("FreightLoadFinish")) {//排除了装机结束和卸机结束的code，宽体机滑动开始卸机时会自动调取步骤接口生成卸机开始和卸机结束时间
+                if (!"FreightUnloadFinish".equals(code) && !"FreightLoadFinish".equals(code)) {//排除了装机结束和卸机结束的code，宽体机滑动开始卸机时会自动调取步骤接口生成卸机开始和卸机结束时间
                     codeList.add(code);
                 }
             }
@@ -508,8 +513,9 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
         seachByText();
         setSlideListener(checkedList);
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 
@@ -597,13 +603,16 @@ public class InstallEquipFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void toastView(String error) {
-        if (loadInstall == 1)
+        if (loadInstall == 1) {
             ToastUtil.showToast("暂无装机单");
+        }
 
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

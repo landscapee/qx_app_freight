@@ -222,7 +222,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("BaggageListActivity")) {
+        if ("BaggageListActivity".equals(result.getFunctionFlag())) {
             if (result.getData() != null ) {
                 //板车号
                 mScooterCode = result.getData();
@@ -236,7 +236,7 @@ public class BaggageListActivity extends BaseActivity implements BaggageAreaSubC
                 ToastUtil.showToast("请扫描或输入正确的板车号");
             }
         }
-        if (result.getFunctionFlag().equals("BaggageListActivity_done")) {
+        if ("BaggageListActivity_done".equals(result.getFunctionFlag())) {
             if (flag == 1) {
                 if (result.getData()!=null){
                     for (String item : mAbnormalList) {

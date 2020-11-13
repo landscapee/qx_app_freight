@@ -21,8 +21,9 @@ public class AppUtil {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace(System.err);
         }
-        if (info == null)
+        if (info == null) {
             info = new PackageInfo();
+        }
         return info;
     }
 
@@ -32,7 +33,7 @@ public class AppUtil {
     @SuppressLint("WakelockTimeout")
     public static void wakeupScreen(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (pm.isScreenOn()) {
+        if (pm.isInteractive()) {
             return;
         }
         //获取电源管理器对象
@@ -49,6 +50,6 @@ public class AppUtil {
      */
     public static boolean isLocked(Context context) {
         KeyguardManager mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        return mKeyguardManager.inKeyguardRestrictedInputMode();
+        return mKeyguardManager.isKeyguardLocked();
     }
 }

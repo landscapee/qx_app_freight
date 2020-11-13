@@ -11,16 +11,17 @@ public class MapValue {
      */
     public static String getLocationValue(String code){
         String value ="无";
-        if ("temp_area".equals(code))
+        if ("temp_area".equals(code)) {
             value = "临时区";
-        else if ("waiting_area".equals(code))
+        } else if ("waiting_area".equals(code)) {
             value = "待运区";
-        else if ("seat".equals(code))
+        } else if ("seat".equals(code)) {
             value = "机下";
-        else if ("baggage_area".equals(code))
+        } else if ("baggage_area".equals(code)) {
             value = "行李区";
-        else if ("warehouse_area".equals(code))
+        } else if ("warehouse_area".equals(code)) {
             value = "库区";
+        }
         return value;
     }
     /**
@@ -39,10 +40,11 @@ public class MapValue {
 //            value = "平板";
 //        else if ("6".equals(code))
 //            value = "大滚筒-窄";
-        if (ScooterConfiSingle.getInstance().isEmpty())
+        if (ScooterConfiSingle.getInstance().isEmpty()) {
             return value;
-        else
+        } else {
             return ScooterConfiSingle.getInstance().get(code);
+        }
     }
 
     /**
@@ -52,29 +54,31 @@ public class MapValue {
      */
     public static String getProjectName(String code){
         String projectName = "";
-        if ("CargoOutTransport".equals(code))
+        if ("CargoOutTransport".equals(code)) {
             projectName = "货物运输";
-        else if ("CargoSiteClearing".equals(code))
+        } else if ("CargoSiteClearing".equals(code)) {
             projectName = "货物清场";
-        else if ("LuggageTransport".equals(code))
+        } else if ("LuggageTransport".equals(code)) {
             projectName = "行李运输";
-        else if ("EquipmentGuarantee".equals(code))
+        } else if ("EquipmentGuarantee".equals(code)) {
             projectName = "设备保障";
+        }
 
         return projectName;
     }
     public static int getAreaType(String code){
         int areaType = 0;
-        if ("temp_area".equals(code))
+        if ("temp_area".equals(code)) {
             areaType = 3;
-        else if ("waiting_area".equals(code))
+        } else if ("waiting_area".equals(code)) {
             areaType = 2;
-        else if ("seat".equals(code))
+        } else if ("seat".equals(code)) {
             areaType = 4;
-        else if ("baggage_area".equals(code))
+        } else if ("baggage_area".equals(code)) {
             areaType = 5;
-        else if ("warehouse".equals(code))
+        } else if ("warehouse".equals(code)) {
             areaType = 1;
+        }
 
         return areaType;
     }
@@ -82,16 +86,17 @@ public class MapValue {
 
     public static String getHYOfZP(String code){
         String hyType = "";
-        if ("0".equals(code))
+        if ("0".equals(code)) {
             hyType = "8";
-        else if ("1".equals(code))
+        } else if ("1".equals(code)) {
             hyType = "7";
-        else if ("2".equals(code))
+        } else if ("2".equals(code)) {
             hyType = "9";
-        else if ("3".equals(code))
+        } else if ("3".equals(code)) {
             hyType = "8";
-        else if ("4".equals(code))
+        } else if ("4".equals(code)) {
             hyType = "6";
+        }
 
         return hyType;
     }

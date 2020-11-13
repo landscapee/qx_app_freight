@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter.loadinglist;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -68,21 +69,21 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 rvBill.setAdapter(new OnBoardBillsAdapter(data));
             }
             if (item.isHasLiveGoods()){//有活体运单时背景设为桃红色
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red_avi));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red_avi));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
                 }
             }
             else if ((item.isHasGUNGoods())){
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
                 }
             }
             else{
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
                 for (TextView tv : tvList) {
-                    tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
+                    tv.setTextColor(ContextCompat.getColor(mContext,R.color.text_666));
                 }
             }
 
@@ -94,19 +95,20 @@ public class RightRvAdapter extends BaseQuickAdapter<ScrollEntity, BaseViewHolde
                 tvPullDown.setVisibility(View.VISIBLE);
             }
 //            for (TextView tv : tvList) {
-//                tv.setTextColor(mContext.getResources().getColor(R.color.text_666));
-//                tv.setBackgroundColor(mContext.getResources().getColor(R.color.login_txt));
+//                tv.setTextColor(ContextCompat.getColor(mContext,R.color.text_666));
+//                tv.setBackgroundColor(ContextCompat.getColor(mContext,R.color.login_txt));
 //            }
             tvPullDown.setOnClickListener(v -> {
-                if (!Tools.isFastClick())
+                if (!Tools.isFastClick()) {
                     return;
+                }
                 if (!item.isLocked()) {
                     if (item.isPull()) {
                         item.setPull(false);
-                        tvPullDown.setTextColor(mContext.getResources().getColor(R.color.gray_888));
+                        tvPullDown.setTextColor(ContextCompat.getColor(mContext,R.color.gray_888));
                     } else {
                         item.setPull(true);
-                        tvPullDown.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+                        tvPullDown.setTextColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
                     }
                     onPullCheckListener.onPullChecked(helper.getAdapterPosition(), item.isPull());
                     onDataCheckListener.onDataChecked(item.getScooterId());

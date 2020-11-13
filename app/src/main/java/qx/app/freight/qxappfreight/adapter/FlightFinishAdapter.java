@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,13 +82,13 @@ public class FlightFinishAdapter extends BaseAdapter {
     private void setBubbColor(BubbleTextVew v, View round, MilepostBean model) {
         if (model.getActualTime()>0){
             round.setBackgroundResource(R.drawable.shape_blue_dot);
-            v.setBubbleColor(mContext.getResources().getColor(R.color.deepskyblue));
-            v.setTextColor(mContext.getResources().getColor(R.color.white));
+            v.setBubbleColor(ContextCompat.getColor(mContext,R.color.deepskyblue));
+            v.setTextColor(ContextCompat.getColor(mContext,R.color.white));
         }
         else {
             round.setBackgroundResource(R.drawable.shape_white_dot);
-            v.setBubbleColor(mContext.getResources().getColor(R.color.white));
-            v.setTextColor(mContext.getResources().getColor(R.color.deepskyblue));
+            v.setBubbleColor(ContextCompat.getColor(mContext,R.color.white));
+            v.setTextColor(ContextCompat.getColor(mContext,R.color.deepskyblue));
         }
 
     }

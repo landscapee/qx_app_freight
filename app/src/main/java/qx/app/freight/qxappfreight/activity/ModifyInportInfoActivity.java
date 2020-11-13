@@ -158,7 +158,7 @@ public class ModifyInportInfoActivity extends BaseActivity {
             dialog.show(getSupportFragmentManager(), "123");
         });
         mTvCommitInfo.setOnClickListener(v -> {
-            if (!mTvStoreName.getText().toString().equals("请选择库区") && !mTvStoreNumber.getText().toString().equals("请选择库位")) {
+            if (!"请选择库区".equals(mTvStoreName.getText().toString()) && !"请选择库位".equals(mTvStoreNumber.getText().toString())) {
                 if ("".equals(mEtTallyNumber.getText().toString())) {
                     ToastUtil.showToast("请输入理货件数");
                     return;
@@ -168,7 +168,7 @@ public class ModifyInportInfoActivity extends BaseActivity {
                 double weight;
                 if (text1.contains("kg")) {
                     weight = Double.valueOf(text1.substring(0, text1.length() - 2));
-                } else if (text1.equals("")) {
+                } else if ("".equals(text1)) {
                     ToastUtil.showToast("请输入理货重量");
                     return;
                 } else {

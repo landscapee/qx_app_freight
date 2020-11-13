@@ -69,10 +69,11 @@ public class AllocateScooterActivity extends BaseActivity {
     }
 
     public void setTotalWeight(double weight,int flag){
-        if (flag == 0)
+        if (flag == 0) {
             tvTotalWeight.setText("板车总重量:"+weight+"kg");
-        else
+        } else {
             tvTotalWeight.setText("货邮总重量:"+weight+"kg");
+        }
     }
 
 

@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter.loadinglist;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -74,10 +75,11 @@ public class LeftRvAdapter extends BaseQuickAdapter<RegularEntity, BaseViewHolde
                 helper.itemView.setBackgroundColor(Color.parseColor("#ee3f8e"));
             }
             else if ((item.isHasGUNGoods())){
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.red));
             }
-            else
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            else {
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
+            }
 
             helper.getView(R.id.iv_lock_status).setVisibility(View.VISIBLE);
             helper.getView(R.id.tv_lock).setVisibility(View.GONE);

@@ -22,8 +22,9 @@ public class ScooterConfiSingle {
     public static Map<String,String> getInstance() {
 
         synchronized (ScooterConfiSingle.class) {
-            if (scooterMap == null)
+            if (scooterMap == null) {
                 return new HashMap <String,String>();
+            }
         }
         return scooterMap;
     }

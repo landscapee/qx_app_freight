@@ -100,21 +100,21 @@ public class SubPackageWaybillActivity extends BaseActivity {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                if (!"".equals(tvSubpackageWeight.getText().toString()))
+                if (!"".equals(tvSubpackageWeight.getText().toString())) {
                     subpackageWeight = Double.valueOf(tvSubpackageWeight.getText().toString());
-                else{
+                } else{
                     ToastUtil.showToast(this,"请填写分装重量");
                     return;
                 }
-                if (!"".equals(tvSubpackageCount.getText().toString()))
+                if (!"".equals(tvSubpackageCount.getText().toString())) {
                     subpackageCount = Integer.valueOf(tvSubpackageCount.getText().toString());
-                else{
+                } else{
                     ToastUtil.showToast(this,"请填写分装件数");
                     return;
                 }
-                if (!"".equals(tvSubpackageVolume.getText().toString()))
+                if (!"".equals(tvSubpackageVolume.getText().toString())) {
                     subpackageVolume = Double.valueOf(tvSubpackageVolume.getText().toString());
-                else{
+                } else{
                     ToastUtil.showToast(this,"请填写分装体积");
                     return;
                 }

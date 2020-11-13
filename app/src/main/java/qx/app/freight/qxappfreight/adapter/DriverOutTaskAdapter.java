@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -48,11 +49,11 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                     sb.append("&");
                 }
             }
-            tvFlightNo.setTextColor(mContext.getResources().getColor(R.color.black_3));
+            tvFlightNo.setTextColor(ContextCompat.getColor(mContext,R.color.black_3));
             tvFlightNo.setText("航班号:" + sb.toString().substring(0, sb.toString().length() - 1));
         }
         else {//临时任务的显示
-            tvFlightNo.setTextColor(mContext.getResources().getColor(R.color.blue_2e8));
+            tvFlightNo.setTextColor(ContextCompat.getColor(mContext,R.color.blue_2e8));
             tvFlightNo.setText(item.getUseTasks().get(0).get(0).getTaskIntro());
         }
         helper.setText(R.id.tv_task_type, item.getProjectName());
@@ -69,7 +70,7 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
 //        collView.collapse();
         mRecyclerView.setVisibility(View.GONE);
         ImageView imageExpand = helper.getView(R.id.iv_expand);
-        View view = helper.getConvertView();
+        View view = helper.itemView;
         view.setOnClickListener(v -> {
             if (item.isExpand()) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -103,23 +104,26 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                     case 0:
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
                                 || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType())|| Constants.TP_TYPE_TEMP.equals(item.getUseTasks().get(position).get(0).getCargoType()))//空板运输
+                        {
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
-                        else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
+                        } else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
-                        } else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                        } else {
+                            DriverOutDoingActivity.startActivity(helper.itemView.getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                        }
                         break;
                     case 1:
                         if (Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) || Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())
-                                || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType())|| Constants.TP_TYPE_TEMP.equals(item.getUseTasks().get(position).get(0).getCargoType()))
+                                || Constants.TP_TYPE_CLEAR.equals(item.getUseTasks().get(position).get(0).getCargoType())|| Constants.TP_TYPE_TEMP.equals(item.getUseTasks().get(position).get(0).getCargoType())) {
                             mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
-                        else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
+                        } else if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
 //                            mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
                             toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
                         }
-                        else
-                            DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                        else {
+                            DriverOutDoingActivity.startActivity(helper.itemView.getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                        }
                         break;
                     case 2:
                         mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);
@@ -134,20 +138,26 @@ public class DriverOutTaskAdapter extends BaseQuickAdapter<AcceptTerminalTodoBea
                         if (!Constants.TP_TYPE_TEMP.equals(item.getUseTasks().get(position).get(0).getCargoType())&&!Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) && !Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))//不是设备保障和宽体机装机保障
 //                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
 //                        else
+                        {
                             if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
                                 toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
-                            } else
-                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                            } else {
+                                DriverOutDoingActivity.startActivity(helper.itemView.getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                            }
+                        }
 
                         break;
                     case 1:
                         if (!Constants.TP_TYPE_TEMP.equals(item.getUseTasks().get(position).get(0).getCargoType())&&!Constants.TP_TYPE_DEVICE.equals(item.getUseTasks().get(position).get(0).getCargoType()) && !Constants.TP_TYPE_LOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType()))
 //                            mOnStepListener.onStepListener(step,helper.getAdapterPosition(),position);
 //                        else
+                        {
                             if (Constants.TP_TYPE_UNLOAD_K.equals(item.getUseTasks().get(position).get(0).getCargoType())) {//宽体机卸机保障
                                 toLoadPlaneActivity(item.getUseTasks().get(position).get(0));
-                            } else
-                                DriverOutDoingActivity.startActivity(helper.getConvertView().getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                            } else {
+                                DriverOutDoingActivity.startActivity(helper.itemView.getContext(), item.getUseTasks().get(position), item.getTransfortType());
+                            }
+                        }
                         break;
                     case 2:
                         mOnStepListener.onStepListener(step, helper.getAdapterPosition(), position);

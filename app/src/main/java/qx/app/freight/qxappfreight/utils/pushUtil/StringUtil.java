@@ -12,13 +12,14 @@ public class StringUtil {
 
     public static char convertDigit(int value) {
         value &= 0x0f;
-        if (value >= 10)
+        if (value >= 10) {
             return ((char) (value - 10 + 'a'));
-        else
+        } else {
             return ((char) (value + '0'));
+        }
     }
 
-    public static String convert(final byte bytes[]) {
+    public static String convert(final byte[] bytes) {
 
         StringBuffer sb = new StringBuffer(bytes.length * 2);
         for (int i = 0; i < bytes.length; i++) {
@@ -29,7 +30,7 @@ public class StringUtil {
 
     }
 
-    public static String convert(final byte bytes[], int pos, int len) {
+    public static String convert(final byte[] bytes, int pos, int len) {
 
         StringBuffer sb = new StringBuffer(len * 2);
         for (int i = pos; i < pos + len; i++) {
@@ -84,21 +85,23 @@ public class StringUtil {
     }
 
     public static boolean isContains(String str1, String str2) {
-        if (isEmpty(str1))
+        if (isEmpty(str1)) {
             return false;
-        else if (str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2))
+        } else if (str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2)) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     public static boolean isEuqals(String str1, String str2) {
-        if (isEmpty(str1) || isEmpty(str2))
+        if (isEmpty(str1) || isEmpty(str2)) {
             return false;
-        else if (str1.equals(str2))
+        } else if (str1.equals(str2)) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**

@@ -120,8 +120,9 @@ public class SlideRecyclerView extends RecyclerView {
                 if (Math.abs(x - mFirstX) >= mTouchSlop
                         && Math.abs(x - mFirstX) > Math.abs(y - mFirstY)) {
                     getParent().requestDisallowInterceptTouchEvent(true);
-                } else
+                } else {
                     getParent().requestDisallowInterceptTouchEvent(false);
+                }
                 break;
             case MotionEvent.ACTION_POINTER_UP:
                 break;
@@ -138,8 +139,9 @@ public class SlideRecyclerView extends RecyclerView {
                 case MotionEvent.ACTION_DOWN:   // 因为没有拦截，所以不会被调用到
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (!ismIsSlide)
+                    if (!ismIsSlide) {
                         break;
+                    }
                     // 随手指滑动
                     if (mMenuViewWidth != INVALID_CHILD_WIDTH) {
                         float dx = mLastX - x;
@@ -151,8 +153,9 @@ public class SlideRecyclerView extends RecyclerView {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (!ismIsSlide)
+                    if (!ismIsSlide) {
                         break;
+                    }
                     if (mMenuViewWidth != INVALID_CHILD_WIDTH) {
                         int scrollX = mFlingView.getScrollX();
                         mVelocityTracker.computeCurrentVelocity(1000);

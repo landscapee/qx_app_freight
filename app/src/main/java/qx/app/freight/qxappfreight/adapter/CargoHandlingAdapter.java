@@ -1,5 +1,6 @@
 package qx.app.freight.qxappfreight.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -70,32 +71,33 @@ public class CargoHandlingAdapter extends BaseQuickAdapter <FtRuntimeFlightScoot
         helper.setText(R.id.tv_weight,""+item.getWeight());
         helper.setText(R.id.tv_volume,""+item.getVolume());
         helper.setText(R.id.tv_cabin,""+item.getSuggestRepository());
-        helper.setText(R.id.tv_repName, ""+item.getRepName());//库区
+        //库区
+        helper.setText(R.id.tv_repName, ""+item.getRepName());
 
         if (item.getInFlight() == 1){
-            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.red));
-            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.red));
+            helper.setTextColor(R.id.tv_handcar, ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_uld,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_volume,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_cabin,ContextCompat.getColor(mContext,R.color.red));
+            helper.setTextColor(R.id.tv_repName,ContextCompat.getColor(mContext,R.color.red));
         }
         else if(item.getInFlightCourse() == 0){
-            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.yellow));
-            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.yellow));
+            helper.setTextColor(R.id.tv_handcar,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_uld,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_volume,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_cabin,ContextCompat.getColor(mContext,R.color.yellow));
+            helper.setTextColor(R.id.tv_repName,ContextCompat.getColor(mContext,R.color.yellow));
         }
         else
         {
-            helper.setTextColor(R.id.tv_handcar,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_uld,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_weight,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_volume,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_cabin,mContext.getResources().getColor(R.color.text_color));
-            helper.setTextColor(R.id.tv_repName,mContext.getResources().getColor(R.color.text_color));
+            helper.setTextColor(R.id.tv_handcar,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_uld,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_weight,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_volume,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_cabin,ContextCompat.getColor(mContext,R.color.text_color));
+            helper.setTextColor(R.id.tv_repName,ContextCompat.getColor(mContext,R.color.text_color));
         }
     }
 

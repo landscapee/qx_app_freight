@@ -54,8 +54,9 @@ public class BaseFragment extends Fragment {
     }
 
     public void showProgessDialog(String message) {
-        if (!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message)) {
             mTextView.setText(message);
+        }
         mProgessbarDialog.show();
     }
 
@@ -66,8 +67,9 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null)
+        if (unbinder != null) {
             unbinder.unbind();
+        }
     }
 
     @Override
@@ -99,8 +101,9 @@ public class BaseFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0)
+        if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
             outState.putSerializable("static_user", UserInfoSingle.getInstance());
+        }
     }
 
     @Override

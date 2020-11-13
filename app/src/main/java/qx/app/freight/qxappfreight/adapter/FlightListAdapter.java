@@ -30,7 +30,7 @@ public class FlightListAdapter extends BaseQuickAdapter<FlightLuggageBean, BaseV
                 .setText(R.id.tv_flight_place, item.getSeat())
                 .setText(R.id.tv_arrive_time, String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getScheduleTime()), TimeUtils.getDay((item.getScheduleTime()))));
 
-        if (item.getFlightIndicator().equals("D")) {
+        if ("D".equals(item.getFlightIndicator())) {
             helper.setGone(R.id.iv_lock, false);
         } else {
             helper.setGone(R.id.iv_lock, true);

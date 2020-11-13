@@ -129,13 +129,16 @@ public class PowerFullLayout extends FrameLayout {
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
 
-            if (left < (screenWidth - screenWidth * preScale) / 2)
+            if (left < (screenWidth - screenWidth * preScale) / 2) {
                 left = (int) (screenWidth - screenWidth * preScale) / 2;// 限制mainView可向左移动到的位置
-            if (left > (screenWidth * preScale - screenWidth) / 2)
+            }
+            if (left > (screenWidth * preScale - screenWidth) / 2) {
                 left = (int) (screenWidth * preScale - screenWidth) / 2;// 限制mainView可向右移动到的位置
+            }
             return left;
         }
 
+        @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
 
             if (top < (screenHeight - screenHeight * preScale) / 2) {

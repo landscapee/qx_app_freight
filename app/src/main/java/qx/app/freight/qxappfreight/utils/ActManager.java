@@ -23,8 +23,9 @@ public class ActManager {
     public static ActManager getAppManager() {
         if (instance == null) {
             synchronized (ActManager.class) {
-                if (instance == null)
+                if (instance == null) {
                     instance = new ActManager();
+                }
             }
 
         }
@@ -147,7 +148,7 @@ public class ActManager {
         try {
             finishAllActivity();
             ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.restartPackage(context.getPackageName());
+            activityMgr.killBackgroundProcesses(context.getPackageName());
             System.exit(0);
         } catch (Exception e) {
         }

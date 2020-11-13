@@ -49,6 +49,7 @@ public class WebSocketUtils {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         TimerTask mTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 boolean success = compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"),throwable ->{
                     Log.e(TAG, "websocket 消息发送失败 重连");

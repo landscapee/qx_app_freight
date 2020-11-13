@@ -143,15 +143,17 @@ public class DeliveryClient extends StompClient {
                                 ScooterArriveNumChangeEntity scooterArriveNumChangeEntity = mGson.fromJson(mWebSocketMessBean.getContent(), ScooterArriveNumChangeEntity.class);
                                 sendScooterChangeEventBus(scooterArriveNumChangeEntity);
                             }
-                            else
+                            else {
                                 sendMessageEventBus(mWebSocketMessBean);
+                            }
                         }, throwable -> Log.e(TAG, "websocket-->消息中心失败", throwable));
                 compositeDisposable.add(dispTopic2);
                 WebSocketService.subList.add(WebSocketService.Message);
             }
         }
-        if (NetworkUtils.isNetWorkAvailable(mContext))
+        if (NetworkUtils.isNetWorkAvailable(mContext)) {
             my.connect();
+        }
     }
 
     //用于代办刷新
@@ -173,6 +175,7 @@ public class DeliveryClient extends StompClient {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
                 if (!WebSocketService.isTopic){

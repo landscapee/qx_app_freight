@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -70,8 +71,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= 26) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        } else
+        } else {
             window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
 
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
@@ -192,8 +194,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
+        if (hasFocus) {
             Tools.startVibrator(context.getApplicationContext(), true, R.raw.ring);
+        }
     }
 
     @Override
@@ -228,8 +231,9 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
     @Override
     public void toastView(String error) {
         count++;
-        if (error != null)
+        if (error != null) {
             ToastUtil.showToast(error);
+        }
         if (count == list.size()) {
             dismiss();
             onDismissListener.refreshUI(false);
@@ -295,13 +299,13 @@ public class PushLoadUnloadDialog extends Dialog implements LoadAndUnloadTodoCon
             }
             switch (timeType) {
                 case Constants.TIME_TYPE_AUTUAL:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                     break;
                 case Constants.TIME_TYPE_EXCEPT:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                     break;
                 case Constants.TIME_TYPE_PLAN:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                     break;
             }
             tvTime.setText(time);

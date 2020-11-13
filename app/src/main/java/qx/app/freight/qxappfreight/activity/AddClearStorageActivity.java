@@ -135,8 +135,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
 
     private void getWayBillInfo() {
         mPresenter = new AddInventoryDetailPresenter(this);
-        if (!StringUtil.isEmpty(waybillId))
+        if (!StringUtil.isEmpty(waybillId)) {
             ((AddInventoryDetailPresenter) mPresenter).getWaybillInfoByWaybillCode(waybillId);
+        }
     }
 
     private void initData() {
@@ -161,7 +162,7 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                         originList.add(url);
                     }
                 }
-                MultiImageSelector.create(AddClearStorageActivity.this)
+                MultiImageSelector.create()
                         .showCamera(true) // 是否显示相机. 默认为显示
                         .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                         .multi() // 多选模式, 默认模式;
@@ -353,7 +354,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
                 List <File> files = new ArrayList <>();
                 for (String str : photoList) {
                     if (str.contains("storage"))//没有上传过的 图片
+                    {
                         files.add(new File(str));
+                    }
                 }
                 Luban.get(this).load(files)
                         .setMaxSize(150)
@@ -390,8 +393,9 @@ public class AddClearStorageActivity extends BaseActivity implements AddInventor
         } else {
             ToastUtil.showToast("暂存成功");
         }
-        if (isFinish)
+        if (isFinish) {
             finish();
+        }
     }
 
     @Override

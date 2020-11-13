@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -67,8 +68,9 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= 26) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        } else
+        } else {
             window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
 
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.gravity = Gravity.BOTTOM; // 紧贴底部
@@ -143,8 +145,9 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
         mTvTitle.setText(context.getString(R.string.format_new_task_push, list.size()));
         LoadUnloadLeaderPresenter mPresenter = new LoadUnloadLeaderPresenter(PushLoadUnloadLeaderDialog.this);
         mTvAccept.setOnClickListener(v -> {
-            if (flag)
+            if (flag) {
                 return;
+            }
             flag = true;
             count = 0;
             if (list != null && list.size() > 0) {
@@ -162,11 +165,15 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
 //                            entity.setOperationCode("FreightUnloadReceived");
 //                        }
                     if (bean.getTaskType() == 7)//单进
+                    {
                         entity.setOperationCode("StevedoresUnloadReceived"); //by -zyy ：装卸员领受code
-                    else  if (bean.getTaskType() == 6)//单出
+                    } else  if (bean.getTaskType() == 6)//单出
+                    {
                         entity.setOperationCode("StevedoresLoadReceived"); //by -zyy ：装卸员领受code
-                    else  if (bean.getTaskType() == 8)//连班
+                    } else  if (bean.getTaskType() == 8)//连班
+                    {
                         entity.setOperationCode("StevedoresLoadAnUnloadReceived"); //by -zyy ：装卸员领受code
+                    }
 
 
                     entity.setTerminalId(DeviceInfoUtil.getDeviceInfo(getContext()).get("deviceId"));
@@ -179,13 +186,15 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
             }
         });
         mTvRefuse.setOnClickListener(v -> {
-            if (flag)
+            if (flag) {
                 return;
+            }
             flag = true;
             count = 0;
             BaseFilterEntity entity = new BaseFilterEntity();
-            if (list != null && list.size() > 0)
+            if (list != null && list.size() > 0) {
                 entity.setTaskId(list.get(0).getTaskId());
+            }
             entity.setStaffId(UserInfoSingle.getInstance().getUserId());
             mPresenter.refuseTask(entity);
         });
@@ -262,8 +271,9 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
+        if (hasFocus) {
             Tools.startVibrator(context.getApplicationContext(), true, R.raw.ring);
+        }
     }
 
     @Override
@@ -317,13 +327,13 @@ public class PushLoadUnloadLeaderDialog extends Dialog implements LoadUnloadLead
             }
             switch (timeType) {
                 case Constants.TIME_TYPE_AUTUAL:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                     break;
                 case Constants.TIME_TYPE_EXCEPT:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                     break;
                 case Constants.TIME_TYPE_PLAN:
-                    drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                    drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                     break;
             }
             tvTime.setText(time);

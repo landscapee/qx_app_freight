@@ -166,7 +166,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("CargoHandlingActivity_refresh")) {
+        if ("CargoHandlingActivity_refresh".equals(result)) {
             pageCurrent = 1;
             getData();
         }
@@ -188,7 +188,7 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
     public void onEventMainThread(ScanDataBean result) {
         String daibanCode = result.getData();
         Log.e("22222", "daibanCode" + daibanCode);
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity")) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag())) {
             chooseCode(daibanCode);
         }
     }
@@ -254,10 +254,12 @@ public class TaskStowageFragment extends BaseFragment implements GroupBoardToDoC
         if (pageCurrent == 1) {
             mCacheList.clear();
         }
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

@@ -61,8 +61,9 @@ public class TaskDoneActivity extends BaseActivity implements LocationObservable
 
     @Override
     public void receiveLocationUpdate(LocationEntity locationEntity) {
-        if (locationEntity != null)
+        if (locationEntity != null) {
             ToastUtil.showToast("经度:" + locationEntity.getLongitude() + "纬度:" + locationEntity.getLatitude());
+        }
     }
 }
 

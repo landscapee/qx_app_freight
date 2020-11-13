@@ -3,8 +3,11 @@ package qx.app.freight.qxappfreight.utils;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
@@ -106,13 +109,13 @@ public class StringUtil {
     }
 
     public static SpannableStringBuilder getAutoColorText(String text) {
-        String splitTexts[] = text.split(":");
+        String[] splitTexts = text.split(":");
         SpannableStringBuilder builderText = new SpannableStringBuilder(text);
         ColorStateList blue = ColorStateList.valueOf(Color.parseColor("#31ccbd"));
         ColorStateList red = ColorStateList.valueOf(Color.RED);
         if (splitTexts.length == 2) {
             int index = text.indexOf(":");
-            boolean flag = text.substring(index + 1, index + 2).equals("Y");
+            boolean flag = "Y".equals(text.substring(index + 1, index + 2));
             TextAppearanceSpan textAppearanceSpan;
             if (flag) {
                 textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
@@ -124,7 +127,7 @@ public class StringUtil {
         } else {
             List<Integer> indexes = getIndex(text, ":");
             for (Integer index : indexes) {
-                boolean flag = text.substring(index + 1, index + 2).equals("Y");
+                boolean flag = "Y".equals(text.substring(index + 1, index + 2));
                 TextAppearanceSpan textAppearanceSpan;
                 if (flag) {
                     textAppearanceSpan = new TextAppearanceSpan(null, 0, 0, blue, null);
@@ -157,8 +160,9 @@ public class StringUtil {
      * @return
      */
     public static String formatString2(Object value) {
-        if (null == value)
+        if (null == value) {
             return "0";
+        }
         return String.format("%.1f", value);
     }
 
@@ -169,8 +173,9 @@ public class StringUtil {
      * @return
      */
     public static String formatStringDeleteDot(String value) {
-        if (value == null || "".equals(value) || !isNumeric(value))
+        if (value == null || "".equals(value) || !isNumeric(value)) {
             return "0";
+        }
         if (value.indexOf(".") > 0) {
             //正则表达
             value = value.replaceAll("0+?$", "");//去掉后面无用的零
@@ -227,8 +232,9 @@ public class StringUtil {
                 c[i] = (char) 32;
                 continue;
             }
-            if (c[i] > 65280 && c[i] < 65375)
+            if (c[i] > 65280 && c[i] < 65375) {
                 c[i] = (char) (c[i] - 65248);
+            }
         }
         return new String(c);
     }
@@ -249,9 +255,11 @@ public class StringUtil {
     }
 
     public static boolean isContains(String str1, String str2) {
-        if (isEmpty(str1))
+        if (isEmpty(str1)) {
             return false;
-        else return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
+        } else {
+            return str1.toLowerCase().contains(str2.toLowerCase()) || isEmpty(str2);
+        }
     }
 
     /**
@@ -412,5 +420,18 @@ public class StringUtil {
         Comparator<Object> collator = Collator.getInstance(java.util.Locale.CHINA);
         Collections.sort(list, collator);
         return list;
+    }
+
+    /**
+     * 拼接字符串格式化方法过时
+     * @param inputStr
+     * @return
+     */
+    public static Spanned transformHtmlFromhtml(String inputStr) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(inputStr, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(inputStr);
+        }
     }
 }

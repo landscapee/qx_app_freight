@@ -190,8 +190,9 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
             Log.e("111111", "setUserVisibleHint: " + "展示");
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     mSearchText = text;
@@ -282,10 +283,12 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -321,10 +324,11 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
             StringUtil.setTimeAndType(bean);//设置对应的时间和时间图标显示
             List<String> times = new ArrayList<>();
             times.add(String.valueOf(bean.getAcceptTime()));
-            if (bean.getPassengerLoadSend() > 0)
+            if (bean.getPassengerLoadSend() > 0) {
                 times.add(String.valueOf(bean.getPassengerLoadSend()));
-            else
+            } else {
                 times.add("0");
+            }
             StringUtil.setFlightRoute(bean.getRoute(), bean);//设置航班航线信息
             int posNow = ("0".equals(String.valueOf(bean.getAcceptTime()))) ? 0 :2;//如果领受时间为0或者null，则表示从未领受过任务，即推送任务时未登陆，或登陆时收到新任务推送按了回退键
             if (posNow > 0) {
@@ -348,8 +352,9 @@ public class JunctionLoadDoneFragment extends BaseFragment implements MultiFunct
         seachByText();
         setSlideListener();
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 }

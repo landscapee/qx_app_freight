@@ -200,7 +200,7 @@ public class SortingAddActivity extends BaseActivity implements ReservoirContrac
             if (counterUbnormalGoodsList.get(position).getLocalPath() != null) {
                 originList.addAll(counterUbnormalGoodsList.get(position).getLocalPath());
             }
-            MultiImageSelector.create(SortingAddActivity.this)
+            MultiImageSelector.create()
                     .showCamera(true) // 是否显示相机. 默认为显示
                     .count(9) // 最大选择图片数量, 默认为9. 只有在选择模式为多选时有效
                     .multi() // 多选模式, 默认模式;

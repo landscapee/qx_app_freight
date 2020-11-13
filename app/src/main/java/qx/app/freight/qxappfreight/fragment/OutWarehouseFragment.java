@@ -102,9 +102,9 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
         entityBaseFilterEntity.setCurrent(pageCurrent1);
         pageCurrent = pageCurrent1;
         entityBaseFilterEntity.setSize(Constants.PAGE_SIZE);
-        if (IOManifestFragment.iOqrcodeEntity != null && !StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getOutletId()))
+        if (IOManifestFragment.iOqrcodeEntity != null && !StringUtil.isEmpty(IOManifestFragment.iOqrcodeEntity.getOutletId())) {
             getIOManifestEntity.setOutletId(IOManifestFragment.iOqrcodeEntity.getOutletId());
-        else {
+        } else {
             mMfrvData.finishRefresh();
             mMfrvData.finishLoadMore();
             return;
@@ -136,7 +136,7 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String msg) {
-        if (msg != null && msg.equals("inventory_refresh_out")) {
+        if (msg != null && "inventory_refresh_out".equals(msg)) {
             loadData(1);
         }
     }
@@ -153,14 +153,16 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
     @Override
     public void setManifestResult(List <SmInventoryEntryandexit> result) {
 
-        if (pageCurrent == 1)
+        if (pageCurrent == 1) {
             mList.clear();
+        }
 
         mMfrvData.finishRefresh();
         mMfrvData.finishLoadMore();
         if (result != null && result.size() > 0) {
-            if (result.size() >= 100)
+            if (result.size() >= 100) {
                 pageCurrent++;
+            }
             mList.addAll(result);
         }
         bySearchList(mList);
@@ -169,12 +171,15 @@ public class OutWarehouseFragment extends BaseFragment implements MultiFunctionR
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
-        if (error != null)
+        }
+        if (error != null) {
             ToastUtil.showToast(error);
+        }
     }
 
     @Override

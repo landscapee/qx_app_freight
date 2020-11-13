@@ -181,9 +181,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
         }
         mTvArriveTime.setText(time);
         String scanGoods = "请扫描添加  <font color='#4791E5'>货物</font>  板车";
-        mTvScanGoods.setText(Html.fromHtml(scanGoods));
+        mTvScanGoods.setText(StringUtil.transformHtmlFromhtml(scanGoods));
         String scanPac = "请扫描添加  <font color='#4791E5'>行李</font>  板车";
-        mTvScanPac.setText(Html.fromHtml(scanPac));
+        mTvScanPac.setText(StringUtil.transformHtmlFromhtml(scanPac));
         mSlideRvGoods.setLayoutManager(new LinearLayoutManager(this));
         mScanGoodsAdapter = new ScanInfoAdapter(mListGoods, mData);
         mSlideRvGoods.setAdapter(mScanGoodsAdapter);
@@ -495,8 +495,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
             myAgentListBean.setScooterCode(scooterCode);
             baseFilterEntity.setFilter(myAgentListBean);
             ((ScooterInfoListPresenter) mPresenter).ScooterInfoList(baseFilterEntity);
-        } else
+        } else {
             ToastUtil.showToast(this, "扫描结果为空请重新扫描");
+        }
     }
 
     @Override
@@ -630,8 +631,9 @@ public class UnloadPlaneActivity extends BaseActivity implements ScooterInfoList
 
     @Override
     public void toastView(String error) {
-        if (error!=null)
+        if (error!=null) {
             ToastUtil.showToast(error);
+        }
         mListTempAlreadyNotify.clear();
         Log.e("tagError", "error========" + error);
     }

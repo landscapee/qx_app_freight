@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -167,8 +168,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
 //        mTvVersion.setText(mBaseData.getVersion() == null ? "版本号：- -" : "版本号：" + mBaseData.getVersion());
         mRvData.setLayoutManager(new LinearLayoutManager(this));
         mBtSure.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             loadFlag = -1;
             showYesOrNoDialog("", "重新获取离港数据并发送至监装", 5);
 //            mPresenter = new SynchronousLoadingPresenter(this);
@@ -182,8 +184,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         });
         Button btnReOpen = findViewById(R.id.btn_reopen_task);
         btnReOpen.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             loadFlag = -1;
             showYesOrNoDialog("", "确认二次开启舱门", 4);
 //            mPresenter = new ReOpenLoadTaskPresenter(LnstallationInfoActivity.this);
@@ -200,14 +203,16 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             loadData();
         });
         mTvVersion.setOnClickListener((v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             showStoragePickView();
         }
         ));
         mBtRefuse.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             loadFlag = -1;
             String intro ="";
             if (getRadioBtnFlag() == 5|| getRadioBtnFlag() == 6){
@@ -255,7 +260,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             mTvConfirmDate.setVisibility(View.GONE);
             mTvConfirmJZ.setVisibility(View.GONE);
             mTvConfirmDateJZ.setVisibility(View.GONE);
-            mSrRefush.setBackgroundColor(getResources().getColor(R.color.white));
+            mSrRefush.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
             switch (checkedId) {
                 case R.id.rb_install: //装机单
                     loadFlag = 2;
@@ -288,7 +293,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
             mTvConfirmDate.setVisibility(View.VISIBLE);
             mTvConfirmJZ.setVisibility(View.VISIBLE);
             mTvConfirmDateJZ.setVisibility(View.VISIBLE);
-            mSrRefush.setBackgroundColor(getResources().getColor(R.color.blue_btn_bg_color));
+            mSrRefush.setBackgroundColor(ContextCompat.getColor(this,R.color.blue_btn_bg_color));
         }
 
     }
@@ -467,9 +472,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         }).build();
         pickerView.setPicker(mListVerson);
         pickerView.setTitleText("版本号");
-        if (!map.isEmpty())
+        if (!map.isEmpty()) {
             pickerView.show();
-        else {
+        } else {
             ToastUtil.showToast("还没有装机单！");
         }
     }
@@ -488,7 +493,7 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         } else {
             mTvConfirm.setVisibility(View.GONE);
             mTvConfirmDate.setVisibility(View.GONE);
-            mSrRefush.setBackgroundColor(getResources().getColor(R.color.white));
+            mSrRefush.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
         }
         mTvVersion.setText(mListVerson.get(verson));
         currentVersion = Integer.valueOf(mListVersonCode.get(verson));
@@ -570,9 +575,9 @@ public class LnstallationInfoActivity extends BaseActivity implements EmptyLayou
         entity.setFlightId(mBaseData.getFlightId());
         entity.setOperationUserName(UserInfoSingle.getInstance().getUsername());
         entity.setOperationUser(UserInfoSingle.getInstance().getUserId());
-        if (getRadioBtnFlag() == 5 || getRadioBtnFlag() == 6)
+        if (getRadioBtnFlag() == 5 || getRadioBtnFlag() == 6) {
             entity.setLocation(1);
-        else {
+        } else {
             entity.setLocation(2);
         }
         String userName = UserInfoSingle.getInstance().getUsername();

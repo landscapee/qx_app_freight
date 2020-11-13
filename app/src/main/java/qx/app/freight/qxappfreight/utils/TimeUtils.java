@@ -37,14 +37,18 @@ public class TimeUtils {
         hour = (int) (time - (day * 24 * 60)) / 60;
         min = time - (day * 24 * 60) - (hour * 60);
         String date = "";
-        if (day > 0)
+        if (day > 0) {
             date = date + day + "d";
-        if (hour > 0)
+        }
+        if (hour > 0) {
             date = date + hour + "h";
-        if (min > 0)
+        }
+        if (min > 0) {
             date = date + min + "m";
-        if (day == 0 && hour == 0 && min == 0)
+        }
+        if (day == 0 && hour == 0 && min == 0) {
             date = "<1m";
+        }
         return date;
     }
 
@@ -80,8 +84,9 @@ public class TimeUtils {
      * @return
      */
     public static String getTimeForParam(long time) {
-        if (time == 0)
+        if (time == 0) {
             return "0";
+        }
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.e("time", "time2=" + format.format(date));
@@ -213,7 +218,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HHmm";
@@ -233,7 +238,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (time1 - time2) / 1000 + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HHmm";
@@ -250,10 +255,11 @@ public class TimeUtils {
      * @return
      */
     public static boolean isTimeEmpty(long second) {
-        if (second == 0)
+        if (second == 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -270,7 +276,7 @@ public class TimeUtils {
             return "--:--";
         }
         String seconds = (second / 1000) + "";
-        if (seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HH:mm";
@@ -290,7 +296,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HH:mm:ss";
@@ -311,7 +317,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HHmmss";
@@ -332,7 +338,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "yyyy-MM-dd HH:mm";
@@ -353,7 +359,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "dd日";
@@ -374,7 +380,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "ddHHmm";
@@ -394,7 +400,7 @@ public class TimeUtils {
             return "-";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "dd";
@@ -415,7 +421,7 @@ public class TimeUtils {
             return "";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HH:mm(dd)";
@@ -437,7 +443,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HH";
@@ -459,7 +465,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "dd日HH时";
@@ -483,17 +489,18 @@ public class TimeUtils {
         int hour;
         int minute;
         int second;
-        if (time <= 0)
+        if (time <= 0) {
             return "00:00";
-        else {
+        } else {
             minute = time / 60;
             if (minute < 60) {
                 second = time % 60;
                 timeStr = unitFormat(minute) + ":" + unitFormat(second);
             } else {
                 hour = minute / 60;
-                if (hour > 99)
+                if (hour > 99) {
                     return "99:59:59";
+                }
                 minute = minute % 60;
                 second = time - hour * 3600 - minute * 60;
                 timeStr = unitFormat(hour) + ":" + unitFormat(minute) + ":" + unitFormat(second);
@@ -504,10 +511,11 @@ public class TimeUtils {
 
     public static String unitFormat(int i) {
         String retStr = null;
-        if (i >= 0 && i < 10)
+        if (i >= 0 && i < 10) {
             retStr = "0" + Integer.toString(i);
-        else
+        } else {
             retStr = "" + i;
+        }
         return retStr;
     }
 
@@ -522,7 +530,7 @@ public class TimeUtils {
             return "-";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "HHmm(dd)";
@@ -543,7 +551,7 @@ public class TimeUtils {
             return "-";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "yyyy-MM-dd HH:mm:ss";
@@ -564,7 +572,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "yyyy-MM-dd";
@@ -585,7 +593,7 @@ public class TimeUtils {
             return "0";
         }
         String seconds = (second / 1000) + "";
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         String format = "dd日 HH:mm";

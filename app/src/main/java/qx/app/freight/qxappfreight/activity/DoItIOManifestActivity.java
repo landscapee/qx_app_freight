@@ -72,8 +72,9 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
         tvNum.setText(smInventoryEntryandexit.getNumber()+"");
         tvWeight.setText(smInventoryEntryandexit.getWeight()+"");
         btnSubmit.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             smInventoryEntryandexit.setExecUserId(UserInfoSingle.getInstance().getUserId());
             smInventoryEntryandexit.setExecUserName(UserInfoSingle.getInstance().getUsername());
             smInventoryEntryandexit.setExecTime(TimeUtils.getTime());
@@ -93,10 +94,11 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
     public void setSubmitIOManiFestResult(String result) {
         if (result!=null){
             ToastUtil.showToast(result);
-            if ("I".equals(smInventoryEntryandexit.getType()))
+            if ("I".equals(smInventoryEntryandexit.getType())) {
                 EventBus.getDefault().post("inventory_refresh_in");
-            else
+            } else {
                 EventBus.getDefault().post("inventory_refresh_out");
+            }
         }
 
         finish();
@@ -104,10 +106,11 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
 
     @Override
     public void toastView(String error) {
-        if (error!=null)
+        if (error!=null) {
             ToastUtil.showToast(error);
-        else
+        } else {
             ToastUtil.showToast("提交失败");
+        }
     }
 
     @Override

@@ -243,8 +243,9 @@ public class Tools {
      */
     public static PositionBean getGPSPosition() {
         PositionBean bean = (PositionBean) SaveUtils.getInstance().getValue(Constants.POSITION);
-        if (bean == null)
+        if (bean == null) {
             return null;
+        }
         return bean;
     }
 
@@ -293,8 +294,9 @@ public class Tools {
                 .getSystemService(ACTIVITY_SERVICE);
         List <ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
-        if (appProcesses == null)
+        if (appProcesses == null) {
             return false;
+        }
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
                 /*
@@ -323,10 +325,11 @@ public class Tools {
      * TODO: 字符串为空返回 --
      */
     public static String returnTime(long s) {
-        if (s == 0)
+        if (s == 0) {
             return "- -";
-        else
+        } else {
             return TimeUtils.date2Tasktime(s);
+        }
     }
 
 
@@ -396,10 +399,11 @@ public class Tools {
      * @return
      */
     public static boolean isProduct() {
-        if (BuildConfig.Model.equals("product"))
+        if ("product".equals(BuildConfig.Model)) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -409,22 +413,24 @@ public class Tools {
      */
     public static boolean compareFist(String first, String second) {
         if (first != null && second != null) {
-            if (first.equals(second))
+            if (first.equals(second)) {
                 return true;
-            else {
+            } else {
                 if (first.length() > 0 && second.length() > 0) {
                     first = first.substring(0, 1);
                     second = second.substring(0, 1);
-                    if (first.equals(second))
+                    if (first.equals(second)) {
                         return true;
-                    else
+                    } else {
                         return false;
+                    }
                 } else {
                     return false;
                 }
             }
-        } else
+        } else {
             return false;
+        }
     }
 
 
@@ -532,7 +538,7 @@ public class Tools {
      */
     public static boolean isScreenOn(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
+        boolean isScreenOn = pm.isInteractive();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
         return isScreenOn;
     }
 
@@ -553,8 +559,9 @@ public class Tools {
             } else {
                 return flights.getFlightId();
             }
-        } else
+        } else {
             return flights.getFlightId();
+        }
 
     }
 
@@ -564,10 +571,12 @@ public class Tools {
         } else if (flights.getLoadingAndUnloadBean() != null && flights.getLoadingAndUnloadBean().getSuccessionId() != null && !StringUtil.isEmpty(flights.getLoadingAndUnloadBean().getSuccessionId())) {
             if (Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId()) > 0) {
                 return Integer.valueOf(flights.getLoadingAndUnloadBean().getSuccessionId());
-            } else
+            } else {
                 return Integer.valueOf(flights.getFlightId());
-        } else
+            }
+        } else {
             return Integer.valueOf(flights.getFlightId());
+        }
     }
 
     /**
@@ -594,8 +603,9 @@ public class Tools {
         String spCode = specialCode;
         if (specialCode.contains("/")) {
             spCode = specialCode.substring(specialCode.indexOf("/"), specialCode.length() - 1);
-        } else
+        } else {
             spCode = "";
+        }
         return spCode;
     }
 

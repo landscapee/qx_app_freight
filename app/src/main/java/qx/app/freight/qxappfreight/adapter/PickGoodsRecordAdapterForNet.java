@@ -26,10 +26,11 @@ public class PickGoodsRecordAdapterForNet extends BaseQuickAdapter<PickGoodsReco
         helper.setText(R.id.tv_no, (helper.getAdapterPosition()+1)+"");
         helper.setText(R.id.tv_count, item.getOutboundNumber()+"");
         helper.setText(R.id.tv_time, TimeUtils.getTimeForParam(item.getCreateTime()));
-        if (item.getRevokeFlag() == 1)
+        if (item.getRevokeFlag() == 1) {
             btnRevocation.setVisibility(View.INVISIBLE);
-        else
+        } else {
             btnRevocation.setVisibility(View.VISIBLE);
+        }
 
         btnRevocation.setOnClickListener(v -> {
             mDeleteClickListener.onDeleteClick(v,helper.getAdapterPosition());

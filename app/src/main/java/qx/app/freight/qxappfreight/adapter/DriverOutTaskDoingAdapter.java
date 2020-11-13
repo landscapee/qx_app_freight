@@ -51,8 +51,9 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         if(item.getNum()>0){
             helper.setText(R.id.tv_flight_task_type, item.getNum() + "个" + MapValue.getCarTypeValue(item.getCarType()));
         }
-        else
+        else {
             helper.setText(R.id.tv_flight_task_type, "");
+        }
 
         helper.setChecked(R.id.cb_flight, item.isSelect());
 
@@ -64,17 +65,19 @@ public class DriverOutTaskDoingAdapter extends BaseQuickAdapter<FlightOfScooterB
         container.removeAllViews();
         container.addView(layout, paramsMain);
         ImageView ivFlag = helper.getView(R.id.iv_flag);
-        if ("离".equals(item.getMTransportTodoListBeans().get(0).getTpType()) || "拉".equals(item.getMTransportTodoListBeans().get(0).getTpType()))
+        if ("离".equals(item.getMTransportTodoListBeans().get(0).getTpType()) || "拉".equals(item.getMTransportTodoListBeans().get(0).getTpType())) {
             ivFlag.setImageResource(R.mipmap.li);
-        else
+        } else {
             ivFlag.setImageResource(R.mipmap.jin);
+        }
         CheckBox checkBox = helper.getView(R.id.cb_flight);
         checkBox.setEnabled(isEnable);
 
-        if (isEnable)
+        if (isEnable) {
             checkBox.setVisibility(View.VISIBLE);
-        else
+        } else {
             checkBox.setVisibility(View.GONE);
+        }
 
         //列表设置
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mContext);

@@ -101,8 +101,9 @@ public class SlideLeftExecuteView extends AppCompatTextView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (mIsDragable)
+        if (mIsDragable) {
             getParent().requestDisallowInterceptTouchEvent(true);
+        }
         return super.dispatchTouchEvent(event);
     }
 
@@ -135,23 +136,26 @@ public class SlideLeftExecuteView extends AppCompatTextView {
             case MotionEvent.ACTION_CANCEL://手势被取消了
                 Log.e("tagSlide", "手势被取消");
                 callTouch(false);
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 resetLock();
                 break;
             case MotionEvent.ACTION_MOVE://移动
                 Log.e("tagSlide", "手势移动");
                 // 如果不在焦点
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 resetLocationX(event.getX(), rightMax);
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP://抬起了手指
                 callTouch(false);
                 Log.e("tagSlide", "抬起手指");
-                if (!mIsDragable)
+                if (!mIsDragable) {
                     return true;
+                }
                 if (mLocationX <= (rightMax*1/5)) {
                     mIsDragable = false;
                     mLocationX = -1;
@@ -163,8 +167,9 @@ public class SlideLeftExecuteView extends AppCompatTextView {
                 }
                 else {
                     new Handler().postDelayed((Runnable) () -> {
-                        if (mOnLockCancelListener!=null)
+                        if (mOnLockCancelListener!=null) {
                             mOnLockCancelListener.onOpenLockCancel();
+                        }
                     },300);
 
                 }
@@ -185,8 +190,9 @@ public class SlideLeftExecuteView extends AppCompatTextView {
      * @param isTouch
      */
     private void callTouch(boolean isTouch) {
-        if (mOnTouchListener != null)
+        if (mOnTouchListener != null) {
             mOnTouchListener.onTouch(isTouch);
+        }
     }
 
     /**

@@ -75,8 +75,9 @@ public class IMUtils {
         IMLIBContext.getInstance().startImLibSpecialList(context, new ImLibSpecialListStartCallback() {
             @Override
             public void onResult(boolean b, String s) {
-                if (!b)
+                if (!b) {
                     ToastUtil.showToast(context, "页面打开失败,原因：" + s);
+                }
             }
         });
     }
@@ -89,10 +90,11 @@ public class IMUtils {
             IMLIBContext.getInstance().imlibLogout(new ImLibLogoutResultCallback() {
                 @Override
                 public void onResponse(boolean b, String s) {
-                    if (!b)
-                       Log.d("tag","签退失败_im:" + s);
-                    else
+                    if (!b) {
+                        Log.d("tag","签退失败_im:" + s);
+                    } else {
                         IMLIBContext.getInstance().destroy();
+                    }
                 }
             });
         } catch (Exception e) {

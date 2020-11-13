@@ -46,8 +46,9 @@ public class ToastUtil {
     }
 
     public static void showToast(String s) {
-        if (s == null)
+        if (s == null) {
             return;
+        }
         Context context = MyApplication.getContext();
         if ("318".equals(s)) {
             return;
@@ -80,8 +81,9 @@ public class ToastUtil {
     }
 
     public static void showErrorDialog(String s) {
-        if (s == null)
+        if (s == null) {
             return;
+        }
 
         showDialogToast(MyApplication.getContext(), s);
         return;

@@ -18,6 +18,7 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.request.SecurityCheckResult;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -60,7 +61,7 @@ public class AddNotTransportRecordActivity extends BaseActivity {
         mGoodsName = getIntent().getStringExtra("goods_name");
         mTvGoodsName.setText(mGoodsName);
         String hint = "带 <font color='red'>*</font> 为必填项";
-        mTvHint.setText(Html.fromHtml(hint));
+        mTvHint.setText(StringUtil.transformHtmlFromhtml(hint));
         String[] array1 = {"退货", "扣货", "移交公安"};
 
         String[] array = {"不明性质的粉末", "不明性质的液体", "发现锂电池但材料不足", "易燃易爆炸", "毒品", "危险品", "其他"};

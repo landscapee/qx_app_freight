@@ -42,18 +42,20 @@ public class HandcarBacklogTPAdapter extends BaseQuickAdapter<TransportTodoListB
         // 时间
         helper.setText(R.id.tv_plan_time, TimeUtils.date2Tasktime3(item.getEtd())+"("+TimeUtils.getDay(item.getEtd())+")");
         //仓位
-        if (!StringUtil.isEmpty(item.getTpFreightSpace()))
+        if (!StringUtil.isEmpty(item.getTpFreightSpace())) {
             helper.setText(R.id.allocate_time_info,item.getTpFreightSpace()+"舱位");
-        else
+        } else {
             helper.setText(R.id.allocate_time_info,"无");
+        }
         helper.setText(R.id.tv_origin, MapValue.getLocationValue(item.getTpStartLocate()));
         helper.setText(R.id.tv_destination,MapValue.getLocationValue(item.getTpDestinationLocate()));
 
         ImageView tvFlightFlag = helper.getView(R.id.iv_flag);
-        if ("离".equals(item.getTpType())||"拉".equals(item.getTpType()))
+        if ("离".equals(item.getTpType())||"拉".equals(item.getTpType())) {
             tvFlightFlag.setImageResource(R.mipmap.li);
-        else
+        } else {
             tvFlightFlag.setImageResource(R.mipmap.jin);
+        }
 
         View viewDelete = helper.getView(R.id.ll_delete);
         viewDelete.setTag(helper.getAdapterPosition());

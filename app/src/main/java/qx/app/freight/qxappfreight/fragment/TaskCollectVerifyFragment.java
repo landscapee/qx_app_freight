@@ -121,8 +121,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     }
 
     private void initTitle() {
-        if (!isShow)
+        if (!isShow) {
             return;
+        }
         if (mTaskFragment == null) {
             mTaskFragment = (TaskFragment) getParentFragment();
         }
@@ -142,10 +143,11 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     }
 
     private void searchWaybill(String toString) {
-        if (!StringUtil.isEmpty(toString) && toString.length() >= 4)
+        if (!StringUtil.isEmpty(toString) && toString.length() >= 4) {
             getData(toString);
-        else
+        } else {
             ToastUtil.showToast("请输入至少4位运单号");
+        }
     }
 
     public void seachWith() {
@@ -225,7 +227,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     public void onEventMainThread(ScanDataBean result) {
         Log.e("扫码运单code111111111111 ", result.getData() + result.getFunctionFlag());
         String daibanCode = result.getData();
-        if (!TextUtils.isEmpty(result.getData()) && (result.getFunctionFlag().equals("TaskCollectVerifyFragment")||result.getFunctionFlag().equals("MainActivity")) && isShow) {
+        if (!TextUtils.isEmpty(result.getData()) && ("TaskCollectVerifyFragment".equals(result.getFunctionFlag()) || "MainActivity".equals(result.getFunctionFlag())) && isShow) {
             String[] parts = daibanCode.split("\\/");
             List <String> strsToList = Arrays.asList(parts);
             if (strsToList.size() >= 4) {
@@ -280,7 +282,7 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
     //刷新列表数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String refresh) {
-        if (refresh.equals("collectVerify_refresh")) {
+        if ("collectVerify_refresh".equals(refresh)) {
             Log.e("refresh", refresh);
             pageCurrent = 1;
             initData();
@@ -319,8 +321,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     @Override
     public void toastView(String error) {
-        if (error != null)
+        if (error != null) {
             ToastUtil.showToast(getActivity(), error);
+        }
 //        if (mMfrvData != null)
 //            mMfrvData.finishLoadMore();
 //        if (mMfrvData != null)
@@ -390,8 +393,9 @@ public class TaskCollectVerifyFragment extends BaseFragment implements SearchTod
 
     @Override
     public void getWaybillStatusResult(TransportDataBase result) {
-        if (result != null)
+        if (result != null) {
             getTaskInfo(result);
+        }
     }
 
     /**

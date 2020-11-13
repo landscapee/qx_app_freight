@@ -92,8 +92,9 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -131,10 +132,12 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
     @Override
     public void toastView(String error) {
         ToastUtil.showToast(error);
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -179,8 +182,9 @@ public class CargoFragment extends BaseFragment implements LookLUggageScannigFli
         pageCurrent++;
         mListTemp.addAll(flightLuggageBeans);
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mListTemp.size());
+            }
         }
         seachWithNum();
     }

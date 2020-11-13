@@ -68,7 +68,7 @@ public class WebSocketManager {
 
                 @Override
                 public void onTextMessage(String payload) {
-                    if (payload.equals("用户刷新-已收到")) {
+                    if ("用户刷新-已收到".equals(payload)) {
                         nowdate = System.currentTimeMillis();
                     }
                 }
@@ -102,10 +102,11 @@ public class WebSocketManager {
 
     //发送信息
     public void sendMessage(String data) {
-        if (!"".equals(data))
+        if (!"".equals(data)) {
             mWebSocketConnection.sendTextMessage(data);
-        else
+        } else {
             ToastUtil.showToast(mContext, "不能为空", Toast.LENGTH_SHORT);
+        }
     }
 
 }

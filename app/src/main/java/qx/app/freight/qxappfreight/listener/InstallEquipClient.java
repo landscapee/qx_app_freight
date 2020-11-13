@@ -247,8 +247,9 @@ public class InstallEquipClient extends StompClient {
                                 str = str.replace("\\", "");
 //                                str = str.substring(1,str.length()-1);
                                 List <LoadingListBean.DataBean.ContentObjectBean> mWebSocketBean = JSONObject.parseArray(str, LoadingListBean.DataBean.ContentObjectBean.class);
-                                if (mWebSocketBean != null && mWebSocketBean.size() > 0)
+                                if (mWebSocketBean != null && mWebSocketBean.size() > 0) {
                                     mWebSocketBean.get(0).setFlightNo(flightNo);
+                                }
                                 sendInstallEventBus(mWebSocketBean);
                             }
                         }
@@ -306,6 +307,7 @@ public class InstallEquipClient extends StompClient {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", "123");
         mTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 compositeDisposable.add(my.send("/app/heartbeat", jsonObject.toJSONString()).subscribe(() -> Log.d(TAG, "websocket 消息发送成功"), throwable -> Log.e(TAG, "websocket 消息发送失败")));
                 if (!WebSocketService.isTopic) {

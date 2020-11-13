@@ -274,10 +274,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
             requestModel.setFlightInfoId(mLoadingList.get(0).getFlightInfoId());
             requestModel.setContent(mLoadingList.get(0).getContentObject());
             requestModel.setVersion(mLoadingList.get(0).getVersion());
-            if (sureFlag == 1)
+            if (sureFlag == 1) {
                 requestModel.setDocumentType(3);
-            else if (sureFlag == 2)
+            } else if (sureFlag == 2) {
                 requestModel.setDocumentType(6);
+            }
             mPresenter = new GetFlightCargoResPresenter(this);
             ((GetFlightCargoResPresenter) mPresenter).overLoad(requestModel);
         });
@@ -305,8 +306,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     intent.putExtra("flight_info_id", mBaseContent.get(0).getScooters().get(0).getFlightInfoId());
                     intent.putExtra("id", data.getId());
                     LoadPlaneActivity.this.startActivity(intent);
-                } else
+                } else {
                     ToastUtil.showToast("当前航班舱位集合，无法进行拉货");
+                }
 
             } else {
                 ToastUtil.showToast("当前航班无装机单数据，无法进行拉货");
@@ -340,8 +342,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
 //            }
         });
         mTvSurePull.setOnClickListener(v -> {
-            if (!useLGsys)
+            if (!useLGsys) {
                 endLoadHyManifest();
+            }
         });
 
         if (useLGsys) {
@@ -458,8 +461,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 newScooters.get(position).setWeight(newScooters.get(position).getWeight() - weight);
                                 splitScooter.setWeight(weight);
                                 splitScooter.setCargoName(strBerth);
-                                if (data.getWidthAirFlag() == 0)
+                                if (data.getWidthAirFlag() == 0) {
                                     splitScooter.setLocation(strGoos);
+                                }
                                 splitScooter.setSplit(true);
                                 joinInstall(newScooters.get(position).getId(), splitScooter);
                                 newScooters.add(position + 1, splitScooter);
@@ -469,8 +473,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                                 Log.e("Tools.IOclone", e.getMessage());
                             }
                         } else {
-                            if (dialog != null && dialog.isShowing())
+                            if (dialog != null && dialog.isShowing()) {
                                 dialog.dismiss();
+                            }
                         }
                     }
                 })
@@ -570,10 +575,11 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private void lockOrUnlockScooter(int position) {
         mPresenter = new GetLastReportInfoPresenter(this);
         LockScooterEntity entity = new LockScooterEntity();
-        if (newScooters.get(position).getLock() == 0 || newScooters.get(position).getLock() == 3)
+        if (newScooters.get(position).getLock() == 0 || newScooters.get(position).getLock() == 3) {
             entity.setOperationType(1);
-        else
+        } else {
             entity.setOperationType(2);
+        }
 
         entity.setScooterId(newScooters.get(position).getId());
         entity.setReportInfoId(loadInstallId);
@@ -655,17 +661,18 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     private void endLoadHyManifest() {
         List <String> listScooters = new ArrayList <>();
         for (ManifestScooterListBean manifestScooterListBean : manifestScooterListBeans) {
-            if (manifestScooterListBean.isPull())
+            if (manifestScooterListBean.isPull()) {
                 listScooters.add(manifestScooterListBean.getScooterId());
+            }
         }
         mPresenter = new StartPullPresenter(this);
         PullGoodsEntity pullGoodsEntity = new PullGoodsEntity();
         pullGoodsEntity.setCreateUserType(1);
         pullGoodsEntity.setPullGoodsType(0);
         pullGoodsEntity.setScooterIds(listScooters);
-        if (flightInfoId != null)
+        if (flightInfoId != null) {
             pullGoodsEntity.setFlightInfoId(flightInfoId);
-        else {
+        } else {
             ToastUtil.showToast("flightInfoId 为空");
             return;
         }
@@ -695,9 +702,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
         }).build();
         pickerView.setPicker(versions);
         pickerView.setTitleText("版本号");
-        if (!versions.isEmpty())
+        if (!versions.isEmpty()) {
             pickerView.show();
-        else {
+        } else {
             ToastUtil.showToast("还没有装机单！");
         }
     }
@@ -803,8 +810,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                     }
                 }
                 //已经确认最终装机单
-                if (mLoadingList.get(0).getDocumentType() != 2 && mLoadingList.get(0).getInstalledSingleConfirm() == 1)
+                if (mLoadingList.get(0).getDocumentType() != 2 && mLoadingList.get(0).getInstalledSingleConfirm() == 1) {
                     mConfirmPlan = true;
+                }
 
                 getPullgoodsStatus();
                 tvChooseVersion.setText(versions.get(0));
@@ -858,8 +866,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing())
+        if (mWaitCallBackDialog != null && mWaitCallBackDialog.isShowing()) {
             mWaitCallBackDialog.dismiss();
+        }
     }
 
     @Override
@@ -990,8 +999,9 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
                         }
 
 //                            datas[i].getCargos().get(j).getScooters().get(k).setMailType(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getMailType());
-                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0)
+                        if (datas[i].getCargos().get(j).getScooters().get(k).getWaybillList() != null && datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().size() > 0) {
                             datas[i].getCargos().get(j).getScooters().get(k).setSpecialNumber(datas[i].getCargos().get(j).getScooters().get(k).getWaybillList().get(0).getSpecialCode());
+                        }
                     }
                     manifestScooterListBeans.addAll(datas[i].getCargos().get(j).getScooters());
                 }
@@ -1009,21 +1019,24 @@ public class LoadPlaneActivity extends BaseActivity implements GetFlightCargoRes
     @Override
     public void lockOrUnlockScooterResult(String result) {
         if (currentLockPosition != -1) {
-            if (newScooters.get(currentLockPosition).getLock() == 0 || newScooters.get(currentLockPosition).getLock() == 3)
+            if (newScooters.get(currentLockPosition).getLock() == 0 || newScooters.get(currentLockPosition).getLock() == 3) {
                 newScooters.get(currentLockPosition).setLock(1);
-            else
+            } else {
                 newScooters.get(currentLockPosition).setLock(0);
+            }
         }
-        if (result != null)
+        if (result != null) {
             ToastUtil.showToast("操作成功");
+        }
 
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void startPullResult(String result) {
-        if (result != null)
+        if (result != null) {
             ToastUtil.showToast(result);
+        }
 
     }
 }

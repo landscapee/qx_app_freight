@@ -139,8 +139,9 @@ public class DownloadFileService extends Service {
      * @param file 安装文件
      */
     private void InstallApp(File file) {
-        if (file == null)
+        if (file == null) {
             return;
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String type;
         if (Build.VERSION.SDK_INT < 23) {
@@ -157,8 +158,9 @@ public class DownloadFileService extends Service {
         String filePath = file.getPath();
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
-        if (lastPoi == -1 || lastSep >= lastPoi)
+        if (lastPoi == -1 || lastSep >= lastPoi) {
             return "";
+        }
         return filePath.substring(lastPoi + 1);
     }
 }

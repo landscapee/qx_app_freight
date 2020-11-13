@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -87,7 +88,7 @@ public class OutStoragePopWindow extends PopupWindow {
 
         this.setWidth(RecyclerView.LayoutParams.MATCH_PARENT);
         this.setHeight(DisplayUtil.getMobileHeight(context) / 5 * 3);
-        this.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.transparent)));
+        this.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context,R.color.transparent)));
         //软键盘不会挡着popupwindow
         this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         this.setAnimationStyle(R.style.anim_bottom_bottom);   // 设置窗口显示的动画效果

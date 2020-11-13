@@ -63,7 +63,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                     boolean hasLiveGoods = false;
                     boolean hasGUNGoods = false;
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        if (bill.getSpecialCode()!=null && bill.getSpecialCode().equals("AVI")) {
+                        if (bill.getSpecialCode()!=null && "AVI".equals(bill.getSpecialCode())) {
                             hasLiveGoods = true;
                             break;
                         }
@@ -73,7 +73,7 @@ public class UnloadPlaneAdapter extends BaseQuickAdapter<LoadingListBean.DataBea
                         }
                     }
                     for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean.WaybillBean bill : scooterBean.getWaybillList()) {
-                        bill.setHasLiveGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals("AVI"));//运单判断是否有活体
+                        bill.setHasLiveGoods(bill.getSpecialCode()!=null&& "AVI".equals(bill.getSpecialCode()));//运单判断是否有活体
                         bill.setHasGUNGoods(bill.getSpecialCode()!=null&&bill.getSpecialCode().equals(Constants.DANGER));
                     }
                     boolean shouldShowGoodsPos = !TextUtils.isEmpty(scooterBean.getLocation());

@@ -83,11 +83,13 @@ public class GetInfosByFlightIdBean implements Serializable {
         if (StringUtil.isEmpty(groundAgentCode)) {
             return scooterCode;
         }
-        if (MainActivity.getAgentName(groundAgentCode).startsWith("地"))
+        if (MainActivity.getAgentName(groundAgentCode).startsWith("地")) {
             return scooterCode;
+        }
         String str = scooterCode;
-        if (MainActivity.getAgentName(groundAgentCode).length() >= 1)
+        if (MainActivity.getAgentName(groundAgentCode).length() >= 1) {
             str = scooterCode + "(" + MainActivity.getAgentName(groundAgentCode).substring(0, 1) + ")";
+        }
         return str;
     }
 

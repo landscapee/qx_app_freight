@@ -112,8 +112,9 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         rlDynamic.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) ->
                 {
-                    if (!Tools.isFastClick())
+                    if (!Tools.isFastClick()) {
                         return;
+                    }
                     DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo());
                 }
                 );
@@ -134,19 +135,21 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
     public void onEventMainThread(FlightEventBusBean result) {
         String flight = result.getFlight();
         Log.e("航班刷新", flight);
-       if (!TextUtils.isEmpty(day)&&day.equals(flight))
+       if (!TextUtils.isEmpty(day)&&day.equals(flight)) {
            initData();
+       }
     }
 
     public void initData() {
 
         BaseFilterEntity entity = new BaseFilterEntity();
-        if ("today".equals(day))
+        if ("today".equals(day)) {
             entity.setDay("today");
-        else if ("yesterday".equals(day))
+        } else if ("yesterday".equals(day)) {
             entity.setDay("yesterday");
-        else if ("tomorrow".equals(day))
+        } else if ("tomorrow".equals(day)) {
             entity.setDay("tomorrow");
+        }
         ((FlightdynamicPresenter) mPresenter).flightdynamic(entity);
 
     }

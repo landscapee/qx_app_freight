@@ -71,8 +71,9 @@ public class RepeatWeightManifestFragment extends BaseFragment implements TodoSc
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (((AllocateScooterActivity) getActivity()) != null)
+            if (((AllocateScooterActivity) getActivity()) != null) {
                 ((AllocateScooterActivity) getActivity()).setTotalWeight(weight, 1);
+            }
         }
     }
 

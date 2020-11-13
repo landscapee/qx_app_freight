@@ -182,7 +182,7 @@ public class LaserScanActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("laser")) {
+        if (!TextUtils.isEmpty(result.getData()) && "laser".equals(result.getTypeName())) {
             mScooterCode = result.getData();
             getBackMessage(mScooterCode);
         }

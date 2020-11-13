@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -298,7 +299,7 @@ public class ScanManagerActivity extends BaseActivity implements ScanListener, S
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LaserAndZxingBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getTypeName().equals("scan")) {
+        if (!TextUtils.isEmpty(result.getData()) && "scan".equals(result.getTypeName())) {
             getBackMessage(result.getData());
         }
 //        ToastUtil.showToast("扫码数据为空请重新扫码");
@@ -376,7 +377,7 @@ public class ScanManagerActivity extends BaseActivity implements ScanListener, S
      */
     private Drawable getDrawable() {
         ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
-        bgdrawable.getPaint().setColor(getResources().getColor(android.R.color.transparent));
+        bgdrawable.getPaint().setColor(ContextCompat.getColor(this,android.R.color.transparent));
         return bgdrawable;
     }
 }

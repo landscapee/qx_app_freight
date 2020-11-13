@@ -83,8 +83,9 @@ public class BubbleTextVew extends AppCompatTextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (bubbleDrawable != null)
+        if (bubbleDrawable != null) {
             bubbleDrawable.draw(canvas);
+        }
         super.onDraw(canvas);
     }
 

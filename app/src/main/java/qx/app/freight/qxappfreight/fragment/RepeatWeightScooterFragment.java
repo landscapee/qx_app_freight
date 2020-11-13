@@ -98,8 +98,9 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (((AllocateScooterActivity) getActivity()) != null)
+            if (((AllocateScooterActivity) getActivity()) != null) {
                 ((AllocateScooterActivity) getActivity()).setTotalWeight(weight, 0);
+            }
         }
     }
 
@@ -116,12 +117,14 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         rlView.setLayoutManager(new LinearLayoutManager(getContext()));
         rlView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
-            if (list.get(position).getReWeightFinish() == 1)
+            }
+            if (list.get(position).getReWeightFinish() == 1) {
                 startActivity(new Intent(getActivity(), AllocaaateHisDetailsActivity.class).putExtra("dataBean", list.get(position)));
-            else
+            } else {
                 getScooterByScooterCode(list.get(position).getScooterCode(),list.get(position).getGroundAgentCode());
+            }
 //            startActivity(new Intent(getActivity(), AllocaaateScanActivity.class).putExtra("dataBean",list.get(position)));
         });
         adapter.setOnReturnClickListener(new RepeatWeightScooterAdapter.OnReturnClickListener() {

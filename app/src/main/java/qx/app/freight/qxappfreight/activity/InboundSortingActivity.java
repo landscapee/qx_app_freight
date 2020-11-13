@@ -125,7 +125,7 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         //暂存，提交请求
         btnTemp.setOnClickListener(listener -> {
             //如果是包机L  货包 H  必须输入整机复重重量
-            if (resultBean.getFlightType().equals("L") || resultBean.getFlightType().equals("H")) {
+            if ("L".equals(resultBean.getFlightType()) || "H".equals(resultBean.getFlightType())) {
                 if (TextUtils.isEmpty(etReWeight.getText().toString())) {
                     ToastUtil.showToast("请输入整机复重重量");
                     return;
@@ -152,7 +152,7 @@ public class InboundSortingActivity extends BaseActivity implements InWaybillRec
         //提交请求
         btnDone.setOnClickListener(listener -> {
             //如果是包机L  货包 H  必须输入整机复重重量
-            if (resultBean.getFlightType().equals("L") || resultBean.getFlightType().equals("H")) {
+            if ("L".equals(resultBean.getFlightType()) || "H".equals(resultBean.getFlightType())) {
                 if (TextUtils.isEmpty(etReWeight.getText().toString())) {
                     ToastUtil.showToast("请输入整机复重重量");
                     return;

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -434,11 +435,12 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         }
 
         if ("ABC".contains(mData.getFlightBody()) && (dValue > 30 || dValue < -30)) {
-            tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.red));
         } else if ("EF".contains(mData.getFlightBody()) && (dValue > 50 || dValue < -50)) {
-            tvDvalueFront.setTextColor(getResources().getColor(R.color.red));
-        } else
-            tvDvalueFront.setTextColor(getResources().getColor(R.color.black_3));
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.red));
+        } else {
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.black_3));
+        }
 
         //复磅差值
         tvDvalueFront.setText(dValue + "kg");

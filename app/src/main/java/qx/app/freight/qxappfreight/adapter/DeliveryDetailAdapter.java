@@ -57,8 +57,9 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             holder.setVisible(R.id.tv_complete_time,true);
             holder.setText(R.id.tv_complete_time, TimeUtils.date2Tasktime6(bean.getOutStorageTime()));
         }
-        else
+        else {
             holder.setGone(R.id.tv_complete_time,false);
+        }
 
         //运单状态
         switch (bean.getWaybillStatus()){
@@ -98,8 +99,9 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
                 holder.setText(R.id.tv_status,"逾期待补费");
                 holder.setText(R.id.tv_outStorage,"");
             }
-            else
+            else {
                 holder.setText(R.id.tv_outStorage,"已出库");
+            }
 
             btnOutRecords.setVisibility(View.VISIBLE);
             holder.setVisible(R.id.tv_outStorage,true);
@@ -108,10 +110,11 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter<WaybillsBean, BaseVi
             holder.setGone(R.id.btn_forklift,false);
 
         }else {
-            if (bean.getOutboundNumber()>0)
+            if (bean.getOutboundNumber()>0) {
                 btnOutRecords.setVisibility(View.VISIBLE);
-            else
+            } else {
                 btnOutRecords.setVisibility(View.GONE);
+            }
             holder.setGone(R.id.tv_outStorage,false);
             holder.setVisible(R.id.btn_outStorage,true);
             holder.setGone(R.id.btn_overweight,true);

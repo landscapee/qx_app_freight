@@ -144,7 +144,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         tvFlightPlace.setText(flightBean.getSeat());
         tvArriveTime.setText(String.format(getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(flightBean.getScheduleTime()), TimeUtils.getDay((flightBean.getScheduleTime()))));
         //显示航线，2条 3条 4条
-        if (flightBean.getFlightCourseByAndroid() != null && flightBean.getFlightCourseByAndroid().size() > 1)
+        if (flightBean.getFlightCourseByAndroid() != null && flightBean.getFlightCourseByAndroid().size() > 1) {
             switch (flightBean.getItemType()) {
                 case 2:
                     llFlight2.setVisibility(View.VISIBLE);
@@ -165,6 +165,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
                     tvFlight44.setText(flightBean.getFlightCourseByAndroid().get(3));
                     break;
             }
+        }
     }
 
     @OnClick({R.id.ll_add, R.id.btn_next})
@@ -233,7 +234,7 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("CargoListActivity")) {
+        if ("CargoListActivity".equals(result.getFunctionFlag())) {
             if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //板车号
                 mScooterCode = result.getData();
@@ -356,7 +357,9 @@ public class CargoListActivity extends BaseActivity implements InternationalCarg
         mGoodsWeight = 0;
         mMailWeight = 0;
         mBaggageWeight = 0;
-        if (result.getData() == null || result.getData().size() == 0) return;
+        if (result.getData() == null || result.getData().size() == 0) {
+            return;
+        }
         for (LoadingListBean.DataBean.ContentObjectBean dataBean : result.getData().get(0).getContentObject()) {
             for (LoadingListBean.DataBean.ContentObjectBean.ScooterBean scooterBean : dataBean.getScooters()) {
                 switch (scooterBean.getType()) {

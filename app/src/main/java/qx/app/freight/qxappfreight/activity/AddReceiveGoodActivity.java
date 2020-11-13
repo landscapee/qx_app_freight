@@ -193,8 +193,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 
     @Override
     public void businessLogic(Bundle savedInstanceState) {
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
         CustomToolbar toolbar = getToolbar();
         setToolbarShow(View.VISIBLE);
         toolbar.setMainTitle(Color.WHITE, "新增");
@@ -266,19 +267,21 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
 //        });
         mTvUldnumber.setOnClickListener(v -> {
             if (null != scooterInfo) {
-                if (!TextUtils.isEmpty(mTvScooter.getText()) || !scooterInfo.getScooterType().equals(Constants.SCOOTER_P))
+                if (!TextUtils.isEmpty(mTvScooter.getText()) || !scooterInfo.getScooterType().equals(Constants.SCOOTER_P)) {
                     showPopWindowUld();
-                else
+                } else {
                     ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
-            } else
+                }
+            } else {
                 ToastUtil.showToast("板车号为空或者板车类型为平板车不能输入ULD号");
+            }
         });
 
     }
 
     private void initView() {
         String content = "带<font color='#FF0000'>" + "*" + "</font>为必填项";
-        mTvInfo.setText(Html.fromHtml(content));
+        mTvInfo.setText(StringUtil.transformHtmlFromhtml(content));
         mMyAgentListBean = new MyAgentListBean();
         waybillId = getIntent().getStringExtra("waybillId");
         wayBillId = getIntent().getStringExtra("wayBillId");
@@ -308,8 +311,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             ((GetWeightPresenter) mPresenter).getWeight("pb1");
         });
         rcInfoOverweight = new ArrayList <>();
-        if (mList.getSpOverweight() != null && mList.getSpOverweight().size() > 0)
+        if (mList.getSpOverweight() != null && mList.getSpOverweight().size() > 0) {
             rcInfoOverweight.addAll(mList.getSpOverweight());
+        }
 
         llOverweight.setOnClickListener(v -> {
             showPopWindowList();
@@ -323,7 +327,7 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     //激光扫码获取返回板车信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (result.getFunctionFlag().equals("AddReceiveGoodActivity")) {
+        if ("AddReceiveGoodActivity".equals(result.getFunctionFlag())) {
             if (result.getData() != null && result.getData().length() == Constants.SCOOTER_NO_LENGTH) {
                 //板车号
                 mScooterCode = result.getData();
@@ -458,10 +462,11 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     //取重
     @Override
     public void getWeightResult(String result) {
-        if (!"".equals(result))
+        if (!"".equals(result)) {
             mTvWeight.setText(result);
-        else
+        } else {
             ToastUtil.showToast("未拿到取重数据，请重新点击取重");
+        }
     }
 
     private void finishAndToast() {
@@ -523,8 +528,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
             intent.putExtras(mBundle);
             setResult(Constants.FINISH_REFRESH, intent);
             finish();
-        } else
+        } else {
             Log.e("123", "123");
+        }
     }
 
 
@@ -733,8 +739,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 public void afterTextChanged(Editable s) {
                     if (!StringUtil.isEmpty(etUldType.getText().toString())) {
                         uldTypeCount = etUldType.getText().toString().length();
-                        if (uldTypeCount > 0)
+                        if (uldTypeCount > 0) {
                             searchUldType(etUldType.getText().toString());
+                        }
                     } else {
                         uldTypes.clear();
                         uldTypeAdapter.notifyDataSetChanged();
@@ -757,8 +764,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
                 public void afterTextChanged(Editable s) {
                     if (!StringUtil.isEmpty(etUldAirline.getText().toString())) {
                         airlineCount = etUldAirline.getText().toString().length();
-                        if (airlineCount > 0)
+                        if (airlineCount > 0) {
                             searchAirline(etUldAirline.getText().toString());
+                        }
                     } else {
                         airlineTwo.clear();
                         uldAirlineAdapter.notifyDataSetChanged();
@@ -825,8 +833,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
         }
         airlineTwo.clear();
         if (airlineCount == 2) {
-            if (airLineBeans.size() < 1)
+            if (airLineBeans.size() < 1) {
                 etUldAirline.setText("");
+            }
             airLineBeans.clear();
         }
         for (FindAirlineAllBean mFindAirlineAllBean : airLineBeans) {
@@ -892,8 +901,9 @@ public class AddReceiveGoodActivity extends BaseActivity implements GetWeightCon
     @Override
     public void listByTypeResult(ListByTypeBean result) {
         if (uldTypeCount == 3) {//10位uld号已经输完，并且检测到了该uld号
-            if (result.getRecords().size() < 1)
+            if (result.getRecords().size() < 1) {
                 etUldType.setText("");
+            }
             uldTypes.clear();
             uldTypeList.clear();
             uldTypeAdapter.notifyDataSetChanged();

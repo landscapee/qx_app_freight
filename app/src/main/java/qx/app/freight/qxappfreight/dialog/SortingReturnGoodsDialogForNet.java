@@ -270,17 +270,18 @@ public class SortingReturnGoodsDialogForNet extends Dialog implements Overweight
     }
 
     public void showProgessDialog(String message) {
-        if (!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message)) {
             mTextView.setText(message);
-        else {
+        } else {
             mTextView.setText("加载中……");
         }
         mProgessbarDialog.show();
     }
 
     public void setProgressText(String message) {
-        if (!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message)) {
             mTextView.setText(message);
+        }
     }
 
     public void dismissProgessDialog() {

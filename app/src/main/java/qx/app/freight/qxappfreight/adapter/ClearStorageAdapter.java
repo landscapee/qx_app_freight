@@ -22,10 +22,11 @@ public class ClearStorageAdapter extends BaseQuickAdapter<InventoryQueryBean.Rec
         //序号
         helper.setText(R.id.tv_nub, helper.getAdapterPosition()+"");
         //清库类型  (0：鲜活清库；1：全仓清库)
-        if (0 == item.getTaskType())
+        if (0 == item.getTaskType()) {
             helper.setText(R.id.clear_storage_type, "鲜活清库");
-        else if (1 == item.getTaskType())
+        } else if (1 == item.getTaskType()) {
             helper.setText(R.id.clear_storage_type, "全仓清库");
+        }
 
         //发起人
         helper.setText(R.id.tv_originator, "发起人:"+item.getCreateUserName());

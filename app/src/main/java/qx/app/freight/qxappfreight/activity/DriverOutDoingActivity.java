@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -126,8 +127,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         setToolbarShow(View.VISIBLE);
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "正在执行");
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
         listScooter = new ArrayList <>();
         //从待办传递过来的任务列表类型
         mAcceptTerminalTodoBean = (List <OutFieldTaskBean>) getIntent().getSerializableExtra("acceptTerminalTodoBean");
@@ -139,10 +141,11 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         //计算本次任务能拉多少板车（所有子任务能拉板车数量的和）
         if (mAcceptTerminalTodoBean != null) {
             //首件行李 任务分配板数为0  但是默认必须 大于一个板车 才能开始运输
-            if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType()))
+            if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                 tpNum = 1;
-            else
+            } else {
                 tpNum = 0;
+            }
             for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
                 tpNum += mOutFieldTaskBean.getNum();
             }
@@ -163,8 +166,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         //扫码
         llAdd.setOnClickListener(v -> {
-            if (!Tools.isFastClick())
+            if (!Tools.isFastClick()) {
                 return;
+            }
             if (Constants.TP_TYPE_SINGLE.equals(mAcceptTerminalTodoBean.get(0).getCargoType())) {
                 ScanManagerActivity.startActivity(this, "DriverOutDoingActivity");
             } else {
@@ -183,17 +187,19 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         });
         //结束运输时 选择某个或多个航班结束 监听
         mDriverOutTaskDoingAdapter.setCheckBoxListener((view, position) -> {
-            if (list.get(position).isSelect())
+            if (list.get(position).isSelect()) {
                 list.get(position).setSelect(false);
-            else
+            } else {
                 list.get(position).setSelect(true);
+            }
 
             //选择item时  设置全选的状态
             for (FlightOfScooterBean mFlightOfScooterBean : list) {
                 if (!mFlightOfScooterBean.isSelect()) {
                     cbAll.setChecked(false);
-                } else
+                } else {
                     cbAll.setChecked(true);
+                }
             }
             upDataBtnStatusEnd();
         });
@@ -312,7 +318,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String result) {
-        if (result.equals("DriverOutDoingActivity_finish")) {
+        if ("DriverOutDoingActivity_finish".equals(result)) {
             ToastUtil.showToast("该任务已异常结束");
             EventBus.getDefault().post("TaskDriverOutFragment_refresh");
             finish();
@@ -332,10 +338,11 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (Constants.SCAN_RESULT == resultCode) {
             String str = data.getStringExtra(Constants.SACN_DATA);
             //根据扫一扫获取的板车信息查找板车内容
-            if (isSure == 0)
+            if (isSure == 0) {
                 addScooterInfo(str);
-            else
+            } else {
                 isSureEndLoc(str);
+            }
 
         }
     }
@@ -350,8 +357,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (!str.equals(mAcceptTerminalTodoBean.get(0).getEndAreaId())) {
             ToastUtil.showToast("请前往正确的运输终点:" + mAcceptTerminalTodoBean.get(0).getEndAreaId());
             return;
-        } else
+        } else {
             doEnd();
+        }
     }
 
     /**
@@ -381,8 +389,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                 ((ScanScooterPresenter) mPresenter).scanScooter(mainIfos);
             }
 
-        } else
+        } else {
             ToastUtil.showToast("扫描结果为空请重新扫描");
+        }
     }
 
     /**
@@ -426,8 +435,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
 
     private int getMaxHandcarNum() {
-        if (listScooter != null)
+        if (listScooter != null) {
             return listScooter.size();
+        }
         return 0;
     }
 
@@ -440,7 +450,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             tvStart.setBackgroundResource(R.drawable.btn_blue_press);
         } else {
             tvStart.setClickable(false);
-            tvStart.setBackgroundColor(getResources().getColor(R.color.gray));
+            tvStart.setBackgroundColor(ContextCompat.getColor(this,R.color.gray));
         }
     }
 
@@ -449,7 +459,7 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
      */
     private void upDataBtnStatusEnd() {
         tvStart.setClickable(false);
-        tvStart.setBackgroundColor(getResources().getColor(R.color.gray));
+        tvStart.setBackgroundColor(ContextCompat.getColor(this,R.color.gray));
         for (FlightOfScooterBean mFlightOfScooterBean : list) {
             if (mFlightOfScooterBean.isSelect()) {
                 tvStart.setClickable(true);
@@ -518,8 +528,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
                         intent.putExtra("error_type", 4);
                         startActivity(intent);
                     }
-                } else
+                } else {
                     ToastUtil.showToast("任务必须先开始运输才能异常结束");
+                }
 
                 break;
             case R.id.tv_start://开始或者结束运输
@@ -598,12 +609,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).isSelect()) {
                 for (TransportTodoListBean mTransportTodoListBean : list.get(i).getMTransportTodoListBeans()) {
-                    if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo()))
+                    if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo())) {
                         mListBeanBegin.add(mTransportTodoListBean);
+                    }
                 }
                 for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
-                    if (list.get(i).getFlightNo().equals(mOutFieldTaskBean.getFlightNo()))
+                    if (list.get(i).getFlightNo().equals(mOutFieldTaskBean.getFlightNo())) {
                         listEndTemp.add(mOutFieldTaskBean);
+                    }
                 }
             }
         }
@@ -663,12 +676,14 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         //把被选中的航班 下的板车 加入 结束列表 ，被选中的子任务 加入子任务结束列表
         for (int i = 0; i < list.size(); i++) {
             for (TransportTodoListBean mTransportTodoListBean : list.get(i).getMTransportTodoListBeans()) {
-                if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo()))
+                if (list.get(i).getFlightNo().equals(mTransportTodoListBean.getFlightNo())) {
                     mListBeanBegin.add(mTransportTodoListBean);
+                }
             }
             for (OutFieldTaskBean mOutFieldTaskBean : mAcceptTerminalTodoBean) {
-                if (list.get(i).getFlightNo().equals(mOutFieldTaskBean.getFlightNo()))
+                if (list.get(i).getFlightNo().equals(mOutFieldTaskBean.getFlightNo())) {
                     listEndTemp.add(mOutFieldTaskBean);
+                }
             }
         }
         if (listEndTemp != null && mListBeanBegin.size() > 0) {
@@ -735,8 +750,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             setTpStatus(0);
             upDataBtnStatusEnd();
             EventBus.getDefault().post("TaskDriverOutFragment_refresh");
-        } else
+        } else {
             Log.e("开始失败", "开始失败");
+        }
     }
 
     /**
@@ -749,8 +765,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
         if (flag == 0) {
             tvStart.setText("结束");
             llAdd.setVisibility(View.GONE);
-            if (!isBaggage)
+            if (!isBaggage) {
                 ivErrorEnd.setVisibility(View.VISIBLE);
+            }
             mDriverOutTaskDoingAdapter.setCheckBoxEnable(true);
             mDriverOutTaskDoingAdapter.setIsmIsSlide(false);
             tvTpStatus.setVisibility(View.VISIBLE);
@@ -779,8 +796,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
     public void transportEndResult(String result) {
         if (!"".equals(result)) {
             getData();
-        } else
+        } else {
             Log.e("结束失败", "结束失败");
+        }
     }
 
     @Override
@@ -857,10 +875,11 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             mDriverOutTaskDoingAdapter.notifyDataSetChanged();
 //            if (result.size() >= tpNum)
             //通过 判断是否 拥有开始时间 来设置 运输的状态
-            if (mAcceptTerminalTodoBean.get(0).getTaskBeginTime() > 0)
+            if (mAcceptTerminalTodoBean.get(0).getTaskBeginTime() > 0) {
                 setTpStatus(0);
-            else
+            } else {
                 setTpStatus(1);
+            }
         }
 
     }
@@ -881,8 +900,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
             }
             tvCanPullScooter.setVisibility(View.VISIBLE);
             tvCanPullScooter.setText(TextUtils.isEmpty(canPullStr) ? "" : canPullStr.substring(0, canPullStr.length() - 1));
-        } else
+        } else {
             tvCanPullScooter.setVisibility(View.GONE);
+        }
 
     }
 
@@ -904,8 +924,9 @@ public class DriverOutDoingActivity extends BaseActivity implements TransportBeg
 
     @Override
     public void toastView(String error) {
-        if (error != null)
+        if (error != null) {
             ToastUtil.showToast(error);
+        }
     }
 
     @Override

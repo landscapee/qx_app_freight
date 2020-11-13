@@ -205,8 +205,9 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
      * mListCache 为0 就不展示
      */
     private void showDialogTask() {
-        if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0)
+        if ((mDialog != null && mDialog.isShowing()) || mListCache.size() == 0) {
             return;
+        }
         mListCacheUse.clear();
         mListCacheUse.add(mListCache.get(0));
         mListCache.remove(0);
@@ -265,8 +266,9 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -474,8 +476,9 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
             setMoreListener();
         }
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 
@@ -625,13 +628,16 @@ public class InstallEquipLeaderFragment extends BaseFragment implements MultiFun
 
     @Override
     public void toastView(String error) {
-        if (loadInstall == 1)
+        if (loadInstall == 1) {
             ToastUtil.showToast("暂无装机单");
+        }
 
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override

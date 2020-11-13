@@ -25,7 +25,9 @@ public class ClickProxy implements View.OnClickListener {
             origin.onClick(v);
             lastclick = System.currentTimeMillis();
         } else {
-            if (mIAgain != null) mIAgain.onAgain();
+            if (mIAgain != null) {
+                mIAgain.onAgain();
+            }
         }
     }
 

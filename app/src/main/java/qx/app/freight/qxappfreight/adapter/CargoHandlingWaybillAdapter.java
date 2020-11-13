@@ -47,20 +47,22 @@ public class CargoHandlingWaybillAdapter extends BaseQuickAdapter<FtGroupScooter
         helper.setText(R.id.tv_weight, item.getWeight() + "");
         helper.setText(R.id.tv_volume, item.getVolume() + "");
         helper.setText(R.id.tv_destination, (item.getDestinationStation() == null) ? item.getDestinationStation() : item.getDestinationStation() + "/" + item.getToCityEn());//目的站
-        if (!StringUtil.isEmpty(item.getRepName()))
+        if (!StringUtil.isEmpty(item.getRepName())) {
             helper.setText(R.id.tv_warehouse_area, item.getRepName());
-        else
+        } else {
             helper.setText(R.id.tv_warehouse_area, "/");
+        }
 
         helper.setText(R.id.tv_subpackage, "分装");
         helper.setText(R.id.tv_all, "全装");
 
-        if (item.getGroupScooterStatus() == 0)
+        if (item.getGroupScooterStatus() == 0) {
             helper.setText(R.id.tv_tp_type, "正常");
-        else if (item.getGroupScooterStatus() == 1)
+        } else if (item.getGroupScooterStatus() == 1) {
             helper.setText(R.id.tv_tp_type, "拉货");
-        else
+        } else {
             helper.setText(R.id.tv_tp_type, "转运");
+        }
     }
 
     public void setOnSubpackageClickListener(OnOneClickLister listener) {

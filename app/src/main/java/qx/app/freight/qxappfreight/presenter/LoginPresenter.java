@@ -38,10 +38,11 @@ public class LoginPresenter extends BasePresenter {
         ((LoginModel) mRequestModel).loginQxAi(loginEntity, new IResultLisenter<RespLoginBean>() {
             @Override
             public void onSuccess(RespLoginBean loginBean) {
-                if (loginBean.isSucc())
+                if (loginBean.isSucc()) {
                     ((LoginContract.loginView) mRequestView).loginQxAiResult(loginBean);
-                else
+                } else {
                     mRequestView.toastView(loginBean.getMsg());
+                }
                 mRequestView.dissMiss();
             }
 

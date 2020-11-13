@@ -120,8 +120,9 @@ public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract
             if (!TextUtils.isEmpty(loginBean.getUserId())) {
                 entity.setUserId(loginBean.getUserId());
                 entity.setUsername(loginBean.getLoginName());
-            } else
+            } else {
                 ToastUtil.showToast("UserId为空");
+            }
             ((UpdatePWDPresenter) mPresenter).updatePWD(entity);
         });
     }

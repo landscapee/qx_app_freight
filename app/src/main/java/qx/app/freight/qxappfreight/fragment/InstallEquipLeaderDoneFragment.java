@@ -120,8 +120,9 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
         if (isVisibleToUser) {
-            if (mTaskFragment != null)
+            if (mTaskFragment != null) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
             if (searchToolbar != null) {
                 searchToolbar.setHintAndListener("请输入航班号", text -> {
                     searchString = text;
@@ -282,18 +283,21 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
             seachByText();
         }
         if (mTaskFragment != null) {
-            if (isShow)
+            if (isShow) {
                 mTaskFragment.setTitleText(mCacheList.size());
+            }
         }
     }
 
 
     @Override
     public void toastView(String error) {
-        if (mMfrvData != null)
+        if (mMfrvData != null) {
             mMfrvData.finishLoadMore();
-        if (mMfrvData != null)
+        }
+        if (mMfrvData != null) {
             mMfrvData.finishRefresh();
+        }
     }
 
     @Override
@@ -318,7 +322,8 @@ public class InstallEquipLeaderDoneFragment extends BaseFragment implements Mult
 
     @Override
     public void startClearTaskResult(String result) {
-        if (result !=null)
+        if (result !=null) {
             ToastUtil.showToast(result);
+        }
     }
 }

@@ -114,8 +114,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     private void initTitle() {
-        if (!isShow)
+        if (!isShow) {
             return;
+        }
         if (mTaskFragment == null) {
             mTaskFragment = (TaskFragment) getParentFragment();
 
@@ -284,7 +285,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ScanDataBean result) {
-        if (!TextUtils.isEmpty(result.getData()) && result.getFunctionFlag().equals("MainActivity") && isShow) {
+        if (!TextUtils.isEmpty(result.getData()) && "MainActivity".equals(result.getFunctionFlag()) && isShow) {
             String daibanCode = result.getData();
             getScooterByScooterCode(daibanCode,result.getGroundAgentCode());
         }
@@ -320,8 +321,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             pageCurrent = transportListBeans.getCurrent()+1;
             list1.addAll(transportListBeans.getRecords());
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
             seachWithNum();
         }
@@ -345,8 +347,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             pageCurrent = transportListBeans.getCurrent()+1;
             list1.addAll(transportListBeans.getRecords());
             if (mTaskFragment != null) {
-                if (isShow)
+                if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
+                }
             }
             seachWithNum();
         }

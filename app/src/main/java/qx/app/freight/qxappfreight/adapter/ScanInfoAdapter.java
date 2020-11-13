@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
     @Override
     protected void convert(BaseViewHolder helper, ScooterInfoListBean item) {
         View viewDelete = helper.getView(R.id.ll_delete);
-        if (item.getFlightType().equals("I")) {
+        if ("I".equals(item.getFlightType())) {
             helper.getView(R.id.iv_type_inter).setVisibility(View.VISIBLE);
         } else {
             helper.getView(R.id.iv_type_inter).setVisibility(View.INVISIBLE);
@@ -49,13 +50,13 @@ public class ScanInfoAdapter extends BaseQuickAdapter<ScooterInfoListBean, BaseV
         Drawable drawableLeft;
         if (!StringUtil.isTimeNull(String.valueOf(mInfo.getAta()))) {
             time = TimeUtils.getHMDay(mInfo.getAta());
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+            drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
         } else if (!StringUtil.isTimeNull(String.valueOf(mInfo.getEta()))) {
             time = TimeUtils.getHMDay(mInfo.getEta());
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+            drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
         } else {
             time = TimeUtils.getHMDay(mInfo.getSta());
-            drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+            drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
         }
         tvTime.setText(time);
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);

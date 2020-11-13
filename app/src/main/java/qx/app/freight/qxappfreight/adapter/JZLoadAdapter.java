@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -93,10 +94,10 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         Button btnExReport = helper.getView(R.id.btn_ex_report);
         if (showExReport){
             if (item.getAcceptTime()> 0&&item.getPassengerLoadSend()> 0){
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.blue_btn_bg_color));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.blue_btn_bg_color));
             }
             else {
-                helper.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                helper.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
             }
             btnExReport.setVisibility(View.VISIBLE);
             btnExReport.setOnClickListener(b->{
@@ -147,8 +148,9 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         if ((item.getMovement() == 4||item.getMovement() == 8) && item.getRelateInfoObj() != null){
             helper.setText(R.id.tv_plane_info, StringUtil.toText(item.getFlightNo()+"("+item.getRelateInfoObj().getFlightNo()+")"));
         }
-        else
+        else {
             helper.setText(R.id.tv_plane_info, StringUtil.toText(item.getFlightNo()));
+        }
 
         helper.setText(R.id.tv_craft_number, StringUtil.toText(item.getAircraftno()));
         LinearLayout llLink = helper.getView(R.id.ll_link);
@@ -167,43 +169,43 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getElecState())){
                 showLable(item.getLoadingAndUnloadBean().getElecState(),mLayoutLable);
             }
-            if (item.getLoadingAndUnloadBean().getVipMark()!=null && item.getLoadingAndUnloadBean().getVipMark().equals("0")){
+            if (item.getLoadingAndUnloadBean().getVipMark()!=null && "0".equals(item.getLoadingAndUnloadBean().getVipMark())){
                 showLable(8,mLayoutLable);
             }
             if (!StringUtil.isEmpty(item.getLoadingAndUnloadBean().getFlightStatus())){
-                if (item.getLoadingAndUnloadBean().getFlightStatus().equals("已达"))// 已达
+                if ("已达".equals(item.getLoadingAndUnloadBean().getFlightStatus()))// 已达
                 {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_a));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_a));
                 }
-                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("正常")){//正常
+                else if("正常".equals(item.getLoadingAndUnloadBean().getFlightStatus())){//正常
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.lightgreen));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.lightgreen));
                 }
-                else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("起飞")) // 起飞
+                else if ("起飞".equals(item.getLoadingAndUnloadBean().getFlightStatus())) // 起飞
                 {
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_d));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("前起")) {//前起
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_d));
+                } else if ("前起".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {//前起
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_pre_atd));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("允登")) {
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_pre_atd));
+                } else if ("允登".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_yundeng));
-                } else if (item.getLoadingAndUnloadBean().getFlightStatus().equals("登机")) {
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_yundeng));
+                } else if ("登机".equals(item.getLoadingAndUnloadBean().getFlightStatus())) {
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_dengji));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_dengji));
                 }
-                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("完登")){//完成登机
+                else if("完登".equals(item.getLoadingAndUnloadBean().getFlightStatus())){//完成登机
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.flight_wanchengdengji));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.flight_wanchengdengji));
                 }
-                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("撤轮档")){//撤轮档
+                else if("撤轮档".equals(item.getLoadingAndUnloadBean().getFlightStatus())){//撤轮档
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.imlib_yellowa));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.imlib_yellowa));
                 }
-                else if(item.getLoadingAndUnloadBean().getFlightStatus().equals("推出")){//飞机推出
+                else if("推出".equals(item.getLoadingAndUnloadBean().getFlightStatus())){//飞机推出
                     mLabelView.setVisibility(View.VISIBLE);
-                    mLabelView.setLabelBackGroundColor(mContext.getResources().getColor(R.color.red));
+                    mLabelView.setLabelBackGroundColor(ContextCompat.getColor(mContext,R.color.red));
                 }
                 mLabelView.setTextContent(item.getLoadingAndUnloadBean().getFlightStatus());
             }
@@ -340,7 +342,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
             if (!item.isAcceptTask()) {
                 llBg.setBackgroundColor(Color.parseColor("#ffac00"));
             } else {
-                llBg.setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+                llBg.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
             }
 //            CollapsableLinearLayout collView = helper.getView(R.id.coll_listview);
             if (item.isShowDetail()) {
@@ -406,7 +408,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         params.setMargins(5, 0, 0, 0);
         tv.setLayoutParams(params);
         tv.setTextSize(12);
-        tv.setTextColor(mContext.getResources().getColor(R.color.white));
+        tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
         tv.setPadding(5, 3, 5, 3);
 //        view.setBackground(mContext.getResources().getDrawable(R.drawable.shape_card_board_nomal));//任务默认背景
         switch (lable) {
@@ -498,7 +500,7 @@ public class JZLoadAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean, BaseV
         params.setMargins(5, 0, 0, 0);
         tv.setLayoutParams(params);
         tv.setTextSize(12);
-        tv.setTextColor(mContext.getResources().getColor(R.color.white));
+        tv.setTextColor(ContextCompat.getColor(mContext,R.color.white));
         tv.setPadding(5, 3, 5, 3);
 //        view.setBackground(mContext.getResources().getDrawable(R.drawable.shape_card_board_nomal));//任务默认背景
         tv.setText(content);

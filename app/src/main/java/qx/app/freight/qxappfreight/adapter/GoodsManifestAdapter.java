@@ -2,6 +2,7 @@ package qx.app.freight.qxappfreight.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -81,13 +82,13 @@ public class GoodsManifestAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean
         }
         switch (item.getTimeType()) {
             case Constants.TIME_TYPE_AUTUAL:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.shi);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                 break;
             case Constants.TIME_TYPE_EXCEPT:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.yu);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                 break;
             case Constants.TIME_TYPE_PLAN:
-                drawableLeft = mContext.getResources().getDrawable(R.mipmap.ji);
+                drawableLeft = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                 break;
         }
         tvTime.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
@@ -113,13 +114,13 @@ public class GoodsManifestAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean
             Drawable drawableLeftLink = null;
             switch (item.getRelateInfoObj().getTimeType()) {
                 case Constants.TIME_TYPE_AUTUAL:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.shi);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.shi);
                     break;
                 case Constants.TIME_TYPE_EXCEPT:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.yu);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.yu);
                     break;
                 case Constants.TIME_TYPE_PLAN:
-                    drawableLeftLink = mContext.getResources().getDrawable(R.mipmap.ji);
+                    drawableLeftLink = ContextCompat.getDrawable(mContext,R.mipmap.ji);
                     break;
             }
             tvTimeLink.setCompoundDrawablesWithIntrinsicBounds(drawableLeftLink, null, null, null);
@@ -131,8 +132,9 @@ public class GoodsManifestAdapter extends BaseQuickAdapter<LoadAndUnloadTodoBean
                 containerLink.removeAllViews();
                 containerLink.addView(layoutLink, paramsMain);
             }
-        } else
+        } else {
             llLink.setVisibility(View.GONE);
+        }
         LinearLayout container = helper.getView(R.id.ll_flight_info_container);
         FlightInfoLayout layout = new FlightInfoLayout(mContext, item.getFlightInfoList());
         LinearLayout.LayoutParams paramsMain = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

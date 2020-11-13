@@ -58,16 +58,18 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         super.onCreate();
         List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
         mStompClient = new ArrayList<>();
-        if (null == UserInfoSingle.getInstance().getRoleRS())
+        if (null == UserInfoSingle.getInstance().getRoleRS()) {
             return;
+        }
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
             if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
                 if (ary.contains(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                     taskAssignType = 1;
                 } else if ("delivery_in".equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                     taskAssignType = 3;
-                } else
+                } else {
                     taskAssignType = 2;
+                }
             }
             //多角色 需要保持多个 web socket 链接
 
@@ -175,8 +177,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
                 }
             });
         }
-        if (!threadGps.isAlive())
+        if (!threadGps.isAlive()) {
             threadGps.start();
+        }
     }
 
     private void sendGps() {
@@ -187,10 +190,11 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
             gpsInfoEntity = new GpsInfoEntity();
             gpsInfoEntity.setLatitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLatitude()));
             gpsInfoEntity.setLongitude(String.valueOf(GPSUtils.getInstance().getCurrentLocation().getLongitude()));
-            if (UserInfoSingle.getInstance() != null)
+            if (UserInfoSingle.getInstance() != null) {
                 gpsInfoEntity.setUserId(UserInfoSingle.getInstance().getUserId());
-            else
+            } else {
                 gpsInfoEntity.setUserId("admin");
+            }
             gpsInfoEntity.setTerminalId(DeviceInfoUtil.getDeviceInfo(this).get("deviceId"));
             saveGpsInfoPresenter.saveGpsInfo(gpsInfoEntity);
         }
@@ -258,8 +262,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     @Override
     public void toastView(String error) {
-        if (!StringUtil.isEmpty(error))
+        if (!StringUtil.isEmpty(error)) {
             Log.e("GPS上传：", error);
+        }
     }
 
     @Override
@@ -294,8 +299,9 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
 
     //停止连接
     public static void closeLink() {
-        if (subList != null)
+        if (subList != null) {
             subList.clear();
+        }
         if (mStompClient != null) {
             if (mStompClient.size() != 0) {
                 for (int i = 0; i < mStompClient.size(); i++) {
