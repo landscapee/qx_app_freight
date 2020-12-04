@@ -10,6 +10,8 @@ import android.util.Log;
 import com.beidouapp.imlibapi.IMLIBContext;
 import com.liys.doubleclicklibrary.ViewDoubleHelper;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 import qx.app.freight.qxappfreight.BuildConfig;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
 import qx.app.freight.qxappfreight.utils.CrashHandler;
@@ -39,7 +41,12 @@ public class MyApplication extends Application  {
 
            //处理点击事件重复点击问题
         ViewDoubleHelper.init(this);
-
+        RxJavaPlugins.setErrorHandler(new Consumer <Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.i("throwable==", throwable.getMessage());
+            }
+        });
         initIM();//初始化IM服务配置
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

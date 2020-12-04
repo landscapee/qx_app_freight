@@ -67,15 +67,15 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         super.onDestroyView();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
         if (mPresenter != null) {
             mPresenter.detach();
             mPresenter.interruptHttp();

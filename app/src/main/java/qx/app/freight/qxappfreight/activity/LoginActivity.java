@@ -41,6 +41,7 @@ import qx.app.freight.qxappfreight.utils.AppUtil;
 import qx.app.freight.qxappfreight.utils.CrashHandler;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
 import qx.app.freight.qxappfreight.utils.IMUtils;
+import qx.app.freight.qxappfreight.utils.RsaCoder;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
@@ -178,8 +179,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.loginVi
      */
     private LoginEntity getLoginEntity() {
         LoginEntity mLoginEntity = new LoginEntity();
-        mLoginEntity.setUsername(mEtUserName.getText().toString().trim());
-        mLoginEntity.setPassword(mEtPassWord.getText().toString().trim());
+        mLoginEntity.setUsername(RsaCoder.encryptByPublicKey(mEtUserName.getText().toString().trim(), RsaCoder.P_KEY));
+        mLoginEntity.setPassword(RsaCoder.encryptByPublicKey(mEtPassWord.getText().toString().trim(), RsaCoder.P_KEY));
         mLoginEntity.setType("MT");
         List <String> syss = new ArrayList <>();
         syss.add("10040000");//外场

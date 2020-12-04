@@ -146,8 +146,10 @@ public class InWarehouseFragment extends BaseFragment implements MultiFunctionRe
     private void bySearchList(List <SmInventoryEntryandexit> mList){
         mListSearch.clear();
         for (SmInventoryEntryandexit smInventoryEntryandexit:mList){
-            if (smInventoryEntryandexit.getWaybillCode().contains(strSearch)){
-                mListSearch.add(smInventoryEntryandexit);
+            if (smInventoryEntryandexit.getWaybillCode()!=null){
+                if (smInventoryEntryandexit.getWaybillCode().contains(strSearch)){
+                    mListSearch.add(smInventoryEntryandexit);
+                }
             }
         }
         mMfrvData.notifyForAdapter(ioManifestAdapter);
