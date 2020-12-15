@@ -42,8 +42,8 @@ public class TaskFragment extends BaseFragment {
     TabLayout mTabLayout;
 
     private String nowRoleCode; //当前角色code
-    private List<Fragment> fragmentList;
-    private List<String> list_Title;
+    private List <Fragment> fragmentList;
+    private List <String> list_Title;
 
     @Nullable
     @Override
@@ -60,35 +60,38 @@ public class TaskFragment extends BaseFragment {
             mToolBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), true));
         });
         mSearchBar.setVisibility(View.GONE);
-            mSearchBar.getCloseView().setOnClickListener(v->{
+        mSearchBar.getCloseView().setOnClickListener(v -> {
 
-                mSearchBar.getSearchView().setText("");
+            mSearchBar.getSearchView().setText("");
 
-                    mToolBar.setVisibility(View.VISIBLE);
-                    mSearchBar.setVisibility(View.GONE);
-                    // 向左边移入
-                    mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
-                    // 向右边移出
-                    mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
-                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            mToolBar.setVisibility(View.VISIBLE);
+            mSearchBar.setVisibility(View.GONE);
+            // 向左边移入
+            mToolBar.setAnimation(AnimationUtils.makeInAnimation(getContext(), false));
+            // 向右边移出
+            mSearchBar.setAnimation(AnimationUtils.makeOutAnimation(getContext(), false));
+            InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
 
-            });
+        });
         return view;
     }
-    public SearchToolbar getSearchView(){
+
+    public SearchToolbar getSearchView() {
         return mSearchBar;
     }
-    public CustomToolbar getToolbar(){
+
+    public CustomToolbar getToolbar() {
         return mToolBar;
     }
+
     private void gotoScan() {
-        if (TextUtils.isEmpty(nowRoleCode)){
+        if (TextUtils.isEmpty(nowRoleCode)) {
             return;
         }
 
-        ScanManagerActivity.startActivityForAgent(getContext(),"MainActivity");
+        ScanManagerActivity.startActivityForAgent(getContext(), "MainActivity");
 //        switch (nowRoleCode){
 //            case "复重":
 //                Intent intent = new Intent(mContext, ChooseWeighScanActivity.class);
@@ -117,6 +120,7 @@ public class TaskFragment extends BaseFragment {
     public void setTitleText(int size) {
         mToolBar.setMainTitle(Color.WHITE, "我的待办（" + size + "）");
     }
+
     /**
      * 设置中间文字显示
      *
@@ -125,6 +129,7 @@ public class TaskFragment extends BaseFragment {
     public void setTitleText(String str) {
         mToolBar.setMainTitle(Color.WHITE, str);
     }
+
     public void setTitleText() {
         mToolBar.setMainTitle(Color.WHITE, "我的待办");
     }
@@ -134,8 +139,8 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void initView() {
-        fragmentList = new ArrayList<>();
-        list_Title = new ArrayList<>();
+        fragmentList = new ArrayList <>();
+        list_Title = new ArrayList <>();
         showFragmentForRole();
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -146,7 +151,7 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 nowRoleCode = list_Title.get(i);
-                if (View.VISIBLE ==mSearchBar.getVisibility()){
+                if (View.VISIBLE == mSearchBar.getVisibility()) {
                     mSearchBar.getSearchView().setText("");
                     mToolBar.setVisibility(View.VISIBLE);
                     mSearchBar.setVisibility(View.GONE);
@@ -180,59 +185,23 @@ public class TaskFragment extends BaseFragment {
             } else if (Constants.COLLECTION.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new CollectorFragment());
                 list_Title.add("收运");
-            } else if (Constants.PREPLANER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new TaskStowageFragment());
-                list_Title.add("组板");
-
             } else if (Constants.WEIGHTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new AllocateVehiclesFragment());
                 list_Title.add("复重");
-            }
-//            else if (Constants.DRIVERIN.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-//                //登录不成功的时候 手动添加 user
-////        LoginResponseBean loginResponseBean = new LoginResponseBean();
-////        loginResponseBean.setUserId("ud8eecd98a3ea4e7aaa2f24ab2808680e");
-////        UserInfoSingle.setUser(loginResponseBean);
-//                fragmentList.add(new DriverInFragment());
-//                list_Title.add("内场司机");
-//                goneTitle();
-//            }
-            else if (Constants.DRIVEROUT.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new TaskDriverOutFragment());
-                list_Title.add("外场运输");
-            } else if (Constants.INSTALL_UNLOAD_EQUIP.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InstallEquipFragment());
-                list_Title.add("装卸机");
-            }else if (Constants.INSTALL_EQUIP_LEADER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InstallEquipLeaderFragment());// 装卸员小组长任务列表Fragment
-                list_Title.add("装卸机");
             } else if (Constants.INPORTDELIVERY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
                 fragmentList.add(new InPortDeliveryFragment());
                 list_Title.add("进港提货");
-            } else if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new InPortTallyFragment());
-                list_Title.add("进港分拣");
-            } else if (Constants.PORTER.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                fragmentList.add(new FlightListBaggerFragment());
-                list_Title.add("行李");
-            } else if(Constants.JUNCTION_LOAD.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new JunctionLoadFragment());
-                list_Title.add("结载");
-            }else if(Constants.INTERNATIONAL_GOODS.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())){
-                fragmentList.add(new CargoFragment());
-                list_Title.add("货物");
             }
 
         }
 
-        if(list_Title.size() > 0){
+        if (list_Title.size() > 0) {
             nowRoleCode = list_Title.get(0);
             //如果第一个是结载就把扫码
-            if ("结载".equals(list_Title.get(0))){
+            if ("结载".equals(list_Title.get(0))) {
                 mToolBar.setleftIconViewVisiable(false);
             }
-        }
-        else {
+        } else {
             ToastUtil.showToast("该用户没有被分配角色");
         }
 
@@ -249,10 +218,10 @@ public class TaskFragment extends BaseFragment {
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter {
-        private List<Fragment> fragmentList;
-        private List<String> list_Title;
+        private List <Fragment> fragmentList;
+        private List <String> list_Title;
 
-        public MyPagerAdapter(FragmentManager fm, Context context, List<Fragment> fragmentList, List<String> list_Title) {
+        public MyPagerAdapter(FragmentManager fm, Context context, List <Fragment> fragmentList, List <String> list_Title) {
             super(fm);
             this.fragmentList = fragmentList;
             this.list_Title = list_Title;

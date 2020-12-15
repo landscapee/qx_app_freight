@@ -197,7 +197,8 @@
             android:background="@drawable/selector_green_05b"
             android:text="叉车费用"
             android:textSize="14sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btn_overweight"
             android:layout_width="60dp"

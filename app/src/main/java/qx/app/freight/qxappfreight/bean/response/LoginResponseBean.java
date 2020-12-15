@@ -1,6 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -35,7 +36,14 @@ public class LoginResponseBean implements Serializable {
     private String token;
     private String userToken;
     private String code;
-    private List<RoleRSBean> roleRS;
+    private List <RoleRSBean> roleRS;
+
+    public List <RoleRSBean> getRoleRS() {
+        if (roleRS == null) {
+            return new ArrayList <>();
+        }
+        return roleRS;
+    }
 
     private String currentRole;
 
@@ -50,7 +58,7 @@ public class LoginResponseBean implements Serializable {
 //    }
 
     @Data
-    public static class RoleRSBean implements Serializable{
+    public static class RoleRSBean implements Serializable {
         private String id;
         private String userId;
         private String roleCode;
@@ -59,10 +67,10 @@ public class LoginResponseBean implements Serializable {
         private String type;
         private int singleNumber;
         private String roleClassId;
-        private List<ResourceRSBean> resourceRS;
+        private List <ResourceRSBean> resourceRS;
 
         @Data
-        public static class ResourceRSBean implements Serializable{
+        public static class ResourceRSBean implements Serializable {
             /**
              * roleId : 24a8e450622146bd997c41150fbb000e
              * type : 0

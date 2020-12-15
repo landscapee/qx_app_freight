@@ -20,10 +20,14 @@ public class PickGoodsRecordsBean {
     private String id;
     private String waybillId;
     private int outboundNumber;
+    private double outboundWeight;
     private int forkliftTruckNumber;
     private long createTime;
     private String createUser;
     private int revokeFlag; //0 未撤销 1 已撤销
+    private String areaId;
+    private String outboundBusinessId;
+
 
 
 }
