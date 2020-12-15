@@ -84,13 +84,14 @@ public class StringUtil {
         return content;
     }
 
+    private static Pattern intPattern = Pattern.compile("^[-\\+]?[\\d]*$");
+
     //判断整数（int）
     public static boolean isInteger(String str) {
         if (null == str || "".equals(str)) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
+        return intPattern.matcher(str).matches();
     }
 
     //判断浮点数（double和float）
@@ -125,7 +126,7 @@ public class StringUtil {
             builderText.setSpan(textAppearanceSpan, index + 1, index + 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             return builderText;
         } else {
-            List<Integer> indexes = getIndex(text, ":");
+            List <Integer> indexes = getIndex(text, ":");
             for (Integer index : indexes) {
                 boolean flag = "Y".equals(text.substring(index + 1, index + 2));
                 TextAppearanceSpan textAppearanceSpan;
@@ -140,8 +141,8 @@ public class StringUtil {
         }
     }
 
-    private static List<Integer> getIndex(String strings, String str) {
-        List<Integer> list = new ArrayList<>();
+    private static List <Integer> getIndex(String strings, String str) {
+        List <Integer> list = new ArrayList <>();
         int flag = 0;
         while (strings.contains(str)) {
             //截取包含自身在内的前边部分
@@ -194,9 +195,10 @@ public class StringUtil {
      *      * @date 2016年11月14日下午7:41:22
      *      
      */
+    private static Pattern isNumPattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
+
     public static boolean isNumeric(String str) {
-        // 该正则表达式可以匹配所有的数字 包括负数
-        Pattern pattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
+
         String bigStr;
         try {
             bigStr = new BigDecimal(str).toString();
@@ -204,7 +206,7 @@ public class StringUtil {
             return false;//异常 说明包含非数字。
         }
 
-        Matcher isNum = pattern.matcher(bigStr); // matcher是全匹配
+        Matcher isNum = isNumPattern.matcher(bigStr); // matcher是全匹配
         if (!isNum.matches()) {
             return false;
         }
@@ -268,11 +270,11 @@ public class StringUtil {
      * @param route
      * @return
      */
-    public static List<String> getFlightList(String route) {
-        List<String> result = new ArrayList<>();
+    public static List <String> getFlightList(String route) {
+        List <String> result = new ArrayList <>();
         if (route != null) {
             String[] placeArray = route.split(",");
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 result.add(temp);
@@ -360,11 +362,11 @@ public class StringUtil {
      */
     public static void setFlightRoute(String route, LoadAndUnloadTodoBean.RelateInfoObjBean entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setFlightInfoList(new ArrayList<>());
+            entity.setFlightInfoList(new ArrayList <>());
         } else {
             String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            List <String> resultList = new ArrayList <>();
+            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
@@ -381,11 +383,11 @@ public class StringUtil {
      */
     public static void setFlightRoute(String route, LoadAndUnloadTodoBean entity) {
         if (route == null) {//根据航线信息字符串数组设置起点、中点、终点的数据显示
-            entity.setFlightInfoList(new ArrayList<>());
+            entity.setFlightInfoList(new ArrayList <>());
         } else {
             String[] placeArray = route.split(",");
-            List<String> resultList = new ArrayList<>();
-            List<String> placeList = new ArrayList<>(Arrays.asList(placeArray));
+            List <String> resultList = new ArrayList <>();
+            List <String> placeList = new ArrayList <>(Arrays.asList(placeArray));
             for (String str : placeList) {
                 String temp = str.replaceAll("[^(a-zA-Z\\u4e00-\\u9fa5)]", "");
                 resultList.add(temp);
@@ -416,14 +418,15 @@ public class StringUtil {
      * @param list 需要排序的数组
      * @return 结果
      */
-    public static List<String> sortByCnFirstLetter(List<String> list) {
-        Comparator<Object> collator = Collator.getInstance(java.util.Locale.CHINA);
+    public static List <String> sortByCnFirstLetter(List <String> list) {
+        Comparator <Object> collator = Collator.getInstance(java.util.Locale.CHINA);
         Collections.sort(list, collator);
         return list;
     }
 
     /**
      * 拼接字符串格式化方法过时
+     *
      * @param inputStr
      * @return
      */

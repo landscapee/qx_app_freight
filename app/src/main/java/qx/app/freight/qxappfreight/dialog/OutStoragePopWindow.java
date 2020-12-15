@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -88,7 +87,7 @@ public class OutStoragePopWindow extends PopupWindow {
 
         this.setWidth(RecyclerView.LayoutParams.MATCH_PARENT);
         this.setHeight(DisplayUtil.getMobileHeight(context) / 5 * 3);
-        this.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context,R.color.transparent)));
+        this.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context, R.color.transparent)));
         //软键盘不会挡着popupwindow
         this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         this.setAnimationStyle(R.style.anim_bottom_bottom);   // 设置窗口显示的动画效果
@@ -111,7 +110,7 @@ public class OutStoragePopWindow extends PopupWindow {
             }
         });
         DatePicker datePicker = datePickerDialog.getDatePicker();
-        datePicker.setMaxDate(new Date().getTime());
+        datePicker.setMaxDate(System.currentTimeMillis());
         datePicker.setMinDate(waybillsBean.getChargeTime());
         datePickerDialog.show();
     }
@@ -133,7 +132,7 @@ public class OutStoragePopWindow extends PopupWindow {
                 , calendar.get(Calendar.MONTH)
                 , calendar.get(Calendar.DAY_OF_MONTH));
         DatePicker datePicker = datePickerDialog.getDatePicker();
-        datePicker.setMaxDate(new Date().getTime());
+        datePicker.setMaxDate(System.currentTimeMillis());
         datePicker.setMinDate(waybillsBean.getChargeTime());
         datePickerDialog.show();
     }
@@ -141,7 +140,7 @@ public class OutStoragePopWindow extends PopupWindow {
     @Override
     public void showAtLocation(View parent, int gravity, int x, int y) {
         if (time == 0) {
-            time = new Date().getTime();
+            time = System.currentTimeMillis();
         }
         tvTime.setText(TimeUtils.getTime2_1(time));
         setBackgroundAlpha(0.5f, (Activity) context);
