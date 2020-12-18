@@ -15,13 +15,13 @@ import qx.app.freight.qxappfreight.bean.response.SearchFlightInfoBean;
  *
  * @文档说明: 根据搜索关键字显示搜索结果列表的适配器
  */
-public class SingleFlightAdapter extends BaseQuickAdapter<SearchFlightInfoBean, BaseViewHolder> {
-    public SingleFlightAdapter(@Nullable List<SearchFlightInfoBean> data) {
+public class SingleFlightAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+    public SingleFlightAdapter(@Nullable List<String> data) {
         super(R.layout.item_flight_info, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, SearchFlightInfoBean item) {
-        helper.setText(R.id.tv_flight, item.getFlightNo());
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.tv_flight, item);
     }
 }

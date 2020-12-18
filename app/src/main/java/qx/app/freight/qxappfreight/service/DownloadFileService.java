@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 
 import okhttp3.ResponseBody;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.utils.ThreadPoolUtil;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,7 +120,7 @@ public class DownloadFileService extends Service {
                 ToastUtil.showToast("下载安装文件出错");
             }
         };
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).callbackExecutor(Executors.newSingleThreadExecutor()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).callbackExecutor(ThreadPoolUtil.threadPool).build();
         DownloadService service = retrofit.create(DownloadService.class);
         Call<ResponseBody> call = service.download(downUrl);
         call.enqueue(callback);

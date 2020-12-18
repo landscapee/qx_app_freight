@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="退货记录"
+            android:text="违规记录"
             android:textColor="#333333"
             android:textSize="@dimen/sp_14"
             android:gravity="center_vertical"/>
@@ -65,7 +65,7 @@
             android:paddingStart="10dp"
             android:textSize="15sp"
             android:textColor="@color/text_main"
-            tools:text="总计件数：56" />
+            tools:text="总计件数：0" />
 
         <TextView
             android:id="@+id/tv_total_weight"
@@ -76,7 +76,7 @@
             android:paddingStart="10dp"
             android:textSize="15sp"
             android:textColor="@color/text_main"
-            tools:text="总计重量：56" />
+            tools:text="总计重量：0" />
 
         <TextView
             android:id="@+id/tv_total_volume"
@@ -87,7 +87,7 @@
             android:paddingStart="10dp"
             android:textSize="15sp"
             android:textColor="@color/text_main"
-            tools:text="总体积：56" />
+            tools:text="总体积：0" />
     </LinearLayout>
 
 

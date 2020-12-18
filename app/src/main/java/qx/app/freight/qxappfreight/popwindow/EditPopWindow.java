@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import qx.app.freight.qxappfreight.R;
@@ -27,14 +28,14 @@ public class EditPopWindow extends PopupWindow {
     private Context mContext;
     private View mView;
     private EditText mEditText;
-    private List<SearchFlightInfoBean> mData;
+    private List<String> mData = new ArrayList <>();
     private SingleFlightAdapter mAdapter;
     private OnFlightCheckListener onFlightCheckListener;
 
-    public EditPopWindow(Context context, List<SearchFlightInfoBean> data, EditText editText) {
+    public EditPopWindow(Context context, List<String> data, EditText editText) {
         mContext = context;
         mEditText = editText;
-        mData = data;
+        mData.addAll(data);
         mView = LayoutInflater.from(context).inflate(R.layout.popwindow_flights, null);
         setContentView(mView);
         setWindow();
@@ -48,7 +49,7 @@ public class EditPopWindow extends PopupWindow {
         mRvData.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             mEditText.setTag(R.id.search_flight_by_key_result, mData.get(position));
-            mEditText.setText(mData.get(position).getFlightNo());
+            mEditText.setText(mData.get(position));
             mEditText.setSelection(mEditText.getText().toString().length());
             dismiss();
             InputMethodManager imm = (InputMethodManager) (mContext).getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -74,7 +75,7 @@ public class EditPopWindow extends PopupWindow {
      *
      * @param data
      */
-    public void update(List<SearchFlightInfoBean> data) {
+    public void update(List<String> data) {
         mData.clear();
         mData.addAll(data);
         mAdapter.notifyDataSetChanged();

@@ -20,6 +20,8 @@
             android:layout_height="40dp"
             android:background="@drawable/shape_rect_gray_line"
             android:hint="请输入航班号"
+            android:singleLine="true"
+            android:maxLength="6"
             android:paddingHorizontal="@dimen/dp_10" />
 
         <ImageView

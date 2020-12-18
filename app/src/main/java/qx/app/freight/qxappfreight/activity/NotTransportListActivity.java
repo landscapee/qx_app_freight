@@ -54,7 +54,7 @@ public class NotTransportListActivity extends BaseActivity {
         setToolbarShow(View.VISIBLE);
         toolbar.setLeftIconView(View.VISIBLE, R.mipmap.icon_back, v -> setDataAndBack());
         toolbar.setLeftTextView(View.VISIBLE, Color.WHITE, "返回", v -> setDataAndBack());
-        toolbar.setMainTitle(Color.WHITE, "未收运记录");
+        toolbar.setMainTitle(Color.WHITE, "违规记录");
         toolbar.setRightIconView(View.VISIBLE, R.mipmap.icon_add_not_transport_record, v -> {
             mSrvList.closeMenu();
             String goodsName = getIntent().getStringExtra("goods_name");

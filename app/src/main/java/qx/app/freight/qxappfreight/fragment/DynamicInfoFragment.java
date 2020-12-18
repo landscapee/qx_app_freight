@@ -42,10 +42,10 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
     private String movement;
     private String day;
     private DynamicInfoAdapter mAdapter;
-    private List<FlightBean.FlightsBean> mList;
-    private List<FlightBean.FlightsBean> mListSearch = new ArrayList <>();
+    private List <FlightBean.FlightsBean> mList;
+    private List <FlightBean.FlightsBean> mListSearch = new ArrayList <>();
 
-    private String strSearch="";
+    private String strSearch = "";
 
     public static DynamicInfoFragment getInstance(String type, String movement, String day) {
         DynamicInfoFragment fragment = new DynamicInfoFragment();
@@ -71,7 +71,6 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         super.onViewCreated(view, savedInstanceState);
         initView();
     }
-
 
 
     @Override
@@ -106,7 +105,7 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         Log.e("movement", movement + "");
         Log.e("day", day + "");
 
-        mList = new ArrayList<>();
+        mList = new ArrayList <>();
         rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new DynamicInfoAdapter(mListSearch, type);
         rlDynamic.setAdapter(mAdapter);
@@ -117,13 +116,13 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
                     }
                     DynamicDetailsAcitvity.startActivity(getActivity(), mList.get(position).getFlightId(), mList.get(position).getFlightNo());
                 }
-                );
+        );
     }
 
     private void seachByText(String str) {
         mListSearch.clear();
-        for (FlightBean.FlightsBean flightsBean:mList){
-            if (flightsBean.getFlightNo().contains(str)){
+        for (FlightBean.FlightsBean flightsBean : mList) {
+            if (flightsBean.getFlightNo().contains(str.toUpperCase())) {
                 mListSearch.add(flightsBean);
             }
         }
@@ -135,9 +134,9 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
     public void onEventMainThread(FlightEventBusBean result) {
         String flight = result.getFlight();
         Log.e("航班刷新", flight);
-       if (!TextUtils.isEmpty(day)&&day.equals(flight)) {
-           initData();
-       }
+        if (!TextUtils.isEmpty(day) && day.equals(flight)) {
+            initData();
+        }
     }
 
     public void initData() {
@@ -185,14 +184,14 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
                 //备降
                 if ("1".equals(type)) {
                     for (FlightBean.FlightsBean item : result.getFlights()) {
-                        if ("1".equals(item.getMovement())) {
+                        if (item.getType() == 1) {
                             mList.add(item);
                         }
                     }
                 } else {
                     //返航
                     for (FlightBean.FlightsBean item : result.getFlights()) {
-                        if ("2".equals(item.getMovement())) {
+                        if (item.getType() == 2) {
                             mList.add(item);
                         }
                     }

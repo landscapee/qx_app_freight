@@ -7,12 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -31,7 +28,6 @@ import butterknife.BindView;
 import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.adapter.AllocaaateHistoryAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
-import qx.app.freight.qxappfreight.bean.SearchFilghtEntity;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.AllocaaateHitoryBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
@@ -59,27 +55,15 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     @BindView(R.id.et_flight_no)
     EditText etFlightNo;
     private AllocaaateHistoryAdapter mAdapter;
-    private List<GetInfosByFlightIdBean> list;
+    private List <GetInfosByFlightIdBean> list;
+    private List <GetInfosByFlightIdBean> listOri;
     private int pageCurrent = 1;
     private long searchTime;
     private SearchFlightInfoBean mSearchFlightInfoBean;
     private EditPopWindow editPopWindow;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            String key = (String) msg.obj;
-            if (TextUtils.isEmpty(key) || key.length() > 6) {
-                return;
-            }
-            long time = (searchTime == 0) ? System.currentTimeMillis() : searchTime;
-            SearchFilghtEntity entity = new SearchFilghtEntity();
-            entity.setFlightNo(key);
-            Log.e("tagTest", "搜索key========" + key);
-            entity.setFlightDate(TimeUtils.getTime2_1(time));
-            ((GetHistoryPresenter) mPresenter).searchFlightsByKey(entity);
-        }
-    };
+
+    private List <String> flightNos = new ArrayList <>();
+    private List <String> flightNosOri = new ArrayList <>();
 
     @Override
     public int getLayoutId() {
@@ -98,7 +82,8 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         toolbar.setMainTitle(Color.WHITE, "复重历史");
         searchTime = new Date(System.currentTimeMillis()).getTime();
         tvDateStart.setText(TimeUtils.getTime2_1(searchTime));
-        list = new ArrayList<>();
+        list = new ArrayList <>();
+        listOri = new ArrayList <>();
         mAdapter = new AllocaaateHistoryAdapter(list);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(this));
         mMfrvAllocateList.setOnRetryLisenter(this);
@@ -126,16 +111,27 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
 
             @Override
             public void afterTextChanged(Editable s) {
-                mSearchFlightInfoBean = (SearchFlightInfoBean) etFlightNo.getTag(R.id.search_flight_by_key_result);
-                if (mSearchFlightInfoBean != null) {
-                    etFlightNo.setTag(R.id.search_flight_by_key_result, null);
-                    return;
+                flightNos.clear();
+                for (String str : flightNosOri) {
+                    if (str.contains(etFlightNo.getText().toString().trim().toUpperCase())) {
+                        flightNos.add(str);
+                    }
                 }
-                handler.removeCallbacksAndMessages(null);
-                mPresenter.interruptHttp();
-                Message message = handler.obtainMessage();
-                message.obj = etFlightNo.getText().toString().trim().toUpperCase();
-                handler.sendMessageDelayed(message, 400);
+                if (editPopWindow == null) {
+                    editPopWindow = new EditPopWindow(AllocaaateHistoryActivity.this, flightNos, etFlightNo);
+                    editPopWindow.showAsDropDown(etFlightNo);
+                    editPopWindow.setOnFlightCheckListener(() -> {
+                        filterData();
+                    });
+                } else {
+                    if (editPopWindow.isShowing()) {
+                        editPopWindow.update(flightNos);
+                    } else {
+                        editPopWindow.update(flightNos);
+                        editPopWindow.showAsDropDown(etFlightNo);
+                    }
+                }
+                filterData();
             }
         });
         etFlightNo.setOnClickListener(v -> {
@@ -148,19 +144,8 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     }
 
     @Override
-    public void searchFlightsByKeyResult(List<SearchFlightInfoBean> result) {
-        if (editPopWindow == null) {
-            editPopWindow = new EditPopWindow(this, result, etFlightNo);
-            editPopWindow.showAsDropDown(etFlightNo);
-        } else {
-            if (editPopWindow.isShowing()) {
-                editPopWindow.update(result);
-            } else {
-                editPopWindow.update(result);
-                editPopWindow.showAsDropDown(etFlightNo);
-            }
-        }
-        editPopWindow.setOnFlightCheckListener(() -> getData(searchTime));
+    public void searchFlightsByKeyResult(List <SearchFlightInfoBean> result) {
+
     }
 
     private void getData(long time) {
@@ -169,7 +154,6 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         AllocaaateHitoryBean bean = new AllocaaateHitoryBean();
         bean.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
         bean.setSearchTime(time);
-        bean.setFlightNo(etFlightNo.getText().toString().trim().toUpperCase());//将航班号加入搜索条件
         entity.setFilter(bean);
         entity.setCurrent(pageCurrent);
         entity.setSize(Constants.PAGE_SIZE);
@@ -179,12 +163,37 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     @Override
     public void getHistoryResult(GetHistoryBean getHistoryBean) {
         if (pageCurrent == 1) {
-            list.clear();
+            listOri.clear();
             mMfrvAllocateList.finishRefresh();
         } else {
             mMfrvAllocateList.finishLoadMore();
         }
-        list.addAll(getHistoryBean.getRecords());
+        listOri.addAll(getHistoryBean.getRecords());
+
+        flightNosOri.clear();
+        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
+            boolean isHas = false;
+            for (String str : flightNosOri) {
+                if (str.equals(getInfosByFlightIdBean.getFlightNo())) {
+                    isHas = true;
+                }
+            }
+            if (!isHas) {
+                flightNosOri.add(getInfosByFlightIdBean.getFlightNo());
+            }
+        }
+        filterData();
+
+    }
+
+    private void filterData() {
+        list.clear();
+        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
+            if (getInfosByFlightIdBean.getFlightNo().contains(etFlightNo.getText().toString().trim().toUpperCase())) {
+                list.add(getInfosByFlightIdBean);
+            }
+        }
+
         mMfrvAllocateList.notifyForAdapter(mAdapter);
     }
 
@@ -252,6 +261,7 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
                 if (flag == 0) {//开始时间
                     tvDateStart.setText(strDate);
                     searchTime = TimeUtils.timeToStamp(strDate);
+                    etFlightNo.setText("");
                     getData(searchTime);
 //                    showDatePickerDialog(AllocaaateHistoryActivity.this, 2, 1, Calendar.getInstance());
                 } else {//结束时间
