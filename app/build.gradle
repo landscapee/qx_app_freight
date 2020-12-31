@@ -22,13 +22,16 @@ static def getVersionName() {
 
 def auto_verison_name = getVersionName()
 
+def versionCodeNum = 85
+def projectName = "app-inland"
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 84//app根据此数字进行版本自动迭代 2020/12/7
+        versionCode 85//app根据此数字进行版本自动迭代 2020/12/30
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
@@ -252,8 +255,8 @@ build.doLast {
         def jar_dir = signProperties.get("jar")
         def pem_dir = signProperties.get("pem")
         def pk8_dir = signProperties.get("pk8")
-        def destination_Release_dir = signProperties.get("destination") + new Date().format("yyyy-MM-dd-HH-mm-ss") + "-release.apk"
-        def destination_Product_dir = signProperties.get("destination") + new Date().format("yyyy-MM-dd-HH-mm-ss") + "-product.apk"
+        def destination_Release_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum  +"_" + new Date().format("MM-dd-HH-mm") + "-release.apk"
+        def destination_Product_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum  +"_" + new Date().format("MM-dd-HH-mm") + "-product.apk"
 
         if (new File(signApk_Release_dir).exists() && new File(signApk_Product_dir)) {
             println "找到待签名文件[release] >>" + signApk_Release_dir

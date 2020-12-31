@@ -173,40 +173,13 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
             turnToDetailActivity(mList.get(position), waybillStatus);
-//            CURRENT_TASK_BEAN = mList.get(position);
-//            mPresenter = new TaskLockPresenter(this);
-//            TaskLockEntity entity = new TaskLockEntity();
-//            List<String> taskIdList = new ArrayList<>();
-//            taskIdList.add(mList.get(position).getTaskId());
-//            entity.setTaskId(taskIdList);
-//            entity.setUserId(UserInfoSingle.getInstance().getUserId());
-//            entity.setRoleCode(Constants.INPORTDELIVERY);
-//
-//            ((TaskLockPresenter) mPresenter).taskLock(entity);
 
         });
         mMfrvData.setAdapter(mAdapter);
     }
 
     private void loadData(String waybillCode) {
-//        if (rgTodo.isChecked())
-//            waybillStatus = 5;
-//        else
-//            waybillStatus = 6;
         mPresenter = new GroupBoardToDoPresenter(this);
-//        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
-//
-//        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
-//
-//        entity.setRoleCode("delivery_in");
-//
-//        entity.setUndoType(3);
-//
-//        List <String> ascs = new ArrayList <>();
-//        ascs.add("flight_number");
-//        ascs.add("lastUpdate_time");
-//
-//        entity.setAscs(ascs);
         BaseFilterEntity <WaybillsBean> entity = new BaseFilterEntity();
         entity.setSize(20);
         entity.setCurrent(pageCurrent);
@@ -227,10 +200,6 @@ public class InPortDeliveryFragment extends BaseFragment implements GroupBoardTo
     private void turnToDetailActivity(WaybillsBean bean, int waybillStatus) {
 
         startActivity(new Intent(getContext(), InportDeliveryDetailActivity.class)
-//                .putExtra("num1", bean.getOutboundNumber())
-//                .putExtra("num2", bean.getWaybillCount())
-//                .putExtra("taskId", bean.getTaskId())
-//                .putExtra("billId", bean.getSerialNumber())
                 .putExtra("waybillStatus", waybillStatus)
                 .putExtra("DATA", bean));
 

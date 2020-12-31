@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="qx.app.freight.qxappfreight">
+
     <!-- bugly权限 -->
     <uses-permission
         android:name="android.permission.READ_LOGS"
@@ -33,6 +34,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.NFC" />
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -45,9 +48,11 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <!-- //解决 java.lang.NoClassDefFoundError:failed resolution of :Lorg/apache/http/ProtocolVersion -->
-        <activity android:name=".activity.InboundSortingActivity"
+        <activity
+            android:name=".activity.InboundSortingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -299,7 +304,5 @@
         <service android:name=".service.WebSocketService" />
         <service android:name=".service.DownloadFileService" />
     </application>
-
-    <uses-permission android:name="android.permission.NFC" />
 
 </manifest>

@@ -115,22 +115,16 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
     }
 
     private void initView() {
-//        billId = getIntent().getStringExtra("billId");
-//        taskId = getIntent().getStringExtra("taskId");
-//        num1 = getIntent().getIntExtra("num1",0);
-//        num2 = getIntent().getIntExtra("num2",0);
 
         bean = (WaybillsBean) getIntent().getSerializableExtra("DATA");
         waybillStatus = getIntent().getIntExtra("waybillStatus", 5);
         if (bean == null) {
             finish();
         }
-//        serialNumber.setText(bean.getSerialNumber());
         tvPickUpName.setText(bean.getPickUpGoodsUser());
         tvPickUpPhone.setText(bean.getPickUpGoodsUserPhone());
         tvPickUpCard.setText(bean.getPickUpGoodsUserCardId());
 
-//        toolbar.setMainTitle(Color.WHITE,"提货("+num1+"/"+num2+")");
         toolbar.setMainTitle(Color.WHITE, "提货");
         rView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -145,13 +139,6 @@ public class InportDeliveryDetailActivity extends BaseActivity implements Arriva
                 } else {
                     ToastUtil.showDialogToast(InportDeliveryDetailActivity.this, "分批货物，目前入库货物已全部提走，暂无新货物入库，请稍后再试。");
                 }
-//                deliveryInWaybill(
-//                        position,
-//                        id,
-//                        outStorageUser,
-//                        mList.get(position).getTallyingTotal()-mList.get(position).getOutboundNumber(),
-//                        mList.get(position).getOverWieght(),
-//                        mList.get(position).getOverWieghtCount());
             }
 
             @Override

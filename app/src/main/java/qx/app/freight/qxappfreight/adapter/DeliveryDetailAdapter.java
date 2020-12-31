@@ -33,25 +33,13 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter <WaybillsBean, BaseV
         holder.setText(R.id.tv_put_num, "待出库: " + bean.getStorageNumber() + "件 / 已出库:" + bean.getOutboundNumber() + "件");
 
         holder.setText(R.id.total_info, "录单: " + bean.getTotalNumber() + "件 / 分拣:" + bean.getTallyingTotal() + "件");
-        //录单 件数 - 重量
-//        holder.setText(R.id.total_info, String.format(mContext.getString(R.string.format_goods_inport)
-//                ,bean.getTotalNumberPackages()+""
-//                ,bean.getTotalWeight()));
         //超重
         holder.setText(R.id.tv_overweight, String.format(mContext.getString(R.string.format_goods_inport)
                 , bean.getOverWieghtCount() + ""
                 , bean.getOverWieght() + ""));
 
-        //分拣件数 - 重量
-//        holder.setText(R.id.tallying_info,bean.getTallyingTotal()+"件");
-        //预期费用
-//        holder.setText(R.id.tv_cost,bean.getAmountOfMoney()+"元");
         //库区
         holder.setText(R.id.tv_kuqu, StringUtil.toText(bean.getRqName(), "-"));
-
-//                .setText(R.id.consignee,bean.getConsignee())
-//                .setText(R.id.consignee_phone,bean.getConsigneePhone())
-//                .setText(R.id.consignee_card,bean.getConsigneeCarid());
 
 
         if (bean.getOutStorageTime() > 0) {
@@ -115,7 +103,12 @@ public class DeliveryDetailAdapter extends BaseQuickAdapter <WaybillsBean, BaseV
             }
             holder.setGone(R.id.tv_outStorage, false);
             holder.setVisible(R.id.btn_outStorage, true);
-            holder.setGone(R.id.btn_overweight, true);
+            if (bean.getStorageNumber()>0){
+                holder.setGone(R.id.btn_overweight, true);
+            }else {
+                holder.setGone(R.id.btn_overweight, false);
+            }
+
             /**
              * 2020.12.9 与PC 保持一致 取消叉车费用 按钮 ——谭斌
              *     holder.setGone(R.id.btn_forklift,true);

@@ -92,7 +92,6 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         });
         searchToolbar.getCloseView().setOnClickListener(v -> {
             searchToolbar.getSearchView().setText("");
-//            seachByText("");
         });
 
         type = getArguments().getString("type");
@@ -101,9 +100,6 @@ public class DynamicInfoFragment extends BaseFragment implements FlightdynamicCo
         mPresenter = new FlightdynamicPresenter(this);
 
         initData();
-        Log.e("info", type + "");
-        Log.e("movement", movement + "");
-        Log.e("day", day + "");
 
         mList = new ArrayList <>();
         rlDynamic.setLayoutManager(new LinearLayoutManager(getContext()));
