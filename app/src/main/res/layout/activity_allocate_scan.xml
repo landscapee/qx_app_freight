@@ -488,7 +488,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_red_press"
+            android:background="@drawable/ripple_round_red_4dp"
             android:text="返回组板"
             android:textSize="18sp"
             android:textColor="@color/white"

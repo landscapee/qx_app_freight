@@ -42,7 +42,7 @@
             android:layout_height="40dp"
             android:text="更换"
             android:textColor="@color/white"
-            android:background="@drawable/btn_blue_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             />
     </LinearLayout>
     <RadioGroup

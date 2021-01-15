@@ -23,7 +23,7 @@
             android:id="@+id/btn_search"
             android:layout_width="60dp"
             android:layout_height="30dp"
-            android:background="@drawable/btn_blue_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="搜索"
             android:textColor="@color/white"
             android:textSize="15sp" />

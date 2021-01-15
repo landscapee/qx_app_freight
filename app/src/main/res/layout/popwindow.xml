@@ -82,7 +82,7 @@
         android:id="@+id/btn_commit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_blue_press"
+        android:background="@drawable/ripple_round_blue_4dp"
         android:layout_marginTop="100dp"
         android:text="确定"
         android:textColor="@color/white" />

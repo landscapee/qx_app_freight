@@ -111,7 +111,7 @@
         android:id="@+id/btn_confirm"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#2e81fd"
+        android:background="@drawable/ripple_round_blue_4dp"
         android:text="确定"
         android:textSize="18sp"
         android:textColor="@color/white" />

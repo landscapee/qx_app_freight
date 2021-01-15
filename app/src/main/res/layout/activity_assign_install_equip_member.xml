@@ -20,5 +20,5 @@
         android:background="@drawable/shape_rect_gray_979797"
         android:gravity="center"
         android:text="确定"
-        android:textColor="@color/black" />
+        android:textColor="@color/white" />
 </LinearLayout>

@@ -46,6 +46,7 @@ import qx.app.freight.qxappfreight.dialog.ChooseFlightDialog;
 import qx.app.freight.qxappfreight.presenter.GroupBoardToDoPresenter;
 import qx.app.freight.qxappfreight.utils.ActManager;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
+import qx.app.freight.qxappfreight.utils.Tools;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
 import qx.app.freight.qxappfreight.widget.SearchToolbar;
 
@@ -196,6 +197,9 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         mMfrvAllocateList.setOnRetryLisenter(this);
         mMfrvAllocateList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
+            if (!Tools.isFastClick()){
+                return;
+            }
             CURRENT_TASK_BEAN = list.get(position);
             startActivity(new Intent(getActivity(), AllocateScooterActivity.class)
                     .putExtra("flightInfoId", list.get(position).getFlightInfoId())

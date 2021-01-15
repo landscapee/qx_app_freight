@@ -396,7 +396,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private void changeClicked(boolean canClick) {
         btnConfirm.setEnabled(canClick);
         if (canClick) {
-            btnConfirm.setBackgroundColor(Color.parseColor("#2e81fd"));
+            btnConfirm.setBackgroundResource(R.drawable.ripple_round_blue_4dp);
         } else {
             btnConfirm.setBackgroundColor(Color.parseColor("#bcbcbc"));
         }

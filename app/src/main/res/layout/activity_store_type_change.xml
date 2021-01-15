@@ -239,7 +239,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:background="@drawable/shape_dynamic_blue"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="接受申请"
             android:textColor="@color/white" />
     </LinearLayout>

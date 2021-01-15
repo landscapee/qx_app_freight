@@ -80,7 +80,7 @@
             android:id="@+id/btn_sure"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            android:background="@drawable/background_press_blue"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="确定"
             android:textColor="@color/white"
             android:textSize="18sp"

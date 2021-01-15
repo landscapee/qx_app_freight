@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="29dp"
-        android:background="#5d9cf9">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
             android:id="@+id/btn_sure"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:background="@drawable/btn_blue_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="确认"
             android:textColor="@color/white"
             android:textSize="12sp"

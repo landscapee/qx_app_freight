@@ -41,6 +41,9 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
     private  SmInventoryEntryandexit smInventoryEntryandexit;
 
     public static void startActivity(Activity context, SmInventoryEntryandexit smInventoryEntryandexit) {
+        if (!Tools.isFastClick()){
+            return;
+        }
         Intent intent = new Intent(context, DoItIOManifestActivity.class);
         intent.putExtra("data", smInventoryEntryandexit);
         intent.putExtras(intent);
@@ -115,11 +118,11 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
 
     @Override
     public void showNetDialog() {
-
+        showProgessDialog("数据提交中");
     }
 
     @Override
     public void dissMiss() {
-
+         dismissProgessDialog();
     }
 }

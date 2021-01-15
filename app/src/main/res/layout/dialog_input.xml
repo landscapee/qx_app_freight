@@ -10,7 +10,7 @@
         android:id="@+id/titleTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_dialog_title"
+        android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
         android:padding="12dp"
         android:text="提示"

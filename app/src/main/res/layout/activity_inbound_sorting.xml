@@ -158,7 +158,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/shape_dynamic_blue"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="提交"
             android:textColor="@color/white" />
     </LinearLayout>

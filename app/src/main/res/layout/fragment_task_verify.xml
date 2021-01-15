@@ -32,7 +32,7 @@
             android:text="搜索"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:background="@drawable/btn_blue_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             />
         <ImageView
             android:id="@+id/iv_scan"

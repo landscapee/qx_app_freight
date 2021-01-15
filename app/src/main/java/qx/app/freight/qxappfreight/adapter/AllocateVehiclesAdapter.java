@@ -28,7 +28,7 @@ public class AllocateVehiclesAdapter extends BaseQuickAdapter<TransportDataBase,
         helper.setText(R.id.flight_id,item.getFlightNo())
                 .setText(R.id.tv_flight_type,item.getAircraftNo())
                 .setText(R.id.tv_flight_place,item.getSeat())
-                .setText(R.id.tv_arrive_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getEtd()) , TimeUtils.getDay((item.getEtd()))));
+                .setText(R.id.tv_arrive_time,String.format(mContext.getString(R.string.format_arrive_info), TimeUtils.date2Tasktime3(item.getScheduleTime()) , TimeUtils.getDay((item.getScheduleTime()))));
 
 //        TextView arriveTime = helper.getView(R.id.tv_arrive_time);
 //        Drawable img =context.getResources().getDrawable(R.mipmap.yu);

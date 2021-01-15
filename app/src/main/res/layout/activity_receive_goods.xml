@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:textSize="21sp"
-            android:background="@color/blue_2e8"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:text="提交"
             android:textColor="@color/white" />
 

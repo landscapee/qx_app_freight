@@ -56,7 +56,6 @@ import qx.app.freight.qxappfreight.bean.response.AcceptTerminalTodoBean;
 import qx.app.freight.qxappfreight.bean.response.AddScooterBean;
 import qx.app.freight.qxappfreight.bean.response.AgentBean;
 import qx.app.freight.qxappfreight.bean.response.AirlineRequireBean;
-import qx.app.freight.qxappfreight.bean.response.ArrivalCargoInfoBean;
 import qx.app.freight.qxappfreight.bean.response.ArrivalDeliveryInfoBean;
 import qx.app.freight.qxappfreight.bean.response.AutoReservoirBean;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
@@ -168,7 +167,7 @@ public class UpdateRepository extends BaseRepository {
      * @param loginEntity
      * @return
      */
-    public Observable<LoginResponseBean> login(LoginEntity loginEntity) {
+    public Observable <LoginResponseBean> login(LoginEntity loginEntity) {
         return transform(getService().login(loginEntity));
     }
 
@@ -177,7 +176,7 @@ public class UpdateRepository extends BaseRepository {
      * @param loginEntity
      * @return
      */
-    public Observable<String> updatePWD(UpdatePwdEntity loginEntity) {
+    public Observable <String> updatePWD(UpdatePwdEntity loginEntity) {
         return nothingtransform(getService().updatePWD(loginEntity));
     }
 
@@ -186,7 +185,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<RespLoginBean> loginQxAi(Map<String, String> map) {
+    public Observable <RespLoginBean> loginQxAi(Map <String, String> map) {
         return nothingDatatransformForOneDisP(getServiceQxAi().loginQxAi(map));
     }
 
@@ -195,7 +194,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<RespBean> loginOutQxAi(Map<String, String> map) {
+    public Observable <RespBean> loginOutQxAi(Map <String, String> map) {
         return nothingDatatransformForOneDisPOut(getServiceQxAi().loginOutQxAi(map));
     }
 
@@ -204,15 +203,15 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<AgentBean> agentTransportationList(BaseFilterEntity param) {
-        return transform(getService().agentTransportationList(param));
+    public Observable <AgentBean> agentTransportationList(BaseFilterEntity param) {
+        return transform(getService().agentTransportationList(((MyAgentListBean) param.getFilter()).getWaybillId(), param));
     }
 
     /*****
      * @param
      * @return
      */
-    public Observable<List<ReturnBean>> returnTransportationList(BaseFilterEntity param) {
+    public Observable <List <ReturnBean>> returnTransportationList(BaseFilterEntity param) {
         return transform(getService().returnTransportationList(param));
     }
 
@@ -220,7 +219,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<DeclareApplyForRecords> changeStorageList(BaseFilterEntity param) {
+    public Observable <DeclareApplyForRecords> changeStorageList(BaseFilterEntity param) {
         return transform(getService().changeStorageList(param));
     }
 
@@ -229,7 +228,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<String> changeStorage(ChangeStorageBean param) {
+    public Observable <String> changeStorage(ChangeStorageBean param) {
         return nothingtransform(getService().changeStorage(param));
     }
 
@@ -238,7 +237,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<SearchReservoirBean> searchReservoir(BaseFilterEntity param) {
+    public Observable <SearchReservoirBean> searchReservoir(BaseFilterEntity param) {
         return transform(getService().searchReservoir(param));
     }
 
@@ -247,7 +246,7 @@ public class UpdateRepository extends BaseRepository {
      * @param
      * @return
      */
-    public Observable<List<ScooterConfBean.ScooterConf>> getScooterConf(String param) {
+    public Observable <List <ScooterConfBean.ScooterConf>> getScooterConf(String param) {
         return transform(getService().getScooterConf(param));
     }
 
@@ -258,7 +257,7 @@ public class UpdateRepository extends BaseRepository {
      * 货代编码
      * @return
      */
-    public Observable<GetQualificationsBean> getQualifications(String freightCode) {
+    public Observable <GetQualificationsBean> getQualifications(String freightCode) {
         return transform(getService().getQualifications(freightCode));
     }
 
@@ -268,7 +267,7 @@ public class UpdateRepository extends BaseRepository {
      * 航空公司Id 或者 航空公司编码
      * @return
      */
-    public Observable<List<QueryAviationRequireBean>> getQueryAviationRequire(String airLineId) {
+    public Observable <List <QueryAviationRequireBean>> getQueryAviationRequire(String airLineId) {
         return transform(getService().getQueryAviationRequire(airLineId));
     }
 
@@ -278,15 +277,15 @@ public class UpdateRepository extends BaseRepository {
      * @return
      * 是否成功信息
      */
-    public Observable<String> storageCommit(StorageCommitEntity storageCommitEntity) {
-        return nothingtransform(getService().storageCommit(storageCommitEntity));
+    public Observable <String> storageCommit(StorageCommitEntity storageCommitEntity) {
+        return nothingtransform(getService().storageCommit(storageCommitEntity.getTaskId(), storageCommitEntity));
     }
 
 
     /****
      * 收验批量提交
      */
-    public Observable<String> commitReceiveList(List<StorageCommitEntity> storageCommitEntity) {
+    public Observable <String> commitReceiveList(List <StorageCommitEntity> storageCommitEntity) {
         return nothingtransform(getService().commitReceiveList(storageCommitEntity));
     }
 
@@ -296,7 +295,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      * 是否成功信息
      */
-    public Observable<String> modifyTest(ModifyTextEntity modifyTextEntity) {
+    public Observable <String> modifyTest(ModifyTextEntity modifyTextEntity) {
         return nothingtransform(getService().modifyTest(modifyTextEntity));
     }
 
@@ -305,7 +304,7 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<TestInfoListBean> testInfo(String waybillId, String freightId, String mTaskTypeCode) {
+    public Observable <TestInfoListBean> testInfo(String waybillId, String freightId, String mTaskTypeCode) {
         return transform(getService().testInfo(waybillId, freightId, mTaskTypeCode));
     }
 
@@ -314,7 +313,7 @@ public class UpdateRepository extends BaseRepository {
      * @param queryContainerInfoEntity
      * @return
      */
-    public Observable<List<QueryContainerInfoBean>> queryContainerInfo(QueryContainerInfoEntity queryContainerInfoEntity) {
+    public Observable <List <QueryContainerInfoBean>> queryContainerInfo(QueryContainerInfoEntity queryContainerInfoEntity) {
         return transform(getService().queryContainerInfo(queryContainerInfoEntity));
     }
 
@@ -322,7 +321,7 @@ public class UpdateRepository extends BaseRepository {
      *查询库区类别
      * @return
      */
-    public Observable<List<QueryReservoirBean>> queryReservoir() {
+    public Observable <List <QueryReservoirBean>> queryReservoir() {
         return transform(getService().queryReservoir());
     }
 
@@ -331,8 +330,8 @@ public class UpdateRepository extends BaseRepository {
      * @param myAgentListBean
      * @return
      */
-    public Observable<MyAgentListBean> addInfo(MyAgentListBean myAgentListBean) {
-        return transform(getService().addInfo(myAgentListBean));
+    public Observable <MyAgentListBean> addInfo(MyAgentListBean myAgentListBean) {
+        return transform(getService().addInfo(myAgentListBean.getId(),myAgentListBean));
     }
 
 
@@ -341,7 +340,7 @@ public class UpdateRepository extends BaseRepository {
      * @param scooterId
      * @return
      */
-    public Observable<MyAgentListBean> exist(String scooterId) {
+    public Observable <MyAgentListBean> exist(String scooterId) {
         return transform(getService().exist(scooterId));
     }
 
@@ -350,7 +349,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<AutoReservoirBean> autoReservoirv(BaseFilterEntity model) {
+    public Observable <AutoReservoirBean> autoReservoirv(BaseFilterEntity model) {
         return transform(getService().autoReservoirv(model));
     }
 
@@ -359,7 +358,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<ReservoirBean> reservoir(BaseFilterEntity model) {
+    public Observable <ReservoirBean> reservoir(BaseFilterEntity model) {
         return transform(getService().reservoir(model));
     }
 
@@ -368,8 +367,8 @@ public class UpdateRepository extends BaseRepository {
      * @param id
      * @return
      */
-    public Observable<String> deleteCollectionInfo(String id) {
-        return nothingtransform(getService().deleteCollectionInfo(id));
+    public Observable <String> deleteCollectionInfo(String id) {
+        return nothingtransform(getService().deleteCollectionInfo(id,id));
     }
 
 
@@ -378,7 +377,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<TransportListBean> transportList(BaseFilterEntity model) {
+    public Observable <TransportListBean> transportList(BaseFilterEntity model) {
         return transform(getService().transportList(model));
     }
 
@@ -387,7 +386,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
+    public Observable <FilterTransportDateBase> getGroupBoardToDo(BaseFilterEntity model) {
         return transform(getService().getGroupBoardToDo(model));
     }
 
@@ -396,7 +395,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<FilterTransportDateBase> getOverWeightToDo(BaseFilterEntity model) {
+    public Observable <FilterTransportDateBase> getOverWeightToDo(BaseFilterEntity model) {
         return transform(getService().getOverWeightToDo(model));
     }
 
@@ -406,11 +405,11 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<BaseParamBean> baseParam(BaseFilterEntity model) {
+    public Observable <BaseParamBean> baseParam(BaseFilterEntity model) {
         return transform(getService().baseParam(model));
     }
 
-    public Observable<BaseParamBean> baseParamType(BaseFilterEntity model) {
+    public Observable <BaseParamBean> baseParamType(BaseFilterEntity model) {
         return transform(getService().baseParamType(model));
     }
 
@@ -420,7 +419,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<TransportListBean> searchTodoTask(BaseFilterEntity model) {
+    public Observable <TransportListBean> searchTodoTask(BaseFilterEntity model) {
         return transform(getService().searchTodoTask(model));
     }
 
@@ -431,7 +430,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
 
-    public Observable<DeclareWaybillBean> getWayBillInfoById(String id) {
+    public Observable <DeclareWaybillBean> getWayBillInfoById(String id) {
         return transform(getService().getWayBillInfoById(id));
     }
 
@@ -440,7 +439,7 @@ public class UpdateRepository extends BaseRepository {
      * @param files
      * @return
      */
-    public Observable<Object> upLoads(List<MultipartBody.Part> files) {
+    public Observable <Object> upLoads(List <MultipartBody.Part> files) {
         return transform(getService().upLoads(files));
     }
 
@@ -449,7 +448,7 @@ public class UpdateRepository extends BaseRepository {
      * @param transportListCommitEntity
      * @return
      */
-    public Observable<String> transportListCommit(TransportListCommitEntity transportListCommitEntity) {
+    public Observable <String> transportListCommit(TransportListCommitEntity transportListCommitEntity) {
         return nothingtransform(getService().transportListCommit(transportListCommitEntity));
     }
 
@@ -458,8 +457,8 @@ public class UpdateRepository extends BaseRepository {
      * @param transportListCommitEntity
      * @return
      */
-    public Observable<String> returnCargoCommit(TransportListCommitEntity transportListCommitEntity) {
-        return nothingtransform(getService().returnCargoCommit(transportListCommitEntity));
+    public Observable <String> returnCargoCommit(TransportListCommitEntity transportListCommitEntity) {
+        return nothingtransform(getService().returnCargoCommit(transportListCommitEntity.getTaskId(),transportListCommitEntity));
     }
 
     /****
@@ -467,7 +466,7 @@ public class UpdateRepository extends BaseRepository {
      * @param baseFilterEntity
      * @return
      */
-    public Observable<ScooterInfoListDataBean> scooterInfoList(BaseFilterEntity baseFilterEntity) {
+    public Observable <ScooterInfoListDataBean> scooterInfoList(BaseFilterEntity baseFilterEntity) {
         return transform(getService().scooterInfoList(baseFilterEntity));
     }
 
@@ -476,7 +475,7 @@ public class UpdateRepository extends BaseRepository {
      * @param baseFilterEntity
      * @return
      */
-    public Observable<ScooterInfoListDataBean> scooterInfoListForReceive(BaseFilterEntity baseFilterEntity) {
+    public Observable <ScooterInfoListDataBean> scooterInfoListForReceive(BaseFilterEntity baseFilterEntity) {
         return transform(getService().scooterInfoListForReceive(baseFilterEntity));
     }
 
@@ -485,7 +484,7 @@ public class UpdateRepository extends BaseRepository {
      * @param baseFilterEntity
      * @return
      */
-    public Observable<List<UldInfoListBean>> uldInfoList(BaseFilterEntity baseFilterEntity) {
+    public Observable <List <UldInfoListBean>> uldInfoList(BaseFilterEntity baseFilterEntity) {
         return transform(getService().uldInfoList(baseFilterEntity));
     }
 
@@ -494,7 +493,7 @@ public class UpdateRepository extends BaseRepository {
      * @param iata
      * @return
      */
-    public Observable<List<MarketCollectionRequireBean>> freightInfo(String iata) {
+    public Observable <List <MarketCollectionRequireBean>> freightInfo(String iata) {
         return transform(getService().freightInfo(iata));
     }
 
@@ -503,7 +502,7 @@ public class UpdateRepository extends BaseRepository {
      * @param acdmDtoId
      * @return
      */
-    public Observable<List<TransportTodoListBean>> getUnloadDoneScooter(String acdmDtoId) {
+    public Observable <List <TransportTodoListBean>> getUnloadDoneScooter(String acdmDtoId) {
         return transform(getService().getUnloadDoneScooter(acdmDtoId));
     }
 
@@ -513,7 +512,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
 
-    public Observable<ForwardInfoBean> forwardInfo(String freightId) {
+    public Observable <ForwardInfoBean> forwardInfo(String freightId) {
         return transform(getService().forwardInfo(freightId));
     }
 
@@ -522,7 +521,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<AirlineRequireBean>> airlineRequire(BaseFilterEntity model) {
+    public Observable <List <AirlineRequireBean>> airlineRequire(BaseFilterEntity model) {
         return transform(getService().airlineRequire(model));
     }
 
@@ -532,7 +531,7 @@ public class UpdateRepository extends BaseRepository {
      * @return
      */
 
-    public Observable<List<DocumentsBean>> getgetCommdityById(GoodsIdEntity goodsNames) {
+    public Observable <List <DocumentsBean>> getgetCommdityById(GoodsIdEntity goodsNames) {
         return transform(getService().getgetCommdityById(goodsNames));
     }
 
@@ -541,7 +540,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> fightScooterSubmit(FightScooterSubmitEntity model) {
+    public Observable <String> fightScooterSubmit(FightScooterSubmitEntity model) {
         return nothingtransform(getService().fightScooterSubmit(model));
     }
 
@@ -549,7 +548,7 @@ public class UpdateRepository extends BaseRepository {
      * 新增板车
      * @return
      */
-    public Observable<AddScooterBean> addScooter() {
+    public Observable <AddScooterBean> addScooter() {
         return transform(getService().addScooter());
     }
 
@@ -558,7 +557,7 @@ public class UpdateRepository extends BaseRepository {
      * @param getScooterListInfoEntity
      * @return
      */
-    public Observable<GetScooterListInfoBean> getScooterListInfo(GetScooterListInfoEntity getScooterListInfoEntity) {
+    public Observable <GetScooterListInfoBean> getScooterListInfo(GetScooterListInfoEntity getScooterListInfoEntity) {
         return transform(getService().getScooterListInfo(getScooterListInfoEntity));
     }
 
@@ -567,7 +566,7 @@ public class UpdateRepository extends BaseRepository {
      * @param pbName
      * @return
      */
-    public Observable<String> getWeight(String pbName) {
+    public Observable <String> getWeight(String pbName) {
         return nothingDatatransform(getService().getWeight(pbName));
     }
 
@@ -576,7 +575,7 @@ public class UpdateRepository extends BaseRepository {
      * @param iata
      * @return
      */
-    public Observable<String> getAirWaybillPrefix(String iata) {
+    public Observable <String> getAirWaybillPrefix(String iata) {
         return nothingDatatransform(getService().getAirWaybillPrefix(iata));
     }
 
@@ -585,7 +584,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> transportEnd(TransportEndEntity model) {
+    public Observable <String> transportEnd(TransportEndEntity model) {
         return nothingtransform(getService().transportEnd(model));
     }
 
@@ -594,7 +593,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> transportBegin(TransportEndEntity model) {
+    public Observable <String> transportBegin(TransportEndEntity model) {
         return nothingtransform(getService().transportBegin(model));
     }
 
@@ -603,7 +602,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> scanScooterDelete(TransportEndEntity model) {
+    public Observable <String> scanScooterDelete(TransportEndEntity model) {
         return nothingtransform(getService().scanScooterDelete(model));
     }
 
@@ -612,7 +611,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> scanScooter(TransportTodoListBean model) {
+    public Observable <String> scanScooter(TransportTodoListBean model) {
         return nothingtransform(getService().scanScooter(model));
     }
 
@@ -621,7 +620,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> scanLockScooter(TransportEndEntity model) {
+    public Observable <String> scanLockScooter(TransportEndEntity model) {
         return nothingtransform(getService().scanLockScooter(model));
     }
 
@@ -630,7 +629,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<TransportTodoListBean>> scooterWithUser(String model, String flightId, String taskId) {
+    public Observable <List <TransportTodoListBean>> scooterWithUser(String model, String flightId, String taskId) {
         return transform(getService().scooterWithUser(model, flightId, taskId));
     }
 
@@ -639,7 +638,7 @@ public class UpdateRepository extends BaseRepository {
      * @param taskId
      * @return
      */
-    public Observable<List<TransportTodoListBean>> scooterWithUserTask(String taskId) {
+    public Observable <List <TransportTodoListBean>> scooterWithUserTask(String taskId) {
         return transform(getService().scooterWithUserForTask(taskId));
     }
 
@@ -647,7 +646,7 @@ public class UpdateRepository extends BaseRepository {
      * 查询出待运输的
      * @return
      */
-    public Observable<List<TransportTodoListBean>> transportTodoList() {
+    public Observable <List <TransportTodoListBean>> transportTodoList() {
         return transform(getService().transportTodoList());
     }
 
@@ -657,7 +656,7 @@ public class UpdateRepository extends BaseRepository {
      * @param performTaskStepsEntity
      * @return
      */
-    public Observable<String> performTaskSteps(PerformTaskStepsEntity performTaskStepsEntity) {
+    public Observable <String> performTaskSteps(PerformTaskStepsEntity performTaskStepsEntity) {
         return nothingtransform(getService().performTaskSteps(performTaskStepsEntity));
     }
 
@@ -665,7 +664,7 @@ public class UpdateRepository extends BaseRepository {
      * 装卸机人员确认装机单版本建议
      * @return
      */
-    public Observable<String> confirmLoadPlan(BaseFilterEntity entity) {
+    public Observable <String> confirmLoadPlan(BaseFilterEntity entity) {
         return nothingtransform(getService().confirmLoadPlan(entity));
     }
 
@@ -673,7 +672,7 @@ public class UpdateRepository extends BaseRepository {
      * 装机页面判断红点
      * @return
      */
-    public Observable<BaseEntity<String>> getPullStatus(BaseFilterEntity entity) {
+    public Observable <BaseEntity <String>> getPullStatus(BaseFilterEntity entity) {
         return getService().getPullStatus(entity);
     }
 
@@ -681,7 +680,7 @@ public class UpdateRepository extends BaseRepository {
      * 上传航班照片记录
      * @return
      */
-    public Observable<String> uploadFlightPhoto(FlightPhotoEntity entity) {
+    public Observable <String> uploadFlightPhoto(FlightPhotoEntity entity) {
         return nothingtransform(getService().uploadFlightPhoto(entity));
     }
 
@@ -689,7 +688,7 @@ public class UpdateRepository extends BaseRepository {
      * 监装发起的 拉货
      * @return
      */
-    public Observable<String> startPull(PullGoodsEntity entity) {
+    public Observable <String> startPull(PullGoodsEntity entity) {
         return nothingtransform(getService().startPull(entity));
     }
 
@@ -698,7 +697,7 @@ public class UpdateRepository extends BaseRepository {
      * @param gpsInfoEntity
      * @return
      */
-    public Observable<String> saveGpsInfo(GpsInfoEntity gpsInfoEntity) {
+    public Observable <String> saveGpsInfo(GpsInfoEntity gpsInfoEntity) {
         return nothingtransform(getService().saveGpsInfo(gpsInfoEntity));
     }
 
@@ -706,7 +705,7 @@ public class UpdateRepository extends BaseRepository {
      * 外场运输待办
      * @return
      */
-    public Observable<List<AcceptTerminalTodoBean>> acceptTerminalTodo(BaseFilterEntity model) {
+    public Observable <List <AcceptTerminalTodoBean>> acceptTerminalTodo(BaseFilterEntity model) {
         return transform(getService().acceptTerminalTodo(model));
     }
 
@@ -715,7 +714,7 @@ public class UpdateRepository extends BaseRepository {
      * @param exceptionReportEntity
      * @return
      */
-    public Observable<String> exceptionTpEnd(ExceptionReportEntity exceptionReportEntity) {
+    public Observable <String> exceptionTpEnd(ExceptionReportEntity exceptionReportEntity) {
         return nothingtransform(getService().exceptionTpEnd(exceptionReportEntity));
     }
 
@@ -724,7 +723,7 @@ public class UpdateRepository extends BaseRepository {
      * @param exceptionReportEntity
      * @return
      */
-    public Observable<String> exceptionReport(ExceptionReportEntity exceptionReportEntity) {
+    public Observable <String> exceptionReport(ExceptionReportEntity exceptionReportEntity) {
         return nothingtransform(getService().exceptionReport(exceptionReportEntity));
     }
 
@@ -733,7 +732,7 @@ public class UpdateRepository extends BaseRepository {
      * @param transportEndEntity
      * @return
      */
-    public Observable<String> arrivalDataSave(TransportEndEntity transportEndEntity) {
+    public Observable <String> arrivalDataSave(TransportEndEntity transportEndEntity) {
         return nothingtransform(getService().arrivalDataSave(transportEndEntity));
     }
 
@@ -742,7 +741,7 @@ public class UpdateRepository extends BaseRepository {
      * @param taskClearEntity
      * @return
      */
-    public Observable<String> startClearTask(TaskClearEntity taskClearEntity) {
+    public Observable <String> startClearTask(TaskClearEntity taskClearEntity) {
         return nothingtransform(getService().startClearTask(taskClearEntity));
     }
 
@@ -751,7 +750,7 @@ public class UpdateRepository extends BaseRepository {
      * @param flightInfoId
      * @return
      */
-    public Observable<PullGoodsInfoBean> getPullGoodsInfo(String flightInfoId) {
+    public Observable <PullGoodsInfoBean> getPullGoodsInfo(String flightInfoId) {
         return transform(getService().getPullGoodsInfo(flightInfoId));
     }
 
@@ -760,7 +759,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<String> pullGoodsInfoCommit(PullGoodsInfoBean entity) {
+    public Observable <String> pullGoodsInfoCommit(PullGoodsInfoBean entity) {
         return nothingtransform(getService().pullGoodsInfoCommit(entity));
     }
 
@@ -768,7 +767,7 @@ public class UpdateRepository extends BaseRepository {
      * 拉货上报
      * @return
      */
-    public Observable<GetWaybillInfoByIdDataBean> getWayBillInfoByCode(String waybillCode) {
+    public Observable <GetWaybillInfoByIdDataBean> getWayBillInfoByCode(String waybillCode) {
         return transform(getService().getWayBillInfoByCode(waybillCode));
     }
 
@@ -776,7 +775,7 @@ public class UpdateRepository extends BaseRepository {
      * 拉货上报
      * @return
      */
-    public Observable<List<GetWaybillInfoByIdDataBean>> getWaybillInfo(String id) {
+    public Observable <List <GetWaybillInfoByIdDataBean>> getWaybillInfo(String id) {
         return transform(getService().getWaybillInfo(id));
     }
 
@@ -786,7 +785,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 请求参数
      * @return
      */
-    public Observable<LoadingListBean> getLoadingList(LoadingListRequestEntity entity) {
+    public Observable <LoadingListBean> getLoadingList(LoadingListRequestEntity entity) {
         return getService().getLoadingList(entity);
     }
 
@@ -796,7 +795,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 请求参数
      * @return
      */
-    public Observable<CargoCabinData> getFlightSpace(FlightIdBean entity) {
+    public Observable <CargoCabinData> getFlightSpace(FlightIdBean entity) {
         return transform(getService().getFlightSpace(entity));
     }
 
@@ -806,7 +805,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> flightDoneInstall(GetFlightCargoResBean model) {
+    public Observable <String> flightDoneInstall(GetFlightCargoResBean model) {
         return nothingtransform(getService().flightDoneInstall(model));
     }
 
@@ -815,7 +814,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> overLoad(LoadingListSendEntity model) {
+    public Observable <String> overLoad(LoadingListSendEntity model) {
         return nothingtransform(getService().overLoad(model));
     }
 
@@ -825,7 +824,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<LoadAndUnloadTodoBean>> loadAndUnloadTodo(BaseFilterEntity model) {
+    public Observable <List <LoadAndUnloadTodoBean>> loadAndUnloadTodo(BaseFilterEntity model) {
         return transform(getService().loadAndUnloadTodo(model));
     }
 
@@ -834,7 +833,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> lockOrUnlockScooter(LockScooterEntity model) {
+    public Observable <String> lockOrUnlockScooter(LockScooterEntity model) {
         return nothingtransform(getService().lockOrUnlockScooter(model));
     }
 
@@ -844,7 +843,7 @@ public class UpdateRepository extends BaseRepository {
      * @param  taskId
      * @return
      */
-    public Observable<List<SelectTaskMemberEntity>> getLoadUnloadLeaderList(String taskId) {
+    public Observable <List <SelectTaskMemberEntity>> getLoadUnloadLeaderList(String taskId) {
         return transform(getService().getLoadUnloadLeaderList(taskId));
     }
 
@@ -853,7 +852,7 @@ public class UpdateRepository extends BaseRepository {
      * @param  baseFilterEntity
      * @return
      */
-    public Observable<String> selectMember(BaseFilterEntity baseFilterEntity) {
+    public Observable <String> selectMember(BaseFilterEntity baseFilterEntity) {
         return nothingtransform(getService().selectMember(baseFilterEntity));
     }
 
@@ -862,7 +861,7 @@ public class UpdateRepository extends BaseRepository {
      * @param  baseFilterEntity
      * @return
      */
-    public Observable<String> refuseTask(BaseFilterEntity baseFilterEntity) {
+    public Observable <String> refuseTask(BaseFilterEntity baseFilterEntity) {
         return nothingtransform(getService().refuseTask(baseFilterEntity));
     }
 
@@ -871,7 +870,7 @@ public class UpdateRepository extends BaseRepository {
      * @param  baseFilterEntity
      * @return
      */
-    public Observable<List<LoadAndUnloadTodoBean>> getLoadUnloadLeaderToDo(BaseFilterEntity baseFilterEntity) {
+    public Observable <List <LoadAndUnloadTodoBean>> getLoadUnloadLeaderToDo(BaseFilterEntity baseFilterEntity) {
         return transform(getService().getLoadUnloadLeaderToDo(baseFilterEntity));
     }
 
@@ -879,7 +878,7 @@ public class UpdateRepository extends BaseRepository {
      * 结载代办
      * @return
      */
-    public Observable<List<LoadAndUnloadTodoBean>> getEndInstallTodo(BaseFilterEntity model) {
+    public Observable <List <LoadAndUnloadTodoBean>> getEndInstallTodo(BaseFilterEntity model) {
         return transform(getService().getEndInstallTodo(model));
     }
 
@@ -888,7 +887,7 @@ public class UpdateRepository extends BaseRepository {
      * @param string
      * @return
      */
-    public Observable<String> baggageAreaSub(String string) {
+    public Observable <String> baggageAreaSub(String string) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 string);
         return nothingtransform(getService().baggageAreaSub(requestBody));
@@ -899,7 +898,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> lookLUggageScannigFlight(BaseFilterEntity model) {
+    public Observable <String> lookLUggageScannigFlight(BaseFilterEntity model) {
         return nothingtransform(getService().lookLUggageScannigFlight(model));
     }
 
@@ -908,7 +907,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<FlightLuggageBean>> getDepartureFlightByAndroid(BaseFilterEntity model) {
+    public Observable <List <FlightLuggageBean>> getDepartureFlightByAndroid(BaseFilterEntity model) {
         return transform(getService().getDepartureFlightByAndroid(model));
     }
 
@@ -916,7 +915,7 @@ public class UpdateRepository extends BaseRepository {
      * 锁定行李扫描航班
      * @return
      */
-    public Observable<List<FlightLuggageBean>> getAllInternationalAndMixedFlight(BaseFilterEntity model) {
+    public Observable <List <FlightLuggageBean>> getAllInternationalAndMixedFlight(BaseFilterEntity model) {
         return transform(getService().getAllInternationalAndMixedFlight(model));
     }
 
@@ -925,7 +924,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<GetInfosByFlightIdBean>> getInfosByFlightId(BaseFilterEntity model) {
+    public Observable <List <GetInfosByFlightIdBean>> getInfosByFlightId(BaseFilterEntity model) {
         return transform(getService().getInfosByFlightId(model));
     }
 
@@ -934,7 +933,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> scooterSubmit(ScooterSubmitEntity model) {
+    public Observable <String> scooterSubmit(ScooterSubmitEntity model) {
         return nothingtransform(getService().scooterSubmit(model));
     }
 
@@ -943,16 +942,17 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<GetInfosByFlightIdBean>> getScooterByScooterCode(BaseFilterEntity model) {
+    public Observable <List <GetInfosByFlightIdBean>> getScooterByScooterCode(BaseFilterEntity model) {
         return transform(getService().getScooterByScooterCode(model));
     }
+
     /****
      * 复重/获取板车信息
      * @param model
      * @return
      */
-    public Observable<BaseEntity<Object>> returnGroupScooterTask(GetInfosByFlightIdBean model) {
-        return getService().returnGroupScooterTask(model);
+    public Observable <BaseEntity <Object>> returnGroupScooterTask(GetInfosByFlightIdBean model) {
+        return getService().returnGroupScooterTask(model.getId(),model);
     }
 
     /****
@@ -960,8 +960,8 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<OverWeightSaveResultBean> saveScooter(GetInfosByFlightIdBean model) {
-        return transform(getService().saveScooter(model));
+    public Observable <OverWeightSaveResultBean> saveScooter(GetInfosByFlightIdBean model) {
+        return transform(getService().saveScooter(model.getId(),model));
     }
 
     /****
@@ -969,7 +969,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> returnWeighing(ReturnWeighingEntity model) {
+    public Observable <String> returnWeighing(ReturnWeighingEntity model) {
         return nothingtransform(getService().returnWeighing(model));
     }
 
@@ -979,7 +979,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<FlightInfoAndScootersBean> getTodoScooters(TodoScootersEntity model) {
+    public Observable <FlightInfoAndScootersBean> getTodoScooters(TodoScootersEntity model) {
         return transform(getService().getTodoScooters(model));
     }
 
@@ -988,7 +988,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<GetHistoryBean> getHistoryScootersPage(BaseFilterEntity model) {
+    public Observable <GetHistoryBean> getHistoryScootersPage(BaseFilterEntity model) {
         return transform(getService().getHistoryScootersPage(model));
     }
 
@@ -997,7 +997,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<List<SearchFlightInfoBean>> searchFlightsByKey(SearchFilghtEntity entity) {
+    public Observable <List <SearchFlightInfoBean>> searchFlightsByKey(SearchFilghtEntity entity) {
         return transform(getService().searchFlightsByKey(entity));
     }
 
@@ -1006,7 +1006,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<ManifestBillModel>> getManifest(BaseFilterEntity model) {
+    public Observable <List <ManifestBillModel>> getManifest(BaseFilterEntity model) {
         return transform(getService().getManifest(model));
     }
 
@@ -1016,7 +1016,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<ArrivalDeliveryInfoBean> arrivalDeliveryInfo(BaseFilterEntity model) {
+    public Observable <ArrivalDeliveryInfoBean> arrivalDeliveryInfo(BaseFilterEntity model) {
         return transform(getService().arrivalDeliveryInfo(model));
     }
 
@@ -1025,7 +1025,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<WaybillsListBean> searchWaybillByWaybillCode(BaseFilterEntity model) {
+    public Observable <WaybillsListBean> searchWaybillByWaybillCode(BaseFilterEntity model) {
         return transform(getService().searchWaybillByWaybillCode(model));
     }
 
@@ -1034,7 +1034,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> deliveryInWaybill(List<BaseFilterEntity> model) {
+    public Observable <String> deliveryInWaybill(List <BaseFilterEntity> model) {
         return nothingtransform(getService().deliveryInWaybill(model));
     }
 
@@ -1043,7 +1043,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<List<OverweightBean>> getOverweight(BaseFilterEntity model) {
+    public Observable <List <OverweightBean>> getOverweight(BaseFilterEntity model) {
         return transform(getService().getWaybillOverWeight(model));
     }
 
@@ -1052,7 +1052,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> addOverweight(List<OverweightBean> model) {
+    public Observable <String> addOverweight(List <OverweightBean> model) {
         return nothingtransform(getService().addWaybillOverWeight(model));
     }
 
@@ -1061,7 +1061,7 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<List<ForkliftWorkingCostBean>> getWaybillForklift(String waybillId) {
+    public Observable <List <ForkliftWorkingCostBean>> getWaybillForklift(String waybillId) {
         return transform(getService().getWaybillForklift(waybillId));
     }
 
@@ -1070,7 +1070,7 @@ public class UpdateRepository extends BaseRepository {
      * @param waybillId
      * @return
      */
-    public Observable<List<PickGoodsRecordsBean>> getOutboundList(String waybillId) {
+    public Observable <List <PickGoodsRecordsBean>> getOutboundList(String waybillId) {
         return transform(getService().getOutboundList(waybillId));
     }
 
@@ -1079,7 +1079,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> revokeInboundDelevery(PickGoodsRecordsBean model) {
+    public Observable <String> revokeInboundDelevery(PickGoodsRecordsBean model) {
         return nothingtransform(getService().revokeInboundDelevery(model));
     }
 
@@ -1088,7 +1088,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> addWaybillForklift(List<ForkliftWorkingCostBean> model) {
+    public Observable <String> addWaybillForklift(List <ForkliftWorkingCostBean> model) {
         return nothingtransform(getService().addWaybillForklift(model));
     }
 
@@ -1097,7 +1097,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> deleteOverweight(OverweightBean model) {
+    public Observable <String> deleteOverweight(OverweightBean model) {
         return nothingtransform(getService().deleteWaybillOverWeight(model));
     }
 
@@ -1106,7 +1106,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> completDelivery(BaseFilterEntity model) {
+    public Observable <String> completDelivery(BaseFilterEntity model) {
         return nothingtransform(getService().completDelivery(model));
     }
 
@@ -1115,7 +1115,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> errorFiling(ErrorFilingEntity model) {
+    public Observable <String> errorFiling(ErrorFilingEntity model) {
         return nothingtransform(getService().errorFiling(model));
     }
 
@@ -1124,7 +1124,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<InPortResponseBean> getInPortTallyList(BaseFilterEntity model) {
+    public Observable <InPortResponseBean> getInPortTallyList(BaseFilterEntity model) {
         return transform(getService().getInPortTallyList(model));
     }
 
@@ -1133,7 +1133,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> inPortTallyCommit(InPortTallyCommitEntity model) {
+    public Observable <String> inPortTallyCommit(InPortTallyCommitEntity model) {
         return nothingtransform(getService().inPortTallyCommit(model));
     }
 
@@ -1143,7 +1143,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<PageListBean> pageList(BaseFilterEntity model) {
+    public Observable <PageListBean> pageList(BaseFilterEntity model) {
         return transform(getService().pageList(model));
     }
 
@@ -1152,7 +1152,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<MsMessageViewBean> msMessageView(BaseFilterEntity model) {
+    public Observable <MsMessageViewBean> msMessageView(BaseFilterEntity model) {
         return transform(getService().msMessageView(model));
     }
 
@@ -1161,7 +1161,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<String> noReadCount(PageListEntity model) {
+    public Observable <String> noReadCount(PageListEntity model) {
         return nothingDatatransform(getService().noReadCount(model));
     }
 
@@ -1170,7 +1170,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<NoticeBean> findUserNoticeByPage(BaseFilterEntity model) {
+    public Observable <NoticeBean> findUserNoticeByPage(BaseFilterEntity model) {
         return transform(getService().findUserNoticeByPage(model));
     }
 
@@ -1179,7 +1179,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<NoticeViewBean> NoticeView(BaseFilterEntity model) {
+    public Observable <NoticeViewBean> NoticeView(BaseFilterEntity model) {
         return transform(getService().NoticeView(model));
     }
 
@@ -1188,7 +1188,7 @@ public class UpdateRepository extends BaseRepository {
      * @param userId
      * @return
      */
-    public Observable<String> noReadNoticeCount(String userId) {
+    public Observable <String> noReadNoticeCount(String userId) {
         return nothingDatatransform(getService().noReadNoticeCount(userId));
     }
 
@@ -1196,14 +1196,14 @@ public class UpdateRepository extends BaseRepository {
     /*****
      * 航班动态
      */
-    public Observable<FlightBean> flightdynamic(BaseFilterEntity model) {
+    public Observable <FlightBean> flightdynamic(BaseFilterEntity model) {
         return flightTransform(mUpdateApisFlight.flightdynamic(model));
     }
 
     /*****
      * 用于接收手机参数的实体
      */
-    public Observable<String> getPhoneParameters(PhoneParametersEntity entity) {
+    public Observable <String> getPhoneParameters(PhoneParametersEntity entity) {
         return notingflightTransform(mUpdateApisFlight.getPhoneParameters(entity));
     }
 
@@ -1212,7 +1212,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<FlightInfoBean> flightInfo(BaseFilterEntity model) {
+    public Observable <FlightInfoBean> flightInfo(BaseFilterEntity model) {
         return flightTransform(mUpdateApisFlight.flightInfo(model));
     }
 
@@ -1221,7 +1221,7 @@ public class UpdateRepository extends BaseRepository {
      * @param model
      * @return
      */
-    public Observable<FlightServiceBean> getMilepostData(BaseFilterEntity model) {
+    public Observable <FlightServiceBean> getMilepostData(BaseFilterEntity model) {
         return flightTransform(mUpdateApisFlight.getMilepostData(model));
     }
 
@@ -1231,7 +1231,7 @@ public class UpdateRepository extends BaseRepository {
      * @param declareWaybillEntity
      * @return （带新订单id的） 换单审核数据
      */
-    public Observable<DeclareWaybillBean> getChangeWaybill(DeclareWaybillEntity declareWaybillEntity) {
+    public Observable <DeclareWaybillBean> getChangeWaybill(DeclareWaybillEntity declareWaybillEntity) {
         return transform(getService().getChangeWaybill(declareWaybillEntity));
     }
 
@@ -1241,7 +1241,7 @@ public class UpdateRepository extends BaseRepository {
      * @param changeWaybillEntity
      * @return 提交结果
      */
-    public Observable<String> changeSubmit(ChangeWaybillEntity changeWaybillEntity) {
+    public Observable <String> changeSubmit(ChangeWaybillEntity changeWaybillEntity) {
         return nothingtransform(getService().changeSubmit(changeWaybillEntity));
     }
 
@@ -1250,7 +1250,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 提交结果
      */
-    public Observable<String> sendPrintMessage(String waybillId) {
+    public Observable <String> sendPrintMessage(String waybillId) {
         return nothingtransform(getService().sendPrintMessage(waybillId));
     }
 
@@ -1260,7 +1260,7 @@ public class UpdateRepository extends BaseRepository {
      * @param scooterCode
      * @return
      */
-    public Observable<BaseEntity<Object>> checkScooterCode(String scooterCode, String flightId, String scSubType) {
+    public Observable <BaseEntity <Object>> checkScooterCode(String scooterCode, String flightId, String scSubType) {
         return getService().checkScooterCode(scooterCode, flightId, scSubType);
     }
 
@@ -1270,7 +1270,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 航班业务id(UUID超级长的, 非数字id)
      * @return
      */
-    public Observable<InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity) {
+    public Observable <InWaybillRecordBean> getInWaybillRecrodList(InWaybillRecordGetEntity entity) {
         return transform(getService().getInWaybillRecrodList(entity));
     }
 
@@ -1280,7 +1280,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity 所有数据
      * @return 成功/失败
      */
-    public Observable<BaseEntity<Object>> submitWillbillRecord(InWaybillRecordSubmitNewEntity entity) {
+    public Observable <BaseEntity <Object>> submitWillbillRecord(InWaybillRecordSubmitNewEntity entity) {
         return getService().submitWillbillRecord(entity);
     }
 
@@ -1290,7 +1290,7 @@ public class UpdateRepository extends BaseRepository {
      * @param id 分拣子信息的id
      * @return 成功/失败
      */
-    public Observable<String> deleteInWayBillRecordById(String id) {
+    public Observable <String> deleteInWayBillRecordById(String id) {
         return nothingtransform(getService().deleteInWayBillRecordById(id));
     }
 
@@ -1300,7 +1300,7 @@ public class UpdateRepository extends BaseRepository {
      * @param data 需要通知已全部到齐的数据
      * @return 成功/失败
      */
-    public Observable<WaybillQuickGetBean> allGoodsArrived(InWaybillRecordSubmitNewEntity.SingleLineBean data) {
+    public Observable <WaybillQuickGetBean> allGoodsArrived(InWaybillRecordSubmitNewEntity.SingleLineBean data) {
         return getService().allGoodsArrived(data);
     }
 
@@ -1310,7 +1310,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return 成功/失败
      */
-    public Observable<String> returnPrematching(BaseFilterEntity entity) {
+    public Observable <String> returnPrematching(BaseFilterEntity entity) {
         return nothingtransform(getService().returnPrematching(entity));
     }
 
@@ -1319,7 +1319,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<InventoryQueryBean> inventoryQuery(BaseFilterEntity entity) {
+    public Observable <InventoryQueryBean> inventoryQuery(BaseFilterEntity entity) {
         return transform(getService().inventoryQuery(entity));
     }
 
@@ -1328,7 +1328,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<BaseEntity> addInventoryDetail(List<InventoryDetailEntity> entity) {
+    public Observable <BaseEntity> addInventoryDetail(List <InventoryDetailEntity> entity) {
         return getService().addInventoryDetail(entity);
     }
 
@@ -1337,7 +1337,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<List<InventoryDetailEntity>> listInventoryDetail(BaseFilterEntity entity) {
+    public Observable <List <InventoryDetailEntity>> listInventoryDetail(BaseFilterEntity entity) {
         return transform(getService().listInventoryDetail(entity));
     }
 
@@ -1346,7 +1346,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<ListWaybillCodeBean> listWaybillCode(String code, String taskId) {
+    public Observable <ListWaybillCodeBean> listWaybillCode(String code, String taskId) {
         return getService().listWaybillCode(code, taskId);
     }
 
@@ -1355,7 +1355,7 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<String> getWaybillCode() {
+    public Observable <String> getWaybillCode() {
         return nothingDatatransform(getService().getWaybillCode());
     }
 
@@ -1364,19 +1364,19 @@ public class UpdateRepository extends BaseRepository {
      *
      * @return 成功/失败
      */
-    public Observable<String> internationalCargoReport(CargoUploadBean entity) {
+    public Observable <String> internationalCargoReport(CargoUploadBean entity) {
         return nothingtransform(getService().internationalCargoReport(entity));
     }
 
-    public Observable<List<ReservoirArea>> listReservoirInfoByCode(String deptCode) {
+    public Observable <List <ReservoirArea>> listReservoirInfoByCode(String deptCode) {
         return transform(getService().listReservoirInfoByCode(deptCode));
     }
 
-    public Observable<List<GetAllRemoteAreaBean>> getAllRemoteArea() {
+    public Observable <List <GetAllRemoteAreaBean>> getAllRemoteArea() {
         return transform(getService().getAllRemoteArea());
     }
 
-    public Observable<UnLoadListBillBean> getUnLoadingList(UnLoadRequestEntity entity) {
+    public Observable <UnLoadListBillBean> getUnLoadingList(UnLoadRequestEntity entity) {
         return getService().getUnLoadingList(entity);
     }
 
@@ -1386,7 +1386,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<String> taskLock(TaskLockEntity entity) {
+    public Observable <String> taskLock(TaskLockEntity entity) {
         return nothingtransform(getService().taskLock(entity));
     }
 
@@ -1396,7 +1396,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<UldLikeBean> likePage(BaseFilterEntity entity) {
+    public Observable <UldLikeBean> likePage(BaseFilterEntity entity) {
         return transform(getService().likePage(entity));
     }
 
@@ -1406,7 +1406,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<ListByTypeBean> listByType(BaseFilterEntity entity) {
+    public Observable <ListByTypeBean> listByType(BaseFilterEntity entity) {
         return transform(getService().listByType(entity));
     }
 
@@ -1416,7 +1416,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<List<FlightAllReportInfo>> getFlightAllReportInfo(BaseFilterEntity entity) {
+    public Observable <List <FlightAllReportInfo>> getFlightAllReportInfo(BaseFilterEntity entity) {
         return transform(getService().getFlightAllReportInfo(entity));
     }
 
@@ -1426,7 +1426,7 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<List<FlightAllReportInfo>> getLastReportInfo(BaseFilterEntity entity) {
+    public Observable <List <FlightAllReportInfo>> getLastReportInfo(BaseFilterEntity entity) {
         return transform(getService().getFlightAllReportInfo(entity));
     }
 
@@ -1436,85 +1436,88 @@ public class UpdateRepository extends BaseRepository {
      * @param entity
      * @return
      */
-    public Observable<String> reOpenLoadTask(BaseFilterEntity entity) {
+    public Observable <String> reOpenLoadTask(BaseFilterEntity entity) {
         return nothingtransform(getService().reOpenLoadTask(entity));
     }
 
 
-    public Observable<String> saveOrUpdate(SaveOrUpdateEntity entity) {
+    public Observable <String> saveOrUpdate(SaveOrUpdateEntity entity) {
         return nothingtransform(getService().saveOrUpdate(entity));
     }
 
-    public Observable<List<FindAirlineAllBean>> findAirlineAll() {
+    public Observable <List <FindAirlineAllBean>> findAirlineAll() {
         return transform(getService().findAirlineAll());
     }
 
-    public Observable<String> synchronousLoading(BaseFilterEntity entity) {
+    public Observable <String> synchronousLoading(BaseFilterEntity entity) {
         return nothingtransform(getService().synchronousLoading(entity));
     }
 
-    public Observable<String> auditManifest(BaseFilterEntity entity) {
+    public Observable <String> auditManifest(BaseFilterEntity entity) {
         return nothingtransform(getService().auditManifest(entity));
     }
 
-    public Observable<String> repartWriteLoading(BaseFilterEntity entity) {
+    public Observable <String> repartWriteLoading(BaseFilterEntity entity) {
         return nothingtransform(getService().repartWriteLoading(entity));
     }
 
 
-    public Observable<List<CargoReportHisBean>> cargoReportHis(BaseFilterEntity operatorId) {
+    public Observable <List <CargoReportHisBean>> cargoReportHis(BaseFilterEntity operatorId) {
         return transform(getService().cargoReportHis(operatorId));
     }
 
-    public Observable<List<CargoReportHisBean>> baggageSubHis(BaseFilterEntity operatorId) {
+    public Observable <List <CargoReportHisBean>> baggageSubHis(BaseFilterEntity operatorId) {
         return transform(getService().baggageSubHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> reportTaskHis(BaseFilterEntity operatorId) {
+    public Observable <List <LoadAndUnloadTodoBean>> reportTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().reportTaskHis(operatorId));
     }
 
-    public Observable<List<OutFieldTaskBean>> transportTaskHis(BaseFilterEntity operatorId) {
+    public Observable <List <OutFieldTaskBean>> transportTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().transportTaskHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> stevedoresTaskHis(BaseFilterEntity operatorId) {
+    public Observable <List <LoadAndUnloadTodoBean>> stevedoresTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().stevedoresTaskHis(operatorId));
     }
 
-    public Observable<List<LoadAndUnloadTodoBean>> loadUnloadTaskHis(BaseFilterEntity operatorId) {
+    public Observable <List <LoadAndUnloadTodoBean>> loadUnloadTaskHis(BaseFilterEntity operatorId) {
         return transform(getService().loadUnloadTaskHis(operatorId));
     }
 
-    public Observable<String> exceptionContent(BaseFilterEntity exceptionContent) {
+    public Observable <String> exceptionContent(BaseFilterEntity exceptionContent) {
         return nothingtransform(getService().exceptionContent(exceptionContent));
     }
 
-    public Observable<String> printRequest(BaseFilterEntity exceptionContent) {
+    public Observable <String> printRequest(BaseFilterEntity exceptionContent) {
         return nothingtransform(getService().printRequest(exceptionContent));
     }
 
-    public Observable<IOManifestBean> getIOManifestList(BaseFilterEntity exceptionContent) {
+    public Observable <IOManifestBean> getIOManifestList(BaseFilterEntity exceptionContent) {
         return transform(getService().getIOManifestList(exceptionContent));
     }
 
-    public Observable<InventoryBean> getInventory(BaseFilterEntity exceptionContent) {
+    public Observable <InventoryBean> getInventory(BaseFilterEntity exceptionContent) {
         return transform(getService().getInventory(exceptionContent));
     }
 
-    public Observable<String> submitIOManifestList(SmInventoryEntryandexit exceptionContent) {
-        return nothingtransform(getService().submitIOManifestList(exceptionContent));
+    public Observable <String> submitIOManifestList(SmInventoryEntryandexit exceptionContent) {
+        return nothingtransform(getService().submitIOManifestList(exceptionContent.getId(), exceptionContent));
     }
 
-    public Observable<InWaybillRecordSubmitNewEntity.SingleLineBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
+    public Observable <InWaybillRecordSubmitNewEntity.SingleLineBean> getWaybillInfoByCode(QueryWaybillInfoEntity entity) {
         return transform(getService().getWaybillInfoByCode(entity));
     }
-    public Observable<WaybillsBean> getWaybillInfoByWaybillCode(String waybillCode) {
+
+    public Observable <WaybillsBean> getWaybillInfoByWaybillCode(String waybillCode) {
         return transform(getService().getWaybillInfoByWaybillCode(waybillCode));
     }
-    public Observable <List<GroundAgentBean>> getAllAgent() {
+
+    public Observable <List <GroundAgentBean>> getAllAgent() {
         return transform(getService().getAllAgent());
     }
+
     public Observable <String> newScooter(ScooterTransitBean entity) {
         return nothingtransform(getService().newScooter(entity));
     }

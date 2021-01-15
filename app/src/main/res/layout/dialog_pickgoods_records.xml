@@ -96,7 +96,7 @@
             android:text="关闭"
             android:textSize="14sp"
             android:textColor="@color/white"
-            android:background="@drawable/background_submit_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="10dp"
             />

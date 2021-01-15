@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/flight_a</item> //导航栏
-        <item name="colorPrimaryDark">@color/flight_a</item>//状态栏
-        <item name="colorAccent">@color/flight_a</item>//光标
+        <item name="colorPrimary">@color/colorPrimary</item> //导航栏
+        <item name="colorPrimaryDark">@color/colorPrimary</item>//状态栏
+        <item name="colorAccent">@color/black_3</item>//光标
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -128,7 +128,7 @@
     <style name="dialog_blue_button" parent="android:Widget.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">31dp</item>
-        <item name="android:background">@drawable/blue_button_background</item>
+        <item name="android:background">@drawable/ripple_round_blue_4dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:paddingLeft">21dp</item>
         <item name="android:paddingRight">21dp</item>
@@ -233,7 +233,7 @@
         <item name="android:layout_marginLeft">7dp</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:background">@drawable/background_submit_press</item>
+        <item name="android:background">@drawable/ripple_round_blue_4dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
         </style>

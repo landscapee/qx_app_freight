@@ -131,6 +131,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -177,7 +178,7 @@ public interface HttpApi {
 
     //暂存提交
     @POST("service-product-transportcheck/ins/commit")
-    Observable <BaseEntity <Object>> storageCommit(@Body StorageCommitEntity model);
+    Observable <BaseEntity <Object>> storageCommit(@Header ("taskId")String taskId,@Body StorageCommitEntity model);
 
     //批量收验
     @POST("service-product-transportcheck/ins/commitList")
@@ -246,12 +247,12 @@ public interface HttpApi {
 
     //出港退货提交
     @POST("service-product-receivecargo/rc/returnCargo")
-    Observable <BaseEntity <Object>> returnCargoCommit(@Body TransportListCommitEntity model);
+    Observable <BaseEntity <Object>> returnCargoCommit(@Header("taskId")String taskId,@Body TransportListCommitEntity model);
 
 
     //出港退货 -收运
     @POST("service-product-receivecargo/rc/list")
-    Observable <BaseEntity <AgentBean>> agentTransportationList(@Body BaseFilterEntity model);
+    Observable <BaseEntity <AgentBean>> agentTransportationList(@Header("taskId")String taskId,@Body BaseFilterEntity model);
 
     //出港退货 -收运
     @POST("service-product-receivecargo/rc/list")
@@ -279,7 +280,7 @@ public interface HttpApi {
 
     //添加收运信息
     @POST("service-product-receivecargo/rc/saveOrUpdate")
-    Observable <BaseEntity <MyAgentListBean>> addInfo(@Body MyAgentListBean model);
+    Observable <BaseEntity <MyAgentListBean>> addInfo(@Header("taskId")String taskId,@Body MyAgentListBean model);
 
     //判断板车是否被占用
     @GET("service-product-receivecargo/rc/exist/{scooterId}")
@@ -311,7 +312,7 @@ public interface HttpApi {
 
     //删除收运信息
     @DELETE("service-product-receivecargo/rc/delete/{id}")
-    Observable <BaseEntity <Object>> deleteCollectionInfo(@Path("id") String id);
+    Observable <BaseEntity <Object>> deleteCollectionInfo(@Header("taskId")String taskId,@Path("id") String id);
 
     //文件上传
     @POST("service-base-file/base/file/uploads")
@@ -380,11 +381,11 @@ public interface HttpApi {
 
     // 复重板车退回 组板
     @POST("service-product-cargoweighing/scooter/returnGroupScooterTask")
-    Observable <BaseEntity <Object>> returnGroupScooterTask(@Body GetInfosByFlightIdBean model);
+    Observable <BaseEntity <Object>> returnGroupScooterTask(@Header("taskId")String taskId,@Body GetInfosByFlightIdBean model);
 
     //复重/保存
     @POST("service-product-cargoweighing/scooter/saveScooter")
-    Observable <BaseEntity <OverWeightSaveResultBean>> saveScooter(@Body GetInfosByFlightIdBean model);
+    Observable <BaseEntity <OverWeightSaveResultBean>> saveScooter(@Header("taskId")String taskId,@Body GetInfosByFlightIdBean model);
 
     //复重/异常退回
     @POST("service-product-cargoweighing/scooter/returnWeighing")
@@ -915,7 +916,7 @@ public interface HttpApi {
 
     //提交出库入库 单
     @POST("service-bussiness-warehouse/storage/affirmInventory")
-    Observable <BaseEntity <Object>> submitIOManifestList(@Body SmInventoryEntryandexit entity);
+    Observable <BaseEntity <Object>> submitIOManifestList(@Header ("taskId")String taskId,@Body SmInventoryEntryandexit entity);
 
     //根据运单号查数据库，如果库里有此运单号，返回的运单数据
     @POST("service-product-cargotallying/sorting/getCargoInfoByWaybillCode")

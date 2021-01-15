@@ -2,7 +2,7 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/btn_bg_press">
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="10dp"/>
+            <corners android:radius="4dp"/>
             <solid android:color="@color/btn_bg_normal"/>
         </shape>
     </item>

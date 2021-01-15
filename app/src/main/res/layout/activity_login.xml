@@ -129,7 +129,7 @@
                 android:layout_marginLeft="@dimen/dp_50"
                 android:layout_marginRight="@dimen/dp_50"
                 android:layout_marginTop="@dimen/dp_40"
-                android:background="@drawable/selector_blue_20"
+                android:background="@drawable/ripple_round_blue_4dp"
                 android:text="登录"
                 android:textSize="20sp"
                 android:textColor="@color/white"/>

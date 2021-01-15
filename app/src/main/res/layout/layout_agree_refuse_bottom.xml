@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/shape_dynamic_black"
+        android:background="@drawable/ripple_round_red_4dp"
         android:gravity="center"
         android:layout_marginRight="3.5dp"
         android:text="@string/unqualified"
-        android:textColor="@color/text_666" />
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/agree_tv"
@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_marginRight="7dp"
-        android:background="@drawable/shape_dynamic_blue"
+        android:background="@drawable/ripple_round_blue_4dp"
         android:gravity="center"
         android:layout_marginLeft="3.5dp"
         android:text="@string/qualified"

@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_27"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:background="@drawable/background_press_blue"
+                    android:background="@drawable/ripple_round_blue_4dp"
                     android:gravity="center"
                     android:text="清空运单号"
                     android:textColor="@color/white" />

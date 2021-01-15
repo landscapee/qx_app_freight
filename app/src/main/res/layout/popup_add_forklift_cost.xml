@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="47dp"
-        android:background="@color/blue_2e8"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -181,7 +181,7 @@
                 android:id="@+id/rl_add"
                 android:layout_width="@dimen/dp_47"
                 android:layout_height="match_parent"
-                android:background="@drawable/btn_blue_press"
+                android:background="@drawable/ripple_round_blue_4dp"
                 >
                 <ImageView
                     android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
             android:text="确定"
              android:textSize="14sp"
             android:textColor="@color/white"
-            android:background="@drawable/background_submit_press"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:layout_marginBottom="24dp"
             />
 

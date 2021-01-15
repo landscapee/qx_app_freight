@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_47"
-        android:background="#2e81fd"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <TextView
@@ -185,7 +185,7 @@
             android:layout_width="@dimen/dp_200"
             android:layout_height="@dimen/dp_40"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/shape_rect_blue"
+            android:background="@drawable/ripple_round_blue_4dp"
             android:gravity="center"
             android:text="确定"
             android:textColor="@color/color_fff" />

@@ -150,7 +150,7 @@
         android:layout_marginBottom="@dimen/dp_4"
         android:layout_marginStart="@dimen/dp_7"
         android:layout_marginEnd="@dimen/dp_7"
-        android:background="@drawable/shape_rect_btn_2e81fd"
+        android:background="@drawable/ripple_round_blue_4dp"
         android:text="提交"
         android:textSize="@dimen/sp_18"
         android:textColor="@color/color_fff"/>

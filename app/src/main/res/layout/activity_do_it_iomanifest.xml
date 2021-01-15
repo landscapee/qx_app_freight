@@ -184,7 +184,7 @@
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:background="@drawable/background_submit_press"
+        android:background="@drawable/ripple_round_blue_4dp"
         android:text="提交"
         android:textColor="@color/white"
         android:textSize="18sp"
