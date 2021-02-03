@@ -62,7 +62,6 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
         toolbar.setMainTitle(Color.WHITE, "库存作业");
         initView();
     }
-
     private void initView() {
         smInventoryEntryandexit = (SmInventoryEntryandexit) getIntent().getSerializableExtra("data");
         if (smInventoryEntryandexit == null){
@@ -80,7 +79,7 @@ public class DoItIOManifestActivity extends BaseActivity implements SubmitIOMani
             }
             smInventoryEntryandexit.setExecUserId(UserInfoSingle.getInstance().getUserId());
             smInventoryEntryandexit.setExecUserName(UserInfoSingle.getInstance().getUsername());
-            smInventoryEntryandexit.setExecTime(TimeUtils.getTime());
+            smInventoryEntryandexit.setExecTime(null);
             smInventoryEntryandexit.setAreaId(IOManifestFragment.iOqrcodeEntity.getDepotID());
             smInventoryEntryandexit.setAreaTypeCode(IOManifestFragment.iOqrcodeEntity.getDepotCode());
             smInventoryEntryandexit.setAreaName(IOManifestFragment.iOqrcodeEntity.getDepotName());
