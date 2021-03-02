@@ -61,11 +61,11 @@ public class RsaCoder {
     public static String encryptByPublicKey(String data, String key)  {
         byte[] encode = new byte[1024];
         try {
-            encode = RsaCoder.encryptByPublicKey(data.getBytes(), Base64.decode(key, Base64.DEFAULT));
+            encode = RsaCoder.encryptByPublicKey(data.getBytes(), Base64.decode(key, Base64.NO_WRAP));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Base64.encodeToString(encode, Base64.DEFAULT);
+        return Base64.encodeToString(encode, Base64.NO_WRAP);
     }
 
 }

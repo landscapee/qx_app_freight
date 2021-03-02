@@ -24,6 +24,7 @@ import qx.app.freight.qxappfreight.contract.UpdatePWDContract;
 import qx.app.freight.qxappfreight.presenter.UpdatePWDPresenter;
 import qx.app.freight.qxappfreight.service.WebSocketService;
 import qx.app.freight.qxappfreight.utils.ActManager;
+import qx.app.freight.qxappfreight.utils.RsaCoder;
 import qx.app.freight.qxappfreight.utils.ToastUtil;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 
@@ -115,8 +116,11 @@ public class UpdatePWDActivity extends BaseActivity implements UpdatePWDContract
             }
 
             UpdatePwdEntity entity = new UpdatePwdEntity();
-            entity.setPassword(newPwd2);
-            entity.setOldpassword(oldPwd);
+//            entity.setPassword(newPwd2);
+//            entity.setOldpassword(oldPwd);
+            entity.setPassword(RsaCoder.encryptByPublicKey(newPwd2, RsaCoder.P_KEY));
+            entity.setOldpassword(RsaCoder.encryptByPublicKey(oldPwd, RsaCoder.P_KEY));
+
             if (!TextUtils.isEmpty(loginBean.getUserId())) {
                 entity.setUserId(loginBean.getUserId());
                 entity.setUsername(loginBean.getLoginName());

@@ -253,25 +253,6 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 
 
     private void initFragment() {
-//        PagerAdapter pagerAdapter = new PagerAdapter(this, getSupportFragmentManager());
-//        mViewPager.setAdapter(pagerAdapter);
-//        mViewPager.setOffscreenPageLimit(2);
-//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int i, float v, int i1) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int i) {
-//                switchFragment(i);
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int i) {
-//            }
-//        });
-//        mViewPager.setCurrentItem(0);
-//        switchFragment(mViewPager.getCurrentItem());
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, fragment1)
@@ -410,34 +391,6 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
 
     }
 
-//    class PagerAdapter extends FragmentPagerAdapter {
-//        PagerAdapter(Context context, FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int i) {
-//            Fragment fragment = null;
-//            switch (i) {
-//                case 0:
-//                    fragment = new TaskFragment();
-//                    break;
-//                case 1:
-//                    fragment = new TestFragment();
-//                    break;
-//                case 2:
-//                    fragment = new TaskStowageFragment();
-//                    break;
-//            }
-//            return fragment;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 3;
-//        }
-//    }
-
     /**
      * android 8  版本（包含） 以上 动态注册广播Action 才能收到隐士广播
      */
@@ -487,32 +440,6 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(InstallChangeEntity result) {
-        String remark = result.getFlightNo();
-        if (remark != null && !StringUtil.isEmpty(remark)) {
-            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
-            });
-            updatePushDialogInstall.show();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(InstallNotifyEventBusEntity result) {
-        String remark = "";
-        if (result.getType() == 2) {
-            remark = result.getFlightNo() + "监装已确认按此装机，版本：" + result.getVersion();
-        } else if (result.getType() == 4) {
-            remark = result.getFlightNo() + "监装已确认最终装机单，版本：" + result.getVersion();
-        }
-        if (remark != null && !StringUtil.isEmpty(remark)) {
-            UpdatePushDialog updatePushDialogInstall = new UpdatePushDialog(this, R.style.custom_dialog, remark, () -> {
-                EventBus.getDefault().post("LoadInstall_Sure_Update");
-            });
-            updatePushDialogInstall.show();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AfterHeavyExceptionBean result) {
         String remark = "航班" + result.getFlightNo() + "出现复重异常, 异常板车" + result.getScooter() + "，请查看！";
         if (remark != null && !StringUtil.isEmpty(remark)) {
@@ -539,22 +466,6 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(NewInstallEventBusEntity result) {
-        List <LoadingListBean.DataBean.ContentObjectBean.ScooterBean> scooters = new ArrayList <>();
-        List <LoadingListBean.DataBean.ContentObjectBean> objectBeans = result.getBeans();
-        if (objectBeans != null && objectBeans.size() > 0) {
-            for (LoadingListBean.DataBean.ContentObjectBean mContentObjectBean : objectBeans) {
-                scooters.addAll(mContentObjectBean.getScooters());
-            }
-            InstallSuggestPushDialog updatePushDialog = new InstallSuggestPushDialog(this, R.style.custom_dialog, scooters, objectBeans.get(0).getFlightNo(), () -> {
-                EventBus.getDefault().post("LoadInstall_Sure_Update");
-                EventBus.getDefault().post("refresh_data_update");
-            });
-
-            updatePushDialog.show();
-        }
-    }
 
     @Override
     protected void onStart() {

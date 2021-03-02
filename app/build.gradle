@@ -31,7 +31,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 86//app根据此数字进行版本自动迭代 2021/1/25
+        versionCode 87//app根据此数字进行版本自动迭代 2021/2/25
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
