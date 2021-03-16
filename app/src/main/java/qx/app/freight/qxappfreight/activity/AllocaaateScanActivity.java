@@ -37,10 +37,8 @@ import qx.app.freight.qxappfreight.bean.WeightWayBillBean;
 import qx.app.freight.qxappfreight.bean.request.BaseFilterEntity;
 import qx.app.freight.qxappfreight.bean.response.BaseEntity;
 import qx.app.freight.qxappfreight.bean.response.GetInfosByFlightIdBean;
-import qx.app.freight.qxappfreight.bean.response.UldInfo;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetScooterByScooterCodeContract;
-import qx.app.freight.qxappfreight.dialog.ShowUldInfoDialog;
 import qx.app.freight.qxappfreight.presenter.GetScooterByScooterCodePresenter;
 import qx.app.freight.qxappfreight.utils.CalculateUtil;
 import qx.app.freight.qxappfreight.utils.StringUtil;
@@ -80,10 +78,10 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     EditText tvReviseFront;
     @BindView(R.id.et_other)
     EditText etOther;
-    @BindView(R.id.tv_uld_weight)
-    TextView tvUldWeight;
-    @BindView(R.id.tv_uld_look_details)
-    TextView tvUldLookDetails;
+    @BindView(R.id.tv_uld)
+    TextView tvUld;
+    @BindView(R.id.tv_uld_self)
+    TextView tvUldSelf;
     @BindView(R.id.btn_read)
     Button btnRead;//取消取重按钮，目前是隐藏了的
     @BindView(R.id.btn_return)
@@ -103,10 +101,6 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private double reviseWeight; //修订重量
     private double crossWeight; //毛重
     private double goodsWeight; //复重净重
-    /**
-     * uld 重量
-     */
-    private double uldWeight;
     private int selectorOption = -1;
     private GetInfosByFlightIdBean mData;
     private CustomToolbar toolbar;
@@ -131,9 +125,9 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         toolbar.setMainTitle(Color.WHITE, "板车复重");
         mPresenter = new GetScooterByScooterCodePresenter(this);
 
-        initView();
-
         initData();
+
+        initView();
     }
 
     private void initData() {
@@ -157,14 +151,26 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 tvToCity.setText("目的站:" + mData.getToCityEn());
                 tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
+                String mType, mCode, mIata;
 
-                uldWeight = 0;
-                if (mData.getUlds() != null && mData.getUlds().size() > 0) {
-                    for (UldInfo uldInfo : mData.getUlds()) {
-                        uldWeight += uldInfo.getUldWeight();
-                    }
+                if (TextUtils.isEmpty(mData.getUldType())) {
+                    mType = "-";
+                } else {
+                    mType = mData.getUldType();
                 }
-                tvUldWeight.setText(uldWeight + "kg");
+                if (TextUtils.isEmpty(mData.getUldCode())) {
+                    mCode = "-";
+                } else {
+                    mCode = mData.getUldCode();
+                }
+                if (TextUtils.isEmpty(mData.getIata())) {
+                    mIata = "-";
+                } else {
+                    mIata = mData.getIata();
+                }
+
+                tvUld.setText(mType + " " + mCode + " " + mIata);
+                tvUldSelf.setText(mData.getUldWeight() + "kg");
                 //收运净重
                 tvNetweightFront.setText(mData.getWeight() + "kg");
                 break;
@@ -231,16 +237,6 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                     calculateWeight();
                 }
             }
-        });
-        tvUldLookDetails.setOnClickListener(v -> {
-            if (mData.getUlds() != null && mData.getUlds().size() > 0) {
-                ShowUldInfoDialog showUldInfoDialog = new ShowUldInfoDialog();
-                showUldInfoDialog.setData(mData.getUlds(), this);
-                showUldInfoDialog.show(getSupportFragmentManager(), "uld详情");
-            } else {
-                ToastUtil.showToast("该板车上没有ULD");
-            }
-
         });
 
     }
@@ -427,7 +423,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
         //复重净重=本次复磅毛重-板车自重-ULD自重-人工干预
 //        goodsWeight = crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight);
-        goodsWeight = CalculateUtil.doubleSave2(crossWeight - (mData.getScooterWeight() + uldWeight + reviseWeight));
+        goodsWeight = CalculateUtil.doubleSave2(crossWeight - (mData.getScooterWeight() + mData.getUldWeight() + reviseWeight));
         //复重差值 = 复重净重 - 组板净重
         dValue = CalculateUtil.doubleSave2(goodsWeight - mData.getWeight());
 
@@ -439,11 +435,11 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         }
 
         if ("ABC".contains(mData.getFlightBody()) && (dValue > 30 || dValue < -30)) {
-            tvDvalueFront.setTextColor(ContextCompat.getColor(this, R.color.red));
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.red));
         } else if ("EF".contains(mData.getFlightBody()) && (dValue > 50 || dValue < -50)) {
-            tvDvalueFront.setTextColor(ContextCompat.getColor(this, R.color.red));
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.red));
         } else {
-            tvDvalueFront.setTextColor(ContextCompat.getColor(this, R.color.black_3));
+            tvDvalueFront.setTextColor(ContextCompat.getColor(this,R.color.black_3));
         }
 
         //复磅差值
@@ -482,14 +478,26 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 tvFlightid.setText(mData.getFlightNo());
                 tvNameFront.setText(mData.getScooterCode());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
+                String mType, mCode, mIata;
 
-                uldWeight = 0;
-                if (mData.getUlds() != null && mData.getUlds().size() > 0) {
-                    for (UldInfo uldInfo : mData.getUlds()) {
-                        uldWeight += uldInfo.getUldWeight();
-                    }
+                if (TextUtils.isEmpty(mData.getUldType())) {
+                    mType = "-";
+                } else {
+                    mType = mData.getUldType();
                 }
-                tvUldWeight.setText(uldWeight + "kg");
+                if (TextUtils.isEmpty(mData.getUldCode())) {
+                    mCode = "-";
+                } else {
+                    mCode = mData.getUldCode();
+                }
+                if (TextUtils.isEmpty(mData.getIata())) {
+                    mIata = "-";
+                } else {
+                    mIata = mData.getIata();
+                }
+
+                tvUld.setText(mType + " " + mCode + " " + mIata);
+                tvUldSelf.setText(mData.getUldWeight() + "kg");
                 //收运净重
                 tvNetweightFront.setText(mData.getWeight() + "kg");
                 break;

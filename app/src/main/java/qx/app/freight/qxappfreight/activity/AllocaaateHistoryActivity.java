@@ -12,8 +12,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GetHistoryContract;
 import qx.app.freight.qxappfreight.popwindow.EditPopWindow;
 import qx.app.freight.qxappfreight.presenter.GetHistoryPresenter;
+import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.TimeUtils;
 import qx.app.freight.qxappfreight.widget.CustomToolbar;
 import qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView;
@@ -54,16 +57,27 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     LinearLayout llSelectTime;
     @BindView(R.id.et_flight_no)
     EditText etFlightNo;
+    @BindView(R.id.et_scooter_code)
+    EditText etScooterCode;
+
+    @BindView(R.id.iv_clear_flight_no)
+    ImageView ivClearFlightNo;
+    @BindView(R.id.iv_clear_scooter_code)
+    ImageView ivClearScooterCode;
+
+    @BindView(R.id.btn_search)
+    Button btnSearch;
+
     private AllocaaateHistoryAdapter mAdapter;
     private List <GetInfosByFlightIdBean> list;
-    private List <GetInfosByFlightIdBean> listOri;
+//    private List <GetInfosByFlightIdBean> listOri;
     private int pageCurrent = 1;
     private long searchTime;
     private SearchFlightInfoBean mSearchFlightInfoBean;
     private EditPopWindow editPopWindow;
 
-    private List <String> flightNos = new ArrayList <>();
-    private List <String> flightNosOri = new ArrayList <>();
+//    private List <String> flightNos = new ArrayList <>();
+//    private List <String> flightNosOri = new ArrayList <>();
 
     @Override
     public int getLayoutId() {
@@ -73,7 +87,7 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
     @Override
     public void businessLogic(Bundle savedInstanceState) {
         initView();
-        getData(searchTime);
+//        getData(searchTime);
     }
 
     private void initView() {
@@ -83,7 +97,7 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         searchTime = new Date(System.currentTimeMillis()).getTime();
         tvDateStart.setText(TimeUtils.getTime2_1(searchTime));
         list = new ArrayList <>();
-        listOri = new ArrayList <>();
+//        listOri = new ArrayList <>();
         mAdapter = new AllocaaateHistoryAdapter(list);
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(this));
         mMfrvAllocateList.setOnRetryLisenter(this);
@@ -111,27 +125,53 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
 
             @Override
             public void afterTextChanged(Editable s) {
-                flightNos.clear();
-                for (String str : flightNosOri) {
-                    if (str.contains(etFlightNo.getText().toString().trim().toUpperCase())) {
-                        flightNos.add(str);
-                    }
+//                flightNos.clear();
+//                for (String str : flightNosOri) {
+//                    if (str.contains(etFlightNo.getText().toString().trim().toUpperCase())) {
+//                        flightNos.add(str);
+//                    }
+//                }
+//                if (editPopWindow == null) {
+//                    editPopWindow = new EditPopWindow(AllocaaateHistoryActivity.this, flightNos, etFlightNo);
+//                    editPopWindow.showAsDropDown(etFlightNo);
+//                    editPopWindow.setOnFlightCheckListener(() -> {
+//                        filterData();
+//                    });
+//                } else {
+//                    if (editPopWindow.isShowing()) {
+//                        editPopWindow.update(flightNos);
+//                    } else {
+//                        editPopWindow.update(flightNos);
+//                        editPopWindow.showAsDropDown(etFlightNo);
+//                    }
+//                }
+//                filterData();
+
+                if (!StringUtil.isEmpty(etFlightNo.getText().toString())){
+                    ivClearFlightNo.setVisibility(View.VISIBLE);
+                }else {
+                    ivClearFlightNo.setVisibility(View.GONE);
                 }
-                if (editPopWindow == null) {
-                    editPopWindow = new EditPopWindow(AllocaaateHistoryActivity.this, flightNos, etFlightNo);
-                    editPopWindow.showAsDropDown(etFlightNo);
-                    editPopWindow.setOnFlightCheckListener(() -> {
-                        filterData();
-                    });
-                } else {
-                    if (editPopWindow.isShowing()) {
-                        editPopWindow.update(flightNos);
-                    } else {
-                        editPopWindow.update(flightNos);
-                        editPopWindow.showAsDropDown(etFlightNo);
-                    }
+            }
+        });
+        etScooterCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!StringUtil.isEmpty(etScooterCode.getText().toString())){
+                    ivClearScooterCode.setVisibility(View.VISIBLE);
+                }else {
+                    ivClearScooterCode.setVisibility(View.GONE);
                 }
-                filterData();
             }
         });
         etFlightNo.setOnClickListener(v -> {
@@ -140,6 +180,27 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
             etFlightNo.requestFocus();
             InputMethodManager imm = (InputMethodManager) AllocaaateHistoryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+        });
+        etScooterCode.setOnClickListener(v -> {
+            etScooterCode.setFocusable(true);
+            etScooterCode.setFocusableInTouchMode(true);
+            etScooterCode.requestFocus();
+            InputMethodManager imm = (InputMethodManager) AllocaaateHistoryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+        });
+        ivClearScooterCode.setOnClickListener(v -> {
+            etScooterCode.setText("");
+            pageCurrent = 1;
+            getData(searchTime);
+        });
+        ivClearFlightNo.setOnClickListener(v -> {
+            etFlightNo.setText("");
+            pageCurrent = 1;
+            getData(searchTime);
+        });
+        btnSearch.setOnClickListener(v -> {
+            pageCurrent = 1;
+            getData(searchTime);
         });
     }
 
@@ -154,47 +215,49 @@ public class AllocaaateHistoryActivity extends BaseActivity implements GetHistor
         AllocaaateHitoryBean bean = new AllocaaateHitoryBean();
         bean.setReWeighedUserId(UserInfoSingle.getInstance().getUserId());
         bean.setSearchTime(time);
+        bean.setFlightNo(etFlightNo.getText().toString().toUpperCase());
+        bean.setScooterCode(etScooterCode.getText().toString().toUpperCase());
         entity.setFilter(bean);
         entity.setCurrent(pageCurrent);
-        entity.setSize(Constants.PAGE_SIZE);
+        entity.setSize(20);
         ((GetHistoryPresenter) mPresenter).getHistory(entity);
     }
 
     @Override
     public void getHistoryResult(GetHistoryBean getHistoryBean) {
         if (pageCurrent == 1) {
-            listOri.clear();
+            list.clear();
             mMfrvAllocateList.finishRefresh();
         } else {
             mMfrvAllocateList.finishLoadMore();
         }
-        listOri.addAll(getHistoryBean.getRecords());
+        list.addAll(getHistoryBean.getRecords());
 
-        flightNosOri.clear();
-        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
-            boolean isHas = false;
-            for (String str : flightNosOri) {
-                if (str.equals(getInfosByFlightIdBean.getFlightNo())) {
-                    isHas = true;
-                }
-            }
-            if (!isHas) {
-                flightNosOri.add(getInfosByFlightIdBean.getFlightNo());
-            }
-        }
-        filterData();
-
+//        flightNosOri.clear();
+//        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
+//            boolean isHas = false;
+//            for (String str : flightNosOri) {
+//                if (str.equals(getInfosByFlightIdBean.getFlightNo())) {
+//                    isHas = true;
+//                }
+//            }
+//            if (!isHas) {
+//                flightNosOri.add(getInfosByFlightIdBean.getFlightNo());
+//            }
+//        }
+//        filterData();
+        mMfrvAllocateList.notifyForAdapter(mAdapter);
     }
 
     private void filterData() {
-        list.clear();
-        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
-            if (getInfosByFlightIdBean.getFlightNo().contains(etFlightNo.getText().toString().trim().toUpperCase())) {
-                list.add(getInfosByFlightIdBean);
-            }
-        }
-
-        mMfrvAllocateList.notifyForAdapter(mAdapter);
+//        list.clear();
+//        for (GetInfosByFlightIdBean getInfosByFlightIdBean : listOri) {
+//            if (getInfosByFlightIdBean.getFlightNo().contains(etFlightNo.getText().toString().trim().toUpperCase())) {
+//                list.add(getInfosByFlightIdBean);
+//            }
+//        }
+//
+//        mMfrvAllocateList.notifyForAdapter(mAdapter);
     }
 
     @Override

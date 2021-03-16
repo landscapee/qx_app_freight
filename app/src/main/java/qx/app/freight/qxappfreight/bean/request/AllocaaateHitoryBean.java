@@ -10,5 +10,6 @@ import lombok.Data;
 public class AllocaaateHitoryBean {
     private String reWeighedUserId;
     private long searchTime;
-    private String flightNo;//航班号
+    private String flightNo;
+    private String scooterCode;
 }

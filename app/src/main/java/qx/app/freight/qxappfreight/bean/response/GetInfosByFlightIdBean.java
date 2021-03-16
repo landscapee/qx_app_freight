@@ -148,6 +148,4 @@ public class GetInfosByFlightIdBean implements Serializable {
     private Integer flightTranssit;
 
     private String groupScooterTaskId; //组板任务id
-
-    private List <UldInfo> ulds;
 }

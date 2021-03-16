@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ouyben.empty.EmptyLayout;
@@ -58,7 +59,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     @BindView(R.id.mfrv_allocate_list)
     MultiFunctionRecylerView mMfrvAllocateList;
     @BindView(R.id.tv_history)
-    TextView tvHistory;
+    Button btnHistory;
 
     private AllocateVehiclesAdapter adapter;
 
@@ -91,7 +92,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        tvHistory.setOnClickListener(v -> {
+        btnHistory.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), AllocaaateHistoryActivity.class));
         });
         mMfrvAllocateList.setLayoutManager(new LinearLayoutManager(getContext()));

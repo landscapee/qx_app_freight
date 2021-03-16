@@ -5,389 +5,378 @@
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="0dp">
 
         <LinearLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:orientation="vertical">
-
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    style="@style/public_tv_16sp_2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="航班号" />
-
+                    android:text="航班号"
+                    style="@style/public_tv_16sp_2" />
                 <TextView
                     android:id="@+id/tv_flightid"
-                    style="@style/public_tv_16sp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center" />
-
+                    android:gravity="center"
+                    style="@style/public_tv_16sp"
+                    />
                 <TextView
                     android:id="@+id/tv_to_city"
-                    style="@style/public_tv_16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    style="@style/public_tv_16sp"
+                    />
             </LinearLayout>
-
-            <View style="@style/line_horizontal_979797" />
-
+            <View
+                style="@style/line_horizontal_979797" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="板车号" />
-
+                        android:text="板车号"
+                        style="@style/public_tv_16sp_2" />
                     <TextView
                         android:id="@+id/tv_name_front"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
-
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical|end" />
+
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="板车自重" />
-
+                        android:text="板车自重"
+                        style="@style/public_tv_16sp_2"/>
                     <TextView
                         android:id="@+id/tv_deadweight_front"
-                        style="@style/public_tv_16sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical|end" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View style="@style/line_horizontal_979797" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="2"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        style="@style/public_tv_16sp_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="ULD 总重合计:" />
-
-                    <TextView
-                        android:id="@+id/tv_uld_weight"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end"
-                        android:textColor="#333333" />
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:id="@+id/tv_uld_look_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="查看详情"
-                        android:textColor="@color/white"
-                        android:background="@drawable/ripple_round_blue_4dp"/>
-                </LinearLayout>
             </LinearLayout>
 
-            <View style="@style/line_horizontal_979797" />
+            <View
+                style="@style/line_horizontal_979797" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="ULD"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_uld"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:textColor="#333333"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="ULD自重"
+                        style="@style/public_tv_16sp_2" />
+                    <TextView
+                        android:id="@+id/tv_uld_self"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                style="@style/line_horizontal_979797" />
+
+            <LinearLayout
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    style="@style/public_tv_16sp_2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="本次复磅毛重" />
-
+                    android:text="本次复磅毛重"
+                    style="@style/public_tv_16sp_2"/>
                 <EditText
                     android:id="@+id/tv_grossweight_front"
-                    style="@style/public_tv_16sp_3"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@null"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
-                    android:hint="请输入复磅值"
                     android:inputType="numberDecimal"
+                    android:background="@null"
+                    android:hint="请输入复磅值"
+                    style="@style/public_tv_16sp_3"
+                    android:textSize="25sp"
                     android:maxLength="5"
-                    android:textSize="25sp" />
-
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:textSize="25sp"
                     android:text="kg"
-                    android:textSize="25sp" />
+                    />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/btn_read"
-                    style="@style/public_tv_14sp_4"
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="27dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/selector_green_05b"
                     android:text="读取"
-                    android:visibility="gone" />
+                    style="@style/public_tv_14sp_4"/>
             </LinearLayout>
-
-            <View style="@style/line_horizontal_979797" />
-
+            <View
+                style="@style/line_horizontal_979797" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="复磅差值" />
-
+                        android:text="复磅差值"
+                        style="@style/public_tv_16sp_2" />
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/tv_dvalue_front"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end"
-                        android:textStyle="bold" />
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="复磅差率" />
-
+                        android:text="复磅差率"
+                        style="@style/public_tv_16sp_2" />
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/tv_gradient_front"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end"
-                        android:textStyle="bold" />
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
             </LinearLayout>
 
-            <View style="@style/line_horizontal_979797" />
+            <View
+                style="@style/line_horizontal_979797" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="复重净重" />
-
+                        android:text="复重净重"
+                        style="@style/public_tv_16sp_2" />
                     <TextView
                         android:id="@+id/tv_netweight_fz"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical|end" />
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="收运净重" />
-
+                        android:text="收运净重"
+                        style="@style/public_tv_16sp_2" />
                     <TextView
                         android:id="@+id/tv_netweight_front"
-                        style="@style/public_tv_16sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical|end" />
+                        android:gravity="center_vertical|end"
+                        style="@style/public_tv_16sp" />
                 </LinearLayout>
 
             </LinearLayout>
 
 
-            <View style="@style/line_horizontal_979797" />
+            <View
+                style="@style/line_horizontal_979797" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:layout_height="50dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="人工干预值" />
-
+                        android:text="人工干预值"
+                        style="@style/public_tv_16sp_2" />
                     <EditText
                         android:id="@+id/tv_revise_front"
-                        style="@style/public_tv_16sp"
+                        android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
                         android:gravity="center_vertical|end"
                         android:hint="请输入"
                         android:inputType="numberSigned|numberDecimal"
-                        android:maxLength="15" />
-
+                        android:background="@null"
+                        android:maxLength="15"
+                        style="@style/public_tv_16sp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:textSize="16sp"
                         android:text="kg"
-                        android:textSize="16sp" />
+                        />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:layout_height="50dp"
                     android:orientation="horizontal"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp">
 
                     <TextView
-                        style="@style/public_tv_16sp_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="备注" />
-
+                        android:text="备注"
+                        style="@style/public_tv_16sp_2" />
                     <LinearLayout
                         android:id="@+id/ll_scan"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:orientation="horizontal"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
-
+                        android:layout_width="0dp"
+                        android:layout_height="50dp">
                         <TextView
                             android:id="@+id/tv_scan"
-                            style="@style/public_tv_16sp"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:spinnerMode="dropdown" />
-
+                            android:spinnerMode="dropdown"
+                            style="@style/public_tv_16sp" />
                         <ImageView
-                            android:layout_width="@dimen/dp_15"
-                            android:layout_height="@dimen/dp_15"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp_15"
                             android:layout_marginRight="@dimen/dp_15"
-                            android:src="@mipmap/drop_select" />
+                            android:layout_marginLeft="@dimen/dp_15"
+                            android:src="@mipmap/drop_select"
+                            android:layout_width="@dimen/dp_15"
+                            android:layout_height="@dimen/dp_15" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -395,15 +384,14 @@
             </LinearLayout>
 
             <View style="@style/line_horizontal_979797" />
-
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_other"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:visibility="gone">
+                android:paddingRight="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -417,11 +405,11 @@
                     android:id="@+id/et_other"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@null"
                     android:gravity="center_vertical|end"
-                    android:hint="请输入备注信息"
-                    android:maxLength="15"
                     android:textColor="#333333"
+                    android:hint="请输入备注信息"
+                    android:background="@null"
+                    android:maxLength="15"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -430,12 +418,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="1px"
                     android:layout_weight="1.5"
+                    android:layout_marginLeft="1px"
                     android:background="@color/gray_576"
                     android:gravity="center"
                     android:padding="9dp"
@@ -454,7 +441,6 @@
                     android:text="品名"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -484,41 +470,39 @@
             <qx.app.freight.qxappfreight.widget.SlideRecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
     <View
+        android:background="#e3e3e3"
         android:layout_width="match_parent"
-        android:layout_height="7dp"
-        android:background="#e3e3e3" />
-
+        android:layout_height="7dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/btn_return"
+            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/ripple_round_red_4dp"
             android:text="返回组板"
+            android:textSize="18sp"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            />
 
         <Button
             android:id="@+id/btn_confirm"
+            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="#bcbcbc"
             android:text="确定"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/white" />
     </LinearLayout>
     <!--android:background="#2e81fd"-->
 </LinearLayout>

@@ -13,16 +13,29 @@
         android:orientation="horizontal"
         android:paddingHorizontal="10dp">
 
-        <EditText
-            android:id="@+id/et_flight_no"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
-            android:background="@drawable/shape_rect_gray_line"
-            android:hint="请输入航班号"
-            android:singleLine="true"
-            android:maxLength="6"
-            android:paddingHorizontal="@dimen/dp_10" />
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_flight_no"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_rect_gray_line"
+                android:hint="请输入航班号"
+                android:singleLine="true"
+                android:maxLength="6"
+                android:paddingHorizontal="@dimen/dp_10" />
+            <ImageView
+                android:id="@+id/iv_clear_flight_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/closed"
+                android:layout_marginLeft="-20dp"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,12 +47,55 @@
             android:id="@+id/tv_date_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:hint="请选择开始日期"
             android:padding="5dp"
             android:text=""
             android:textColor="@color/black_3"
             android:textSize="18sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:gravity="center_vertical">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_scooter_code"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_rect_gray_line"
+                android:hint="请输入板车号"
+                android:singleLine="true"
+                android:maxLength="6"
+                android:paddingHorizontal="@dimen/dp_10" />
+            <ImageView
+                android:id="@+id/iv_clear_scooter_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/closed"
+                android:layout_marginLeft="-20dp"
+                android:visibility="gone"/>
+        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/ripple_round_blue_4dp"
+            android:gravity="center"
+            android:text="搜索"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_marginLeft="15dp"/>
     </LinearLayout>
 
     <qx.app.freight.qxappfreight.widget.MultiFunctionRecylerView
