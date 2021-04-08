@@ -34,6 +34,7 @@ import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LockScooterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
+import qx.app.freight.qxappfreight.bean.request.OnlineStutasEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
@@ -700,7 +701,14 @@ public class UpdateRepository extends BaseRepository {
     public Observable <String> saveGpsInfo(GpsInfoEntity gpsInfoEntity) {
         return nothingtransform(getService().saveGpsInfo(gpsInfoEntity));
     }
-
+    /*****
+     * 登录状态 发送给 服务器
+     * @param userInfo
+     * @return
+     */
+    public Observable <String> onlineStatus(OnlineStutasEntity userInfo) {
+        return nothingtransform(getService().onlineStatus(userInfo));
+    }
     /****
      * 外场运输待办
      * @return

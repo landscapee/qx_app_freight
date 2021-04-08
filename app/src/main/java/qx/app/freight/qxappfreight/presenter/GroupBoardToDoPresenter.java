@@ -45,7 +45,7 @@ public class GroupBoardToDoPresenter extends BasePresenter {
         ((GroupBoardToDoListModel) mRequestModel).getOverWeightToDo(model, new IResultLisenter<FilterTransportDateBase>() {
             @Override
             public void onSuccess(FilterTransportDateBase transportListBeans) {
-                ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getGroupBoardToDoResult(transportListBeans);
+                ((GroupBoardToDoContract.GroupBoardToDoView) mRequestView).getOverWeightToDoResult(transportListBeans);
                 mRequestView.dissMiss();
             }
 

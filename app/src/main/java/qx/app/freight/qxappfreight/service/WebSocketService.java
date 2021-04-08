@@ -1,10 +1,15 @@
 package qx.app.freight.qxappfreight.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.qxkj.positionapp.GPSUtils;
@@ -13,9 +18,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import qx.app.freight.qxappfreight.R;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
 import qx.app.freight.qxappfreight.bean.request.GpsInfoEntity;
+import qx.app.freight.qxappfreight.bean.request.OnlineStutasEntity;
 import qx.app.freight.qxappfreight.constant.HttpConstant;
+import qx.app.freight.qxappfreight.contract.OnlineStatusContract;
 import qx.app.freight.qxappfreight.contract.SaveGpsInfoContract;
 import qx.app.freight.qxappfreight.listener.BaggageClient;
 import qx.app.freight.qxappfreight.listener.BeforehandClient;
@@ -27,39 +35,43 @@ import qx.app.freight.qxappfreight.listener.OffSiteEscortClient;
 import qx.app.freight.qxappfreight.listener.PreplanerClient;
 import qx.app.freight.qxappfreight.listener.ReceiveClient;
 import qx.app.freight.qxappfreight.listener.WeighterClient;
+import qx.app.freight.qxappfreight.presenter.OnlineStatusPresenter;
 import qx.app.freight.qxappfreight.presenter.SaveGpsInfoPresenter;
 import qx.app.freight.qxappfreight.utils.DeviceInfoUtil;
+import qx.app.freight.qxappfreight.utils.RxTimer;
 import qx.app.freight.qxappfreight.utils.StringUtil;
 import qx.app.freight.qxappfreight.utils.Tools;
 import ua.naiksoftware.stomp.StompClient;
 
-public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView {
+public class WebSocketService extends Service implements SaveGpsInfoContract.saveGpsInfoView, OnlineStatusContract.OnlineStatusView {
     public Context mContext;
     //    private static StompClient mStompClient;
     public static final String TAG = "websocket";
     private GpsInfoEntity gpsInfoEntity; // gps 上传实体
     private SaveGpsInfoPresenter saveGpsInfoPresenter;
+    private OnlineStatusPresenter onlineStatusPresenter;
     private int taskAssignType = 0;
     public static boolean isTopic = false;
-    public static List<StompClient> mStompClient;
-
-    private boolean isContinue = true; //线程控制
-    private Thread threadGps = null;
-
+    public static List <StompClient> mStompClient;
     public static String ToList = "/taskTodo/taskTodoList";
     public static String Message = "/MT/msMsg";
     public static String Login = "/MT/message";
     public static String Install = "/departure/installedAdvice";
 
-    public static List<String> subList = new ArrayList<>();
+    public static List <String> subList = new ArrayList <>();
+
+    public  OnlineStutasEntity onlineStutasEntity;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        List<String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
-        mStompClient = new ArrayList<>();
+        List <String> ary = Arrays.asList("cargoAgency", "receive", "securityCheck", "collection", "charge");
+        mStompClient = new ArrayList <>();
         if (null == UserInfoSingle.getInstance().getRoleRS()) {
             return;
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            backGroundStartForeground();
         }
         for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
             if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() > 0) {
@@ -162,24 +174,30 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
             }
         }
         saveGpsInfoPresenter = new SaveGpsInfoPresenter(this);
-        //GPS 数据提交线程
-        isContinue = true;
-        if (threadGps == null) {
-            threadGps = new Thread(() -> {
-                while (isContinue) {
-                    try {
-                        sendGps();
-                        Thread.sleep(30000);
+        onlineStatusPresenter = new OnlineStatusPresenter(this);
+        startSendThread();
+    }
 
-                    } catch (Exception e) {
-                        Log.e("GPS while (true)", e.getMessage());
-                    }
-                }
-            });
+    private RxTimer rxTimer;
+
+    private void endThread() {
+        if (rxTimer != null) {
+            rxTimer.cancel();
         }
-        if (!threadGps.isAlive()) {
-            threadGps.start();
+    }
+
+    private void startSendThread() {
+        endThread();
+        if (rxTimer == null) {
+            rxTimer = new RxTimer();
         }
+        rxTimer.interval(10000, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
+                sendGps();
+//                sendOnlineStatus();
+            }
+        });
     }
 
     private void sendGps() {
@@ -200,6 +218,16 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
         }
     }
 
+    private void sendOnlineStatus() {
+        Log.e("登录状态上传：", "已发送" );
+        if (onlineStutasEntity == null){
+            onlineStutasEntity = new OnlineStutasEntity();
+            onlineStutasEntity.setPlatform("android");
+            onlineStutasEntity.setUser(UserInfoSingle.getInstance());
+        }
+        onlineStatusPresenter.onlineStatus(onlineStutasEntity);
+    }
+
     public static void startService(Context activtity) {
         actionStart(activtity);
     }
@@ -207,6 +235,33 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     private static void actionStart(Context ctx) {
         Intent i = new Intent(ctx, WebSocketService.class);
         ctx.startService(i);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void backGroundStartForeground() {
+
+        /**
+         *通过通知启动服务
+         */
+        //设定的通知渠道名称
+        String channelName = "background_qx_freight_app";
+        //设置通知的重要程度
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        //构建通知渠道
+        NotificationChannel channel = new NotificationChannel(channelName, channelName, importance);
+        channel.setDescription("");
+        //在创建的通知渠道上发送通知
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelName);
+        builder.setSmallIcon(R.mipmap.ic_logo) //设置通知图标
+                .setContentTitle("后台服务")//设置通知标题
+                .setContentText("推送已连接")//设置通知内容
+                .setAutoCancel(true) //用户触摸时，自动关闭
+                .setOngoing(true);//设置处于运行状态
+        //向系统注册通知渠道，注册后不能改变重要性以及其他通知行为
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+        //将服务置于启动状态 NOTIFICATION_ID指的是创建的通知的ID
+        startForeground(2, builder.build());
     }
 
     public void Collection(String uri) {
@@ -244,14 +299,21 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     public void NewspaperClient(String uri) {
         new NewspaperClient(uri, this);
     }
+
     public void BaggageClient(String uri) {
         new BaggageClient(uri, this);
     }
 
+
     @Override
     public void onDestroy() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            stopForeground(true);
+        }
+        endThread();
+        Log.e("WebSocketService：", "onDestroy");
         super.onDestroy();
-        isContinue = false;
+
     }
 
 
@@ -275,6 +337,13 @@ public class WebSocketService extends Service implements SaveGpsInfoContract.sav
     @Override
     public void dissMiss() {
 
+    }
+
+    @Override
+    public void onlineStatusResult(String result) {
+        if (!StringUtil.isEmpty(result)) {
+            Log.e("登录状态上传：", "成功：" + result);
+        }
     }
 
     public class WebSocketBinder extends Binder {

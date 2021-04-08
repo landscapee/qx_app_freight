@@ -120,7 +120,7 @@ public class WaybillsBean implements Serializable {
     /**
      * 预期费用
      */
-    private int amountOfMoney;
+    private double amountOfMoney;
     /**
      * 逾期费用
      */

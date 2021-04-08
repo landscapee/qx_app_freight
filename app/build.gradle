@@ -22,7 +22,7 @@ static def getVersionName() {
 
 def auto_verison_name = getVersionName()
 
-def versionCodeNum = 90
+def versionCodeNum = 91
 def projectName = "app-inland"
 
 android {
@@ -31,7 +31,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 90//app根据此数字进行版本自动迭代 2021/3/08
+        versionCode 91//app根据此数字进行版本自动迭代 2021/3/23
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
@@ -199,10 +199,10 @@ dependencies {
 
     //dex分包
     implementation 'com.android.support:multidex:1.0.3'
-    //bugly
-    implementation 'com.tencent.bugly:crashreport:2.8.6'
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-    implementation 'com.tencent.bugly:nativecrashreport:3.6.0'
+//    //bugly
+//    implementation 'com.tencent.bugly:crashreport:2.8.6'
+//    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+//    implementation 'com.tencent.bugly:nativecrashreport:3.6.0'
     //图片选择
     implementation 'com.yongchun:com.yongchun.imageselector:1.1.0'
     implementation 'com.isseiaoki:simplecropview:1.0.13'
@@ -234,10 +234,6 @@ dependencies {
     implementation 'com.github.hackware1993:MagicIndicator:1.6.0'
     implementation files('libs/nineoldandroids-2.4.0.jar')
     implementation 'com.github.donkingliang:LabelsView:1.4.1'
-    implementation 'com.tencent.bugly:crashreport:latest.release'
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
-    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 
 
     implementation 'com.github.liys666666:DoubleClick:V1.0.4'  // 利用 hook 处理重复点击

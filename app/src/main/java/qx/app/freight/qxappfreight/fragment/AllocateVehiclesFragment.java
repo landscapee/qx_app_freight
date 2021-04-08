@@ -141,20 +141,20 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     //根据条件筛选数据
     private void seachWithNum() {
-        list.clear();
-        if (TextUtils.isEmpty(searchString)) {
-            list.addAll(list1);
-        } else {
-            for (TransportDataBase item : list1) {
-                if (item.getFlightNo() != null && item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
-                    list.add(item);
-                }
-            }
-        }
-        if (mMfrvAllocateList != null) {
-            mMfrvAllocateList.notifyForAdapter(adapter);
-        }
-
+//        list.clear();
+//        if (TextUtils.isEmpty(searchString)) {
+//            list.addAll(list1);
+//        } else {
+//            for (TransportDataBase item : list1) {
+//                if (item.getFlightNo() != null && item.getFlightNo().toLowerCase().contains(searchString.toLowerCase())) {
+//                    list.add(item);
+//                }
+//            }
+//        }
+//        if (mMfrvAllocateList != null) {
+//            mMfrvAllocateList.notifyForAdapter(adapter);
+//        }
+        getData(searchString);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -193,7 +193,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     private void initData() {
         list = new ArrayList <>();
         list1 = new ArrayList <>();
-        adapter = new AllocateVehiclesAdapter(list, getContext());
+        adapter = new AllocateVehiclesAdapter(list1, getContext());
         mMfrvAllocateList.setRefreshListener(this);
         mMfrvAllocateList.setOnRetryLisenter(this);
         mMfrvAllocateList.setAdapter(adapter);
@@ -213,6 +213,32 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     /**
      * 获取列表数据
      */
+    public void getData(String flightNo) {
+        mPresenter = new GroupBoardToDoPresenter(this);
+
+        BaseFilterEntity baseFilterEntity = new BaseFilterEntity();
+        GroupBoardRequestEntity entity = new GroupBoardRequestEntity();
+        entity.setStepOwner(UserInfoSingle.getInstance().getUserId());
+//        {"stepOwner":"uef9de97d6c53428c946089d63cfaaa4c","undoType":2,"roleCode":"weighter","ascs":["ETD"]}
+        entity.setRoleCode(Constants.WEIGHTER);
+        entity.setUndoType(2);
+        entity.setFlightNo(flightNo);
+        List <String> ascs = new ArrayList <>();
+        ascs.add("ETD");
+        entity.setAscs(ascs);
+        baseFilterEntity.setFilter(entity);
+        baseFilterEntity.setCurrent(pageCurrent);
+        baseFilterEntity.setSize(30);
+        ((GroupBoardToDoPresenter) mPresenter).getOverWeightToDo(baseFilterEntity);
+//
+//        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
+//        entity.setUserId("weighter");
+//        entity.setRoleCode(Constants.WEIGHTER);
+//        ((GetInfosByFlightIdPresenter) mPresenter).getInfosByFlightId(entity);
+    }
+    /**
+     * 获取列表数据
+     */
     public void getData() {
         mPresenter = new GroupBoardToDoPresenter(this);
 
@@ -227,7 +253,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
         entity.setAscs(ascs);
         baseFilterEntity.setFilter(entity);
         baseFilterEntity.setCurrent(pageCurrent);
-        baseFilterEntity.setSize(Constants.PAGE_SIZE);
+        baseFilterEntity.setSize(30);
         ((GroupBoardToDoPresenter) mPresenter).getOverWeightToDo(baseFilterEntity);
 //
 //        BaseFilterEntity<GetInfosByFlightIdBean> entity = new BaseFilterEntity();
@@ -330,7 +356,6 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
                     mTaskFragment.setTitleText(list1.size());
                 }
             }
-            seachWithNum();
         }
         else {
             ToastUtil.showToast("无更多数据");
@@ -351,12 +376,12 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             }
             pageCurrent = transportListBeans.getCurrent()+1;
             list1.addAll(transportListBeans.getRecords());
+            adapter.notifyDataSetChanged();
             if (mTaskFragment != null) {
                 if (isShow) {
                     mTaskFragment.setTitleText(list1.size());
                 }
             }
-            seachWithNum();
         }
         else {
             ToastUtil.showToast("无更多数据");

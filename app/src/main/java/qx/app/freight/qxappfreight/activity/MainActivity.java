@@ -34,19 +34,14 @@ import qx.app.freight.qxappfreight.app.MyApplication;
 import qx.app.freight.qxappfreight.bean.AfterHeavyExceptionBean;
 import qx.app.freight.qxappfreight.bean.ScooterConfiSingle;
 import qx.app.freight.qxappfreight.bean.UserInfoSingle;
-import qx.app.freight.qxappfreight.bean.loadinglist.InstallNotifyEventBusEntity;
-import qx.app.freight.qxappfreight.bean.loadinglist.NewInstallEventBusEntity;
-import qx.app.freight.qxappfreight.bean.request.InstallChangeEntity;
 import qx.app.freight.qxappfreight.bean.request.SeatChangeEntity;
 import qx.app.freight.qxappfreight.bean.response.GroundAgentBean;
-import qx.app.freight.qxappfreight.bean.response.LoadingListBean;
 import qx.app.freight.qxappfreight.bean.response.LoginResponseBean;
 import qx.app.freight.qxappfreight.bean.response.ScooterConfBean;
 import qx.app.freight.qxappfreight.bean.response.WebSocketMessageBean;
 import qx.app.freight.qxappfreight.constant.Constants;
 import qx.app.freight.qxappfreight.contract.GroundAgentContract;
 import qx.app.freight.qxappfreight.contract.ScooterConfContract;
-import qx.app.freight.qxappfreight.dialog.InstallSuggestPushDialog;
 import qx.app.freight.qxappfreight.dialog.UpdatePushDialog;
 import qx.app.freight.qxappfreight.fragment.CargoManifestFragment;
 import qx.app.freight.qxappfreight.fragment.ClearStorageFragment;
@@ -282,59 +277,52 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
                 .hide(fragment4)
                 .hide(fragment5);
 
-
         nowFragment = fragment; //替换当前fragment
-        if (isJunctionLoad) {
-            mIvTest.setImageResource(R.mipmap.mainfest);
-            mTvTest.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
-            mTvTest.setText("货邮舱单");
-            mIvSearch.setImageResource(R.mipmap.load_list);
-            mTvSearch.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
-            mTvSearch.setText("装机单");
-        } else {
-            //判断 是否需要显示 清库 tab
-            int rw = 0;
-            if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() != 0) {
-                for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
-                    if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
-                        rw = 1;
-                        break;
-                    }
-                }
-            }
-            if (rw == 1) {
-                llSearch.setVisibility(View.VISIBLE);
-            } else {
-                llSearch.setVisibility(View.GONE);
-            }
-            mIvTest.setImageResource(R.mipmap.dynamics_normal);
-            mTvTest.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
-            mTvTest.setText("航班动态");
-            mIvSearch.setImageResource(R.mipmap.clear_normal);
-            mTvSearch.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
-            mTvSearch.setText("清库");
-        }
+        /**
+         * 隐藏国内手持清库 2021 .3.23
+         */
+//            //判断 是否需要显示 清库 tab
+//            int rw = 0;
+//            if (UserInfoSingle.getInstance().getRoleRS() != null && UserInfoSingle.getInstance().getRoleRS().size() != 0) {
+//                for (int i = 0; i < UserInfoSingle.getInstance().getRoleRS().size(); i++) {
+//                    if (Constants.INPORTTALLY.equals(UserInfoSingle.getInstance().getRoleRS().get(i).getRoleCode())) {
+//                        rw = 1;
+//                        break;
+//                    }
+//                }
+//            }
+//            if (rw == 1) {
+//                llSearch.setVisibility(View.VISIBLE);
+//            } else {
+//                llSearch.setVisibility(View.GONE);
+//            }
+        mIvTest.setImageResource(R.mipmap.dynamics_normal);
+        mTvTest.setTextColor(ContextCompat.getColor(this, R.color.main_tv_normal));
+        mTvTest.setText("航班动态");
+//            mIvSearch.setImageResource(R.mipmap.clear_normal);
+//            mTvSearch.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
+//            mTvSearch.setText("清库");
         mIvTask.setImageResource(R.mipmap.backlog_normal);
-        mTvTask.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
+        mTvTask.setTextColor(ContextCompat.getColor(this, R.color.main_tv_normal));
         if (MyApplication.isNeedIm && Tools.isProduct()) {
             mIvMessgae.setImageResource(R.mipmap.news_normal);
-            mTvMessge.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
+            mTvMessge.setTextColor(ContextCompat.getColor(this, R.color.main_tv_normal));
             mTvMessge.setText("消息");
         } else {
             mIvMessgae.setImageResource(R.mipmap.warehouse_press);
-            mTvMessge.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
+            mTvMessge.setTextColor(ContextCompat.getColor(this, R.color.main_tv_normal));
             mTvMessge.setText("库房管理");
 
         }
         mIvMine.setImageResource(R.mipmap.my_normal);
-        mTvMine.setTextColor(ContextCompat.getColor(this,R.color.main_tv_normal));
+        mTvMine.setTextColor(ContextCompat.getColor(this, R.color.main_tv_normal));
         switch (index) {
             case 0:
                 mIvTask.setImageResource(R.mipmap.backlog_selected);
-                mTvTask.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                mTvTask.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
                 break;
             case 1:
-                mTvTest.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                mTvTest.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
                 if (isJunctionLoad) {
                     mIvTest.setImageResource(R.mipmap.mainfest_press);
                 } else {
@@ -342,7 +330,7 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
                 }
                 break;
             case 2:
-                mTvSearch.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                mTvSearch.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
                 if (isJunctionLoad) {
                     mIvSearch.setImageResource(R.mipmap.load_list_press);
                 } else {
@@ -352,17 +340,17 @@ public class MainActivity extends BaseActivity implements LocationObservable, Sc
             case 3:
                 if (MyApplication.isNeedIm && Tools.isProduct()) {
                     mIvMessgae.setImageResource(R.mipmap.news_selected);
-                    mTvMessge.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                    mTvMessge.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
                 } else {
                     mIvMessgae.setImageResource(R.mipmap.warehouse);
-                    mTvMessge.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                    mTvMessge.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
 
                 }
 
                 break;
             case 4:
                 mIvMine.setImageResource(R.mipmap.my_selected);
-                mTvMine.setTextColor(ContextCompat.getColor(this,R.color.main_tv_press));
+                mTvMine.setTextColor(ContextCompat.getColor(this, R.color.main_tv_press));
                 break;
         }
         transaction.show(nowFragment).commit();

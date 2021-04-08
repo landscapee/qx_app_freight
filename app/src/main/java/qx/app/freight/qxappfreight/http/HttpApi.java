@@ -33,6 +33,7 @@ import qx.app.freight.qxappfreight.bean.request.LoadingListSendEntity;
 import qx.app.freight.qxappfreight.bean.request.LockScooterEntity;
 import qx.app.freight.qxappfreight.bean.request.LoginEntity;
 import qx.app.freight.qxappfreight.bean.request.ModifyTextEntity;
+import qx.app.freight.qxappfreight.bean.request.OnlineStutasEntity;
 import qx.app.freight.qxappfreight.bean.request.PageListEntity;
 import qx.app.freight.qxappfreight.bean.request.PerformTaskStepsEntity;
 import qx.app.freight.qxappfreight.bean.request.PhoneParametersEntity;
@@ -469,6 +470,10 @@ public interface HttpApi {
     //GPS
     @POST("service-product-transport/tp-terminal-gps/saveGpsInfo")
     Observable <BaseEntity <Object>> saveGpsInfo(@Body GpsInfoEntity model);
+
+    //登录状态 发送给 服务器
+    @POST("service-base-sysmanage/user-on-line/online")
+    Observable <BaseEntity <Object>> onlineStatus(@Body OnlineStutasEntity model);
 
     //代办
     @POST("service-product-transport/tp-main-info/outFieldTodo")

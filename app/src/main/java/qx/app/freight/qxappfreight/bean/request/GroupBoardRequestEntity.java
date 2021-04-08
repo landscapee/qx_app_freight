@@ -17,5 +17,6 @@ public class GroupBoardRequestEntity {
     private String stepOwner;
     private int undoType;
     private String roleCode;
-    private List<String> ascs;
+    private List <String> ascs;
+    private String flightNo;
 }
