@@ -63,7 +63,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 
     private AllocateVehiclesAdapter adapter;
 
-    private List <TransportDataBase> list; //条件list
+//    private List <TransportDataBase> list; //条件list
     private List <TransportDataBase> list1; //原始list
 
     private int pageCurrent = 1;
@@ -154,6 +154,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //        if (mMfrvAllocateList != null) {
 //            mMfrvAllocateList.notifyForAdapter(adapter);
 //        }
+        pageCurrent = 1;
         getData(searchString);
     }
 
@@ -181,6 +182,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
 //        }
         pageCurrent = 1;
         getData();
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String postStr){
@@ -191,7 +193,7 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
     }
 
     private void initData() {
-        list = new ArrayList <>();
+//        list = new ArrayList <>();
         list1 = new ArrayList <>();
         adapter = new AllocateVehiclesAdapter(list1, getContext());
         mMfrvAllocateList.setRefreshListener(this);
@@ -201,10 +203,10 @@ public class AllocateVehiclesFragment extends BaseFragment implements GroupBoard
             if (!Tools.isFastClick()){
                 return;
             }
-            CURRENT_TASK_BEAN = list.get(position);
+            CURRENT_TASK_BEAN = list1.get(position);
             startActivity(new Intent(getActivity(), AllocateScooterActivity.class)
-                    .putExtra("flightInfoId", list.get(position).getFlightInfoId())
-                    .putExtra("taskId", list.get(position).getTaskId()));
+                    .putExtra("flightInfoId", list1.get(position).getFlightInfoId())
+                    .putExtra("taskId", list1.get(position).getTaskId()));
         });
 //        mPresenter = new GetInfosByFlightIdPresenter(this);
         getData();
