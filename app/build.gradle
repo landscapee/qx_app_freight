@@ -22,7 +22,7 @@ static def getVersionName() {
 
 def auto_verison_name = getVersionName()
 
-def versionCodeNum = 91
+def versionCodeNum = 92
 def projectName = "app-inland"
 
 android {
@@ -31,7 +31,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 91//app根据此数字进行版本自动迭代 2021/3/23
+        versionCode 92//app根据此数字进行版本自动迭代 2021/04/9
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
