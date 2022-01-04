@@ -76,7 +76,10 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     @BindView(R.id.et_remark)
     EditText etRemark;
-
+    @BindView(R.id.tv_shipper)
+    TextView tvShipper;
+    @BindView(R.id.tv_sales_agent)
+    TextView tvSalesAgent;
 
     private VerifyFileAdapter mAdapter;
     private List <AddtionInvoicesBean.AddtionInvoices> mList = new ArrayList <>();
@@ -122,8 +125,8 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
 
     private void initData() {
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
-        setWaybillInfo(mBean);
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        setWaybillInfo(mBean,mDecBean);
         mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         mFilePath = getIntent().getStringExtra("filePath");
         mSpotResult = getIntent().getIntExtra("spotResult", -1);
@@ -210,7 +213,7 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
         }
     }
 
-    private void setWaybillInfo(TransportDataBase mBean) {
+    private void setWaybillInfo(TransportDataBase mBean,DeclareWaybillBean mDecBean) {
         if (mBean != null) {
             tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
             tvGoodsName.setText("品名:  " + mBean.getCargoCn());
@@ -222,12 +225,16 @@ public class VerifyFileActivity extends BaseActivity implements MultiFunctionRec
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
             etRemark.setText(mBean.getRemark());
+            tvShipper.setText("托运人: "+mDecBean.getSalesAgentObject() );
+            tvSalesAgent.setText("销售代理人: "  + mDecBean.getConsignmentObject() );
         } else {
             tvWaybillCode.setText("运单号:   ");
             tvGoodsName.setText("品名:  ");
             tvSpecialCode.setText("特货代码:  ");
             tvNumber.setText("件数:  ");
             tvWeight.setText("重量:  ");
+            tvShipper.setText("托运人: " );
+            tvSalesAgent.setText("销售代理人: " );
         }
 
     }
