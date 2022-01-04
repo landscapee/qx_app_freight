@@ -145,8 +145,9 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         CustomToolbar toolbar = getToolbar();
         toolbar.setMainTitle(Color.WHITE, "核查货物");
         mBean = (TransportDataBase) getIntent().getSerializableExtra("mBean");
-        setWaybillInfo(mBean);
         mDecBean = (DeclareWaybillBean) getIntent().getSerializableExtra("mDecBean");
+        setWaybillInfo(mBean,mDecBean);
+
         mAcTestInfoListBean = (TestInfoListBean) getIntent().getSerializableExtra("mAcTestInfoListBean");
         insFile = getIntent().getStringExtra("insFile");
         insCheck = getIntent().getIntExtra("insCheck", 0);
@@ -291,7 +292,7 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
         });
     }
 
-    private void setWaybillInfo(TransportDataBase mBean) {
+    private void setWaybillInfo(TransportDataBase mBean,DeclareWaybillBean mDecBean) {
         if (mBean != null) {
             tvWaybillCode.setText("运单号:   " + mBean.getWaybillCode());
             tvGoodsName.setText("品名:  " + mBean.getCargoCn());
@@ -303,6 +304,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             tvNumber.setText("件数:  " + mBean.getTotalNumber());
             tvWeight.setText("重量:  " + mBean.getTotalWeight());
             etRemark.setText(mBean.getRemark());
+            tvShipper.setText("托运人: "+mDecBean.getSalesAgentObject() );
+            tvSalesAgent.setText("销售代理人: "  + mDecBean.getConsignmentObject() );
         } else {
             tvWaybillCode.setText("运单号:   ");
             tvGoodsName.setText("品名:  ");
