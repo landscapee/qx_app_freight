@@ -312,6 +312,8 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
             tvSpecialCode.setText("特货代码:  ");
             tvNumber.setText("件数:  ");
             tvWeight.setText("重量:  ");
+            tvShipper.setText("托运人: " );
+            tvSalesAgent.setText("销售代理人: " );
         }
 
     }

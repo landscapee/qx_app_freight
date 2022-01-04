@@ -1,5 +1,7 @@
 package qx.app.freight.qxappfreight.bean.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -353,7 +355,34 @@ public class DeclareWaybillBean implements Serializable {
     private double surplusOfVolume;
     private String storageTypeName;
     private String storageType;
+    /** 销售代理-公司-ID 人员-ID 数据示例：{"companyId":"XXXXXX","companyName":"四川航空XXX","peopleId":"zzzzzzXXX","peopleName":"薛德河"} */
+    private String salesAgent;
+    /** 托运-公司-ID 人员-ID  {"companyId":"XXXXXX","companyName":"四川航空XXX","peopleId":"zzzzzzXXX","peopleName":"薛德河"}*/
+    private String consignment;
+     private String salesAgentObject;
+    private String consignmentObject;
 
+    public String getSalesAgentObject() {
+        if(salesAgent==null){
+            return "";
+        }
+        JSONObject jsonObject = JSONObject.parseObject(salesAgent);
+        if(jsonObject ==null){
+            return "";
+        }
+        return jsonObject.get("companyName")+"--"+jsonObject.get("peopleName")+"";
+    }
+
+    public String getConsignmentObject() {
+        if(consignment==null){
+            return "";
+        }
+        JSONObject jsonObject = JSONObject.parseObject(consignment);
+        if(jsonObject==null){
+            return "";
+        }
+        return jsonObject.get("companyName")+"--"+jsonObject.get("peopleName")+"";
+    }
 
 
 }
