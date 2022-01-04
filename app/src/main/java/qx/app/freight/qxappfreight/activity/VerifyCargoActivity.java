@@ -91,7 +91,10 @@ public class VerifyCargoActivity extends BaseActivity implements SubmissionContr
 
     @BindView(R.id.et_remark)
     EditText etRemark;
-
+    @BindView(R.id.tv_shipper)
+    TextView tvShipper;
+    @BindView(R.id.tv_sales_agent)
+    TextView tvSalesAgent;
 
     private String insFile;  //报检员资质路径
     private int insCheck; //报检是否合格1合格 0不合格
