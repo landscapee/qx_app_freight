@@ -94,7 +94,10 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
 
     @BindView(R.id.tv_storage_info)
     TextView mTvStorageInfo;
-
+    @BindView(R.id.tv_shipper)
+    TextView tvShipper;
+    @BindView(R.id.tv_sales_agent)
+    TextView tvSalesAgent;
     private String wayBillId;
     private String taskId;
     private String taskTypeCode;
@@ -409,6 +412,8 @@ public class CollectorDeclareActivity extends BaseActivity implements GetWayBill
         waybillId.setText(mData.getWaybillCode());
         declareType.setText(mData.getFreightName());
         flightCode.setText(mData.getFlightNo());
+        tvShipper.setText("托运人: "+mData.getSalesAgentObject() );
+        tvSalesAgent.setText("销售代理人: "  + mData.getConsignmentObject() );
         if (TextUtils.isEmpty(mData.getOriginatingStation())) {
             flightLineStart.setText("--");
         } else {
