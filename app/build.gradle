@@ -22,7 +22,7 @@ static def getVersionName() {
 
 def auto_verison_name = getVersionName()
 
-def versionCodeNum = 92
+def versionCodeNum = 93
 def projectName = "app-inland"
 
 android {
@@ -31,7 +31,7 @@ android {
         applicationId "qx.app.freight.qxappfreight"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 92//app根据此数字进行版本自动迭代 2021/04/9
+        versionCode versionCodeNum //app根据此数字进行版本自动迭代 2021/04/9
         versionName "1.0_" + auto_verison_name
 
         javaCompileOptions {
@@ -41,8 +41,18 @@ android {
         }
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi',"armeabi-v7a","arm64-v8a" //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', "armeabi-v7a", "arm64-v8a"
+//                    ,'x86'
+            //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
+//        splits {
+//            abi {
+//                enable true
+//                reset()
+//                include  'x86'
+//                universalApk true
+//            }
+//        }
     }
 
     //配置签名文件
@@ -251,8 +261,8 @@ build.doLast {
         def jar_dir = signProperties.get("jar")
         def pem_dir = signProperties.get("pem")
         def pk8_dir = signProperties.get("pk8")
-        def destination_Release_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum  +"_" + new Date().format("MM-dd-HH-mm") + "-release.apk"
-        def destination_Product_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum  +"_" + new Date().format("MM-dd-HH-mm") + "-product.apk"
+        def destination_Release_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum + "_" + new Date().format("MM-dd-HH-mm") + "-release.apk"
+        def destination_Product_dir = signProperties.get("destination") + projectName + "-v" + versionCodeNum + "_" + new Date().format("MM-dd-HH-mm") + "-product.apk"
 
         if (new File(signApk_Release_dir).exists() && new File(signApk_Product_dir)) {
             println "找到待签名文件[release] >>" + signApk_Release_dir
