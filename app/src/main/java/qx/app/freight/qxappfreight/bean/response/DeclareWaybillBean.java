@@ -361,19 +361,8 @@ public class DeclareWaybillBean implements Serializable {
     private String consignment;
      private String salesAgentObject;
     private String consignmentObject;
-
+//     托运 （页面取值反了，在尺吧返回值 替换）
     public String getSalesAgentObject() {
-        if(salesAgent==null){
-            return "";
-        }
-        JSONObject jsonObject = JSONObject.parseObject(salesAgent);
-        if(jsonObject ==null){
-            return "";
-        }
-        return jsonObject.get("companyName")+"--"+jsonObject.get("peopleName")+"";
-    }
-
-    public String getConsignmentObject() {
         if(consignment==null){
             return "";
         }
@@ -382,6 +371,18 @@ public class DeclareWaybillBean implements Serializable {
             return "";
         }
         return jsonObject.get("companyName")+"--"+jsonObject.get("peopleName")+"";
+    }
+//    销售代理
+    public String getConsignmentObject() {
+        if(salesAgent==null){
+            return "";
+        }
+        JSONObject jsonObject = JSONObject.parseObject(salesAgent);
+        if(jsonObject ==null){
+            return "";
+        }
+        return jsonObject.get("companyName")+"--"+jsonObject.get("peopleName")+"";
+
     }
 
 

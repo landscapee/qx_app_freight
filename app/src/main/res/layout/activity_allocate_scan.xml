@@ -125,6 +125,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_uld_info"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:layout_width="0dp"
@@ -145,6 +146,11 @@
                         android:gravity="center_vertical|end"
                         style="@style/public_tv_16sp" />
                 </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rc_uld_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
             <View
