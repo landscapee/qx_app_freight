@@ -15,6 +15,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -153,6 +155,15 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
         ((GroupBoardToDoPresenter) mPresenter).getScooterByScooterCode(entity);
     }
 
+    Comparator<GetInfosByFlightIdBean> comparator = new Comparator<GetInfosByFlightIdBean>() {
+        @Override
+        public int compare(GetInfosByFlightIdBean o1, GetInfosByFlightIdBean o2) {
+            // 0:"待复重" 1:"完成" 2:"复重异常"
+
+            return o1.getReWeightFinish() - o2.getReWeightFinish() ;
+        }
+    };
+
     @Override
     public void todoScootersResult(FlightInfoAndScootersBean result) {
         weight = 0;
@@ -162,8 +173,10 @@ public class RepeatWeightScooterFragment extends BaseFragment implements TodoSco
 //                ToastUtil.showToast("该航班负重任务已完成");
 //                return;
 //            }
+            List<GetInfosByFlightIdBean> scooterLists = result.getScooters();
+            Collections.sort(scooterLists, comparator);
             list.clear();
-            list.addAll(result.getScooters());
+            list.addAll(scooterLists);
             adapter.isShowReturn(result.isHasGroupScooterTask());
             adapter.notifyDataSetChanged();
 
