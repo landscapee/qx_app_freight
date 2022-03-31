@@ -96,6 +96,10 @@ public class GetInfosByFlightIdBean implements Serializable {
     private int scooterType;
     private String uldCode;
     private String uldType;
+    /**
+     * 板车上uld的列表
+     */
+    private List<GetInfosByFlightIdBean> ulds;
     private String iata;
     private double scooterWeight;
     private double uldWeight;

@@ -95,6 +95,7 @@ public class WeightWayBillBean implements Serializable {
     private String flightInfoId;
     private Object rcInfoId;
     private String cargoCn;
+    private String uldName;
     private int selectedStatus;
     private Object signUserId;
 

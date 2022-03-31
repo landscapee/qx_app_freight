@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,12 +26,16 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import qx.app.freight.qxappfreight.R;
+import qx.app.freight.qxappfreight.adapter.AllocaaateScanUldsAdapter;
 import qx.app.freight.qxappfreight.adapter.WeightWayBillBeanAdapter;
 import qx.app.freight.qxappfreight.app.BaseActivity;
 import qx.app.freight.qxappfreight.bean.OverWeightSaveResultBean;
@@ -82,6 +89,8 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     TextView tvUld;
     @BindView(R.id.tv_uld_self)
     TextView tvUldSelf;
+    @BindView(R.id.ll_uld_info)
+    LinearLayout llUldInfo;
     @BindView(R.id.btn_read)
     Button btnRead;//取消取重按钮，目前是隐藏了的
     @BindView(R.id.btn_return)
@@ -92,6 +101,11 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     SlideRecyclerView recyclerView;
     @BindView(R.id.tv_to_city)
     TextView tvToCity;
+    @BindView(R.id.ll_uld_name)
+    TextView llUldName;
+    @BindView(R.id.rc_uld_info)
+    RecyclerView rcUldInfo;
+
 
     private List <String> mRemarksList; //库区
     private String chenNum; //秤号
@@ -105,7 +119,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     private GetInfosByFlightIdBean mData;
     private CustomToolbar toolbar;
     //运单列表相关
-    private List <WeightWayBillBean> wayBillBeanList;
+    private List <WeightWayBillBean> wayBillBeanList =new ArrayList<WeightWayBillBean>();
 
     private WeightWayBillBeanAdapter madapter;
 
@@ -129,6 +143,26 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
 
         initView();
     }
+    private String getUldName(GetInfosByFlightIdBean mData){
+        String mType, mCode, mIata;
+
+        if (TextUtils.isEmpty(mData.getUldType())) {
+            mType = "-";
+        } else {
+            mType = mData.getUldType();
+        }
+        if (TextUtils.isEmpty(mData.getUldCode())) {
+            mCode = "-";
+        } else {
+            mCode = mData.getUldCode();
+        }
+        if (TextUtils.isEmpty(mData.getIata())) {
+            mIata = "-";
+        } else {
+            mIata = mData.getIata();
+        }
+      return mType + " " + mCode + " " + mIata;
+    };
 
     private void initData() {
         mData = (GetInfosByFlightIdBean) getIntent().getSerializableExtra("dataBean");
@@ -138,39 +172,50 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             finish();
             return;
         }
-        wayBillBeanList = mData.getGroupScooters();
+
+        if(mData.getUlds().size()>0){
+//            wayBillBeanList.clear();
+            for (GetInfosByFlightIdBean getInfosByFlightIdBean : mData.getUlds()) {
+                if (getInfosByFlightIdBean.getGroupScooters().size()>0) {
+                    for (WeightWayBillBean weightWayBillBean :getInfosByFlightIdBean.getGroupScooters()) {
+                        if(weightWayBillBean!=null){
+                            weightWayBillBean.setUldName(getUldName(getInfosByFlightIdBean));
+                            wayBillBeanList.add(weightWayBillBean);
+                        }
+                    }
+                }
+            }
+        }else{
+            wayBillBeanList = mData.getGroupScooters();
+            llUldName.setVisibility(View.GONE);
+        }
         if (wayBillBeanList != null) {
+
             madapter = new WeightWayBillBeanAdapter(wayBillBeanList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(madapter);
         }
-        switch (mData.getReWeightFinish()) {
+
+         switch (mData.getReWeightFinish()) {
             case 2:
             case 0:
                 tvFlightid.setText(mData.getFlightNo());
                 tvToCity.setText("目的站:" + mData.getToCityEn());
                 tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
-                String mType, mCode, mIata;
 
-                if (TextUtils.isEmpty(mData.getUldType())) {
-                    mType = "-";
-                } else {
-                    mType = mData.getUldType();
-                }
-                if (TextUtils.isEmpty(mData.getUldCode())) {
-                    mCode = "-";
-                } else {
-                    mCode = mData.getUldCode();
-                }
-                if (TextUtils.isEmpty(mData.getIata())) {
-                    mIata = "-";
-                } else {
-                    mIata = mData.getIata();
-                }
+                if(mData.getUlds().size()>0){
+//                    一版多ULD
+                    llUldInfo.setVisibility(View.GONE);
+                    rcUldInfo.setLayoutManager(new LinearLayoutManager(this));
+                    AllocaaateScanUldsAdapter allocaaateScanUldsAdapter = new AllocaaateScanUldsAdapter(mData.getUlds());
+                    rcUldInfo.setAdapter(allocaaateScanUldsAdapter);
 
-                tvUld.setText(mType + " " + mCode + " " + mIata);
-                tvUldSelf.setText(mData.getUldWeight() + "kg");
+                }else{
+                    rcUldInfo.setVisibility(View.GONE);
+                    tvUld.setText(getUldName(mData));
+                    tvUldSelf.setText(mData.getUldWeight() + "kg");
+                }
                 //收运净重
                 tvNetweightFront.setText(mData.getWeight() + "kg");
                 break;
@@ -521,18 +566,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
     @SuppressLint("SetTextI18n")
     @Override
     public void getScooterByScooterCodeResult(GetInfosByFlightIdBean bean) {
-//        if (bean!=null){
-//            mData = bean;
-//            tvFlightid.setText(bean.getFlightNo());
-//            tvNameFront.setText(bean.getScooterCode());
-//            tvDeadweightFront.setText(bean.getScooterWeight()+"kg");
-//            tvUld.setText(bean.getUldType()+" "+bean.getUldCode()+" "+bean.getIata());
-//            tvUldSelf.setText(bean.getUldWeight()+"kg");
-//            //收运净重
-//            tvNetweightFront.setText(bean.getWeight()+"kg");
-////            tvNetweightFront.setText(bean.getWeight()+"kg");
-//
-//        }
+
     }
 
     @Override

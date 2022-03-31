@@ -22,7 +22,7 @@ static def getVersionName() {
 
 def auto_verison_name = getVersionName()
 
-def versionCodeNum = 94
+def versionCodeNum = 96
 def projectName = "app-inland"
 
 android {
