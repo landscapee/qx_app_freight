@@ -88,7 +88,8 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
     Button btnConfirm;
     @BindView(R.id.recycler_view)
     SlideRecyclerView recyclerView;
-
+    @BindView(R.id.ll_uld_name)
+    TextView llUldName;
     private List <String> mRemarksList; //备注
     private String chenNum; //秤号
     private String mScooterCode;//板车号
@@ -101,7 +102,7 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
     private GetInfosByFlightIdBean mData;
     private CustomToolbar toolbar;
     //运单列表相关
-    private List <WeightWayBillBean> wayBillBeanList;
+    private List <WeightWayBillBean> wayBillBeanList=new ArrayList<WeightWayBillBean>();
 
     private WeightWayBillBeanAdapter madapter;
 
@@ -124,7 +125,26 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
         initView();
         initData();
     }
+    private String getUldName(GetInfosByFlightIdBean mData){
+        String mType, mCode, mIata;
 
+        if (TextUtils.isEmpty(mData.getUldType())) {
+            mType = "-";
+        } else {
+            mType = mData.getUldType();
+        }
+        if (TextUtils.isEmpty(mData.getUldCode())) {
+            mCode = "-";
+        } else {
+            mCode = mData.getUldCode();
+        }
+        if (TextUtils.isEmpty(mData.getIata())) {
+            mIata = "-";
+        } else {
+            mIata = mData.getIata();
+        }
+        return mType + " " + mCode + " " + mIata;
+    };
     private void initData() {
         mData = (GetInfosByFlightIdBean) getIntent().getSerializableExtra("dataBean");
 
@@ -133,9 +153,29 @@ public class AllocaaateHisDetailsActivity extends BaseActivity implements GetSco
             finish();
             return;
         }
-        wayBillBeanList = mData.getGroupScooters();
+        if(mData.getUlds()!=null&&mData.getUlds().size()>0){
+//            wayBillBeanList.clear();
+            for (GetInfosByFlightIdBean getInfosByFlightIdBean : mData.getUlds()) {
+                if (getInfosByFlightIdBean.getGroupScooters().size()>0) {
+                    for (WeightWayBillBean weightWayBillBean :getInfosByFlightIdBean.getGroupScooters()) {
+                        if(weightWayBillBean!=null){
+                            weightWayBillBean.setUldName(getUldName(getInfosByFlightIdBean));
+                            wayBillBeanList.add(weightWayBillBean);
+                        }
+                    }
+                }
+            }
+        }else{
+            wayBillBeanList = mData.getGroupScooters();
+            llUldName.setVisibility(View.GONE);
+        }
+
         if (wayBillBeanList != null) {
-            madapter = new WeightWayBillBeanAdapter(wayBillBeanList);
+            boolean isUld=false;
+            if(mData.getUlds()!=null&&mData.getUlds().size()>0){
+                isUld=true;
+            }
+            madapter = new WeightWayBillBeanAdapter(wayBillBeanList,isUld);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(madapter);
         }

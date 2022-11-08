@@ -173,7 +173,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             return;
         }
 
-        if(mData.getUlds().size()>0){
+        if(mData.getUlds()!=null&&mData.getUlds().size()>0){
 //            wayBillBeanList.clear();
             for (GetInfosByFlightIdBean getInfosByFlightIdBean : mData.getUlds()) {
                 if (getInfosByFlightIdBean.getGroupScooters().size()>0) {
@@ -190,8 +190,11 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
             llUldName.setVisibility(View.GONE);
         }
         if (wayBillBeanList != null) {
-
-            madapter = new WeightWayBillBeanAdapter(wayBillBeanList);
+            boolean isUld=false;
+            if(mData.getUlds()!=null&&mData.getUlds().size()>0){
+                isUld=true;
+            }
+            madapter = new WeightWayBillBeanAdapter(wayBillBeanList,isUld);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(madapter);
         }
@@ -204,7 +207,7 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
                 tvNameFront.setText(mData.getScooterCodeName());
                 tvDeadweightFront.setText(mData.getScooterWeight() + "kg");
 
-                if(mData.getUlds().size()>0){
+                if(mData.getUlds()!=null&&mData.getUlds().size()>0){
 //                    一版多ULD
                     llUldInfo.setVisibility(View.GONE);
                     rcUldInfo.setLayoutManager(new LinearLayoutManager(this));
@@ -469,6 +472,16 @@ public class AllocaaateScanActivity extends BaseActivity implements GetScooterBy
         //复重净重=本次复磅毛重-板车自重-ULD自重-人工干预
 //        goodsWeight = crossWeight -(mData.getScooterWeight()+mData.getUldWeight()+reviseWeight);
         goodsWeight = CalculateUtil.doubleSave2(crossWeight - (mData.getScooterWeight() + mData.getUldWeight() + reviseWeight));
+        if(mData.getUlds()!=null&&mData.getUlds().size()>0){
+            goodsWeight = CalculateUtil.doubleSave2(crossWeight - (mData.getScooterWeight() + reviseWeight));
+
+            for (GetInfosByFlightIdBean uldItem : mData.getUlds()) {
+                if (uldItem.getWeight()>0) {
+                    goodsWeight=goodsWeight-uldItem.getUldWeight();
+                }
+            }
+            goodsWeight=CalculateUtil.doubleSave2(goodsWeight);
+        }
         //复重差值 = 复重净重 - 组板净重
         dValue = CalculateUtil.doubleSave2(goodsWeight - mData.getWeight());
 

@@ -16,10 +16,12 @@ import qx.app.freight.qxappfreight.utils.StringUtil;
  * created by swd
  * 2019/8/2 12:18
  */
-public class WeightWayBillBeanAdapter extends BaseQuickAdapter<WeightWayBillBean, BaseViewHolder> {
 
-    public WeightWayBillBeanAdapter(@Nullable List<WeightWayBillBean> data) {
+public class WeightWayBillBeanAdapter extends BaseQuickAdapter<WeightWayBillBean, BaseViewHolder> {
+    private    boolean isUld;
+    public WeightWayBillBeanAdapter(@Nullable List<WeightWayBillBean> data,boolean isUld1) {
         super(R.layout.item_weight_waybill, data);
+        this.isUld=isUld1;
     }
 
     @Override
@@ -36,8 +38,12 @@ public class WeightWayBillBeanAdapter extends BaseQuickAdapter<WeightWayBillBean
                 .setTextColor(R.id.tv_waybill_code, isMail? Color.parseColor("#FF0000"):Color.parseColor("#000000"))
                 .setText(R.id.tv_cargo_name, StringUtil.toText(item.getCargoCn(),"-"))
                 .setText(R.id.tv_num,item.getNumber()+"")
-                .setText(R.id.tv_uld_name,item.getUldName())
                 .setText(R.id.tv_weight,item.getWeight()+"");
+        if(isUld){
+            helper.setText(R.id.tv_uld_name,item.getUldName());
+        }else{
+            helper.getView(R.id.tv_uld_name).setVisibility(View.GONE);
+        }
 
     }
 }
